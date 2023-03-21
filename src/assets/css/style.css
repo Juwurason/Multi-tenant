@@ -1,4 +1,7 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;500;700;900&display=swap');
+
+
 
 /****** UTILS ******/
 /*** default values ***/
@@ -620,7 +623,7 @@ h6 {
 }
 
 body {
-  font-family: "CircularStd", sans-serif;
+  font-family: "Roboto", sans-serif !important;
   font-size: 15px;
   color: #1f1f1f;
   background-color: #f7f7f7;

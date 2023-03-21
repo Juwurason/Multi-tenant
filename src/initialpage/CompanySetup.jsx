@@ -7,7 +7,7 @@ import { useCompanyContext } from "../context";
 import Phone from "../_components/Phone/Phone";
 const CompanySetup = () => {
 
-    // const { storeCompanyId } = useCompanyContext();
+    const { storeCompanyId } = useCompanyContext();
     const [packages, setPackages] = useState([])
     const companyName = useRef(null);
     const companyEmail = useRef(null)
@@ -31,7 +31,6 @@ const CompanySetup = () => {
         fetchPackages()
 
     }, [])
-
     const navigate = useHistory()
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -76,7 +75,7 @@ const CompanySetup = () => {
             console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message)
-                // storeCompanyId(data.company?.companyId);
+                storeCompanyId(data.company?.companyId);
                 navigate.push(`/admin-auth/${data.company?.companyId}`)
             } else {
                 toast.error(data.message)
@@ -184,10 +183,10 @@ const CompanySetup = () => {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <div className="card shadow-none bg-none px-2">
-                            <h4 className="card-header mx-auto">CREATE COMPANY ACCOUNT</h4>
+                            <h4 className="card-header mx-auto font-bold">CREATE COMPANY ACCOUNT</h4>
                             <div className="card-body bg-none">
                                 <form className="form-horizontal" onSubmit={handleSubmit}>
-                                    <div className="form-group">
+                                    <div className="form-group mt-3">
                                         <label htmlFor="name" className="cols-sm-2 control-label">Company Name</label>
                                         <div className="cols-sm-10">
                                             <div className="input-group">
@@ -197,11 +196,11 @@ const CompanySetup = () => {
                                                     className="form-control" name="name" />
                                             </div>
                                             {errors.companyName && (
-                                                <span className="text-danger fs-6">{errors.companyName}</span>
+                                                <span className="text-danger">{errors.companyName}</span>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group mt-3">
                                         <label htmlFor="email" className="cols-sm-2 control-label">Company Email</label>
                                         <div className="cols-sm-10">
                                             <div className="input-group">
@@ -211,7 +210,7 @@ const CompanySetup = () => {
                                                     className="form-control" name="email" id="email" placeholder="Enter company Email" />
                                             </div>
                                             {errors.companyEmail && (
-                                                <span className="text-danger fs-6">{errors.companyEmail}</span>
+                                                <span className="text-danger">{errors.companyEmail}</span>
                                             )}
                                         </div>
                                     </div>
@@ -223,7 +222,7 @@ const CompanySetup = () => {
                                             setValue={setValue}
                                         />
                                         {errors.Phone && (
-                                            <span className="text-danger fs-6">{errors.Phone}</span>
+                                            <span className="text-danger">{errors.Phone}</span>
                                         )}
                                     </div>
                                     <div className="form-group">
@@ -235,7 +234,7 @@ const CompanySetup = () => {
                                                     className="form-control" name="email" id="email" placeholder="Enter company Address" />
                                             </div>
                                             {errors.companyAddress && (
-                                                <span className="text-danger fs-6">{errors.companyAddress}</span>
+                                                <span className="text-danger">{errors.companyAddress}</span>
                                             )}
                                         </div>
                                     </div>
@@ -251,18 +250,18 @@ const CompanySetup = () => {
                                                     className="form-control" name="email" id="email" placeholder="Name of Company Head" />
                                             </div>
                                             {errors.companyHead && (
-                                                <span className="text-danger fs-6">{errors.companyHead}</span>
+                                                <span className="text-danger">{errors.companyHead}</span>
                                             )}
                                         </div>
                                     </div>
 
 
                                     <div className="form-group">
-                                        <select className="form-select form-select-lg "
+                                        <select className="form-select"
                                             ref={packagesId}
                                             aria-label="Default select example">
 
-                                            <option hidden className="fs-6">Choose a package</option>
+                                            <option hidden>Choose a package</option>
 
                                             {
                                                 packages.map((item) =>
@@ -276,7 +275,7 @@ const CompanySetup = () => {
                                     <div className="form-group">
                                         <div className="form-check">
                                             <input className="form-check-input" type="checkbox" defaultValue id="flexCheckChecked" defaultChecked />
-                                            <label className="form-check-label" htmlFor="flexCheckChecked">
+                                            <label className="form-check-label text-muted" htmlFor="flexCheckChecked">
                                                 I consent to the collection and processing of my personal data in line with data regulations as described in the privacy policy
                                             </label>
                                         </div>
@@ -291,7 +290,7 @@ const CompanySetup = () => {
                                     </div>
                                     <div className="form-group">
                                         <span>Already have an account ? </span>
-                                        <a href="#"> Sign in here</a>
+                                        <a href="/login"> Sign in here</a>
 
                                     </div>
                                 </form>

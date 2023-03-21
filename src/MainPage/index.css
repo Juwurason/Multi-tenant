@@ -1,6 +1,8 @@
 /* a {
     color: rgb(0 0 0 / 1);
 } */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;500;700;900&display=swap');
+
 .note-popover .popover-content,
 .note-editor .note-toolbar {
     background: #f5f5f5 !important;

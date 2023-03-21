@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { alphaNumericPattern, emailrgx } from '../constant'
 import './login.css'
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 const schema = yup
@@ -27,6 +28,7 @@ const schema = yup
   })
 
 const Loginpage = (props) => {
+  const [pwdVisible, setPwdVisible] = useState(false)
 
   const [eye, seteye] = useState(true);
   const [emailerror, setEmailError] = useState("");
@@ -78,21 +80,44 @@ const Loginpage = (props) => {
       <div className="login-form">
         <form>
           <h4 className="text-center">Login to your account</h4>
-          <div className="form-group">
+          <div className="form-group mt-4">
             <input type="text" className="form-control" placeholder="Username" required="required" />
           </div>
-          <div className="form-group">
-            <input type="password" className="form-control" placeholder="Password" required="required" />
+          <div className="form-group d-flex justify-content-between border mt-4">
+            <input
+
+
+              type={pwdVisible ? "text" : "password"}
+              name="password"
+              minLength="6"
+              maxLength="15"
+              required
+
+
+
+              className="form-control border-0" placeholder="password" />
+            <button onClick={() => setPwdVisible(!pwdVisible)} type='button' className="btn">
+              {pwdVisible ? <FaEye /> : <FaEyeSlash />}
+
+
+            </button>
+            {/* <input type="password" className="form-control" placeholder="Password" required="required" /> */}
           </div>
-          <div className="form-group">
+
+
+          <div className="form-group mt-4">
             <button type="submit" className="btn btn-primary btn-lg w-100">Log in</button>
           </div>
-          <div className="clearfix">
+          <div className="clearfix mt-4">
             <label className="pull-left checkbox-inline"><input type="checkbox" /> Remember me</label>
             <a href="#" className="pull-right">Forgot Password?</a>
           </div>
+          <div className="form-group mt-4">
+
+            <p className="text-center"><span>Don't have an account?    </span> &nbsp; <Link to={'/register'}> Create an Account</Link></p>
+
+          </div>
         </form>
-        <p className="text-center"><a href="#">Create an Account</a></p>
       </div>
 
     </>
