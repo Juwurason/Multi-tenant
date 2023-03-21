@@ -20,47 +20,51 @@ import uicomponents from '../MainPage/UIinterface/components';
 //Error Page
 import Error404 from '../MainPage/Pages/ErrorPage/error404';
 import Error500 from '../MainPage/Pages/ErrorPage/error500';
+import CompanySetup from './CompanySetup';
+import AdminRegistration from './AdminRegistration';
 
 
 
 export default class App extends Component {
-    componentDidMount(){
+    componentDidMount() {
         if (location.pathname.includes("login") || location.pathname.includes("register") || location.pathname.includes("forgotpassword")
-        || location.pathname.includes("otp")|| location.pathname.includes("lockscreen") ) {
+            || location.pathname.includes("otp") || location.pathname.includes("lockscreen")) {
             // $('body').addClass('account-page');
-        }else if (location.pathname.includes("error-404") || location.pathname.includes("error-500") ) {
+        } else if (location.pathname.includes("error-404") || location.pathname.includes("error-500")) {
             $('body').addClass('error-page');
         }
     }
-       render(){
-            const { location, match, user } = this.props;
-            
-            
-           
-            if (location.pathname === '/') {                 
-                   return (<Redirect to={'/app/main/dashboard'} />);                
-             }
-            return (
-                <Switch>
-                 
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/forgotpassword" component={ForgotPassword} />
-                    <Route path="/register" component={RegistrationPage} />
-                    <Route path="/otp" component={OTP} />
-                    <Route path="/lockscreen" component={LockScreen} />
-                    <Route path="/applyjob" component={ApplyJobs} />
+    render() {
+        const { location, match, user } = this.props;
 
-                    <Route path="/app" component={DefaultLayout} />
-                    <Route path="/settings" component={Settinglayout} />
-                    <Route path="/tasks" component={Tasklayout} />
-                    <Route path="/email" component={Emaillayout} />
-                    <Route path="/conversation" component={chatlayout} />
-                    
-                    <Route path="/ui-components" component={uicomponents} />
-                    <Route path="/error-404" component={Error404} />
-                    <Route path="/error-500" component={Error500} />
-                </Switch>
-            )
+
+
+        if (location.pathname === '/') {
+            return (<Redirect to={'/app/main/dashboard'} />);
         }
-         
+        return (
+            <Switch>
+
+                <Route path="/login" component={LoginPage} />
+                <Route path="/forgotpassword" component={ForgotPassword} />
+                <Route path="/register" component={CompanySetup} />
+                <Route path="/admin" component={AdminRegistration} />
+                {/* <Route path="/register" component={RegistrationPage} /> */}
+                <Route path="/otp" component={OTP} />
+                <Route path="/lockscreen" component={LockScreen} />
+                <Route path="/applyjob" component={ApplyJobs} />
+
+                <Route path="/app" component={DefaultLayout} />
+                <Route path="/settings" component={Settinglayout} />
+                <Route path="/tasks" component={Tasklayout} />
+                <Route path="/email" component={Emaillayout} />
+                <Route path="/conversation" component={chatlayout} />
+
+                <Route path="/ui-components" component={uicomponents} />
+                <Route path="/error-404" component={Error404} />
+                <Route path="/error-500" component={Error500} />
+            </Switch>
+        )
+    }
+
 }

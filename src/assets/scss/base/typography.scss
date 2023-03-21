@@ -4,53 +4,61 @@
 	font-weight: 400;
 	src: url(../fonts/MaterialIcons-Regular.eot);
 	src: local('Material Icons'),
-	local('MaterialIcons-Regular'),
-	url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
-	url(../fonts/MaterialIcons-Regular.woff) format('woff'),
-	url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
+		local('MaterialIcons-Regular'),
+		url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
+		url(../fonts/MaterialIcons-Regular.woff) format('woff'),
+		url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: normal;
 	font-weight: 400;
 	src: local('Circular Std Book'), url('../fonts/CircularStd-Book.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: italic;
 	font-weight: 400;
 	src: local('Circular Std Book Italic'), url('../fonts/CircularStd-BookItalic.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: normal;
 	font-weight: 500;
 	src: local('Circular Std Medium'), url('../fonts/CircularStd-Medium.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: italic;
 	font-weight: 500;
 	src: local('Circular Std Medium Italic'), url('../fonts/CircularStd-MediumItalic.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: normal;
 	font-weight: 600;
 	src: local('Circular Std Bold'), url('../fonts/CircularStd-Bold.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: italic;
 	font-weight: 600;
 	src: local('Circular Std Bold Italic'), url('../fonts/CircularStd-BoldItalic.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: normal;
 	font-weight: 800;
 	src: local('Circular Std Black'), url('../fonts/CircularStd-Black.woff') format('woff');
 }
+
 @font-face {
 	font-family: 'CircularStd';
 	font-style: italic;
@@ -58,7 +66,8 @@
 	src: local('Circular Std Black Italic'), url('../fonts/CircularStd-BlackItalic.woff') format('woff');
 }
 
-$__body__font__family:'CircularStd', sans-serif;
+$__body__font__family:'Arial',
+sans-serif;
 
 
 $__bold:700;
@@ -99,57 +108,70 @@ $__font__size__54:54px;
 $__font__size__65:65px;
 $__font__size__70:70px;
 
-h1{
-	font-weight:$__medium;
-	font-size:$__font__size__40;
+h1 {
+	font-weight: $__medium;
+	font-size: $__font__size__40;
 	margin-bottom: 0.5rem;
-	@include respond-below(custom767){
-		font-size:$__font__size__26 + 1;
+
+	@include respond-below(custom767) {
+		font-size: $__font__size__26 + 1;
 	}
 }
-h2{
-	font-weight:$__medium;
-	font-size:$__font__size__30;
+
+h2 {
+	font-weight: $__medium;
+	font-size: $__font__size__30;
 	margin-bottom: 0.5rem;
-	@include respond-below(custom767){
-		font-size:$__font__size__22 + 1;
+
+	@include respond-below(custom767) {
+		font-size: $__font__size__22 + 1;
 	}
 }
-h3{
-	font-weight:$__medium;
-	font-size:$__font__size__24;
+
+h3 {
+	font-weight: $__medium;
+	font-size: $__font__size__24;
 	margin-bottom: 0.5rem;
-	@include respond-below(custom1023){
-		font-size:$__font__size__20;
+
+	@include respond-below(custom1023) {
+		font-size: $__font__size__20;
 	}
-	@include respond-below(custom767){
-		font-size:$__font__size__16;
+
+	@include respond-below(custom767) {
+		font-size: $__font__size__16;
 	}
 }
-h4{
-	font-weight:$__medium;
-	font-size:$__font__size__18;
+
+h4 {
+	font-weight: $__medium;
+	font-size: $__font__size__18;
 	margin-bottom: 0.5rem;
-	@include respond-below(custom1023){
-		font-size:$__font__size__18;
+
+	@include respond-below(custom1023) {
+		font-size: $__font__size__18;
 	}
-	@include respond-below(custom767){
-		font-size:$__font__size__16;
-	}
-}
-h5{
-	font-weight:$__medium;
-	font-size:$__font__size__14;
-	margin-bottom: 0.5rem;
-	@include respond-below(custom1023){
-		font-size:$__font__size__14;
+
+	@include respond-below(custom767) {
+		font-size: $__font__size__16;
 	}
 }
-h6{
-	font-weight:$__medium;
-	font-size:$__font__size__12;
+
+h5 {
+	font-weight: $__medium;
+	font-size: $__font__size__14;
 	margin-bottom: 0.5rem;
-	@include respond-below(custom1023){
-		font-size:$__font__size__12;
+
+	@include respond-below(custom1023) {
+		font-size: $__font__size__14;
+	}
+}
+
+h6 {
+	font-weight: $__medium;
+	font-size: $__font__size__12;
+	margin-bottom: 0.5rem;
+
+	@include respond-below(custom1023) {
+		font-size: $__font__size__12;
 	}
 }

@@ -1,46 +1,74 @@
-
 /* a {
     color: rgb(0 0 0 / 1);
 } */
-.note-popover .popover-content, .note-editor .note-toolbar {
+.note-popover .popover-content,
+.note-editor .note-toolbar {
     background: #f5f5f5 !important;
-    border-bottom: 1px solid rgba(0,0,0,.125) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
 }
-.note-editor.note-frame .note-editing-area .note-editable, .note-editor.note-airframe .note-editing-area .note-editable {   
+
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-editing-area .note-editable {
     background-color: white;
 }
 
-.recharts-cartesian-grid-vertical{
+.recharts-cartesian-grid-vertical {
     display: none !important;
 }
 
-.recharts-cartesian-axis-line{
+.recharts-cartesian-axis-line {
     display: none !important;
 }
-.recharts-legend-wrapper{
+
+.recharts-legend-wrapper {
     display: none !important;
 }
-.recharts-text{
+
+.recharts-text {
     font-size: 12px !important;
     font-weight: normal !important;
 }
-.recharts-line{
-    height:10px !important
+
+.recharts-line {
+    height: 10px !important
 }
-.recharts-tooltip-wrapper{
+
+.recharts-tooltip-wrapper {
     border-radius: 5px !important;
 }
-.recharts-surface{
- padding-right: 40px;
+
+.recharts-surface {
+    padding-right: 40px;
 }
-.recharts-default-tooltip{
+
+.recharts-default-tooltip {
     margin: 0px;
     white-space: nowrap;
     border-radius: 10px;
     padding: 6px !important;
     color: #666 !important;
-    background: rgba(255,255,255,0.8) !important;
-    border: solid 2px rgba(230,230,230,0.8) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: solid 2px rgba(230, 230, 230, 0.8) !important;
     font-size: 12px;
     text-align: center;
+}
+
+.PhoneInputInput {
+    height: 3rem;
+    /* border: 1px solid gainsboro; */
+    outline: none;
+    border: none;
+    font-size: .9rem;
+    border-radius: 0.375rem;
+
+}
+
+
+
+.PhoneInput {
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    padding-left: 10px;
 }
