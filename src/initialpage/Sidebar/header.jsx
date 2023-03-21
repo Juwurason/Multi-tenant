@@ -35,7 +35,7 @@ import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Av
         </a>
         {/* Header Title */}
         <div className="page-title-box">
-          <h3>Multi-Tenant</h3>
+          <h3>Promax Care</h3>
         </div>
         {/* /Header Title */}
         <a id="mobile_btn" className="mobile_btn" href="#" onClick={() => onMenuClik()}><i className="fa fa-bars" /></a>
