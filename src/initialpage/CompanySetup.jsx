@@ -22,7 +22,7 @@ const CompanySetup = () => {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const response = await axios.get("http://profitmax-001-site8.ctempurl.com/api/Packages/get_all_packages")
+                const response = await axios.get("https://profitmax-001-site8.ctempurl.com/api/Packages/get_all_packages")
                 setPackages(response.data)
             } catch (error) {
                 console.log(error);
