@@ -70,13 +70,13 @@ const Loginpage = (props) => {
 
     <>
       <Helmet>
-        <title>Login - HRMS Admin Template</title>
+        <title>Login - Promax Multitenant App</title>
         <meta name="description" content="Login page" />
       </Helmet>
 
 
       <div className="login-form">
-        <form action="/examples/actions/confirmation.php" method="post">
+        <form>
           <h4 className="text-center">Login to your account</h4>
           <div className="form-group">
             <input type="text" className="form-control" placeholder="Username" required="required" />
