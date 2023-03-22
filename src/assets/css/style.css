@@ -6188,8 +6188,8 @@ div,
 }
 
 [data-layout-mode=orange] body .header {
-  background: #4763E4;
-  background: linear-gradient(to right, #4763E4 0%, #4763E4 100%);
+  background: #18225C;
+  background: linear-gradient(to right, #18225C 0%, #18225C 100%);
 }
 
 [data-layout-mode=orange] body .header .header-left .logo {
@@ -8309,8 +8309,8 @@ textarea.form-control {
 }
 
 .dash-widget .card-body .dash-widget-icon {
-  background-color: rgba(0, 197, 251, 0.2);
-  color: #4763E4;
+  background-color: #18225C; 
+  color: #fff;
   font-size: 30px;
   height: 60px;
   line-height: 60px;
