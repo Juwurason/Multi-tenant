@@ -11,6 +11,8 @@ import {BarChart,Bar, Cell,ResponsiveContainer,
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 import Header from '../../../initialpage/Sidebar/header'
+import {IoIosPeople} from "react-icons/io"
+import {BsFillCalendarRangeFill} from "react-icons/bs"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
@@ -92,7 +94,7 @@ const [menu, setMenu] = useState(false)
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
               <div className="card dash-widget">
                 <div className="card-body">
-                  <span className="dash-widget-icon"><i className="fa fa-usd" /></span>
+                  <span className="dash-widget-icon"><IoIosPeople /></span>
                   <div className="dash-widget-info">
                     <h3>44</h3>
                     <span>Clients</span>
@@ -103,7 +105,7 @@ const [menu, setMenu] = useState(false)
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
               <div className="card dash-widget">
                 <div className="card-body">
-                  <span className="dash-widget-icon"><i className="fa fa-diamond" /></span>
+                  <span className="dash-widget-icon"><BsFillCalendarRangeFill /></span>
                   <div className="dash-widget-info">
                     <h3>37</h3>
                     <span>Tasks</span>
