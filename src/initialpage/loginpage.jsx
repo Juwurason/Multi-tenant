@@ -42,7 +42,7 @@ const Loginpage = () => {
     try {
       setLoading(true)
       const { data } = await http.post('/Account/auth_login', info)
-      console.log(data);
+      // console.log(data);
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         localStorage.setItem("user", JSON.stringify(data.userProfile))
@@ -54,12 +54,15 @@ const Loginpage = () => {
 
     } catch (error) {
 
-      console.log(error.response.data);
+      // console.log(error.response.data);
       if (error.response?.data?.message === 'User Not Found') {
         toast.error('User not found')
       }
       else if (error.response?.data?.message === 'Email Not Confirmed') {
         toast.error(error.response?.data?.message)
+      }
+      else if (error.response?.data?.message === 'Invalid Login Attempt') {
+        toast.error("Incorrect Password")
       }
 
     }
@@ -68,8 +71,8 @@ const Loginpage = () => {
     }
   }
 
-  const { userProfile } = useCompanyContext();
-  console.log(userProfile);
+  // const { userProfile } = useCompanyContext();
+  // console.log(userProfile);
 
   return (
 
@@ -124,7 +127,7 @@ const Loginpage = () => {
             </button>
           </div>
           <div className="clearfix mt-4">
-            <label className="pull-left checkbox-inline"><input type="checkbox" /> Remember me</label>
+            <label className="pull-left checkbox-inline"><input type="checkbox" defaultChecked /> Remember me</label>
             <Link to={'/forgotpassword'} className="pull-right">Forgot Password?</Link>
           </div>
           <div className="form-group mt-4">
