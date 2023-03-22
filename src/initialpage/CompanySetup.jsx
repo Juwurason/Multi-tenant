@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -77,7 +77,7 @@ const CompanySetup = () => {
             if (data.status === "Success") {
                 toast.success(data.message)
                 storeCompanyId(data.company?.companyId);
-                navigate.push(`/admin-auth/${data.company?.companyId}`)
+                navigate.push(`/admin/${data.company?.companyId}`)
             } else {
                 toast.error(data.message)
                 return
@@ -90,97 +90,12 @@ const CompanySetup = () => {
     }
     return (
         <>
-
-            {/* <div className="container-lg bg-light mx-auto p-lg-4 p-md-4 p-sm-0 w-100 border border-2">
-               
-                <div className="mx-auto w-75">
-                    <div className="bg-white rounded ">
-                        <div className="border-bottom py-6 text-black text-center d-flex flex-column gap-2">
-                            <small className="fw-1 fs-4">CREATE COMPANY ACCOUNT</small>
-                            <small className="fs-5">Set up your new account to get started</small>
-                        </div>
-                        <form className="bg-light px-4 py-4" onSubmit={handleSubmit}>
-                            <div className="mb-3">
-                                <label className="form-label">
-                                    Company Name
-                                    <input
-                                        type="text"
-                                        className="form-control mt-2"
-                                        ref={companyName}
-                                        placeholder="Enter company name"
-                                    />
-                                </label>
-                                {errors.companyName && (
-                                    <span className="text-danger fs-6">{errors.companyName}</span>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">
-                                    Company Email
-                                    <input
-                                        type="email"
-                                        className="form-control mt-2"
-                                        ref={companyEmail}
-                                        placeholder="Enter company email"
-                                    />
-                                </label>
-                                {errors.companyEmail && (
-                                    <span className="text-danger fs-6">{errors.companyEmail}</span>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">
-                                    Phone
-                                    <div className="input-group mt-2">
-                                        <Phone value={value} setValue={setValue} />
-                                    </div>
-                                </label>
-                                {errors.Phone && (
-                                    <span className="text-danger fs-6">{errors.Phone}</span>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">
-                                    Company Address
-                                    <input
-                                        type="text"
-                                        className="form-control mt-2"
-                                        ref={companyAddress}
-                                        placeholder="Enter company address"
-                                    />
-                                </label>
-                                {errors.companyAddress && (
-                                    <span className="text-danger fs-6">{errors.companyAddress}</span>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">
-                                    Company Head
-                                    <input
-                                        type="text"
-                                        className="form-control mt-2"
-                                        ref={companyHead}
-                                        placeholder="Enter company head"
-                                    />
-                                </label>
-                                {errors.companyHead && (
-                                    <span className="text-danger fs-6">{errors.companyHead}</span>
-                                )}
-                            </div>
-                            <button type="submit" className="btn btn-primary mt-4">
-                                Create
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div> */}
-
             <Helmet>
                 <title>Company Setup - Promax Multitenant APP</title>
                 <meta name="description" content="Company Registration Page" />
             </Helmet>
 
-            <div className="container mt-5">
+            <div className="container pt-5">
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <div className="card shadow-none bg-none px-2">
@@ -230,7 +145,7 @@ const CompanySetup = () => {
                                         <label htmlFor="email" className="cols-sm-2 control-label">Company Address</label>
                                         <div className="cols-sm-10">
                                             <div className="input-group">
-                                                <input type="email"
+                                                <input type="text"
                                                     ref={companyAddress}
                                                     className="form-control" name="email" id="email" placeholder="Enter company Address" />
                                             </div>
@@ -243,7 +158,7 @@ const CompanySetup = () => {
                                         <label htmlFor="email" className="cols-sm-2 control-label">Company Head</label>
                                         <div className="cols-sm-10">
                                             <div className="input-group">
-                                                <input type="email"
+                                                <input type="text"
                                                     ref={companyHead}
 
 
@@ -259,6 +174,7 @@ const CompanySetup = () => {
 
                                     <div className="form-group">
                                         <select className="form-select"
+                                            style={{ height: "3rem" }}
                                             ref={packagesId}
                                             aria-label="Default select example">
 
@@ -273,21 +189,16 @@ const CompanySetup = () => {
 
                                     </div>
 
-                                    <div className="form-group">
-                                        <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" defaultValue id="flexCheckChecked" defaultChecked />
-                                            <label className="form-check-label text-muted" htmlFor="flexCheckChecked">
-                                                I consent to the collection and processing of my personal data in line with data regulations as described in the privacy policy
-                                            </label>
-                                        </div>
-
-                                    </div>
-
-
 
 
                                     <div className="form-group w-100 ">
-                                        <button type="submit" className="btn w-100 btn-primary btn-lg btn-block login-button">Continue</button>
+                                        <button type="submit" className="btn w-100 btn-primary btn-lg btn-block login-button"
+                                            disabled={loading ? true : false}
+                                        >{loading ? <div className="spinner-grow text-light" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div> : "Continue"}
+
+                                        </button>
                                     </div>
                                     <div className="form-group">
                                         <span>Already have an account ? </span>

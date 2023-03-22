@@ -1,51 +1,54 @@
-/**
- * Signin Firebase
- */
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from "react-helmet";
+import { FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Applogo } from '../Entryfile/imagepath.jsx'
+import './login.css'
+
 
 const ForgotPassword = () => {
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  console.log(email);
   return (
+
     <>
       <Helmet>
-        <title>Forgot Password - HRMS Admin Template</title>
-        <meta name="description" content="Login page" />
+        <title>Forget Password - Promax Multitenant App</title>
+        <meta name="description" content="Password Reset" />
       </Helmet>
-      <div className="account-content">
-        <Link to="/applyjob/joblist" className="btn btn-primary apply-btn">Apply Job</Link>
-        <div className="container">
-          {/* Account Logo */}
-          <div className="account-logo">
-            <Link to="/app/main/dashboard">
-              <img src={Applogo} alt="Dreamguy's Technologies" />
-            </Link>
+
+
+      <div className="login-form px-2" >
+        <form>
+          <h4 className="text-center">Reset Password</h4>
+          <div className="form-group mt-4">
+            <input type="email" className="form-control" placeholder="Email"
+              onChange={e => setEmail(e.target.value)}
+
+              required />
           </div>
-          {/* /Account Logo */}
-          <div className="account-box">
-            <div className="account-wrapper">
-              <h3 className="account-title">Forgot Password?</h3>
-              <p className="account-subtitle">Enter your email to get a password reset link</p>
-              {/* Account Form */}
-              <form>
-                <div className="form-group">
-                  <label>Email Address</label>
-                  <input className="form-control" type="text" />
-                </div>
-                <div className="form-group text-center">
-                  <button className="btn btn-primary account-btn" type="submit">Reset Password</button>
-                </div>
-                <div className="account-footer">
-                  <p>Remember your password? <Link to="/login">Login</Link></p>
-                </div>
-              </form>
-              {/* /Account Form */}
-            </div>
+
+
+          <div className="form-group mt-4">
+            <button type="submit" className="btn btn-primary btn-lg w-100"
+              disabled={loading ? true : false}
+            >{loading ? <div className="spinner-grow text-light" role="status">
+              <span className="sr-only">Loading...</span>
+            </div> : "Proceed"}
+
+            </button>
           </div>
-        </div>
+
+          <div className="form-group mt-4">
+
+            <p className="text-center"><span>Back to login </span> &nbsp; <Link to={'/login'}> <FaArrowLeft /></Link></p>
+
+          </div>
+        </form>
       </div>
+
     </>
   );
 }

@@ -48,7 +48,7 @@ export default class App extends Component {
                 <Route path="/login" component={LoginPage} />
                 <Route path="/forgotpassword" component={ForgotPassword} />
                 <Route path="/register" component={CompanySetup} />
-                <Route path="/admin" component={AdminRegistration} />
+                <Route path="/admin/:companyId" component={AdminRegistration} />
                 {/* <Route path="/register" component={RegistrationPage} /> */}
                 <Route path="/otp" component={OTP} />
                 <Route path="/lockscreen" component={LockScreen} />
