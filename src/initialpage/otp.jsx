@@ -3,10 +3,10 @@ import React, { Component, useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Applogo } from '../Entryfile/imagepath.jsx'
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useCompanyContext } from '../context/index.jsx';
+import http from '../api/http.jsx';
 
 const OTPscreen = () => {
   const { email, companyId } = useCompanyContext();
@@ -57,7 +57,7 @@ const OTPscreen = () => {
 
       try {
         setLoading(true)
-        const res = await axios.post(' http://profitmax-001-site8.ctempurl.com/api/Account/post_otp', postData)
+        const res = await http.post('/Account/post_otp', postData)
         toast.success(res.data.message)
         navigate.push('/login')
         localStorage.removeItem("companyId")

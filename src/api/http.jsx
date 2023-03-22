@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://profitmax-001-site8.ctempurl.com/api"
+const baseURL = "https://profitmax-001-site8.ctempurl.com/api"
 
 const http = axios.create({
     baseURL: baseURL,

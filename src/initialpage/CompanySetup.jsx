@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
@@ -72,7 +71,7 @@ const CompanySetup = () => {
 
         try {
             setLoading(true)
-            const { data } = await axios.post("http://profitmax-001-site8.ctempurl.com/api/Companies/add_company", info)
+            const { data } = await http.post("/Companies/add_company", info)
             console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message)
