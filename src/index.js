@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Main from "./Entryfile/Main";
 import 'react-phone-number-input/style.css'
-// import 'react-phone-number-input/style.css'
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-phone-number-input/style.css'
 import { ToastContainer } from 'react-toastify'
-// import { CompanyProvider } from './context';
 // window.Popper = require("popper.js").default;
 
 // // ReactDOM.render(<Main/>, document.getElementById('app'));
@@ -18,6 +18,7 @@ const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
     <CompanyProvider>
+        <ToastContainer position="top-right" />
         <Main />
     </CompanyProvider>
 );

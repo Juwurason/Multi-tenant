@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export const CompanyContext = createContext();
 
@@ -8,6 +8,22 @@ export const CompanyProvider = ({ children }) => {
     const [companyId, setCompanyId] = useState('');
     const [email, setEmail] = useState('');
     const [test, setTest] = useState("Testing")
+    const [userProfile, setUserProfile] = useState(
+        {
+            companyId: 0,
+            email: "",
+            firstName: "",
+            fullName: "",
+            lastName: "",
+            phoneNumber: "",
+            role: "",
+            token: "",
+            tokenExpiration: ""
+        }
+    )
+    useEffect(() => {
+        setUserProfile(JSON.parse(localStorage.getItem('user')))
+    }, [])
 
     const storeCompanyId = (companyId) => {
         setCompanyId(companyId);
@@ -25,7 +41,7 @@ export const CompanyProvider = ({ children }) => {
         localStorage.removeItem('email');
     };
 
-    const contextValue = { companyId, email, storeCompanyId, storeAdminEmail, clearCompanyData, test };
+    const contextValue = { companyId, email, storeCompanyId, storeAdminEmail, clearCompanyData, test, userProfile, setUserProfile };
 
     return (
         <CompanyContext.Provider value={contextValue}>

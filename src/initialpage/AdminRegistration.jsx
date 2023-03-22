@@ -1,15 +1,15 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
-// import { useCompanyContext } from "../../context";
 import Phone from "../_components/Phone/Phone";
+import http from "../api/http";
+import { useCompanyContext } from "../context";
 
 const AdminRegistration = () => {
-    // const { companyId, storeAdminEmail } = useCompanyContext();
+    const { companyId, storeAdminEmail } = useCompanyContext();
     const navigate = useHistory()
     const [pwdVisible, setPwdVisible] = useState(false)
     const firstName = useRef(null)
@@ -22,23 +22,19 @@ const AdminRegistration = () => {
     const [loading, setLoading] = useState(false)
     let errorsObj = { firstName: '', surName: '', email: '', phone: '', address: '', password: '', confirmPassword: '' };
     const [errors, setErrors] = useState(errorsObj);
-    // useEffect(() => {
-
-    //     const storedCompanyId = localStorage.getItem('companyId');
-
-
-
-    //     if (companyId === "") {
-    //         navigate("/register")
-    //     }
+    useEffect(() => {
+        const checkID = localStorage.getItem("companyId")
+        if (checkID === "") {
+            navigate.push("/register")
+        }
 
 
-    // }, [])
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         const details = {
-            // companyId: companyId,
+            companyId: companyId,
             firstName: firstName.current.value,
             surName: surName.current.value,
             email: email.current.value,
@@ -84,14 +80,14 @@ const AdminRegistration = () => {
 
         try {
             setLoading(true)
-            const { data } = await axios.post(`http://profitmax-001-site8.ctempurl.com/api/CompanyAdmins/company_admin?id=${companyId}`, details)
+            const { data } = await http.post(`/CompanyAdmins/company_admin?id=${companyId}`, details)
             console.log(data);
             setLoading(false)
 
             if (data.status === "Success") {
                 toast.success(data.message)
                 storeAdminEmail(data.companyAdmin?.email)
-                navigate('/email-confirmation')
+                navigate.push('/otp')
 
             } else {
                 toast.error(data.message)
@@ -175,7 +171,7 @@ const AdminRegistration = () => {
                                         <label htmlFor="email" className="cols-sm-2 control-label">Address</label>
                                         <div className="cols-sm-10">
                                             <div className="input-group">
-                                                <input type="email"
+                                                <input type="text"
                                                     ref={address}
                                                     className="form-control" name="email" id="email" placeholder="Enter Address" />
                                             </div>
@@ -233,13 +229,28 @@ const AdminRegistration = () => {
                                             )}
                                         </div>
                                     </div>
+                                    <div className="form-group">
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="checkbox" defaultValue id="flexCheckChecked" defaultChecked />
+                                            <label className="form-check-label text-muted" htmlFor="flexCheckChecked">
+                                                I consent to the collection and processing of my personal data in line with data regulations as described in the privacy policy
+                                            </label>
+                                        </div>
 
+                                    </div>
 
 
 
 
                                     <div className="form-group w-100 ">
-                                        <button type="submit" className="btn w-100 btn-primary btn-lg btn-block login-button">Create Account</button>
+                                        <button type="submit" className="btn w-100 btn-primary btn-lg btn-block login-button"
+
+                                            disabled={loading ? true : false}
+                                        >
+                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div> : "Create Account"}
+                                        </button>
                                     </div>
 
                                 </form>

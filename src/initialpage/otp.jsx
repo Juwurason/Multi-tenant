@@ -1,18 +1,15 @@
-/**
- * Signin Firebase
- */
 
 import React, { Component, useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Applogo } from '../Entryfile/imagepath.jsx'
-import { Link, NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { BsArrowCounterclockwise } from 'react-icons/bs';
-// import { useCompanyContext } from "../../context";
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { useCompanyContext } from '../context/index.jsx';
 
 const OTPscreen = () => {
-  // const { email, companyId } = useCompanyContext();
+  const { email, companyId } = useCompanyContext();
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [loading, setLoading] = useState(false)
   const navigate = useHistory()
@@ -36,13 +33,15 @@ const OTPscreen = () => {
     });
 
   };
-  // useEffect(() => {
-  //   const storedAdminEmail = localStorage.getItem('email');
-  //   if (email === "" || companyId === "") {
-  //     navigate("/register")
-  //   }
+  useEffect(() => {
+    const checkID = localStorage.getItem("companyId")
+    const checkEmail = localStorage.getItem("email")
 
-  // })
+    if (checkEmail === "" || checkID === "") {
+      navigate.push("/register")
+    }
+
+  })
 
 
   const handleSubmit = async (event) => {
@@ -59,12 +58,13 @@ const OTPscreen = () => {
       try {
         setLoading(true)
         const res = await axios.post(' http://profitmax-001-site8.ctempurl.com/api/Account/post_otp', postData)
-        console.log(res.data);
         toast.success(res.data.message)
+        navigate.push('/login')
+        localStorage.removeItem("companyId")
+        localStorage.removeItem("email")
         setLoading(false)
 
       } catch (error) {
-        console.log(error.response.data);
         toast.error(error.response.data.message)
         setLoading(false)
       }
@@ -83,9 +83,9 @@ const OTPscreen = () => {
           <div className='row justify-content-center h-100 align-items-center'>
             <div className='col-md-7   py-5'>
               <div className='text-center w-100 d-flex flex-column gap-4'>
-                <h2 className='text-center font-weight-bold mb-2 fs-1'>Check your email for a code</h2>
+                <h1 className='text-center fw-2 mb-2 fs-1'>Check your email for a code</h1>
                 <h4>
-                  <i className='fa fa-lock text-primary mb-2' />  We've sent a 6-digit code to <span className="text-primary">tmail@mail.com </span>
+                  We've sent a 6-digit code to <span className="text-primary"> {email} </span>
                   The code expires shortly.
                 </h4>
 
@@ -109,17 +109,18 @@ const OTPscreen = () => {
                   </div>
                   <button className="btn"
                     onClick={e => setOtp([...otp.map(v => "")])}
-                  ><BsArrowCounterclockwise /></button>
+                  ><FaRegTrashAlt /></button>
 
 
                 </div>
 
                 <div>
                   <button className='btn btn-primary btn-lg rounded-sm w-50' to='/dashboard'
-                    onClick={handleSubmit}>
-                    {/* <span className="spinner-border spinner-border-sm"></span> */}
-
-                    Verify OTP
+                    onClick={handleSubmit}
+                    disabled={loading ? true : false}
+                  >{loading ? <div className="spinner-grow text-light" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div> : "Verify"}
                   </button>
                 </div>
                 <div>

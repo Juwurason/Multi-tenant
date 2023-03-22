@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server",
     "dev": "webpack serve",
-    "build": "webpack",
+    "build": "webpack --output-path build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
