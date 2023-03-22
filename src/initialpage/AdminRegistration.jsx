@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 // import { useCompanyContext } from "../../context";
 import Phone from "../_components/Phone/Phone";
+import http from "../api/http";
 
 const AdminRegistration = () => {
     // const { companyId, storeAdminEmail } = useCompanyContext();
@@ -84,7 +85,7 @@ const AdminRegistration = () => {
 
         try {
             setLoading(true)
-            const { data } = await axios.post(`http://profitmax-001-site8.ctempurl.com/api/CompanyAdmins/company_admin?id=${companyId}`, details)
+            const { data } = await http.post(`/CompanyAdmins/company_admin?id=${companyId}`, details)
             console.log(data);
             setLoading(false)
 

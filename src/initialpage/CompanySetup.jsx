@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import http from "../api/http";
 import { useCompanyContext } from "../context";
 import Phone from "../_components/Phone/Phone";
 const CompanySetup = () => {
@@ -22,7 +23,7 @@ const CompanySetup = () => {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const response = await axios.get("https://profitmax-001-site8.ctempurl.com/api/Packages/get_all_packages")
+                const response = await http.get("/Packages/get_all_packages")
                 setPackages(response.data)
             } catch (error) {
                 console.log(error);
@@ -286,7 +287,7 @@ const CompanySetup = () => {
 
 
                                     <div className="form-group w-100 ">
-                                        <button type="submit" className="btn w-100 btn-primary btn-lg btn-block login-button">Register</button>
+                                        <button type="submit" className="btn w-100 btn-primary btn-lg btn-block login-button">Continue</button>
                                     </div>
                                     <div className="form-group">
                                         <span>Already have an account ? </span>

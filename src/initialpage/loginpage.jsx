@@ -77,7 +77,7 @@ const Loginpage = (props) => {
       </Helmet>
 
 
-      <div className="login-form">
+      <div className="login-form px-2">
         <form>
           <h4 className="text-center">Login to your account</h4>
           <div className="form-group mt-4">
@@ -106,7 +106,7 @@ const Loginpage = (props) => {
 
 
           <div className="form-group mt-4">
-            <button type="submit" className="btn btn-primary btn-lg w-100">Log in</button>
+            <button type="submit" className="btn btn-primary w-100">Log in</button>
           </div>
           <div className="clearfix mt-4">
             <label className="pull-left checkbox-inline"><input type="checkbox" /> Remember me</label>
