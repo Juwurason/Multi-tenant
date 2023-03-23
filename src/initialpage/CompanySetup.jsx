@@ -6,7 +6,6 @@ import http from "../api/http";
 import { useCompanyContext } from "../context";
 import Phone from "../_components/Phone/Phone";
 const CompanySetup = () => {
-
     const { storeCompanyId } = useCompanyContext();
     const [packages, setPackages] = useState([])
     const companyName = useRef(null);
