@@ -32,18 +32,12 @@ import "../assets/js/multiselect.min.js";
 import "../assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css";
 import "../assets/css/bootstrap-datetimepicker.min.css";
 import '../assets/css/style.css';
-import { CompanyProvider } from '../context';
-import { ToastContainer } from 'react-toastify';
-// window.Popper = require("popper.js").default;
 
 const MainApp = () => (
 
    <Router basename={`${config.publicPath}`}>
       <Switch>
-         {/* <CompanyProvider> */}
-         {/* <ToastContainer position='top-right' /> */}
          <Route path="/" component={App} />
-         {/* </CompanyProvider> */}
       </Switch>
    </Router>
 );

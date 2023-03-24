@@ -1,6 +1,3 @@
-/**
- * App Header
- */
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -36,7 +33,7 @@ const Sidebar = (props) => {
 
   let pathname = props.location.pathname
   return (
-    <div id="sidebar" className="sidebar "  >
+    <div id="sidebar" className="sidebar"  >
       <Scrollbars
         autoHide
         autoHideTimeout={1000}
