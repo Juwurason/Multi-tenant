@@ -7,7 +7,6 @@ export const useCompanyContext = () => useContext(CompanyContext);
 export const CompanyProvider = ({ children }) => {
     const [companyId, setCompanyId] = useState('');
     const [email, setEmail] = useState('');
-    const [test, setTest] = useState("Testing")
     const [userProfile, setUserProfile] = useState(
         {
             companyId: 0,
@@ -41,7 +40,7 @@ export const CompanyProvider = ({ children }) => {
         localStorage.removeItem('email');
     };
 
-    const contextValue = { companyId, email, storeCompanyId, storeAdminEmail, clearCompanyData, test, userProfile, setUserProfile };
+    const contextValue = { companyId, email, storeCompanyId, storeAdminEmail, clearCompanyData, userProfile, setUserProfile };
 
     return (
         <CompanyContext.Provider value={contextValue}>
