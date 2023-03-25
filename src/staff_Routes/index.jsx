@@ -1,5 +1,6 @@
 
 //main
+import StaffDashboard from '../modules/Staff/StaffDashboard';
 import Dashboard from '../MainPage/Main/Dashboard';
 import Apps from '../MainPage/Main/Apps';
 //UI Interface
@@ -26,17 +27,16 @@ import Employees from '../MainPage/Employees';
 import Projects from '../MainPage/Employees/Projects';
 import Employee from '../MainPage/Employees/Employees';
 import ProjectList from '../MainPage/Employees/Projects/projectlist'
-// import StaffDashboard from '../modules/Staff/StaffDashboard';
 
 export default [
    {
       path: 'main',
       component: Dashboard
    },
-   // {
-   //    path: 'staff',
-   //    component: StaffDashboard
-   // },
+   {
+      path: 'staff',
+      component: StaffDashboard
+   },
    {
       path: 'apps',
       component: Apps

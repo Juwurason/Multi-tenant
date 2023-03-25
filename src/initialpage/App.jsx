@@ -22,6 +22,7 @@ import Error404 from '../MainPage/Pages/ErrorPage/error404';
 import Error500 from '../MainPage/Pages/ErrorPage/error500';
 import CompanySetup from './CompanySetup';
 import AdminRegistration from './AdminRegistration';
+import StaffLayout from './Sidebar/StaffLayout';
 
 
 
@@ -53,8 +54,8 @@ export default class App extends Component {
                 <Route path="/otp" component={OTP} />
                 <Route path="/lockscreen" component={LockScreen} />
                 <Route path="/applyjob" component={ApplyJobs} />
-
                 <Route path="/app" component={DefaultLayout} />
+                <Route path="/staff" component={StaffLayout} />
                 <Route path="/settings" component={Settinglayout} />
                 <Route path="/tasks" component={Tasklayout} />
                 <Route path="/email" component={Emaillayout} />
