@@ -9,10 +9,10 @@ import {itemRender,onShowSizeChange} from "../../../MainPage/paginationfunction"
 // import "../antdstyle.css"
 import Offcanvas from '../../../Entryfile/offcanvance';
 
-const StaffDocument = () => {
+const StaffAttendance = () => {
   const [data, setData] = useState([
-    {id:1,policyname:"John Doe",description:"Lorem ipsum dollar",department:"IOS",creatat:"1 Jan 2013",status:"Active"},
-         {id:2,policyname:"Richard Miles",description:"Lorem ipsum dollar",department:"Design",creatat:"18 Mar 2014",status:"Active"},
+    {id:1,policyname:"Monday",description:"10:06 PM", department:"01:05 AM",creatat:"1 Jan 2013",status:"Active"},
+         {id:2,policyname:"Tuesday",description:"10:06 PM", department:"01:05 AM",creatat:"18 Mar 2014",status:"Active"},
   ]);
   useEffect( ()=>{
     if($('.select').length > 0) {
@@ -26,22 +26,22 @@ const StaffDocument = () => {
     const columns = [
       
       {
-        title: '#',
+        title: 'S/N',
         dataIndex: 'id',
           sorter: (a, b) => a.id.length - b.id.length,
       }, 
       {
-        title: 'Policy Name',
+        title: 'Days',
         dataIndex: 'policyname', 
         sorter: (a, b) => a.policyname.length - b.policyname.length,
       }, 
       {
-        title: 'Department',
+        title: 'From Time of Day',
         dataIndex: 'department', 
         sorter: (a, b) => a.department.length - b.department.length,
       },        
       {
-        title: 'Description',
+        title: 'To Time of Day',
         dataIndex: 'description',
         sorter: (a, b) => a.description.length - b.description.length,
       },
@@ -56,7 +56,7 @@ const StaffDocument = () => {
             <div className="dropdown dropdown-action text-end">
                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                 <div className="dropdown-menu dropdown-menu-right">
-                  <a className="dropdown-item" href="#"><i className="fa fa-download m-r-5" /> Download</a>
+                  {/* <a className="dropdown-item" href="#"><i className="fa fa-download m-r-5" /> Download</a> */}
                   <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_policy"><i className="fa fa-pencil m-r-5" /> Edit</a>
                   <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_policy"><i className="fa fa-trash-o m-r-5" /> Delete</a>
                 </div>
@@ -205,4 +205,4 @@ const StaffDocument = () => {
    
 }
 
-export default StaffDocument;
+export default StaffAttendance;
