@@ -430,8 +430,11 @@ const Sidebar = (props) => {
                 <span>Main</span>
               </li>
               <li className="submenu">
+
                 <a href="#" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" />
                   <span> Dashboard</span> <span className="menu-arrow" /></a>
+
+
                 {isSideMenu == "dashboard" ?
                   <ul >
                     <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">Admin Dashboard</Link></li>

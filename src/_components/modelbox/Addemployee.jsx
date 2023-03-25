@@ -15,6 +15,12 @@ const Addemployee = () => {
 
   const submitForm = async (e) => {
     e.preventDefault()
+    if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
+      email.trim() === ""
+    ) {
+      return toast.error("Input Fields cannot be empty")
+    }
+
     const formData = new FormData()
     // Add input field values to formData
     formData.append("CompanyId", 30);
