@@ -1325,6 +1325,25 @@ strong {
   height: 2.5rem;
 }
 
+.sidebar-vertical::-webkit-scrollbar {
+  width: 12px;
+  /* width of the entire scrollbar */
+}
+
+.sidebar-vertical::-webkit-scrollbar-track {
+  background: gainsboro;
+  /* color of the tracking area */
+}
+
+.sidebar-vertical::-webkit-scrollbar-thumb {
+  background-color: #999;
+  /* color of the scroll thumb */
+  border-radius: 20px;
+  /* roundness of the scroll thumb */
+  border: 3px solid #999;
+  /* creates padding around scroll thumb */
+}
+
 .avatar-sm .border {
   border-width: 3px !important;
 }
@@ -8311,7 +8330,7 @@ textarea.form-control {
 
 .dash-widget .card-body .dash-widget-icon {
 
-  background-color: #18225C; 
+  background-color: #18225C;
   color: #fff;
 
   font-size: 30px;

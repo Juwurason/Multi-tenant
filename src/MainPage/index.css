@@ -93,3 +93,7 @@ body::-webkit-scrollbar-thumb {
     border: 3px solid #999;
     /* creates padding around scroll thumb */
 }
+
+.pointer {
+    cursor: pointer;
+}

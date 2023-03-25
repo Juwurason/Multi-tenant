@@ -17,6 +17,7 @@ import { BsFillCalendarRangeFill } from "react-icons/bs"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
+import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt } from 'react-icons/fa';
 
 
 const barchartdata = [
@@ -63,7 +64,7 @@ const AdminDashboard = () => {
         <Sidebar />
         <div className="page-wrapper">
           <Helmet>
-            <title>Dashboard - HRMS Admin Template</title>
+            <title>Dashboard - Promax Admin Dashboard</title>
             <meta name="description" content="Dashboard" />
           </Helmet>
           {/* Page Content */}
@@ -72,7 +73,7 @@ const AdminDashboard = () => {
             <div className="page-header">
               <div className="row">
                 <div className="col-sm-12">
-                  <h3 className="page-title">Welcome Amina!</h3>
+                  <h3 className="page-title">Welcome Admin!</h3>
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item active">Dashboard</li>
                   </ul>
@@ -83,48 +84,111 @@ const AdminDashboard = () => {
             <div className="row">
               <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                 <div className="card dash-widget">
-                  <div className="card-body">
-                    <span className="dash-widget-icon"><i className="fa fa-cubes" /></span>
-                    <div className="dash-widget-info">
-                      <h3>112</h3>
-                      <span>Projects</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div className="card dash-widget">
-                  <div className="card-body">
-                    <span className="dash-widget-icon"><IoIosPeople /></span>
-                    <div className="dash-widget-info">
-                      <h3>44</h3>
-                      <span>Clients</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div className="card dash-widget">
-                  <div className="card-body">
-                    <span className="dash-widget-icon"><BsFillCalendarRangeFill /></span>
-                    <div className="dash-widget-info">
-                      <h3>37</h3>
-                      <span>Tasks</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div className="card dash-widget">
-                  <div className="card-body">
+                  <div className="card-body align-items-center">
                     <span className="dash-widget-icon"><i className="fa fa-user" /></span>
                     <div className="dash-widget-info">
-                      <h3>218</h3>
-                      <span>Employees</span>
+                      <span>Total Staff</span>
+                      <h3>0</h3>
+                      <Link to={'/app/employee/allemployees'} className='pointer fw-bold'>View Staffs</Link>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><i className="fa fa-users" /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Client</span>
+                      <h3>0</h3>
+                      <Link to={'/app/employees/clients'} className='pointer fw-bold'>View Clients</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><i className="fa fa-user" /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Admin</span>
+                      <h3>0</h3>
+                      <span className='pointer fw-bold'>View Admin</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><FaTicketAlt /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Tickets</span>
+                      <h3>0</h3>
+                      <span className='pointer fw-bold'>View Tickets</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><FaFolderOpen /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Documents</span>
+                      <h3>0</h3>
+                      <span className='pointer fw-bold'>View Documents</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><FaFileAlt /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Progress Notes</span>
+                      <h3>0</h3>
+                      <span className='pointer fw-bold'>View Progress Notes</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><FaCalendar /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Shift Roaster</span>
+                      <h3>0</h3>
+                      <span className='pointer fw-bold'>View Roaster</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div className="card dash-widget">
+                  <div className="card-body align-items-center">
+                    <span className="dash-widget-icon"><FaClock /></span>
+                    <div className="dash-widget-info">
+                      <span>Total Attendances</span>
+                      <h3>0</h3>
+                      <span className='pointer fw-bold'>View Attendance</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
             </div>
             <div className="row">
               <div className="col-md-12">
