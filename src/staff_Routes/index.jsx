@@ -5,8 +5,9 @@ import Dashboard from '../MainPage/Main/Dashboard';
 import Apps from '../MainPage/Main/Apps';
 //UI Interface
 import UIinterface from '../MainPage/UIinterface';
+import StaffForm from '../modules/Staff/StaffForm';
 //Pages
-import ProfilePage from '../MainPage/Pages/Profile';
+import StaffProfile from '../modules/Staff/StaffProfile';
 import Subscription from '../MainPage/Pages/Subscription';
 import Pages from '../MainPage/Pages/Pages';
 //Administrator
@@ -22,6 +23,7 @@ import Reports from '../MainPage/HR/Reports';
 import Sales from '../MainPage/HR/Sales';
 import Accounts from '../MainPage/HR/Accounts'
 import Payroll from '../MainPage/HR/Payroll';
+import StaffDocument from '../modules/Staff/StaffDocument';
 //Employees
 import Employees from '../MainPage/Employees';
 import Projects from '../MainPage/Employees/Projects';
@@ -36,6 +38,10 @@ export default [
    {
       path: 'staff',
       component: StaffDashboard
+   },
+   {
+      path: 'staff-document',
+      component: StaffDocument
    },
    {
       path: 'apps',
@@ -58,8 +64,8 @@ export default [
       component: UIinterface
    },
    {
-      path: 'profile',
-      component: ProfilePage
+      path: 'staffprofile',
+      component: StaffProfile
    },
    {
       path: 'subscription',
@@ -108,6 +114,10 @@ export default [
    {
       path: 'payroll',
       component: Payroll
+   },
+   {
+      path: 'staff-form',
+      component: StaffForm
    },
    {
       path: 'projectlist',
