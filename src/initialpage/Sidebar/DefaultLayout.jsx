@@ -28,7 +28,7 @@ const DefaultLayout = (props) => {
 						<Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
 					)}
 				</div>
-				{/* <SidebarContent /> */}
+				<SidebarContent />
 				{/* </div> */}
 				{/* Delete Employee Modal */}
 				<div className="modal custom-modal fade" id="delete_employee" role="dialog">
