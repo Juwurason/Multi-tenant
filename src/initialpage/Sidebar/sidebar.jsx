@@ -91,7 +91,7 @@ const Sidebar = (props) => {
                   }
                 </li>
                 <li className="menu-title">
-                  <span>Employees</span>
+                  <span >Employees</span>
                 </li>
                 <li className="submenu" >
                   <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
@@ -427,11 +427,13 @@ const Sidebar = (props) => {
             </nav>
             <ul className="sidebar-vertical" id='veritical-sidebar'>
               <li className="menu-title">
-                <span>Main</span>
+                <span>"Main"</span>
               </li>
               <li className="submenu">
+
+               
                 <a href="#" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" />
-                  <span> Dashboard</span> <span className="menu-arrow" /></a>
+                  <span> Dashboard</span> <span className="menu-arrow" /><
                 {isSideMenu == "dashboard" ?
                   <ul >
                     <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">Admin Dashboard</Link></li>

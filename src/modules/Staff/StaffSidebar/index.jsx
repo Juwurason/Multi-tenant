@@ -433,17 +433,17 @@ const StaffSidebar = (props) => {
                                 <span>Main</span>
                             </li>
                             <li className="submenu">
-                                <a href="#" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "dashboard" ?
+                                <a href="/staff/staff/staffDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
+                                {/* {isSideMenu == "dashboard" ?
                                     <ul >
-                                        <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">ss Dashboard</Link></li>
+                                        <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">Dashboard</Link></li>
                                         <li><Link className={pathname.includes('main/employee-') ? "active" : ""}
                                             to="/app/main/employee-dashboard">Employ me Dashboard</Link></li>
                                     </ul>
                                     : ""
-                                }
+                                } */}
                             </li>
-                            <li className="submenu">
+                            {/* <li className="submenu">
                                 <a href="#" className={isSideMenu == "apps" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "apps" ? "" : "apps")} ><i className="la la-cube" /> <span> Apps</span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "apps" ?
                                     <ul>
@@ -467,11 +467,11 @@ const StaffSidebar = (props) => {
                                     </ul>
                                     : ""
                                 }
-                            </li>
+                            </li> */}
                             <li className="menu-title">
-                                <span>Employees</span>
+                                <span>ACCOUNT MANAGEMENT</span>
                             </li>
-                            <li className="submenu" >
+                            {/* <li className="submenu" >
                                 <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "employee" ?
 
@@ -493,11 +493,11 @@ const StaffSidebar = (props) => {
                                     </ul>
                                     : ""
                                 }
-                            </li>
+                            </li> */}
                             <li className={pathname.includes('clients') ? "active" : ""}>
-                                <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
+                                <Link to="/staff/staffprofile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
-                            <li className="submenu">
+                            {/* <li className="submenu">
                                 <a href="#" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-rocket" /> <span> Projects</span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "projects" ?
                                     <ul>
@@ -509,17 +509,18 @@ const StaffSidebar = (props) => {
                                     </ul>
                                     : ""
                                 }
-                            </li>
+                            </li> */}
                             <li className={pathname.includes('leads') ? "active" : ""}>
-                                <Link to="/app/employees/leads"><i className="la la-user-secret" /> <span>Leads</span></Link>
+                                <Link to="/forgotpassword"><i className="la la-lock" /> <span>Change Password</span></Link>
+                                {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
                             <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
-                                <Link to="/app/employees/tickets"><i className="la la-ticket" /> <span>Tickets</span></Link>
+                                <Link to="/staff/staff-form"><i className="la la-book" /> <span>My Availabilities</span></Link>
                             </li>
                             <li className="menu-title">
-                                <span>HR</span>
+                                <span>STAFF-CLIENT MANAGEMENT</span>
                             </li>
-                            <li className="submenu">
+                            {/* <li className="submenu">
                                 <a href="#" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-files-o" /> <span> Sales </span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "sales" ?
                                     <ul>
@@ -532,8 +533,8 @@ const StaffSidebar = (props) => {
                                     </ul>
                                     : ""
                                 }
-                            </li>
-                            <li className="submenu">
+                            </li> */}
+                            {/* <li className="submenu">
                                 <a href="#" className={isSideMenu == "accounting" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "accounting" ? "" : "accounting")}><i className="la la-files-o" /> <span> Accounting </span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "accounting" ?
                                     <ul>
@@ -544,8 +545,8 @@ const StaffSidebar = (props) => {
                                     </ul>
                                     : ""
                                 }
-                            </li>
-                            <li className="submenu">
+                            </li> */}
+                            {/* <li className="submenu">
                                 <a href="#" className={isSideMenu == "payroll" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "payroll" ? "" : "payroll")}><i className="la la-money" /> <span> Payroll </span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "payroll" ?
                                     <ul>
@@ -555,9 +556,9 @@ const StaffSidebar = (props) => {
                                     </ul>
                                     : ""
                                 }
-                            </li>
+                            </li> */}
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/app/hr/policies"><i className="la la-file-pdf-o" /> <span>Policies</span></Link>
+                                <Link to="/staff/staff-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>
                             <li className="submenu">
                                 <a href="#" className={isSideMenu == "reports" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "reports" ? "" : "reports")}><i className="la la-pie-chart" /> <span> Reports </span> <span className="menu-arrow" /></a>
