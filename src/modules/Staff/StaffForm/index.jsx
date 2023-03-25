@@ -18,7 +18,7 @@ import StaffTable from '../StaffTable';
          return (
              <div className="page-wrapper">
              <Helmet>
-                   <title> Form</title>
+                   <title> Availabilities</title>
                    <meta name="description" content="Login page"/>					
              </Helmet>
              <div className="content container-fluid">
@@ -71,17 +71,15 @@ import StaffTable from '../StaffTable';
                      </div>
                    </div>
                  </div>
-               </div>
-               
+               </div> 
                <div className="row">
                  <div className="col-md-12">
-                   <div className="card">
-                     <StaffTable />
-                   </div>
+                 <StaffTable />
                  </div>
                </div>
-               
+              
              </div>
+             
            </div>
          );
      }
