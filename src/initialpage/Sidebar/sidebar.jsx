@@ -438,8 +438,8 @@ const Sidebar = (props) => {
                 {isSideMenu == "dashboard" ?
                   <ul >
                     <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">Admin Dashboard</Link></li>
-                    {/* <li><Link className={pathname.includes('main/employee-') ? "active" : ""}
-                      to="/app/main/employee-dashboard">Employee Dashboard</Link></li> */}
+                    <li><Link className={pathname.includes('main/employee-') ? "active" : ""}
+                      to="/app/main/employee-dashboard">Employee Dashboard</Link></li>
                   </ul>
                   : ""
                 }

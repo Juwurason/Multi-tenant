@@ -517,6 +517,9 @@ const StaffSidebar = (props) => {
                             <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
                                 <Link to="/staff/staff-form"><i className="la la-book" /> <span>My Availabilities</span></Link>
                             </li>
+                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+                                <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>Attendances</span></Link>
+                            </li>
                             <li className="menu-title">
                                 <span>STAFF-CLIENT MANAGEMENT</span>
                             </li>

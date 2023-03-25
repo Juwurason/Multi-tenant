@@ -9,10 +9,10 @@ import {itemRender,onShowSizeChange} from "../../../MainPage/paginationfunction"
 // import "../antdstyle.css"
 import Offcanvas from '../../../Entryfile/offcanvance';
 
-const StaffDocument = () => {
+const StaffAttendance = () => {
   const [data, setData] = useState([
-    {id:1,policyname:"John Doe",description:"Lorem ipsum dollar",department:"Staff",creatat:"1 Jan 2013",status:"Active"},
-         {id:2,policyname:"Richard Miles",description:"Lorem ipsum dollar",department:"Staff",creatat:"18 Mar 2014",status:"Active"},
+    {id:1,policyname:"John Doe",description:"8 Hrs 10 min", clockout: "2/8/2023 6:00:00 PM", department:"2/8/2023 9:50:00 AM",creatat:"1 Jan 2013",status:"Active"},
+         {id:2,policyname:"Richard Miles",description:"8 Hrs 10 min", clockout: "2/8/2023 6:00:00 PM", department:"2/8/2023 9:50:00 AM",creatat:"18 Mar 2014",status:"Active"},
   ]);
   useEffect( ()=>{
     if($('.select').length > 0) {
@@ -31,29 +31,24 @@ const StaffDocument = () => {
           sorter: (a, b) => a.id.length - b.id.length,
       }, 
       {
-        title: 'User',
+        title: 'Staff',
         dataIndex: 'policyname', 
         sorter: (a, b) => a.policyname.length - b.policyname.length,
       }, 
       {
-        title: 'Role',
+        title: 'ClockIn',
         dataIndex: 'department', 
         sorter: (a, b) => a.department.length - b.department.length,
       },        
       {
-        title: 'Document',
+        title: 'Duration',
         dataIndex: 'description',
         sorter: (a, b) => a.description.length - b.description.length,
       },
       {
-        title: 'Expires Date',
-        // dataIndex: 'description',
-        // sorter: (a, b) => a.description.length - b.description.length,
-      },
-      {
-        title: 'Status',
-        // dataIndex: 'description',
-        // sorter: (a, b) => a.description.length - b.description.length,
+        title: 'ClockOut',
+        dataIndex: 'clockout',
+        sorter: (a, b) => a.clockout.length - b.clockout.length,
       },
       {
         title: 'Created',
@@ -77,27 +72,10 @@ const StaffDocument = () => {
       return (
         <>
         <div className="page-wrapper">
-        <Helmet>
-            <title> Upload document</title>
-            <meta name="description" content="Login page"/>					
-        </Helmet>
         {/* Page Content */}
         <div className="content container-fluid">
           {/* Page Header */}
-          <div className="page-header">
-            <div className="row align-items-center">
-              <div className="col">
-                <h3 className="page-title">Documents</h3>
-                <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item active">User Documents</li>
-                </ul>
-              </div>
-              <div className="col-auto float-end ml-auto">
-                <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
-              </div>
-            </div>
-          </div>
+    
           {/* /Page Header */}
           <div className="row">
             <div className="col-md-12">
@@ -232,4 +210,4 @@ const StaffDocument = () => {
    
 }
 
-export default StaffDocument;
+export default StaffAttendance;
