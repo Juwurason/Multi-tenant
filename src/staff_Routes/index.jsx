@@ -8,6 +8,7 @@ import UIinterface from '../MainPage/UIinterface';
 import StaffForm from '../modules/Staff/StaffForm';
 //Pages
 import StaffProfile from '../modules/Staff/StaffProfile';
+import StaffRoster from '../modules/Staff/StaffRoster';
 import Subscription from '../MainPage/Pages/Subscription';
 import Pages from '../MainPage/Pages/Pages';
 //Administrator
@@ -47,6 +48,10 @@ export default [
    {
       path: 'staff-attendance',
       component: StaffAttendance
+   },
+   {
+      path: 'staff-roster',
+      component: StaffRoster
    },
    {
       path: 'apps',
