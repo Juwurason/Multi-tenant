@@ -77,7 +77,7 @@ const StaffDashboard = () => {
                             </div>
                         </div>
                         {/* /Page Header */}
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                                 <div className="card dash-widget">
                                     <div className="card-body">
@@ -122,8 +122,8 @@ const StaffDashboard = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
+                        </div> */}
+                        {/* <div className="row">
                             <div className="col-md-12">
                                 <div className="row">
                                     <div className="col-md-6 text-center">
@@ -151,8 +151,8 @@ const StaffDashboard = () => {
 
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-md-6 text-center">
+                                    </div> */}
+                                    {/* <div className="col-md-6 text-center">
                                         <div className="card">
                                             <div className="card-body">
                                                 <h3 className="card-title">Sales Overview</h3>
@@ -174,8 +174,8 @@ const StaffDashboard = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
+                        </div> */}
+                        {/* <div className="row">
                             <div className="col-md-12">
                                 <div className="card-group m-b-30">
                                     <div className="card">
@@ -248,9 +248,9 @@ const StaffDashboard = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* Statistics Widget */}
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
                                 <div className="card flex-fill dash-statistics">
                                     <div className="card-body">
@@ -289,8 +289,8 @@ const StaffDashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+                            </div> */}
+                            {/* <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
                                 <div className="card flex-fill">
                                     <div className="card-body">
                                         <h4 className="card-title">Task Statistics</h4>
@@ -326,8 +326,8 @@ const StaffDashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+                            </div> */}
+                            {/* <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
                                 <div className="card flex-fill">
                                     <div className="card-body">
                                         <h4 className="card-title">Today Absent <span className="badge bg-inverse-danger ml-2">5</span></h4>
@@ -371,9 +371,9 @@ const StaffDashboard = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* /Statistics Widget */}
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-md-6 d-flex">
                                 <div className="card card-table flex-fill">
                                     <div className="card-header">
@@ -488,7 +488,7 @@ const StaffDashboard = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="row">
                             <div className="col-md-6 d-flex">
                                 <div className="card card-table flex-fill">

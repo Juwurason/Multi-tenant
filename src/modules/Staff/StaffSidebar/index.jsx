@@ -469,7 +469,7 @@ const StaffSidebar = (props) => {
                                 }
                             </li> */}
                             <li className="menu-title">
-                                <span>ACCOUNT MANAGEMENT</span>
+                                <span>Account Management</span>
                             </li>
                             {/* <li className="submenu" >
                                 <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
@@ -521,7 +521,7 @@ const StaffSidebar = (props) => {
                                 <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>Attendances</span></Link>
                             </li>
                             <li className="menu-title">
-                                <span>STAFF-CLIENT MANAGEMENT</span>
+                                <span>Staff-Client Management</span>
                             </li>
                             {/* <li className="submenu">
                                 <a href="#" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-files-o" /> <span> Sales </span> <span className="menu-arrow" /></a>
@@ -560,6 +560,9 @@ const StaffSidebar = (props) => {
                                     : ""
                                 }
                             </li> */}
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to="/staff/staff-roster"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
+                            </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>
