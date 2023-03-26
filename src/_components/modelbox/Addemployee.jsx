@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import http from '../../api/http'
+import { useCompanyContext } from '../../context';
 
 const Addemployee = () => {
+  const { userProfile } = useCompanyContext();
   const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState('');
   const [surName, setSurName] = useState('');
@@ -20,6 +22,7 @@ const Addemployee = () => {
       return toast.error("Input Fields cannot be empty")
     }
 
+
     const formData = new FormData()
     // Add input field values to formData
     formData.append("CompanyId", 30);
@@ -34,7 +37,7 @@ const Addemployee = () => {
 
     try {
       setLoading(true)
-      const { data } = await http.post(`/api/Staffs/add_staff`, formData)
+      const { data } = await http.post(`/Staffs/add_staff?userId=${userProfile.userId}`, formData)
       console.log(data);
       // toast.success(data.message)
 
@@ -47,15 +50,10 @@ const Addemployee = () => {
     }
 
     console.log(
-      firstName,
-      surName,
-      middleName,
-      address,
-      email,
-      phoneNumber,
-      offerLetter
+      formData
     );
   }
+
 
   return (
     <>
