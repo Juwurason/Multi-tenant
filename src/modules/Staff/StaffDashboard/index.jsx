@@ -57,7 +57,7 @@ const StaffDashboard = () => {
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
                 <StaffHeader onMenuClick={(value) => toggleMobileMenu()} />
-                {/* <StaffSidebar /> */}
+                <StaffSidebar />
                 <div className="page-wrapper">
                     <Helmet>
                         <title>Dashboard</title>

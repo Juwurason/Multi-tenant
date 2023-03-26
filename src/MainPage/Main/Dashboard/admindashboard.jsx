@@ -211,8 +211,8 @@ const AdminDashboard = () => {
                             <YAxis />
 
                             <Legend />
-                            <Bar dataKey="Total Income" fill="#ff9b44" />
-                            <Bar dataKey="Total Outcome" fill="#fc6075" />
+                            <Bar dataKey="Total Income" fill="#4256D0" />
+                            <Bar dataKey="Total Outcome" fill="#18225C" />
                           </BarChart>
                         </ResponsiveContainer>
 
@@ -231,8 +231,8 @@ const AdminDashboard = () => {
                             <YAxis />
 
                             <Legend />
-                            <Line type="monotone" dataKey="Total Sales" stroke="#ff9b44" fill="#00c5fb" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
-                            <Line type="monotone" dataKey="Total Revenue" stroke="#fc6075" fill="#0253cc" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
+                            <Line type="monotone" dataKey="Total Sales" stroke="#4256D0" fill="#18225C" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
+                            <Line type="monotone" dataKey="Total Revenue" stroke="#18225C" fill="#4256D0" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
                           </LineChart>
                         </ResponsiveContainer>
 
