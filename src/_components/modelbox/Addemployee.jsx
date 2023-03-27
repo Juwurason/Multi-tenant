@@ -47,7 +47,7 @@ const Addemployee = () => {
 
 
       )
-      console.log(data);
+      // console.log(data);
       // toast.success(data.message)
 
       setLoading(false)
@@ -63,7 +63,6 @@ const Addemployee = () => {
     );
   }
 
-  console.log(userProfile);
   return (
     <>
       {/* Add Employee Modal */}

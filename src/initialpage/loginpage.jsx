@@ -49,13 +49,12 @@ const Loginpage = () => {
       }
       if (data.userProfile?.role === "CompanyAdmin") {
         navigate.push('/app/main/dashboard')
-        console.log(1);
 
       }
 
       if (data.userProfile?.role === "Staff") {
         navigate.push('/staff/staff/staffDashboard')
-        console.log(2);
+
       }
 
 
@@ -82,8 +81,7 @@ const Loginpage = () => {
     }
   }
 
-  // const { userProfile } = useCompanyContext();
-  // console.log(userProfile);
+
 
   return (
 
