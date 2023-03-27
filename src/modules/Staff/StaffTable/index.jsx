@@ -1,90 +1,92 @@
 
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 
 import { Table } from 'antd';
 import 'antd/dist/antd.css';
-import {itemRender,onShowSizeChange} from "../../../MainPage/paginationfunction"
+import { itemRender, onShowSizeChange } from "../../../MainPage/paginationfunction"
 // import "../antdstyle.css"
 import Offcanvas from '../../../Entryfile/offcanvance';
 
 const StaffAttendance = () => {
   const [data, setData] = useState([
-    {id:1,policyname:"Monday",description:"10:06 PM", department:"01:05 AM",creatat:"1 Jan 2013",status:"Active"},
-         {id:2,policyname:"Tuesday",description:"10:06 PM", department:"01:05 AM",creatat:"18 Mar 2014",status:"Active"},
+    { id: 1, policyname: "Monday", description: "10:06 PM", department: "01:05 AM", creatat: "1 Jan 2013", status: "Active" },
+    { id: 2, policyname: "Tuesday", description: "10:06 PM", department: "01:05 AM", creatat: "18 Mar 2014", status: "Active" },
   ]);
-  useEffect( ()=>{
-    if($('.select').length > 0) {
+  useEffect(() => {
+    if ($('.select').length > 0) {
       $('.select').select2({
         minimumResultsForSearch: -1,
         width: '100%'
       });
     }
-  });  
-  
-    const columns = [
-      
-      {
-        title: 'S/N',
-        dataIndex: 'id',
-          sorter: (a, b) => a.id.length - b.id.length,
-      }, 
-      {
-        title: 'Days',
-        dataIndex: 'policyname', 
-        sorter: (a, b) => a.policyname.length - b.policyname.length,
-      }, 
-      {
-        title: 'From Time of Day',
-        dataIndex: 'department', 
-        sorter: (a, b) => a.department.length - b.department.length,
-      },        
-      {
-        title: 'To Time of Day',
-        dataIndex: 'description',
-        sorter: (a, b) => a.description.length - b.description.length,
-      },
-      {
-        title: 'Created',
-        dataIndex: 'creatat',
-        sorter: (a, b) => a.creatat.length - b.creatat.length,
-      },
-      {
-        title: 'Action',
-        render: (text, record) => (
-            <div className="dropdown dropdown-action text-end">
-               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                <div className="dropdown-menu dropdown-menu-right">
-                  {/* <a className="dropdown-item" href="#"><i className="fa fa-download m-r-5" /> Download</a> */}
-                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_policy"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_policy"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                </div>
-            </div>
-          ),
-      },
-    ]
-      return (
-        <>
-        <div className="page-wrapper">
+  });
+
+  const columns = [
+
+    {
+      title: 'S/N',
+      dataIndex: 'id',
+      sorter: (a, b) => a.id.length - b.id.length,
+    },
+    {
+      title: 'Days',
+      dataIndex: 'policyname',
+      sorter: (a, b) => a.policyname.length - b.policyname.length,
+    },
+    {
+      title: 'From Time of Day',
+      dataIndex: 'department',
+      sorter: (a, b) => a.department.length - b.department.length,
+    },
+    {
+      title: 'To Time of Day',
+      dataIndex: 'description',
+      sorter: (a, b) => a.description.length - b.description.length,
+    },
+    {
+      title: 'Created',
+      dataIndex: 'creatat',
+      sorter: (a, b) => a.creatat.length - b.creatat.length,
+    },
+    {
+      title: 'Action',
+      render: (text, record) => (
+        <div className="dropdown dropdown-action text-end">
+          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+          <div className="dropdown-menu dropdown-menu-right">
+            {/* <a className="dropdown-item" href="#"><i className="fa fa-download m-r-5" /> Download</a> */}
+            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_policy"><i className="fa fa-pencil m-r-5" /> Edit</a>
+            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_policy"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+          </div>
+        </div>
+      ),
+    },
+  ]
+  return (
+    <>
+      <div className="page-wrapper">
         {/* Page Content */}
         <div className="content container-fluid">
           {/* Page Header */}
-    
+
           {/* /Page Header */}
           <div className="row">
             <div className="col-md-12">
               <div className="table-responsive">
                 <Table className="table-striped"
-                  pagination= { {total : data.length,
-                    showTotal : (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                    showSizeChanger : true,onShowSizeChange: onShowSizeChange ,itemRender : itemRender } }
-                  style = {{overflowX : 'auto'}}
-                  columns={columns}                 
+                  pagination={{
+                    total: data.length,
+                    showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                    showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
+                  }}
+                  style={{ overflowX: 'auto' }}
+                  columns={columns}
                   // bordered
                   dataSource={data}
                   rowKey={record => record.id}
-                  // onChange={this.handleTableChange}
+                // onChange={this.handleTableChange}
                 />
               </div>
             </div>
@@ -111,7 +113,7 @@ const StaffAttendance = () => {
                     <label>Expiration Date <span className="text-danger">*</span></label>
                     <input className="form-control" type="date" />
                   </div>
-                 
+
                   <div className="form-group">
                     <label>Upload Document <span className="text-danger">*</span></label>
                     <div className="custom-file">
@@ -198,11 +200,11 @@ const StaffAttendance = () => {
         </div>
         {/* /Delete Policy Modal */}
       </div>
-      <Offcanvas/>
-        </>
-      
-      );
-   
+      <Offcanvas />
+    </>
+
+  );
+
 }
 
 export default StaffAttendance;

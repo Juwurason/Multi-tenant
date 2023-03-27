@@ -10,11 +10,8 @@ import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
-import { useCompanyContext } from '../../../context';
 
 const AllEmployees = () => {
-  const { userProfile } = useCompanyContext()
-  console.log(userProfile);
   const [menu, setMenu] = useState(false)
 
   const toggleMobileMenu = () => {

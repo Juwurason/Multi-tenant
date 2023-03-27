@@ -58,16 +58,13 @@ const Addemployee = () => {
 
     }
 
-    console.log(
-      formData
-    );
   }
 
   return (
     <>
       {/* Add Employee Modal */}
       <div id="add_employee" className="modal custom-modal fade" role="dialog">
-        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
           <div className="modal-content overflow-auto">
             <div className="modal-header">
               <h5 className="modal-title">Add Staff</h5>
