@@ -42,23 +42,34 @@ const Loginpage = () => {
     try {
       setLoading(true)
       const { data } = await http.post('/Account/auth_login', info)
-      // console.log(data);
+      console.log(data);
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         localStorage.setItem("user", JSON.stringify(data.userProfile))
+      }
+      if (data.userProfile?.role === "CompanyAdmin") {
         navigate.push('/app/main/dashboard')
-      } else {
+        console.log(1);
 
+      }
+
+      if (data.userProfile?.role === "Staff") {
+        navigate.push('/staff/staff/staffDashboard')
+        console.log(2);
       }
 
 
     } catch (error) {
 
-      // console.log(error.response.data);
+      console.log(error);
       if (error.response?.data?.message === 'User Not Found') {
         toast.error('User not found')
       }
       else if (error.response?.data?.message === 'Email Not Confirmed') {
+
+        toast.error(error.response?.data?.message)
+      }
+      else if (error.response?.data?.message === "Email Not Confirmed. An OTP has been sent to your mail to confirm your email") {
         toast.error(error.response?.data?.message)
       }
       else if (error.response?.data?.message === 'Invalid Login Attempt') {

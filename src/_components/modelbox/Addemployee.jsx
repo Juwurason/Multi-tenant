@@ -37,7 +37,16 @@ const Addemployee = () => {
 
     try {
       setLoading(true)
-      const { data } = await http.post(`/Staffs/add_staff?userId=${userProfile.userId}`, formData)
+      const { data } = await http.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
+        formData
+        , {
+          headers: {
+            'Authorization': `Bearer ${userProfile.token}`
+          }
+        }
+
+
+      )
       console.log(data);
       // toast.success(data.message)
 
@@ -54,7 +63,7 @@ const Addemployee = () => {
     );
   }
 
-
+  console.log(userProfile);
   return (
     <>
       {/* Add Employee Modal */}
