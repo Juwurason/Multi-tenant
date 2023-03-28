@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import http from "../api/http";
 import { useCompanyContext } from "../context";
+import usePublicHttp from "../hooks/usePublicHttp";
 import Phone from "../_components/Phone/Phone";
 const CompanySetup = () => {
     const { storeCompanyId } = useCompanyContext();
@@ -17,11 +18,11 @@ const CompanySetup = () => {
     const [loading, setLoading] = useState(false)
     let errorsObj = { companyName: '', companyEmail: '', companyAddress: '', companyHead: '', Phone: '' };
     const [errors, setErrors] = useState(errorsObj);
-
+    const publicHttp = usePublicHttp()
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const response = await http.get("/Packages/get_all_packages")
+                const response = await publicHttp.get("/Packages/get_all_packages")
                 setPackages(response.data)
             } catch (error) {
                 console.log(error);
@@ -70,7 +71,7 @@ const CompanySetup = () => {
 
         try {
             setLoading(true)
-            const { data } = await http.post("/Companies/add_company", info)
+            const { data } = await publicHttp.post("/Companies/add_company", info)
             console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message)

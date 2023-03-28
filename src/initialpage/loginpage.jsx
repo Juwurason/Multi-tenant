@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import http from '../api/http.jsx';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../context';
+import usePublicHttp from '../hooks/usePublicHttp';
 
 
 const Loginpage = () => {
@@ -15,8 +16,10 @@ const Loginpage = () => {
   const [pwdVisible, setPwdVisible] = useState(false)
   let errorsObj = { email: '', password: '' };
   const [errorss, setErrorss] = useState(errorsObj);
-  const [loading, setLoading] = useState(false)
-  const navigate = useHistory()
+  const [loading, setLoading] = useState(false);
+  const navigate = useHistory();
+  const publicHttp = usePublicHttp()
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,7 +44,7 @@ const Loginpage = () => {
     }
     try {
       setLoading(true)
-      const { data } = await http.post('/Account/auth_login', info)
+      const { data } = await publicHttp.post('/Account/auth_login', info)
       console.log(data);
       if (data.response.status === "Success") {
         toast.success(data.response.message)
@@ -65,11 +68,14 @@ const Loginpage = () => {
         toast.error('User not found')
       }
       else if (error.response?.data?.message === 'Email Not Confirmed') {
-
         toast.error(error.response?.data?.message)
+        localStorage.setItem('email', email)
+        navigate.push('/otp')
       }
       else if (error.response?.data?.message === "Email Not Confirmed. An OTP has been sent to your mail to confirm your email") {
         toast.error(error.response?.data?.message)
+        localStorage.setItem('email', email)
+        navigate.push('/otp')
       }
       else if (error.response?.data?.message === 'Invalid Login Attempt') {
         toast.error("Incorrect Password")
@@ -82,7 +88,15 @@ const Loginpage = () => {
   }
 
 
-
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.token && user.role === "CompanyAdmin") {
+      navigate.push('/app/main/dashboard');
+    }
+    if (user && user.token && user.role === "Staff") {
+      navigate.push('/staff/staff/staffDashboard');
+    }
+  }, []);
   return (
 
 

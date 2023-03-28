@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import http from '../../api/http'
 import { useCompanyContext } from '../../context';
+import useHttp from '../../hooks/useHttp';
 
 const Addemployee = () => {
   const { userProfile } = useCompanyContext();
@@ -13,6 +14,8 @@ const Addemployee = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [offerLetter, setOfferLetter] = useState(null);
+  const privateHttp = useHttp();
+
 
   const submitForm = async (e) => {
     e.preventDefault()
@@ -37,14 +40,8 @@ const Addemployee = () => {
 
     try {
       setLoading(true)
-      const { data } = await http.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
+      const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
         formData
-        , {
-          headers: {
-            'Authorization': `Bearer ${userProfile.token}`
-          }
-        }
-
 
       )
       // console.log(data);
@@ -111,13 +108,8 @@ const Addemployee = () => {
                       <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
                   </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">Employee ID <span className="text-danger">*</span></label>
-                      <input type="text" className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
+
+                  <div className="col-sm-12">
                     <div className="form-group">
                       <label className="col-form-label">Offer Letter <span className="text-danger">*</span></label>
                       <div><input className="form-control" type="file" onChange={e => setOfferLetter(e.target.files[0])} /></div>

@@ -10,13 +10,29 @@ import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
+import { useCompanyContext } from '../../../context';
+import useHttp from '../../../hooks/useHttp';
 
 const AllEmployees = () => {
+  const { userProfile } = useCompanyContext()
   const [menu, setMenu] = useState(false)
+  const privateHttp = useHttp()
+
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
+  useEffect(() => {
+    const FetchStaff = async () => {
+      try {
+        const { data } = await privateHttp.get('/Staffs')
+        console.log(data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    FetchStaff()
+  }, [])
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -156,134 +172,14 @@ const AllEmployees = () => {
                   <div className="small text-muted">IOS Developer</div>
                 </div>
               </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_11} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Wilmer Deluna</Link></h4>
-                  <div className="small text-muted">Team Leader</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_12} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Jeffrey Warden</Link></h4>
-                  <div className="small text-muted">Web Developer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_13} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Bernardo Galaviz</Link></h4>
-                  <div className="small text-muted">Web Developer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_01} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Lesley Grauer</Link></h4>
-                  <div className="small text-muted">Team Leader</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_16} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Jeffery Lalor</Link></h4>
-                  <div className="small text-muted">Team Leader</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_04} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Loren Gatlin</Link></h4>
-                  <div className="small text-muted">Android Developer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_03} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Tarah Shropshire</Link></h4>
-                  <div className="small text-muted">Android Developer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_08} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Catherine Manseau</Link></h4>
-                  <div className="small text-muted">Android Developer</div>
-                </div>
-              </div>
+
+
+
+
+
+
+
+
             </div>
           </div>
           {/* /Page Content */}

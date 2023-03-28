@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Phone from "../_components/Phone/Phone";
 import http from "../api/http";
 import { useCompanyContext } from "../context";
+import usePublicHttp from "../hooks/usePublicHttp";
 
 const AdminRegistration = () => {
     const { companyId, storeAdminEmail } = useCompanyContext();
@@ -20,6 +21,8 @@ const AdminRegistration = () => {
     const confirmPassword = useRef(null)
     const [value, setValue] = useState("")
     const [loading, setLoading] = useState(false)
+    const publicHttp = usePublicHttp()
+
     let errorsObj = { firstName: '', surName: '', email: '', phone: '', address: '', password: '', confirmPassword: '' };
     const [errors, setErrors] = useState(errorsObj);
     useEffect(() => {
@@ -80,7 +83,7 @@ const AdminRegistration = () => {
 
         try {
             setLoading(true)
-            const { data } = await http.post(`/CompanyAdmins/company_admin?id=${companyId}`, details)
+            const { data } = await publicHttp.post(`/CompanyAdmins/company_admin?id=${companyId}`, details)
             console.log(data);
             setLoading(false)
 

@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useCompanyContext } from '../context/index.jsx';
 import http from '../api/http.jsx';
+import usePublicHttp from '../hooks/usePublicHttp.jsx';
 
 const OTPscreen = () => {
-  const { email, companyId } = useCompanyContext();
+  // const { email, companyId } = useCompanyContext();
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [loading, setLoading] = useState(false)
   const navigate = useHistory()
@@ -33,34 +34,34 @@ const OTPscreen = () => {
     });
 
   };
+  const publicHttp = usePublicHttp()
+
   useEffect(() => {
-    const checkID = localStorage.getItem("companyId")
+    // const checkID = localStorage.getItem("companyId")
     const checkEmail = localStorage.getItem("email")
 
-    if (checkEmail === "" || checkID === "") {
+    if (checkEmail === "") {
       navigate.push("/register")
     }
 
   })
 
-
-  const handleSubmit = async (event) => {
+  const dmail = localStorage.getItem('email')
+  const handleSubmit = async () => {
 
     const postData = {
-      email: email,
+      email: dmail,
       otp: otp.join(''),
-      companyId: companyId
     }
-    if (postData.otp < 5 || postData.email === '' || postData.companyId === null) {
+    if (postData.otp < 5 || postData.email === '') {
       return
     } else {
 
       try {
         setLoading(true)
-        const res = await http.post('/Account/post_otp', postData)
+        const res = await publicHttp.post('/Account/post_otp', postData)
         toast.success(res.data.message)
         navigate.push('/login')
-        localStorage.removeItem("companyId")
         localStorage.removeItem("email")
         setLoading(false)
 
@@ -85,7 +86,7 @@ const OTPscreen = () => {
               <div className='text-center w-100 d-flex flex-column gap-4'>
                 <h1 className='text-center fw-2 mb-2 fs-1'>Check your email for a code</h1>
                 <h4>
-                  We've sent a 6-digit code to <span className="text-primary"> {email} </span>
+                  We've sent a 6-digit code to <span className="text-primary"> {dmail} </span>
                   The code expires shortly.
                 </h4>
 

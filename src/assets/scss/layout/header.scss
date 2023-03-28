@@ -2,14 +2,14 @@
     background-color: $__primarycolor !important;
     background: $__primarycolor !important;
     border-bottom: 1px solid $__transparent;
-    height: 60px;
+    height: 70px;
     z-index: 1002;
     @include position($__fixed, 0, 0, null, 0);
     @include box-shadow(null, 0, 1px, 1px, 0, rgba(0, 0, 0, .20));
 
     .header-left {
         float: $__left;
-        height: 60px;
+        height: 70px;
         position: $__relative;
         text-align: $__center;
         width: 230px;

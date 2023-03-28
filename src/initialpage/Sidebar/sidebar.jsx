@@ -431,18 +431,11 @@ const Sidebar = (props) => {
               </li>
               <li className="submenu">
 
-                <a href="#" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" />
-                  <span> Dashboard</span> <span className="menu-arrow" /></a>
+                <Link to="/app/main/dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" />
+                  <span> Dashboard</span></Link>
 
 
-                {isSideMenu == "dashboard" ?
-                  <ul >
-                    <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">Admin Dashboard</Link></li>
-                    <li><Link className={pathname.includes('main/employee-') ? "active" : ""}
-                      to="/app/main/employee-dashboard">Employee Dashboard</Link></li>
-                  </ul>
-                  : ""
-                }
+
               </li>
               <li className="submenu">
                 <a href="#" className={isSideMenu == "apps" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "apps" ? "" : "apps")} ><i className="la la-cube" /> <span> Apps</span> <span className="menu-arrow" /></a>
@@ -470,15 +463,15 @@ const Sidebar = (props) => {
                 }
               </li>
               <li className="menu-title">
-                <span>Employees</span>
+                <span>Staff</span>
               </li>
               <li className="submenu" >
-                <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
+                <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Staffs</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "employee" ?
 
                   <ul >
                     <li><Link className={pathname.includes('allemployees') ? "active" : pathname.includes('employees-list') ? "active" : ""}
-                      to="/app/employee/allemployees">All Employees</Link></li>
+                      to="/app/employee/allemployees">All Staffs</Link></li>
                     <li><Link className={pathname.includes('holidays') ? "active" : ""} to="/app/employee/holidays">Holidays</Link></li>
                     <li><Link className={pathname.includes('es-admin') ? "active" : ""} to="/app/employee/leaves-admin">Leaves (Admin) <span className="badge badge-pill bg-primary float-end">1</span></Link></li>
                     <li><Link className={pathname.includes('ves-employee') ? "active" : ""} to="/app/employee/leaves-employee">Leaves (Employee)</Link></li>
