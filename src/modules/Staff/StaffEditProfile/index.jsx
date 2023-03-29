@@ -55,6 +55,14 @@
                                <input type="text" className="form-control" />
                              </div>
                              <div className="form-group">
+                               <label>Phone Number</label>
+                               <input type="number" className="form-control" />
+                             </div>
+                             <div className="form-group">
+                               <label>Date Of Birth</label>
+                               <input type="date" className="form-control" />
+                             </div>
+                             {/* <div className="form-group">
                                <label>Blood Group</label>
                                <select className="select">
                                  <option>Select</option>
@@ -63,11 +71,11 @@
                                  <option value={3}>B+</option>
                                  <option value={4}>AB+</option>
                                </select>
-                             </div>
+                             </div> */}
                            </div>
                            <div className="col-md-6">
                              <div className="form-group">
-                               <label>Username</label>
+                               <label>Surname</label>
                                <input type="text" className="form-control" />
                              </div>
                              <div className="form-group">
@@ -124,6 +132,37 @@
                                <label>Postal Code</label>
                                <input type="text" className="form-control" />
                              </div>
+                           </div>
+                         </div>
+                         <h4 className="card-title">Bank information</h4>
+                         <div className="row">
+                           <div className="col-md-6">
+                             <div className="form-group">
+                               <label>Account Name</label>
+                               <input type="text" className="form-control" />
+                             </div>
+                             {/* <div className="form-group">
+                               <label>Account Number</label>
+                               <input type="text" className="form-control" />
+                             </div> */}
+                             <div className="form-group">
+                               <label>Bank Name</label>
+                               <input type="text" className="form-control" />
+                             </div>
+                           </div>
+                           <div className="col-md-6">
+                           <div className="form-group">
+                               <label>Account Number</label>
+                               <input type="text" className="form-control" />
+                             </div>
+                             {/* <div className="form-group">
+                               <label>Country</label>
+                               <input type="text" className="form-control" />
+                             </div>
+                             <div className="form-group">
+                               <label>Postal Code</label>
+                               <input type="text" className="form-control" />
+                             </div> */}
                            </div>
                          </div>
                          <div className="text-end">
