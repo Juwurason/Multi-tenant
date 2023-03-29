@@ -18,6 +18,8 @@ const StaffHeader = (props) => {
         props.onMenuClick()
     }
 
+    const staffRole = JSON.parse(localStorage.getItem('user'))
+
     const handleLogout = () => {
         localStorage.removeItem('user')
         navigate.push("/login")
