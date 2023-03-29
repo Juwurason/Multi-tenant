@@ -2,7 +2,7 @@
  * App Header
  */
 import React, { useState } from 'react'
-import { withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
     headerlogo, lnEnglish, lnFrench, lnSpanish, lnGerman, Avatar_02, Avatar_03, Avatar_05,
@@ -10,12 +10,17 @@ import {
 } from '../../../Entryfile/imagepath'
 
 const StaffHeader = (props) => {
-
+    const navigate = useHistory()
     const handlesidebar = () => {
         document.body.classList.toggle('mini-sidebar');
     }
     const onMenuClik = () => {
         props.onMenuClick()
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('user')
+        navigate.push("/login")
     }
 
     let pathname = location.pathname
@@ -276,7 +281,7 @@ const StaffHeader = (props) => {
                     <div className="dropdown-menu">
                         <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
                         <Link className="dropdown-item" to="/settings/companysetting">Settings</Link>
-                        <Link className="dropdown-item" to="/login">Logout</Link>
+                        <Link className="dropdown-item" onClick={handleLogout} to="/login">Logout</Link>
                     </div>
                 </li>
             </ul>
@@ -287,7 +292,7 @@ const StaffHeader = (props) => {
                 <div className="dropdown-menu dropdown-menu-right">
                     <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
                     <Link className="dropdown-item" to="/settings/companysetting">Settings</Link>
-                    <Link className="dropdown-item" to="/login">Logout</Link>
+                    <Link className="dropdown-item" onClick={handleLogout} to="/login">Logout</Link>
                 </div>
             </div>
             {/* /Mobile Menu */}
