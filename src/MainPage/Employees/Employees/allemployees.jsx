@@ -14,7 +14,8 @@ import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 
 const AllEmployees = () => {
-  const { userProfile } = useCompanyContext()
+  const [staff, setStaff] = useState([])
+  const { setStaffNum } = useCompanyContext()
   const [menu, setMenu] = useState(false)
   const privateHttp = useHttp()
 
@@ -26,7 +27,9 @@ const AllEmployees = () => {
     const FetchStaff = async () => {
       try {
         const { data } = await privateHttp.get('/Staffs')
-        console.log(data)
+        setStaff(data)
+        setStaffNum(data.length)
+
       } catch (error) {
         console.log(error);
       }
@@ -108,70 +111,29 @@ const AllEmployees = () => {
             </div>
             {/* Search Filter */}
             <div className="row staff-grid-row">
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_02} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+
+              {
+                staff.map((data, index) =>
+                  <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
+                    <div className="profile-widget">
+                      <div className="profile-img">
+                        <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_02} alt="" /></Link>
+                      </div>
+                      <div className="dropdown profile-action">
+                        <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                        <div className="dropdown-menu dropdown-menu-right">
+                          <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                          <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                        </div>
+                      </div>
+                      <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">{data.firstName} {data.surName}</Link></h4>
+                      <div className="small text-muted">Web Designer</div>
                     </div>
                   </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">John Doe</Link></h4>
-                  <div className="small text-muted">Web Designer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_09} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Richard Miles</Link></h4>
-                  <div className="small text-muted">Web Developer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_10} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">John Smith</Link></h4>
-                  <div className="small text-muted">Android Developer</div>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_05} alt="" /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">Mike Litorus</Link></h4>
-                  <div className="small text-muted">IOS Developer</div>
-                </div>
-              </div>
+
+                )
+              }
+
 
 
 

@@ -45,11 +45,11 @@ const CompanySetup = () => {
         let error = false;
         const errorObj = { ...errorsObj };
         if (info.companyName.trim() === '') {
-            errorObj.companyName = 'Company Name is Required';
+            toast.error('Company Name is Required')
             error = true;
         }
         if (info.companyEmail.trim() === '') {
-            errorObj.companyEmail = 'Company Email is Required';
+            toast.error('Company Email is Required')
             error = true;
         }
         if (info.companyPhone < 9) {
@@ -110,9 +110,7 @@ const CompanySetup = () => {
                                                     placeholder="Enter company name"
                                                     className="form-control" name="name" />
                                             </div>
-                                            {errors.companyName && (
-                                                <span className="text-danger">{errors.companyName}</span>
-                                            )}
+
                                         </div>
                                     </div>
                                     <div className="form-group mt-3">
@@ -124,9 +122,7 @@ const CompanySetup = () => {
 
                                                     className="form-control" name="email" id="email" placeholder="Enter company Email" />
                                             </div>
-                                            {errors.companyEmail && (
-                                                <span className="text-danger">{errors.companyEmail}</span>
-                                            )}
+
                                         </div>
                                     </div>
                                     <div className="form-group">

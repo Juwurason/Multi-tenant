@@ -425,6 +425,10 @@ const Sidebar = (props) => {
                 </li>
               </ul>
             </nav>
+
+
+
+            { /*Vertical Sidebar starts here*/}
             <ul className="sidebar-vertical" id='veritical-sidebar'>
               <li className="menu-title">
                 <span>Main</span>
@@ -437,7 +441,7 @@ const Sidebar = (props) => {
 
 
               </li>
-              <li className="submenu">
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "apps" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "apps" ? "" : "apps")} ><i className="la la-cube" /> <span> Apps</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "apps" ?
                   <ul>
@@ -461,9 +465,9 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
+              </li> */}
               <li className="menu-title">
-                <span>Staff</span>
+                <span>User Management</span>
               </li>
               <li className="submenu" >
                 <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Staffs</span> <span className="menu-arrow" /></a>

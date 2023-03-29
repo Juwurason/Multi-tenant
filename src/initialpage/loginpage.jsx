@@ -57,6 +57,7 @@ const Loginpage = () => {
 
       if (data.userProfile?.role === "Staff") {
         navigate.push('/staff/staff/staffDashboard')
+        localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }
 
@@ -127,9 +128,6 @@ const Loginpage = () => {
               minLength="6"
               maxLength="15"
               required
-
-
-
               className="form-control border-0" placeholder="password" />
             <button onClick={() => setPwdVisible(!pwdVisible)} type='button' className="btn">
               {pwdVisible ? <FaEye /> : <FaEyeSlash />}

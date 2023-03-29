@@ -18,6 +18,7 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
 import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt } from 'react-icons/fa';
+import { useCompanyContext } from '../../../context/index.jsx';
 
 
 const barchartdata = [
@@ -41,7 +42,8 @@ const linechartdata = [
 const AdminDashboard = () => {
 
   const [menu, setMenu] = useState(false)
-
+  const { staffNum } = useCompanyContext()
+  console.log(staffNum);
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
@@ -88,7 +90,7 @@ const AdminDashboard = () => {
                     <span className="dash-widget-icon"><i className="fa fa-user" /></span>
                     <div className="dash-widget-info">
                       <span>Total Staff</span>
-                      <h3>0</h3>
+                      <h3>{staffNum}</h3>
                       <Link to={'/app/employee/allemployees'} className='pointer fw-bold'>View Staffs</Link>
                     </div>
                   </div>

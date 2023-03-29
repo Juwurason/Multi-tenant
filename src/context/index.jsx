@@ -20,6 +20,7 @@ export const CompanyProvider = ({ children }) => {
             tokenExpiration: ""
         }
     )
+    const [staffNum, setStaffNum] = useState(0)
     useEffect(() => {
         setUserProfile(JSON.parse(localStorage.getItem('user')))
     }, [])
@@ -40,7 +41,11 @@ export const CompanyProvider = ({ children }) => {
         localStorage.removeItem('email');
     };
 
-    const contextValue = { companyId, email, storeCompanyId, storeAdminEmail, clearCompanyData, userProfile, setUserProfile };
+    const contextValue = {
+        companyId, email, storeCompanyId,
+        storeAdminEmail, clearCompanyData,
+        userProfile, setUserProfile, staffNum, setStaffNum
+    };
 
     return (
         <CompanyContext.Provider value={contextValue}>
