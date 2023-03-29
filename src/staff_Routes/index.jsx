@@ -13,6 +13,7 @@ import Subscription from '../MainPage/Pages/Subscription';
 import Pages from '../MainPage/Pages/Pages';
 //Administrator
 import Administrator from '../MainPage/Administration';
+import StaffChangePassword from '../modules/Staff/StaffForgettingPassword';
 //Performance
 import Performance from '../MainPage/Performance';
 import Goals from '../MainPage/Performance/Goals';
@@ -44,6 +45,10 @@ export default [
    {
       path: 'staff-document',
       component: StaffDocument
+   },
+   {
+      path: 'staffchangepassword',
+      component: StaffChangePassword
    },
    {
       path: 'staff-attendance',

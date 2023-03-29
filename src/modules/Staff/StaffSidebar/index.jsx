@@ -434,84 +434,19 @@ const StaffSidebar = (props) => {
                             </li>
                             <li className="submenu">
                                 <a href="/staff/staff/staffDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
-                                {/* {isSideMenu == "dashboard" ?
-                                    <ul >
-                                        <li><Link className={pathname.includes('main/dashboard') ? "active" : ""} to="/app/main/dashboard">Dashboard</Link></li>
-                                        <li><Link className={pathname.includes('main/employee-') ? "active" : ""}
-                                            to="/app/main/employee-dashboard">Employ me Dashboard</Link></li>
-                                    </ul>
-                                    : ""
-                                } */}
+                
                             </li>
-                            {/* <li className="submenu">
-                                <a href="#" className={isSideMenu == "apps" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "apps" ? "" : "apps")} ><i className="la la-cube" /> <span> Apps</span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "apps" ?
-                                    <ul>
-                                        <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">Chat</Link></li>
-                                        <li className="submenu">
-                                            <a href="#" className={level2Menu == "calls" ? "subdrop" : ""} onClick={() => toggleLvelTwo(level2Menu == "calls" ? "" : "calls")}><span> Calls</span> <span className="menu-arrow" /></a>
-                                            {level2Menu == "calls" ?
-                                                <ul>
-                                                    <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/voice-call">Voice Call</Link></li>
-                                                    <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/video-call">Video Call</Link></li>
-                                                    <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/outgoing-call">Outgoing Call</Link></li>
-                                                    <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/incoming-call">Incoming Call</Link></li>
-                                                </ul>
-                                                : ""
-                                            }
-                                        </li>
-                                        <li><Link className={pathname.includes('apps/calendar') ? "active" : ""} to="/app/apps/calendar">Calendar</Link></li>
-                                        <li><Link onClick={() => localStorage.setItem("minheight", "true")} className={pathname.includes('contacts') ? "active" : ""} to="/app/apps/contacts">Contacts</Link></li>
-                                        <li><Link to="/email/inbox">Email</Link></li>
-                                        <li><Link className={pathname.includes('file-manager') ? "active" : ""} to="/app/apps/file-manager">File Manager</Link></li>
-                                    </ul>
-                                    : ""
-                                }
-                            </li> */}
+                          
                             <li className="menu-title">
                                 <span>Account Management</span>
                             </li>
-                            {/* <li className="submenu" >
-                                <a href="#" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "employee" ?
-
-                                    <ul >
-                                        <li><Link className={pathname.includes('allemployees') ? "active" : pathname.includes('employees-list') ? "active" : ""}
-                                            to="/app/employee/allemployees">All Employees</Link></li>
-                                        <li><Link className={pathname.includes('holidays') ? "active" : ""} to="/app/employee/holidays">Holidays</Link></li>
-                                        <li><Link className={pathname.includes('es-admin') ? "active" : ""} to="/app/employee/leaves-admin">Leaves (Admin) <span className="badge badge-pill bg-primary float-end">1</span></Link></li>
-                                        <li><Link className={pathname.includes('ves-employee') ? "active" : ""} to="/app/employee/leaves-employee">Leaves (Employee)</Link></li>
-                                        <li><Link className={pathname.includes('e-settings') ? "active" : ""} to="/app/employee/leave-settings">Leave Settings</Link></li>
-                                        <li><Link className={pathname.includes('nce-admin') ? "active" : ""} to="/app/employee/attendance-admin">Attendance (Admin)</Link></li>
-                                        <li><Link className={pathname.includes('ce-employee') ? "active" : ""} to="/app/employee/attendance-employee">Attendance (Employee)</Link></li>
-                                        <li><Link className={pathname.includes('departments') ? "active" : ""} to="/app/employee/departments">Departments</Link></li>
-                                        <li><Link className={pathname.includes('designations') ? "active" : ""} to="/app/employee/designations">Designations</Link></li>
-                                        <li><Link className={pathname.includes('timesheet') ? "active" : ""} to="/app/employee/timesheet">Timesheet</Link></li>
-                                        <li><Link className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}
-                                            to="/app/employee/shift-scheduling">Shift &amp; Schedule</Link></li>
-                                        <li><Link className={pathname.includes('overtime') ? "active" : ""} to="/app/employee/overtime">Overtime</Link></li>
-                                    </ul>
-                                    : ""
-                                }
-                            </li> */}
+                           
                             <li className={pathname.includes('clients') ? "active" : ""}>
                                 <Link to="/staff/staffprofile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
-                            {/* <li className="submenu">
-                                <a href="#" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-rocket" /> <span> Projects</span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "projects" ?
-                                    <ul>
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
-                                            to="/app/projects/project_dashboard">Projects</Link></li>
-                                        <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/tasks/tasks">Tasks</Link></li>
-                                        <li><Link className={pathname.includes('task-board') ? "active" : ""} to="/app/projects/task-board">Task Board</Link></li>
-                                    </ul>
-                                    : ""
-                                }
-                            </li> */}
+                           
                             <li className={pathname.includes('leads') ? "active" : ""}>
-                                <Link to="/forgotpassword"><i className="la la-lock" /> <span>Change Password</span></Link>
+                                <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
                             <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
@@ -523,43 +458,7 @@ const StaffSidebar = (props) => {
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
-                            {/* <li className="submenu">
-                                <a href="#" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-files-o" /> <span> Sales </span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "sales" ?
-                                    <ul>
-                                        <li><Link className={pathname.includes('estimates') ? "active" : ""} to="/app/sales/estimates">Estimates</Link></li>
-                                        <li><Link className={pathname.includes('invoices') ? "active" : ""} to="/app/sales/invoices">Invoices</Link></li>
-                                        <li><Link className={pathname.includes('payments') ? "active" : ""} to="/app/sales/payments">Payments</Link></li>
-                                        <li><Link className={pathname.includes('expenses') ? "active" : ""} to="/app/sales/expenses">Expenses</Link></li>
-                                        <li><Link className={pathname.includes('provident-fund') ? "active" : ""} to="/app/sales/provident-fund">Provident Fund</Link></li>
-                                        <li><Link className={pathname.includes('taxes') ? "active" : ""} to="/app/sales/taxes">Taxes</Link></li>
-                                    </ul>
-                                    : ""
-                                }
-                            </li> */}
-                            {/* <li className="submenu">
-                                <a href="#" className={isSideMenu == "accounting" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "accounting" ? "" : "accounting")}><i className="la la-files-o" /> <span> Accounting </span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "accounting" ?
-                                    <ul>
-                                        <li><Link className={pathname.includes('categories') || pathname.includes('sub-category') ? "active" : ""} to="/app/accounts/categories">Categories</Link></li>
-                                        <li><Link className={pathname.includes('budgets') ? "active" : ""} to="/app/accounts/budgets">Budgets</Link></li>
-                                        <li><Link className={pathname.includes('budget-expenses') ? "active" : ""} to="/app/accounts/budget-expenses">Budget Expenses</Link></li>
-                                        <li><Link className={pathname.includes('budget-revenues') ? "active" : ""} to="/app/accounts/budget-revenues">Budget Revenues</Link></li>
-                                    </ul>
-                                    : ""
-                                }
-                            </li> */}
-                            {/* <li className="submenu">
-                                <a href="#" className={isSideMenu == "payroll" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "payroll" ? "" : "payroll")}><i className="la la-money" /> <span> Payroll </span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "payroll" ?
-                                    <ul>
-                                        <li><Link className={pathname.includes('_salary') ? "active" : ""} to="/app/payroll/_salary"> Employee Salary </Link></li>
-                                        <li><Link className={pathname.includes('y-view') ? "active" : ""} to="/app/payroll/salary-view"> Payslip </Link></li>
-                                        <li><Link className={pathname.includes('payroll-items') ? "active" : ""} to="/app/payroll/payroll-items"> Payroll Items </Link></li>
-                                    </ul>
-                                    : ""
-                                }
-                            </li> */}
+                          
                             <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-roster"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
                             </li>

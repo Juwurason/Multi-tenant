@@ -16,7 +16,7 @@ const Addemployee = () => {
   const [offerLetter, setOfferLetter] = useState(null);
   const privateHttp = useHttp();
 
-
+  
   const submitForm = async (e) => {
     e.preventDefault()
     if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||

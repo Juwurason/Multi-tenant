@@ -8,6 +8,8 @@ import 'antd/dist/antd.css';
 import {itemRender,onShowSizeChange} from "../../../MainPage/paginationfunction"
 // import "../antdstyle.css"
 import Offcanvas from '../../../Entryfile/offcanvance';
+import { toast } from "react-toastify";
+import useHttp from '../../../hooks/useHttp';
 
 const StaffDocument = () => {
   const [data, setData] = useState([
@@ -22,6 +24,60 @@ const StaffDocument = () => {
       });
     }
   });  
+
+  const [loading, setLoading] = useState(false)
+  const [documentName, setDocumentName] = useState(null)
+  const [expire, setExpire] = useState(null)
+  const [document, setDocument] = useState(null)
+
+  const id = JSON.parse(localStorage.getItem('user'))
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const allowedExtensions = /(\.pdf|\.doc)$/i;
+
+    if (allowedExtensions.exec(selectedFile.name)) {
+      setDocument(selectedFile);
+    } else {
+      alert('Please select a PDF or DOC file');
+    }
+  };
+
+  const privateHttp = useHttp()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (documentName === "" ||  expire === "" || document === "")
+     {
+      return toast.error("Input Fields cannot be empty")
+    }
+
+   const formData = new FormData()
+    // Add input field values to formData
+    formData.append("CompanyId", id.companyId);
+    formData.append("DocumentFile", document);
+    formData.append("DocumentName", documentName);
+    formData.append("ExpirationDate", expire);
+
+    try {
+      setLoading(true)
+      const { data } = await privateHttp.post(`/Staffs/document_upload?userId=${id.userId}`,
+        formData
+
+      )
+      console.log(data);
+      toast.success(data.message)
+
+      setLoading(false)
+
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+
+    }
+    finally{
+        setLoading(false)
+    }
+}
   
     const columns = [
       
@@ -129,25 +185,30 @@ const StaffDocument = () => {
                 </button>
               </div>
               <div className="modal-body">
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label>Document Name <span className="text-danger">*</span></label>
-                    <input className="form-control" type="text" />
+                    <input className="form-control" type="text" onChange={e => setDocumentName(e.target.value)} />
                   </div>
                   <div className="form-group">
                     <label>Expiration Date <span className="text-danger">*</span></label>
-                    <input className="form-control" type="date" />
+                    <input className="form-control" type="date" onChange={e => setExpire(e.target.value)} />
                   </div>
                  
                   <div className="form-group">
                     <label>Upload Document <span className="text-danger">*</span></label>
                     <div className="custom-file">
-                      <input type="file" className="custom-file-input" id="policy_upload" />
-                      <label className="custom-file-label" htmlFor="policy_upload">Choose file</label>
+                      <input type="file" className="custom-file-input" accept=".pdf,.doc" id="policy_upload" onChange={handleFileChange} />
+                      {/* {document && <p>Selected file: {document.name}</p>} */}
+                      {/* <label className="custom-file-label" htmlFor="policy_upload">Choose file</label> */}
                     </div>
                   </div>
                   <div className="submit-section">
-                    <button className="btn btn-primary submit-btn">Add</button>
+                    <button className="btn btn-primary submit-btn" disabled={loading ? true : false}>
+                    {loading ? <div className="spinner-grow text-light" role="status">
+                 <span className="sr-only">Loading...</span>
+             </div> : "Add"}
+                    </button>
                   </div>
                 </form>
               </div>
