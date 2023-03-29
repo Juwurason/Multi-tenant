@@ -52,11 +52,13 @@ const StaffDocument = () => {
     }
 
    const formData = new FormData()
-    // Add input field values to formData
     formData.append("CompanyId", id.companyId);
     formData.append("DocumentFile", document);
     formData.append("DocumentName", documentName);
     formData.append("ExpirationDate", expire);
+    formData.append("User", id.fullName);
+    formData.append("UserRole", id.role);
+    formData.append("Status", "Pending");
 
     try {
       setLoading(true)
@@ -64,13 +66,14 @@ const StaffDocument = () => {
         formData
 
       )
-      console.log(data);
+      // console.log(data);
       toast.success(data.message)
 
       setLoading(false)
 
     } catch (error) {
       console.log(error);
+      toast.error(data.error)
       setLoading(false);
 
     }

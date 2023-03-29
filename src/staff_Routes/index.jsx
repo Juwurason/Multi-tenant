@@ -11,6 +11,7 @@ import StaffProfile from '../modules/Staff/StaffProfile';
 import StaffRoster from '../modules/Staff/StaffRoster';
 import Subscription from '../MainPage/Pages/Subscription';
 import Pages from '../MainPage/Pages/Pages';
+import StaffEditProfile from '../modules/Staff/StaffEditProfile';
 //Administrator
 import Administrator from '../MainPage/Administration';
 import StaffChangePassword from '../modules/Staff/StaffForgettingPassword';
@@ -45,6 +46,10 @@ export default [
    {
       path: 'staff-document',
       component: StaffDocument
+   },
+   {
+      path: 'staff-edit-profile',
+      component: StaffEditProfile
    },
    {
       path: 'staffchangepassword',

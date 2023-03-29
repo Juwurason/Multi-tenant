@@ -14,7 +14,8 @@ const StaffProfile = () => {
   const [profile, setProfile] = useState([])
   const [userId, setUserId] = useState([""])
   const privateHttp = useHttp()
-  // const staffId = JSON.parse(localstorage.getItem('user'))
+  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -24,39 +25,20 @@ const StaffProfile = () => {
     }
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (email === "" ||  oldPassword === "" || password === "" || confirmPassword === "")
-     {
-      return toast.error("Input Fields cannot be empty")
-    }
-    const info = {
-        email: email.current.value,
-        oldPassword: oldPassword.current.value,
-        password: password.current.value,
-        confirmPassword: confirmPassword.current.value,
-    }
-    try {
-        setLoading(true)
-        const { data } = await privateHttp.get(`Staff/${2}`, info)
-        console.log(data);
-        if (data.status === "Success") {
-            toast.success(data.message)
-            navigate.push("staff/staff/staffDashboard")
-        } else {
-            toast.error(data.message)
-            return
-        }
-        setLoading(false)
-    } catch (error) {
-        toast.error(error.response.data.message);
-        console.log(error);
-        setLoading(false);
-    }
-    finally{
-        setLoading(false)
-    }
-}
+  useEffect(()=>{
+    const fetchProfile = async () => {
+      try {
+          const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+          setProfile(response.data)
+          console.log(response.data);
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  fetchProfile()
+  },[])
+
+  
  
   
   return (
@@ -95,11 +77,11 @@ const StaffProfile = () => {
                       <div className="row">
                         <div className="col-md-5">
                           <div className="profile-info-left">
-                            <h3 className="user-name m-t-0 mb-0">John Doe</h3>
-                            <h6 className="text-muted">MCP202224</h6>
-                            <small className="text-muted">johndoe@example.com</small>
-                            <div className="staff-id">Employee ID : FT-0001</div>
-                            <div className="small doj text-muted">1861 Bayonne Ave, Manchester Township, NJ, 08759</div>
+                            <h3 className="user-name m-t-0 mb-0">{profile.fullName}</h3>
+                            {/* <h6 className="text-muted">MCP202224</h6> */}
+                            <small className="text-muted">{profile.email}</small>
+                            <div className="staff-id">{profile.maxStaffId}</div>
+                            <div className="small doj text-muted">{profile.address}</div>
                             <div className="staff-msg"><Link onClick={() => localStorage.setItem("minheight", "true")} className="btn btn-custom" to="/conversation/chat">Message</Link></div>
                           </div>
                         </div>
@@ -107,25 +89,25 @@ const StaffProfile = () => {
                           <ul className="personal-info">
                             <li>
                               <div className="title">Phone:</div>
-                              <div className="text"><a href="">9876543210</a></div>
+                              <div className="text"><a href="">{profile.phoneNumber}</a></div>
                             </li>
                             <li>
                               <div className="title">Email:</div>
-                              <div className="text"><a href="">johndoe@example.com</a></div>
+                              <div className="text"><a href="">{profile.email}</a></div>
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">24th July</div>
+                              <div className="text">{profile.dob}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>
-                              <div className="text">1861 Bayonne Ave, Manchester Township, NJ, 08759</div>
+                              <div className="text">{profile.address}</div>
                             </li>
                             <li>
                               <div className="title">Gender:</div>
-                              <div className="text">Male</div>
+                              <div className="text">{profile.gender}</div>
                             </li>
-                            <li>
+                            {/* <li>
                               <div className="title">Reports to:</div>
                               <div className="text">
                                 <div className="avatar-box">
@@ -137,12 +119,12 @@ const StaffProfile = () => {
                                   Jeffery Lalor
                                 </Link>
                               </div>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div className="pro-edit"><a data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="edit-icon" href="#"><i className="fa fa-pencil" /></a></div>
+                    <div className="pro-edit"><Link to="/staff/staff-edit-profile" className="edit-icon">Edit</Link></div>
                   </div>
                 </div>
               </div>
@@ -302,87 +284,6 @@ const StaffProfile = () => {
                             </tr>
                           </tbody>
                         </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6 d-flex">
-                  <div className="card profile-box flex-fill">
-                    <div className="card-body">
-                      <h3 className="card-title">Education Informations <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i className="fa fa-pencil" /></a></h3>
-                      <div className="experience-box">
-                        <ul className="experience-list">
-                          <li>
-                            <div className="experience-user">
-                              <div className="before-circle" />
-                            </div>
-                            <div className="experience-content">
-                              <div className="timeline-content">
-                                <a href="/" className="name">International College of Arts and Science (UG)</a>
-                                <div>Bsc Computer Science</div>
-                                <span className="time">2000 - 2003</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="experience-user">
-                              <div className="before-circle" />
-                            </div>
-                            <div className="experience-content">
-                              <div className="timeline-content">
-                                <a href="/" className="name">International College of Arts and Science (PG)</a>
-                                <div>Msc Computer Science</div>
-                                <span className="time">2000 - 2003</span>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6 d-flex">
-                  <div className="card profile-box flex-fill">
-                    <div className="card-body">
-                      <h3 className="card-title">Experience <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i className="fa fa-pencil" /></a></h3>
-                      <div className="experience-box">
-                        <ul className="experience-list">
-                          <li>
-                            <div className="experience-user">
-                              <div className="before-circle" />
-                            </div>
-                            <div className="experience-content">
-                              <div className="timeline-content">
-                                <a href="/" className="name">Web Designer at Zen Corporation</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="experience-user">
-                              <div className="before-circle" />
-                            </div>
-                            <div className="experience-content">
-                              <div className="timeline-content">
-                                <a href="/" className="name">Web Designer at Ron-tech</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="experience-user">
-                              <div className="before-circle" />
-                            </div>
-                            <div className="experience-content">
-                              <div className="timeline-content">
-                                <a href="/" className="name">Web Designer at Dalt Technology</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
                       </div>
                     </div>
                   </div>
