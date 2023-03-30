@@ -8,21 +8,39 @@ export const useCompanyContext = () => useContext(CompanyContext);
 export const CompanyProvider = ({ children }) => {
     const [staff, setStaff] = useState([]);
     const [staffNum, setStaffNum] = useState(0);
+
     const privateHttp = useHttp();
 
     useEffect(() => {
-        const FetchStaff = async () => {
+        let isMounted = true;
+        async function FetchStaff() {
+
+
             try {
-                const { data } = await privateHttp.get('/Staffs')
-                setStaff(data)
-                setStaffNum(data.length)
+                const response = await Promise.all([
+                    privateHttp.get('/Staffs'),
+
+
+                ])
+                const staff = response[0].data;
+                setStaff(staff)
+                setStaffNum(staff.length)
+
 
             } catch (error) {
                 console.log(error);
             }
         }
-        FetchStaff()
+        if (isMounted) FetchStaff()
+        return () => {
+            isMounted = false
+        }
+
+
     }, [])
+
+
+
     const [companyId, setCompanyId] = useState('');
     const [email, setEmail] = useState('');
     const [userProfile, setUserProfile] = useState(
