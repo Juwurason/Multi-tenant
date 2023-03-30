@@ -14,6 +14,7 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
 
+
 const Employeeslist = () => {
   const { staff } = useCompanyContext()
   console.log(staff);
@@ -22,11 +23,26 @@ const Employeeslist = () => {
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
-  const [data, setData] = useState([
-    { id: 1, image: Avatar_02, name: "John Doe", role: "Web Designer", employee_id: "FT-0001", email: "johndoe@example.com", mobile: '9876543210', joindate: "1 Jan 2013" },
-    { id: 2, image: Avatar_02, name: "John Doe", role: "Web Designer", employee_id: "FT-0001", email: "johndoe@example.com", mobile: '9876543210', joindate: "1 Jan 2013" },
-    { id: 3, image: Avatar_02, name: "John Doe", role: "Web Designer", employee_id: "FT-0001", email: "johndoe@example.com", mobile: '9876543210', joindate: "1 Jan 2013" },
-  ]);
+  console.log(staff);
+
+  // const [data, setData] = useState([
+  //   {
+  //     id: 1, image: Avatar_02,
+  //     name: "Makinde",
+  //     role: "Web Designer",
+  //     employee_id: "FT-0001",
+  //     email: "johndoe@example.com",
+  //     mobile: '9876543210',
+  //     joindate: "1 Jan 2013"
+  //   },
+  // ]);
+  const data = staff.map(row => ({
+    name: row.fullName,
+    staff_id: row.maxStaffId,
+    email: row.email,
+    mobile: row.phoneNumber,
+  }));
+
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -51,9 +67,9 @@ const Employeeslist = () => {
       sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-      title: 'Employee ID',
-      dataIndex: 'employee_id',
-      sorter: (a, b) => a.employee_id.length - b.employee_id.length,
+      title: 'Staff ID',
+      dataIndex: 'staff_id',
+      sorter: (a, b) => a.staff_id.length - b.staff_id.length,
     },
 
     {
@@ -68,29 +84,16 @@ const Employeeslist = () => {
       sorter: (a, b) => a.mobile.length - b.mobile.length,
     },
 
-    {
-      title: 'Join Date',
-      dataIndex: 'joindate',
-      sorter: (a, b) => a.joindate.length - b.joindate.length,
-    },
-    {
-      title: 'Role',
-      render: (text, record) => (
-        <div className="dropdown">
-          <a href="" className="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Web Developer </a>
-          <div className="dropdown-menu">
-            <a className="dropdown-item" href="#">Software Engineer</a>
-            <a className="dropdown-item" href="#">Software Tester</a>
-            <a className="dropdown-item" href="#">Frontend Developer</a>
-            <a className="dropdown-item" href="#">UI/UX Developer</a>
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   title: 'Join Date',
+    //   dataIndex: 'joindate',
+    //   sorter: (a, b) => a.joindate.length - b.joindate.length,
+    // },
+
     {
       title: 'Action',
       render: (text, record) => (
-        <div className="dropdown dropdown-action text-end">
+        <div className="dropdown dropdown-action text-start">
           <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
           <div className="dropdown-menu dropdown-menu-right">
             <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
@@ -117,10 +120,10 @@ const Employeeslist = () => {
             <div className="page-header">
               <div className="row align-items-center">
                 <div className="col">
-                  <h3 className="page-title">Employee</h3>
+                  <h3 className="page-title">Staff</h3>
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                    <li className="breadcrumb-item active">Employee</li>
+                    <li className="breadcrumb-item active">Staff</li>
                   </ul>
                 </div>
                 <div className="col-auto float-end ml-auto">
@@ -138,27 +141,22 @@ const Employeeslist = () => {
               <div className="col-sm-6 col-md-3">
                 <div className="form-group form-focus">
                   <input type="text" className="form-control floating" />
-                  <label className="focus-label">Employee ID</label>
+                  <label className="focus-label">Staff ID</label>
                 </div>
               </div>
               <div className="col-sm-6 col-md-3">
                 <div className="form-group form-focus">
                   <input type="text" className="form-control floating" />
-                  <label className="focus-label">Employee Name</label>
+                  <label className="focus-label">Staff Name</label>
                 </div>
               </div>
               <div className="col-sm-6 col-md-3">
-                <div className="form-group form-focus select-focus">
-                  <select className="select floating">
-                    <option>Select Designation</option>
-                    <option>Web Developer</option>
-                    <option>Web Designer</option>
-                    <option>Android Developer</option>
-                    <option>Ios Developer</option>
-                  </select>
-                  <label className="focus-label">Designation</label>
+                <div className="form-group form-focus">
+                  <input type="text" className="form-control floating" />
+                  <label className="focus-label">Staff Email</label>
                 </div>
               </div>
+
               <div className="col-sm-6 col-md-3">
                 <a href="#" className="btn btn-success btn-block w-100"> Search </a>
               </div>

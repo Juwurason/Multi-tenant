@@ -78,17 +78,12 @@ const AllEmployees = () => {
                 </div>
               </div>
               <div className="col-sm-6 col-md-3">
-                <div className="form-group form-focus select-focus">
-                  <select className="select floating">
-                    <option>Select Designation</option>
-                    <option>Web Developer</option>
-                    <option>Web Designer</option>
-                    <option>Android Developer</option>
-                    <option>Ios Developer</option>
-                  </select>
-                  <label className="focus-label">Designation</label>
+                <div className="form-group form-focus">
+                  <label className="focus-label">Staff Email</label>
+                  <input type="text" className="form-control floating" />
                 </div>
               </div>
+
               <div className="col-sm-6 col-md-3">
                 <a href="#" className="btn btn-success btn-block w-100"> Search </a>
               </div>

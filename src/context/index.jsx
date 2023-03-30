@@ -10,7 +10,7 @@ export const CompanyProvider = ({ children }) => {
     const [staffNum, setStaffNum] = useState(0);
     const [staffProfile, setStaffProfile] = useState({});
 
-    const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+    // const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
     const privateHttp = useHttp();
     let isMounted = true;
     useEffect(() => {
@@ -20,14 +20,14 @@ export const CompanyProvider = ({ children }) => {
             try {
                 const response = await Promise.all([
                     privateHttp.get('/Staffs'),
-                    privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+                    // privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
 
                 ])
                 const staff = response[0].data;
-                const staffPro = response[1].data;
+                // const staffPro = response[1].data;
                 setStaff(staff)
                 setStaffNum(staff.length)
-                setStaffProfile(staffPro)
+                // setStaffProfile(staffPro)
 
             } catch (error) {
                 console.log(error);

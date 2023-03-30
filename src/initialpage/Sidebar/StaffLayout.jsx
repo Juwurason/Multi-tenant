@@ -13,19 +13,19 @@ import Header from './header.jsx';
 import SidebarContent from './sidebar';
 
 const StaffLayout = (props) => {
-        const navigate = useHistory()
+    const navigate = useHistory()
     const [menu, setMenu] = useState(false)
 
     const toggleMobileMenu = () => {
         setMenu(!menu)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
         if (!user || !user.token) {
             navigate.push('/')
         }
-    },[localStorage.getItem('user')]);
+    }, [localStorage.getItem('user')]);
 
     const handleLogout = () => {
         localStorage.removeItem('user')
@@ -44,7 +44,7 @@ const StaffLayout = (props) => {
                     )}
                 </div>
                 <StaffSidebar />
-                
+
             </div>
         </>
     );
