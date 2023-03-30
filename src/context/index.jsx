@@ -9,9 +9,10 @@ export const CompanyProvider = ({ children }) => {
     const [staff, setStaff] = useState([]);
     const [staffNum, setStaffNum] = useState(0);
     const [staffProfile, setStaffProfile] = useState({});
+
     const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
     const privateHttp = useHttp();
-
+    let isMounted = true;
     useEffect(() => {
         async function FetchStaff() {
 
