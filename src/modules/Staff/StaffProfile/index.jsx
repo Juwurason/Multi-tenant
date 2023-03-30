@@ -4,17 +4,14 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+import { useCompanyContext } from '../../../context';
 // import http from '../../../api/http';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
-import useHttp from '../../../hooks/useHttp';
 
 const StaffProfile = () => {
 
-  const [profile, setProfile] = useState([])
-  const [userId, setUserId] = useState([""])
-  const privateHttp = useHttp()
-  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+  const {staffProfile} = useCompanyContext()
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -24,19 +21,6 @@ const StaffProfile = () => {
       });
     }
   });
-
-  useEffect(()=>{
-    const fetchProfile = async () => {
-      try {
-          const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
-          setProfile(response.data)
-          console.log(response.data);
-      } catch (error) {
-          console.log(error);
-      }
-  }
-  fetchProfile()
-  },[])
 
   
  
@@ -77,11 +61,11 @@ const StaffProfile = () => {
                       <div className="row">
                         <div className="col-md-5">
                           <div className="profile-info-left">
-                            <h3 className="user-name m-t-0 mb-0">{profile.fullName}</h3>
+                            <h3 className="user-name m-t-0 mb-0">{staffProfile.fullName}</h3>
                             {/* <h6 className="text-muted">MCP202224</h6> */}
-                            <small className="text-muted">{profile.email}</small>
-                            <div className="staff-id">{profile.maxStaffId}</div>
-                            <div className="small doj text-muted">{profile.address}</div>
+                            <small className="text-muted">{staffProfile.email}</small>
+                            <div className="staff-id">{staffProfile.maxStaffId}</div>
+                            <div className="small doj text-muted">{staffProfile.address}</div>
                             <div className="staff-msg"><Link onClick={() => localStorage.setItem("minheight", "true")} className="btn btn-custom" to="/conversation/chat">Message</Link></div>
                           </div>
                         </div>
@@ -89,23 +73,23 @@ const StaffProfile = () => {
                           <ul className="personal-info">
                             <li>
                               <div className="title">Phone:</div>
-                              <div className="text"><a href="">{profile.phoneNumber}</a></div>
+                              <div className="text"><a href="">{staffProfile.phoneNumber}</a></div>
                             </li>
                             <li>
                               <div className="title">Email:</div>
-                              <div className="text"><a href="">{profile.email}</a></div>
+                              <div className="text"><a href="">{staffProfile.email}</a></div>
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">{profile.dob}</div>
+                              <div className="text">{staffProfile.dob}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>
-                              <div className="text">{profile.address}</div>
+                              <div className="text">{staffProfile.address}</div>
                             </li>
                             <li>
                               <div className="title">Gender:</div>
-                              <div className="text">{profile.gender}</div>
+                              <div className="text">{staffProfile.gender}</div>
                             </li>
                             {/* <li>
                               <div className="title">Reports to:</div>
