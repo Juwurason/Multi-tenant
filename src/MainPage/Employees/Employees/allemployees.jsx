@@ -11,31 +11,15 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
-import useHttp from '../../../hooks/useHttp';
 
 const AllEmployees = () => {
-  const [staff, setStaff] = useState([])
-  const { setStaffNum } = useCompanyContext()
+  const { staff } = useCompanyContext()
   const [menu, setMenu] = useState(false)
-  const privateHttp = useHttp()
 
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
-  useEffect(() => {
-    const FetchStaff = async () => {
-      try {
-        const { data } = await privateHttp.get('/Staffs')
-        setStaff(data)
-        setStaffNum(data.length)
-
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    FetchStaff()
-  }, [])
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -127,7 +111,7 @@ const AllEmployees = () => {
                         </div>
                       </div>
                       <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">{data.firstName} {data.surName}</Link></h4>
-                      <div className="small text-muted">Web Designer</div>
+                      {/* <div className="small text-muted">Web Designer</div> */}
                     </div>
                   </div>
 

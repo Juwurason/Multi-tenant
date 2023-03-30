@@ -656,7 +656,7 @@ const Sidebar = (props) => {
               <li>
                 <Link to="/settings/companysetting"><i className="la la-cog" /> <span>Settings</span></Link>
               </li>
-              <li className="menu-title">
+              {/* <li className="menu-title">
                 <span>Pages</span>
               </li>
               <li className="submenu">
@@ -668,8 +668,8 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "authentication" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "authentication" ? "" : "authentication")} ><i className="la la-key" /> <span> Authentication </span> <span className="menu-arrow" /></a>
                 {isSideMenu == "authentication" ?
                   <ul>
@@ -681,8 +681,8 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "error pages" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "error pages" ? "" : "error pages")}><i className="la la-exclamation-triangle" /> <span> Error Pages </span> <span className="menu-arrow" /></a>
                 {isSideMenu == "error pages" ?
                   <ul>
@@ -691,8 +691,8 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "subscriptions" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "subscriptions" ? "" : "subscriptions")}><i className="la la-hand-o-up" /> <span> Subscriptions </span> <span className="menu-arrow" /></a>
                 {isSideMenu == "subscriptions" ?
                   <ul>
@@ -705,8 +705,8 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "pages" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "pages" ? "" : "pages")}><i className="la la-columns" /> <span> Pages </span> <span className="menu-arrow" /></a>
                 {isSideMenu == "pages" ?
                   <ul>
@@ -718,14 +718,14 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="menu-title">
+              </li> */}
+              {/* <li className="menu-title">
                 <span>UI Interface</span>
               </li>
               <li>
                 <Link to="/ui-components"><i className="la la-puzzle-piece" /> <span>Components</span></Link>
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "forms" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "forms" ? "" : "forms")}><i className="la la-object-group" /> <span> Forms </span> <span className="menu-arrow" /></a>
                 {isSideMenu == "forms" ?
                   <ul>
@@ -744,8 +744,8 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <Link to="/app/ui-interface/tables/basic" className={isSideMenu == "tables" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "tables" ? "" : "tables")}><i className="la la-table" /> <span> Tables </span> <span className="menu-arrow" /></Link>
                 {isSideMenu == "tables" ?
                   <ul>
@@ -754,8 +754,8 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
-              <li className="menu-title">
+              </li> */}
+              {/* <li className="menu-title">
                 <span>Extras</span>
               </li>
               <li>
@@ -763,8 +763,8 @@ const Sidebar = (props) => {
               </li>
               <li>
                 <a href=""><i className="la la-info" /> <span>Change Log</span> <span className="badge badge-primary ml-auto">v3.4</span></a>
-              </li>
-              <li className="submenu">
+              </li> */}
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "multi Level" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "multi Level" ? "" : "multi Level")}><i className="la la-share-alt" /> <span>Multi Level</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "multi Level" ?
                   <ul>
@@ -794,7 +794,7 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

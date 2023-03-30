@@ -31,6 +31,15 @@ const CompanySetup = () => {
         fetchPackages()
 
     }, [])
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user && user.token && user.role === "CompanyAdmin") {
+            navigate.push('/app/main/dashboard');
+        }
+        if (user && user.token && user.role === "Staff") {
+            navigate.push('/staff/staff/staffDashboard');
+        }
+    }, []);
     const navigate = useHistory()
     const handleSubmit = async (e) => {
         e.preventDefault()
