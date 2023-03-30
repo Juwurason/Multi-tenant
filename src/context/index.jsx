@@ -9,10 +9,10 @@ export const CompanyProvider = ({ children }) => {
     const [staff, setStaff] = useState([]);
     const [staffNum, setStaffNum] = useState(0);
 
+    let isMounted = true;
     const privateHttp = useHttp();
 
     useEffect(() => {
-        let isMounted = true;
         async function FetchStaff() {
 
 
