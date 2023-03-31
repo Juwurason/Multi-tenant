@@ -11,7 +11,7 @@ import ClientProfile from "./clientprofile"
 const subscriptionroute = ({ match }) => (
     <Switch>
         <Redirect exact from={`${match.url}/`} to={`${match.url}/employee-profile`} />
-        <Route path={`${match.url}/employee-profile`} component={EmployeeProfile} />
+        <Route path={`${match.url}/employee-profile/:uid`} component={EmployeeProfile} />
         <Route path={`${match.url}/client-profile`} component={ClientProfile} />
     </Switch>
 );

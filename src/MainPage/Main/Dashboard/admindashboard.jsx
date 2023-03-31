@@ -42,8 +42,7 @@ const linechartdata = [
 const AdminDashboard = () => {
 
   const [menu, setMenu] = useState(false)
-  const { staffNum } = useCompanyContext()
-  console.log(staffNum);
+  const { staff } = useCompanyContext()
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
@@ -90,7 +89,7 @@ const AdminDashboard = () => {
                     <span className="dash-widget-icon"><i className="fa fa-user" /></span>
                     <div className="dash-widget-info">
                       <span>Total Staff</span>
-                      <h3>{staffNum}</h3>
+                      <h3>{staff.length}</h3>
                       <Link to={'/app/employee/allemployees'} className='pointer fw-bold'>View Staffs</Link>
                     </div>
                   </div>

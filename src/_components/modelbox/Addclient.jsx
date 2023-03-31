@@ -4,7 +4,7 @@ import http from '../../api/http'
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 
-const Addemployee = () => {
+const AddClient = () => {
   const { userProfile } = useCompanyContext();
   const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState('');
@@ -13,7 +13,6 @@ const Addemployee = () => {
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [offerLetter, setOfferLetter] = useState(null);
   const privateHttp = useHttp();
 
 
@@ -35,7 +34,6 @@ const Addemployee = () => {
     formData.append("Address", address);
     formData.append("Email", email);
     formData.append("PhoneNumber", phoneNumber);
-    formData.append("OfferLetter", offerLetter);
 
 
     try {
@@ -62,11 +60,11 @@ const Addemployee = () => {
   return (
     <>
       {/* Add Employee Modal */}
-      <div id="add_employee" className="modal custom-modal fade" role="dialog">
+      <div id="add_client" className="modal custom-modal fade" role="dialog">
         <div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
           <div className="modal-content overflow-auto">
             <div className="modal-header">
-              <h5 className="modal-title">Add Staff</h5>
+              <h5 className="modal-title">Add Client</h5>
               <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -110,16 +108,26 @@ const Addemployee = () => {
                       <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
                   </div>
-
-                  <div className="col-sm-12">
+                  <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Offer Letter <span className="text-danger">*</span></label>
-                      <div><input className="form-control" type="file"
-                        accept=".pdf,.doc,.docx"
-                        maxSize={1024 * 1024 * 2}
-                        onChange={e => setOfferLetter(e.target.files[0])} /></div>
+                      <label className="col-form-label">Agreement start date</label>
+                      <input className="form-control" type="date" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
                   </div>
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <label className="col-form-label">Agreement end date</label>
+                      <input className="form-control" type="date" value={address} onChange={e => setAddress(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <label className="col-form-label">NDIS NO</label>
+                      <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
+                    </div>
+                  </div>
+
+
 
                 </div>
 
@@ -141,4 +149,4 @@ const Addemployee = () => {
   )
 }
 
-export default Addemployee
+export default AddClient

@@ -4,6 +4,7 @@
 /* eslint-disable */
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import AddClient from '../../_components/modelbox/Addclient';
 
 import Clients from './clients';
 import ClientsList from './clientslist';
@@ -15,6 +16,8 @@ const EmployeeRoute = ({ match }) => (
    <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/clients`} />
       <Route path={`${match.url}/clients`} component={Clients} />
+      <Route path={`${match.url}/add-client`} component={AddClient} />
+
       <Route path={`${match.url}/clients-list`} component={ClientsList} />
       <Route path={`${match.url}/leads`} component={Leades} />
       <Route path={`${match.url}/tickets`} component={Tickets} />

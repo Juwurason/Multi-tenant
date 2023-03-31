@@ -1,16 +1,20 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
 const EmployeeProfile = () => {
+  const { uid } = useParams()
+  const [staffOne, setStaffOne] = useState({});
+
   const privateHttp = useHttp()
   useEffect(() => {
     const FetchStaff = async () => {
       try {
-        const { data } = await privateHttp.get('/Staffs/2')
+        const { data } = await privateHttp.get(`/Staffs/${uid}`)
+        setStaffOne(data)
         console.log(data);
 
       } catch (error) {
@@ -19,6 +23,8 @@ const EmployeeProfile = () => {
     }
     FetchStaff()
   }, [])
+
+
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -31,7 +37,7 @@ const EmployeeProfile = () => {
     <>
       <div className="page-wrapper">
         <Helmet>
-          <title>Employee Profile - HRMS admin Template</title>
+          <title>Employee Profile </title>
           <meta name="description" content="Reactify Blank Page" />
         </Helmet>
         {/* Page Content */}
@@ -62,38 +68,36 @@ const EmployeeProfile = () => {
                     <div className="profile-basic">
                       <div className="row">
                         <div className="col-md-5">
-                          <div className="profile-info-left">
-                            <h3 className="user-name m-t-0 mb-0">Johan Roe</h3>
-                            <h6 className="text-muted">UI/UX Design Team</h6>
-                            <small className="text-muted">Web Designer</small>
-                            <div className="staff-id">Employee ID : FT-0001</div>
-                            <div className="small doj text-muted">Date of Join : 1st Jan 2013</div>
-                            <div className="staff-msg"><Link onClick={() => localStorage.setItem("minheight", "true")} className="btn btn-custom" to="/conversation/chat">Send Message</Link></div>
+                          <div className="profile-info-left d-flex flex-column">
+                            <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
+                            <div className="staff-id">Staff ID : {staffOne.maxStaffId}</div>
+                            {/* <div className="small doj text-muted">Date of Join : 1st Jan 2013</div> */}
+                            <div className="staff-msg"><a data-bs-target="#profile_info" data-bs-toggle="modal" className="btn btn-primary" >Edit Profile</a></div>
                           </div>
                         </div>
                         <div className="col-md-7">
                           <ul className="personal-info">
                             <li>
                               <div className="title">Phone:</div>
-                              <div className="text"><a href="">9876543210</a></div>
+                              <div className="text"><a href="">{staffOne.phoneNumber}</a></div>
                             </li>
                             <li>
                               <div className="title">Email:</div>
-                              <div className="text"><a href="">johndoe@example.com</a></div>
+                              <div className="text"><a href="">{staffOne.email}</a></div>
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">24th July</div>
+                              <div className="text"></div>
                             </li>
                             <li>
                               <div className="title">Address:</div>
-                              <div className="text">1861 Bayonne Ave, Manchester Township, NJ, 08759</div>
+                              <div className="text"></div>
                             </li>
                             <li>
                               <div className="title">Gender:</div>
-                              <div className="text">Male</div>
+                              <div className="text"></div>
                             </li>
-                            <li>
+                            {/* <li>
                               <div className="title">Reports to:</div>
                               <div className="text">
                                 <div className="avatar-box">
@@ -105,7 +109,7 @@ const EmployeeProfile = () => {
                                   Jeffery Lalor
                                 </Link>
                               </div>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       </div>
@@ -121,7 +125,7 @@ const EmployeeProfile = () => {
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
                 <ul className="nav nav-tabs nav-tabs-bottom">
                   <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active">Profile</a></li>
-                  <li className="nav-item"><a href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li>
+                  {/* <li className="nav-item"><a href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
                   <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li>
                 </ul>
               </div>
@@ -138,35 +142,35 @@ const EmployeeProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Passport No.</div>
-                          <div className="text">9876543210</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Passport Exp Date.</div>
-                          <div className="text">9876543210</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Tel</div>
-                          <div className="text"><a href="">9876543210</a></div>
+                          <div className="text"><a href="">{staffOne.phoneNumber}</a></div>
                         </li>
                         <li>
                           <div className="title">Nationality</div>
-                          <div className="text">Indian</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Religion</div>
-                          <div className="text">Christian</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Marital status</div>
-                          <div className="text">Married</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Employment of spouse</div>
-                          <div className="text">No</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">No. of children</div>
-                          <div className="text">2</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                     </div>
@@ -180,15 +184,15 @@ const EmployeeProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Name</div>
-                          <div className="text">John Doe</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Relationship</div>
-                          <div className="text">Father</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Phone </div>
-                          <div className="text">9876543210, 9876543210</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                       <hr />
@@ -196,15 +200,15 @@ const EmployeeProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Name</div>
-                          <div className="text">Karen Wills</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Relationship</div>
-                          <div className="text">Brother</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Phone </div>
-                          <div className="text">9876543210, 9876543210</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                     </div>
@@ -219,19 +223,19 @@ const EmployeeProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Bank name</div>
-                          <div className="text">ICICI Bank</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Bank account No.</div>
-                          <div className="text">159843014641</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">IFSC Code</div>
-                          <div className="text">ICI24504</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">PAN No</div>
-                          <div className="text">TC000Y56</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                     </div>
@@ -288,9 +292,9 @@ const EmployeeProfile = () => {
                             </div>
                             <div className="experience-content">
                               <div className="timeline-content">
-                                <a href="/" className="name">International College of Arts and Science (UG)</a>
+                                {/* <a href="/" className="name">International College of Arts and Science (UG)</a>
                                 <div>Bsc Computer Science</div>
-                                <span className="time">2000 - 2003</span>
+                                <span className="time">2000 - 2003</span> */}
                               </div>
                             </div>
                           </li>
@@ -300,9 +304,9 @@ const EmployeeProfile = () => {
                             </div>
                             <div className="experience-content">
                               <div className="timeline-content">
-                                <a href="/" className="name">International College of Arts and Science (PG)</a>
+                                {/* <a href="/" className="name">International College of Arts and Science (PG)</a>
                                 <div>Msc Computer Science</div>
-                                <span className="time">2000 - 2003</span>
+                                <span className="time">2000 - 2003</span> */}
                               </div>
                             </div>
                           </li>
@@ -323,8 +327,8 @@ const EmployeeProfile = () => {
                             </div>
                             <div className="experience-content">
                               <div className="timeline-content">
-                                <a href="/" className="name">Web Designer at Zen Corporation</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span>
+                                {/* <a href="/" className="name">Web Designer at Zen Corporation</a>
+                                <span className="time">Jan 2013 - Present (5 years 2 months)</span> */}
                               </div>
                             </div>
                           </li>
@@ -334,8 +338,8 @@ const EmployeeProfile = () => {
                             </div>
                             <div className="experience-content">
                               <div className="timeline-content">
-                                <a href="/" className="name">Web Designer at Ron-tech</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span>
+                                {/* <a href="/" className="name">Web Designer at Ron-tech</a>
+                                <span className="time">Jan 2013 - Present (5 years 2 months)</span> */}
                               </div>
                             </div>
                           </li>
@@ -345,8 +349,8 @@ const EmployeeProfile = () => {
                             </div>
                             <div className="experience-content">
                               <div className="timeline-content">
-                                <a href="/" className="name">Web Designer at Dalt Technology</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span>
+                                {/* <a href="/" className="name">Web Designer at Dalt Technology</a>
+                                <span className="time">Jan 2013 - Present (5 years 2 months)</span> */}
                               </div>
                             </div>
                           </li>
@@ -1075,7 +1079,7 @@ const EmployeeProfile = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="card">
+                    {/* <div className="card">
                       <div className="card-body">
                         <h3 className="card-title">Education Informations <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
                         <div className="row">
@@ -1108,7 +1112,7 @@ const EmployeeProfile = () => {
                           <a href=""><i className="fa fa-plus-circle" /> Add More</a>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="submit-section">
                     <button className="btn btn-primary submit-btn">Submit</button>
