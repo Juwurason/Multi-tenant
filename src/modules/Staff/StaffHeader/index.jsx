@@ -22,6 +22,7 @@ const StaffHeader = (props) => {
 
     const handleLogout = () => {
         localStorage.removeItem('user')
+        localStorage.removeItem('staffProfile')
         navigate.push("/login")
     }
 
@@ -32,11 +33,11 @@ const StaffHeader = (props) => {
             {/* Logo */}
             <div className="header-left">
                 <Link to="/app/main/dashboard" className="logo">
-                    <img src={headerlogo} width={40} height={40} alt="" />
+                    <img src={headerlogo} width={40} height={40} alt="" style={{backgroundColor: "black"}} />
                 </Link>
             </div>
             {/* /Logo */}
-            <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
+            <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : ""}} onClick={handlesidebar}>
                 <span className="bar-icon"><span />
                     <span />
                     <span />

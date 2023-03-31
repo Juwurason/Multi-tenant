@@ -2818,7 +2818,7 @@ input[type=file].form-control {
   display: block;
   width: 16px;
   height: 16px;
-  background-color: #ffffff;
+  background-color: black;
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
@@ -2918,7 +2918,7 @@ input[type=file].form-control {
 
 @media (min-width: 991px) {
   .header #toggle_btn {
-    color: #999;
+    color: black;
     float: left;
     font-size: 26px;
     line-height: 70px;
@@ -2931,7 +2931,7 @@ input[type=file].form-control {
   }
 
   .header #toggle_btn .bar-icon span {
-    background-color: #ffffff;
+    background-color: black;
     display: block;
     float: left;
     height: 2px;
@@ -2973,7 +2973,7 @@ input[type=file].form-control {
 
 @media (max-width: 991px) {
   .header .mobile_btn {
-    color: #ffffff;
+    color: black;
     font-size: 24px;
     height: 60px;
     line-height: 60px;
@@ -4617,6 +4617,7 @@ input[type=file].form-control {
 
 [data-sidebar-size=sm-hover] #toggle_btn {
   display: none;
+  color: #000000;
 }
 
 [data-sidebar-size=sm-hover] .sidebar ul .menu-title {
@@ -6209,7 +6210,7 @@ div,
 [data-layout-mode=orange] body .header {
 
   background: #18225C;
-  background: linear-gradient(to right, #18225C 0%, #18225C 100%);
+  background: white;
 }
 
 [data-layout-mode=orange] body .header .header-left .logo {
@@ -6218,15 +6219,15 @@ div,
 }
 
 [data-layout-mode=orange] body .header .user-menu.nav>li>a {
-  color: #fff;
+  color: black;
 }
 
 [data-layout-mode=orange] body .header #toggle_btn .bar-icon span {
-  background-color: #fff;
+  background-color: black;
 }
 
 [data-layout-mode=orange] body .header .page-title-box h3 {
-  color: #fff;
+  color: black;
 }
 
 [data-layout-mode=orange] body .header .header-left .logo2 {
