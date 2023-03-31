@@ -35,7 +35,7 @@ const Header = (props) => {
       </div>
       {/* /Logo */}
       <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
-        <span className="bar-icon"><span />
+        <span className="bar-icon btn btn-dark"><span />
           <span />
           <span />
         </span>
