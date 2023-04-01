@@ -298,7 +298,7 @@
     }
 
     .mobile-user-menu {
-        color: $__white;
+        color: black;
         display: $__none;
         float: $__right;
         font-size: $__font__size__24;
@@ -315,7 +315,7 @@
         }
 
         a {
-            color: $__white;
+            color: black;
             padding: 0;
 
             &::after {

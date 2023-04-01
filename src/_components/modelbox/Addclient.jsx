@@ -13,13 +13,17 @@ const AddClient = () => {
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [agreementStartDate, setAgreementStartDate] = useState('');
+  const [agreementEndDate, setAgreementEndDate] = useState('');
+  const [NDISNo, setNDISNo] = useState('');
+
   const privateHttp = useHttp();
 
 
   const submitForm = async (e) => {
     e.preventDefault()
     if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
-      email.trim() === ""
+      email.trim() === "" || agreementEndDate.trim() === "" || agreementStartDate.trim() === "" || NDISNo.trim() === ""
     ) {
       return toast.error("All Fields must be filled")
     }
@@ -34,11 +38,15 @@ const AddClient = () => {
     formData.append("Address", address);
     formData.append("Email", email);
     formData.append("PhoneNumber", phoneNumber);
+    formData.append("AgreementStartDate", agreementStartDate);
+    formData.append("AgreementEndDate", agreementEndDate);
+    formData.append("NDISNo", NDISNo);
+
 
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
+      const { data } = await privateHttp.post(`/Profiles/add_client?userId=${userProfile.userId}`,
         formData
       )
       console.log(data);
@@ -48,7 +56,7 @@ const AddClient = () => {
 
     } catch (error) {
       toast.error(error.response?.data?.message)
-
+      console.log(error);
       setLoading(false)
 
     } finally {
@@ -98,32 +106,32 @@ const AddClient = () => {
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Phone Number</label>
+                      <label className="col-form-label">Phone Number <span className="text-danger">*</span></label>
                       <input className="form-control" type="tel" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Address</label>
+                      <label className="col-form-label">Address <span className="text-danger">*</span></label>
                       <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Agreement start date</label>
-                      <input className="form-control" type="date" value={address} onChange={e => setAddress(e.target.value)} />
+                      <label className="col-form-label">Agreement start date <span className="text-danger">*</span></label>
+                      <input className="form-control" type="date" value={agreementStartDate} onChange={e => setAgreementStartDate(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Agreement end date</label>
-                      <input className="form-control" type="date" value={address} onChange={e => setAddress(e.target.value)} />
+                      <label className="col-form-label">Agreement end date <span className="text-danger">*</span></label>
+                      <input className="form-control" type="date" value={agreementEndDate} onChange={e => setAgreementEndDate(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">NDIS NO</label>
-                      <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
+                      <label className="col-form-label">NDIS NO <span className="text-danger">*</span></label>
+                      <input className="form-control" type="text" value={NDISNo} onChange={e => setNDISNo(e.target.value)} />
                     </div>
                   </div>
 

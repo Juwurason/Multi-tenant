@@ -30,12 +30,12 @@ const Header = (props) => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={headerlogo} width={40} height={40} alt="" />
+          <img src={headerlogo} width={40} height={40} alt="" style={{ backgroundColor: "#000" }} />
         </Link>
       </div>
       {/* /Logo */}
       <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
-        <span className="bar-icon"><span />
+        <span className="bar-icon btn"><span />
           <span />
           <span />
         </span>

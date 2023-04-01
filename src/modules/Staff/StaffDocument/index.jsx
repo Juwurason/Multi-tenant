@@ -158,7 +158,7 @@ const StaffDocument = () => {
             </div>
           </div>
           {/* /Page Header */}
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-12">
               <div className="table-responsive">
                 <Table className="table-striped"
@@ -174,7 +174,7 @@ const StaffDocument = () => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         {/* /Page Content */}
         {/* Add Policy Modal */}

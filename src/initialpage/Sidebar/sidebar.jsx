@@ -33,7 +33,7 @@ const Sidebar = (props) => {
 
   let pathname = props.location.pathname
   return (
-    <div id="sidebar" className="sidebar"  >
+    <div id="sidebar" className="sidebar" style={{ backgroundColor: "#18225C" }}>
       <Scrollbars
         autoHide
         autoHideTimeout={1000}

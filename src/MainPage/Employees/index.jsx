@@ -16,7 +16,6 @@ const EmployeeRoute = ({ match }) => (
    <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/clients`} />
       <Route path={`${match.url}/clients`} component={Clients} />
-      <Route path={`${match.url}/add-client`} component={AddClient} />
 
       <Route path={`${match.url}/clients-list`} component={ClientsList} />
       <Route path={`${match.url}/leads`} component={Leades} />

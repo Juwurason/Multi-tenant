@@ -9,17 +9,18 @@ export const CompanyProvider = ({ children }) => {
     const [staff, setStaff] = useState([]);
 
     const privateHttp = useHttp();
+
     let isMounted = true;
     useEffect(() => {
         async function FetchStaff() {
-
-
             try {
                 const response = await Promise.all([
                     privateHttp.get('/Staffs'),
+
                 ])
                 const staff = response[0].data;
                 setStaff(staff)
+
 
             } catch (error) {
                 console.log(error);

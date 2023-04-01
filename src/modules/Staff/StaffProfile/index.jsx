@@ -4,14 +4,17 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { useCompanyContext } from '../../../context';
 // import http from '../../../api/http';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
+import useHttp from '../../../hooks/useHttp';
 
 const StaffProfile = () => {
 
-  const {staffProfile} = useCompanyContext()
+  const [profile, setProfile] = useState([])
+  const [userId, setUserId] = useState([""])
+  const privateHttp = useHttp()
+  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -21,6 +24,19 @@ const StaffProfile = () => {
       });
     }
   });
+
+  useEffect(()=>{
+    const fetchProfile = async () => {
+      try {
+          const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+          setProfile(response.data)
+          console.log(response.data);
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  fetchProfile()
+  },[])
 
   
  
@@ -61,35 +77,35 @@ const StaffProfile = () => {
                       <div className="row">
                         <div className="col-md-5">
                           <div className="profile-info-left">
-                            <h3 className="user-name m-t-0 mb-0">{staffProfile.fullName}</h3>
+                            <h3 className="user-name m-t-0 mb-0">{profile.fullName}</h3>
                             {/* <h6 className="text-muted">MCP202224</h6> */}
-                            <small className="text-muted">{staffProfile.email}</small>
-                            <div className="staff-id">{staffProfile.maxStaffId}</div>
-                            <div className="small doj text-muted">{staffProfile.address}</div>
-                            <div className="staff-msg"><Link onClick={() => localStorage.setItem("minheight", "true")} className="btn btn-custom" to="/conversation/chat">Message</Link></div>
+                            {/* <small className="text-muted">{profile.email}</small> */}
+                            <div className="staff-id">Staff ID : {profile.maxStaffId}</div>
+                            {/* <div className="small doj text-muted">{profile.address}</div> */}
+                            <div className="staff-msg"><Link className="btn btn-primary" to="/staff/staff-edit-profile">Edit Profile</Link></div>
                           </div>
                         </div>
                         <div className="col-md-7">
                           <ul className="personal-info">
                             <li>
                               <div className="title">Phone:</div>
-                              <div className="text"><a href="">{staffProfile.phoneNumber}</a></div>
+                              <div className="text"><a href="">{profile.phoneNumber}</a></div>
                             </li>
                             <li>
                               <div className="title">Email:</div>
-                              <div className="text"><a href="">{staffProfile.email}</a></div>
+                              <div className="text"><a href="">{profile.email}</a></div>
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">{staffProfile.dob}</div>
+                              <div className="text">{profile.dob}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>
-                              <div className="text">{staffProfile.address}</div>
+                              <div className="text">{profile.address}</div>
                             </li>
                             <li>
                               <div className="title">Gender:</div>
-                              <div className="text">{staffProfile.gender}</div>
+                              <div className="text">{profile.gender}</div>
                             </li>
                             {/* <li>
                               <div className="title">Reports to:</div>
@@ -136,35 +152,35 @@ const StaffProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Passport No.</div>
-                          <div className="text">9876543210</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Passport Exp Date.</div>
-                          <div className="text">9876543210</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Tel</div>
-                          <div className="text"><a href="">9876543210</a></div>
+                          <div className="text"><a href=""></a></div>
                         </li>
                         <li>
                           <div className="title">Nationality</div>
-                          <div className="text">Indian</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Religion</div>
-                          <div className="text">Christian</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Marital status</div>
-                          <div className="text">Married</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Employment of spouse</div>
-                          <div className="text">No</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">No. of children</div>
-                          <div className="text">2</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                     </div>
@@ -178,15 +194,15 @@ const StaffProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Name</div>
-                          <div className="text">John Doe</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Relationship</div>
-                          <div className="text">Father</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Phone </div>
-                          <div className="text">9876543210, 9876543210</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                       <hr />
@@ -194,15 +210,15 @@ const StaffProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Name</div>
-                          <div className="text">Karen Wills</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Relationship</div>
-                          <div className="text">Brother</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Phone </div>
-                          <div className="text">9876543210, 9876543210</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                     </div>
@@ -217,19 +233,19 @@ const StaffProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Bank name</div>
-                          <div className="text">ICICI Bank</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Bank account No.</div>
-                          <div className="text">159843014641</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">IFSC Code</div>
-                          <div className="text">ICI24504</div>
+                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">PAN No</div>
-                          <div className="text">TC000Y56</div>
+                          <div className="text"></div>
                         </li>
                       </ul>
                     </div>
@@ -252,10 +268,10 @@ const StaffProfile = () => {
                           </thead>
                           <tbody>
                             <tr>
-                              <td>Leo</td>
-                              <td>Brother</td>
-                              <td>Feb 16th, 2019</td>
-                              <td>9876543210</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
                               <td className="text-end">
                                 <div className="dropdown dropdown-action">
                                   <a aria-expanded="false" data-bs-toggle="dropdown" className="action-icon dropdown-toggle" href="#"><i className="material-icons">more_vert</i></a>
