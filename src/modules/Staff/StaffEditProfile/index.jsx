@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { useCompanyContext } from '../../../context';
+import { FaCamera } from 'react-icons/fa'
+import man from "../../../assets/img/man.png"
 import useHttp from '../../../hooks/useHttp';
+import { toast } from "react-toastify";
 
 const StaffEditProfile = () => {
 
@@ -14,6 +16,21 @@ const StaffEditProfile = () => {
       });
     }
   });
+
+  const styles = {
+    main: {
+      backgroundColor: 'black',
+      display: 'none',
+
+    },
+    label: {
+      width: '130px',
+      height: '130px',
+      borderRadius: "50%",
+      cursor: "pointer",
+      display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
+    }
+  }
 
   const [step, setStep] = useState(1);
   const [branch, setBranch] = useState('');
@@ -45,6 +62,12 @@ const StaffEditProfile = () => {
   const [relationship, setRelationship] = useState('')
   const [aboutMe, setAboutMe] = useState('')
   const [bsb, setBsb] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [image, setImage] = useState('')
+  const [insta, setInsta] = useState('')
+  const [fbook, setFbook] = useState('')
+  const [tweet, setTweet] = useState('')
+  const [linkd, setLinkd] = useState('')
 
 
   const handleNext = (e) => {
@@ -56,44 +79,41 @@ const StaffEditProfile = () => {
     e.preventDefault()
     setStep(step - 1);
   }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(33);
-    // TODO: handle form submission
-  }
-
+  const privateHttp = useHttp()
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchProfile = async () => {
       try {
-          const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
-          setProfile(response.data)
-          console.log(response.data);
+        const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+        setProfile(response.data)
+        console.log(response.data);
       } catch (error) {
-          console.log(error);
+        console.log(error);
       }
-  }
-  fetchProfile()
-  },[])
-  const handleSubmi = async (e) => {
-    e.preventDefault()
-    if (documentName === "" ||  expire === "" || document === "")
-     {
-      return toast.error("Input Fields cannot be empty")
     }
+    fetchProfile()
+  }, [])
 
-   const formData = new FormData()
-    formData.append("firstName", getStaffProfile.firstName);
-    formData.append("email", getStaffProfile.email);
-    formData.append("phoneNumber", getStaffProfile.phoneNumber);
-    formData.append("surName", getStaffProfile.surName);
+  const id = JSON.parse(localStorage.getItem('user'))
+
+  const handleSave = async (e) => {
+    e.preventDefault()
+    // if (documentName === "" ||  expire === "" || document === "")
+    //  {
+    //   return toast.error("Input Fields cannot be empty")
+    // }
+
+    const formData = new FormData()
+    formData.append("firstName", profile.firstName);
+    formData.append("email", profile.email);
+    formData.append("phoneNumber", profile.phoneNumber);
+    formData.append("surName", profile.surName);
     formData.append("middleName", lastName);
     formData.append("gender", gender);
     formData.append("dateOfBirth", dateOfBirth);
     formData.append("aboutMe", aboutMe);
-    formData.append("address", addressLine2);
+    formData.append("address", profile.address);
     formData.append("city", city);
     formData.append("country", country);
     formData.append("state", state);
@@ -113,47 +133,68 @@ const StaffEditProfile = () => {
     formData.append("kinPostcode", emePostCode);
     formData.append("kinState", emeState);
     formData.append("relationship", relationship);
+    formData.append("imageFile", image);
+    formData.append("twitter", tweet);
+    formData.append("linkedIn", linkd);
+    formData.append("instagram", insta);
+    formData.append("facebook", fbook);
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/document_upload?userId=${id.userId}`,
+      const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
         formData
-
       )
-      // console.log(data);
-      toast.success(data.message)
+      console.log(data);
+      // toast.success(data.message)
 
       setLoading(false)
 
     } catch (error) {
       console.log(error);
-      toast.error(data.error)
+      toast.error(error.response.data.message)
       setLoading(false);
 
     }
-    finally{
-        setLoading(false)
+    finally {
+      setLoading(false)
     }
-}
-
+  }
+  const handlechange = (e) => {
+    setImage(e.target.files[0]);
+  }
   const renderStep1 = () => {
 
     return (
       <div>
         <h4 className="card-title">Personal Information</h4>
+
         <div className="row">
+          <div style={{ display: "flex", justifyContent: 'center' }}>
+            <div className="form-group">
+              <label style={styles.label} className="border border-2 rounded-circle">
+                <img className="rounded-circle" style={{ width: '100%', height: '100%' }}
+                  src={image === "" ? man : URL.createObjectURL(image)} alt="profile image" />
+              </label>
+
+              <label style={{ display: 'flex', justifyContent: 'center' }}>
+                <FaCamera />
+                <input type="file" accept="image/jpeg, image/png" required style={styles.main} onChange={handlechange} />
+              </label>
+
+            </div>
+          </div>
           <div className="col-md-6">
             <div className="form-group">
               <label>First Name</label>
-              <input type="text" className="form-control" value={getStaffProfile.firstName} readOnly />
+              <input type="text" className="form-control" value={profile.firstName} readOnly />
             </div>
             <div className="form-group">
               <label>Last Name</label>
-              <input type="number" className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+              <input type="text" className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} />
             </div>
             <div className="form-group">
               <label>Phone Number</label>
-              <input type="number" className="form-control" value={getStaffProfile.phoneNumber} readOnly />
+              <input type="number" className="form-control" value={profile.phoneNumber} readOnly />
             </div>
             <div className="form-group">
               <label>Date Of Birth</label>
@@ -164,11 +205,11 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Surname</label>
-              <input type="text" className="form-control" value={getStaffProfile.surName} readOnly />
+              <input type="text" className="form-control" value={profile.surName} readOnly />
             </div>
             <div className="form-group">
               <label>Email</label>
-              <input type="text" className="form-control" value={getStaffProfile.email} readOnly />
+              <input type="text" className="form-control" value={profile.email} readOnly />
             </div>
             <div className="form-group">
               <label className="d-block">Gender:</label>
@@ -183,10 +224,11 @@ const StaffEditProfile = () => {
             </div>
             <div className="form-group">
               <label>About Me</label><br />
-              <textarea name="" id="" cols="43" rows="3" value={aboutMe} onChange={(event) => setAboutMe(event.target.value)}></textarea>
+              <textarea name="" id="" style={{ width: "100%", height: "auto" }} value={aboutMe} onChange={(event) => setAboutMe(event.target.value)}></textarea>
             </div>
-
           </div>
+
+
         </div>
       </div>
     );
@@ -200,7 +242,7 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Address Line 1</label>
-              <input type="text" className="form-control" value={getStaffProfile.address} readOnly />
+              <input type="text" className="form-control" value={profile.address} readOnly />
             </div>
             <div className="form-group">
               <label>Address Line 2</label>
@@ -331,22 +373,22 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Instagram</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' value={accountName} onChange={(event) => setAccountName(event.target.value)} />
+              <input type="text" className="form-control" placeholder='https://WWW......' value={insta} onChange={(event) => setInsta(event.target.value)} />
             </div>
 
             <div className="form-group">
               <label>Facebook</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' value={bankName} onChange={(event) => setBankName(event.target.value)} />
+              <input type="text" className="form-control" placeholder='https://WWW......' value={fbook} onChange={(event) => setFbook(event.target.value)} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-group">
               <label>Twitter</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' value={accountNumber} onChange={(event) => setAccountNumber(event.target.value)} />
+              <input type="text" className="form-control" placeholder='https://WWW......' value={tweet} onChange={(event) => setTweet(event.target.value)} />
             </div>
             <div className="form-group">
               <label>LinkedIn</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' value={accountNumber} onChange={(event) => setAccountNumber(event.target.value)} />
+              <input type="text" className="form-control" placeholder='https://WWW......' value={linkd} onChange={(event) => setLinkd(event.target.value)} />
             </div>
 
           </div>
@@ -376,8 +418,13 @@ const StaffEditProfile = () => {
                 {step === 5 && renderStep5()}
                 <div className="mt-3">
                   {step > 1 && <button className="btn btn-primary mr-2" onClick={handlePrev}>Previous</button>}
-                  {step < 5 ? <button style={{marginLeft:'10px'}} className="btn btn-primary" onClick={handleNext}>Next</button> : <button className="btn btn-success" type="submit" onClick={handleSubmit}>Save</button>}
-                  <Link to="/staff/staffprofile" style={{marginLeft:'10px'}}><button className="btn btn-primary"> Cancel </button></Link>
+                  {step < 5 ? <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> : 
+                  <button style={{ marginLeft: '10px' }} disabled={loading ? true : false} className="btn btn-success" type="submit" onClick={handleSave}>
+                  {loading ? <div className="spinner-grow text-light" role="status">
+                 <span className="sr-only">Loading...</span>
+             </div> : "Save"}
+                    </button>}
+                  <Link to="/staff/staffprofile" style={{ marginLeft: '10px' }}><button className="btn btn-primary"> Cancel </button></Link>
                 </div>
               </form>
             </div>

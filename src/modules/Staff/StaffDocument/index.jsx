@@ -73,7 +73,7 @@ const StaffDocument = () => {
 
     } catch (error) {
       console.log(error);
-      toast.error(data.error)
+      toast.error(error.message)
       setLoading(false);
 
     }
@@ -157,24 +157,6 @@ const StaffDocument = () => {
               </div>
             </div>
           </div>
-          {/* /Page Header */}
-          {/* <div className="row">
-            <div className="col-md-12">
-              <div className="table-responsive">
-                <Table className="table-striped"
-                  pagination= { {total : data.length,
-                    showTotal : (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                    showSizeChanger : true,onShowSizeChange: onShowSizeChange ,itemRender : itemRender } }
-                  style = {{overflowX : 'auto'}}
-                  columns={columns}                 
-                  // bordered
-                  dataSource={data}
-                  rowKey={record => record.id}
-                  // onChange={this.handleTableChange}
-                />
-              </div>
-            </div>
-          </div> */}
         </div>
         {/* /Page Content */}
         {/* Add Policy Modal */}
@@ -202,8 +184,6 @@ const StaffDocument = () => {
                     <label>Upload Document <span className="text-danger">*</span></label>
                     <div className="custom-file">
                       <input type="file" className="custom-file-input" accept=".pdf,.doc" id="policy_upload" onChange={handleFileChange} />
-                      {/* {document && <p>Selected file: {document.name}</p>} */}
-                      {/* <label className="custom-file-label" htmlFor="policy_upload">Choose file</label> */}
                     </div>
                   </div>
                   <div className="submit-section">
