@@ -57,7 +57,7 @@ const AllEmployees = () => {
                   <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add Employee</a>
                   <div className="view-icons">
                     <Link to="/app/employee/allemployees" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                    <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
+                    {/* <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link> */}
                   </div>
                 </div>
               </div>
@@ -80,7 +80,7 @@ const AllEmployees = () => {
               <div className="col-sm-6 col-md-3">
                 <div className="form-group form-focus">
                   <label className="focus-label">Staff Email</label>
-                  <input type="text" className="form-control floating" />
+                  <input type="text" className="form-control " />
                 </div>
               </div>
 
@@ -96,7 +96,7 @@ const AllEmployees = () => {
                   <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
                     <div className="profile-widget">
                       <div className="profile-img">
-                        <Link to="/app/profile/employee-profile" className="avatar"><img src={Avatar_02} alt="" /></Link>
+                        <Link to={`/app/profile/employee-profile/${data.staffId}`} className="avatar"><img src={Avatar_02} alt="" /></Link>
                       </div>
                       <div className="dropdown profile-action">
                         <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
@@ -105,7 +105,7 @@ const AllEmployees = () => {
                           <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
                         </div>
                       </div>
-                      <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/employee-profile">{data.firstName} {data.surName}</Link></h4>
+                      <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}`}>{data.firstName} {data.surName}</Link></h4>
                       {/* <div className="small text-muted">Web Designer</div> */}
                     </div>
                   </div>

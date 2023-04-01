@@ -4,7 +4,7 @@ import http from '../../api/http'
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 
-const Addemployee = () => {
+const AddClient = () => {
   const { userProfile } = useCompanyContext();
   const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState('');
@@ -13,14 +13,17 @@ const Addemployee = () => {
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [offerLetter, setOfferLetter] = useState(null);
+  const [agreementStartDate, setAgreementStartDate] = useState('');
+  const [agreementEndDate, setAgreementEndDate] = useState('');
+  const [NDISNo, setNDISNo] = useState('');
+
   const privateHttp = useHttp();
 
 
   const submitForm = async (e) => {
     e.preventDefault()
     if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
-      email.trim() === ""
+      email.trim() === "" || agreementEndDate.trim() === "" || agreementStartDate.trim() === "" || NDISNo.trim() === ""
     ) {
       return toast.error("All Fields must be filled")
     }
@@ -35,12 +38,15 @@ const Addemployee = () => {
     formData.append("Address", address);
     formData.append("Email", email);
     formData.append("PhoneNumber", phoneNumber);
-    formData.append("OfferLetter", offerLetter);
+    formData.append("AgreementStartDate", agreementStartDate);
+    formData.append("AgreementEndDate", agreementEndDate);
+    formData.append("NDISNo", NDISNo);
+
 
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
+      const { data } = await privateHttp.post(`/Profiles/add_client?userId=${userProfile.userId}`,
         formData
       )
       console.log(data);
@@ -50,7 +56,7 @@ const Addemployee = () => {
 
     } catch (error) {
       toast.error(error.response?.data?.message)
-
+      console.log(error);
       setLoading(false)
 
     } finally {
@@ -62,11 +68,11 @@ const Addemployee = () => {
   return (
     <>
       {/* Add Employee Modal */}
-      <div id="add_employee" className="modal custom-modal fade" role="dialog">
+      <div id="add_client" className="modal custom-modal fade" role="dialog">
         <div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
           <div className="modal-content overflow-auto">
             <div className="modal-header">
-              <h5 className="modal-title">Add Staff</h5>
+              <h5 className="modal-title">Add Client</h5>
               <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -100,26 +106,36 @@ const Addemployee = () => {
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Phone Number</label>
+                      <label className="col-form-label">Phone Number <span className="text-danger">*</span></label>
                       <input className="form-control" type="tel" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Address</label>
+                      <label className="col-form-label">Address <span className="text-danger">*</span></label>
                       <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
                   </div>
-
-                  <div className="col-sm-12">
+                  <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Offer Letter <span className="text-danger">*</span></label>
-                      <div><input className="form-control" type="file"
-                        accept=".pdf,.doc,.docx"
-                        maxSize={1024 * 1024 * 2}
-                        onChange={e => setOfferLetter(e.target.files[0])} /></div>
+                      <label className="col-form-label">Agreement start date <span className="text-danger">*</span></label>
+                      <input className="form-control" type="date" value={agreementStartDate} onChange={e => setAgreementStartDate(e.target.value)} />
                     </div>
                   </div>
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <label className="col-form-label">Agreement end date <span className="text-danger">*</span></label>
+                      <input className="form-control" type="date" value={agreementEndDate} onChange={e => setAgreementEndDate(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <label className="col-form-label">NDIS NO <span className="text-danger">*</span></label>
+                      <input className="form-control" type="text" value={NDISNo} onChange={e => setNDISNo(e.target.value)} />
+                    </div>
+                  </div>
+
+
 
                 </div>
 
@@ -141,4 +157,4 @@ const Addemployee = () => {
   )
 }
 
-export default Addemployee
+export default AddClient

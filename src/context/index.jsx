@@ -7,11 +7,9 @@ export const useCompanyContext = () => useContext(CompanyContext);
 
 export const CompanyProvider = ({ children }) => {
     const [staff, setStaff] = useState([]);
-    
 
-   
     const privateHttp = useHttp();
-    
+
     let isMounted = true;
     useEffect(() => {
         async function FetchStaff() {
@@ -21,6 +19,11 @@ export const CompanyProvider = ({ children }) => {
                 ])
                 const staff = response[0].data;
                 setStaff(staff)
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 57b0df839ed2b7a1040276ce96f2f49b748fb205
             } catch (error) {
                 console.log(error);
             }
