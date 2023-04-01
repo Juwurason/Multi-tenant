@@ -224,7 +224,7 @@ const StaffEditProfile = () => {
             </div>
             <div className="form-group">
               <label>About Me</label><br />
-              <textarea name="" id="" style={{ width: "100%", height: "auto" }} value={aboutMe} onChange={(event) => setAboutMe(event.target.value)}></textarea>
+              <textarea className='form-control' name="" id="" style={{ width: "100%", height: "auto" }} value={aboutMe} onChange={(event) => setAboutMe(event.target.value)}></textarea>
             </div>
           </div>
 
@@ -418,11 +418,11 @@ const StaffEditProfile = () => {
                 {step === 5 && renderStep5()}
                 <div className="mt-3">
                   {step > 1 && <button className="btn btn-primary mr-2" onClick={handlePrev}>Previous</button>}
-                  {step < 5 ? <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> : 
-                  <button style={{ marginLeft: '10px' }} disabled={loading ? true : false} className="btn btn-success" type="submit" onClick={handleSave}>
-                  {loading ? <div className="spinner-grow text-light" role="status">
-                 <span className="sr-only">Loading...</span>
-             </div> : "Save"}
+                  {step < 5 ? <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> :
+                    <button style={{ marginLeft: '10px' }} disabled={loading ? true : false} className="btn btn-success" type="submit" onClick={handleSave}>
+                      {loading ? <div className="spinner-grow text-light" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div> : "Save"}
                     </button>}
                   <Link to="/staff/staffprofile" style={{ marginLeft: '10px' }}><button className="btn btn-primary"> Cancel </button></Link>
                 </div>
