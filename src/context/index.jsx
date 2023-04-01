@@ -17,22 +17,10 @@ export const CompanyProvider = ({ children }) => {
         async function FetchStaff() {
             try {
                 const response = await Promise.all([
-                    privateHttp.get('/Staffs'),
-
+                    privateHttp.get('/Staffs')
                 ])
                 const staff = response[0].data;
                 setStaff(staff)
-                
-
-                    
-
-                ])
-                const staff = response[0].data;
-                
-                setStaff(staff)
-                
-               
-
             } catch (error) {
                 console.log(error);
             }
