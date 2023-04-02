@@ -96,16 +96,17 @@ const AllEmployees = () => {
                   <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
                     <div className="profile-widget">
                       <div className="profile-img">
-                        <Link to={`/app/profile/employee-profile/${data.staffId}`} className="avatar"><img src={Avatar_02} alt="" /></Link>
+                        <Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`} className="avatar"><img src={Avatar_02} alt="" /></Link>
                       </div>
                       <div className="dropdown profile-action">
                         <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                         <div className="dropdown-menu dropdown-menu-right">
-                          <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                          <Link to={`/app/profile/edit-profile/${data.staffId}`} className="dropdown-item">
+                            <i className="fa fa-pencil m-r-5" /> Edit</Link>
                           <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
                         </div>
                       </div>
-                      <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}`}>{data.firstName} {data.surName}</Link></h4>
+                      <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
                       {/* <div className="small text-muted">Web Designer</div> */}
                     </div>
                   </div>

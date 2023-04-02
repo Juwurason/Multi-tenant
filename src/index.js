@@ -14,10 +14,12 @@ import { ToastContainer } from 'react-toastify'
 // }
 import { createRoot } from 'react-dom/client';
 import { CompanyProvider } from "./context";
+import OnlineStatus from "./hooks/onlineStatus";
 const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
     <CompanyProvider>
+        <OnlineStatus />
         <ToastContainer position="top-right" />
         <Main />
     </CompanyProvider>

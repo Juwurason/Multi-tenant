@@ -34,12 +34,14 @@ const Header = (props) => {
         </Link>
       </div>
       {/* /Logo */}
-      <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
+      <button id="toggle_btn"
+        className='btn'
+        style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
         <span className="bar-icon btn"><span />
           <span />
           <span />
         </span>
-      </a>
+      </button>
       {/* Header Title */}
       <div className="page-title-box">
         <h3>Promax Care</h3>
@@ -273,7 +275,7 @@ const Header = (props) => {
         </li>
         {/* /Message Notifications */}
         <li className="nav-item dropdown has-arrow main-drop">
-          <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+          <a className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <span className="user-img me-1"><img src={Avatar_21} alt="" />
               <span className="status online" /></span>
             <span>Admin</span>

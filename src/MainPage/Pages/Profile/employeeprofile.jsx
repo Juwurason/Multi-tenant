@@ -15,7 +15,6 @@ const EmployeeProfile = () => {
       try {
         const { data } = await privateHttp.get(`/Staffs/${uid}`)
         setStaffOne(data)
-        console.log(data);
 
       } catch (error) {
         console.log(error);
@@ -37,7 +36,7 @@ const EmployeeProfile = () => {
     <>
       <div className="page-wrapper">
         <Helmet>
-          <title>Employee Profile </title>
+          <title>Staff Profile </title>
           <meta name="description" content="Reactify Blank Page" />
         </Helmet>
         {/* Page Content */}
@@ -72,7 +71,7 @@ const EmployeeProfile = () => {
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
                             <div className="staff-id">Staff ID : {staffOne.maxStaffId}</div>
                             {/* <div className="small doj text-muted">Date of Join : 1st Jan 2013</div> */}
-                            <div className="staff-msg"><a data-bs-target="#profile_info" data-bs-toggle="modal" className="btn btn-primary" >Edit Profile</a></div>
+                            <div className="staff-msg"><Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link></div>
                           </div>
                         </div>
                         <div className="col-md-7">
@@ -114,7 +113,7 @@ const EmployeeProfile = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal" className="edit-icon" href="#"><i className="fa fa-pencil" /></a></div>
+                    <div className="pro-edit"><Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="edit-icon" ><i className="fa fa-pencil" /></Link></div>
                   </div>
                 </div>
               </div>
