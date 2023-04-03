@@ -36,7 +36,7 @@ const StaffForm = () => {
         </div>
         {/* /Page Header */}
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <div className="card">
               <div className="card-header">
                 <h4 className="card-title mb-0">Add your availability & Schedule</h4>
@@ -79,7 +79,29 @@ const StaffForm = () => {
 
         {/* <StaffTable /> */}
       </div>
-
+      <div className="table-responsive">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Days</th>
+              <th>From Time of Day</th>
+              <th>To Time of Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Monday</td>
+              <td>08:26 AM</td>
+              <td>06:26 PM</td>
+            </tr>
+            <tr>
+              <td>Thursday</td>
+              <td>10:30 PM</td>
+              <td>12:30 PM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

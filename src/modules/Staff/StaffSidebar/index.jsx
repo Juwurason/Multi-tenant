@@ -51,7 +51,7 @@ const StaffSidebar = (props) => {
 
             >
                 <div className="sidebar-inner slimscroll">
-                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor:"#18225C", height:'600px'}}>
+                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor:"#18225C", height:'100vh'}}>
                         
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
