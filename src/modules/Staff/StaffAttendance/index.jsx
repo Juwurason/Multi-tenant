@@ -37,6 +37,7 @@ const StaffAttendance = () => {
         </Helmet>
 
 
+        <div className='content container-fluid'>
         <div className="table-responsive">
           <table className="table table-striped">
             <thead>
@@ -67,6 +68,7 @@ const StaffAttendance = () => {
               <button onClick={handleNextClick} disabled={currentPage === totalPages} style={{ backgroundColor: "blue", color: "white" }}>Next</button>
             </div>
           </div>
+        </div>
         </div>
 
       </div>

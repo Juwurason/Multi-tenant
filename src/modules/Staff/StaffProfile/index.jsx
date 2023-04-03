@@ -97,7 +97,7 @@ const StaffProfile = () => {
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">{profile.dob}</div>
+                              <div className="text">{profile.dateOfBirth}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>

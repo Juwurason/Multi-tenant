@@ -94,10 +94,34 @@ const StaffDocument = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto">
-                <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
+                <a href="" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
               </div>
             </div>
           </div>
+
+          <div className="table-responsive">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Documnet</th>
+              <th>Expiration Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ajibola Sunday</td>
+              <td>Staff</td>
+              <td>Current first aid certificate</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
         </div>
         {/* /Page Content */}
         {/* Add Policy Modal */}
@@ -140,29 +164,7 @@ const StaffDocument = () => {
           </div>
         </div>
         
-        <div className="table-responsive">
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Document Name</th>
-              <th>Expiration Date</th>
-              <th>Uploaded By</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Document 1</td>
-              <td>01/01/2023</td>
-              <td>User 1</td>
-            </tr>
-            <tr>
-              <td>Document 2</td>
-              <td>01/01/2024</td>
-              <td>User 2</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+       
       </div>
       <Offcanvas/>
         </>

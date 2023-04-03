@@ -36,7 +36,7 @@ const StaffForm = () => {
         </div>
         {/* /Page Header */}
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="card">
               <div className="card-header">
                 <h4 className="card-title mb-0">Add your availability & Schedule</h4>
@@ -72,14 +72,8 @@ const StaffForm = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-md-12">
-          </div>
-        </div>
 
-        {/* <StaffTable /> */}
-      </div>
-      <div className="table-responsive">
+        <div className="table-responsive">
         <table className="table table-striped">
           <thead>
             <tr>
@@ -102,6 +96,9 @@ const StaffForm = () => {
           </tbody>
         </table>
       </div>
+
+      </div>
+    
     </div>
   );
 }
