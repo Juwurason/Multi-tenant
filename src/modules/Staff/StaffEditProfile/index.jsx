@@ -107,15 +107,15 @@ const StaffEditProfile = () => {
     formData.append("bankName", editedProfile.bankName);
     formData.append("branch", editedProfile.branch);
     formData.append("bsb", editedProfile.bsb);
-    formData.append("suburb", editedProfile.emeSuburb);
-    formData.append("nextOfKin", editedProfile.emeName);
-    formData.append("kinAddress", editedProfile.emeAddress);
-    formData.append("kinCity", editedProfile.emeCity);
-    formData.append("kinCountry", editedProfile.emeCountry);
-    formData.append("kinEmail", editedProfile.emeEmail);
-    formData.append("kinPhoneNumber", editedProfile.emePhoneNumber);
-    formData.append("kinPostcode", editedProfile.emePostCode);
-    formData.append("kinState", editedProfile.emeState);
+    formData.append("suburb", editedProfile.kinSuburb);
+    formData.append("nextOfKin", editedProfile.kinName);
+    formData.append("kinAddress", editedProfile.kinAddress);
+    formData.append("kinCity", editedProfile.kinCity);
+    formData.append("kinCountry", editedProfile.kinCountry);
+    formData.append("kinEmail", editedProfile.kinEmail);
+    formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
+    formData.append("kinPostcode", editedProfile.kinPostCode);
+    formData.append("kinState", editedProfile.kinState);
     formData.append("relationship", editedProfile.relationship);
     formData.append("imageFile", editedProfile.image);
     formData.append("twitter", editedProfile.tweet);
@@ -140,6 +140,7 @@ const StaffEditProfile = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
       setLoading(false);
 
     }
@@ -201,7 +202,7 @@ const StaffEditProfile = () => {
             </div>
             <div className="form-group">
               <label>Gender:</label>
-              <select className="form-control" name="gender" value={editedProfile.gender} onChange={handleInputChange}>
+              <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
@@ -231,25 +232,25 @@ const StaffEditProfile = () => {
             </div>
             <div className="form-group">
               <label>Address Line 2</label>
-              <input type="text" className="form-control" name='address' value={editedProfile.address} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='address' value={editedProfile.address || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>State</label>
-              <input type="text" className="form-control" name='state' value={editedProfile.state} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='state' value={editedProfile.state || ''} onChange={handleInputChange} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-group">
               <label>City</label>
-              <input type="text" className="form-control" name='city' value={editedProfile.city} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='city' value={editedProfile.city || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Country</label>
-              <input type="text" className="form-control" name='country' value={editedProfile.country} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='country' value={editedProfile.country || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Postal Code</label>
-              <input type="text" className="form-control" name='postalCode' value={editedProfile.postalCode} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='postalCode' value={editedProfile.postalCode || ''} onChange={handleInputChange} />
             </div>
           </div>
         </div>
@@ -265,26 +266,26 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Account Name</label>
-              <input type="text" className="form-control" name='AccountName' value={editedProfile.AccountName} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='AccountName' value={editedProfile.AccountName || ''} onChange={handleInputChange} />
             </div>
 
             <div className="form-group">
               <label>Bank Name</label>
-              <input type="text" className="form-control" name='bankName' value={editedProfile.bankName} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>BSB</label>
-              <input type="text" className="form-control" name='bsb' value={editedProfile.bsb} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='bsb' value={editedProfile.bsb || ''} onChange={handleInputChange} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-group">
               <label>Account Number</label>
-              <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Branch</label>
-              <input type="text" className="form-control" name='branch' value={editedProfile.branch} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='branch' value={editedProfile.branch || ''} onChange={handleInputChange} />
             </div>
 
           </div>
@@ -301,47 +302,47 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Emergency Contact FullName</label>
-              <input type="text" className="form-control" name='emeName' value={editedProfile.emeName} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='kinName' value={editedProfile.kinName || ''} onChange={handleInputChange} />
             </div>
 
             <div className="form-group">
               <label>Relationship</label>
-              <input type="text" className="form-control" name='relationship' value={editedProfile.relationship} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='relationship' value={editedProfile.relationship || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>State</label>
-              <input type="text" className="form-control" name='emeState' value={editedProfile.emeState} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='kinState' value={editedProfile.kinState || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Email</label>
-              <input type="email" className="form-control" name='emeEmail' value={editedProfile.emeEmail} onChange={handleInputChange} />
+              <input type="email" className="form-control" name='kinEmail' value={editedProfile.kinEmail || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Post Code</label>
-              <input type="email" className="form-control" name='emePostCode' value={editedProfile.emePostCode} onChange={handleInputChange} />
+              <input type="email" className="form-control" name='kinPostCode' value={editedProfile.kinPostCode || ''} onChange={handleInputChange} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-group">
               <label>Address</label>
-              <input type="text" className="form-control" name='emeAddress' value={editedProfile.emeAddress} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='kinAddress' value={editedProfile.kinAddress || ''} onChange={handleInputChange} />
             </div>
 
             <div className="form-group">
               <label>Country</label>
-              <input type="text" className="form-control" name='emeCountry' value={editedProfile.emeCountry} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='kinCountry' value={editedProfile.kinCountry || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>City</label>
-              <input type="text" className="form-control" name='emeCity' value={editedProfile.emeCity} onChange={handleInputChange} />
+              <input type="text" className="form-control" name='kinCity' value={editedProfile.kinCity || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Phone Number</label>
-              <input type="email" className="form-control" name='emePhoneNumber' value={editedProfile.emePhoneNumber} onChange={handleInputChange} />
+              <input type="email" className="form-control" name='kinPhoneNumber' value={editedProfile.kinPhoneNumber || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>Suburb</label>
-              <input type="email" className="form-control" name='emeSuburb' value={editedProfile.emeSuburb} onChange={handleInputChange} />
+              <input type="email" className="form-control" name='kinSuburb' value={editedProfile.kinSuburb || ''} onChange={handleInputChange} />
             </div>
 
           </div>
@@ -358,22 +359,22 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Instagram</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta} onChange={handleInputChange} />
+              <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
             </div>
 
             <div className="form-group">
               <label>Facebook</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook} onChange={handleInputChange} />
+              <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-group">
               <label>Twitter</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet} onChange={handleInputChange} />
+              <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
               <label>LinkedIn</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd} onChange={handleInputChange} />
+              <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
             </div>
 
           </div>
