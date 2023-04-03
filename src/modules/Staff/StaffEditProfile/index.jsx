@@ -424,7 +424,7 @@ const StaffEditProfile = () => {
                         <span className="sr-only">Loading...</span>
                       </div> : "Save"}
                     </button>}
-                  <Link to="/staff/staffprofile" style={{ marginLeft: '10px' }}><button className="btn btn-primary"> Cancel </button></Link>
+                  <Link to="/staff/staffprofile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
                 </div>
               </form>
             </div>
