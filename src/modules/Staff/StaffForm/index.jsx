@@ -72,14 +72,33 @@ const StaffForm = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-md-12">
-          </div>
-        </div>
 
-        {/* <StaffTable /> */}
+        <div className="table-responsive">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Days</th>
+              <th>From Time of Day</th>
+              <th>To Time of Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Monday</td>
+              <td>08:26 AM</td>
+              <td>06:26 PM</td>
+            </tr>
+            <tr>
+              <td>Thursday</td>
+              <td>10:30 PM</td>
+              <td>12:30 PM</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
+      </div>
+    
     </div>
   );
 }
