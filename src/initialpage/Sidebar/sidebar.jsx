@@ -108,13 +108,14 @@ const Sidebar = (props) => {
                     <li><Link className={pathname.includes('departments') ? "active" : ""} to="/app/employee/departments">Departments</Link></li>
                     <li><Link className={pathname.includes('designations') ? "active" : ""} to="/app/employee/designations">Designations</Link></li>
                     <li><Link className={pathname.includes('timesheet') ? "active" : ""} to="/app/employee/timesheet">Timesheet</Link></li>
-                    <li><Link className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}
-                      to="/app/employee/shift-scheduling">Shift &amp; Schedule</Link></li>
+
                     <li><Link className={pathname.includes('overtime') ? "active" : ""} to="/app/employee/overtime">Overtime</Link></li>
                   </ul>
                   : ""
                 }
               </li>
+
+
               <li className={pathname.includes('clients') ? "active" : ""}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
@@ -131,6 +132,16 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li>
+              <li className="menu-title">
+                <span>Staff - Client Management</span>
+              </li>
+
+
+              <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
+                <Link to="/app/employee/shift-scheduling"><i className="la la-book" /> <span>Shift Roaster</span></Link>
+              </li>
+
+
               <li className={pathname.includes('leads') ? "active" : ""}>
                 <Link to="/app/employees/leads"><i className="la la-user-secret" /> <span>Leads</span></Link>
               </li>

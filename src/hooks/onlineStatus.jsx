@@ -17,7 +17,7 @@ const OnlineStatus = () => {
     const handleOnline = () => {
         setOnline(true);
         toast.success("You are now online!", {
-            position: "top-right",
+            position: "bottom-right",
             autoClose: 3000,
             hideProgressBar: true,
             closeOnClick: true,
@@ -41,10 +41,16 @@ const OnlineStatus = () => {
     return (
         <div>
             {online ? (
-                <span className="rounded-circle" style={{ color: "green", width: "1rem", height: "1rem" }}></span>
+                <span></span>
             ) : (
-                <span className="rounded-circle" style={{ color: "red", width: "1rem", height: "1rem" }}></span>
-
+                toast.error("You are offline.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                })
             )}
         </div>
     );

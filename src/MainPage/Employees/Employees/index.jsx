@@ -19,12 +19,14 @@ import Timesheet from './timesheet';
 import Overtime from './overtime';
 import ShiftScheduling from './shiftscheduling';
 import ShiftList from './shiftlist';
+import DeleteStaff from './deleteStaff';
 
 const EmployeesRoute = ({ match }) => (
    <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/allemployees`} />
       <Route path={`${match.url}/allemployees`} component={AllEmployees} />
       <Route path={`${match.url}/employees-list`} component={AllEmployeesList} />
+      <Route path={`${match.url}/delete-staff`} component={DeleteStaff} />
       <Route path={`${match.url}/holidays`} component={Holidays} />
       <Route path={`${match.url}/leaves-admin`} component={LeaveAdmin} />
       <Route path={`${match.url}/leaves-employee`} component={LeaveEmployee} />

@@ -22,7 +22,10 @@
     "js/**/*.js"
   ],
   "dependencies": {
+    "@aldabil/react-scheduler": "^2.7.8",
     "@ant-design/icons": "^5.0.1",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
@@ -34,6 +37,7 @@
     "@fullcalendar/react": "^5.10.2",
     "@fullcalendar/timegrid": "^5.10.2",
     "@hookform/resolvers": "^2.9.11",
+    "@mui/material": "^5.11.15",
     "@reduxjs/toolkit": "^1.9.2",
     "@restart/hooks": "^0.4.9",
     "@types/summernote": "^0.8.7",

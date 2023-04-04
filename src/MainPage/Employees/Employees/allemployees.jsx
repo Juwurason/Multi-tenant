@@ -15,7 +15,10 @@ import { useCompanyContext } from '../../../context';
 const AllEmployees = () => {
   const { staff } = useCompanyContext()
   const [menu, setMenu] = useState(false)
-
+  const handleDelete = (e) => {
+    e.preventDefault()
+    console.log('1234');
+  }
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
@@ -104,6 +107,8 @@ const AllEmployees = () => {
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="dropdown-item">
                             <i className="fa fa-pencil m-r-5" /> Edit</Link>
                           <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+
+
                         </div>
                       </div>
                       <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
@@ -143,7 +148,7 @@ const AllEmployees = () => {
                   <div className="modal-btn delete-action">
                     <div className="row">
                       <div className="col-6">
-                        <a href="" className="btn btn-primary continue-btn">Delete</a>
+                        <a className="btn btn-primary continue-btn" onClick={() => handleDelete(staff.userId)}>Delete</a>
                       </div>
                       <div className="col-6">
                         <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>

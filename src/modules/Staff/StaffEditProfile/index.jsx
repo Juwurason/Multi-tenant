@@ -148,6 +148,7 @@ const StaffEditProfile = () => {
       setLoading(false)
     }
   }
+
   const handlechange = (e) => {
     setImage(e.target.files[0]);
   }

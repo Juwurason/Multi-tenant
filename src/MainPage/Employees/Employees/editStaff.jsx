@@ -32,42 +32,13 @@ const editStaff = () => {
         }
     }
 
+    const [profile, setProfile] = useState({})
+    const [editedProfile, setEditedProfile] = useState({});
     const [step, setStep] = useState(1);
-    const [branch, setBranch] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('');
-    const [surname, setSurname] = useState('');
-    const [email, setEmail] = useState('');
-    const [gender, setGender] = useState('');
-    const [addressLine1, setAddressLine1] = useState('');
-    const [addressLine2, setAddressLine2] = useState('');
-    const [state, setState] = useState('');
-    const [city, setCity] = useState('');
-    const [country, setCountry] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [accountName, setAccountName] = useState('');
-    const [bankName, setBankName] = useState('');
-    const [accountNumber, setAccountNumber] = useState('');
-    const [profile, setProfile] = useState({});
-    const [emeName, setEmeName] = useState('');
-    const [emeState, setEmeState] = useState('');
-    const [emeEmail, setEmeEmail] = useState('');
-    const [emePostCode, setEmePostCode] = useState('');
-    const [emeAddress, setEmeAddress] = useState('');
-    const [emeCountry, setEmeCountry] = useState('');
-    const [emeCity, setEmeCity] = useState('');
-    const [emeSuburb, setEmeSuburb] = useState('');
-    const [emePhoneNumber, setEmePhoneNumber] = useState('');
-    const [relationship, setRelationship] = useState('');
-    const [aboutMe, setAboutMe] = useState('');
-    const [bsb, setBsb] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [image, setImage] = useState('');
-    const [insta, setInsta] = useState('');
-    const [fbook, setFbook] = useState('');
-    const [tweet, setTweet] = useState('');
-    const [linkd, setLinkd] = useState('');
+    const [loading, setLoading] = useState(false)
+    const [image, setImage] = useState('')
+
+
 
 
     const handleNext = (e) => {
@@ -79,6 +50,18 @@ const editStaff = () => {
         e.preventDefault()
         setStep(step - 1);
     }
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+
+        setEditedProfile({
+            ...editedProfile,
+            [name]: value
+        });
+    }
+
     const privateHttp = useHttp()
     // const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
     const { uid } = useParams()
@@ -87,7 +70,8 @@ const editStaff = () => {
         const fetchProfile = async () => {
             try {
                 const response = await privateHttp.get(`/Staffs/${uid}`)
-                setProfile(response.data)
+                setProfile(response.data);
+                setEditedProfile(response.data)
                 console.log(response.data);
             } catch (error) {
                 console.log(error);
@@ -106,53 +90,59 @@ const editStaff = () => {
         // }
 
         const formData = new FormData()
+        formData.append("CompanyId", id.companyId);
+        formData.append("StaffId", getStaffProfile.staffId);
         formData.append("firstName", profile.firstName);
         formData.append("email", profile.email);
         formData.append("phoneNumber", profile.phoneNumber);
         formData.append("surName", profile.surName);
-        formData.append("middleName", lastName);
-        formData.append("gender", gender);
-        formData.append("dateOfBirth", dateOfBirth);
-        formData.append("aboutMe", aboutMe);
+        formData.append("middleName", editedProfile.middleName);
+        formData.append("gender", editedProfile.gender);
+        formData.append("dateOfBirth", editedProfile.dateOfBirth);
+        formData.append("aboutMe", editedProfile.aboutMe);
         formData.append("address", profile.address);
-        formData.append("city", city);
-        formData.append("country", country);
-        formData.append("state", state);
-        formData.append("postcode", postalCode);
-        formData.append("accountName", accountName);
-        formData.append("accountNumber", accountNumber);
-        formData.append("bankName", bankName);
-        formData.append("branch", branch);
-        formData.append("bsb", bsb);
-        formData.append("suburb", emeSuburb);
-        formData.append("nextOfKin", emeName);
-        formData.append("kinAddress", emeAddress);
-        formData.append("kinCity", emeCity);
-        formData.append("kinCountry", emeCountry);
-        formData.append("kinEmail", emeEmail);
-        formData.append("kinPhoneNumber", emePhoneNumber);
-        formData.append("kinPostcode", emePostCode);
-        formData.append("kinState", emeState);
-        formData.append("relationship", relationship);
-        formData.append("imageFile", image);
-        formData.append("twitter", tweet);
-        formData.append("linkedIn", linkd);
-        formData.append("instagram", insta);
-        formData.append("facebook", fbook);
-
+        formData.append("city", editedProfile.city);
+        formData.append("country", editedProfile.country);
+        formData.append("state", editedProfile.state);
+        formData.append("postcode", editedProfile.postalCode);
+        formData.append("accountName", editedProfile.accountName);
+        formData.append("accountNumber", editedProfile.accountNumber);
+        formData.append("bankName", editedProfile.bankName);
+        formData.append("branch", editedProfile.branch);
+        formData.append("bsb", editedProfile.bsb);
+        formData.append("suburb", editedProfile.kinSuburb);
+        formData.append("nextOfKin", editedProfile.kinName);
+        formData.append("kinAddress", editedProfile.kinAddress);
+        formData.append("kinCity", editedProfile.kinCity);
+        formData.append("kinCountry", editedProfile.kinCountry);
+        formData.append("kinEmail", editedProfile.kinEmail);
+        formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
+        formData.append("kinPostcode", editedProfile.kinPostCode);
+        formData.append("kinState", editedProfile.kinState);
+        formData.append("relationship", editedProfile.relationship);
+        formData.append("imageFile", editedProfile.image);
+        formData.append("twitter", editedProfile.tweet);
+        formData.append("linkedIn", editedProfile.linkd);
+        formData.append("instagram", editedProfile.insta);
+        formData.append("facebook", editedProfile.fbook);
         try {
             setLoading(true)
             const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
                 formData
             )
             console.log(data);
-            // toast.success(data.message)
+            if (data.status === 'Success') {
+                toast.success(data.message);
+            } else {
+                toast.error(data.message);
+            }
 
             setLoading(false)
 
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
             setLoading(false);
 
         }
@@ -160,6 +150,7 @@ const editStaff = () => {
             setLoading(false)
         }
     }
+
     const handlechange = (e) => {
         setImage(e.target.files[0]);
     }
@@ -191,7 +182,7 @@ const editStaff = () => {
                         </div>
                         <div className="form-group">
                             <label>Last Name</label>
-                            <input type="text" className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                            <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
                             <label>Phone Number</label>
@@ -199,33 +190,30 @@ const editStaff = () => {
                         </div>
                         <div className="form-group">
                             <label>Date Of Birth</label>
-                            <input type="date" className="form-control" value={dateOfBirth} onChange={(event) => setDateOfBirth(event.target.value)} />
+                            <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} />
                         </div>
 
                     </div>
                     <div className="col-md-6">
                         <div className="form-group">
                             <label>Surname</label>
-                            <input type="text" className="form-control" value={profile.surName} readOnly />
+                            <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
                         </div>
                         <div className="form-group">
                             <label>Email</label>
                             <input type="text" className="form-control" value={profile.email} readOnly />
                         </div>
                         <div className="form-group">
-                            <label className="d-block">Gender:</label>
-                            <div className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="gender" id="gender_male" value="Male" checked={gender === 'Male'} onChange={(event) => setGender(event.target.value)} />
-                                <label className="form-check-label" htmlFor="gender_male">Male</label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="gender" id="gender_female" value="Female" checked={gender === 'Female'} onChange={(event) => setGender(event.target.value)} />
-                                <label className="form-check-label" htmlFor="gender_female">Female</label>
-                            </div>
+                            <label>Gender:</label>
+                            <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
+
                         <div className="form-group">
                             <label>About Me</label><br />
-                            <textarea className='form-control' name="" id="" value={aboutMe} onChange={(event) => setAboutMe(event.target.value)}></textarea>
+                            <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
                         </div>
                     </div>
 
@@ -237,7 +225,7 @@ const editStaff = () => {
 
     const renderStep2 = () => {
         return (
-            <div style={{ height: "30rem" }}>
+            <div>
                 <h4 className="card-title">Postal Address</h4>
                 <div className="row">
                     <div className="col-md-6">
@@ -247,25 +235,56 @@ const editStaff = () => {
                         </div>
                         <div className="form-group">
                             <label>Address Line 2</label>
-                            <input type="text" className="form-control" value={addressLine2} onChange={(event) => setAddressLine2(event.target.value)} />
+                            <input type="text" className="form-control" name='address' value={editedProfile.address || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
                             <label>State</label>
-                            <input type="text" className="form-control" value={state} onChange={(event) => setState(event.target.value)} />
+                            <input type="text" className="form-control" name='state' value={editedProfile.state || ''} onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className="col-md-6">
                         <div className="form-group">
                             <label>City</label>
-                            <input type="text" className="form-control" value={city} onChange={(event) => setCity(event.target.value)} />
+                            <input type="text" className="form-control" name='city' value={editedProfile.city || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
                             <label>Country</label>
-                            <input type="text" className="form-control" value={country} onChange={(event) => setCountry(event.target.value)} />
+                            <input type="text" className="form-control" name='country' value={editedProfile.country || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
                             <label>Postal Code</label>
-                            <input type="text" className="form-control" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} />
+                            <input type="text" className="form-control" name='postalCode' value={editedProfile.postalCode || ''} onChange={handleInputChange} />
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 className="card-title">Bank information</h4>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Account Name</label>
+                                <input type="text" className="form-control" name='AccountName' value={editedProfile.AccountName || ''} onChange={handleInputChange} />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Bank Name</label>
+                                <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
+                            </div>
+                            <div className="form-group">
+                                <label>BSB</label>
+                                <input type="text" className="form-control" name='bsb' value={editedProfile.bsb || ''} onChange={handleInputChange} />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Account Number</label>
+                                <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
+                            </div>
+                            <div className="form-group">
+                                <label>Branch</label>
+                                <input type="text" className="form-control" name='branch' value={editedProfile.branch || ''} onChange={handleInputChange} />
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -273,34 +292,57 @@ const editStaff = () => {
         );
     }
 
+
+
     const renderStep3 = () => {
         return (
-            <div style={{ height: "30rem" }}>
-                <h4 className="card-title">Bank information</h4>
+            <div>
+                <h4 className="card-title">Emergency Contact</h4>
                 <div className="row">
                     <div className="col-md-6">
                         <div className="form-group">
-                            <label>Account Name</label>
-                            <input type="text" className="form-control" value={accountName} onChange={(event) => setAccountName(event.target.value)} />
+                            <label>Emergency Contact FullName</label>
+                            <input type="text" className="form-control" name='kinName' value={editedProfile.kinName || ''} onChange={handleInputChange} />
                         </div>
 
                         <div className="form-group">
-                            <label>Bank Name</label>
-                            <input type="text" className="form-control" value={bankName} onChange={(event) => setBankName(event.target.value)} />
+                            <label>Relationship</label>
+                            <input type="text" className="form-control" name='relationship' value={editedProfile.relationship || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
-                            <label>BSB</label>
-                            <input type="text" className="form-control" value={bsb} onChange={(event) => setBsb(event.target.value)} />
+                            <label>State</label>
+                            <input type="text" className="form-control" name='kinState' value={editedProfile.kinState || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input type="email" className="form-control" name='kinEmail' value={editedProfile.kinEmail || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Post Code</label>
+                            <input type="email" className="form-control" name='kinPostCode' value={editedProfile.kinPostCode || ''} onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className="col-md-6">
                         <div className="form-group">
-                            <label>Account Number</label>
-                            <input type="text" className="form-control" value={accountNumber} onChange={(event) => setAccountNumber(event.target.value)} />
+                            <label>Address</label>
+                            <input type="text" className="form-control" name='kinAddress' value={editedProfile.kinAddress || ''} onChange={handleInputChange} />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Country</label>
+                            <input type="text" className="form-control" name='kinCountry' value={editedProfile.kinCountry || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
-                            <label>Branch</label>
-                            <input type="text" className="form-control" value={branch} onChange={(event) => setBranch(event.target.value)} />
+                            <label>City</label>
+                            <input type="text" className="form-control" name='kinCity' value={editedProfile.kinCity || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Phone Number</label>
+                            <input type="email" className="form-control" name='kinPhoneNumber' value={editedProfile.kinPhoneNumber || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Suburb</label>
+                            <input type="email" className="form-control" name='kinSuburb' value={editedProfile.kinSuburb || ''} onChange={handleInputChange} />
                         </div>
 
                     </div>
@@ -311,85 +353,28 @@ const editStaff = () => {
 
     const renderStep4 = () => {
         return (
-            <div style={{ height: "30rem" }}>
-                <h4 className="card-title">Emergency Contact</h4>
-                <div className="row">
-                    <div className="col-md-6">
-                        <div className="form-group">
-                            <label>Emergency Contact Full Name</label>
-                            <input type="text" className="form-control" value={emeName} onChange={(event) => setEmeName(event.target.value)} />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Relationship</label>
-                            <input type="text" className="form-control" value={relationship} onChange={(event) => setRelationship(event.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>State</label>
-                            <input type="text" className="form-control" value={emeState} onChange={(event) => setEmeState(event.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Email</label>
-                            <input type="email" className="form-control" value={emeEmail} onChange={(event) => setEmeEmail(event.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Post Code</label>
-                            <input type="email" className="form-control" value={emePostCode} onChange={(event) => setEmePostCode(event.target.value)} />
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <div className="form-group">
-                            <label>Address</label>
-                            <input type="text" className="form-control" value={emeAddress} onChange={(event) => setEmeAddress(event.target.value)} />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Country</label>
-                            <input type="text" className="form-control" value={emeCountry} onChange={(event) => setEmeCountry(event.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>City</label>
-                            <input type="text" className="form-control" value={emeCity} onChange={(event) => setEmeCity(event.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Phone Number</label>
-                            <input type="email" className="form-control" value={emePhoneNumber} onChange={(event) => setEmePhoneNumber(event.target.value)} />
-                        </div>
-                        <div className="form-group">
-                            <label>Suburb</label>
-                            <input type="email" className="form-control" value={emeSuburb} onChange={(event) => setEmeSuburb(event.target.value)} />
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    const renderStep5 = () => {
-        return (
-            <div style={{ height: "30rem" }}>
+            <div style={{ height: "28rem" }}>
                 <h4 className="card-title">Other Information</h4>
                 <div className="row">
                     <div className="col-md-6">
                         <div className="form-group">
                             <label>Instagram</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' value={insta} onChange={(event) => setInsta(event.target.value)} />
+                            <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
                         </div>
 
                         <div className="form-group">
                             <label>Facebook</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' value={fbook} onChange={(event) => setFbook(event.target.value)} />
+                            <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className="col-md-6">
                         <div className="form-group">
                             <label>Twitter</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' value={tweet} onChange={(event) => setTweet(event.target.value)} />
+                            <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
                             <label>LinkedIn</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' value={linkd} onChange={(event) => setLinkd(event.target.value)} />
+                            <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
                         </div>
 
                     </div>
@@ -416,16 +401,18 @@ const editStaff = () => {
                                 {step === 2 && renderStep2()}
                                 {step === 3 && renderStep3()}
                                 {step === 4 && renderStep4()}
-                                {step === 5 && renderStep5()}
                                 <div className="mt-3 text-center">
-                                    {step > 1 && <button className="btn btn-primary mr-2" onClick={handlePrev}>Previous</button>}
-                                    {step < 5 ? <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> :
+                                    <Link to="/app/employee/allemployees" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
+                                    {step > 1 && <button className="btn btn-primary mr-2"
+                                        style={{ marginLeft: '10px' }}
+                                        onClick={handlePrev}>Previous</button>}
+                                    {step < 4 ?
+                                        <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> :
                                         <button style={{ marginLeft: '10px' }} disabled={loading ? true : false} className="btn btn-success" type="submit" onClick={handleSave}>
                                             {loading ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>
                                             </div> : "Submit"}
                                         </button>}
-                                    <Link to="/app/employee/allemployees" style={{ marginLeft: '13px' }}><button className="btn btn-danger">Cancel</button></Link>
                                 </div>
                             </form>
                         </div>

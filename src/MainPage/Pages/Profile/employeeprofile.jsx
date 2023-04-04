@@ -94,7 +94,7 @@ const EmployeeProfile = () => {
                             </li>
                             <li>
                               <div className="title">Gender:</div>
-                              <div className="text"></div>
+                              <div className="text">{staffOne.gender || "None"}</div>
                             </li>
                             {/* <li>
                               <div className="title">Reports to:</div>
