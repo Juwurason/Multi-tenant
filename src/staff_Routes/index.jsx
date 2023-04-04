@@ -33,6 +33,7 @@ import Projects from '../MainPage/Employees/Projects';
 import Employee from '../MainPage/Employees/Employees';
 import ProjectList from '../MainPage/Employees/Projects/projectlist'
 import StaffAttendance from '../modules/Staff/StaffAttendance';
+import StaffTable from '../modules/Staff/StaffTable';
 
 export default [
    {
@@ -46,6 +47,10 @@ export default [
    {
       path: 'staff-document',
       component: StaffDocument
+   },
+   {
+      path: 'staff-table',
+      component: StaffTable
    },
    {
       path: 'staff-edit-profile',
