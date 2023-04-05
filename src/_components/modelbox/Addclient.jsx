@@ -88,13 +88,13 @@ const AddClient = () => {
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Last Name</label>
+                      <label className="col-form-label">Surname <span className="text-danger">*</span></label>
                       <input className="form-control" type="text" value={surName} onChange={e => setSurName(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Middle Name <span className="text-danger">*</span></label>
+                      <label className="col-form-label">Middle Name </label>
                       <input className="form-control" type="text" value={middleName} onChange={e => setMiddleName(e.target.value)} />
                     </div>
                   </div>

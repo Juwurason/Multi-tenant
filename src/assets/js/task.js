@@ -5,7 +5,7 @@
 
 // 		var notificationTimeout;
 
-// 		//Shows updated notification popup 
+// 		//Shows updated notification popup
 // 		var updateNotification = function(task, notificationText, newClass){
 // 			var notificationPopup = $('.notification-popup ');
 // 			notificationPopup.find('.task').text(task);
@@ -23,7 +23,7 @@
 // 			}, 3000);
 // 		};
 
-// 		// Adds a new Task to the todo list 
+// 		// Adds a new Task to the todo list
 // 		var addTask = function(){
 // 			// Get the new task entered by user
 // 			var newTask = $('#new-task').val();
@@ -66,9 +66,9 @@
 // 			}
 // 		};
 
-//     // Initalizes HTML template for a given task 
+//     // Initalizes HTML template for a given task
 //     //var taskTemplate = $($('#task-template').html());
-//     var taskTemplate = '<li class="task"><div class="task-container"><span class="task-action-btn task-check"><span class="action-circle large complete-btn" title="Mark Complete"><i class="material-icons">check</i></span></span><span class="task-label" contenteditable="true"></span><span class="task-action-btn task-btn-right"><span class="action-circle large" title="Assign"><i class="material-icons">person_add</i></span> <span class="action-circle large delete-btn" title="Delete Task"><i class="material-icons">delete</i></span></span></div></li>';
+//     var taskTemplate = '<li className="task"><div className="task-container"><span className="task-action-btn task-check"><span className="action-circle large complete-btn" title="Mark Complete"><i className="material-icons">check</i></span></span><span className="task-label" contenteditable="true"></span><span className="task-action-btn task-btn-right"><span className="action-circle large" title="Assign"><i className="material-icons">person_add</i></span> <span className="action-circle large delete-btn" title="Delete Task"><i className="material-icons">delete</i></span></span></div></li>';
 //     // Shows panel for entering new tasks
 //     $('.add-task-btn').click(function() {
 //         var newTaskWrapperOffset = $('.new-task-wrapper').offset().top;

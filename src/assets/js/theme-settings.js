@@ -21,73 +21,73 @@
             ("en" == a
                 ? (document.getElementById("header-lang-img").src = "assets/images/flags/us.svg")
                 : "sp" == a
-                ? (document.getElementById("header-lang-img").src = "assets/images/flags/spain.svg")
-                : "gr" == a
-                ? (document.getElementById("header-lang-img").src = "assets/images/flags/germany.svg")
-                : "it" == a
-                ? (document.getElementById("header-lang-img").src = "assets/images/flags/italy.svg")
-                : "ru" == a
-                ? (document.getElementById("header-lang-img").src = "assets/images/flags/russia.svg")
-                : "ch" == a
-                ? (document.getElementById("header-lang-img").src = "assets/images/flags/china.svg")
-                : "fr" == a && (document.getElementById("header-lang-img").src = "assets/images/flags/french.svg"),
-            localStorage.setItem("language", a),
-            null == (l = localStorage.getItem("language")) && r("en"),
-            (b = new XMLHttpRequest()).open("GET", "assets/lang/" + l + ".json"),
-            (b.onreadystatechange = function () {
-                var a;
-                4 === this.readyState &&
-                    200 === this.status &&
-                    ((a = JSON.parse(this.responseText)),
-                    Object.keys(a).forEach(function (b) {
-                        var c = document.querySelectorAll("[data-key='" + b + "']");
-                        Array.from(c).forEach(function (c) {
-                            c.textContent = a[b];
-                        });
-                    }));
-            }),
-            b.send());
+                    ? (document.getElementById("header-lang-img").src = "assets/images/flags/spain.svg")
+                    : "gr" == a
+                        ? (document.getElementById("header-lang-img").src = "assets/images/flags/germany.svg")
+                        : "it" == a
+                            ? (document.getElementById("header-lang-img").src = "assets/images/flags/italy.svg")
+                            : "ru" == a
+                                ? (document.getElementById("header-lang-img").src = "assets/images/flags/russia.svg")
+                                : "ch" == a
+                                    ? (document.getElementById("header-lang-img").src = "assets/images/flags/china.svg")
+                                    : "fr" == a && (document.getElementById("header-lang-img").src = "assets/images/flags/french.svg"),
+                localStorage.setItem("language", a),
+                null == (l = localStorage.getItem("language")) && r("en"),
+                (b = new XMLHttpRequest()).open("GET", "assets/lang/" + l + ".json"),
+                (b.onreadystatechange = function () {
+                    var a;
+                    4 === this.readyState &&
+                        200 === this.status &&
+                        ((a = JSON.parse(this.responseText)),
+                            Object.keys(a).forEach(function (b) {
+                                var c = document.querySelectorAll("[data-key='" + b + "']");
+                                Array.from(c).forEach(function (c) {
+                                    c.textContent = a[b];
+                                });
+                            }));
+                }),
+                b.send());
     }
     function s() {
         var a;
         document.querySelectorAll(".navbar-nav .collapse") &&
             ((a = document.querySelectorAll(".navbar-nav .collapse")),
-            Array.from(a).forEach(function (a) {
-                var b = new bootstrap.Collapse(a, { toggle: !1 });
-                a.addEventListener("show.bs.collapse", function (c) {
-                    c.stopPropagation();
-                    var d,
-                        c = a.parentElement.closest(".collapse");
-                    c
-                        ? ((d = c.querySelectorAll(".collapse")),
-                          Array.from(d).forEach(function (a) {
-                              (a = bootstrap.Collapse.getInstance(a)) !== b && a.hide();
-                          }))
-                        : ((d = (function (b) {
-                              for (var c = [], a = b.parentNode.firstChild; a; ) 1 === a.nodeType && a !== b && c.push(a), (a = a.nextSibling);
-                              return c;
-                          })(a.parentElement)),
-                          Array.from(d).forEach(function (a) {
-                              2 < a.childNodes.length && a.firstElementChild.setAttribute("aria-expanded", "false"),
-                                  (a = a.querySelectorAll("*[id]")),
-                                  Array.from(a).forEach(function (a) {
-                                      a.classList.remove("show"),
-                                          2 < a.childNodes.length &&
-                                              ((a = a.querySelectorAll("ul li a")),
-                                              Array.from(a).forEach(function (a) {
-                                                  a.hasAttribute("aria-expanded") && a.setAttribute("aria-expanded", "false");
-                                              }));
-                                  });
-                          }));
-                }),
-                    a.addEventListener("hide.bs.collapse", function (b) {
-                        b.stopPropagation(),
-                            (b = a.querySelectorAll(".collapse")),
-                            Array.from(b).forEach(function (a) {
-                                (childCollapseInstance = bootstrap.Collapse.getInstance(a)).hide();
-                            });
-                    });
-            }));
+                Array.from(a).forEach(function (a) {
+                    var b = new bootstrap.Collapse(a, { toggle: !1 });
+                    a.addEventListener("show.bs.collapse", function (c) {
+                        c.stopPropagation();
+                        var d,
+                            c = a.parentElement.closest(".collapse");
+                        c
+                            ? ((d = c.querySelectorAll(".collapse")),
+                                Array.from(d).forEach(function (a) {
+                                    (a = bootstrap.Collapse.getInstance(a)) !== b && a.hide();
+                                }))
+                            : ((d = (function (b) {
+                                for (var c = [], a = b.parentNode.firstChild; a;) 1 === a.nodeType && a !== b && c.push(a), (a = a.nextSibling);
+                                return c;
+                            })(a.parentElement)),
+                                Array.from(d).forEach(function (a) {
+                                    2 < a.childNodes.length && a.firstElementChild.setAttribute("aria-expanded", "false"),
+                                        (a = a.querySelectorAll("*[id]")),
+                                        Array.from(a).forEach(function (a) {
+                                            a.classList.remove("show"),
+                                                2 < a.childNodes.length &&
+                                                ((a = a.querySelectorAll("ul li a")),
+                                                    Array.from(a).forEach(function (a) {
+                                                        a.hasAttribute("aria-expanded") && a.setAttribute("aria-expanded", "false");
+                                                    }));
+                                        });
+                                }));
+                    }),
+                        a.addEventListener("hide.bs.collapse", function (b) {
+                            b.stopPropagation(),
+                                (b = a.querySelectorAll(".collapse")),
+                                Array.from(b).forEach(function (a) {
+                                    (childCollapseInstance = bootstrap.Collapse.getInstance(a)).hide();
+                                });
+                        });
+                }));
     }
     function t() {
         var c,
@@ -98,53 +98,53 @@
         b &&
             ("twocolumn" == d || "twocolumn" == b["data-layout"]) &&
             ((document.querySelector(".sidebar").innerHTML = z),
-            ((c = document.createElement("ul")).innerHTML = '<a href="#" class="logo"><img src="assets/images/logo-sm.png" alt="" height="22"></a>'),
-            Array.from(document.getElementById("navbar-nav").querySelectorAll(".menu-link")).forEach(function (b) {
-                c.className = "twocolumn-iconview";
-                var d = document.createElement("li"),
-                    a = b;
-                Array.from(a.querySelectorAll("span")).forEach(function (a) {
-                    a.classList.add("d-none");
+                ((c = document.createElement("ul")).innerHTML = '<a href="#" className="logo"><img src="assets/images/logo-sm.png" alt="" height="22"></a>'),
+                Array.from(document.getElementById("navbar-nav").querySelectorAll(".menu-link")).forEach(function (b) {
+                    c.className = "twocolumn-iconview";
+                    var d = document.createElement("li"),
+                        a = b;
+                    Array.from(a.querySelectorAll("span")).forEach(function (a) {
+                        a.classList.add("d-none");
+                    }),
+                        b.parentElement.classList.contains("twocolumn-item-show") && b.classList.add("active"),
+                        d.appendChild(a),
+                        c.appendChild(d),
+                        a.classList.contains("nav-link") && a.classList.replace("nav-link", "nav-icon"),
+                        a.classList.remove("collapsed", "menu-link");
                 }),
-                    b.parentElement.classList.contains("twocolumn-item-show") && b.classList.add("active"),
-                    d.appendChild(a),
-                    c.appendChild(d),
-                    a.classList.contains("nav-link") && a.classList.replace("nav-link", "nav-icon"),
-                    a.classList.remove("collapsed", "menu-link");
-            }),
-            (b = (b = "/" == location.pathname ? "index.html" : location.pathname.substring(1)).substring(b.lastIndexOf("/") + 1)) &&
+                (b = (b = "/" == location.pathname ? "index.html" : location.pathname.substring(1)).substring(b.lastIndexOf("/") + 1)) &&
                 (!(b = document.getElementById("navbar-nav").querySelector('[href="' + b + '"]')) ||
                     ((a = b.closest(".collapse.menu-dropdown")) &&
                         (a.classList.add("show"),
-                        a.parentElement.children[0].classList.add("active"),
-                        a.parentElement.children[0].setAttribute("aria-expanded", "true"),
-                        a.parentElement.closest(".collapse.menu-dropdown") &&
+                            a.parentElement.children[0].classList.add("active"),
+                            a.parentElement.children[0].setAttribute("aria-expanded", "true"),
+                            a.parentElement.closest(".collapse.menu-dropdown") &&
                             (a.parentElement.closest(".collapse").classList.add("show"),
-                            a.parentElement.closest(".collapse").previousElementSibling && a.parentElement.closest(".collapse").previousElementSibling.classList.add("active"),
-                            a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown") &&
+                                a.parentElement.closest(".collapse").previousElementSibling && a.parentElement.closest(".collapse").previousElementSibling.classList.add("active"),
+                                a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown") &&
                                 (a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").classList.add("show"),
-                                a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling &&
+                                    a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling &&
                                     a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling.classList.add("active")))))),
-            (document.getElementById("two-column-menu").innerHTML = c.outerHTML),
-            Array.from(document.querySelector("#two-column-menu ul").querySelectorAll("li a")).forEach(function (a) {
-                var b = (b = "/" == location.pathname ? "index.html" : location.pathname.substring(1)).substring(b.lastIndexOf("/") + 1);
-                a.addEventListener("click", function (c) {
-                    var d;
-                    (b != "/" + a.getAttribute("href") || a.getAttribute("data-bs-toggle")) && document.body.classList.contains("twocolumn-panel") && document.body.classList.remove("twocolumn-panel"),
-                        document.getElementById("navbar-nav").classList.remove("twocolumn-nav-hide"),
-                        document.querySelector(".hamburger-icon").classList.remove("open"),
-                        ((c.target && c.target.matches("a.nav-icon")) || (c.target && c.target.matches("i"))) &&
+                (document.getElementById("two-column-menu").innerHTML = c.outerHTML),
+                Array.from(document.querySelector("#two-column-menu ul").querySelectorAll("li a")).forEach(function (a) {
+                    var b = (b = "/" == location.pathname ? "index.html" : location.pathname.substring(1)).substring(b.lastIndexOf("/") + 1);
+                    a.addEventListener("click", function (c) {
+                        var d;
+                        (b != "/" + a.getAttribute("href") || a.getAttribute("data-bs-toggle")) && document.body.classList.contains("twocolumn-panel") && document.body.classList.remove("twocolumn-panel"),
+                            document.getElementById("navbar-nav").classList.remove("twocolumn-nav-hide"),
+                            document.querySelector(".hamburger-icon").classList.remove("open"),
+                            ((c.target && c.target.matches("a.nav-icon")) || (c.target && c.target.matches("i"))) &&
                             (null !== document.querySelector("#two-column-menu ul .nav-icon.active") && document.querySelector("#two-column-menu ul .nav-icon.active").classList.remove("active"),
-                            (c.target.matches("i") ? c.target.closest("a") : c.target).classList.add("active"),
-                            0 < (d = document.getElementsByClassName("twocolumn-item-show")).length && d[0].classList.remove("twocolumn-item-show"),
-                            (c = (c.target.matches("i") ? c.target.closest("a") : c.target).getAttribute("href").slice(1)),
-                            document.getElementById(c) && document.getElementById(c).parentElement.classList.add("twocolumn-item-show"));
-                }),
-                    b != "/" + a.getAttribute("href") ||
+                                (c.target.matches("i") ? c.target.closest("a") : c.target).classList.add("active"),
+                                0 < (d = document.getElementsByClassName("twocolumn-item-show")).length && d[0].classList.remove("twocolumn-item-show"),
+                                (c = (c.target.matches("i") ? c.target.closest("a") : c.target).getAttribute("href").slice(1)),
+                                document.getElementById(c) && document.getElementById(c).parentElement.classList.add("twocolumn-item-show"));
+                    }),
+                        b != "/" + a.getAttribute("href") ||
                         a.getAttribute("data-bs-toggle") ||
                         (a.classList.add("active"), document.getElementById("navbar-nav").classList.add("twocolumn-nav-hide"), document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.add("open"));
-            }),
-            "horizontal" !== document.documentElement.getAttribute("data-layout") &&
+                }),
+                "horizontal" !== document.documentElement.getAttribute("data-layout") &&
                 ((a = new SimpleBar(document.getElementById("navbar-nav"))).getContentElement(), (a = new SimpleBar(document.getElementsByClassName("twocolumn-iconview")[0])).getContentElement()));
     }
     function u(a) {
@@ -153,32 +153,32 @@
                 c = a.offsetLeft,
                 d = a.offsetWidth,
                 e = a.offsetHeight;
-            if (a.offsetParent) for (; a.offsetParent; ) (b += (a = a.offsetParent).offsetTop), (c += a.offsetLeft);
+            if (a.offsetParent) for (; a.offsetParent;) (b += (a = a.offsetParent).offsetTop), (c += a.offsetLeft);
             return b >= window.pageYOffset && c >= window.pageXOffset && b + e <= window.pageYOffset + window.innerHeight && c + d <= window.pageXOffset + window.innerWidth;
         }
     }
-   
+
     function m() {
         /*feather.replace();*/
         var a = document.documentElement.clientWidth;
         a < 1025 && 767 < a
             ? (document.body.classList.remove("twocolumn-panel"),
-              "twocolumn" == sessionStorage.getItem("data-layout") &&
-                  (document.documentElement.setAttribute("data-layout", "twocolumn"), document.getElementById("customizer-layout03") && document.getElementById("customizer-layout03").click(), t(), B(), s()),
-              "vertical" == sessionStorage.getItem("data-layout") && document.documentElement.setAttribute("data-sidebar-size", "sm"),
-              document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.add("open"))
+                "twocolumn" == sessionStorage.getItem("data-layout") &&
+                (document.documentElement.setAttribute("data-layout", "twocolumn"), document.getElementById("customizer-layout03") && document.getElementById("customizer-layout03").click(), t(), B(), s()),
+                "vertical" == sessionStorage.getItem("data-layout") && document.documentElement.setAttribute("data-sidebar-size", "sm"),
+                document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.add("open"))
             : 1025 <= a
-            ? (document.body.classList.remove("twocolumn-panel"),
-              "twocolumn" == sessionStorage.getItem("data-layout") &&
-                  (document.documentElement.setAttribute("data-layout", "twocolumn"), document.getElementById("customizer-layout03") && document.getElementById("customizer-layout03").click(), t(), B(), s()),
-              "vertical" == sessionStorage.getItem("data-layout") && document.documentElement.setAttribute("data-sidebar-size", sessionStorage.getItem("data-sidebar-size")),
-              document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.remove("open"))
-            : a <= 767 &&
-              (document.body.classList.remove("vertical-sidebar-enable"),
-              document.body.classList.add("twocolumn-panel"),
-              "twocolumn" == sessionStorage.getItem("data-layout") && (document.documentElement.setAttribute("data-layout", "vertical"), E("vertical"), s()),
-              "horizontal" != sessionStorage.getItem("data-layout") && document.documentElement.setAttribute("data-sidebar-size", "lg"),
-              document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.add("open")),
+                ? (document.body.classList.remove("twocolumn-panel"),
+                    "twocolumn" == sessionStorage.getItem("data-layout") &&
+                    (document.documentElement.setAttribute("data-layout", "twocolumn"), document.getElementById("customizer-layout03") && document.getElementById("customizer-layout03").click(), t(), B(), s()),
+                    "vertical" == sessionStorage.getItem("data-layout") && document.documentElement.setAttribute("data-sidebar-size", sessionStorage.getItem("data-sidebar-size")),
+                    document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.remove("open"))
+                : a <= 767 &&
+                (document.body.classList.remove("vertical-sidebar-enable"),
+                    document.body.classList.add("twocolumn-panel"),
+                    "twocolumn" == sessionStorage.getItem("data-layout") && (document.documentElement.setAttribute("data-layout", "vertical"), E("vertical"), s()),
+                    "horizontal" != sessionStorage.getItem("data-layout") && document.documentElement.setAttribute("data-sidebar-size", "lg"),
+                    document.querySelector(".hamburger-icon") && document.querySelector(".hamburger-icon").classList.add("open")),
             (a = document.querySelectorAll("#navbar-nav > li.nav-item")),
             Array.from(a).forEach(function (a) {
                 a.addEventListener("click", A.bind(this), !1), a.addEventListener("mouseover", A.bind(this), !1);
@@ -192,7 +192,7 @@
                 Array.from(c.querySelectorAll(".menu-dropdown")).forEach(function (a) {
                     a.classList.add("dropdown-custom-right");
                 });
-            } else if (1 == u(a.target.parentElement.nextElementSibling) && 1848 <= window.innerWidth) for (var b = document.getElementsByClassName("dropdown-custom-right"); 0 < b.length; ) b[0].classList.remove("dropdown-custom-right");
+            } else if (1 == u(a.target.parentElement.nextElementSibling) && 1848 <= window.innerWidth) for (var b = document.getElementsByClassName("dropdown-custom-right"); 0 < b.length;) b[0].classList.remove("dropdown-custom-right");
         }
         if (a.target && a.target.matches("a.nav-link")) {
             if (0 == u(a.target.nextElementSibling))
@@ -202,7 +202,7 @@
                     Array.from(c.querySelectorAll(".menu-dropdown")).forEach(function (a) {
                         a.classList.add("dropdown-custom-right");
                     });
-            else if (1 == u(a.target.nextElementSibling) && 1848 <= window.innerWidth) for (b = document.getElementsByClassName("dropdown-custom-right"); 0 < b.length; ) b[0].classList.remove("dropdown-custom-right");
+            else if (1 == u(a.target.nextElementSibling) && 1848 <= window.innerWidth) for (b = document.getElementsByClassName("dropdown-custom-right"); 0 < b.length;) b[0].classList.remove("dropdown-custom-right");
         }
     }
     function B() {
@@ -216,49 +216,49 @@
                     .getElementById("two-column-menu")
                     .querySelector('[href="' + b + '"]')
                     .classList.add("active"),
-            (c = document.getElementById("navbar-nav").querySelector('[href="' + b + '"]'))
-                ? (c.classList.add("active"),
-                  (a =
-                      (a = c.closest(".collapse.menu-dropdown")) && a.parentElement.closest(".collapse.menu-dropdown")
-                          ? (a.classList.add("show"),
-                            a.parentElement.children[0].classList.add("active"),
-                            a.parentElement.closest(".collapse.menu-dropdown").parentElement.classList.add("twocolumn-item-show"),
-                            a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown") &&
-                                ((b = a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown").getAttribute("id")),
-                                a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown").parentElement.classList.add("twocolumn-item-show"),
-                                a.parentElement.closest(".collapse.menu-dropdown").parentElement.classList.remove("twocolumn-item-show"),
-                                document.getElementById("two-column-menu").querySelector('[href="#' + b + '"]') &&
-                                    document
-                                        .getElementById("two-column-menu")
-                                        .querySelector('[href="#' + b + '"]')
-                                        .classList.add("active")),
-                            a.parentElement.closest(".collapse.menu-dropdown").getAttribute("id"))
-                          : (c.closest(".collapse.menu-dropdown").parentElement.classList.add("twocolumn-item-show"), a.getAttribute("id"))),
-                  document.getElementById("two-column-menu").querySelector('[href="#' + a + '"]') &&
-                      document
-                          .getElementById("two-column-menu")
-                          .querySelector('[href="#' + a + '"]')
-                          .classList.add("active"))
-                : document.body.classList.add("twocolumn-panel"));
+                (c = document.getElementById("navbar-nav").querySelector('[href="' + b + '"]'))
+                    ? (c.classList.add("active"),
+                        (a =
+                            (a = c.closest(".collapse.menu-dropdown")) && a.parentElement.closest(".collapse.menu-dropdown")
+                                ? (a.classList.add("show"),
+                                    a.parentElement.children[0].classList.add("active"),
+                                    a.parentElement.closest(".collapse.menu-dropdown").parentElement.classList.add("twocolumn-item-show"),
+                                    a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown") &&
+                                    ((b = a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown").getAttribute("id")),
+                                        a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown").parentElement.classList.add("twocolumn-item-show"),
+                                        a.parentElement.closest(".collapse.menu-dropdown").parentElement.classList.remove("twocolumn-item-show"),
+                                        document.getElementById("two-column-menu").querySelector('[href="#' + b + '"]') &&
+                                        document
+                                            .getElementById("two-column-menu")
+                                            .querySelector('[href="#' + b + '"]')
+                                            .classList.add("active")),
+                                    a.parentElement.closest(".collapse.menu-dropdown").getAttribute("id"))
+                                : (c.closest(".collapse.menu-dropdown").parentElement.classList.add("twocolumn-item-show"), a.getAttribute("id"))),
+                        document.getElementById("two-column-menu").querySelector('[href="#' + a + '"]') &&
+                        document
+                            .getElementById("two-column-menu")
+                            .querySelector('[href="#' + a + '"]')
+                            .classList.add("active"))
+                    : document.body.classList.add("twocolumn-panel"));
     }
     function C() {
         var a = "/" == location.pathname ? "index.html" : location.pathname.substring(1);
         !(a = a.substring(a.lastIndexOf("/") + 1)) ||
             ((a = document.getElementById("navbar-nav").querySelector('[href="' + a + '"]')) &&
                 (a.classList.add("active"),
-                (a = a.closest(".collapse.menu-dropdown")) &&
+                    (a = a.closest(".collapse.menu-dropdown")) &&
                     (a.classList.add("show"),
-                    a.parentElement.children[0].classList.add("active"),
-                    a.parentElement.children[0].setAttribute("aria-expanded", "true"),
-                    a.parentElement.closest(".collapse.menu-dropdown") &&
+                        a.parentElement.children[0].classList.add("active"),
+                        a.parentElement.children[0].setAttribute("aria-expanded", "true"),
+                        a.parentElement.closest(".collapse.menu-dropdown") &&
                         (a.parentElement.closest(".collapse").classList.add("show"),
-                        a.parentElement.closest(".collapse").previousElementSibling && a.parentElement.closest(".collapse").previousElementSibling.classList.add("active"),
-                        a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown") &&
+                            a.parentElement.closest(".collapse").previousElementSibling && a.parentElement.closest(".collapse").previousElementSibling.classList.add("active"),
+                            a.parentElement.parentElement.parentElement.parentElement.closest(".collapse.menu-dropdown") &&
                             (a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").classList.add("show"),
-                            a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling &&
+                                a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling &&
                                 (console.log("parentCollapseDiv", a),
-                                a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling.classList.add("active"),
-                                "horizontal" == document.documentElement.getAttribute("data-layout") &&
+                                    a.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling.classList.add("active"),
+                                    "horizontal" == document.documentElement.getAttribute("data-layout") &&
                                     a.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.closest(".collapse") &&
                                     a.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.closest(".collapse").previousElementSibling.classList.add("active")))))));
     }
@@ -268,7 +268,7 @@
                 c = a.offsetLeft,
                 d = a.offsetWidth,
                 e = a.offsetHeight;
-            if (a.offsetParent) for (; a.offsetParent; ) (b += (a = a.offsetParent).offsetTop), (c += a.offsetLeft);
+            if (a.offsetParent) for (; a.offsetParent;) (b += (a = a.offsetParent).offsetTop), (c += a.offsetLeft);
             return b >= window.pageYOffset && c >= window.pageXOffset && b + e <= window.pageYOffset + window.innerHeight && c + d <= window.pageXOffset + window.innerWidth;
         }
     }
@@ -285,16 +285,16 @@
             e + 1 === 7 && (c = d),
                 7 < e + 1 && ((b += d.outerHTML), d.remove()),
                 e + 1 === a.length &&
-                    c.insertAdjacentHTML &&
-                    c.insertAdjacentHTML(
-                        "afterend",
-                        '<li class="nav-item">						<a class="nav-link" href="#sidebarMore" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMore">							<i class="ri-briefcase-2-line"></i> More						</a>						<div class="collapse menu-dropdown" id="sidebarMore"><ul class="nav nav-sm flex-column">' +
-                            b +
-                            "</ul></div>					</li>"
-                    );
+                c.insertAdjacentHTML &&
+                c.insertAdjacentHTML(
+                    "afterend",
+                    '<li className="nav-item">						<a className="nav-link" href="#sidebarMore" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMore">							<i className="ri-briefcase-2-line"></i> More						</a>						<div className="collapse menu-dropdown" id="sidebarMore"><ul className="nav nav-sm flex-column">' +
+                    b +
+                    "</ul></div>					</li>"
+                );
         });
     }
-   
+
     function n(a) {
         if (a == a) {
             switch (a["data-layout"]) {
@@ -311,9 +311,9 @@
                     "vertical" == sessionStorage.getItem("data-layout") && sessionStorage.getItem("data-layout")
                         ? (G("data-layout", "vertical"), sessionStorage.setItem("data-layout", "vertical"), document.documentElement.setAttribute("data-layout", "vertical"), E("vertical"), s())
                         : "horizontal" == sessionStorage.getItem("data-layout")
-                        ? (G("data-layout", "horizontal"), sessionStorage.setItem("data-layout", "horizontal"), document.documentElement.setAttribute("data-layout", "horizontal"), E("horizontal"))
-                        : "twocolumn" == sessionStorage.getItem("data-layout") &&
-                          (G("data-layout", "twocolumn"), sessionStorage.setItem("data-layout", "twocolumn"), document.documentElement.setAttribute("data-layout", "twocolumn"), E("twocolumn"));
+                            ? (G("data-layout", "horizontal"), sessionStorage.setItem("data-layout", "horizontal"), document.documentElement.setAttribute("data-layout", "horizontal"), E("horizontal"))
+                            : "twocolumn" == sessionStorage.getItem("data-layout") &&
+                            (G("data-layout", "twocolumn"), sessionStorage.setItem("data-layout", "twocolumn"), document.documentElement.setAttribute("data-layout", "twocolumn"), E("twocolumn"));
             }
             switch (a["data-topbar"]) {
                 case "light":
@@ -356,10 +356,10 @@
                     "sm" == sessionStorage.getItem("data-sidebar-size")
                         ? (document.documentElement.setAttribute("data-sidebar-size", "sm"), G("data-sidebar-size", "sm"), sessionStorage.setItem("data-sidebar-size", "sm"))
                         : "md" == sessionStorage.getItem("data-sidebar-size")
-                        ? (document.documentElement.setAttribute("data-sidebar-size", "md"), G("data-sidebar-size", "md"), sessionStorage.setItem("data-sidebar-size", "md"))
-                        : "sm-hover" == sessionStorage.getItem("data-sidebar-size")
-                        ? (document.documentElement.setAttribute("data-sidebar-size", "sm-hover"), G("data-sidebar-size", "sm-hover"), sessionStorage.setItem("data-sidebar-size", "sm-hover"))
-                        : (document.documentElement.setAttribute("data-sidebar-size", "lg"), G("data-sidebar-size", "lg"), sessionStorage.setItem("data-sidebar-size", "lg"));
+                            ? (document.documentElement.setAttribute("data-sidebar-size", "md"), G("data-sidebar-size", "md"), sessionStorage.setItem("data-sidebar-size", "md"))
+                            : "sm-hover" == sessionStorage.getItem("data-sidebar-size")
+                                ? (document.documentElement.setAttribute("data-sidebar-size", "sm-hover"), G("data-sidebar-size", "sm-hover"), sessionStorage.setItem("data-sidebar-size", "sm-hover"))
+                                : (document.documentElement.setAttribute("data-sidebar-size", "lg"), G("data-sidebar-size", "lg"), sessionStorage.setItem("data-sidebar-size", "lg"));
             }
             switch (a["data-layout-mode"]) {
                 case "light":
@@ -417,15 +417,15 @@
                     sessionStorage.getItem("data-sidebar") && "light" == sessionStorage.getItem("data-sidebar")
                         ? (sessionStorage.setItem("data-sidebar", "light"), G("data-sidebar", "light"), document.documentElement.setAttribute("data-sidebar", "light"))
                         : "dark" == sessionStorage.getItem("data-sidebar")
-                        ? (sessionStorage.setItem("data-sidebar", "dark"), G("data-sidebar", "dark"), document.documentElement.setAttribute("data-sidebar", "dark"))
-                        : "gradient" == sessionStorage.getItem("data-sidebar")
-                        ? (sessionStorage.setItem("data-sidebar", "gradient"), G("data-sidebar", "gradient"), document.documentElement.setAttribute("data-sidebar", "gradient"))
-                        : "gradient-2" == sessionStorage.getItem("data-sidebar")
-                        ? (sessionStorage.setItem("data-sidebar", "gradient-2"), G("data-sidebar", "gradient-2"), document.documentElement.setAttribute("data-sidebar", "gradient-2"))
-                        : "gradient-3" == sessionStorage.getItem("data-sidebar")
-                        ? (sessionStorage.setItem("data-sidebar", "gradient-3"), G("data-sidebar", "gradient-3"), document.documentElement.setAttribute("data-sidebar", "gradient-3"))
-                        : "gradient-4" == sessionStorage.getItem("data-sidebar") &&
-                          (sessionStorage.setItem("data-sidebar", "gradient-4"), G("data-sidebar", "gradient-4"), document.documentElement.setAttribute("data-sidebar", "gradient-4"));
+                            ? (sessionStorage.setItem("data-sidebar", "dark"), G("data-sidebar", "dark"), document.documentElement.setAttribute("data-sidebar", "dark"))
+                            : "gradient" == sessionStorage.getItem("data-sidebar")
+                                ? (sessionStorage.setItem("data-sidebar", "gradient"), G("data-sidebar", "gradient"), document.documentElement.setAttribute("data-sidebar", "gradient"))
+                                : "gradient-2" == sessionStorage.getItem("data-sidebar")
+                                    ? (sessionStorage.setItem("data-sidebar", "gradient-2"), G("data-sidebar", "gradient-2"), document.documentElement.setAttribute("data-sidebar", "gradient-2"))
+                                    : "gradient-3" == sessionStorage.getItem("data-sidebar")
+                                        ? (sessionStorage.setItem("data-sidebar", "gradient-3"), G("data-sidebar", "gradient-3"), document.documentElement.setAttribute("data-sidebar", "gradient-3"))
+                                        : "gradient-4" == sessionStorage.getItem("data-sidebar") &&
+                                        (sessionStorage.setItem("data-sidebar", "gradient-4"), G("data-sidebar", "gradient-4"), document.documentElement.setAttribute("data-sidebar", "gradient-4"));
             }
             switch (a["data-sidebar-image"]) {
                 case "none":
@@ -447,13 +447,13 @@
                     sessionStorage.getItem("data-sidebar-image") && "none" == sessionStorage.getItem("data-sidebar-image")
                         ? (sessionStorage.setItem("data-sidebar-image", "none"), G("data-sidebar-image", "none"), document.documentElement.setAttribute("data-sidebar-image", "none"))
                         : "img-1" == sessionStorage.getItem("data-sidebar-image")
-                        ? (sessionStorage.setItem("data-sidebar-image", "img-1"), G("data-sidebar-image", "img-1"), document.documentElement.setAttribute("data-sidebar-image", "img-2"))
-                        : "img-2" == sessionStorage.getItem("data-sidebar-image")
-                        ? (sessionStorage.setItem("data-sidebar-image", "img-2"), G("data-sidebar-image", "img-2"), document.documentElement.setAttribute("data-sidebar-image", "img-2"))
-                        : "img-3" == sessionStorage.getItem("data-sidebar-image")
-                        ? (sessionStorage.setItem("data-sidebar-image", "img-3"), G("data-sidebar-image", "img-3"), document.documentElement.setAttribute("data-sidebar-image", "img-3"))
-                        : "img-4" == sessionStorage.getItem("data-sidebar-image") &&
-                          (sessionStorage.setItem("data-sidebar-image", "img-4"), G("data-sidebar-image", "img-4"), document.documentElement.setAttribute("data-sidebar-image", "img-4"));
+                            ? (sessionStorage.setItem("data-sidebar-image", "img-1"), G("data-sidebar-image", "img-1"), document.documentElement.setAttribute("data-sidebar-image", "img-2"))
+                            : "img-2" == sessionStorage.getItem("data-sidebar-image")
+                                ? (sessionStorage.setItem("data-sidebar-image", "img-2"), G("data-sidebar-image", "img-2"), document.documentElement.setAttribute("data-sidebar-image", "img-2"))
+                                : "img-3" == sessionStorage.getItem("data-sidebar-image")
+                                    ? (sessionStorage.setItem("data-sidebar-image", "img-3"), G("data-sidebar-image", "img-3"), document.documentElement.setAttribute("data-sidebar-image", "img-3"))
+                                    : "img-4" == sessionStorage.getItem("data-sidebar-image") &&
+                                    (sessionStorage.setItem("data-sidebar-image", "img-4"), G("data-sidebar-image", "img-4"), document.documentElement.setAttribute("data-sidebar-image", "img-4"));
             }
             switch (a["data-layout-position"]) {
                 case "fixed":
@@ -492,12 +492,12 @@
                         "data-layout-width" == a && "boxed" == c.value
                             ? (document.documentElement.setAttribute("data-sidebar-size", "sm-hover"), sessionStorage.setItem("data-sidebar-size", "sm-hover"), (document.getElementById("sidebar-size-small-hover").checked = !0))
                             : "data-layout-width" == a &&
-                              "fluid" == c.value &&
-                              (document.documentElement.setAttribute("data-sidebar-size", "lg"), sessionStorage.setItem("data-sidebar-size", "lg"), (document.getElementById("sidebar-size-default").checked = !0)),
+                            "fluid" == c.value &&
+                            (document.documentElement.setAttribute("data-sidebar-size", "lg"), sessionStorage.setItem("data-sidebar-size", "lg"), (document.getElementById("sidebar-size-default").checked = !0)),
                         "data-layout" == a &&
-                            ("vertical" == c.value
-                                ? (E("vertical"), s(), feather.replace())
-                                : "horizontal" == c.value
+                        ("vertical" == c.value
+                            ? (E("vertical"), s(), feather.replace())
+                            : "horizontal" == c.value
                                 ? (document.getElementById("sidebarimg-none").click(), E("horizontal"), feather.replace())
                                 : "twocolumn" == c.value && (E("twocolumn"), document.documentElement.setAttribute("data-layout-width", "fluid"), document.getElementById("layout-width-fluid").click(), t(), B(), s(), feather.replace()));
                 });
@@ -536,41 +536,41 @@
     }
     sessionStorage.getItem("defaultAttribute")
         ? (((b = {})["data-layout"] = sessionStorage.getItem("data-layout")),
-          (b["data-sidebar-size"] = sessionStorage.getItem("data-sidebar-size")),
-          (b["data-layout-mode"] = sessionStorage.getItem("data-layout-mode")),
-          (b["data-layout-width"] = sessionStorage.getItem("data-layout-width")),
-          (b["data-sidebar"] = sessionStorage.getItem("data-sidebar")),
-          (b["data-layout-position"] = sessionStorage.getItem("data-layout-position")),
-          (b["data-layout-style"] = sessionStorage.getItem("data-layout-style")),
-          (b["data-topbar"] = sessionStorage.getItem("data-topbar")),
-          n(b))
+            (b["data-sidebar-size"] = sessionStorage.getItem("data-sidebar-size")),
+            (b["data-layout-mode"] = sessionStorage.getItem("data-layout-mode")),
+            (b["data-layout-width"] = sessionStorage.getItem("data-layout-width")),
+            (b["data-sidebar"] = sessionStorage.getItem("data-sidebar")),
+            (b["data-layout-position"] = sessionStorage.getItem("data-layout-position")),
+            (b["data-layout-style"] = sessionStorage.getItem("data-layout-style")),
+            (b["data-topbar"] = sessionStorage.getItem("data-topbar")),
+            n(b))
         : ((a = document.documentElement.attributes),
-          (b = {}),
-          Array.from(a).forEach(function (a) {
-              var c;
-              a && a.nodeName && "undefined" != a.nodeName && ((b[(c = a.nodeName)] = a.nodeValue), sessionStorage.setItem(c, a.nodeValue));
-          }),
-          sessionStorage.setItem("defaultAttribute", JSON.stringify(b)),
-          n(b),
-          (a = document.querySelector('.btn[data-bs-target="#theme-settings-offcanvas"]')) && a.click()),
+            (b = {}),
+            Array.from(a).forEach(function (a) {
+                var c;
+                a && a.nodeName && "undefined" != a.nodeName && ((b[(c = a.nodeName)] = a.nodeValue), sessionStorage.setItem(c, a.nodeValue));
+            }),
+            sessionStorage.setItem("defaultAttribute", JSON.stringify(b)),
+            n(b),
+            (a = document.querySelector('.btn[data-bs-target="#theme-settings-offcanvas"]')) && a.click()),
         t(),
         (j = document.getElementById("search-close-options")),
         (o = document.getElementById("search-dropdown")),
         (f = document.getElementById("search-options")) &&
-            (f.addEventListener("focus", function () {
-                0 < f.value.length ? (o.classList.add("show"), j.classList.remove("d-none")) : (o.classList.remove("show"), j.classList.add("d-none"));
-            }),
+        (f.addEventListener("focus", function () {
+            0 < f.value.length ? (o.classList.add("show"), j.classList.remove("d-none")) : (o.classList.remove("show"), j.classList.add("d-none"));
+        }),
             f.addEventListener("keyup", function (c) {
                 var b, a;
                 0 < f.value.length
                     ? (o.classList.add("show"),
-                      j.classList.remove("d-none"),
-                      (b = f.value.toLowerCase()),
-                      (a = document.getElementsByClassName("notify-item")),
-                      Array.from(a).forEach(function (a) {
-                          var c = a.getElementsByTagName("span") ? a.getElementsByTagName("span")[0].innerText.toLowerCase() : "";
-                          c && (a.style.display = c.includes(b) ? "block" : "none");
-                      }))
+                        j.classList.remove("d-none"),
+                        (b = f.value.toLowerCase()),
+                        (a = document.getElementsByClassName("notify-item")),
+                        Array.from(a).forEach(function (a) {
+                            var c = a.getElementsByTagName("span") ? a.getElementsByTagName("span")[0].innerText.toLowerCase() : "";
+                            c && (a.style.display = c.includes(b) ? "block" : "none");
+                        }))
                     : (o.classList.remove("show"), j.classList.add("d-none"));
             }),
             j.addEventListener("click", function () {
@@ -583,11 +583,11 @@
         (k = document.getElementById("search-dropdown-reponsive")),
         (d = document.getElementById("search-options-reponsive")),
         g &&
-            k &&
-            d &&
-            (d.addEventListener("focus", function () {
-                0 < d.value.length ? (k.classList.add("show"), g.classList.remove("d-none")) : (k.classList.remove("show"), g.classList.add("d-none"));
-            }),
+        k &&
+        d &&
+        (d.addEventListener("focus", function () {
+            0 < d.value.length ? (k.classList.add("show"), g.classList.remove("d-none")) : (k.classList.remove("show"), g.classList.add("d-none"));
+        }),
             d.addEventListener("keyup", function () {
                 0 < d.value.length ? (k.classList.add("show"), g.classList.remove("d-none")) : (k.classList.remove("show"), g.classList.add("d-none"));
             }),
@@ -598,30 +598,30 @@
                 "search-options" !== a.target.getAttribute("id") && (k.classList.remove("show"), g.classList.add("d-none"));
             })),
         (a = document.querySelector('[data-toggle="fullscreen"]')) &&
-            a.addEventListener("click", function (a) {
-                a.preventDefault(),
-                    document.body.classList.toggle("fullscreen-enable"),
-                    document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement
-                        ? document.cancelFullScreen
-                            ? document.cancelFullScreen()
-                            : document.mozCancelFullScreen
+        a.addEventListener("click", function (a) {
+            a.preventDefault(),
+                document.body.classList.toggle("fullscreen-enable"),
+                document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement
+                    ? document.cancelFullScreen
+                        ? document.cancelFullScreen()
+                        : document.mozCancelFullScreen
                             ? document.mozCancelFullScreen()
                             : document.webkitCancelFullScreen && document.webkitCancelFullScreen()
-                        : document.documentElement.requestFullscreen
+                    : document.documentElement.requestFullscreen
                         ? document.documentElement.requestFullscreen()
                         : document.documentElement.mozRequestFullScreen
-                        ? document.documentElement.mozRequestFullScreen()
-                        : document.documentElement.webkitRequestFullscreen && document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }),
+                            ? document.documentElement.mozRequestFullScreen()
+                            : document.documentElement.webkitRequestFullscreen && document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }),
         document.addEventListener("fullscreenchange", h),
         document.addEventListener("webkitfullscreenchange", h),
         document.addEventListener("mozfullscreenchange", h),
         (p = document.getElementsByTagName("HTML")[0]),
         (a = document.querySelectorAll(".light-dark-mode")) &&
-            a.length &&
-            a[0].addEventListener("click", function (a) {
-                p.hasAttribute("data-layout-mode") && "dark" == p.getAttribute("data-layout-mode") ? H("data-layout-mode", "orange", "layout-mode-orange", p) : H("data-layout-mode", "dark", "layout-mode-dark", p);
-            }),
+        a.length &&
+        a[0].addEventListener("click", function (a) {
+            p.hasAttribute("data-layout-mode") && "dark" == p.getAttribute("data-layout-mode") ? H("data-layout-mode", "orange", "layout-mode-orange", p) : H("data-layout-mode", "dark", "layout-mode-dark", p);
+        }),
         document.addEventListener("DOMContentLoaded", function () {
             var a = document.getElementsByClassName("code-switcher");
             Array.from(a).forEach(function (a) {
@@ -639,33 +639,33 @@
             var a;
             (a = document.getElementById("page-topbar")) && (50 <= document.body.scrollTop || 50 <= document.documentElement.scrollTop ? a.classList.add("topbar-shadow") : a.classList.remove("topbar-shadow"));
         }),
-      
+
         document.getElementById("topnav-hamburger-icon") &&
-            document.getElementById("topnav-hamburger-icon").addEventListener("click", function () {
-                var a = document.documentElement.clientWidth;
-                767 < a && document.querySelector(".hamburger-icon").classList.toggle("open"),
-                    "horizontal" === document.documentElement.getAttribute("data-layout") && (document.body.classList.contains("menu") ? document.body.classList.remove("menu") : document.body.classList.add("menu")),
-                    "vertical" === document.documentElement.getAttribute("data-layout") &&
-                        (a < 1025 && 767 < a
-                            ? (document.body.classList.remove("vertical-sidebar-enable"),
-                              "sm" == document.documentElement.getAttribute("data-sidebar-size") ? document.documentElement.setAttribute("data-sidebar-size", "") : document.documentElement.setAttribute("data-sidebar-size", "sm"))
-                            : 1025 < a
-                            ? (document.body.classList.remove("vertical-sidebar-enable"),
-                              "lg" == document.documentElement.getAttribute("data-sidebar-size") ? document.documentElement.setAttribute("data-sidebar-size", "sm") : document.documentElement.setAttribute("data-sidebar-size", "lg"))
-                            : a <= 767 && (document.body.classList.add("vertical-sidebar-enable"), document.documentElement.setAttribute("data-sidebar-size", "lg"))),
-                    "twocolumn" == document.documentElement.getAttribute("data-layout") &&
-                        (document.body.classList.contains("twocolumn-panel") ? document.body.classList.remove("twocolumn-panel") : document.body.classList.add("twocolumn-panel"));
-            }),
+        document.getElementById("topnav-hamburger-icon").addEventListener("click", function () {
+            var a = document.documentElement.clientWidth;
+            767 < a && document.querySelector(".hamburger-icon").classList.toggle("open"),
+                "horizontal" === document.documentElement.getAttribute("data-layout") && (document.body.classList.contains("menu") ? document.body.classList.remove("menu") : document.body.classList.add("menu")),
+                "vertical" === document.documentElement.getAttribute("data-layout") &&
+                (a < 1025 && 767 < a
+                    ? (document.body.classList.remove("vertical-sidebar-enable"),
+                        "sm" == document.documentElement.getAttribute("data-sidebar-size") ? document.documentElement.setAttribute("data-sidebar-size", "") : document.documentElement.setAttribute("data-sidebar-size", "sm"))
+                    : 1025 < a
+                        ? (document.body.classList.remove("vertical-sidebar-enable"),
+                            "lg" == document.documentElement.getAttribute("data-sidebar-size") ? document.documentElement.setAttribute("data-sidebar-size", "sm") : document.documentElement.setAttribute("data-sidebar-size", "lg"))
+                        : a <= 767 && (document.body.classList.add("vertical-sidebar-enable"), document.documentElement.setAttribute("data-sidebar-size", "lg"))),
+                "twocolumn" == document.documentElement.getAttribute("data-layout") &&
+                (document.body.classList.contains("twocolumn-panel") ? document.body.classList.remove("twocolumn-panel") : document.body.classList.add("twocolumn-panel"));
+        }),
         (c = sessionStorage.getItem("defaultAttribute")),
         (i = JSON.parse(c)),
         (c = document.documentElement.clientWidth),
         "twocolumn" == i["data-layout"] &&
-            c < 767 &&
-            Array.from(document.getElementById("two-column-menu").querySelectorAll("li")).forEach(function (a) {
-                a.addEventListener("click", function (a) {
-                    document.body.classList.remove("twocolumn-panel");
-                });
-            }),
+        c < 767 &&
+        Array.from(document.getElementById("two-column-menu").querySelectorAll("li")).forEach(function (a) {
+            a.addEventListener("click", function (a) {
+                document.body.classList.remove("twocolumn-panel");
+            });
+        }),
         (function () {
             var a = document.querySelectorAll(".counter-value");
             function b(a) {
@@ -682,7 +682,7 @@
                 });
         })(),
         document.getElementsByClassName("dropdown-item-cart") &&
-            ((q = document.querySelectorAll(".dropdown-item-cart").length),
+        ((q = document.querySelectorAll(".dropdown-item-cart").length),
             Array.from(document.querySelectorAll("#page-topbar .dropdown-menu-cart .remove-item-btn")).forEach(function (a) {
                 a.addEventListener("click", function (a) {
                     q--,
@@ -702,11 +702,11 @@
             document.getElementById("checkout-elem") && (document.getElementById("checkout-elem").style.display = "block"),
             x()),
         document.getElementsByClassName("notification-check") &&
-            Array.from(document.querySelectorAll(".notification-check input")).forEach(function (a) {
-                a.addEventListener("click", function (a) {
-                    a.target.closest(".notification-item").classList.toggle("active");
-                });
-            }),
+        Array.from(document.querySelectorAll(".notification-check input")).forEach(function (a) {
+            a.addEventListener("click", function (a) {
+                a.target.closest(".notification-item").classList.toggle("active");
+            });
+        }),
         [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map(function (a) {
             return new bootstrap.Tooltip(a);
         }),
@@ -714,9 +714,9 @@
             return new bootstrap.Popover(a);
         }),
         document.getElementById("reset-layout") &&
-            document.getElementById("reset-layout").addEventListener("click", function () {
-                sessionStorage.clear(), window.location.reload();
-            }),
+        document.getElementById("reset-layout").addEventListener("click", function () {
+            sessionStorage.clear(), window.location.reload();
+        }),
         (a = document.querySelectorAll("[data-toast]")),
         Array.from(a).forEach(function (a) {
             a.addEventListener("click", function () {
@@ -768,26 +768,26 @@
             var c, b, a;
             "flatpickr" == d.getAttribute("data-provider")
                 ? ((a = {}),
-                  (c = d.attributes)["data-date-format"] && (a.dateFormat = c["data-date-format"].value.toString()),
-                  c["data-enable-time"] && ((a.enableTime = !0), (a.dateFormat = c["data-date-format"].value.toString() + " H:i")),
-                  c["data-altFormat"] && ((a.altInput = !0), (a.altFormat = c["data-altFormat"].value.toString())),
-                  c["data-minDate"] && ((a.minDate = c["data-minDate"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
-                  c["data-maxDate"] && ((a.maxDate = c["data-maxDate"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
-                  c["data-deafult-date"] && ((a.defaultDate = c["data-deafult-date"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
-                  c["data-multiple-date"] && ((a.mode = "multiple"), (a.dateFormat = c["data-date-format"].value.toString())),
-                  c["data-range-date"] && ((a.mode = "range"), (a.dateFormat = c["data-date-format"].value.toString())),
-                  c["data-inline-date"] && ((a.inline = !0), (a.defaultDate = c["data-deafult-date"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
-                  c["data-disable-date"] && ((b = []).push(c["data-disable-date"].value), (a.disable = b.toString().split(","))),
-                  flatpickr(d, a))
+                    (c = d.attributes)["data-date-format"] && (a.dateFormat = c["data-date-format"].value.toString()),
+                    c["data-enable-time"] && ((a.enableTime = !0), (a.dateFormat = c["data-date-format"].value.toString() + " H:i")),
+                    c["data-altFormat"] && ((a.altInput = !0), (a.altFormat = c["data-altFormat"].value.toString())),
+                    c["data-minDate"] && ((a.minDate = c["data-minDate"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
+                    c["data-maxDate"] && ((a.maxDate = c["data-maxDate"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
+                    c["data-deafult-date"] && ((a.defaultDate = c["data-deafult-date"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
+                    c["data-multiple-date"] && ((a.mode = "multiple"), (a.dateFormat = c["data-date-format"].value.toString())),
+                    c["data-range-date"] && ((a.mode = "range"), (a.dateFormat = c["data-date-format"].value.toString())),
+                    c["data-inline-date"] && ((a.inline = !0), (a.defaultDate = c["data-deafult-date"].value.toString()), (a.dateFormat = c["data-date-format"].value.toString())),
+                    c["data-disable-date"] && ((b = []).push(c["data-disable-date"].value), (a.disable = b.toString().split(","))),
+                    flatpickr(d, a))
                 : "timepickr" == d.getAttribute("data-provider") &&
-                  ((b = {}),
-                  (a = d.attributes)["data-time-basic"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i")),
-                  a["data-time-hrs"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.time_24hr = !0)),
-                  a["data-min-time"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.minTime = a["data-min-time"].value.toString())),
-                  a["data-max-time"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.minTime = a["data-max-time"].value.toString())),
-                  a["data-default-time"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.defaultDate = a["data-default-time"].value.toString())),
-                  a["data-time-inline"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.defaultDate = a["data-time-inline"].value.toString()), (b.inline = !0)),
-                  flatpickr(d, b));
+                ((b = {}),
+                    (a = d.attributes)["data-time-basic"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i")),
+                    a["data-time-hrs"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.time_24hr = !0)),
+                    a["data-min-time"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.minTime = a["data-min-time"].value.toString())),
+                    a["data-max-time"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.minTime = a["data-max-time"].value.toString())),
+                    a["data-default-time"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.dateFormat = "H:i"), (b.defaultDate = a["data-default-time"].value.toString())),
+                    a["data-time-inline"] && ((b.enableTime = !0), (b.noCalendar = !0), (b.defaultDate = a["data-time-inline"].value.toString()), (b.inline = !0)),
+                    flatpickr(d, b));
         }),
         Array.from(document.querySelectorAll('.dropdown-menu a[data-bs-toggle="tab"]')).forEach(function (a) {
             a.addEventListener("click", function (a) {
@@ -797,11 +797,11 @@
         r(null === l ? "en" : l),
         (e = document.getElementsByClassName("language")),
         e &&
-            Array.from(e).forEach(function (a) {
-                a.addEventListener("click", function (b) {
-                    r(a.getAttribute("data-lang"));
-                });
-            }),
+        Array.from(e).forEach(function (a) {
+            a.addEventListener("click", function (b) {
+                r(a.getAttribute("data-lang"));
+            });
+        }),
         s(),
         w(),
         window.addEventListener("resize", function () {

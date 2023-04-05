@@ -43,7 +43,7 @@
 
 // 	// Mobile menu sidebar overlay
 
-// 	$('body').append('<div class="sidebar-overlay"></div>');
+// 	$('body').append('<div className="sidebar-overlay"></div>');
 // 	$(document).on('click', '#mobile_btn', function() {
 // 		$wrapper.toggleClass('slide-nav');
 // 		$('.sidebar-overlay').toggleClass('opened');
@@ -224,7 +224,7 @@
 
 // 	$(document).on('click', '.leave-edit-btn', function() {
 // 		$(this).removeClass('leave-edit-btn').addClass('btn btn-white leave-cancel-btn').text('Cancel');
-// 		$(this).closest("div.leave-right").append('<button class="btn btn-primary leave-save-btn" type="submit">Save</button>');
+// 		$(this).closest("div.leave-right").append('<button className="btn btn-primary leave-save-btn" type="submit">Save</button>');
 // 		$(this).parent().parent().find("input").prop('disabled', false);
 // 		return false;
 // 	});

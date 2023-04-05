@@ -119,7 +119,7 @@ const Sidebar = (props) => {
               <li className={pathname.includes('clients') ? "active" : ""}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
-              <li className="submenu">
+              {/* <li className="submenu">
                 <a href="#" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-rocket" /> <span> Projects</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "projects" ?
                   <ul>
@@ -131,7 +131,7 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
+              </li> */}
               <li className="menu-title">
                 <span>Staff - Client Management</span>
               </li>
@@ -248,8 +248,8 @@ const Sidebar = (props) => {
               <li className={pathname.includes('promotion') ? "active" : ""}><Link to="/app/performance/promotion"><i className="la la-bullhorn" /> <span>Promotion</span></Link></li>
               <li className={pathname.includes('resignation') ? "active" : ""}><Link to="/app/performance/resignation"><i className="la la-external-link-square" /> <span>Resignation</span></Link></li>
               <li className={pathname.includes('termination') ? "active" : ""}><Link to="/app/performance/termination"><i className="la la-times-circle" /> <span>Termination</span></Link></li>
-              <li className="menu-title">
-                <span>Administration</span>
+              {/* <li className="menu-title"> */}
+              {/* <span>Administration</span>
               </li>
               <li className={pathname.includes('assets') ? "active" : ""}>
                 <Link to="/app/administrator/assets"><i className="la la-object-ungroup" /> <span>Assets</span></Link>
@@ -289,7 +289,7 @@ const Sidebar = (props) => {
               </li>
               <li>
                 <Link to="/settings/companysetting"><i className="la la-cog" /> <span>Settings</span></Link>
-              </li>
+              </li> */}
               {/* <li className="menu-title">
                 <span>Pages</span>
               </li>
@@ -491,8 +491,8 @@ const Sidebar = (props) => {
                   request_quote
                 </span>
               </a>
-              {/* <a class="nav-link" id="v-pills-policies-tab" title="Policies" data-bs-toggle="pill" href="#v-pills-policies" role="tab" aria-controls="v-pills-policies" aria-selected="false">
-								<span class="material-icons-outlined">
+              {/* <a className="nav-link" id="v-pills-policies-tab" title="Policies" data-bs-toggle="pill" href="#v-pills-policies" role="tab" aria-controls="v-pills-policies" aria-selected="false">
+								<span className="material-icons-outlined">
 									request_quote
 								</span>
 							</a> */}
