@@ -6,7 +6,6 @@ import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avata
 import Offcanvas from '../../../Entryfile/offcanvance';
 import Addschedule from "../../../_components/modelbox/Addschedule"
 import { Events } from '../../../_components/modelbox/Events';
-import { Scheduler } from "@aldabil/react-scheduler";
 import useHttp from '../../../hooks/useHttp';
 
 const ShiftScheduling = () => {
