@@ -71,7 +71,7 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('leads') ? "active" : ""}>
-                                <Link to="/"><i className="la la-lock" /> <span>Change Password</span></Link>
+                                <Link to="/client/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
                             <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
