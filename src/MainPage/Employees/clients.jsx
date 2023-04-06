@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+import { useCompanyContext } from '../../context';
 import { Avatar_19, Avatar_29, Avatar_07, Avatar_06, Avatar_14, Avatar_18, Avatar_28, Avatar_13 } from "../../Entryfile/imagepath"
 import AddClient from '../../_components/modelbox/Addclient';
 import Editclient from "../../_components/modelbox/Editclient"
 
 
 const Clients = () => {
-
+  const { clients } = useCompanyContext()
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -20,7 +21,7 @@ const Clients = () => {
   return (
     <div className="page-wrapper">
       <Helmet>
-        <title>Clients - HRMS Admin Template</title>
+        <title>Clients</title>
         <meta name="description" content="Login page" />
       </Helmet>
       {/* Page Content */}
@@ -81,26 +82,35 @@ const Clients = () => {
         </div>
         {/* Search Filter */}
         <div className="row staff-grid-row">
-          <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-            <div className="profile-widget">
-              <div className="profile-img">
-                <Link to="/app/profile/client-profile" className="avatar"><img alt="" src={Avatar_19} /></Link>
-              </div>
-              <div className="dropdown profile-action">
-                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                <div className="dropdown-menu dropdown-menu-right">
-                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_client"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_client"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+
+          {
+            clients.map((data, index) =>
+              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
+                <div className="profile-widget">
+                  <div className="profile-img">
+                    <Link to="/app/profile/client-profile" className="avatar"><img alt="" src={Avatar_19} /></Link>
+                  </div>
+                  <div className="dropdown profile-action">
+                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                    <div className="dropdown-menu dropdown-menu-right">
+                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_client"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_client"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                    </div>
+                  </div>
+                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/client-profile">{data.firstName} {data.surName}</Link></h4>
+                  <h5 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/client-profile">{data.email}</Link></h5>
+                  {/* <div className="small text-muted">CEO</div> */}
+                  {/* <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat" className="btn btn-white btn-sm m-t-10 mr-1">Message</Link> */}
+                  <Link to="/app/profile/client-profile" className="btn btn-white btn-sm m-t-10">View Profile</Link>
                 </div>
               </div>
-              <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/client-profile">Global Technologies</Link></h4>
-              <h5 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/client-profile">Barry Cuda</Link></h5>
-              <div className="small text-muted">CEO</div>
-              <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat" className="btn btn-white btn-sm m-t-10 mr-1">Message</Link>
-              <Link to="/app/profile/client-profile" className="btn btn-white btn-sm m-t-10">View Profile</Link>
-            </div>
-          </div>
+            )
+          }
+
+
         </div>
+
+
       </div>
 
 

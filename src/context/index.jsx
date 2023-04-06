@@ -24,7 +24,7 @@ export const CompanyProvider = ({ children }) => {
             }
 
             try {
-                const clientResponse = await privateHttp.get('/Profiles/get_all_clients');
+                const clientResponse = await privateHttp.get('/Profiles');
                 const client = clientResponse.data;
                 setClients(client);
             } catch (error) {

@@ -24,58 +24,7 @@ const ShiftScheduling = () => {
     getShift()
   }, [])
 
-  const fetchRemote = async () => {
-    const Even = Events.map((evt) => {
-      return
-      evt.activities
 
-
-    })
-    // console.log(Even);
-    /**Simulate fetchin remote data */
-    return new Promise((res) => {
-      setTimeout(() => {
-        res(Events);
-      }, 3000);
-    });
-  };
-
-  const handleConfirm = async (
-  ) => {
-    console.log("handleConfirm =", action, Events.title);
-    if (action === "edit") {
-      /** PUT Event to remote DB */
-    } else if (action === "create") {
-      /**POST Event to remote DB */
-      // console.log(action);
-    }
-    /**
-     * Make sure to return 4 mandatory fields:
-     * Event_id: string|number
-     * title: string
-     * start: Date|string
-     * end: Date|string
-     * ....extra other fields depend on your custom fields/editor properties
-     */
-    // Simulate http request: return added/edited Event
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        res({
-          ...Event,
-          Event_id: Event.Event_id || Math.random()
-        });
-      }, 3000);
-    });
-  };
-
-  const handleDelete = async (deletedId) => {
-    // Simulate http request: return the deleted id
-    return new Promise((res, rej) => {
-      setTimeout(() => {
-        res(deletedId);
-      }, 3000);
-    });
-  };
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -166,13 +115,7 @@ const ShiftScheduling = () => {
           {/* /Content End */}
         </div>
         {/* /Page Content */}
-        <div className='px-4'>
-          <Scheduler
-            getRemoteEvents={fetchRemote}
-            onConfirm={handleConfirm}
-            onDelete={handleDelete}
-          />
-        </div>
+
       </div>
       {/* /Page Wrapper */}
       {/* Add Schedule Modal */}

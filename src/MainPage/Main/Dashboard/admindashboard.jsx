@@ -56,7 +56,6 @@ const AdminDashboard = () => {
       }, 1000)
     }
   });
-  console.log(staff);
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -102,7 +101,7 @@ const AdminDashboard = () => {
                     <span className="dash-widget-icon"><i className="fa fa-users" /></span>
                     <div className="dash-widget-info">
                       <span>Total Client</span>
-                      <h3>0</h3>
+                      <h3>{clients.length}</h3>
                       <Link to={'/app/employees/clients'} className='pointer fw-bold'>View Clients</Link>
                     </div>
                   </div>
