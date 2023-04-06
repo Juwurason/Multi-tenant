@@ -42,7 +42,7 @@ const linechartdata = [
 const AdminDashboard = () => {
 
   const [menu, setMenu] = useState(false)
-  const { staff } = useCompanyContext()
+  const { staff, clients } = useCompanyContext()
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
       }, 1000)
     }
   });
-
+  console.log(staff);
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>

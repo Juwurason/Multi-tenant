@@ -7,31 +7,39 @@ export const useCompanyContext = () => useContext(CompanyContext);
 
 export const CompanyProvider = ({ children }) => {
     const [staff, setStaff] = useState([]);
+    const [clients, setClients] = useState([]);
 
     const privateHttp = useHttp();
 
     let isMounted = true;
+
     useEffect(() => {
         async function FetchStaff() {
             try {
-                const response = await Promise.all([
-                    privateHttp.get('/Staffs')
-                ])
-                const staff = response[0].data;
-                setStaff(staff)
+                const staffResponse = await privateHttp.get('/Staffs');
+                const staff = staffResponse.data;
+                setStaff(staff);
+            } catch (error) {
+                console.log(error);
+            }
 
-
+            try {
+                const clientResponse = await privateHttp.get('/Profiles/get_all_clients');
+                const client = clientResponse.data;
+                setClients(client);
             } catch (error) {
                 console.log(error);
             }
         }
-        if (isMounted) FetchStaff()
-        return () => {
-            isMounted = false
+
+        if (isMounted) {
+            FetchStaff();
         }
 
-
-    }, [])
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
 
 
@@ -74,7 +82,7 @@ export const CompanyProvider = ({ children }) => {
         companyId, email, storeCompanyId,
         storeAdminEmail, clearCompanyData,
         userProfile, setUserProfile,
-        staff, setStaff
+        staff, setStaff, clients
     };
 
     return (

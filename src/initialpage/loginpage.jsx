@@ -61,6 +61,11 @@ const Loginpage = () => {
         localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }
+      if (data.userProfile?.role === "Client") {
+        navigate.push('/client/client/Dashboard')
+        localStorage.setItem("clientProfile", JSON.stringify(data.clientProfile))
+
+      }
 
 
     } catch (error) {
@@ -97,6 +102,9 @@ const Loginpage = () => {
     }
     if (user && user.token && user.role === "Staff") {
       navigate.push('/staff/staff/staffDashboard');
+    }
+    if (user && user.token && user.role === "Client") {
+      navigate.push('/client/client/Dashboard');
     }
   }, []);
   return (

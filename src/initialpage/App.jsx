@@ -23,6 +23,7 @@ import Error500 from '../MainPage/Pages/ErrorPage/error500';
 import CompanySetup from './CompanySetup';
 import AdminRegistration from './AdminRegistration';
 import StaffLayout from './Sidebar/StaffLayout';
+import ClientLayout from './Sidebar/ClientLayout';
 
 
 
@@ -56,6 +57,8 @@ export default class App extends Component {
                 <Route path="/applyjob" component={ApplyJobs} />
                 <Route path="/app" component={DefaultLayout} />
                 <Route path="/staff" component={StaffLayout} />
+                <Route path="/client" component={ClientLayout} />
+
                 <Route path="/settings" component={Settinglayout} />
                 <Route path="/tasks" component={Tasklayout} />
                 <Route path="/email" component={Emaillayout} />
