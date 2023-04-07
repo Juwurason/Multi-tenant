@@ -188,7 +188,7 @@ const StaffEditProfile = () => {
             </div>
             <div className="form-group">
               <label>Date Of Birth</label>
-              <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} />
+              <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} onChange={handleInputChange} />
             </div>
 
           </div>

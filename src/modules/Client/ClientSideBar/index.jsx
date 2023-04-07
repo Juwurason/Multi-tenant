@@ -88,7 +88,7 @@ const ClientSidebar = (props) => {
                                 <Link to="/"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
+                                <Link to="/client/client-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>
                             {/* <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-table"><i className="la la-file-pdf-o" /> <span>Tab</span></Link>

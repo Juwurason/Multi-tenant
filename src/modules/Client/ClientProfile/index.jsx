@@ -80,7 +80,7 @@ const ClientProfile = () => {
                             <h3 className="user-name m-t-0 mb-0">{profile.fullName}</h3>
                             {/* <h6 className="text-muted">MCP202224</h6> */}
                             {/* <small className="text-muted">{profile.email}</small> */}
-                            {/* <div className="staff-id">Staff ID : {profile.maxStaffId}</div> */}
+                            <div className="staff-id">NDIS No : {profile.ndisNo}</div>
                             {/* <div className="small doj text-muted">{profile.address}</div> */}
                             <div className="staff-msg"><Link className="btn btn-primary" to="/client/client-edit-profile">Edit Profile</Link></div>
                           </div>
