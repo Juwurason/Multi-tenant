@@ -125,7 +125,7 @@ const ClientEditProfile = () => {
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
+      const { data } = await privateHttp.post(`/Profiles/edit/${getClientProfile.profileId}?userId=${id.userId}`,
         formData
       )
       console.log(data);
@@ -209,13 +209,9 @@ const ClientEditProfile = () => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label>About Me</label><br />
-              <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
-            </div>
+
+
           </div>
-
-
         </div>
       </div>
     );
@@ -262,21 +258,26 @@ const ClientEditProfile = () => {
   const renderStep3 = () => {
     return (
       <div>
-        <h4 className="card-title">Bank information</h4>
+        <h4 className="card-title"></h4>
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <label>Account Name</label>
-              <input type="text" className="form-control" name='AccountName' value={editedProfile.AccountName || ''} onChange={handleInputChange} />
+              <label>Cultural Background</label>
+              <input type="text" className="form-control" name='culturalBackground' value={editedProfile.culturalBackground || ''} onChange={handleInputChange} />
             </div>
 
             <div className="form-group">
-              <label>Bank Name</label>
-              <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
+              <label>Preferred Language</label>
+              <input type="text" className="form-control" name='preferredLanguage' value={editedProfile.preferredLanguage || ''} onChange={handleInputChange} />
             </div>
             <div className="form-group">
-              <label>BSB</label>
-              <input type="text" className="form-control" name='bsb' value={editedProfile.bsb || ''} onChange={handleInputChange} />
+              <label>Interpreter Required?</label>
+              <label htmlFor="selectOption">Select Option: </label>
+              <select id="selectOption" name='requireInterpreter' value={editedProfile.requireInterpreter || ''} onChange={handleInputChange}>
+                <option value="">Please select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
             </div>
           </div>
           <div className="col-md-6">
@@ -411,7 +412,7 @@ const ClientEditProfile = () => {
                         <span className="sr-only">Loading...</span>
                       </div> : "Save"}
                     </button>}
-                  <Link to="/staff/staffprofile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
+                  <Link to="/client/client-profile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
                 </div>
               </form>
             </div>
