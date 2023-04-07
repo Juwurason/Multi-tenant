@@ -13,7 +13,7 @@ const subscriptionroute = ({ match }) => (
     <Switch>
         <Redirect exact from={`${match.url}/`} to={`${match.url}/employee-profile`} />
         <Route path={`${match.url}/employee-profile/:uid/*`} component={EmployeeProfile} />
-        <Route path={`${match.url}/client-profile`} component={ClientProfile} />
+        <Route path={`${match.url}/client-profile/:uid/*`} component={ClientProfile} />
         <Route path={`${match.url}/edit-profile/:uid`} component={editStaff} />
     </Switch>
 );

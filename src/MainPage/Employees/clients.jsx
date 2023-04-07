@@ -40,7 +40,7 @@ const Clients = () => {
               <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a>
               <div className="view-icons">
                 <Link to="/app/employees/clients" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                {/* <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link> */}
+                <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
               </div>
             </div>
           </div>
@@ -66,21 +66,13 @@ const Clients = () => {
               <label className="focus-label">Client Email</label>
             </div>
           </div>
-          {/* <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus select-focus">
-              <select className="select floating">
-                <option>Select Company</option>
-                <option>Global Technologies</option>
-                <option>Delta Infotech</option>
-              </select>
-              <label className="focus-label">Company</label>
-            </div>
-          </div> */}
+
           <div className="col-sm-6 col-md-3">
-            <a href="#" className="btn btn-success btn-block w-100"> Search </a>
+            <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
           </div>
         </div>
         {/* Search Filter */}
+
         <div className="row staff-grid-row">
 
           {
@@ -88,7 +80,7 @@ const Clients = () => {
               <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
                 <div className="profile-widget">
                   <div className="profile-img">
-                    <Link to="/app/profile/client-profile" className="avatar"><img alt="" src={Avatar_19} /></Link>
+                    <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="avatar"><img alt="" src={Avatar_19} /></Link>
                   </div>
                   <div className="dropdown profile-action">
                     <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
@@ -97,11 +89,11 @@ const Clients = () => {
                       <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_client"><i className="fa fa-trash-o m-r-5" /> Delete</a>
                     </div>
                   </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/client-profile">{data.firstName} {data.surName}</Link></h4>
-                  <h5 className="user-name m-t-10 mb-0 text-ellipsis"><Link to="/app/profile/client-profile">{data.email}</Link></h5>
+                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
+                  <h5 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`}>{data.email}</Link></h5>
                   {/* <div className="small text-muted">CEO</div> */}
                   {/* <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat" className="btn btn-white btn-sm m-t-10 mr-1">Message</Link> */}
-                  <Link to="/app/profile/client-profile" className="btn btn-white btn-sm m-t-10">View Profile</Link>
+                  <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="btn btn-white btn-sm m-t-10">View Profile</Link>
                 </div>
               </div>
             )

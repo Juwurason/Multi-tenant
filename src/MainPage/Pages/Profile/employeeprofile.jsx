@@ -90,7 +90,7 @@ const EmployeeProfile = () => {
                             </li>
                             <li>
                               <div className="title">Address:</div>
-                              <div className="text"></div>
+                              <div className="text">{staffOne.address}</div>
                             </li>
                             <li>
                               <div className="title">Gender:</div>
@@ -257,10 +257,10 @@ const EmployeeProfile = () => {
                           </thead>
                           <tbody>
                             <tr>
-                              <td>Leo</td>
-                              <td>Brother</td>
-                              <td>Feb 16th, 2019</td>
-                              <td>9876543210</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
                               <td className="text-end">
                                 <div className="dropdown dropdown-action">
                                   <a aria-expanded="false" data-bs-toggle="dropdown" className="action-icon dropdown-toggle" href="#"><i className="material-icons">more_vert</i></a>
@@ -282,7 +282,7 @@ const EmployeeProfile = () => {
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Education Informations <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i className="fa fa-pencil" /></a></h3>
+                      <h3 className="card-title">Education Information <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i className="fa fa-pencil" /></a></h3>
                       <div className="experience-box">
                         <ul className="experience-list">
                           <li>

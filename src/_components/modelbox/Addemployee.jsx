@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import http from '../../api/http'
 import { useCompanyContext } from '../../context';
@@ -15,6 +16,7 @@ const Addemployee = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [offerLetter, setOfferLetter] = useState(null);
   const privateHttp = useHttp();
+  const navigate = useHistory()
 
 
   const submitForm = async (e) => {
@@ -43,9 +45,8 @@ const Addemployee = () => {
       const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
         formData
       )
-      console.log(data);
       toast.success(data.message)
-
+      navigate.push('/app/main/dashboard')
       setLoading(false)
 
     } catch (error) {
@@ -100,13 +101,13 @@ const Addemployee = () => {
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Phone Number</label>
+                      <label className="col-form-label">Phone Number <span className="text-danger">*</span></label>
                       <input className="form-control" type="tel" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label className="col-form-label">Address</label>
+                      <label className="col-form-label">Address <span className="text-danger">*</span></label>
                       <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                     </div>
                   </div>

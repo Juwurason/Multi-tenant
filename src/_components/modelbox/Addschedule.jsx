@@ -3,8 +3,7 @@ import React from 'react';
 import { useCompanyContext } from '../../context';
 
 const Addschedule = () => {
-  const { staff } = useCompanyContext()
-  console.log(staff);
+  const { staff, clients } = useCompanyContext()
   return (
     <>
       {/* Add Schedule Modal */}
@@ -26,7 +25,7 @@ const Addschedule = () => {
                       <label className="col-form-label">Staff Name</label>
                       <div>
                         <select className="form-select">
-                          <option defaultValue>--Select a staff--</option>
+                          <option defaultValue hidden>--Select a staff--</option>
                           {
                             staff.map((data, index) =>
                               <option value={data.staffId} key={index}>{data.fullName}</option>)
@@ -39,9 +38,9 @@ const Addschedule = () => {
                       <label className="col-form-label">Client Name</label>
                       <div>
                         <select className="form-select">
-                          <option defaultValue>--Select a Client--</option>
+                          <option defaultValue hidden>--Select a Client--</option>
                           {
-                            staff.map((data, index) =>
+                            clients.map((data, index) =>
                               <option value={data.staffId} key={index}>{data.fullName}</option>)
                           }
                         </select></div>

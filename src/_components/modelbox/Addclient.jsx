@@ -49,9 +49,8 @@ const AddClient = () => {
       const { data } = await privateHttp.post(`/Profiles/add_client?userId=${userProfile.userId}`,
         formData
       )
-      console.log(data);
       toast.success(data.message)
-
+      navigate.push('/app/main/dashboard')
       setLoading(false)
 
     } catch (error) {
@@ -73,7 +72,7 @@ const AddClient = () => {
           <div className="modal-content overflow-auto">
             <div className="modal-header">
               <h5 className="modal-title">Add Client</h5>
-              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+              <button type="button" className="close bg-primary" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
