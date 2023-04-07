@@ -67,7 +67,7 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('clients') ? "active" : ""}>
-                                <Link to="/"><i className="la la-user" /> <span>Profile</span></Link>
+                                <Link to="/client/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
 
                             <li className={pathname.includes('leads') ? "active" : ""}>
