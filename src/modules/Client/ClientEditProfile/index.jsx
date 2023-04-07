@@ -71,9 +71,11 @@ const ClientEditProfile = () => {
     const name = target.name;
     const value = target.value;
 
+    const newValue = value === "" ? "" : value;
+
     setEditedProfile({
       ...editedProfile,
-      [name]: value
+      [name]: newValue
     });
   }
 
@@ -88,6 +90,7 @@ const ClientEditProfile = () => {
 
     const formData = new FormData()
     formData.append("CompanyId", id.companyId);
+    formData.append("ProfileId", getClientProfile.profileId);
     formData.append("firstName", profile.firstName);
     formData.append("email", profile.email);
     formData.append("phoneNumber", profile.phoneNumber);

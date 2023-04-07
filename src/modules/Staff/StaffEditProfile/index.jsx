@@ -70,10 +70,10 @@ const StaffEditProfile = () => {
     const target = event.target;
     const name = target.name;
     const value = target.value;
-
+    const newValue = value === "" ? "" : value;
     setEditedProfile({
       ...editedProfile,
-      [name]: value
+      [name]: newValue
     });
   }
 
