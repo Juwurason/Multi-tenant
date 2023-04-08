@@ -60,7 +60,7 @@ const AllEmployees = () => {
                   <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add Employee</a>
                   <div className="view-icons">
                     <Link to="/app/employee/allemployees" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                    {/* <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link> */}
+                    <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
                   </div>
                 </div>
               </div>
@@ -88,7 +88,7 @@ const AllEmployees = () => {
               </div>
 
               <div className="col-sm-6 col-md-3">
-                <a href="#" className="btn btn-success btn-block w-100"> Search </a>
+                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
               </div>
             </div>
             {/* Search Filter */}

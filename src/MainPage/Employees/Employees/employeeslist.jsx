@@ -2,11 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { Table } from 'antd';
 import 'antd/dist/antd.css';
-import { itemRender, onShowSizeChange } from "../../paginationfunction"
 import "../../antdstyle.css"
-import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath"
+import '../../../assets/css/table.css'
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Addemployee from "../../../_components/modelbox/Addemployee"
 import Header from '../../../initialpage/Sidebar/header'
@@ -17,31 +15,14 @@ import { useCompanyContext } from '../../../context';
 
 const Employeeslist = () => {
   const { staff } = useCompanyContext()
-  console.log(staff);
   const [menu, setMenu] = useState(false)
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
-  console.log(staff);
 
-  // const [data, setData] = useState([
-  //   {
-  //     id: 1, image: Avatar_02,
-  //     name: "Makinde",
-  //     role: "Web Designer",
-  //     employee_id: "FT-0001",
-  //     email: "johndoe@example.com",
-  //     mobile: '9876543210',
-  //     joindate: "1 Jan 2013"
-  //   },
-  // ]);
-  const data = staff.map(row => ({
-    name: row.fullName,
-    staff_id: row.maxStaffId,
-    email: row.email,
-    mobile: row.phoneNumber,
-  }));
+
+
 
 
   useEffect(() => {
@@ -52,57 +33,7 @@ const Employeeslist = () => {
       });
     }
   });
-
-  const columns = [
-
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      render: (text, record) => (
-        <h2 className="table-avatar">
-          <Link to="/app/profile/employee-profile" className="avatar"><img alt="" src={record.image} /></Link>
-          <Link to="/app/profile/employee-profile">{text} <span>{record.role}</span></Link>
-        </h2>
-      ),
-      sorter: (a, b) => a.name.length - b.name.length,
-    },
-    {
-      title: 'Staff ID',
-      dataIndex: 'staff_id',
-      sorter: (a, b) => a.staff_id.length - b.staff_id.length,
-    },
-
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      sorter: (a, b) => a.email.length - b.email.length,
-    },
-
-    {
-      title: 'Mobile',
-      dataIndex: 'mobile',
-      sorter: (a, b) => a.mobile.length - b.mobile.length,
-    },
-
-    // {
-    //   title: 'Join Date',
-    //   dataIndex: 'joindate',
-    //   sorter: (a, b) => a.joindate.length - b.joindate.length,
-    // },
-
-    {
-      title: 'Action',
-      render: (text, record) => (
-        <div className="dropdown dropdown-action text-start">
-          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a>
-            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-          </div>
-        </div>
-      ),
-    },
-  ]
+  console.log(staff);
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -111,7 +42,7 @@ const Employeeslist = () => {
         <Sidebar />
         <div className="page-wrapper">
           <Helmet>
-            <title>Employeeslist - HRMS Admin Template</title>
+            <title>Staff List</title>
             <meta name="description" content="Login page" />
           </Helmet>
           {/* Page Content */}
@@ -158,29 +89,82 @@ const Employeeslist = () => {
               </div>
 
               <div className="col-sm-6 col-md-3">
-                <a href="#" className="btn btn-success btn-block w-100"> Search </a>
+                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
               </div>
             </div>
             {/* /Search Filter */}
-            <div className="row">
-              <div className="col-md-12">
-                <div className="table-responsive">
-                  <Table className="table-striped"
-                    pagination={{
-                      total: data.length,
-                      showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                      showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
-                    }}
-                    style={{ overflowX: 'auto' }}
-                    columns={columns}
-                    // bordered
-                    dataSource={data}
-                    rowKey={record => record.id}
-                    onChange={console.log("change")}
-                  />
+
+
+            <div className="">
+              <div className="table-responsive">
+                <div className="table-wrapper">
+                  <div className="table-title bg-primary">
+                    <div className="row">
+                      <div className="col-sm-5">
+
+                      </div>
+                      <div className="col-sm-7">
+                        <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Download PDF</span></a>
+                        <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Export to Excel</span></a>
+                      </div>
+                    </div>
+                  </div>
+                  <table className="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Staff ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        staff.map(data =>
+
+                          <tr key={data.staffId}>
+                            <td>{data.staffId}</td>
+                            <td><a href="#"> {data.maxStaffId}</a></td>
+                            <td><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}> {data.fullName}</Link></td>
+                            <td>{data.email}</td>
+                            <td>{data.phoneNumber}</td>
+                            <td>{data.gender}</td>
+                            <td><span className="status text-success">•</span> Active</td>
+                            <td>
+                              <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
+                                <i className="material-icons"></i>
+                              </Link>
+                              <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
+                            </td>
+                          </tr>
+                        )
+                      }
+
+
+
+
+                    </tbody>
+                  </table>
+                  <div className="clearfix">
+                    <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <ul className="pagination">
+                      <li className="page-item disabled"><a href="#">Previous</a></li>
+                      <li className="page-item"><a href="#" className="page-link">1</a></li>
+                      <li className="page-item"><a href="#" className="page-link">2</a></li>
+                      <li className="page-item active"><a href="#" className="page-link">3</a></li>
+                      <li className="page-item"><a href="#" className="page-link">4</a></li>
+                      <li className="page-item"><a href="#" className="page-link">5</a></li>
+                      <li className="page-item"><a href="#" className="page-link">Next</a></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
+
+
           </div>
           {/* /Page Content */}
           {/* Add Employee Modal */}
