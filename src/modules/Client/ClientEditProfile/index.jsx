@@ -6,7 +6,7 @@ import man from "../../../assets/img/man.png"
 import useHttp from '../../../hooks/useHttp';
 import { toast } from "react-toastify";
 
-const StaffEditProfile = () => {
+const ClientEditProfile = () => {
 
   const [profile, setProfile] = useState({})
   const [editedProfile, setEditedProfile] = useState({});
@@ -15,12 +15,12 @@ const StaffEditProfile = () => {
   const [image, setImage] = useState('')
 
   const privateHttp = useHttp()
-  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+  const getClientProfile = JSON.parse(localStorage.getItem('clientProfile'))
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+        const response = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`)
         setProfile(response.data)
         setEditedProfile(response.data)
         console.log(response.data);
@@ -70,7 +70,9 @@ const StaffEditProfile = () => {
     const target = event.target;
     const name = target.name;
     const value = target.value;
+
     const newValue = value === "" ? "" : value;
+
     setEditedProfile({
       ...editedProfile,
       [name]: newValue
@@ -88,7 +90,7 @@ const StaffEditProfile = () => {
 
     const formData = new FormData()
     formData.append("CompanyId", id.companyId);
-    formData.append("StaffId", getStaffProfile.staffId);
+    formData.append("ProfileId", getClientProfile.profileId);
     formData.append("firstName", profile.firstName);
     formData.append("email", profile.email);
     formData.append("phoneNumber", profile.phoneNumber);
@@ -96,17 +98,17 @@ const StaffEditProfile = () => {
     formData.append("middleName", editedProfile.middleName);
     formData.append("gender", editedProfile.gender);
     formData.append("dateOfBirth", editedProfile.dateOfBirth);
-    formData.append("aboutMe", editedProfile.aboutMe);
+    formData.append("ndisPlanNote", editedProfile.ndisPlanNote);
     formData.append("address", profile.address);
     formData.append("city", editedProfile.city);
     formData.append("country", editedProfile.country);
     formData.append("state", editedProfile.state);
     formData.append("postcode", editedProfile.postalCode);
-    formData.append("accountName", editedProfile.accountName);
-    formData.append("accountNumber", editedProfile.accountNumber);
-    formData.append("bankName", editedProfile.bankName);
-    formData.append("branch", editedProfile.branch);
-    formData.append("bsb", editedProfile.bsb);
+    formData.append("culturalBackground", editedProfile.culturalBackground);
+    formData.append("indigenousSatatus", editedProfile.indigenousSatatus);
+    formData.append("preferredLanguage", editedProfile.preferredLanguage);
+    formData.append("ndisPlan", editedProfile.ndisPlan);
+    formData.append("requireInterpreter", editedProfile.requireInterpreter);
     formData.append("suburb", editedProfile.kinSuburb);
     formData.append("nextOfKin", editedProfile.kinName);
     formData.append("kinAddress", editedProfile.kinAddress);
@@ -118,14 +120,12 @@ const StaffEditProfile = () => {
     formData.append("kinState", editedProfile.kinState);
     formData.append("relationship", editedProfile.relationship);
     formData.append("imageFile", editedProfile.image);
-    formData.append("twitter", editedProfile.tweet);
-    formData.append("linkedIn", editedProfile.linkd);
-    formData.append("instagram", editedProfile.insta);
-    formData.append("facebook", editedProfile.fbook);
+    formData.append("financialArrangement", editedProfile.financialArrangement);
+    formData.append("privacyPreferences", editedProfile.privacyPreferences);
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
+      const { data } = await privateHttp.post(`/Profiles/edit/${getClientProfile.profileId}?userId=${id.userId}`,
         formData
       )
       console.log(data);
@@ -209,13 +209,9 @@ const StaffEditProfile = () => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label>About Me</label><br />
-              <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
-            </div>
+
+
           </div>
-
-
         </div>
       </div>
     );
@@ -260,42 +256,6 @@ const StaffEditProfile = () => {
   }
 
   const renderStep3 = () => {
-    return (
-      <div>
-        <h4 className="card-title">Bank information</h4>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="form-group">
-              <label>Account Name</label>
-              <input type="text" className="form-control" name='AccountName' value={editedProfile.AccountName || ''} onChange={handleInputChange} />
-            </div>
-
-            <div className="form-group">
-              <label>Bank Name</label>
-              <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
-            </div>
-            <div className="form-group">
-              <label>BSB</label>
-              <input type="text" className="form-control" name='bsb' value={editedProfile.bsb || ''} onChange={handleInputChange} />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <label>Account Number</label>
-              <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
-            </div>
-            <div className="form-group">
-              <label>Branch</label>
-              <input type="text" className="form-control" name='branch' value={editedProfile.branch || ''} onChange={handleInputChange} />
-            </div>
-
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const renderStep4 = () => {
     return (
       <div>
         <h4 className="card-title">Emergency Contact</h4>
@@ -352,34 +312,72 @@ const StaffEditProfile = () => {
     );
   }
 
-  const renderStep5 = () => {
+  const renderStep4 = () => {
     return (
       <div>
-        <h4 className="card-title">Other Information</h4>
+        <h4 className="card-title"></h4>
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <label>Instagram</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
+              <label>Cultural Background</label>
+              <input type="text" className="form-control" name='culturalBackground' value={editedProfile.culturalBackground || ''} onChange={handleInputChange} />
             </div>
 
             <div className="form-group">
-              <label>Facebook</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
+              <label>Preferred Language</label>
+              <input type="text" className="form-control" name='preferredLanguage' value={editedProfile.preferredLanguage || ''} onChange={handleInputChange} />
             </div>
+
+
+            <div className="form-group">
+              <label>Privacy Preferences</label><br />
+              <textarea className='form-control' name="privacyPreferences" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.privacyPreferences || ''} onChange={handleInputChange}></textarea>
+            </div>
+
+            <div className="form-group">
+              <label>Do you have an NDIS plan?</label>
+              <select className="form-control" name='ndisPlan' value={editedProfile.ndisPlan || ''} onChange={handleInputChange}>
+                <option value="" disabled>Please select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+             </div>
+
           </div>
+
           <div className="col-md-6">
             <div className="form-group">
-              <label>Twitter</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
+              <label>Indigenous Satatus</label>
+              <select className="form-control" name='indigenousSatatus' value={editedProfile.indigenousSatatus || ''} onChange={handleInputChange}>
+                <option value="" disabled>Please select</option>
+                <option value="Aboriginal and Torres Strait Islander">Aboriginal and Torres Strait Islander</option>
+                <option value="Aboriginal">Aboriginal</option>
+                <option value="Torres Strait Islander">Torres Strait Islander</option>
+                <option value="Not Aboriginal or Torres Strait Islander">Not Aboriginal or Torres Strait Islander</option>
+              </select>
             </div>
+
             <div className="form-group">
-              <label>LinkedIn</label>
-              <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
+              <label>Interpreter Required?</label>
+              <select className="form-control" name='requireInterpreter' value={editedProfile.requireInterpreter || ''} onChange={handleInputChange}>
+                <option value="" disabled>Please select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Financial Arrangement</label><br />
+              <textarea className='form-control' name="financialArrangement" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.financialArrangement || ''} onChange={handleInputChange}></textarea>
             </div>
 
           </div>
+
         </div>
+        <div className="form-group">
+              <label>NDIS Plan Notes If Yes above, Include Plan approval Date and if No, State reason (e.g waiting for plan approval or plan review)</label><br />
+              <textarea className='form-control' name="ndisPlanNote" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.ndisPlanNote || ''} onChange={handleInputChange}></textarea>
+            </div>
       </div>
     );
   }
@@ -402,16 +400,15 @@ const StaffEditProfile = () => {
                 {step === 2 && renderStep2()}
                 {step === 3 && renderStep3()}
                 {step === 4 && renderStep4()}
-                {step === 5 && renderStep5()}
                 <div className="mt-3">
                   {step > 1 && <button className="btn btn-primary mr-2" onClick={handlePrev}>Previous</button>}
-                  {step < 5 ? <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> :
+                  {step < 4 ? <button style={{ marginLeft: '10px' }} className="btn btn-primary" onClick={handleNext}>Next</button> :
                     <button style={{ marginLeft: '10px' }} disabled={loading ? true : false} className="btn btn-success" type="submit" onClick={handleSave}>
                       {loading ? <div className="spinner-grow text-light" role="status">
                         <span className="sr-only">Loading...</span>
                       </div> : "Save"}
                     </button>}
-                  <Link to="/staff/staffprofile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
+                  <Link to="/client/client-profile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
                 </div>
               </form>
             </div>
@@ -422,4 +419,4 @@ const StaffEditProfile = () => {
   )
 };
 
-export default StaffEditProfile;
+export default ClientEditProfile;

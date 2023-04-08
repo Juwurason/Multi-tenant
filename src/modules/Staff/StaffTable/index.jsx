@@ -43,6 +43,17 @@ const StaffTable = () => {
     info.el.style.backgroundColor = info.event.backgroundColor;
   };
 
+  const renderEventContent = (eventInfo) => {
+    return (
+      <div
+        className="fc-event-title-container"
+        style={{ backgroundColor: eventInfo.event.backgroundColor }}
+      >
+        <span className="fc-event-title">{eventInfo.event.title}</span>
+      </div>
+    );
+  };
+
   const today = new Date();
   const todayEvents = events.filter(event => 
     event.date === `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
@@ -68,6 +79,7 @@ const StaffTable = () => {
                 events={formatEvents(todayEvents)}
                 eventRender={eventRender}
                 eventLimit={4}
+                eventContent={renderEventContent}
               />
             </div>
             {todayEvents.length > 4 && (

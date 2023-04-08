@@ -67,11 +67,11 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('clients') ? "active" : ""}>
-                                <Link to="/"><i className="la la-user" /> <span>Profile</span></Link>
+                                <Link to="/client/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
 
                             <li className={pathname.includes('leads') ? "active" : ""}>
-                                <Link to="/"><i className="la la-lock" /> <span>Change Password</span></Link>
+                                <Link to="/client/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
                             <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
@@ -88,7 +88,7 @@ const ClientSidebar = (props) => {
                                 <Link to="/"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
+                                <Link to="/client/client-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>
                             {/* <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-table"><i className="la la-file-pdf-o" /> <span>Tab</span></Link>
