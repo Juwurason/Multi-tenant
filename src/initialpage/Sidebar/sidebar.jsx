@@ -119,6 +119,9 @@ const Sidebar = (props) => {
               <li className={pathname.includes('clients') ? "active" : ""}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
+              <li className={pathname.includes('refferals') ? "active" : ""}>
+                <Link to="/app/employees/clients"><i className="la la-user-plus" /> <span>Refferals</span></Link>
+              </li>
               {/* <li className="submenu">
                 <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-rocket" /> <span> Projects</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "projects" ?
@@ -142,12 +145,22 @@ const Sidebar = (props) => {
               </li>
 
 
-              <li className={pathname.includes('leads') ? "active" : ""}>
+              {/* <li className={pathname.includes('leads') ? "active" : ""}>
                 <Link to="/app/employees/leads"><i className="la la-user-secret" /> <span>Leads</span></Link>
               </li>
               <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
                 <Link to="/app/employees/tickets"><i className="la la-ticket" /> <span>Tickets</span></Link>
+              </li> */}
+
+
+              <li className="menu-title">
+                <span>Report Management</span>
               </li>
+
+              <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
+                <Link to="/app/employee/document"><i className="la la-book" /> <span>Documents</span></Link>
+              </li>
+              {/*               
               <li className="menu-title">
                 <span>HR</span>
               </li>
@@ -209,7 +222,7 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li>
+              </li> */}
               {/* <li className="menu-title">
                 <span>Performance</span>
               </li>

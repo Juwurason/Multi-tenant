@@ -271,8 +271,14 @@ const StaffEditProfile = () => {
             </div>
 
             <div className="form-group">
+
               <label>Bank Name</label>
-              <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
+              {editedProfile.bankName === "" ?
+                <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
+                :
+                <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} readOnly />
+
+              }
             </div>
             <div className="form-group">
               <label>BSB</label>
@@ -282,7 +288,12 @@ const StaffEditProfile = () => {
           <div className="col-md-6">
             <div className="form-group">
               <label>Account Number</label>
-              <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
+              {editedProfile.accountNumber === "" ?
+                <input type="text" className="form-control" name='bankName' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
+                :
+                <input type="text" className="form-control" name='bankName' value={editedProfile.accountNumber || ''} onChange={handleInputChange} readOnly />
+
+              }
             </div>
             <div className="form-group">
               <label>Branch</label>

@@ -70,7 +70,7 @@ const ClientProfile = () => {
                             {/* <h5 className="company-role m-t-0 mb-0">Barry Cuda</h5> */}
                             <small className="text-muted">{clientOne.email}</small>
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
-                            <div className="staff-msg"><Link to="/conversation/chat" className="btn btn-primary">Edit Profile</Link></div>
+                            <div className="staff-msg"><Link to={`/app/employees/edit-client/${clientOne.profileId}`} className="btn btn-primary">Edit Profile</Link></div>
                           </div>
                         </div>
                         <div className="col-md-7">

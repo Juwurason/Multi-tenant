@@ -14,24 +14,6 @@ export const CompanyProvider = ({ children }) => {
     let isMounted = true;
 
     useEffect(() => {
-        async function FetchStaff() {
-            try {
-                const staffResponse = await privateHttp.get('/Staffs');
-                const staff = staffResponse.data;
-                setStaff(staff);
-            } catch (error) {
-                console.log(error);
-            }
-
-            try {
-                const clientResponse = await privateHttp.get('/Profiles');
-                const client = clientResponse.data;
-                setClients(client);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
         if (isMounted) {
             FetchStaff();
         }
@@ -40,6 +22,23 @@ export const CompanyProvider = ({ children }) => {
             isMounted = false;
         };
     }, []);
+    async function FetchStaff() {
+        try {
+            const staffResponse = await privateHttp.get('/Staffs');
+            const staff = staffResponse.data;
+            setStaff(staff);
+        } catch (error) {
+            console.log(error);
+        }
+
+        try {
+            const clientResponse = await privateHttp.get('/Profiles');
+            const client = clientResponse.data;
+            setClients(client);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 
@@ -82,7 +81,7 @@ export const CompanyProvider = ({ children }) => {
         companyId, email, storeCompanyId,
         storeAdminEmail, clearCompanyData,
         userProfile, setUserProfile,
-        staff, setStaff, clients
+        staff, setStaff, clients, FetchStaff
     };
 
     return (

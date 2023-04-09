@@ -6,7 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 
 import EmployeeProfile from "./employeeprofile"
 import ClientProfile from "./clientprofile"
-import editStaff from '../../Employees/Employees/editStaff';
+import EditStaff from '../../Employees/Employees/editStaff';
 
 
 const subscriptionroute = ({ match }) => (
@@ -14,7 +14,7 @@ const subscriptionroute = ({ match }) => (
         <Redirect exact from={`${match.url}/`} to={`${match.url}/employee-profile`} />
         <Route path={`${match.url}/employee-profile/:uid/*`} component={EmployeeProfile} />
         <Route path={`${match.url}/client-profile/:uid/*`} component={ClientProfile} />
-        <Route path={`${match.url}/edit-profile/:uid`} component={editStaff} />
+        <Route path={`${match.url}/edit-profile/:uid`} component={EditStaff} />
     </Switch>
 );
 

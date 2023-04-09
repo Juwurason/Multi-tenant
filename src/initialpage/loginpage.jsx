@@ -112,7 +112,7 @@ const Loginpage = () => {
 
     <>
       <Helmet>
-        <title>Login - Promax Multitenant App</title>
+        <title>Login</title>
         <meta name="description" content="Login page" />
       </Helmet>
 
@@ -124,7 +124,6 @@ const Loginpage = () => {
             <input type="email" className="form-control" placeholder="Email"
               onChange={e => setEmail(e.target.value)}
               value={email}
-
               required />
           </div>
           <div className="form-group d-flex justify-content-between border mt-4">
@@ -162,7 +161,7 @@ const Loginpage = () => {
           </div>
           <div className="form-group mt-4">
 
-            <p className="text-center"><span>Don't have an account?    </span> &nbsp; <Link to={'/register'}> Create an Account</Link></p>
+            <p className="text-center"><span>Don't have an account?  </span> &nbsp; <Link to={'/register'}> Create an Account</Link></p>
 
           </div>
         </form>

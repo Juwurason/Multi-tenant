@@ -26,17 +26,14 @@ import Employees from '../MainPage/Employees';
 import Projects from '../MainPage/Employees/Projects';
 import Employee from '../MainPage/Employees/Employees';
 import ProjectList from '../MainPage/Employees/Projects/projectlist'
-// import StaffDashboard from '../modules/Staff/StaffDashboard';
+import ChangePassword from '../MainPage/Administration/Settings/changepassword';
 
 export default [
    {
       path: 'main',
       component: Dashboard
    },
-   // {
-   //    path: 'staff',
-   //    component: StaffDashboard
-   // },
+
    {
       path: 'apps',
       component: Apps
@@ -60,6 +57,10 @@ export default [
    {
       path: 'profile',
       component: ProfilePage
+   },
+   {
+      path: 'change-password',
+      component: ChangePassword
    },
    {
       path: 'subscription',

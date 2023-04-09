@@ -1,12 +1,53 @@
-/**
- * Signin Firebase
- */
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
+import { useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
+import { toast } from "react-toastify";
+import usePublicHttp from '../../../hooks/usePublicHttp';
+
 
 const ChangePassword = () => {
+  const mail = JSON.parse(localStorage.getItem('user'))
+  const navigate = useHistory()
+  const [loading, setLoading] = useState(false)
+  const email = useRef(null);
+  const oldPassword = useRef(null)
+  const password = useRef(null)
+  const confirmPassword = useRef(null)
+  const publicHttp = usePublicHttp()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (email === "" || oldPassword === "" || password === "" || confirmPassword === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+    const info = {
+      email: email.current.value,
+      oldPassword: oldPassword.current.value,
+      password: password.current.value,
+      confirmPassword: confirmPassword.current.value,
+    }
+    try {
+      setLoading(true)
+      const { data } = await publicHttp.post("/Account/change_password", info)
+      console.log(data);
+      if (data.status === "Success") {
+        toast.success(data.message)
+        navigate.push("staff/staff/staffDashboard")
+      } else {
+        toast.error(data.message)
+        return
+      }
+      setLoading(false)
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+
 
   return (
     <>
@@ -27,27 +68,34 @@ const ChangePassword = () => {
                 </div>
               </div>
               {/* /Page Header */}
-              <form>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" ref={email} value={mail.email} readOnly className="form-control" />
+                </div>
                 <div className="form-group">
                   <label>Old password</label>
-                  <input type="password" className="form-control" />
+                  <input type="text" ref={oldPassword} className="form-control" />
                 </div>
                 <div className="form-group">
                   <label>New password</label>
-                  <input type="password" className="form-control" />
+                  <input type="text" ref={password} className="form-control" />
                 </div>
                 <div className="form-group">
                   <label>Confirm password</label>
-                  <input type="password" className="form-control" />
+                  <input type="text" ref={confirmPassword} className="form-control" />
                 </div>
                 <div className="submit-section">
-                  <button className="btn btn-primary submit-btn">Update Password</button>
+                  <button className="btn btn-primary submit-btn" disabled={loading ? true : false}>
+                    {loading ? <div className="spinner-grow text-light" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div> : "Update Password"}</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
-        {/* /Page Content */}
+
       </div>
       <Offcanvas />
     </>

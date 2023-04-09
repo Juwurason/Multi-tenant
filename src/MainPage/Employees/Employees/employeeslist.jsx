@@ -11,11 +11,46 @@ import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
+import useHttp from '../../../hooks/useHttp';
+import { toast } from 'react-toastify';
 
 
 const Employeeslist = () => {
-  const { staff } = useCompanyContext()
+  const privateHttp = useHttp()
+  const { staff, FetchStaff } = useCompanyContext()
   const [menu, setMenu] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const id = JSON.parse(localStorage.getItem('user'));
+  const handleDelete = async (e) => {
+    try {
+      setLoading(true)
+      const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
+        { userId: id.userId }
+      )
+      // console.log(data);
+      if (data.status === 'Success') {
+        toast.success(data.message);
+        FetchStaff()
+      } else {
+        toast.error(data.message);
+      }
+
+      setLoading(false)
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading(false);
+
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+  if (loading) {
+    toast("In Progress")
+  }
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
@@ -33,7 +68,6 @@ const Employeeslist = () => {
       });
     }
   });
-  console.log(staff);
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -118,26 +152,25 @@ const Employeeslist = () => {
                         <th>Email</th>
                         <th>Phone Number</th>
                         <th>Gender</th>
-                        <th>Status</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {
-                        staff.map(data =>
+                        staff.map((data, index) =>
 
                           <tr key={data.staffId}>
-                            <td>{data.staffId}</td>
+                            <td>{index + 1}</td>
                             <td><a href="#"> {data.maxStaffId}</a></td>
                             <td><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}> {data.fullName}</Link></td>
                             <td>{data.email}</td>
                             <td>{data.phoneNumber}</td>
                             <td>{data.gender}</td>
-                            <td><span className="status text-success">•</span> Active</td>
                             <td>
                               <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
                                 <i className="material-icons"></i>
                               </Link>
-                              <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
+                              <a onClick={() => handleDelete(data.staffId)} className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
                             </td>
                           </tr>
                         )
@@ -149,7 +182,7 @@ const Employeeslist = () => {
                     </tbody>
                   </table>
                   <div className="clearfix">
-                    <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <div className="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
                     <ul className="pagination">
                       <li className="page-item disabled"><a href="#">Previous</a></li>
                       <li className="page-item"><a href="#" className="page-link">1</a></li>

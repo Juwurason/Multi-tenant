@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa'
-import man from "../../../assets/img/man.png"
-import useHttp from '../../../hooks/useHttp';
+import man from "../../assets/img/man.png";
 import { toast } from "react-toastify";
+import useHttp from '../../hooks/useHttp';
 
-const EditStaff = () => {
+const EditClient = () => {
 
     useEffect(() => {
         if ($('.select').length > 0) {
@@ -32,11 +32,11 @@ const EditStaff = () => {
         }
     }
 
-    const [profile, setProfile] = useState({})
+    const [profile, setProfile] = useState({});
     const [editedProfile, setEditedProfile] = useState({});
     const [step, setStep] = useState(1);
-    const [loading, setLoading] = useState(false)
-    const [image, setImage] = useState('')
+    const [loading, setLoading] = useState(false);
+    const [image, setImage] = useState('');
 
 
 
@@ -51,7 +51,6 @@ const EditStaff = () => {
         setStep(step - 1);
     }
 
-
     function handleInputChange(event) {
         const target = event.target;
         const name = target.name;
@@ -63,13 +62,12 @@ const EditStaff = () => {
         });
     }
 
-    const privateHttp = useHttp()
-    const { uid } = useParams()
-
+    const privateHttp = useHttp();
+    const { uid } = useParams();
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await privateHttp.get(`/Staffs/${uid}`)
+                const response = await privateHttp.get(`/Profiles/${uid}`)
                 setProfile(response.data);
                 setEditedProfile(response.data)
                 console.log(response.data);
@@ -81,22 +79,25 @@ const EditStaff = () => {
     }, [])
 
     const id = JSON.parse(localStorage.getItem('user'))
-
+    console.log(editedProfile);
     const handleSave = async (e) => {
         e.preventDefault()
-
+        // if (documentName === "" ||  expire === "" || document === "")
+        //  {
+        //   return toast.error("Input Fields cannot be empty")
+        // }
 
         const formData = new FormData()
         formData.append("CompanyId", id.companyId);
-        formData.append("StaffId", uid);
-        formData.append("firstName", profile.firstName);
-        formData.append("email", profile.email);
+        formData.append("ProfileId", uid);
+        formData.append("FirstName", profile.firstName);
+        formData.append("Email", profile.email);
         formData.append("phoneNumber", profile.phoneNumber);
-        formData.append("surName", profile.surName);
-        formData.append("middleName", editedProfile.middleName);
-        formData.append("gender", editedProfile.gender);
-        formData.append("dateOfBirth", editedProfile.dateOfBirth);
-        formData.append("aboutMe", editedProfile.aboutMe);
+        formData.append("SurName", profile.surName);
+        formData.append("MiddleName", editedProfile.middleName);
+        formData.append("Gender", editedProfile.gender);
+        formData.append("DateOfBirth", editedProfile.dateOfBirth);
+        formData.append("address", editedProfile.address);
         formData.append("address", profile.address);
         formData.append("city", editedProfile.city);
         formData.append("country", editedProfile.country);
@@ -108,7 +109,7 @@ const EditStaff = () => {
         formData.append("branch", editedProfile.branch);
         formData.append("bsb", editedProfile.bsb);
         formData.append("suburb", editedProfile.kinSuburb);
-        formData.append("nextOfKin", editedProfile.kinName);
+        formData.append("NextOfKin", editedProfile.kinName);
         formData.append("kinAddress", editedProfile.kinAddress);
         formData.append("kinCity", editedProfile.kinCity);
         formData.append("kinCountry", editedProfile.kinCountry);
@@ -124,7 +125,7 @@ const EditStaff = () => {
         formData.append("facebook", editedProfile.fbook);
         try {
             setLoading(true)
-            const { data } = await privateHttp.post(`/Staffs/edit/${uid}?userId=${id.userId}`,
+            const { data } = await privateHttp.post(`/Profiles/edit/${uid}?userId=${id.userId}`,
                 formData
             )
             console.log(data);
@@ -178,7 +179,7 @@ const EditStaff = () => {
                             <input type="text" className="form-control" value={profile.firstName} readOnly />
                         </div>
                         <div className="form-group">
-                            <label>Last Name</label>
+                            <label>Middle Name</label>
                             <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
@@ -187,9 +188,8 @@ const EditStaff = () => {
                         </div>
                         <div className="form-group">
                             <label>Date Of Birth</label>
-                            <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} onChange={handleInputChange} />
+                            <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} />
                         </div>
-
 
                     </div>
                     <div className="col-md-6">
@@ -209,10 +209,7 @@ const EditStaff = () => {
                             </select>
                         </div>
 
-                        <div className="form-group">
-                            <label>About Me</label><br />
-                            <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
-                        </div>
+
                     </div>
 
 
@@ -224,7 +221,7 @@ const EditStaff = () => {
     const renderStep2 = () => {
         return (
             <div>
-                <h4 className="card-title">Postal Address</h4>
+                <h4 className="card-title"></h4>
                 <div className="row">
                     <div className="col-md-6">
                         <div className="form-group">
@@ -238,6 +235,14 @@ const EditStaff = () => {
                         <div className="form-group">
                             <label>State</label>
                             <input type="text" className="form-control" name='state' value={editedProfile.state || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>NDIS No</label>
+                            <input type="text" className="form-control" name='state' value={editedProfile.NDISNo || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Service agreement End Date</label>
+                            <input type="date" className="form-control" name='postalCode' value={editedProfile.AgreementEndDate || ''} onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className="col-md-6">
@@ -253,39 +258,13 @@ const EditStaff = () => {
                             <label>Postal Code</label>
                             <input type="text" className="form-control" name='postalCode' value={editedProfile.postalCode || ''} onChange={handleInputChange} />
                         </div>
-                    </div>
-                </div>
-                <div>
-                    <h4 className="card-title">Bank information</h4>
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>Account Name</label>
-                                <input type="text" className="form-control" name='AccountName' value={editedProfile.accountName || ''} onChange={handleInputChange} />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Bank Name</label>
-                                <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
-                            </div>
-                            <div className="form-group">
-                                <label>BSB</label>
-                                <input type="text" className="form-control" name='bsb' value={editedProfile.bsb || ''} onChange={handleInputChange} />
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>Account Number</label>
-                                <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
-                            </div>
-                            <div className="form-group">
-                                <label>Branch</label>
-                                <input type="text" className="form-control" name='branch' value={editedProfile.branch || ''} onChange={handleInputChange} />
-                            </div>
-
+                        <div className="form-group">
+                            <label>Service agreement Start Date</label>
+                            <input type="date" className="form-control" name='postalCode' value={editedProfile.AgreementStartDate || ''} onChange={handleInputChange} />
                         </div>
                     </div>
                 </div>
+
             </div>
         );
     }
@@ -351,28 +330,58 @@ const EditStaff = () => {
 
     const renderStep4 = () => {
         return (
-            <div style={{ height: "28rem" }}>
+
+
+
+
+            <div >
                 <h4 className="card-title">Other Information</h4>
                 <div className="row">
                     <div className="col-md-6">
                         <div className="form-group">
-                            <label>Instagram</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
+                            <label>Cultural Background</label>
+                            <input type="text" className="form-control" value={editedProfile.insta || ''} onChange={handleInputChange} />
                         </div>
 
                         <div className="form-group">
-                            <label>Facebook</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
+                            <label>Preferred Language</label>
+                            <input type="text" className="form-control" value={editedProfile.fbook || ''} onChange={handleInputChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Do you have an NDIS plan??</label>
+                            <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                                <option defaultValue hidden>Please Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
                     </div>
                     <div className="col-md-6">
+
                         <div className="form-group">
-                            <label>Twitter</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
+                            <label>Interpreter Required ?</label>
+                            <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                                <option defaultValue hidden>Please Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
                         <div className="form-group">
-                            <label>LinkedIn</label>
-                            <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
+                            <label>Indigenous Status</label>
+                            <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                                <option defaultValue hidden>Please Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <div className='col-md-12'>
+                        <div className="form-group">
+                            <label>NDIS Plan Notes If Yes above, Include Plan approval Date and if No, State reason (e.g waiting for plan approval or plan review)</label>
+                            <textarea name="" id="" className='form-control'></textarea>
                         </div>
 
                     </div>
@@ -400,7 +409,7 @@ const EditStaff = () => {
                                 {step === 3 && renderStep3()}
                                 {step === 4 && renderStep4()}
                                 <div className="mt-3 text-center">
-                                    <Link to="/app/employee/allemployees" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
+                                    <Link to="/app/employee/clients" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
                                     {step > 1 && <button className="btn btn-primary mr-2"
                                         style={{ marginLeft: '10px' }}
                                         onClick={handlePrev}>Previous</button>}
@@ -421,4 +430,4 @@ const EditStaff = () => {
     )
 };
 
-export default EditStaff;
+export default EditClient;

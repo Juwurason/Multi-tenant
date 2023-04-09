@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';

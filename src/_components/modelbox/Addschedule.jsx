@@ -38,7 +38,7 @@ const Addschedule = () => {
                       <label className="col-form-label">Client Name</label>
                       <div>
                         <select className="form-select">
-                          <option defaultValue hidden>--Select a Client--</option>
+                          <option defaultValue hidde>--Select a Client--</option>
                           {
                             clients.map((data, index) =>
                               <option value={data.staffId} key={index}>{data.fullName}</option>)

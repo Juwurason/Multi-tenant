@@ -11,13 +11,44 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
+import { toast } from 'react-toastify';
+import useHttp from '../../../hooks/useHttp';
 
 const AllEmployees = () => {
-  const { staff } = useCompanyContext()
-  const [menu, setMenu] = useState(false)
-  const handleDelete = (e) => {
-    e.preventDefault()
-    console.log('1234');
+  const privateHttp = useHttp();
+  const { staff, FetchStaff } = useCompanyContext();
+  const [menu, setMenu] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const id = JSON.parse(localStorage.getItem('user'));
+  const handleDelete = async (e) => {
+    try {
+      setLoading(true)
+      const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
+        { userId: id.userId }
+      )
+      console.log(data);
+      if (data.status === 'Success') {
+        toast.success(data.message);
+        FetchStaff()
+      } else {
+        toast.error(data.message);
+      }
+
+      setLoading(false)
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading(false);
+
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+  if (loading) {
+    toast("Loading")
   }
 
   const toggleMobileMenu = () => {
@@ -32,6 +63,7 @@ const AllEmployees = () => {
       });
     }
   });
+
 
   return (
     <>
@@ -106,16 +138,43 @@ const AllEmployees = () => {
                         <div className="dropdown-menu dropdown-menu-right">
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="dropdown-item">
                             <i className="fa fa-pencil m-r-5" /> Edit</Link>
-                          <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                          <a className="dropdown-item" href="#" onClick={() => handleDelete(data.staffId)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
+
+
 
 
                         </div>
                       </div>
                       <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
                       {/* <div className="small text-muted">Web Designer</div> */}
+                      <div className="modal custom-modal fade" id="delete_employee" role="dialog">
+                        <div className="modal-dialog modal-dialog-centered">
+                          <div className="modal-content">
+                            <div className="modal-body">
+                              <div className="form-header">
+                                <h3>Delete Staff</h3>
+                                <p>Are you sure want to delete?</p>
+                              </div>
+                              <div className="modal-btn delete-action">
+                                <div className="row">
+                                  <div className="col-6">
+                                    <a className="btn btn-primary continue-btn" >Delete</a>
+                                  </div>
+                                  <div className="col-6">
+                                    <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
 
+
+
+
+                  </div>
                 )
               }
 
@@ -137,28 +196,7 @@ const AllEmployees = () => {
           <Editemployee />
           {/* /Edit Employee Modal */}
           {/* Delete Employee Modal */}
-          <div className="modal custom-modal fade" id="delete_employee" role="dialog">
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-body">
-                  <div className="form-header">
-                    <h3>Delete Employee</h3>
-                    <p>Are you sure want to delete?</p>
-                  </div>
-                  <div className="modal-btn delete-action">
-                    <div className="row">
-                      <div className="col-6">
-                        <a className="btn btn-primary continue-btn" onClick={() => handleDelete(staff.userId)}>Delete</a>
-                      </div>
-                      <div className="col-6">
-                        <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
           {/* /Delete Employee Modal */}
         </div>
       </div>

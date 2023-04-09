@@ -21,7 +21,7 @@ const EmployeeProfile = () => {
       }
     }
     FetchStaff()
-  }, [])
+  }, []);
 
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const EmployeeProfile = () => {
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
                             <div className="staff-id">Staff ID : {staffOne.maxStaffId}</div>
-                            {/* <div className="small doj text-muted">Date of Join : 1st Jan 2013</div> */}
+                            <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg"><Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link></div>
                           </div>
                         </div>
@@ -78,15 +78,15 @@ const EmployeeProfile = () => {
                           <ul className="personal-info">
                             <li>
                               <div className="title">Phone:</div>
-                              <div className="text"><a href="">{staffOne.phoneNumber}</a></div>
+                              <div className="text"><a href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                             </li>
                             <li>
                               <div className="title">Email:</div>
-                              <div className="text"><a href="">{staffOne.email}</a></div>
+                              <div className="text"><a href={`mailto:${staffOne.email}`}>{staffOne.email}</a></div>
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text"></div>
+                              <div className="text">{staffOne.dateOfBirth}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>
@@ -137,7 +137,7 @@ const EmployeeProfile = () => {
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Personal Informations <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#personal_info_modal"><i className="fa fa-pencil" /></a></h3>
+                      <h3 className="card-title">Personal Informations</h3>
                       <ul className="personal-info">
                         <li>
                           <div className="title">Passport No.</div>
@@ -153,7 +153,7 @@ const EmployeeProfile = () => {
                         </li>
                         <li>
                           <div className="title">Nationality</div>
-                          <div className="text"></div>
+                          <div className="text">{staffOne.country}</div>
                         </li>
                         <li>
                           <div className="title">Religion</div>
@@ -178,20 +178,20 @@ const EmployeeProfile = () => {
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Emergency Contact <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i className="fa fa-pencil" /></a></h3>
+                      <h3 className="card-title">Emergency Contact </h3>
                       <h5 className="section-title">Primary</h5>
                       <ul className="personal-info">
                         <li>
                           <div className="title">Name</div>
-                          <div className="text"></div>
+                          <div className="text">{staffOne.nextOfKin}</div>
                         </li>
                         <li>
                           <div className="title">Relationship</div>
-                          <div className="text"></div>
+                          <div className="text">{staffOne.relationship}</div>
                         </li>
                         <li>
                           <div className="title">Phone </div>
-                          <div className="text"></div>
+                          <div className="text">{staffOne.kinPhoneNumber}</div>
                         </li>
                       </ul>
                       <hr />
@@ -222,11 +222,11 @@ const EmployeeProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Bank name</div>
-                          <div className="text"></div>
+                          <div className="text">{staffOne.bankName}</div>
                         </li>
                         <li>
                           <div className="title">Bank account No.</div>
-                          <div className="text"></div>
+                          <div className="text">{staffOne.accountNumber}</div>
                         </li>
                         <li>
                           <div className="title">IFSC Code</div>
@@ -243,7 +243,7 @@ const EmployeeProfile = () => {
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Family Informations <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i className="fa fa-pencil" /></a></h3>
+                      <h3 className="card-title">Family Informations</h3>
                       <div className="table-responsive">
                         <table className="table table-nowrap">
                           <thead>

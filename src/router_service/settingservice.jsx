@@ -15,7 +15,7 @@ import Toxboxsetting from '../MainPage/Administration/Settings/toxboxsetting';
 import CronSetting from '../MainPage/Administration/Settings/cronsetting';
 
 
-export default [  
+export default [
    {
       path: 'companysetting',
       component: Companysettings
@@ -48,10 +48,10 @@ export default [
       path: 'notifications',
       component: Notification
    },
-   {
-      path: 'change-password',
-      component: ChangePassword
-   },
+   // {
+   //    path: 'change-password',
+   //    component: ChangePassword
+   // },
    {
       path: 'leave-type',
       component: Leavetype
