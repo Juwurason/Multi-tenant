@@ -28,6 +28,19 @@ const ClientHeader = (props) => {
 
     let pathname = location.pathname
 
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentTime(new Date());
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, []);
+  
+    const options = { timeZone: 'Australia/Sydney' };
+    const timeString = currentTime.toLocaleTimeString('en-AU', options);
+
     return (
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
@@ -66,24 +79,14 @@ const ClientHeader = (props) => {
                 {/* /Search */}
                 {/* Flag */}
                 <li className="nav-item dropdown has-arrow flag-nav">
-                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                        <img src={lnEnglish} alt="" height={20} /> <span>English</span>
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                        <a href="" className="dropdown-item">
-                            <img src={lnEnglish} alt="" height={16} /> English
-                        </a>
-                        <a href="" className="dropdown-item">
-                            <img src={lnFrench} alt="" height={16} /> French
-                        </a>
-                        <a href="" className="dropdown-item">
-                            <img src={lnSpanish} alt="" height={16} /> Spanish
-                        </a>
-                        <a href="" className="dropdown-item">
-                            <img src={lnGerman} alt="" height={16} /> German
-                        </a>
-                    </div>
-                </li>
+          <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
+            <span className='fw-bold'>
+              {timeString}
+
+            </span>
+          </a>
+
+        </li>
                 {/* /Flag */}
                 {/* Notifications */}
                 <li className="nav-item dropdown">
