@@ -189,7 +189,7 @@ const Document = () => {
                                 </div>
                                 <div className="table-wrapper">
 
-                                    <table className="table table-striped table-hover">
+                                    <table className="table  table-hover">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -210,7 +210,7 @@ const Document = () => {
                                                         <td>{data.documentId}</td>
                                                         <td>{data.user}</td>
                                                         <td>{data.userRole}</td>
-                                                        <td className='d-flex flex-column'>
+                                                        <td className='d-flex flex-column bg-none'>
                                                             <span>{data.documentName}</span>
                                                             <span className='d-flex gap-2'>
                                                                 <button className='btn text-success btn-sm'
