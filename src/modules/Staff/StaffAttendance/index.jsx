@@ -88,10 +88,7 @@ const StaffAttendance = () => {
                         <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
                       </td>
                     </tr>
-
-
-
-
+          
                   </tbody>
                 </table>
                 <div className="clearfix">
