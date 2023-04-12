@@ -6,42 +6,28 @@ import Addemployee from "../../../_components/modelbox/Addemployee"
 import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
-import useHttp from '../../../hooks/useHttp';
-import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../../context';
 import moment from 'moment';
-import { FaCheckSquare, FaDownload, FaEye, FaTrash } from 'react-icons/fa';
+import { FaArrowCircleLeft, FaArrowCircleRight, FaCheckSquare, FaDownload, FaEye, FaTrash } from 'react-icons/fa';
+import ReactPaginate from 'react-paginate';
 
 const Document = () => {
-    const privateHttp = useHttp();
-    const { staff, clients } = useCompanyContext();
+    const { staff, clients, document, FetchStaff } = useCompanyContext();
     const [menu, setMenu] = useState(false)
-    const [loading, setLoading] = useState(false);
-    const [document, setDocument] = useState([]);
     const downloadLinkRef = useRef(null);
+    const [pageNumber, setPageNumber] = useState(0);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     FetchStaff()
 
-        const FetchDoc = async () => {
-            try {
-                setLoading(true)
-                const { data } = await privateHttp.get('/Documents/get_all_documents')
-                console.log(data);
-                setDocument(data)
-                setLoading(false)
-            } catch (error) {
-                console.log(error);
-                toast.error(error.response.data.message)
-                toast.error(error.response.data.title)
-                setLoading(false);
-            }
-            finally {
-                setLoading(false)
-            }
-        }
+    // }, [])
 
-        FetchDoc()
-    }, [])
+    const itemsPerPage = 10;
+    const pageCount = Math.ceil(document.length / itemsPerPage);
+    const displayData = document.slice(
+        pageNumber * itemsPerPage,
+        (pageNumber + 1) * itemsPerPage
+    );
 
     const handleView = (documentUrl) => {
         window.open(documentUrl, '_blank');
@@ -53,11 +39,6 @@ const Document = () => {
         downloadLinkRef.current.click();
     };
 
-
-
-    if (loading) {
-        toast("In Progress")
-    }
 
     const toggleMobileMenu = () => {
         setMenu(!menu)
@@ -224,9 +205,9 @@ const Document = () => {
                                         </thead>
                                         <tbody>
                                             {
-                                                document.map((data, index) =>
+                                                displayData.map((data, index) =>
                                                     <tr>
-                                                        <td>{index + 1}</td>
+                                                        <td>{data.documentId}</td>
                                                         <td>{data.user}</td>
                                                         <td>{data.userRole}</td>
                                                         <td className='d-flex flex-column'>
@@ -250,11 +231,13 @@ const Document = () => {
                                                         <td>{data.status}</td>
                                                         <td>{moment(data.dateCreated).format('lll')}</td>
                                                         <td>{moment(data.dateModified).format('lll')}</td>
-                                                        <td className='d-flex gap-2'>
-                                                            <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Approve" data-toggle="tooltip">
-                                                                <FaCheckSquare className='text-success' />
+                                                        <td className='d-flex justify-content-center align-items-center gap-2 h-100'>
+                                                            <Link className="btn bg-success text-white p-1" title="Approve" data-toggle="tooltip">
+                                                                Accepted
                                                             </Link>
-                                                            <a className="delete" title="Delete" data-toggle="tooltip"><FaTrash /></a>
+                                                            <Link className="btn bg-danger text-white p-1" title="Rejected " data-toggle="tooltip">
+                                                                Rejected
+                                                            </Link>
                                                         </td>
                                                     </tr>
                                                 )
@@ -264,18 +247,22 @@ const Document = () => {
 
                                         </tbody>
                                     </table>
-                                    <div className="clearfix">
-                                        <div className="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
-                                        <ul className="pagination">
-                                            <li className="page-item disabled"><a href="#">Previous</a></li>
-                                            <li className="page-item"><a href="#" className="page-link">1</a></li>
-                                            <li className="page-item"><a href="#" className="page-link">2</a></li>
-                                            <li className="page-item active"><a href="#" className="page-link">3</a></li>
-                                            <li className="page-item"><a href="#" className="page-link">4</a></li>
-                                            <li className="page-item"><a href="#" className="page-link">5</a></li>
-                                            <li className="page-item"><a href="#" className="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+                                    <ReactPaginate
+                                        pageCount={pageCount}
+                                        onPageChange={page => setPageNumber(page.selected)}
+                                        activeClassName={'items actives'}
+                                        breakClassName={'items break-me '}
+                                        breakLabel={'...'}
+                                        containerClassName={'pagination'}
+                                        disabledClassName={'disabled-page'}
+                                        marginPagesDisplayed={2}
+                                        nextClassName={"items next "}
+                                        nextLabel={< FaArrowCircleRight style={{ fontSize: 18, width: 150 }} />}
+                                        pageClassName={'items pagination-page '}
+                                        pageRangeDisplayed={2}
+                                        previousClassName={"items previous"}
+                                        previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
+                                    />
                                 </div>
                             </div>
                         </div>

@@ -127,7 +127,7 @@ const Clients = () => {
                         <td><span className="status text-success">•</span> Active</td>
                         <td>
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
-                            <i className="material-icons"></i>
+                            <i className="material-icons">mode_edit</i>
                           </Link>
                           <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
                         </td>

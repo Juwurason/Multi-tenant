@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa'
 import man from "../../../assets/img/man.png"
 import useHttp from '../../../hooks/useHttp';
+import { useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const EditStaff = () => {
@@ -72,7 +73,6 @@ const EditStaff = () => {
                 const response = await privateHttp.get(`/Staffs/${uid}`)
                 setProfile(response.data);
                 setEditedProfile(response.data)
-                console.log(response.data);
             } catch (error) {
                 console.log(error);
             }
@@ -130,6 +130,7 @@ const EditStaff = () => {
             console.log(data);
             if (data.status === 'Success') {
                 toast.success(data.message);
+                history.push('/app/employee/allemployees')
             } else {
                 toast.error(data.message);
             }

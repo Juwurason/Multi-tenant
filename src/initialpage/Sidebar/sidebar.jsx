@@ -92,6 +92,10 @@ const Sidebar = (props) => {
               <li className="menu-title">
                 <span>User Management</span>
               </li>
+              <li className={pathname.includes('admin') ? "active" : ""}>
+                <Link to="/"><i className="la la-user-lock" /> <span>Admin</span></Link>
+              </li>
+
               <li className="submenu" >
                 <a href="javascript:void(0)" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Staffs</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "employee" ?
