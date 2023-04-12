@@ -18,6 +18,7 @@ import "../../index.css"
 import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
+import useHttp from '../../../hooks/useHttp.jsx';
 
 
 const barchartdata = [
@@ -39,9 +40,65 @@ const linechartdata = [
   { y: '2012', "Total Sales": 100, 'Total Revenue': 50 }
 ];
 const AdminDashboard = () => {
+  const [staff, setStaff] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [document, setDocument] = useState([]);
+
+  const privateHttp = useHttp();
+
+  let isMounted = true;
+
+  useEffect(() => {
+    if (isMounted) {
+      FetchStaff();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+  async function FetchStaff() {
+    try {
+      const staffResponse = await privateHttp.get('/Staffs');
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const clientResponse = await privateHttp.get('/Profiles');
+      const client = clientResponse.data;
+      setClients(client);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const { data } = await privateHttp.get('/Documents/get_all_documents')
+      console.log(data);
+      setDocument(data)
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+
+    finally {
+      setLoading(false)
+    }
+  }
+
+
+
+
+
 
   const [menu, setMenu] = useState(false)
-  const { staff, clients, FetchStaff, document } = useCompanyContext()
+  // const { staff, clients, FetchStaff, document } = useCompanyContext()
   const toggleMobileMenu = () => {
     setMenu(!menu)
   }
