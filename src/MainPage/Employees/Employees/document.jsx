@@ -206,7 +206,7 @@ const Document = () => {
                                         <tbody>
                                             {
                                                 displayData.map((data, index) =>
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <td>{data.documentId}</td>
                                                         <td>{data.user}</td>
                                                         <td>{data.userRole}</td>
@@ -232,10 +232,10 @@ const Document = () => {
                                                         <td>{moment(data.dateCreated).format('lll')}</td>
                                                         <td>{moment(data.dateModified).format('lll')}</td>
                                                         <td className='d-flex justify-content-center align-items-center gap-2 h-100'>
-                                                            <Link className="btn bg-success text-white p-1" title="Approve" data-toggle="tooltip">
+                                                            <Link className="btn bg-success text-white fw-normal p-1" title="Approve" data-toggle="tooltip">
                                                                 Accepted
                                                             </Link>
-                                                            <Link className="btn bg-danger text-white p-1" title="Rejected " data-toggle="tooltip">
+                                                            <Link className="btn bg-danger text-white p-1 fw-normal" title="Rejected " data-toggle="tooltip">
                                                                 Rejected
                                                             </Link>
                                                         </td>

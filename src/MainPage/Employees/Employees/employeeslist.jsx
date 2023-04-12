@@ -161,13 +161,13 @@ const Employeeslist = () => {
 
                           <tr key={data.staffId}>
                             <td>{index + 1}</td>
-                            <td><a href="#"> {data.maxStaffId}</a></td>
+                            <td> {data.maxStaffId}</td>
                             <td><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}> {data.fullName}</Link></td>
                             <td>{data.email}</td>
                             <td>{data.phoneNumber}</td>
                             <td>{data.gender}</td>
                             <td>
-                              <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
+                              <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Edit" data-toggle="tooltip">
                                 <i className="material-icons">edit</i>
                               </Link>
                               <a onClick={() => handleDelete(data.staffId)} className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
