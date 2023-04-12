@@ -1,7 +1,7 @@
 /**
  * App Header
  */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -18,15 +18,26 @@ const StaffHeader = (props) => {
         props.onMenuClick()
     }
 
-    const staffRole = JSON.parse(localStorage.getItem('user'))
+    let pathname = location.pathname
+
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentTime(new Date());
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, []);
+  
+    const options = { timeZone: 'Australia/Sydney' };
+    const timeString = currentTime.toLocaleTimeString('en-AU', options);
 
     const handleLogout = () => {
         localStorage.removeItem('user')
         localStorage.removeItem('staffProfile')
         navigate.push("/login")
     }
-
-    let pathname = location.pathname
 
     return (
         <div className="header" style={{ right: "0px" }}>
@@ -65,25 +76,15 @@ const StaffHeader = (props) => {
                 </li>
                 {/* /Search */}
                 {/* Flag */}
-                <li className="nav-item dropdown has-arrow flag-nav">
-                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                        <img src={lnEnglish} alt="" height={20} /> <span>English</span>
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                        <a href="" className="dropdown-item">
-                            <img src={lnEnglish} alt="" height={16} /> English
-                        </a>
-                        <a href="" className="dropdown-item">
-                            <img src={lnFrench} alt="" height={16} /> French
-                        </a>
-                        <a href="" className="dropdown-item">
-                            <img src={lnSpanish} alt="" height={16} /> Spanish
-                        </a>
-                        <a href="" className="dropdown-item">
-                            <img src={lnGerman} alt="" height={16} /> German
-                        </a>
-                    </div>
-                </li>
+                 <li className="nav-item dropdown has-arrow flag-nav">
+          <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
+            <span className='fw-bold'>
+              {timeString}
+
+            </span>
+          </a>
+
+        </li>
                 {/* /Flag */}
                 {/* Notifications */}
                 <li className="nav-item dropdown">

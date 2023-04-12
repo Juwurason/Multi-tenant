@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import Offcanvas from '../../../Entryfile/offcanvance';
+import { Link } from 'react-router-dom';
 
 const StaffAttendance = () => {
 
@@ -36,39 +37,79 @@ const StaffAttendance = () => {
           <meta name="description" content="Attendance page" />
         </Helmet>
 
-
         <div className='content container-fluid'>
-        <div className="table-responsive">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>S/N</th>
-                <th>Staff</th>
-                <th>ClockIn</th>
-                <th>Duration</th>
-                <th>ClockOut</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((item, index) => (
-                <tr key={index}>
-                  <td>{startIndex + index + 1}</td>
-                  <td>{item.staff}</td>
-                  <td>{item.clockIn}</td>
-                  <td>{item.duration}</td>
-                  <td>{item.clockOut}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ marginRight: "1rem" }}>{`Page ${currentPage} of ${totalPages}`}</div>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-              <button onClick={handlePrevClick} disabled={currentPage === 1} style={{ backgroundColor: "blue", color: "white", marginRight: "0.5rem" }}>Prev</button>
-              <button onClick={handleNextClick} disabled={currentPage === totalPages} style={{ backgroundColor: "blue", color: "white" }}>Next</button>
+
+        <div className="page-header">
+            <div className="row">
+              <div className="col-sm-12">
+                <h3 className="page-title">Attendance</h3>
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item active">Attendance</li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+       
+        <div className="">
+            <div className="table-responsive">
+              <div className="table-wrapper">
+                <div className="table-title bg-primary">
+                  <div className="row">
+                    <div className="col-sm-5">
+
+                    </div>
+                    <div className="col-sm-7">
+                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Download PDF</span></a>
+                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Export to Excel</span></a>
+                    </div>
+                  </div>
+                </div>
+                <table className="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Staff</th>
+                      <th>ClockIn</th>
+                      <th>Duration</th>
+                      <th>ClockOut</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><a href="#">Michael Holz</a></td>
+                      <td>2/8/2023 9:50:00 AM</td>
+                      <td>8 Hrs 10 min</td>
+                      <td>2/8/2023 6:00:00 PM</td>
+                      <td>
+                        <a href="#" className="settings" title="Settings" data-toggle="tooltip"><i className="material-icons"></i></a>
+                        <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
+                      </td>
+                    </tr>
+
+
+
+
+                  </tbody>
+                </table>
+                <div className="clearfix">
+                  <div className="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
+                  <ul className="pagination">
+                    <li className="page-item disabled"><a href="#">Previous</a></li>
+                    <li className="page-item active"><a href="#" className="page-link">1</a></li>
+                    <li className="page-item"><a href="#" className="page-link">2</a></li>
+                    <li className="page-item"><a href="#" className="page-link">3</a></li>
+                    <li className="page-item"><a href="#" className="page-link">4</a></li>
+                    <li className="page-item"><a href="#" className="page-link">5</a></li>
+                    <li className="page-item"><a href="#" className="page-link">Next</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
