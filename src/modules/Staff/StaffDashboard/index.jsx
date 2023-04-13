@@ -35,10 +35,11 @@ const linechartdata = [
     { y: '2012', "Total Sales": 100, 'Total Revenue': 50 }
 ];
 
-const staffName = JSON.parse(localStorage.getItem('user'))
 const StaffDashboard = () => {
 
     const [menu, setMenu] = useState(false)
+    const [profile, setProfile] = useState([])
+    const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
     const toggleMobileMenu = () => {
         setMenu(!menu)
@@ -53,6 +54,19 @@ const StaffDashboard = () => {
             }, 1000)
         }
     });
+
+    useEffect(()=>{
+      const fetchProfile = async () => {
+        try {
+            const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+            setProfile(response.data)
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    fetchProfile()
+    },[])
 
     return (
         <>
@@ -71,7 +85,7 @@ const StaffDashboard = () => {
                         <div className="page-header">
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <h3 className="page-title">Welcome {staffName.firstName} {staffName.lastName}</h3>
+                                    <h3 className="page-title">Welcome {profile.fullName}</h3>
                                     <ul className="breadcrumb">
                                         <li className="breadcrumb-item active">Dashboard</li>
                                     </ul>
