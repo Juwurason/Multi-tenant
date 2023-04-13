@@ -14,6 +14,7 @@ import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../../MainPage/index.css"
 import StaffSidebar from '../StaffSidebar/index.jsx';
 import StaffHeader from '../StaffHeader/index.jsx';
+import useHttp from '../../../hooks/useHttp.jsx';
 
 
 const barchartdata = [
@@ -40,6 +41,7 @@ const StaffDashboard = () => {
     const [menu, setMenu] = useState(false)
     const [profile, setProfile] = useState([])
     const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+    const privateHttp = useHttp()
 
     const toggleMobileMenu = () => {
         setMenu(!menu)
