@@ -1,9 +1,40 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCompanyContext } from '../../context';
+import useHttp from '../../hooks/useHttp';
 
 const Addschedule = () => {
-  const { staff, clients } = useCompanyContext()
+  const id = JSON.parse(localStorage.getItem('user'));
+  const privateHttp = useHttp();
+  const { loading, setLoading } = useCompanyContext()
+  const [staff, setStaff] = useState([]);
+  const [clients, setClients] = useState([]);
+  const FetchSchedule = async () => {
+
+    try {
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const client = clientResponse.data;
+      setClients(client);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+
+  };
+  useEffect(() => {
+    FetchSchedule()
+  }, []);
   return (
     <>
       {/* Add Schedule Modal */}

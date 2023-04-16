@@ -15,7 +15,7 @@ import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
-import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt } from 'react-icons/fa';
+import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
@@ -144,31 +144,41 @@ const AdminDashboard = () => {
               </div>
             </div>
             {/* /Page Header */}
+            <h4>Overview</h4>
             <div className="row">
-              <DashboardCard title={"Total Staff"} content={staff.length} icon={<i className="fa fa-user" />}
+
+              <DashboardCard title={"Staffs"} sty={'text-success'} content={staff.length} icon={<FaUser className='fs-4
+                  text-success' />}
                 linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
               />
-              <DashboardCard title={"Total Client"} content={clients.length} icon={<i className="fa fa-users" />}
+              <DashboardCard title={"Clients"} content={clients.length} icon={<FaUsers className='fs-4' />}
                 linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
               />
-              <DashboardCard title={"Total Admin"} content={0} icon={<i className="fa fa-user" />}
+              <DashboardCard title={"Admin"} content={0} icon={<FaUser className='fs-4' />}
                 linkTitle={"View Clients"} loading={loading} link={''}
               />
-              <DashboardCard title={"Total Tickets"} content={0} icon={<FaTicketAlt />}
+              <DashboardCard title={"Tickets"} content={0} icon={<FaTicketAlt className='fs-4' />}
                 linkTitle={"View Tickets"} loading={loading} link={''}
               />
-              <DashboardCard title={"Total Document"} content={document.length} icon={<FaFolderOpen />}
+              <DashboardCard title={"Document"} content={document.length} icon={<FaFolderOpen className='fs-4' />}
                 linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
               />
-              <DashboardCard title={"Total Progress Notes "} content={0} icon={<FaFileAlt />}
+              <DashboardCard title={"Progress Notes "} content={0} icon={<FaFileAlt className='fs-4' />}
                 linkTitle={"View Progress Notes"} loading={loading} link={``}
               />
-              <DashboardCard title={"Total Shift Roaster "} content={0} icon={<FaCalendar />}
+              <DashboardCard title={"Shift Roaster "} content={0} icon={<FaCalendar className='fs-4' />}
                 linkTitle={"View Roaster"} loading={loading} link={``}
               />
-              <DashboardCard title={"Total Attendances"} content={0} icon={<FaClock />}
+              <DashboardCard title={"Attendances"} content={0} icon={<FaClock className='fs-4' />}
                 linkTitle={"View Attendance"} loading={loading} link={``}
               />
+
+
+
+
+
+
+
 
             </div>
             <div className="row">

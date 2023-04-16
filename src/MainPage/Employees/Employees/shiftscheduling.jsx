@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath"
@@ -7,11 +7,41 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
 import '../../../assets/css/table2.css'
-import { useCompanyContext } from '../../../context';
 import { FaSearch } from 'react-icons/fa';
+import { useCompanyContext } from '../../../context';
 
 const ShiftScheduling = () => {
-  const { staff, clients } = useCompanyContext()
+  const id = JSON.parse(localStorage.getItem('user'));
+  const privateHttp = useHttp();
+  const { loading, setLoading } = useCompanyContext();
+  const [staff, setStaff] = useState([]);
+  const [clients, setClients] = useState([]);
+  const FetchSchedule = async () => {
+
+    try {
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const client = clientResponse.data;
+      setClients(client);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+
+  };
+  useEffect(() => {
+    FetchSchedule()
+  }, []);
 
   // const privateHttp = useHttp()
   // useEffect(() => {

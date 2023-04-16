@@ -7,7 +7,7 @@ import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import moment from 'moment';
-import { FaArrowCircleLeft, FaArrowCircleRight, FaCheck, FaDownload, FaEye, FaFileExport, FaSearch, FaTrash } from 'react-icons/fa';
+import { FaArrowCircleLeft, FaArrowCircleRight, FaCheck, FaDownload, FaEye, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaSearch, FaTrash } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import '../../../assets/css/table2.css'
 import useHttp from '../../../hooks/useHttp';
@@ -224,10 +224,9 @@ const Document = () => {
                                     <input type="checkbox" id="export-file" />
                                     <div className="export__file-options ">
                                         <label>Export As &nbsp; ➜</label>
-                                        <label htmlFor="export-file" id="toPDF">PDF <img src="images/pdf.png" alt /></label>
-                                        <label htmlFor="export-file" id="toJSON">JSON <img src="images/json.png" alt /></label>
-                                        <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
-                                        <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
+                                        <label htmlFor="export-file" id="toPDF">PDF <FaFilePdf className='text-danger' /></label>
+                                        <label htmlFor="export-file" id="toCSV">CSV <FaFileCsv className='text-info' /></label>
+                                        <label htmlFor="export-file" id="toEXCEL">EXCEL <FaFileExcel className='text-warning' /></label>
                                     </div>
                                 </div>
                             </section>
