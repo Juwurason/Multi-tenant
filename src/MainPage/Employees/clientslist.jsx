@@ -7,9 +7,46 @@ import 'antd/dist/antd.css';
 import "../antdstyle.css"
 import { useCompanyContext } from '../../context';
 import AddClient from '../../_components/modelbox/Addclient';
+import '../../assets/css/table2.css'
+import ReactPaginate from 'react-paginate';
+import { FaArrowCircleLeft, FaArrowCircleRight, FaEdit, FaFileExport, FaSearch, FaTrash } from 'react-icons/fa';
+import useHttp from '../../hooks/useHttp';
+import moment from 'moment';
 
 const Clients = () => {
-  const { clients } = useCompanyContext()
+  const { loading, setLoading } = useCompanyContext()
+  const id = JSON.parse(localStorage.getItem('user'));
+  const [clients, setClients] = useState([]);
+  const privateHttp = useHttp();
+  const [pageNumber, setPageNumber] = useState(0);
+
+
+  const itemsPerPage = 10;
+  const pageCount = Math.ceil(clients.length / itemsPerPage);
+  const displayData = clients.slice(
+    pageNumber * itemsPerPage,
+    (pageNumber + 1) * itemsPerPage
+
+  );
+
+  const FetchClient = async () => {
+    try {
+      setLoading(true)
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const client = clientResponse.data;
+      setClients(client);
+
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }
+  };
+  useEffect(() => {
+    FetchClient()
+  }, []);
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -79,82 +116,106 @@ const Clients = () => {
         {/* Search Filter */}
 
 
-        <div className="">
-          <div className="table-responsive">
-            <div className="row mt-4">
-
-              <div className="col-sm-7 d-flex gap-2">
-                <a href="#" className="btn btn-info"><i className="material-icons"></i> <span>Download PDF</span></a>
-                <a href="#" className="btn btn-danger"><i className="material-icons"></i> <span>Export to Excel</span></a>
+        <main className="table">
+          <section className="table__header">
+            {/* <h1>Customer's Orders</h1> */}
+            <div className="input-group">
+              <input type="search" className='form-control' placeholder="Search Data..." />
+              <FaSearch className='text-dark' />
+            </div>
+            <div className="export__file">
+              <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
+                <FaFileExport className='text-white fs-3' /></label>
+              <input type="checkbox" id="export-file" />
+              <div className="export__file-options ">
+                <label>Export As &nbsp; ➜</label>
+                <label htmlFor="export-file" id="toPDF">PDF <img src="images/pdf.png" alt /></label>
+                <label htmlFor="export-file" id="toJSON">JSON <img src="images/json.png" alt /></label>
+                <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
+                <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
               </div>
             </div>
-            <div className="table-wrapper">
-              <div className="table-title bg-light">
+          </section>
+          <section className="table__body">
+            <table>
+              <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
+                <tr style={{ backgroundColor: "#18225C" }}>
 
-              </div>
-              <table className="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Gender</th>
-                    <th>State</th>
-                    <th>City</th>
-                    <th>Date of Birth</th>
-                    <th>user Modified</th>
-                    <th>Date Modified</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    clients.map(data =>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Gender</th>
+                  <th>State</th>
+                  <th>City</th>
+                  <th>Date of Birth</th>
+                  <th>Date Created</th>
+                  <th>Date Modified</th>
+                  <th>Status</th>
+                  <th>Actions</th>
 
-                      <tr key={data.profileId}>
-                        <td>{data.profileId}</td>
-                        <td>{data.fullName}</td>
-                        <td><a href="#"> {data.address}</a></td>
-                        <td><a href="#"> {data.email}</a></td>
-                        <td>{data.phoneNumber}</td>
-                        <td>{data.gender}</td>
-                        <td>{data.state}</td>
-                        <td>{data.state}</td>
-                        <td>{data.dateOfBirth}</td>
-                        <td>{data.dateOfBirth}</td>
-                        <td>{data.dateOfBirth}</td>
-                        <td><span className="status text-success">•</span> Active</td>
-                        <td>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  displayData.map((data, index) =>
+                    <tr key={index}>
+
+                      <td>{data.profileId}</td>
+                      <td className='fw-bold'>{data.fullName}</td>
+                      <td><a href="#"> {data.address}</a></td>
+                      <td><a href="#"> {data.email}</a></td>
+                      <td>{data.phoneNumber}</td>
+                      <td>{data.gender}</td>
+                      <td>{data.state}</td>
+                      <td>{data.state}</td>
+                      <td>{moment(data.dateOfBirth).format('ll')}</td>
+                      <td>{moment(data.dateCreated).format('lll')}</td>
+                      <td>{moment(data.dateModified).format('lll')}</td>
+                      <td><span className="status text-success">•</span> Active</td>
+                      <td>
+                        <span className='d-flex gap-2 align-items-center'>
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
-                            <i className="material-icons">mode_edit</i>
+                            <FaEdit className='text-info' />
                           </Link>
-                          <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
-                        </td>
-                      </tr>
-                    )
-                  }
+                          <a href="#" className="delete" title="Delete" data-toggle="tooltip"><FaTrash className='text-danger' /></a>
+                        </span>
+                      </td>
+
+
+                    </tr>
+                  )
+                }
 
 
 
 
-                </tbody>
-              </table>
-              <div className="clearfix">
-                <div className="hint-text">Showing <b>1</b> out of <b>25</b> entries</div>
-                <ul className="pagination">
-                  <li className="page-item disabled"><a href="#">Previous</a></li>
-                  <li className="page-item"><a href="#" className="page-link">1</a></li>
-                  <li className="page-item"><a href="#" className="page-link">2</a></li>
-                  <li className="page-item active"><a href="#" className="page-link">3</a></li>
-                  <li className="page-item"><a href="#" className="page-link">4</a></li>
-                  <li className="page-item"><a href="#" className="page-link">5</a></li>
-                  <li className="page-item"><a href="#" className="page-link">Next</a></li>
-                </ul>
-              </div>
+              </tbody>
+            </table>
+            <div className="clearfix">
+              <div className="hint-text">Showing <b>{1}</b> out of <b>{clients.length}</b> entries</div>
+
+              <ReactPaginate
+                pageCount={pageCount}
+                onPageChange={page => setPageNumber(page.selected)}
+                activeClassName={'items actives'}
+                breakClassName={'items break-me '}
+                breakLabel={'...'}
+                containerClassName={'pagination'}
+                disabledClassName={'disabled-page'}
+                marginPagesDisplayed={2}
+                nextClassName={"items next "}
+                nextLabel={< FaArrowCircleRight style={{ fontSize: 18, width: 150 }} />}
+                pageClassName={'items pagination-page '}
+                pageRangeDisplayed={2}
+                previousClassName={"items previous"}
+                previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
+              />
             </div>
-          </div>
-        </div>
+          </section>
+        </main>
+
 
 
 

@@ -23,15 +23,18 @@ import DeleteStaff from './deleteStaff';
 import ChangePassword from '../../Administration/Settings/changepassword';
 import Document from './document';
 import Refferal from './refferals';
+import AllAdmin from './Admin';
 
 const EmployeesRoute = ({ match }) => (
    <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/allemployees`} />
       <Route path={`${match.url}/allemployees`} component={AllEmployees} />
+      <Route path={`${match.url}/alladmin`} component={AllAdmin} />
       <Route path={`${match.url}/changePassword`} component={ChangePassword} />
       <Route path={`${match.url}/employees-list`} component={AllEmployeesList} />
       <Route path={`${match.url}/delete-staff`} component={DeleteStaff} />
       <Route path={`${match.url}/holidays`} component={Holidays} />
+
       <Route path={`${match.url}/document`} component={Document} />
       <Route path={`${match.url}/refferals`} component={Refferal} />
       <Route path={`${match.url}/leaves-admin`} component={LeaveAdmin} />

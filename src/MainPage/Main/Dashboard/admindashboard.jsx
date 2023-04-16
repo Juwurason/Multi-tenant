@@ -40,9 +40,10 @@ const linechartdata = [
   { y: '2012', "Total Sales": 100, 'Total Revenue': 50 }
 ];
 const AdminDashboard = () => {
+  const userObj = JSON.parse(localStorage.getItem('user'));
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
 
   const privateHttp = useHttp();
@@ -58,18 +59,19 @@ const AdminDashboard = () => {
       isMounted = false;
     };
   }, []);
+
   async function FetchStaff() {
+    setLoading(true)
     try {
-      const staffResponse = await privateHttp.get('/Staffs');
-      const staff = staffResponse.data;
-      setStaff(staff);
+      const { data } = await privateHttp.get(`Staffs?companyId=${userObj.companyId}`);
+      setStaff(data);
       setLoading(false)
     } catch (error) {
       console.log(error);
     }
 
     try {
-      const clientResponse = await privateHttp.get('/Profiles');
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${userObj.companyId}`);
       const client = clientResponse.data;
       setClients(client);
       setLoading(false)
@@ -78,8 +80,7 @@ const AdminDashboard = () => {
     }
 
     try {
-      const { data } = await privateHttp.get('/Documents/get_all_documents')
-      console.log(data);
+      const { data } = await privateHttp.get(`Documents/get_all_documents?companyId=${userObj.companyId}`);
       setDocument(data)
       setLoading(false)
     } catch (error) {
@@ -96,16 +97,15 @@ const AdminDashboard = () => {
 
 
 
-
-  const [menu, setMenu] = useState(false)
+  const [menu, setMenu] = useState(false);
   // const { staff, clients, FetchStaff, document } = useCompanyContext()
   const toggleMobileMenu = () => {
     setMenu(!menu)
-  }
+  };
 
   useEffect(() => {
     FetchStaff()
-  }, [])
+  }, []);
 
   useEffect(() => {
     let firstload = localStorage.getItem("firstload")
@@ -116,6 +116,9 @@ const AdminDashboard = () => {
       }, 1000)
     }
   });
+
+
+
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -143,28 +146,28 @@ const AdminDashboard = () => {
             {/* /Page Header */}
             <div className="row">
               <DashboardCard title={"Total Staff"} content={staff.length} icon={<i className="fa fa-user" />}
-                linkTitle={"View Staffs"} link={`/app/employee/allemployees`}
+                linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
               />
               <DashboardCard title={"Total Client"} content={clients.length} icon={<i className="fa fa-users" />}
-                linkTitle={"View Clients"} link={`/app/employee/clients`}
+                linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
               />
               <DashboardCard title={"Total Admin"} content={0} icon={<i className="fa fa-user" />}
-                linkTitle={"View Clients"} link={''}
+                linkTitle={"View Clients"} loading={loading} link={''}
               />
               <DashboardCard title={"Total Tickets"} content={0} icon={<FaTicketAlt />}
-                linkTitle={"View Tickets"} link={''}
+                linkTitle={"View Tickets"} loading={loading} link={''}
               />
               <DashboardCard title={"Total Document"} content={document.length} icon={<FaFolderOpen />}
-                linkTitle={"View Documents"} link={`/app/employee/document`}
+                linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
               />
               <DashboardCard title={"Total Progress Notes "} content={0} icon={<FaFileAlt />}
-                linkTitle={"View Progress Notes"} link={``}
+                linkTitle={"View Progress Notes"} loading={loading} link={``}
               />
               <DashboardCard title={"Total Shift Roaster "} content={0} icon={<FaCalendar />}
-                linkTitle={"View Roaster"} link={``}
+                linkTitle={"View Roaster"} loading={loading} link={``}
               />
               <DashboardCard title={"Total Attendances"} content={0} icon={<FaClock />}
-                linkTitle={"View Attendance"} link={``}
+                linkTitle={"View Attendance"} loading={loading} link={``}
               />
 
             </div>
@@ -222,7 +225,7 @@ const AdminDashboard = () => {
             </div>
 
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
                 <div className="card-group m-b-30">
                   <div className="card">
@@ -295,7 +298,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* Statistics Widget */}
 
             {/* /Statistics Widget */}

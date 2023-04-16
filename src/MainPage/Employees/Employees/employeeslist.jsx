@@ -10,17 +10,45 @@ import Addemployee from "../../../_components/modelbox/Addemployee"
 import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
-import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
+import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
+import { useCompanyContext } from '../../../context';
+import ReactPaginate from 'react-paginate';
 
 
 const Employeeslist = () => {
   const privateHttp = useHttp()
-  const { staff, FetchStaff } = useCompanyContext()
   const [menu, setMenu] = useState(false)
-  const [loading, setLoading] = useState(false);
+  const [staff, setStaff] = useState([]);
+  const { loading, setLoading } = useCompanyContext();
   const id = JSON.parse(localStorage.getItem('user'));
+  const [pageNumber, setPageNumber] = useState(0);
+
+
+  const itemsPerPage = 10;
+  const pageCount = Math.ceil(staff.length / itemsPerPage);
+  const displayData = staff.slice(
+    pageNumber * itemsPerPage,
+    (pageNumber + 1) * itemsPerPage
+
+  );
+
+  const FetchStaff = async () => {
+    try {
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+
+    FetchStaff()
+  }, []);
+
   const handleDelete = async (e) => {
     try {
       setLoading(true)
@@ -48,9 +76,7 @@ const Employeeslist = () => {
       setLoading(false)
     }
   }
-  if (loading) {
-    toast("In Progress")
-  }
+
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
@@ -157,7 +183,7 @@ const Employeeslist = () => {
                     </thead>
                     <tbody>
                       {
-                        staff.map((data, index) =>
+                        displayData.map((data, index) =>
 
                           <tr key={data.staffId}>
                             <td>{index + 1}</td>
@@ -182,17 +208,28 @@ const Employeeslist = () => {
                     </tbody>
                   </table>
                   <div className="clearfix">
-                    <div className="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
-                    <ul className="pagination">
-                      <li className="page-item disabled"><a href="#">Previous</a></li>
-                      <li className="page-item"><a href="#" className="page-link">1</a></li>
-                      <li className="page-item"><a href="#" className="page-link">2</a></li>
-                      <li className="page-item active"><a href="#" className="page-link">3</a></li>
-                      <li className="page-item"><a href="#" className="page-link">4</a></li>
-                      <li className="page-item"><a href="#" className="page-link">5</a></li>
-                      <li className="page-item"><a href="#" className="page-link">Next</a></li>
-                    </ul>
+                    <div className="hint-text">Showing <b>1</b> out of <b>{staff.length}</b> entries</div>
+
+
+                    <ReactPaginate
+                      pageCount={pageCount}
+                      onPageChange={page => setPageNumber(page.selected)}
+                      activeClassName={'items actives'}
+                      breakClassName={'items break-me '}
+                      breakLabel={'...'}
+                      containerClassName={'pagination'}
+                      disabledClassName={'disabled-page'}
+                      marginPagesDisplayed={2}
+                      nextClassName={"items next "}
+                      nextLabel={< FaArrowCircleRight style={{ fontSize: 18, width: 150 }} />}
+                      pageClassName={'items pagination-page '}
+                      pageRangeDisplayed={2}
+                      previousClassName={"items previous"}
+                      previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
+                    />
                   </div>
+
+
                 </div>
               </div>
             </div>

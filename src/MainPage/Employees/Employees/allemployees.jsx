@@ -2,31 +2,48 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import {
-  Avatar_01, Avatar_02, Avatar_03, Avatar_04, Avatar_05, Avatar_11, Avatar_12, Avatar_09,
-  Avatar_10, Avatar_08, Avatar_13, Avatar_16
+  Avatar_02
 } from "../../../Entryfile/imagepath"
 import Addemployee from "../../../_components/modelbox/Addemployee"
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
-import { useCompanyContext } from '../../../context';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
+import { useCompanyContext } from '../../../context';
 
 const AllEmployees = () => {
   const privateHttp = useHttp();
-  const { staff, FetchStaff } = useCompanyContext();
-  const [menu, setMenu] = useState(false);
-  const [loading, setLoading] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
+  const [staff, setStaff] = useState([]);
+  const { loading, setLoading } = useCompanyContext();
+  const FetchStaff = async () => {
+    try {
+      setLoading(true);
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+
+    FetchStaff()
+  }, []);
+
+  const [menu, setMenu] = useState(false);
+
   const handleDelete = async (e) => {
     try {
       setLoading(true)
       const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
         { userId: id.userId }
       )
-      console.log(data);
       if (data.status === 'Success') {
         toast.success(data.message);
         FetchStaff()
@@ -47,9 +64,7 @@ const AllEmployees = () => {
       setLoading(false)
     }
   }
-  if (loading) {
-    toast("Loading")
-  }
+
 
   const toggleMobileMenu = () => {
     setMenu(!menu)
@@ -89,7 +104,7 @@ const AllEmployees = () => {
                   </ul>
                 </div>
                 <div className="col-auto float-end ml-auto">
-                  <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add Employee</a>
+                  <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New Staff</a>
                   <div className="view-icons">
                     <Link to="/app/employee/allemployees" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                     <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>

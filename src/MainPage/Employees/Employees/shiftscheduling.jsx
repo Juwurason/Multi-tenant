@@ -6,8 +6,9 @@ import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avata
 import Offcanvas from '../../../Entryfile/offcanvance';
 import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
-import '../../../assets/css/table.css'
+import '../../../assets/css/table2.css'
 import { useCompanyContext } from '../../../context';
+import { FaSearch } from 'react-icons/fa';
 
 const ShiftScheduling = () => {
   const { staff, clients } = useCompanyContext()
@@ -121,64 +122,65 @@ const ShiftScheduling = () => {
           </div>
           {/* Search Filter */}
 
-          <div className="">
-            <div className="table-responsive">
-              <div className="table-wrapper">
-                <div className="table-title bg-primary">
-                  <div className="row">
-                    <div className="col-sm-5">
 
-                    </div>
-                    <div className="col-sm-7">
-                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Download PDF</span></a>
-                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Export to Excel</span></a>
-                    </div>
-                  </div>
-                </div>
-                <table className="table table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Name</th>
-                      <th>Date Created</th>
-                      <th>Role</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td><a href="#"><img src="/examples/images/avatar/1.jpg" className="avatar" alt="Avatar" /> Michael Holz</a></td>
-                      <td>04/10/2013</td>
-                      <td>Admin</td>
-                      <td><span className="status text-success">•</span> Active</td>
-                      <td>
-                        <a href="#" className="settings" title="Settings" data-toggle="tooltip"><i className="material-icons"></i></a>
-                        <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
-                      </td>
-                    </tr>
-
-
-
-
-                  </tbody>
-                </table>
-                <div className="clearfix">
-                  <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                  <ul className="pagination">
-                    <li className="page-item disabled"><a href="#">Previous</a></li>
-                    <li className="page-item"><a href="#" className="page-link">1</a></li>
-                    <li className="page-item"><a href="#" className="page-link">2</a></li>
-                    <li className="page-item active"><a href="#" className="page-link">3</a></li>
-                    <li className="page-item"><a href="#" className="page-link">4</a></li>
-                    <li className="page-item"><a href="#" className="page-link">5</a></li>
-                    <li className="page-item"><a href="#" className="page-link">Next</a></li>
-                  </ul>
+          <main className="table">
+            <section className="table__header">
+              {/* <h1>Customer's Orders</h1> */}
+              <div className="input-group">
+                <input type="search" className='form-control' placeholder="Search Data..." />
+                <FaSearch />
+              </div>
+              <div className="export__file">
+                <label htmlFor="export-file" className="export__file-btn" title="Export File" />
+                <input type="checkbox" id="export-file" />
+                <div className="export__file-options ">
+                  <label>Export As &nbsp; ➜</label>
+                  <label htmlFor="export-file" id="toPDF">PDF <img src="images/pdf.png" alt /></label>
+                  <label htmlFor="export-file" id="toJSON">JSON <img src="images/json.png" alt /></label>
+                  <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
+                  <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
                 </div>
               </div>
-            </div>
-          </div>
+            </section>
+            <section className="table__body">
+              <table>
+                <thead>
+                  <tr>
+                    <th> Id <span className="icon-arrow">↑</span></th>
+                    <th> Customer <span className="icon-arrow">↑</span></th>
+                    <th> Location <span className="icon-arrow">↑</span></th>
+                    <th> Order Date <span className="icon-arrow">↑</span></th>
+                    <th> Status <span className="icon-arrow">↑</span></th>
+                    <th> Amount <span className="icon-arrow">↑</span></th>
+                    <th> Actions <span className="icon-arrow">↑</span></th>
+                    <th> Actions 2 <span className="icon-arrow">↑</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> 1 </td>
+                    <td> <img src="images/Zinzu Chan Lee.jpg" alt />Zinzu Chan Lee</td>
+                    <td> Seoul </td>
+                    <td> 17 Dec, 2022 </td>
+                    <td>
+                      <p className="">Delivered</p>
+                    </td>
+                    <td> <strong> $128.90 </strong></td>
+                    <td> <strong> $128.90 </strong></td>
+                    <td> <strong> $128.90 </strong></td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+
+            </section>
+          </main>
+
+
+
+
+
 
 
           {/* /Content End */}

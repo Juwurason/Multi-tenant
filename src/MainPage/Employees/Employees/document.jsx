@@ -6,27 +6,64 @@ import Addemployee from "../../../_components/modelbox/Addemployee"
 import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
-import { useCompanyContext } from '../../../context';
 import moment from 'moment';
-import { FaArrowCircleLeft, FaArrowCircleRight, FaCheckSquare, FaDownload, FaEye, FaTrash } from 'react-icons/fa';
+import { FaArrowCircleLeft, FaArrowCircleRight, FaCheck, FaDownload, FaEye, FaFileExport, FaSearch, FaTrash } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
-
+import '../../../assets/css/table2.css'
+import useHttp from '../../../hooks/useHttp';
+import { useCompanyContext } from '../../../context';
 const Document = () => {
-    const { staff, clients, document, FetchStaff } = useCompanyContext();
+    const id = JSON.parse(localStorage.getItem('user'));
+    const { loading, setLoading } = useCompanyContext();
+    const [document, setDocument] = useState([]);
+    const [staff, setStaff] = useState([]);
+    const [clients, setClients] = useState([]);
+    const privateHttp = useHttp();
+
+    const FetchDocument = async () => {
+        try {
+            const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`);
+            const document = documentResponse.data;
+            setDocument(document);
+        } catch (error) {
+            console.log(error);
+        }
+        try {
+            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+            const staff = staffResponse.data;
+            setStaff(staff);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+
+        try {
+            const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+            const client = clientResponse.data;
+            setClients(client);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+
+    };
+    useEffect(() => {
+        FetchDocument()
+    }, []);
+
     const [menu, setMenu] = useState(false)
     const downloadLinkRef = useRef(null);
     const [pageNumber, setPageNumber] = useState(0);
 
-    // useEffect(() => {
-    //     FetchStaff()
-
-    // }, [])
 
     const itemsPerPage = 10;
     const pageCount = Math.ceil(document.length / itemsPerPage);
     const displayData = document.slice(
         pageNumber * itemsPerPage,
         (pageNumber + 1) * itemsPerPage
+
     );
 
     const handleView = (documentUrl) => {
@@ -174,79 +211,100 @@ const Document = () => {
                         {/* /Search Filter */}
 
 
-                        <div className="">
-                            <div className="table-responsive">
-                                <div className="table-title bg-primary ">
-                                    <div className="row mt-4">
-                                        <div className="col-sm-5">
-
-                                        </div>
-                                        <div className="col-sm-7">
-                                            <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Download PDF</span></a>
-                                            <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Export to Excel</span></a>
-                                        </div>
+                        <main className="table">
+                            <section className="table__header">
+                                {/* <h1>Customer's Orders</h1> */}
+                                <div className="input-group">
+                                    <input type="search" className='form-control' placeholder="Search Data..." />
+                                    <FaSearch className='text-dark' />
+                                </div>
+                                <div className="export__file">
+                                    <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
+                                        <FaFileExport className='text-white fs-3' /></label>
+                                    <input type="checkbox" id="export-file" />
+                                    <div className="export__file-options ">
+                                        <label>Export As &nbsp; ➜</label>
+                                        <label htmlFor="export-file" id="toPDF">PDF <img src="images/pdf.png" alt /></label>
+                                        <label htmlFor="export-file" id="toJSON">JSON <img src="images/json.png" alt /></label>
+                                        <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
+                                        <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
                                     </div>
                                 </div>
-                                <div className="table-wrapper">
+                            </section>
+                            <section className="table__body">
+                                <table>
+                                    <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
+                                        <tr style={{ backgroundColor: "#18225C" }}>
+                                            <th>#</th>
+                                            <th>User</th>
+                                            <th>Role</th>
+                                            <th>Document</th>
+                                            <th>Expiration Date</th>
+                                            <th>Status</th>
+                                            <th>Date Created</th>
+                                            <th>Date Modified</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            displayData.map((data, index) =>
+                                                <tr key={index}>
+                                                    <td>{data.documentId}</td>
+                                                    <td>{data.user}</td>
+                                                    <td>{data.userRole}</td>
+                                                    <td className='fw-bold'>
+                                                        {data.documentName}
 
-                                    <table className="table  table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>User</th>
-                                                <th>Role</th>
-                                                <th>Document</th>
-                                                <th>Expiration Date</th>
-                                                <th>Status</th>
-                                                <th>Date Created</th>
-                                                <th>Date Modified</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                displayData.map((data, index) =>
-                                                    <tr key={index}>
-                                                        <td>{data.documentId}</td>
-                                                        <td>{data.user}</td>
-                                                        <td>{data.userRole}</td>
-                                                        <td className='d-flex flex-column bg-none'>
-                                                            <span>{data.documentName}</span>
-                                                            <span className='d-flex gap-2'>
-                                                                <button className='btn text-success btn-sm'
-                                                                    onClick={() => handleView(data.documentUrl)}
-                                                                >
+                                                    </td>
+                                                    <td>{moment(data.expirationDate).format('ll')}</td>
+                                                    <td><span className='bg-warning px-2 py-1 rounded-pill fw-bold'>{data.status}</span></td>
+                                                    <td>{moment(data.dateCreated).format('lll')}</td>
+                                                    <td>{moment(data.dateModified).format('lll')}</td>
+                                                    <td>
+                                                        <span className='d-flex gap-2'>
+                                                            <button className='btn text-primary btn-sm'
+                                                                title='View'
+                                                                onClick={() => handleView(data.documentUrl)}
+                                                            >
 
-                                                                    <FaEye />
-                                                                </button>
-                                                                <button className='btn text-info btn-sm'
-                                                                    onClick={() => handleDownload(data.documentUrl, data.documentName)}
-                                                                >
-                                                                    <FaDownload />
-                                                                </button>
-                                                                <a ref={downloadLinkRef} style={{ display: 'none' }} />
-                                                            </span>
-                                                        </td>
-                                                        <td>{moment(data.expirationDate).format('ll')}</td>
-                                                        <td>{data.status}</td>
-                                                        <td>{moment(data.dateCreated).format('lll')}</td>
-                                                        <td>{moment(data.dateModified).format('lll')}</td>
-                                                        <td className='d-flex justify-content-center align-items-center gap-2 h-100'>
-                                                            <Link className="btn bg-success text-white fw-normal p-1" title="Approve" data-toggle="tooltip">
-                                                                Accepted
-                                                            </Link>
-                                                            <Link className="btn bg-danger text-white p-1 fw-normal" title="Rejected " data-toggle="tooltip">
-                                                                Rejected
-                                                            </Link>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
+                                                                <FaEye />
+                                                            </button>
+                                                            <button className='btn text-info btn-sm'
+                                                                title='Download'
+                                                                onClick={() => handleDownload(data.documentUrl, data.documentName)}
+                                                            >
+                                                                <FaDownload />
+                                                            </button>
+                                                            <a ref={downloadLinkRef} style={{ display: 'none' }} />
+                                                            <button className='btn text-success btn-sm'
+                                                                title='Accept'
+                                                                onClick={() => handleView(data.documentUrl)}
+                                                            >
+
+                                                                <FaCheck />
+                                                            </button>
+                                                            <button className='btn text-danger btn-sm'
+                                                                title='Delete'
+                                                                onClick={() => handleDownload(data.documentUrl, data.documentName)}
+                                                            >
+                                                                <FaTrash />
+                                                            </button>
+                                                        </span>
+
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
 
 
 
-                                        </tbody>
-                                    </table>
+
+                                    </tbody>
+                                </table>
+                                <div className="clearfix">
+                                    <div className="hint-text">Showing <b>{itemsPerPage}</b> out of <b>{document.length}</b> entries</div>
+
                                     <ReactPaginate
                                         pageCount={pageCount}
                                         onPageChange={page => setPageNumber(page.selected)}
@@ -264,8 +322,12 @@ const Document = () => {
                                         previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
                                     />
                                 </div>
-                            </div>
-                        </div>
+                            </section>
+                        </main>
+
+
+
+
 
 
                     </div>

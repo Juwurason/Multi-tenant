@@ -1,7 +1,7 @@
 /**
  * App Header
  */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -31,13 +31,13 @@ const ClientHeader = (props) => {
     const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrentTime(new Date());
-      }, 1000);
-  
-      return () => clearInterval(interval);
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(interval);
     }, []);
-  
+
     const options = { timeZone: 'Australia/Sydney' };
     const timeString = currentTime.toLocaleTimeString('en-AU', options);
 
@@ -79,14 +79,14 @@ const ClientHeader = (props) => {
                 {/* /Search */}
                 {/* Flag */}
                 <li className="nav-item dropdown has-arrow flag-nav">
-          <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
-            <span className='fw-bold'>
-              {timeString}
+                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
+                        <span className='fw-bold'>
+                            {timeString}
 
-            </span>
-          </a>
+                        </span>
+                    </a>
 
-        </li>
+                </li>
                 {/* /Flag */}
                 {/* Notifications */}
                 <li className="nav-item dropdown">

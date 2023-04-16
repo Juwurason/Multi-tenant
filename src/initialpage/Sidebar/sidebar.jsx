@@ -93,7 +93,7 @@ const Sidebar = (props) => {
                 <span>User Management</span>
               </li>
               <li className={pathname.includes('admin') ? "active" : ""}>
-                <Link to="/"><i className="la la-user-lock" /> <span>Admin</span></Link>
+                <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li>
 
               <li className="submenu" >
