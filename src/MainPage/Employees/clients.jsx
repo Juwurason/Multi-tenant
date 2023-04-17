@@ -1,15 +1,39 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import { useCompanyContext } from '../../context';
-import { Avatar_19, Avatar_29, Avatar_07, Avatar_06, Avatar_14, Avatar_18, Avatar_28, Avatar_13 } from "../../Entryfile/imagepath"
+// import { useCompanyContext } from '../../context';
+import { Avatar_19, } from "../../Entryfile/imagepath"
+import useHttp from '../../hooks/useHttp';
 import AddClient from '../../_components/modelbox/Addclient';
 import Editclient from "../../_components/modelbox/Editclient"
 
 
 const Clients = () => {
-  const { clients } = useCompanyContext()
+  const { loading, setLoading } = useCompanyContext()
+  const id = JSON.parse(localStorage.getItem('user'));
+  const [clients, setClients] = useState([]);
+  const privateHttp = useHttp();
+  const FetchClient = async () => {
+    try {
+      setLoading(true)
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const client = clientResponse.data;
+      setClients(client);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }
+  };
+  useEffect(() => {
+    FetchClient()
+  }, []);
+
+
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({

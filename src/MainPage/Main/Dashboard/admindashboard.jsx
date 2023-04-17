@@ -15,9 +15,10 @@ import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
-import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt } from 'react-icons/fa';
+import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
+import useHttp from '../../../hooks/useHttp.jsx';
 
 
 const barchartdata = [
@@ -39,16 +40,72 @@ const linechartdata = [
   { y: '2012', "Total Sales": 100, 'Total Revenue': 50 }
 ];
 const AdminDashboard = () => {
+  const userObj = JSON.parse(localStorage.getItem('user'));
+  const [staff, setStaff] = useState([]);
+  const [clients, setClients] = useState([]);
+  const { loading, setLoading } = useCompanyContext();
+  const [document, setDocument] = useState([]);
 
-  const [menu, setMenu] = useState(false)
-  const { staff, clients, FetchStaff, document } = useCompanyContext()
+  const privateHttp = useHttp();
+
+  let isMounted = true;
+
+  useEffect(() => {
+    if (isMounted) {
+      FetchStaff();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  async function FetchStaff() {
+    setLoading(true)
+    try {
+      const { data } = await privateHttp.get(`Staffs?companyId=${userObj.companyId}`);
+      setStaff(data);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${userObj.companyId}`);
+      const client = clientResponse.data;
+      setClients(client);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const { data } = await privateHttp.get(`Documents/get_all_documents?companyId=${userObj.companyId}`);
+      setDocument(data)
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+
+    finally {
+      setLoading(false)
+    }
+  }
+
+
+
+
+
+  const [menu, setMenu] = useState(false);
+  // const { staff, clients, FetchStaff, document } = useCompanyContext()
   const toggleMobileMenu = () => {
     setMenu(!menu)
-  }
+  };
 
   useEffect(() => {
     FetchStaff()
-  }, [])
+  }, []);
 
   useEffect(() => {
     let firstload = localStorage.getItem("firstload")
@@ -59,6 +116,9 @@ const AdminDashboard = () => {
       }, 1000)
     }
   });
+
+
+
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -84,31 +144,41 @@ const AdminDashboard = () => {
               </div>
             </div>
             {/* /Page Header */}
+            <h4>Overview</h4>
             <div className="row">
-              <DashboardCard title={"Total Staff"} content={staff.length} icon={<i className="fa fa-user" />}
-                linkTitle={"View Staffs"} link={`/app/employee/allemployees`}
+
+              <DashboardCard title={"Staffs"} sty={'text-success'} content={staff.length} icon={<FaUser className='fs-4
+                  text-success' />}
+                linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
               />
-              <DashboardCard title={"Total Client"} content={clients.length} icon={<i className="fa fa-users" />}
-                linkTitle={"View Clients"} link={`/app/employee/clients`}
+              <DashboardCard title={"Clients"} content={clients.length} icon={<FaUsers className='fs-4' />}
+                linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
               />
-              <DashboardCard title={"Total Admin"} content={0} icon={<i className="fa fa-user" />}
-                linkTitle={"View Clients"} link={''}
+              <DashboardCard title={"Admin"} content={0} icon={<FaUser className='fs-4' />}
+                linkTitle={"View Clients"} loading={loading} link={''}
               />
-              <DashboardCard title={"Total Tickets"} content={0} icon={<FaTicketAlt />}
-                linkTitle={"View Tickets"} link={''}
+              <DashboardCard title={"Tickets"} content={0} icon={<FaTicketAlt className='fs-4' />}
+                linkTitle={"View Tickets"} loading={loading} link={''}
               />
-              <DashboardCard title={"Total Document"} content={document.length} icon={<FaFolderOpen />}
-                linkTitle={"View Documents"} link={`/app/employee/document`}
+              <DashboardCard title={"Document"} content={document.length} icon={<FaFolderOpen className='fs-4' />}
+                linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
               />
-              <DashboardCard title={"Total Progress Notes "} content={0} icon={<FaFileAlt />}
-                linkTitle={"View Progress Notes"} link={``}
+              <DashboardCard title={"Progress Notes "} content={0} icon={<FaFileAlt className='fs-4' />}
+                linkTitle={"View Progress Notes"} loading={loading} link={``}
               />
-              <DashboardCard title={"Total Shift Roaster "} content={0} icon={<FaCalendar />}
-                linkTitle={"View Roaster"} link={``}
+              <DashboardCard title={"Shift Roaster "} content={0} icon={<FaCalendar className='fs-4' />}
+                linkTitle={"View Roaster"} loading={loading} link={``}
               />
-              <DashboardCard title={"Total Attendances"} content={0} icon={<FaClock />}
-                linkTitle={"View Attendance"} link={``}
+              <DashboardCard title={"Attendances"} content={0} icon={<FaClock className='fs-4' />}
+                linkTitle={"View Attendance"} loading={loading} link={``}
               />
+
+
+
+
+
+
+
 
             </div>
             <div className="row">
@@ -165,7 +235,7 @@ const AdminDashboard = () => {
             </div>
 
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
                 <div className="card-group m-b-30">
                   <div className="card">
@@ -238,7 +308,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* Statistics Widget */}
 
             {/* /Statistics Widget */}

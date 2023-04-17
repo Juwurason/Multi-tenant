@@ -93,7 +93,7 @@ const Sidebar = (props) => {
                 <span>User Management</span>
               </li>
               <li className={pathname.includes('admin') ? "active" : ""}>
-                <Link to="/"><i className="la la-user-lock" /> <span>Admin</span></Link>
+                <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li>
 
               <li className="submenu" >
@@ -124,7 +124,7 @@ const Sidebar = (props) => {
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
               <li className={pathname.includes('refferals') ? "active" : ""}>
-                <Link to="/app/employees/clients"><i className="la la-user-plus" /> <span>Refferals</span></Link>
+                <Link to=""><i className="la la-user-plus" /> <span>Refferals</span></Link>
               </li>
               {/* <li className="submenu">
                 <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-rocket" /> <span> Projects</span> <span className="menu-arrow" /></a>

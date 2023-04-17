@@ -1,21 +1,66 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DashboardCard = ({ title, content, icon, linkTitle, link }) => {
+const DashboardCard = ({ title, content, sty, icon, linkTitle, link, loading }) => {
     return (
+        <div className="col-md-3">
+            <div className="card">
+                <div className="card-content">
+                    <div className="card-body">
+                        <div className="media d-flex justify-content-between">
+                            <div className="media-body text-left">
+                                <span className="fw-bold">{title}</span>
 
-        <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-            <div className="card dash-widget">
-                <div className="card-body align-items-center">
-                    <span className="dash-widget-icon">{icon}</span>
-                    <div className="dash-widget-info">
-                        <span>{title}</span>
-                        <h3>{content}</h3>
-                        <Link to={link} className='pointer fw-bold'>{linkTitle}</Link>
+                                {
+                                    loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
+                                        <div class="spinner-border text-secondary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    )
+
+                                        :
+                                        <h3 className={sty}>{content}</h3>
+                                }
+
+                                <Link style={{ fontSize: "12px" }}
+
+                                    to={link} className='pointer text-dark'>{linkTitle}</Link>
+                            </div>
+                            <div className="align-self-center">
+                                {icon}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        // <div className="col-md-6">
+        //     <div className="card dash-widget">
+        //         <div className="card-body align-items-center">
+        //             <span className="dash-widget-icon">{icon}</span>
+        //             <div className="dash-widget-info">
+        //                 <span className="fw-normal fs-6">{title}</span>
+        //                 {
+        //                     loading ? (<div className=" d-flex py-2 justify-content-end fs-6">
+        //                         <div class="spinner-border text-secondary" role="status">
+        //                             <span class="visually-hidden">Loading...</span>
+        //                         </div>
+        //                     </div>
+        //                     )
+
+        //                         :
+        //                         <h3 className={sty}>{content}</h3>
+        //                 }
+        //                 <Link
+
+        //                     to={link} className='pointer'>{linkTitle}</Link>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
+
     );
 }
 
