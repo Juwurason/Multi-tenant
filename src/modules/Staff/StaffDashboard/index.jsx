@@ -62,7 +62,6 @@ const StaffDashboard = () => {
         try {
             const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
             setProfile(response.data)
-            console.log(response.data);
         } catch (error) {
             console.log(error);
         }
