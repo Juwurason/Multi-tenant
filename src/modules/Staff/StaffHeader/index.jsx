@@ -283,8 +283,8 @@ const StaffHeader = (props) => {
                         <span>Staff </span>
                     </a>
                     <div className="dropdown-menu">
-                        <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
-                        <Link className="dropdown-item" to="/settings/companysetting">Settings</Link>
+                        <Link className="dropdown-item" to="/staff/staffprofile">My Profile</Link>
+                        <Link className="dropdown-item" to="/staff/staffchangepassword">Change Password</Link>
                         <Link className="dropdown-item" onClick={handleLogout} to="/login">Logout</Link>
                     </div>
                 </li>
@@ -294,8 +294,8 @@ const StaffHeader = (props) => {
             <div className="dropdown mobile-user-menu">
                 <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="fa fa-ellipsis-v" /></a>
                 <div className="dropdown-menu dropdown-menu-right">
-                    <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
-                    <Link className="dropdown-item" to="/settings/companysetting">Settings</Link>
+                    <Link className="dropdown-item" to="/staff/staffprofile">My Profile</Link>
+                    <Link className="dropdown-item" to="/staff/staffchangepassword">Change Password</Link>
                     <Link className="dropdown-item" onClick={handleLogout} to="/login">Logout</Link>
                 </div>
             </div>
