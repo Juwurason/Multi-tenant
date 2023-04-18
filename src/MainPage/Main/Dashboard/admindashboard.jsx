@@ -151,16 +151,16 @@ const AdminDashboard = () => {
                   text-success' />}
                 linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
               />
-              <DashboardCard title={"Clients"} content={clients.length} icon={<FaUsers className='fs-4' />}
+              <DashboardCard title={"Clients"} sty={'text-warning'} content={clients.length} icon={<FaUsers className='fs-4 text-warning' />}
                 linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
               />
-              <DashboardCard title={"Admin"} content={0} icon={<FaUser className='fs-4' />}
+              <DashboardCard title={"Admin"} sty={'text-info'} content={0} icon={<FaUser className='fs-4 text-info' />}
                 linkTitle={"View Clients"} loading={loading} link={''}
               />
               <DashboardCard title={"Tickets"} content={0} icon={<FaTicketAlt className='fs-4' />}
                 linkTitle={"View Tickets"} loading={loading} link={''}
               />
-              <DashboardCard title={"Document"} content={document.length} icon={<FaFolderOpen className='fs-4' />}
+              <DashboardCard title={"Document"} sty={'text-danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}
                 linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
               />
               <DashboardCard title={"Progress Notes "} content={0} icon={<FaFileAlt className='fs-4' />}
@@ -187,7 +187,7 @@ const AdminDashboard = () => {
                   <div className="col-md-6 text-center">
                     <div className="card">
                       <div className="card-body">
-                        <h3 className="card-title">Total Revenue</h3>
+                        <h3 className="card-title">Total</h3>
 
                         <ResponsiveContainer width='100%' height={300}>
                           <BarChart
@@ -213,7 +213,7 @@ const AdminDashboard = () => {
                   <div className="col-md-6 text-center">
                     <div className="card">
                       <div className="card-body">
-                        <h3 className="card-title">Sales Overview</h3>
+                        <h3 className="card-title">Incoming</h3>
                         <ResponsiveContainer width='100%' height={300}>
                           <LineChart data={linechartdata}
                             margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>

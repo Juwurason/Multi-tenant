@@ -12,16 +12,20 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import AddAdmin from '../../../_components/modelbox/AddAdmin';
+import { useCompanyContext } from '../../../context';
 
 const AllAdmin = () => {
     const privateHttp = useHttp();
+    const { loading, setLoading } = useCompanyContext();
     const id = JSON.parse(localStorage.getItem('user'));
-    const [staff, setStaff] = useState([]);
+    const [admin, setAdmin] = useState([]);
     const FetchStaff = async () => {
         try {
-            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
-            const staff = staffResponse.data;
-            setStaff(staff);
+            setLoading(true)
+            const { data } = await privateHttp.get(`Administrators?companyId=${id.companyId}`);
+            console.log(data);
+
+            setAdmin(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -33,7 +37,6 @@ const AllAdmin = () => {
     }, []);
 
     const [menu, setMenu] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const handleDelete = async (e) => {
         try {
@@ -41,7 +44,6 @@ const AllAdmin = () => {
             const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
                 { userId: id.userId }
             )
-            console.log(data);
             if (data.status === 'Success') {
                 toast.success(data.message);
                 FetchStaff()
@@ -62,9 +64,7 @@ const AllAdmin = () => {
             setLoading(false)
         }
     }
-    if (loading) {
-        toast("Loading")
-    }
+
 
     const toggleMobileMenu = () => {
         setMenu(!menu)
@@ -143,47 +143,31 @@ const AllAdmin = () => {
 
 
                             <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" >
-                                <div className="profile-widget">
-                                    <div className="profile-img">
-                                        <Link to={``} className="avatar"><img src={Avatar_02} alt="" /></Link>
-                                    </div>
-                                    <div className="dropdown profile-action">
-                                        <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                                        <div className="dropdown-menu dropdown-menu-right">
-                                            <Link to={``} className="dropdown-item">
-                                                <i className="fa fa-pencil m-r-5" /> Edit</Link>
-                                            <a className="dropdown-item" href="#" ><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                                {
+                                    admin.map((data, index) =>
+
+                                        <div className="profile-widget">
+                                            <div className="profile-img">
+                                                <Link to={``} className="avatar"><img src={Avatar_02} alt="" /></Link>
+                                            </div>
+                                            <div className="dropdown profile-action">
+                                                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                                                <div className="dropdown-menu dropdown-menu-right">
+                                                    <Link to={``} className="dropdown-item">
+                                                        <i className="fa fa-pencil m-r-5" /> Edit</Link>
+                                                    <a className="dropdown-item" href="#" ><i className="fa fa-trash-o m-r-5" /> Delete</a>
 
 
 
 
-                                        </div>
-                                    </div>
-                                    <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={``}>Admin Personnel</Link></h4>
-                                    {/* <div className="small text-muted">Web Designer</div> */}
-                                    <div className="modal custom-modal fade" id="delete_employee" role="dialog">
-                                        <div className="modal-dialog modal-dialog-centered">
-                                            <div className="modal-content">
-                                                <div className="modal-body">
-                                                    <div className="form-header">
-                                                        <h3>Delete Staff</h3>
-                                                        <p>Are you sure want to delete?</p>
-                                                    </div>
-                                                    <div className="modal-btn delete-action">
-                                                        <div className="row">
-                                                            <div className="col-6">
-                                                                <a className="btn btn-primary continue-btn" >Delete</a>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
+                                            <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={``}>Admin Personnel</Link></h4>
+
+
                                         </div>
-                                    </div>
-                                </div>
+                                    )
+                                }
 
 
 
@@ -211,6 +195,28 @@ const AllAdmin = () => {
                     {/* Delete Employee Modal */}
 
                     {/* /Delete Employee Modal */}
+                </div>
+            </div>
+            <div className="modal custom-modal fade" id="delete_employee" role="dialog">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-body">
+                            <div className="form-header">
+                                <h3>Delete Staff</h3>
+                                <p>Are you sure want to delete?</p>
+                            </div>
+                            <div className="modal-btn delete-action">
+                                <div className="row">
+                                    <div className="col-6">
+                                        <a className="btn btn-primary continue-btn" >Delete</a>
+                                    </div>
+                                    <div className="col-6">
+                                        <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <Offcanvas />
