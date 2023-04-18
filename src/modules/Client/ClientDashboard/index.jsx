@@ -8,6 +8,7 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
+import useHttp from '../../../hooks/useHttp.jsx';
 import "../../../MainPage/index.css"
 import ClientHeader from '../ClientHeader/index.jsx';
 import ClientSideBar from '../ClientSideBar/index.jsx';
@@ -34,7 +35,10 @@ const linechartdata = [
 
 const ClientDashboard = () => {
 
+    const [profile, setProfile] = useState([])
     const [menu, setMenu] = useState(false)
+    const privateHttp = useHttp()
+  const getClientProfile = JSON.parse(localStorage.getItem('clientProfile'))
 
     const toggleMobileMenu = () => {
         setMenu(!menu)
@@ -49,6 +53,19 @@ const ClientDashboard = () => {
             }, 1000)
         }
     });
+
+    useEffect(()=>{
+        const fetchProfile = async () => {
+          try {
+              const response = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`)
+              setProfile(response.data)
+              console.log(response.data);
+          } catch (error) {
+              console.log(error);
+          }
+      }
+      fetchProfile()
+      },[])
 
     return (
         <>
@@ -67,7 +84,7 @@ const ClientDashboard = () => {
                         <div className="page-header">
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <h3 className="page-title">Welcome Boda Nuru</h3>
+                                    <h3 className="page-title">Welcome {profile.fullName}</h3>
                                     <ul className="breadcrumb">
                                         <li className="breadcrumb-item active">Dashboard</li>
                                     </ul>

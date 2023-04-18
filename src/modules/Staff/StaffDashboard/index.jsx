@@ -67,8 +67,7 @@ const StaffDashboard = () => {
       }
     }
     fetchProfile()
-  }, [])
-
+  },[])
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>

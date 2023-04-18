@@ -72,6 +72,19 @@ const ClientDocument = () => {
         setLoading(false)
     }
 }
+
+// useEffect(()=>{
+//   const getDocument = async () => {
+//     try {
+//         const response = await privateHttp.get(`/Documents/get_all_client_documents?clientId=${id.userId}`)
+//         setProfile(response.data)
+//         console.log(response.data);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+// getDocument()
+// },[])
   
       return (
         <>
