@@ -136,7 +136,7 @@ const AdminDashboard = () => {
             <div className="page-header">
               <div className="row">
                 <div className="col-sm-12">
-                  <h3 className="page-title">Welcome Admin!</h3>
+                  <h3 className="page-title">Welcome {userObj.firstName}</h3>
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item active">Dashboard</li>
                   </ul>
@@ -155,22 +155,22 @@ const AdminDashboard = () => {
                 linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
               />
               <DashboardCard title={"Admin"} sty={'text-info'} content={0} icon={<FaUser className='fs-4 text-info' />}
-                linkTitle={"View Clients"} loading={loading} link={''}
+                linkTitle={"View Admin"} link={''}
               />
-              <DashboardCard title={"Tickets"} content={0} icon={<FaTicketAlt className='fs-4' />}
-                linkTitle={"View Tickets"} loading={loading} link={''}
+              <DashboardCard title={"Tickets"} sty={'text-primary'} content={0} icon={<FaTicketAlt className='fs-4 text-primary' />}
+                linkTitle={"View Tickets"} link={''}
               />
               <DashboardCard title={"Document"} sty={'text-danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}
                 linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
               />
               <DashboardCard title={"Progress Notes "} content={0} icon={<FaFileAlt className='fs-4' />}
-                linkTitle={"View Progress Notes"} loading={loading} link={``}
+                linkTitle={"View Progress Notes"} link={``}
               />
-              <DashboardCard title={"Shift Roaster "} content={0} icon={<FaCalendar className='fs-4' />}
-                linkTitle={"View Roaster"} loading={loading} link={``}
+              <DashboardCard title={"Shift Roaster"} content={0} icon={<FaCalendar className='fs-4' />}
+                linkTitle={"View Roaster"} link={``}
               />
               <DashboardCard title={"Attendances"} content={0} icon={<FaClock className='fs-4' />}
-                linkTitle={"View Attendance"} loading={loading} link={``}
+                linkTitle={"View Attendance"} link={``}
               />
 
 

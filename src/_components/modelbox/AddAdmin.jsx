@@ -13,7 +13,7 @@ const AddAdmin = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const privateHttp = useHttp();
-    const navigate = useHistory()
+    const navigate = useHistory();
 
 
     const submitForm = async (e) => {
@@ -46,6 +46,7 @@ const AddAdmin = () => {
                 }
             )
             toast.success(data.message)
+            $('#add_admin').modal('dispose')
             navigate.push('/app/main/dashboard')
             setLoading(false)
 

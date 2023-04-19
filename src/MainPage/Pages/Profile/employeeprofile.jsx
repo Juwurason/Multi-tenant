@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams } from 'react-router-dom';
@@ -86,7 +87,7 @@ const EmployeeProfile = () => {
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">{staffOne.dateOfBirth}</div>
+                              <div className="text">{moment(staffOne.dateOfBirth).format('ll')}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>

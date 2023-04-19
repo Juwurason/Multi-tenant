@@ -96,14 +96,18 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li>
 
-              <li className="submenu" >
-                <a href="javascript:void(0)" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot"> Staffs</span> <span className="menu-arrow" /></a>
+              <li className={pathname.includes('allemployees') ? "active" : ""}>
+                <Link to="/app/employee/allemployees"><i className="la la-user" /> <span>Staffs</span></Link>
+              </li>
+              {/* <li className="submenu" >
+                <a href="javascript:void(0)" className={isSideMenu == "employee" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "employee" ? "" : "employee")}><i className="la la-user" /> <span className="noti-dot">
+                  Staffs</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "employee" ?
 
                   <ul >
                     <li><Link className={pathname.includes('allemployees') ? "active" : pathname.includes('employees-list') ? "active" : ""}
-                      to="/app/employee/allemployees">All Staffs</Link></li>
-                    {/* <li><Link className={pathname.includes('holidays') ? "active" : ""} to="/app/employee/holidays">Holidays</Link></li>
+                      to="/app/employee/allemployees">All Staffs</Link></li> */}
+              {/* <li><Link className={pathname.includes('holidays') ? "active" : ""} to="/app/employee/holidays">Holidays</Link></li>
                     <li><Link className={pathname.includes('es-admin') ? "active" : ""} to="/app/employee/leaves-admin">Leaves (Admin) <span className="badge badge-pill bg-primary float-end">1</span></Link></li>
                     <li><Link className={pathname.includes('ves-employee') ? "active" : ""} to="/app/employee/leaves-employee">Leaves (Employee)</Link></li>
                     <li><Link className={pathname.includes('e-settings') ? "active" : ""} to="/app/employee/leave-settings">Leave Settings</Link></li>
@@ -114,10 +118,10 @@ const Sidebar = (props) => {
                     <li><Link className={pathname.includes('timesheet') ? "active" : ""} to="/app/employee/timesheet">Timesheet</Link></li>
 
                     <li><Link className={pathname.includes('overtime') ? "active" : ""} to="/app/employee/overtime">Overtime</Link></li> */}
-                  </ul>
+              {/* </ul>
                   : ""
                 }
-              </li>
+              </li> */}
 
 
               <li className={pathname.includes('clients') ? "active" : ""}>
