@@ -12,6 +12,7 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
+import Swal from 'sweetalert2';
 
 const AllEmployees = () => {
   const privateHttp = useHttp();
@@ -39,30 +40,45 @@ const AllEmployees = () => {
   const [menu, setMenu] = useState(false);
 
   const handleDelete = async (e) => {
-    try {
-      setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
-        { userId: id.userId }
-      )
-      if (data.status === 'Success') {
-        toast.success(data.message);
-        FetchStaff()
-      } else {
-        toast.error(data.message);
+    setLoading(true)
+    Swal.fire({
+      html: `<h3>Are you sure? you want to delete this staff</h3></br><p>You won't be able to revert this!</p>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'rgb(29 78 216)',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm Delete',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
+            { userId: id.userId }
+          )
+          if (data.status === 'Success') {
+            toast.success(data.message);
+            FetchStaff()
+          } else {
+            toast.error(data.message);
+          }
+
+          setLoading(false)
+
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+          setLoading(false);
+
+        }
+        finally {
+          setLoading(false)
+        }
+
       }
+    })
 
-      setLoading(false)
 
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
-      setLoading(false);
-
-    }
-    finally {
-      setLoading(false)
-    }
   }
 
 
@@ -104,7 +120,7 @@ const AllEmployees = () => {
                   </ul>
                 </div>
                 <div className="col-auto float-end ml-auto">
-                  <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New Staff</a>
+                  <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New Staff</a>
                   <div className="view-icons">
                     <Link to="/app/employee/allemployees" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                     <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
@@ -135,7 +151,7 @@ const AllEmployees = () => {
               </div>
 
               <div className="col-sm-6 col-md-3">
-                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
+                <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
               </div>
             </div>
             {/* Search Filter */}
@@ -149,11 +165,11 @@ const AllEmployees = () => {
                         <Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`} className="avatar"><img src={Avatar_02} alt="" /></Link>
                       </div>
                       <div className="dropdown profile-action">
-                        <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                        <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                         <div className="dropdown-menu dropdown-menu-right">
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="dropdown-item">
                             <i className="fa fa-pencil m-r-5" /> Edit</Link>
-                          <a className="dropdown-item" href="#" onClick={() => handleDelete(data.staffId)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                          <a className="dropdown-item" href="javascript:void(0)" onClick={() => handleDelete(data.staffId)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
 
 
 

@@ -46,9 +46,16 @@ const AddAdmin = () => {
                 }
             )
             toast.success(data.message)
-            $('#add_admin').modal('dispose')
-            navigate.push('/app/main/dashboard')
-            setLoading(false)
+
+            // navigate.push('/app/main/dashboard')
+            setLoading(false);
+            setSurName('');
+            setFirstName('');
+            setEmail('');
+            setAddress('');
+            setPassword('');
+            setConfirmPassword('');
+            setPhoneNumber('');
 
         } catch (error) {
             toast.error(error.response?.data?.message)

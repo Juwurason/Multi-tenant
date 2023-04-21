@@ -149,7 +149,7 @@ const Sidebar = (props) => {
 
 
               <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
-                <Link to="/app/employee/shift-scheduling"><i className="la la-book" /> <span>Shift Roaster</span></Link>
+                <Link to="/app/employee/shift-scheduling"><i className="la la-calendar" /> <span>Shift Roaster</span></Link>
               </li>
 
 
