@@ -127,6 +127,19 @@ const Sidebar = (props) => {
               <li className={pathname.includes('clients') ? "active" : ""}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
+              <li className="submenu">
+                <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-tools" /> <span>Account Management</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "projects" ?
+                  <ul>
+                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                      to="/app/account/alluser">Manage Users</Link> </li>
+                    <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/tasks/tasks">Manage Roles</Link></li>
+                    <li><Link className={pathname.includes('task-board') ? "active" : ""} to="/app/projects/task-board">Activity Logs</Link></li>
+                  </ul>
+                  : ""
+                }
+              </li>
               <li className={pathname.includes('refferals') ? "active" : ""}>
                 <Link to=""><i className="la la-user-plus" /> <span>Refferals</span></Link>
               </li>
@@ -146,7 +159,20 @@ const Sidebar = (props) => {
               <li className="menu-title">
                 <span>Staff - Client Management</span>
               </li>
-
+              <li className="submenu">
+                <a href="javascript:void(0)" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-files-o" /> <span> Set Up </span> <span className="menu-arrow" /></a>
+                {isSideMenu == "sales" ?
+                  <ul>
+                    <li><Link className={pathname.includes('estimates') ? "active" : ""} to="/app/sales/estimates">Estimates</Link></li>
+                    <li><Link className={pathname.includes('invoices') ? "active" : ""} to="/app/sales/invoices">Invoices</Link></li>
+                    <li><Link className={pathname.includes('payments') ? "active" : ""} to="/app/sales/payments">Payments</Link></li>
+                    <li><Link className={pathname.includes('expenses') ? "active" : ""} to="/app/sales/expenses">Expenses</Link></li>
+                    <li><Link className={pathname.includes('provident-fund') ? "active" : ""} to="/app/sales/provident-fund">Provident Fund</Link></li>
+                    <li><Link className={pathname.includes('taxes') ? "active" : ""} to="/app/sales/taxes">Taxes</Link></li>
+                  </ul>
+                  : ""
+                }
+              </li>
 
               <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
                 <Link to="/app/employee/shift-scheduling"><i className="la la-calendar" /> <span>Shift Roaster</span></Link>

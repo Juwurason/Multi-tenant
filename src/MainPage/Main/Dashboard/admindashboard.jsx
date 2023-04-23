@@ -63,7 +63,7 @@ const AdminDashboard = () => {
   async function FetchStaff() {
     setLoading(true)
     try {
-      const { data } = await privateHttp.get(`Staffs?companyId=${userObj.companyId}`);
+      const { data } = await privateHttp.get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       setStaff(data);
       setLoading(false)
     } catch (error) {
@@ -71,7 +71,7 @@ const AdminDashboard = () => {
     }
 
     try {
-      const clientResponse = await privateHttp.get(`/Profiles?companyId=${userObj.companyId}`);
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
       setClients(client);
       setLoading(false)
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
     }
 
     try {
-      const { data } = await privateHttp.get(`Documents/get_all_documents?companyId=${userObj.companyId}`);
+      const { data } = await privateHttp.get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       setDocument(data)
       setLoading(false)
     } catch (error) {

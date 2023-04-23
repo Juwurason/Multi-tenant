@@ -35,7 +35,7 @@ main.table {
 
 .table__header .input-group:hover {
     width: 35%;
-    background-color: #fff8;
+    background-color: #fff;
     box-shadow: 0 .1rem .4rem #0002;
 }
 

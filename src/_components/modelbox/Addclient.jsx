@@ -50,9 +50,17 @@ const AddClient = () => {
         formData
       )
       toast.success(data.message)
-      navigate.push('/app/main/dashboard')
+      // navigate.push('/app/main/dashboard')
       setLoading(false)
-
+      setFirstName('');
+      setSurName('');
+      setMiddleName('');
+      setAddress('');
+      setEmail('');
+      setPhoneNumber('');
+      setAgreementStartDate('');
+      setAgreementEndDate('');
+      setNDISNo('');
     } catch (error) {
       toast.error(error.response?.data?.message)
       console.log(error);

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../context';
 // import { useCompanyContext } from '../../context';
 import { Avatar_19, } from "../../Entryfile/imagepath"
@@ -42,6 +44,46 @@ const Clients = () => {
       });
     }
   });
+  const handleDelete = async (e) => {
+    setLoading(true)
+    Swal.fire({
+      html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3></br><p>This decision cannot be reverted!</p>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'rgb(29 78 216)',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm Delete',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await privateHttp.post(`Profiles/delete/${e.profileId}?userId=${id.userId}`,
+            { userId: id.userId }
+          )
+          if (data.status === 'Success') {
+            toast.success(data.message);
+          } else {
+            toast.error(data.message);
+          }
+
+          setLoading(false)
+
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+          setLoading(false);
+
+        }
+        finally {
+          setLoading(false)
+        }
+
+      }
+    })
+
+
+  }
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -61,7 +103,7 @@ const Clients = () => {
               </ul>
             </div>
             <div className="col-auto float-end ml-auto">
-              <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a>
+              <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a>
               <div className="view-icons">
                 <Link to="/app/employees/clients" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                 <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
@@ -92,7 +134,7 @@ const Clients = () => {
           </div>
 
           <div className="col-sm-6 col-md-3">
-            <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
+            <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
           </div>
         </div>
         {/* Search Filter */}
@@ -107,10 +149,10 @@ const Clients = () => {
                     <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="avatar"><img alt="" src={Avatar_19} /></Link>
                   </div>
                   <div className="dropdown profile-action">
-                    <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                    <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                     <div className="dropdown-menu dropdown-menu-right">
                       <Link className="dropdown-item" to={`/app/employees/edit-client/${data.profileId}`}><i className="fa fa-pencil m-r-5" /> Edit</Link>
-                      <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_client"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                      <a className="dropdown-item" href="javascript:void(0)" onClick={() => handleDelete(data)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
                     </div>
                   </div>
                   <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>

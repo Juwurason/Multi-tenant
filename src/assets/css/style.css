@@ -4727,7 +4727,7 @@ div,
 }
 
 [data-layout=vertical] .sidebar>div>div {
-  overflow: scroll !important;
+  overflow: auto;
 }
 
 [data-layout=twocolumn] .sidebar>div {
