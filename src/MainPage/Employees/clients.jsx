@@ -16,11 +16,11 @@ const Clients = () => {
   const { loading, setLoading } = useCompanyContext()
   const id = JSON.parse(localStorage.getItem('user'));
   const [clients, setClients] = useState([]);
-  const privateHttp = useHttp();
+  const { get } = useHttp();
   const FetchClient = async () => {
     try {
       setLoading(true)
-      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
       setClients(client);
       setLoading(false)
@@ -103,7 +103,8 @@ const Clients = () => {
               </ul>
             </div>
             <div className="col-auto float-end ml-auto">
-              <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a>
+              <Link to="/app/employees/addclients" className="btn add-btn"><i className="fa fa-plus" /> Add Client</Link>
+              {/* <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a> */}
               <div className="view-icons">
                 <Link to="/app/employees/clients" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                 <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>

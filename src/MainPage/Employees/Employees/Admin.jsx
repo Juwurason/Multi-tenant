@@ -104,8 +104,8 @@ const AllAdmin = () => {
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">
-                                    <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_admin"><i className="fa fa-plus" />
-                                        Create New Admin</a>
+                                    <Link to={'/app/employee/addadmin'} className="btn add-btn"><i className="fa fa-plus" />
+                                        Create New Admin</Link>
                                     <div className="view-icons">
                                         <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                                     </div>

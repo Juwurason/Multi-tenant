@@ -12,7 +12,7 @@ const Addschedule = () => {
   const FetchSchedule = async () => {
 
     try {
-      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       setStaff(staff);
       setLoading(false)
@@ -21,7 +21,7 @@ const Addschedule = () => {
     }
 
     try {
-      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
       setClients(client);
       setLoading(false)

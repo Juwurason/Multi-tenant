@@ -19,11 +19,17 @@ const Clients = () => {
   const [clients, setClients] = useState([]);
   const privateHttp = useHttp();
   const [pageNumber, setPageNumber] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredData = clients.filter((item) =>
+    item.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
 
   const itemsPerPage = 10;
   const pageCount = Math.ceil(clients.length / itemsPerPage);
-  const displayData = clients.slice(
+  const displayData = filteredData.slice(
     pageNumber * itemsPerPage,
     (pageNumber + 1) * itemsPerPage
 
@@ -120,7 +126,9 @@ const Clients = () => {
           <section className="table__header">
             {/* <h1>Customer's Orders</h1> */}
             <div className="input-group">
-              <input type="search" className='form-control' placeholder="Search Data..." />
+              <input type="search" className='form-control' placeholder="Search Data..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)} />
               <FaSearch className='text-dark' />
             </div>
             <div className="export__file">
@@ -152,7 +160,7 @@ const Clients = () => {
                   <th>Date of Birth</th>
                   <th>Date Created</th>
                   <th>Date Modified</th>
-                  <th>Status</th>
+
                   <th>Actions</th>
 
                 </tr>
@@ -162,18 +170,18 @@ const Clients = () => {
                   displayData.map((data, index) =>
                     <tr key={index}>
 
-                      <td>{data.profileId}</td>
+                      <td>{index + 1}</td>
                       <td className='fw-bold'>{data.fullName}</td>
                       <td><a href="#"> {data.address}</a></td>
                       <td><a href="#"> {data.email}</a></td>
                       <td>{data.phoneNumber}</td>
                       <td>{data.gender}</td>
+                      <td>{!data.state ? "Not Updated" : data.state}</td>
                       <td>{data.state}</td>
-                      <td>{data.state}</td>
-                      <td>{moment(data.dateOfBirth).format('ll')}</td>
+
+                      <td>{!data.dateOfBirth ? "Not Updated" : moment(data.dateOfBirth).format('ll')}</td>
                       <td>{moment(data.dateCreated).format('lll')}</td>
                       <td>{moment(data.dateModified).format('lll')}</td>
-                      <td><span className="status text-success">•</span> Active</td>
                       <td>
                         <span className='d-flex gap-2 align-items-center'>
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
@@ -187,14 +195,27 @@ const Clients = () => {
                     </tr>
                   )
                 }
-
+                {displayData.length <= 0 && <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td className='text-danger fs-6'>No data to display</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>}
 
 
 
               </tbody>
             </table>
             <div className="clearfix">
-              <div className="hint-text">Showing <b>{1}</b> out of <b>{clients.length}</b> entries</div>
+              <div className="hint-text">Showing <b>{1}</b> out of <b>{displayData.length}</b> entries</div>
 
               <ReactPaginate
                 pageCount={pageCount}

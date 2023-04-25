@@ -4,7 +4,6 @@ main.table {
     background-color: #fff5;
     backdrop-filter: blur(7px);
     box-shadow: 0 .1rem .1rem #0005;
-    border-radius: .8rem;
     overflow: hidden;
 }
 
@@ -24,7 +23,6 @@ main.table {
     height: 3rem;
     background-color: #fff5;
     padding: 0 .8rem;
-    border-radius: 2rem;
     border: 2px solid gainsboro;
     display: flex;
     justify-content: center;
@@ -58,7 +56,6 @@ main.table {
     background-color: #fffb;
 
     margin: .8rem auto;
-    border-radius: .6rem;
 
     overflow: auto;
     overflow: overlay;
@@ -76,7 +73,7 @@ main.table {
 }
 
 .table__body:hover::-webkit-scrollbar-thumb {
-    visibility: visible;
+    visibility: hidden;
 }
 
 table {
@@ -123,9 +120,9 @@ tbody tr.hide {
     transform: translateX(100%);
 }
 
-tbody tr:hover {
+/* tbody tr:hover {
     background-color: #fff6 !important;
-}
+} */
 
 tbody tr td,
 tbody tr td p,

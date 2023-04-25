@@ -20,7 +20,7 @@ import EditUser from '../../../_components/modelbox/EditUser';
 
 
 const AllUser = () => {
-    const privateHttp = useHttp()
+    const { get } = useHttp()
     const [menu, setMenu] = useState(false)
     const [users, setUsers] = useState([]);
     const { loading, setLoading } = useCompanyContext();
@@ -28,21 +28,17 @@ const AllUser = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const handleSearch = (event) => {
-        setSearchQuery(event.target.value);
 
-        // const filteredUsers = users.filter(
-        //     (user) =>
-        //         user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        //         user.email.toLowerCase().includes(searchQuery.toLowerCase())
-        // );
-        // console.log(filteredUsers);
-        console.log(searchQuery);
-    };
+
+    const filteredUsers = users.filter((user) =>
+        user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
 
     const itemsPerPage = 10;
     const pageCount = Math.ceil(users.length / itemsPerPage);
-    const displayData = users.slice(
+    const displayData = filteredUsers.slice(
         pageNumber * itemsPerPage,
         (pageNumber + 1) * itemsPerPage
 
@@ -50,7 +46,7 @@ const AllUser = () => {
 
     const FetchStaff = async () => {
         try {
-            const UserResponse = await privateHttp.get(`Account/get_all_users?companyId=${id.companyId}`);
+            const UserResponse = await get(`Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const users = UserResponse.data;
             setUsers(users);
             setLoading(false)
@@ -108,7 +104,7 @@ const AllUser = () => {
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">
-                                    <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#edit_user"><i className="fa fa-plus" /> Add New User</a>
+                                    {/* <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#edit_user"><i className="fa fa-plus" /> Add New User</a> */}
 
                                 </div>
                             </div>
@@ -117,12 +113,10 @@ const AllUser = () => {
                             <section className="table__header">
 
                                 <div className="input-group">
-                                    <input type="text" className='form-control' />
-                                    <FaSearch className='text-dark'
-                                        placeholder="Search users"
+                                    <input type="search" className='form-control' placeholder="Search Data..."
                                         value={searchQuery}
-                                        onChange={handleSearch}
-                                    />
+                                        onChange={e => setSearchQuery(e.target.value)} />
+                                    <FaSearch className='text-dark' />
                                 </div>
                                 <div className="export__file">
                                     <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
@@ -163,7 +157,7 @@ const AllUser = () => {
 
 
                                                     <td>
-                                                        <span className='d-flex gap-2 align-items-center'>
+                                                        <span className='d-flex gap-4 align-items-center'>
                                                             <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
                                                                 <FaEdit className='text-info' />
                                                             </Link>
@@ -175,6 +169,15 @@ const AllUser = () => {
                                                 </tr>
                                             )
                                         }
+                                        {displayData.length <= 0 && <tr>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td className='text-danger fs-6'>No user found</td>
+                                            <td></td>
+
+                                        </tr>}
 
 
 
@@ -182,7 +185,7 @@ const AllUser = () => {
                                     </tbody>
                                 </table>
                                 <div className="clearfix">
-                                    <div className="hint-text">Showing <b>{1}</b> out of <b></b> entries</div>
+                                    <div className="hint-text">Showing <b>{itemsPerPage}</b> out of <b>{displayData.length}</b> entries</div>
 
                                     <ReactPaginate
                                         pageCount={pageCount}

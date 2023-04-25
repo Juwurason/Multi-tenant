@@ -12,14 +12,15 @@ import { useCompanyContext } from '../../../context';
 
 const ShiftScheduling = () => {
   const id = JSON.parse(localStorage.getItem('user'));
-  const privateHttp = useHttp();
+  const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
+
   const FetchSchedule = async () => {
 
     try {
-      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       setStaff(staff);
       setLoading(false)
@@ -28,7 +29,7 @@ const ShiftScheduling = () => {
     }
 
     try {
-      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
       setClients(client);
       setLoading(false)
@@ -43,18 +44,7 @@ const ShiftScheduling = () => {
     FetchSchedule()
   }, []);
 
-  // const privateHttp = useHttp()
-  // useEffect(() => {
-  //   const getShift = async () => {
-  //     try {
-  //       const { data } = await privateHttp.get('/ShiftRosters/get_all_shift_rosters')
 
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   getShift()
-  // }, [])
 
 
 

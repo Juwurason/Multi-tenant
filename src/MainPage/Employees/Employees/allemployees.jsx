@@ -119,7 +119,8 @@ const AllEmployees = () => {
                   </ul>
                 </div>
                 <div className="col-auto float-end ml-auto">
-                  <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New Staff</a>
+                  <Link to={'/app/employee/addstaff'} className="btn add-btn"><i className="fa fa-plus" /> Add New Staff</Link>
+                  {/* <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New Staff</a> */}
                   <div className="view-icons">
                     <Link to="/app/employee/allemployees" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                     <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
@@ -177,28 +178,6 @@ const AllEmployees = () => {
                       </div>
                       <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
                       {/* <div className="small text-muted">Web Designer</div> */}
-                      <div className="modal custom-modal fade" id="delete_employee" role="dialog">
-                        <div className="modal-dialog modal-dialog-centered">
-                          <div className="modal-content">
-                            <div className="modal-body">
-                              <div className="form-header">
-                                <h3>Delete Staff</h3>
-                                <p>Are you sure want to delete?</p>
-                              </div>
-                              <div className="modal-btn delete-action">
-                                <div className="row">
-                                  <div className="col-6">
-                                    <a className="btn btn-primary continue-btn" >Delete</a>
-                                  </div>
-                                  <div className="col-6">
-                                    <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
 
 
