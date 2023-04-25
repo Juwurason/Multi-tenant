@@ -1,16 +1,31 @@
+import axios from "axios";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { LRUCache } from 'lru-cache';
 import { privateHttp } from "../api/http";
+
+const useUser = () => {
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        setUser(storedUser);
+    }, []);
+
+    return user;
+};
 
 const useHttp = () => {
     const navigate = useHistory();
-
+    const user = useUser();
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
+
         const reqInterceptor = privateHttp.interceptors.request.use(
             (config) => {
-                config.headers["Authorization"] = `Bearer ${user.token}`;
+                if (user) {
+                    config.headers["Authorization"] = `Bearer ${user.token}`;
+                }
                 return config;
             },
             (error) => {
@@ -40,33 +55,35 @@ const useHttp = () => {
             privateHttp.interceptors.response.eject(resInterceptor);
             privateHttp.interceptors.request.eject(reqInterceptor);
         };
-    }, [navigate]);
+    }, [navigate, user]);
 
     // cache implementation
-    const cache = {};
-    const cacheTimeouts = {};
+    const cache = new LRUCache({ max: 100, maxAge: 1000 * 60 * 5 }); // set max size to 100 and max age to 5 minutes
 
-    const getFromCacheOrFetch = async (url, config, cacheTimeout) => {
-        if (cache[url]) {
-            return cache[url];
+
+
+    const getFromCacheOrFetch = async (url, config) => {
+        const cachedResponse = cache.get(url);
+
+        if (cachedResponse) {
+            return Promise.resolve(cachedResponse);
         }
 
         const response = await privateHttp.get(url, config);
-        cache[url] = response;
-        cacheTimeouts[url] = setTimeout(() => {
-            delete cache[url];
-            delete cacheTimeouts[url];
-        }, cacheTimeout);
+        cache.set(url, response);
 
-        return response;
+        return Promise.resolve(response);
     };
+
 
     const get = (url, config) => {
         const cacheTimeout = config && config.cacheTimeout ? config.cacheTimeout : 0;
         if (cacheTimeout > 0) {
             return getFromCacheOrFetch(url, config, cacheTimeout);
         } else {
-            return privateHttp.get(url, config);
+            const source = axios.CancelToken.source();
+            const responsePromise = privateHttp.get(url, { ...config, cancelToken: source.token });
+            return { response: responsePromise, cancelToken: source.token };
         }
     };
 
@@ -88,59 +105,3 @@ const useHttp = () => {
 };
 
 export default useHttp;
-
-
-// import { AxiosError } from "axios";
-// import { useEffect } from "react";
-// import { useHistory } from "react-router-dom";
-// import { privateHttp } from "../api/http";
-
-
-// const useHttp = () => {
-
-//     const navigate = useHistory()
-
-//     useEffect(() => {
-//         const user = JSON.parse(localStorage.getItem('user'))
-//         const reqInterceptor = privateHttp.interceptors.request.use(
-//             (config) => {
-//                 config.headers['Authorization'] = `Bearer ${user.token}`
-//                 return config;
-//             },
-//             (error) => {
-//                 return Promise.reject(error);
-//             }
-//         )
-
-//         const resInterceptor = privateHttp.interceptors.response.use(
-//             (res) => {
-//                 return Promise.resolve(res)
-//             },
-//             (err) => {
-//                 if (err instanceof AxiosError) {
-//                     if (err.response.status == 401) {
-//                         localStorage.removeItem('user');
-//                         navigate.push('/')
-
-//                     } else {
-//                         return Promise.reject(err);
-//                     }
-//                 }
-
-//                 return Promise.reject(err);
-
-//             }
-//         )
-
-//         return () => {
-//             privateHttp.interceptors.response.eject(resInterceptor)
-//             privateHttp.interceptors.request.eject(reqInterceptor)
-//         }
-
-//     }, [])
-
-//     return privateHttp
-// }
-
-
-// export default useHttp;

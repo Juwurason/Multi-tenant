@@ -1,19 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DashboardCard = ({ title, content, sty, icon, linkTitle, link, loading }) => {
+const DashboardCard = ({ title, content, sty, icon, linkTitle, link, loading, bod }) => {
     return (
         <div className="col-md-3">
-            <div className="card">
-                <div className="card-content">
-                    <div className="card-body">
+            <div className={`card`}>
+                <div className="card-content shadow-none">
+                    <div className="card-body shadow-none">
                         <div className="media d-flex justify-content-between">
                             <div className="media-body text-left">
                                 <span className="fw-bold">{title}</span>
 
                                 {
                                     loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                                        <div class="spinner-border text-secondary" role="status">
+                                        <div class="spinner-border text-light" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
                                     </div>

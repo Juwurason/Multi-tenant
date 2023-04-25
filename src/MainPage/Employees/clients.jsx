@@ -20,7 +20,7 @@ const Clients = () => {
   const FetchClient = async () => {
     try {
       setLoading(true)
-      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
       setClients(client);
       setLoading(false)
@@ -159,7 +159,7 @@ const Clients = () => {
                   <h5 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`}>{data.email}</Link></h5>
                   {/* <div className="small text-muted">CEO</div> */}
                   {/* <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat" className="btn btn-white btn-sm m-t-10 mr-1">Message</Link> */}
-                  <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="btn btn-white btn-sm m-t-10">View Profile</Link>
+                  {/* <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="btn btn-white btn-sm m-t-10">View Profile</Link> */}
                 </div>
               </div>
             )

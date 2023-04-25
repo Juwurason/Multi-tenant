@@ -16,6 +16,7 @@ import { FaArrowCircleLeft, FaArrowCircleRight, FaChartBar, FaDharmachakra, FaEd
 import { useCompanyContext } from '../../../context';
 import ReactPaginate from 'react-paginate';
 import '../../../assets/css/table2.css'
+import EditUser from '../../../_components/modelbox/EditUser';
 
 
 const AllUser = () => {
@@ -107,7 +108,7 @@ const AllUser = () => {
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">
-                                    <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New User</a>
+                                    <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#edit_user"><i className="fa fa-plus" /> Add New User</a>
 
                                 </div>
                             </div>
@@ -210,6 +211,7 @@ const AllUser = () => {
 
                 </div>
             </div>
+            <EditUser />
             <Offcanvas />
         </>
 

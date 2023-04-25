@@ -32,7 +32,7 @@ const Clients = () => {
   const FetchClient = async () => {
     try {
       setLoading(true)
-      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+      const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
       setClients(client);
 

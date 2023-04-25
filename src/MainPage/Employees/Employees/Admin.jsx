@@ -22,7 +22,7 @@ const AllAdmin = () => {
     const FetchStaff = async () => {
         try {
             setLoading(true)
-            const { data } = await privateHttp.get(`Administrators?companyId=${id.companyId}`);
+            const { data } = await privateHttp.get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             console.log(data);
 
             setAdmin(data);

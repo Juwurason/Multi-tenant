@@ -14,7 +14,7 @@ const EmployeeProfile = () => {
   useEffect(() => {
     const FetchStaff = async () => {
       try {
-        const { data } = await privateHttp.get(`/Staffs/${uid}`)
+        const { data } = await privateHttp.get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
         setStaffOne(data)
 
       } catch (error) {

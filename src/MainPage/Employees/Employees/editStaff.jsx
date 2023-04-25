@@ -70,7 +70,7 @@ const EditStaff = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await privateHttp.get(`/Staffs/${uid}`)
+                const response = await privateHttp.get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
                 setProfile(response.data);
                 setEditedProfile(response.data)
             } catch (error) {

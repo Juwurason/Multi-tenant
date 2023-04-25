@@ -10,9 +10,9 @@ export const CompanyProvider = ({ children }) => {
     const [loading, setLoading] = useState(false)
     const [companyId, setCompanyId] = useState('');
     const [email, setEmail] = useState('');
-    if (loading) {
-        toast('Fetching Data......')
-    }
+    // if (loading) {
+    //     toast('Fetching Data......')
+    // }
     const [userProfile, setUserProfile] = useState(
         {
             companyId: 0,

@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
 import Swal from 'sweetalert2';
-
 const AllEmployees = () => {
   const privateHttp = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
@@ -22,7 +21,7 @@ const AllEmployees = () => {
   const FetchStaff = async () => {
     try {
       setLoading(true);
-      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       setStaff(staff);
       setLoading(false);

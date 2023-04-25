@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import ReactPaginate from 'react-paginate';
+import Swal from 'sweetalert2';
 
 
 const Employeeslist = () => {
@@ -36,7 +37,7 @@ const Employeeslist = () => {
 
   const FetchStaff = async () => {
     try {
-      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       setStaff(staff);
       setLoading(false)
@@ -50,32 +51,47 @@ const Employeeslist = () => {
   }, []);
 
   const handleDelete = async (e) => {
-    try {
-      setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
-        { userId: id.userId }
-      )
-      // console.log(data);
-      if (data.status === 'Success') {
-        toast.success(data.message);
-        FetchStaff()
-      } else {
-        toast.error(data.message);
+    setLoading(true)
+    Swal.fire({
+      html: `<h3>Are you sure? you want to delete this staff</h3></br><p>You won't be able to revert this!</p>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'rgb(29 78 216)',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm Delete',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
+            { userId: id.userId }
+          )
+          if (data.status === 'Success') {
+            toast.success(data.message);
+            FetchStaff()
+          } else {
+            toast.error(data.message);
+          }
+
+          setLoading(false)
+
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+          setLoading(false);
+
+        }
+        finally {
+          setLoading(false)
+        }
+
       }
+    })
 
-      setLoading(false)
 
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
-      setLoading(false);
-
-    }
-    finally {
-      setLoading(false)
-    }
   }
+
 
 
   const toggleMobileMenu = () => {

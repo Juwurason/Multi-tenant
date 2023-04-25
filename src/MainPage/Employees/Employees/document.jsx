@@ -22,14 +22,14 @@ const Document = () => {
 
     const FetchDocument = async () => {
         try {
-            const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`);
+            const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const document = documentResponse.data;
             setDocument(document);
         } catch (error) {
             console.log(error);
         }
         try {
-            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`);
+            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const staff = staffResponse.data;
             setStaff(staff);
             setLoading(false)
@@ -38,7 +38,7 @@ const Document = () => {
         }
 
         try {
-            const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`);
+            const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
             setClients(client);
             setLoading(false)

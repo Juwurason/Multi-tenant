@@ -17,7 +17,7 @@ const ClientProfile = () => {
   useEffect(() => {
     const FetchClient = async () => {
       try {
-        const { data } = await privateHttp.get(`/Profiles/${uid}`)
+        const { data } = await privateHttp.get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
         setClientOne(data)
 
 
