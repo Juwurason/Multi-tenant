@@ -59,7 +59,6 @@ const ClientSidebar = (props) => {
                             </li>
                             <li className="submenu">
                                 <a href="/client/client/Dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
-
                             </li>
 
                             <li className="menu-title">
@@ -74,19 +73,10 @@ const ClientSidebar = (props) => {
                                 <Link to="/client/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
-                                <Link to="/"><i className="la la-book" /> <span>My Availabilities</span></Link>
-                            </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
-                                <Link to="/"><i className="la la-columns" /> <span>Attendances</span></Link>
-                            </li>
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
 
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
-                            </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/client/client-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>

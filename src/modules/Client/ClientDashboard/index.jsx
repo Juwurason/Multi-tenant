@@ -57,7 +57,7 @@ const ClientDashboard = () => {
     useEffect(()=>{
         const fetchProfile = async () => {
           try {
-              const response = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`)
+              const response = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`, { cacheTimeout: 300000 })
               setProfile(response.data)
               console.log(response.data);
           } catch (error) {

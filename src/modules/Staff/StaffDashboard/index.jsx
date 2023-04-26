@@ -59,7 +59,7 @@ const StaffDashboard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`)
+        const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
         setProfile(response.data)
         console.log(response.data);
       } catch (error) {
