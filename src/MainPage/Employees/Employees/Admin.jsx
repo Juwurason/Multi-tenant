@@ -143,6 +143,14 @@ const AllAdmin = () => {
 
 
                             <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" >
+
+                                {
+                                    loading && <div className='text-center fs-1'>
+                                        <div className="spinner-grow text-secondary" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                }
                                 {
                                     admin.map((data, index) =>
 
@@ -169,7 +177,11 @@ const AllAdmin = () => {
                                     )
                                 }
 
-
+                                {
+                                    !loading && admin.length <= 0 && <div className='text-center text-danger fs-6'>
+                                        <p>No data found</p>
+                                    </div>
+                                }
 
 
                             </div>

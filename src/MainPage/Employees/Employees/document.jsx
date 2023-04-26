@@ -56,7 +56,14 @@ const Document = () => {
     const [menu, setMenu] = useState(false)
     const downloadLinkRef = useRef(null);
     const [pageNumber, setPageNumber] = useState(0);
+    const [searchQuery, setSearchQuery] = useState("");
 
+
+
+    // const filteredData = document.filter((data) =>
+    //     data?.documentName.includes(searchQuery.toLowerCase()) ||
+    //     data?.user.includes(searchQuery.toLowerCase())
+    // );
 
     const itemsPerPage = 10;
     const pageCount = Math.ceil(document.length / itemsPerPage);
@@ -211,11 +218,14 @@ const Document = () => {
                         {/* /Search Filter */}
 
 
-                        <main className="table">
+                        <main className="table bg-white">
                             <section className="table__header">
                                 {/* <h1>Customer's Orders</h1> */}
                                 <div className="input-group">
-                                    <input type="search" className='form-control' placeholder="Search Data..." />
+                                    <input type="search" className='form-control' placeholder="Search Data..."
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value)}
+                                    />
                                     <FaSearch className='text-dark' />
                                 </div>
                                 <div className="export__file">
@@ -253,7 +263,25 @@ const Document = () => {
                                                     <td>{data.user}</td>
                                                     <td>{data.userRole}</td>
                                                     <td className='fw-bold'>
-                                                        {data.documentName}
+                                                        <div className='d-flex flex-column'>
+                                                            <span> {data.documentName}</span>
+                                                            <span className='d-flex gap-2'>
+                                                                <button className='btn text-primary btn-sm'
+                                                                    title='View'
+                                                                    onClick={() => handleView(data.documentUrl)}
+                                                                >
+
+                                                                    <FaEye />
+                                                                </button>
+                                                                {/* <button className='btn text-info btn-sm'
+                                                                    title='Download'
+                                                                    onClick={() => handleDownload(data.documentUrl, data.documentName)}
+                                                                >
+                                                                    <FaDownload />
+                                                                </button> */}
+                                                                <a ref={downloadLinkRef} style={{ display: 'none' }} />
+                                                            </span>
+                                                        </div>
 
                                                     </td>
                                                     <td>{moment(data.expirationDate).format('ll')}</td>
@@ -262,33 +290,24 @@ const Document = () => {
                                                     <td>{moment(data.dateModified).format('lll')}</td>
                                                     <td>
                                                         <span className='d-flex gap-2'>
-                                                            <button className='btn text-primary btn-sm'
-                                                                title='View'
-                                                                onClick={() => handleView(data.documentUrl)}
-                                                            >
 
-                                                                <FaEye />
-                                                            </button>
-                                                            <button className='btn text-info btn-sm'
-                                                                title='Download'
-                                                                onClick={() => handleDownload(data.documentUrl, data.documentName)}
-                                                            >
-                                                                <FaDownload />
-                                                            </button>
-                                                            <a ref={downloadLinkRef} style={{ display: 'none' }} />
-                                                            <button className='btn text-success btn-sm'
+                                                            <button className='btn text-white bg-success  px-2 py-1 rounded-2 btn-sm '
                                                                 title='Accept'
-                                                                onClick={() => handleView(data.documentUrl)}
                                                             >
 
-                                                                <FaCheck />
+                                                                Accept
                                                             </button>
-                                                            <button className='btn text-danger btn-sm'
+                                                            <button className='btn text-white bg-danger  px-2 py-1 rounded-2 btn-sm '
+                                                                title='Accept'
+                                                            >
+
+                                                                Delete
+                                                            </button>
+                                                            {/* <button className='btn text-danger btn-sm'
                                                                 title='Delete'
-                                                                onClick={() => handleDownload(data.documentUrl, data.documentName)}
                                                             >
                                                                 <FaTrash />
-                                                            </button>
+                                                            </button> */}
                                                         </span>
 
                                                     </td>

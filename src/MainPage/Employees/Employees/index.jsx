@@ -26,6 +26,7 @@ import Refferal from './refferals';
 import AllAdmin from './Admin';
 import AddStaff from '../../../_components/forms/AddStaff';
 import AddAdministrator from '../../../_components/forms/AddAdmin';
+import AddShiftRoaster from '../../../_components/forms/AddShiftRoaster';
 
 const EmployeesRoute = ({ match }) => (
    <Switch>
@@ -51,6 +52,7 @@ const EmployeesRoute = ({ match }) => (
       <Route path={`${match.url}/timesheet`} component={Timesheet} />
       <Route path={`${match.url}/overtime`} component={Overtime} />
       <Route path={`${match.url}/shift-scheduling`} component={ShiftScheduling} />
+      <Route path={`${match.url}/add-shift`} component={AddShiftRoaster} />
       <Route path={`${match.url}/shift-list`} component={ShiftList} />
    </Switch>
 );

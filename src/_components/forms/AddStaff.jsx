@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { useHistory } from 'react-router-dom';
+import { FaBackspace } from 'react-icons/fa';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import http from '../../api/http'
 import { useCompanyContext } from '../../context';
@@ -46,7 +47,7 @@ const AddStaff = () => {
                 formData
             )
             toast.success(data.message)
-            navigate.push('/app/main/dashboard')
+            navigate.push('/app/employee/allemployees')
             setLoading(false)
 
         } catch (error) {
@@ -63,15 +64,17 @@ const AddStaff = () => {
         <div className="page-wrapper">
             <Helmet>
                 <title>Add Staff</title>
-                <meta name="description" content="Login page" />
+                <meta name="description" content="" />
             </Helmet>
             <div className="content container-fluid">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
-                            <div className="card-header">
+                            <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Add New Staff</h4>
+                                <Link to={'/app/employee/allemployees'} className="card-title mb-0 text-danger fs-3 "> <FaBackspace /></Link>
                             </div>
+
                             <div className="card-body">
                                 <form onSubmit={submitForm}>
                                     <div className="row">

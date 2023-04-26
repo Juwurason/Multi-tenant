@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { useHistory } from 'react-router-dom';
+import { FaArrowLeft, FaBackspace } from 'react-icons/fa';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import http from '../../api/http'
 import { useCompanyContext } from '../../context';
@@ -82,8 +83,9 @@ const AddClients = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
-                            <div className="card-header">
+                            <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Add New Client</h4>
+                                <Link to={'/app/employees/clients'} className="card-title mb-0 text-danger fs-3 "> <FaBackspace /></Link>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={submitForm}>

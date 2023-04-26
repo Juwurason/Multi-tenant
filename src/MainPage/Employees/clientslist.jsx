@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Editclient from "../../_components/modelbox/Editclient"
-import 'antd/dist/antd.css';
-import "../antdstyle.css"
 import { useCompanyContext } from '../../context';
 import AddClient from '../../_components/modelbox/Addclient';
 import '../../assets/css/table2.css'
@@ -195,7 +193,7 @@ const Clients = () => {
                     </tr>
                   )
                 }
-                {displayData.length <= 0 && <tr>
+                {!loading && displayData.length <= 0 && <tr>
                   <td></td>
                   <td></td>
                   <td></td>

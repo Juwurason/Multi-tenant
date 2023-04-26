@@ -1,3 +1,4 @@
+import regeneratorRuntime from "@babel/runtime/regenerator";
 import axios from "axios";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";

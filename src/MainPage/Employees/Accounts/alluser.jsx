@@ -2,11 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import 'antd/dist/antd.css';
-import "../../antdstyle.css"
-import '../../../assets/css/table.css'
-import Editemployee from "../../../_components/modelbox/Editemployee"
-import Addemployee from "../../../_components/modelbox/Addemployee"
 import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -46,6 +41,7 @@ const AllUser = () => {
 
     const FetchStaff = async () => {
         try {
+            setLoading(true);
             const UserResponse = await get(`Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const users = UserResponse.data;
             setUsers(users);
@@ -146,6 +142,17 @@ const AllUser = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {loading && <tr>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><div className="spinner-grow text-secondary" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div></td>
+                                            <td></td>
+
+                                        </tr>}
                                         {
                                             displayData.map((data, index) =>
                                                 <tr key={index}>
@@ -169,7 +176,7 @@ const AllUser = () => {
                                                 </tr>
                                             )
                                         }
-                                        {displayData.length <= 0 && <tr>
+                                        {!loading && displayData.length <= 0 && <tr>
 
                                             <td></td>
                                             <td></td>

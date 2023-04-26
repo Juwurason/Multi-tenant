@@ -13,8 +13,8 @@ const DashboardCard = ({ title, content, sty, icon, linkTitle, link, loading, bo
 
                                 {
                                     loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                                        <div class="spinner-border text-light" role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                                        <div className="spinner-grow text-light" role="status">
+                                            <span className="sr-only">Loading...</span>
                                         </div>
                                     </div>
                                     )

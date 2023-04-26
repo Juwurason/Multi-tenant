@@ -16,9 +16,18 @@ const ShiftScheduling = () => {
   const { loading, setLoading } = useCompanyContext();
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
+  const [schedule, setSchedule] = useState([]);
 
   const FetchSchedule = async () => {
-
+    setLoading(true)
+    try {
+      const scheduleResponse = await get(`ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const schedule = scheduleResponse.data;
+      setSchedule(schedule);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
     try {
       const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
@@ -70,16 +79,16 @@ const ShiftScheduling = () => {
           <div className="page-header">
             <div className="row">
               <div className="col">
-                <h3 className="page-title">Roaster Calendar View</h3>
+                <h3 className="page-title">Shift Roaster</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="/app/employee/allemployees">Employees</Link></li>
-                  <li className="breadcrumb-item active">Shift Scheduling</li>
+                  <li className="breadcrumb-item active">Shift Roaster</li>
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto">
-                <Link to="/app/employee/shift-list" className="btn add-btn m-r-5">Shifts</Link>
-                <a href="#" className="btn add-btn m-r-5" data-bs-toggle="modal" data-bs-target="#add_schedule"> Assign Shifts</a>
+                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5">Add Shift</Link>
+                {/* <a href="#" className="btn add-btn m-r-5" data-bs-toggle="modal" data-bs-target="#add_schedule"> Assign Shifts</a> */}
               </div>
             </div>
           </div>

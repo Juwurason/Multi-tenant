@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
 import Swal from 'sweetalert2';
+import { FaEllipsisV } from 'react-icons/fa';
 const AllEmployees = () => {
   const privateHttp = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
@@ -156,6 +157,13 @@ const AllEmployees = () => {
             </div>
             {/* Search Filter */}
             <div className="row staff-grid-row">
+              {
+                loading && <div className='text-center fs-1'>
+                  <div className="spinner-grow text-secondary" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                </div>
+              }
 
               {
                 staff.map((data, index) =>
@@ -165,7 +173,7 @@ const AllEmployees = () => {
                         <Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`} className="avatar"><img src={Avatar_02} alt="" /></Link>
                       </div>
                       <div className="dropdown profile-action">
-                        <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                        <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
                         <div className="dropdown-menu dropdown-menu-right">
                           <Link to={`/app/profile/edit-profile/${data.staffId}`} className="dropdown-item">
                             <i className="fa fa-pencil m-r-5" /> Edit</Link>
@@ -187,7 +195,11 @@ const AllEmployees = () => {
                 )
               }
 
-
+              {
+                !loading && staff.length <= 0 && <div className='text-center text-danger fs-6'>
+                  <p>No data found</p>
+                </div>
+              }
 
 
 
@@ -199,10 +211,10 @@ const AllEmployees = () => {
           </div>
           {/* /Page Content */}
           {/* Add Employee Modal */}
-          <Addemployee />
+          {/* <Addemployee /> */}
           {/* /Add Employee Modal */}
           {/* Edit Employee Modal */}
-          <Editemployee />
+          {/* <Editemployee /> */}
           {/* /Edit Employee Modal */}
           {/* Delete Employee Modal */}
 

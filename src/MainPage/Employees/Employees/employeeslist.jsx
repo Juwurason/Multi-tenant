@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import 'antd/dist/antd.css';
-import "../../antdstyle.css"
-import '../../../assets/css/table.css'
+import '../../../assets/css/table2.css'
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Addemployee from "../../../_components/modelbox/Addemployee"
 import Header from '../../../initialpage/Sidebar/header'
@@ -12,7 +10,7 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
+import { FaArrowCircleLeft, FaArrowCircleRight, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaSearch, FaTrash } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import ReactPaginate from 'react-paginate';
 import Swal from 'sweetalert2';
@@ -25,11 +23,19 @@ const Employeeslist = () => {
   const { loading, setLoading } = useCompanyContext();
   const id = JSON.parse(localStorage.getItem('user'));
   const [pageNumber, setPageNumber] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
+
+
+  const filteredData = staff.filter((data) =>
+    data?.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    data?.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
 
   const itemsPerPage = 10;
   const pageCount = Math.ceil(staff.length / itemsPerPage);
-  const displayData = staff.slice(
+  const displayData = filteredData.slice(
     pageNumber * itemsPerPage,
     (pageNumber + 1) * itemsPerPage
 
@@ -172,7 +178,7 @@ const Employeeslist = () => {
 
 
             <div className="">
-              <div className="table-responsive">
+              {/* <div className="table-responsive">
                 <div className="table-wrapper">
                   <div className="table-title bg-primary">
                     <div className="row">
@@ -197,6 +203,44 @@ const Employeeslist = () => {
                         <th>Actions</th>
                       </tr>
                     </thead>
+                    <tbody> */}
+              <main className="table bg-white">
+                <section className="table__header">
+                  {/* <h1>Customer's Orders</h1> */}
+                  <div className="input-group">
+                    <input type="search" className='form-control' placeholder="Search Staffs..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                    />
+                    <FaSearch className='text-dark' />
+                  </div>
+                  <div className="export__file">
+                    <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
+                      <FaFileExport className='text-white fs-3' /></label>
+                    <input type="checkbox" id="export-file" />
+                    <div className="export__file-options ">
+                      <label>Export As &nbsp; ➜</label>
+                      <label htmlFor="export-file" id="toPDF">PDF <FaFilePdf className='text-danger' /></label>
+                      <label htmlFor="export-file" id="toCSV">CSV <FaFileCsv className='text-info' /></label>
+                      <label htmlFor="export-file" id="toEXCEL">EXCEL <FaFileExcel className='text-warning' /></label>
+                    </div>
+                  </div>
+                </section>
+                <section className="table__body">
+                  <table>
+                    <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
+                      <tr style={{ backgroundColor: "#18225C" }}>
+
+                        <th>#</th>
+                        <th>Staff ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
+                      </tr>
+
+                    </thead>
                     <tbody>
                       {
                         displayData.map((data, index) =>
@@ -209,16 +253,29 @@ const Employeeslist = () => {
                             <td>{data.phoneNumber}</td>
                             <td>{data.gender}</td>
                             <td>
-                              <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Edit" data-toggle="tooltip">
-                                <i className="material-icons">edit</i>
-                              </Link>
-                              <a onClick={() => handleDelete(data.staffId)} className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
+                              <span className='d-flex gap-3 align-items-center'>
+                                <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
+                                  <FaEdit className='text-info' />
+                                </Link>
+                                <a onClick={() => handleDelete(data.staffId)} className="delete" title="Delete" data-toggle="tooltip"><FaTrash className='text-danger' /></a>
+                              </span>
                             </td>
                           </tr>
                         )
                       }
 
+                      {displayData.length <= 0 && <tr>
 
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td className='text-danger fs-6'>No data to display</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+
+                      </tr>}
 
 
                     </tbody>
@@ -244,10 +301,8 @@ const Employeeslist = () => {
                       previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
                     />
                   </div>
-
-
-                </div>
-              </div>
+                </section>
+              </main>
             </div>
 
 

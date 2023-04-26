@@ -8,16 +8,17 @@ import { Avatar_01, Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_11, Avata
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import '../../../assets/css/table.css';
+import moment from 'moment';
 
 const ClientProfile = () => {
   const { uid } = useParams()
   const [clientOne, setClientOne] = useState({});
 
-  const privateHttp = useHttp()
+  const { get } = useHttp()
   useEffect(() => {
     const FetchClient = async () => {
       try {
-        const { data } = await privateHttp.get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
+        const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
         setClientOne(data)
 
 
@@ -70,7 +71,10 @@ const ClientProfile = () => {
                             {/* <h5 className="company-role m-t-0 mb-0">Barry Cuda</h5> */}
                             <small className="text-muted">{clientOne.email}</small>
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
-                            <div className="staff-msg"><Link to={`/app/employees/edit-client/${clientOne.profileId}`} className="btn btn-primary">Edit Profile</Link></div>
+                            <div className="staff-msg d-flex gap-2">
+                              <Link to={`/app/profile/edit-client/${clientOne.profileId}`} className="btn btn-primary">Edit Profile</Link>
+                              <Link to={`/app/profile/client-docUpload/${clientOne.profileId}`} className="btn btn-danger">Client's Doc</Link>
+                            </div>
                           </div>
                         </div>
                         <div className="col-md-7">
@@ -85,7 +89,7 @@ const ClientProfile = () => {
                             </li>
                             <li>
                               <span className="title">Birthday:</span>
-                              <span className="text">{clientOne.dateOfBirth}</span>
+                              <span className="text">{!clientOne.dateOfBirth ? "Not Updated" : moment(clientOne.dateOfBirth).format('ll')}</span>
                             </li>
                             <li>
                               <span className="title">Address:</span>

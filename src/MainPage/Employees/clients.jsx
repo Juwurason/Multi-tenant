@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
+import { FaEllipsisV } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -141,6 +142,13 @@ const Clients = () => {
         {/* Search Filter */}
 
         <div className="row staff-grid-row">
+          {
+            loading && <div className='text-center fs-1'>
+              <div className="spinner-grow text-secondary" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          }
 
           {
             clients.map((data, index) =>
@@ -150,7 +158,7 @@ const Clients = () => {
                     <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="avatar"><img alt="" src={Avatar_19} /></Link>
                   </div>
                   <div className="dropdown profile-action">
-                    <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                    <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
                     <div className="dropdown-menu dropdown-menu-right">
                       <Link className="dropdown-item" to={`/app/employees/edit-client/${data.profileId}`}><i className="fa fa-pencil m-r-5" /> Edit</Link>
                       <a className="dropdown-item" href="javascript:void(0)" onClick={() => handleDelete(data)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
@@ -164,6 +172,11 @@ const Clients = () => {
                 </div>
               </div>
             )
+          }
+          {
+            !loading && clients.length <= 0 && <div className='text-center text-danger fs-6'>
+              <p>No data founnd</p>
+            </div>
           }
 
 
