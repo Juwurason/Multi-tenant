@@ -134,8 +134,8 @@ const Sidebar = (props) => {
                     <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
                       "active" : pathname.includes('cts-view') ? "active" : ""}
                       to="/app/account/alluser">Manage Users</Link> </li>
-                    <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/tasks/tasks">Manage Roles</Link></li>
-                    <li><Link className={pathname.includes('task-board') ? "active" : ""} to="/app/projects/task-board">Activity Logs</Link></li>
+                    {/* <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/tasks/tasks">Manage Roles</Link></li>
+                    <li><Link className={pathname.includes('task-board') ? "active" : ""} to="/app/projects/task-board">Activity Logs</Link></li> */}
                   </ul>
                   : ""
                 }
@@ -156,7 +156,7 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> */}
-              <li className="menu-title">
+              {/* <li className="menu-title">
                 <span>Staff - Client Management</span>
               </li>
               <li className="submenu">
@@ -176,7 +176,7 @@ const Sidebar = (props) => {
 
               <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
                 <Link to="/app/employee/shift-scheduling"><i className="la la-calendar" /> <span>Shift Roaster</span></Link>
-              </li>
+              </li> */}
 
 
               {/* <li className={pathname.includes('leads') ? "active" : ""}>

@@ -46,7 +46,6 @@ const Clients = () => {
     }
   });
   const handleDelete = async (e) => {
-    setLoading(true)
     Swal.fire({
       html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3></br><p>This decision cannot be reverted!</p>`,
       icon: 'warning',
@@ -67,18 +66,14 @@ const Clients = () => {
             toast.error(data.message);
           }
 
-          setLoading(false)
 
         } catch (error) {
           console.log(error);
           toast.error(error.response.data.message)
           toast.error(error.response.data.title)
-          setLoading(false);
 
         }
-        finally {
-          setLoading(false)
-        }
+
 
       }
     })
@@ -160,7 +155,7 @@ const Clients = () => {
                   <div className="dropdown profile-action">
                     <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
                     <div className="dropdown-menu dropdown-menu-right">
-                      <Link className="dropdown-item" to={`/app/employees/edit-client/${data.profileId}`}><i className="fa fa-pencil m-r-5" /> Edit</Link>
+                      <Link className="dropdown-item" to={`/app/profile/edit-client/${data.profileId}`}><i className="fa fa-pencil m-r-5" /> Edit</Link>
                       <a className="dropdown-item" href="javascript:void(0)" onClick={() => handleDelete(data)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
                     </div>
                   </div>

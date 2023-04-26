@@ -40,7 +40,6 @@ const AllEmployees = () => {
   const [menu, setMenu] = useState(false);
 
   const handleDelete = async (e) => {
-    setLoading(true)
     Swal.fire({
       html: `<h3>Are you sure? you want to delete this staff</h3></br><p>You won't be able to revert this!</p>`,
       icon: 'question',
@@ -62,18 +61,15 @@ const AllEmployees = () => {
             toast.error(data.message);
           }
 
-          setLoading(false)
 
         } catch (error) {
           console.log(error);
           toast.error(error.response.data.message)
           toast.error(error.response.data.title)
-          setLoading(false);
+
 
         }
-        finally {
-          setLoading(false)
-        }
+
 
       }
     })

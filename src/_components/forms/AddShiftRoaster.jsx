@@ -51,7 +51,7 @@ const AddShiftRoaster = () => {
 
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Add To Shift Roaster</h4>
-                                <Link to={'/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <FaBackspace /></Link>
+                                <Link to={'/app/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <FaBackspace /></Link>
                             </div>
                             <div className="card-body">
                                 <form>

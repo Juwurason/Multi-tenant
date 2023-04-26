@@ -182,7 +182,7 @@ const Clients = () => {
                       <td>{moment(data.dateModified).format('lll')}</td>
                       <td>
                         <span className='d-flex gap-2 align-items-center'>
-                          <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
+                          <Link to={`/app/profile/edit-profile/${data.profileId}`} className="settings" title="Settings" data-toggle="tooltip">
                             <FaEdit className='text-info' />
                           </Link>
                           <a href="#" className="delete" title="Delete" data-toggle="tooltip"><FaTrash className='text-danger' /></a>
