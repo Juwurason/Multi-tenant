@@ -5,26 +5,26 @@ import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCompanyContext } from "../../context";
 import useHttp from "../../hooks/useHttp";
-const ClientDoc = () => {
+const StaffDoc = () => {
     const { loading, setLoading } = useCompanyContext();
     const { uid } = useParams()
-    const [clientOne, setClientOne] = useState({});
+    const [staffOne, setStaffOne] = useState({});
     const navigate = useHistory();
 
 
     const { get, post } = useHttp()
     useEffect(() => {
-        const FetchClient = async () => {
+        const FetchStaff = async () => {
             try {
-                const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
-                setClientOne(data)
+                const { data } = await get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
+                setStaffOne(data)
 
 
             } catch (error) {
                 console.log(error);
             }
         }
-        FetchClient()
+        FetchStaff()
     }, [])
 
 
@@ -54,19 +54,19 @@ const ClientDoc = () => {
         formData.append("DocumentFile", document);
         formData.append("DocumentName", documentName);
         formData.append("ExpirationDate", expire);
-        formData.append("User", clientOne.fullName);
+        formData.append("User", staffOne.fullName);
         formData.append("UserRole", id.role);
         formData.append("Status", "Pending");
 
         try {
             setLoading(true)
-            const { data } = await post(`/Profiles/document_upload?userId=${id.userId}`,
+            const { data } = await post(`/Staffs/document_upload?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
 
             setLoading(false)
-            navigate.push(`/app/profile/client-profile/${uid}/${clientOne.firstName}`)
+            navigate.push(`/app/profile/employee-profile/${uid}/${staffOne.firstName}`)
 
         } catch (error) {
             console.log(error);
@@ -92,7 +92,7 @@ const ClientDoc = () => {
                         <div className="col-md-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h4 className="card-title mb-0">Upload Document for {clientOne.fullName} </h4>
+                                    <h4 className="card-title mb-0">Upload Document for {staffOne.fullName} </h4>
                                 </div>
                                 <div className="card-body">
                                     <form
@@ -200,4 +200,4 @@ const ClientDoc = () => {
     );
 }
 
-export default ClientDoc;
+export default StaffDoc;

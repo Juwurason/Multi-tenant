@@ -409,7 +409,7 @@ const EditClient = () => {
                                 {step === 3 && renderStep3()}
                                 {step === 4 && renderStep4()}
                                 <div className="mt-3 text-center">
-                                    <Link to="/app/employee/clients" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
+                                    <Link to="/app/employees/clients" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
                                     {step > 1 && <button className="btn btn-primary mr-2"
                                         style={{ marginLeft: '10px' }}
                                         onClick={handlePrev}>Previous</button>}

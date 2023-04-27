@@ -9,6 +9,7 @@ import ClientProfile from "./clientprofile"
 import EditStaff from '../../Employees/Employees/editStaff';
 import ClientDoc from '../../../_components/forms/ClientsDoc';
 import EditClient from '../../Employees/editclient';
+import StaffDoc from '../../../_components/forms/StaffDoc';
 
 
 const ProfileRoute = ({ match }) => (
@@ -17,8 +18,8 @@ const ProfileRoute = ({ match }) => (
         <Route path={`${match.url}/employee-profile/:uid/*`} component={EmployeeProfile} />
         <Route path={`${match.url}/client-profile/:uid/*`} component={ClientProfile} />
         <Route path={`${match.url}/edit-client/:uid`} component={EditClient} />
-
         <Route path={`${match.url}/client-docUpload/:uid`} component={ClientDoc} />
+        <Route path={`${match.url}/staff-docUpload/:uid`} component={StaffDoc} />
         <Route path={`${match.url}/edit-profile/:uid`} component={EditStaff} />
     </Switch>
 );

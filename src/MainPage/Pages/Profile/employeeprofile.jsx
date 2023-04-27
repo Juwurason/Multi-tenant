@@ -72,7 +72,10 @@ const EmployeeProfile = () => {
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
                             <div className="staff-id">Staff ID : {staffOne.maxStaffId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
-                            <div className="staff-msg"><Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link></div>
+                            <div className="staff-msg d-flex gap-2">
+                              <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link>
+                              <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`} className="btn btn-danger">Staff Doc</Link>
+                            </div>
                           </div>
                         </div>
                         <div className="col-md-7">
