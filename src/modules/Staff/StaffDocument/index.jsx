@@ -21,6 +21,8 @@ const StaffDocument = () => {
   const [documentName, setDocumentName] = useState(null)
   const [expire, setExpire] = useState(null)
   const [document, setDocument] = useState(null)
+  const [showModal, setShowModal] = useState(false);
+
 
   const id = JSON.parse(localStorage.getItem('user'))
 
@@ -38,6 +40,7 @@ const StaffDocument = () => {
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setShowModal(false);
     if (documentName === "" ||  expire === "" || document === "")
      {
       return toast.error("Input Fields cannot be empty")
@@ -152,7 +155,7 @@ const StaffDocument = () => {
                     </div>
                   </div>
                   <div className="submit-section">
-                    <button className="btn btn-primary submit-btn" disabled={loading ? true : false}>
+                    <button className="btn btn-primary submit-btn" data-bs-dismiss="modal" aria-label="Close" disabled={loading ? true : false} onClick={() => setShowModal(false)}>
                     {loading ? <div className="spinner-grow text-light" role="status">
                  <span className="sr-only">Loading...</span>
              </div> : "Add"}

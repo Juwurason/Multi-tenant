@@ -59,6 +59,7 @@ const ClientSidebar = (props) => {
                             </li>
                             <li className="submenu">
                                 <a href="/client/client/Dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
+
                             </li>
 
                             <li className="menu-title">
@@ -66,20 +67,48 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('clients') ? "active" : ""}>
-                                <Link to="/client/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
+                                <Link to="/client/client-profile"><i className="la la-user" /> <span>My Profile</span></Link>
                             </li>
 
                             <li className={pathname.includes('leads') ? "active" : ""}>
                                 <Link to="/client/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
+
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
 
                             <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/client/client-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Representative</span></Link>
+                            </li>
+                            {/* <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Disability Support Needs</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Aids & Equipments</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Day Living & Night Support</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Health Support Needs</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Behaviour Support Needs</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Community Support Needs</span></Link>
+                            </li>
+                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <Link to=""><i className="la la-file-pdf-o" /> <span>Privacy Statement</span></Link>
+                            </li> */}
                             {/* <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-table"><i className="la la-file-pdf-o" /> <span>Tab</span></Link>
                             </li> */}
