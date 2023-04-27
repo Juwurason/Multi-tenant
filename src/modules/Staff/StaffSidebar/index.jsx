@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import "./style.css"
 
 const StaffSidebar = (props) => {
     const MenuMore = () => {
@@ -31,9 +32,7 @@ const StaffSidebar = (props) => {
         setLevel3Menu(value)
     }
 
-
-
-
+    
     let pathname = props.location.pathname
     return (
         <div id="sidebar" className="sidebar" >
@@ -47,9 +46,7 @@ const StaffSidebar = (props) => {
                 thumbMinSize={30}
                 universal={false}
                 hideTracksWhenNotNeeded={true}
-            // horizontal="false"
-
-            >
+              >
                 <div className="sidebar-inner slimscroll">
                     <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor:"#18225C", height:'100vh'}}>
                         
@@ -90,19 +87,13 @@ const StaffSidebar = (props) => {
                             <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
                             </li>
-                            {/* <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-table"><i className="la la-file-pdf-o" /> <span>Tab</span></Link>
-                            </li> */}
-                         
                         </ul>
                     </div>
                 </div>
 
 
             </Scrollbars>
-            <div className="two-col-bar" id="two-col-bar">
-                {/* <di */}
-            </div>
+            
         </div>
 
 
@@ -110,4 +101,7 @@ const StaffSidebar = (props) => {
 
 }
 
+
+
 export default withRouter(StaffSidebar);
+
