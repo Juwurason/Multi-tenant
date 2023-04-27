@@ -1,0 +1,9 @@
+.sidebar-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar-menu {
+    flex-grow: 1;
+  }
