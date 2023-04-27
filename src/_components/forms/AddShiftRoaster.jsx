@@ -75,7 +75,7 @@ const AddShiftRoaster = () => {
                                                 <label className="col-form-label">Client Name</label>
                                                 <div>
                                                     <select className="form-select">
-                                                        <option defaultValue hidde>--Select a Client--</option>
+                                                        <option defaultValue hidden>--Select a Client--</option>
                                                         {
                                                             clients.map((data, index) =>
                                                                 <option value={data.staffId} key={index}>{data.fullName}</option>)
@@ -85,22 +85,107 @@ const AddShiftRoaster = () => {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <label className="col-form-label">Date From</label>
+                                                <label className="col-form-label">Start Time</label>
                                                 <div><input className="form-control datetimepicker" type="datetime-local" /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <label className="col-form-label">Date To</label>
+                                                <label className="col-form-label">End Time</label>
                                                 <div><input className="form-control datetimepicker" type="datetime-local" /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-12">
                                             <div className="form-group">
-                                                <label className="col-form-label">Activities</label>
-                                                <div><input className="form-control" type="text" /></div>
+                                                <label className="col-form-label fw-bold">Activities</label>
+
+                                                <div className='d-flex gap-2 flex-wrap'>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Medication Supervision</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Medication administering</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Personal Support</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Domestic Cleaning</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Transport</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Dog training</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Install phone</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Welfare check</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Support Groceries shopping</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Pick up</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Baby sitting</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Taking to solicitors appointment</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Meal Preparation</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Shopping</label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Groceries Transport </label>
+                                                    </span>
+                                                    <span className="form-group">
+                                                        <input type="checkbox" />
+                                                        &nbsp;
+                                                        <label className="col-form-label">Domestics Social Support </label>
+                                                    </span>
+                                                </div>
+
                                             </div>
                                         </div>
+
+                                        <hr />
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <input type="checkbox" />
@@ -115,7 +200,7 @@ const AddShiftRoaster = () => {
                                                 <label className="col-form-label">Is Night Shift</label>
                                             </div>
                                         </div>
-
+                                        <hr />
 
 
                                     </div>

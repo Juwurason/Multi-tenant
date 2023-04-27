@@ -87,7 +87,7 @@ const ShiftScheduling = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto">
-                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5">Add Shift</Link>
+                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5">Add New Roaster</Link>
                 {/* <a href="#" className="btn add-btn m-r-5" data-bs-toggle="modal" data-bs-target="#add_schedule"> Assign Shifts</a> */}
               </div>
             </div>
@@ -152,9 +152,8 @@ const ShiftScheduling = () => {
           {/* Search Filter */}
 
 
-          <main className="table">
+          {/* <main className="table">
             <section className="table__header">
-              {/* <h1>Customer's Orders</h1> */}
               <div className="input-group">
                 <input type="search" className='form-control' placeholder="Search Data..." />
                 <FaSearch />
@@ -205,7 +204,7 @@ const ShiftScheduling = () => {
 
             </section>
           </main>
-
+ */}
 
 
 
@@ -219,7 +218,6 @@ const ShiftScheduling = () => {
       </div>
       {/* /Page Wrapper */}
       {/* Add Schedule Modal */}
-      <Addschedule />
       {/* /Add Schedule Modal */}
       {/* Edit Schedule Modal */}
 

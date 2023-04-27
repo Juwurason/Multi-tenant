@@ -114,7 +114,7 @@ const AllUser = () => {
                                         onChange={e => setSearchQuery(e.target.value)} />
                                     <FaSearch className='text-dark' />
                                 </div>
-                                <div className="export__file">
+                                {/* <div className="export__file">
                                     <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
                                         <FaFileExport className='text-white fs-3' /></label>
                                     <input type="checkbox" id="export-file" />
@@ -125,7 +125,7 @@ const AllUser = () => {
                                         <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
                                         <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
                                     </div>
-                                </div>
+                                </div> */}
                             </section>
                             <section className="table__body">
                                 <table>
@@ -165,8 +165,9 @@ const AllUser = () => {
 
                                                     <td>
                                                         <span className='d-flex gap-4 align-items-center'>
-                                                            <Link to={`/app/profile/edit-profile/${data.staffId}`} className="settings" title="Settings" data-toggle="tooltip">
+                                                            <Link to={`/app/account/edituser/${data.id}`} className="settings" title="Settings" data-toggle="tooltip">
                                                                 <FaEdit className='text-info' />
+
                                                             </Link>
                                                             <a href="#" className="delete" title="Delete" data-toggle="tooltip"><FaTrash className='text-danger' /></a>
                                                         </span>

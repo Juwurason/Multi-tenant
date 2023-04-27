@@ -129,7 +129,7 @@ const Clients = () => {
                 onChange={e => setSearchQuery(e.target.value)} />
               <FaSearch className='text-dark' />
             </div>
-            <div className="export__file">
+            {/* <div className="export__file">
               <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
                 <FaFileExport className='text-white fs-3' /></label>
               <input type="checkbox" id="export-file" />
@@ -140,7 +140,7 @@ const Clients = () => {
                 <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
                 <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
               </div>
-            </div>
+            </div> */}
           </section>
           <section className="table__body">
             <table>

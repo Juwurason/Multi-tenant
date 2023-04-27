@@ -23,6 +23,14 @@ const ClientDoc = () => {
             } catch (error) {
                 console.log(error);
             }
+            try {
+                const { data } = await get(`/Documents/get_all_client_documents?clientId=${uid}`, { cacheTimeout: 300000 })
+                console.log(data);
+
+
+            } catch (error) {
+                console.log(error);
+            }
         }
         FetchClient()
     }, [])
@@ -55,7 +63,7 @@ const ClientDoc = () => {
         formData.append("DocumentName", documentName);
         formData.append("ExpirationDate", expire);
         formData.append("User", clientOne.fullName);
-        formData.append("UserRole", id.role);
+        formData.append("UserRole", 'client');
         formData.append("Status", "Pending");
 
         try {

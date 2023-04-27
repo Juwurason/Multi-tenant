@@ -140,9 +140,9 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li>
-              <li className={pathname.includes('refferals') ? "active" : ""}>
+              {/* <li className={pathname.includes('refferals') ? "active" : ""}>
                 <Link to=""><i className="la la-user-plus" /> <span>Refferals</span></Link>
-              </li>
+              </li> */}
               {/* <li className="submenu">
                 <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-rocket" /> <span> Projects</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "projects" ?
@@ -174,9 +174,7 @@ const Sidebar = (props) => {
                 }
               </li>
 
-              <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
-                <Link to="/app/employee/shift-scheduling"><i className="la la-calendar" /> <span>Shift Roaster</span></Link>
-              </li> */}
+              */}
 
 
               {/* <li className={pathname.includes('leads') ? "active" : ""}>
@@ -186,7 +184,9 @@ const Sidebar = (props) => {
                 <Link to="/app/employees/tickets"><i className="la la-ticket" /> <span>Tickets</span></Link>
               </li> */}
 
-
+              <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
+                <Link to="/app/employee/shift-scheduling"><i className="la la-calendar" /> <span>Shift Roaster</span></Link>
+              </li>
               <li className="menu-title">
                 <span>Report Management</span>
               </li>

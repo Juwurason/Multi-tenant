@@ -188,7 +188,7 @@ const AdminDashboard = () => {
 
 
             </div>
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
                 <div className="row">
                   <div className="col-md-6 text-center">
@@ -239,7 +239,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
 
             {/* <div className="row">

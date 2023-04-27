@@ -12,6 +12,8 @@ import ReactPaginate from 'react-paginate';
 import '../../../assets/css/table2.css'
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 const Document = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const { loading, setLoading } = useCompanyContext();
@@ -24,6 +26,7 @@ const Document = () => {
         try {
             const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const document = documentResponse.data;
+            console.log(document);
             setDocument(document);
         } catch (error) {
             console.log(error);
@@ -58,7 +61,42 @@ const Document = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const handleDelete = async (e) => {
+        Swal.fire({
+            html: `<h3>Are you sure? you want to delete this Document</h3>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(29 78 216)',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm Delete',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await privateHttp.post(`/Documents/delete/${e}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchDocument()
+                    } else {
+                        toast.error(data.message);
+                    }
 
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
+            }
+        })
+
+
+    }
 
     // const filteredData = document.filter((data) =>
     //     data?.documentName.includes(searchQuery.toLowerCase()) ||
@@ -228,7 +266,7 @@ const Document = () => {
                                     />
                                     <FaSearch className='text-dark' />
                                 </div>
-                                <div className="export__file">
+                                {/* <div className="export__file">
                                     <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
                                         <FaFileExport className='text-white fs-3' /></label>
                                     <input type="checkbox" id="export-file" />
@@ -238,7 +276,7 @@ const Document = () => {
                                         <label htmlFor="export-file" id="toCSV">CSV <FaFileCsv className='text-info' /></label>
                                         <label htmlFor="export-file" id="toEXCEL">EXCEL <FaFileExcel className='text-warning' /></label>
                                     </div>
-                                </div>
+                                </div> */}
                             </section>
                             <section className="table__body">
                                 <table>
@@ -259,7 +297,7 @@ const Document = () => {
                                         {
                                             displayData.map((data, index) =>
                                                 <tr key={index}>
-                                                    <td>{data.documentId}</td>
+                                                    <td>{index + 1}</td>
                                                     <td>{data.user}</td>
                                                     <td>{data.userRole}</td>
                                                     <td className='fw-bold'>
@@ -298,7 +336,8 @@ const Document = () => {
                                                                 Accept
                                                             </button>
                                                             <button className='btn text-white bg-danger  px-2 py-1 rounded-2 btn-sm '
-                                                                title='Accept'
+                                                                title='Delete'
+                                                                onClick={() => handleDelete(data.documentId)}
                                                             >
 
                                                                 Delete
@@ -321,7 +360,7 @@ const Document = () => {
                                     </tbody>
                                 </table>
                                 <div className="clearfix">
-                                    <div className="hint-text">Showing <b>{itemsPerPage}</b> out of <b>{document.length}</b> entries</div>
+                                    <div className="hint-text"> <b>Page {pageNumber + 1}</b></div>
 
                                     <ReactPaginate
                                         pageCount={pageCount}

@@ -214,7 +214,7 @@ const Employeeslist = () => {
                     />
                     <FaSearch className='text-dark' />
                   </div>
-                  <div className="export__file">
+                  {/* <div className="export__file">
                     <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
                       <FaFileExport className='text-white fs-3' /></label>
                     <input type="checkbox" id="export-file" />
@@ -224,7 +224,7 @@ const Employeeslist = () => {
                       <label htmlFor="export-file" id="toCSV">CSV <FaFileCsv className='text-info' /></label>
                       <label htmlFor="export-file" id="toEXCEL">EXCEL <FaFileExcel className='text-warning' /></label>
                     </div>
-                  </div>
+                  </div> */}
                 </section>
                 <section className="table__body">
                   <table>

@@ -55,7 +55,7 @@ const StaffDoc = () => {
         formData.append("DocumentName", documentName);
         formData.append("ExpirationDate", expire);
         formData.append("User", staffOne.fullName);
-        formData.append("UserRole", id.role);
+        formData.append("UserRole", 'staff');
         formData.append("Status", "Pending");
 
         try {
