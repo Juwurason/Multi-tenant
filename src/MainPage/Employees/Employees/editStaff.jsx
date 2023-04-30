@@ -262,7 +262,7 @@ const EditStaff = () => {
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label>Account Name</label>
-                                <input type="text" className="form-control" name='AccountName' value={editedProfile.accountName || ''} onChange={handleInputChange} />
+                                <input type="text" className="form-control" name='accountName' value={editedProfile.accountName || ''} onChange={handleInputChange} />
                             </div>
 
                             <div className="form-group">

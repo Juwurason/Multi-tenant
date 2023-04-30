@@ -2,15 +2,37 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FaBackspace } from 'react-icons/fa';
+import { MultiSelect } from 'react-multi-select-component';
 import { Link } from 'react-router-dom';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
+
+const options = [
+    { label: "Medication Supervision", value: "Medication Supervision" },
+    { label: "Medication administering", value: "Medication administering" },
+    { label: "Personal Support", value: "Personal Support" },
+    { label: "Domestic Cleaning", value: "Domestic Cleaning" },
+    { label: "Transport", value: "Transport" },
+    { label: "Dog training", value: "Dog training" },
+    { label: "Install phone", value: "Install phone" },
+    { label: "Welfare check", value: "Welfare check" },
+    { label: "Support Groceries shopping", value: "Support Groceries shopping" },
+    { label: "Pick up", value: "Pick up" },
+    { label: "Baby sitting", value: "Baby sitting" },
+    { label: "Taking to solicitors appointment", value: "Taking to solicitors appointment" },
+    { label: "Meal Preparation", value: "Meal Preparation" },
+    { label: "Shopping", value: "Shopping" },
+    { label: "Groceries Transport", value: "Groceries Transport" },
+    { label: "Domestics Social Support", value: "Domestics Social Support" },
+
+];
 const AddShiftRoaster = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
     const { loading, setLoading } = useCompanyContext()
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
+    const [selected, setSelected] = useState([]);
     const FetchSchedule = async () => {
 
         try {
@@ -37,6 +59,26 @@ const AddShiftRoaster = () => {
     useEffect(() => {
         FetchSchedule()
     }, []);
+
+    const [repeat, setRepeat] = useState(false);
+    const [numOfDays, setNumOfDays] = useState(1);
+
+    const handleRepeatChange = (e) => {
+        setRepeat(e.target.checked);
+    };
+
+    const handleNumOfDaysChange = (e, day) => {
+        // get the value of the checkbox (true or false)
+        const checked = e.target.checked;
+
+        // update the state based on the checked value
+        if (checked) {
+            setNumOfDays(numOfDays + 1);
+        } else {
+            setNumOfDays(numOfDays - 1);
+        }
+    };
+
 
     return (
         <div className="page-wrapper">
@@ -99,89 +141,13 @@ const AddShiftRoaster = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label fw-bold">Activities</label>
 
-                                                <div className='d-flex gap-2 flex-wrap'>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Medication Supervision</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Medication administering</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Personal Support</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Domestic Cleaning</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Transport</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Dog training</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Install phone</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Welfare check</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Support Groceries shopping</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Pick up</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Baby sitting</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Taking to solicitors appointment</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Meal Preparation</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Shopping</label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Groceries Transport </label>
-                                                    </span>
-                                                    <span className="form-group">
-                                                        <input type="checkbox" />
-                                                        &nbsp;
-                                                        <label className="col-form-label">Domestics Social Support </label>
-                                                    </span>
-                                                </div>
 
+                                                <MultiSelect
+                                                    options={options}
+                                                    value={selected}
+                                                    onChange={setSelected}
+                                                    labelledBy="Select Task"
+                                                />
                                             </div>
                                         </div>
 
@@ -203,6 +169,57 @@ const AddShiftRoaster = () => {
                                         <hr />
 
 
+
+                                        <div>
+                                            <div className="form-group">
+                                                <input type="checkbox" checked={repeat} onChange={handleRepeatChange} />
+                                                &nbsp; &nbsp;
+                                                <label className="col-form-label">Repeat</label>
+                                            </div>
+
+                                            {repeat && (
+                                                <div>
+                                                    <p>Select days:</p>
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Monday')} />
+                                                        &nbsp;
+                                                        Monday
+                                                    </label>
+                                                    &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Tuesday')} />
+                                                        &nbsp;
+                                                        Tuesday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Wednesday')} />
+                                                        &nbsp;
+                                                        Wednesday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Thursday')} />
+                                                        &nbsp;
+                                                        Thursday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Friday')} />
+                                                        &nbsp;
+                                                        Friday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Saturday')} />
+                                                        &nbsp;
+                                                        Saturday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Sunday')} />
+                                                        &nbsp;
+                                                        Sunday
+                                                    </label> &nbsp; &nbsp;
+                                                    {/* <p>Number of days to repeat: {numOfDays}</p> */}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="submit-section">

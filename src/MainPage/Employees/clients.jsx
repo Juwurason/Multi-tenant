@@ -170,7 +170,7 @@ const Clients = () => {
           }
           {
             !loading && clients.length <= 0 && <div className='text-center text-danger fs-6'>
-              <p>No data founnd</p>
+              <p>No data found</p>
             </div>
           }
 

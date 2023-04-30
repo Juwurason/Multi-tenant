@@ -23,6 +23,7 @@ const Document = () => {
     const privateHttp = useHttp();
 
     const FetchDocument = async () => {
+        setLoading(true);
         try {
             const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const document = documentResponse.data;
@@ -98,14 +99,14 @@ const Document = () => {
 
     }
 
-    // const filteredData = document.filter((data) =>
-    //     data?.documentName.includes(searchQuery.toLowerCase()) ||
-    //     data?.user.includes(searchQuery.toLowerCase())
-    // );
+    const filteredData = document.filter((data) =>
+        data?.documentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data?.user.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const itemsPerPage = 10;
-    const pageCount = Math.ceil(document.length / itemsPerPage);
-    const displayData = document.slice(
+    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+    const displayData = filteredData.slice(
         pageNumber * itemsPerPage,
         (pageNumber + 1) * itemsPerPage
 
@@ -260,7 +261,7 @@ const Document = () => {
                             <section className="table__header">
                                 {/* <h1>Customer's Orders</h1> */}
                                 <div className="input-group">
-                                    <input type="search" className='form-control' placeholder="Search Data..."
+                                    <input type="search" className='form-control' placeholder="Search documents..."
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
                                     />
@@ -294,6 +295,20 @@ const Document = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {loading && <tr>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><div className="spinner-grow text-secondary" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div></td>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>}
                                         {
                                             displayData.map((data, index) =>
                                                 <tr key={index}>
@@ -355,6 +370,18 @@ const Document = () => {
                                         }
 
 
+                                        {!loading && displayData.length <= 0 && <tr>
+
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td className='text-danger fs-6'>No document found</td>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>}
 
 
                                     </tbody>

@@ -32,7 +32,7 @@ const AllUser = () => {
 
 
     const itemsPerPage = 10;
-    const pageCount = Math.ceil(users.length / itemsPerPage);
+    const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
     const displayData = filteredUsers.slice(
         pageNumber * itemsPerPage,
         (pageNumber + 1) * itemsPerPage
@@ -48,6 +48,11 @@ const AllUser = () => {
             setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
+
+        } finally {
+            setLoading(false)
+
         }
     };
     useEffect(() => {
@@ -193,7 +198,7 @@ const AllUser = () => {
                                     </tbody>
                                 </table>
                                 <div className="clearfix">
-                                    <div className="hint-text">Showing <b>{itemsPerPage}</b> out of <b>{displayData.length}</b> entries</div>
+                                    <div className="hint-text">Showing <b>{itemsPerPage}</b> out of <b>{filteredUsers.length}</b> entries</div>
 
                                     <ReactPaginate
                                         pageCount={pageCount}

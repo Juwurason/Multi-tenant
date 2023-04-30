@@ -3366,14 +3366,14 @@ input[type=file].form-control {
 
 .sidebar .sidebar-menu ul li.menu-title a i,
 .two-col-bar .sidebar-menu ul li.menu-title a i {
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .sidebar .sidebar-menu ul li a,
 .two-col-bar .sidebar-menu ul li a {
   justify-content: flex-start;
   position: relative;
-  font-size: 15px;
+  font-size: 13px;
   color: #b7c0cd;
   height: auto;
   -webkit-transition: all 0.2s ease;
