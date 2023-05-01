@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, withRouter } from 'react-router-dom';
-import man from "../../../assets/img/man.png"
+import man from "../../../assets/img/user.jpg"
 import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';

@@ -9,7 +9,7 @@ import {
   headerlogo, lnEnglish, lnFrench, lnSpanish, lnGerman, Avatar_02, Avatar_03, Avatar_05,
   Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
 } from '../../Entryfile/imagepath'
-
+import man from "../../assets/img/user.jpg"
 const Header = (props) => {
   const navigate = useHistory()
   const handlesidebar = () => {
@@ -283,7 +283,10 @@ const Header = (props) => {
         {/* /Message Notifications */}
         <li className="nav-item dropdown has-arrow main-drop">
           <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-            <span className="user-img me-1"><img src={Avatar_21} alt="" />
+            <span className="user-img me-1">
+
+              <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+
               <span className="status online" /></span>
             <span><FaAngleDown /></span>
           </a>
