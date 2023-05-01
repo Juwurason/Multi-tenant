@@ -155,3 +155,7 @@ body::-webkit-scrollbar-thumb {
     /* position: absolute; */
     width: 150px;
 }
+
+.bg-1 {
+    background: linear-gradient(135deg, #fcedf0, #f0eff6, #e4f2fc);
+}

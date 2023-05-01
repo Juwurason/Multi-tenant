@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
 const ClientChart = () => {
-    const [series] = useState([60, 30, 10]);
+    const [series] = useState([60, 10, 30]);
 
     const [options] = useState({
         chart: {
@@ -18,7 +18,7 @@ const ClientChart = () => {
         plotOptions: {
             pie: {
                 donut: {
-                    size: '65%',
+                    size: '60%',
                     background: 'transparent',
                 },
             },
@@ -31,7 +31,7 @@ const ClientChart = () => {
                 breakpoint: 2600,
                 options: {
                     chart: {
-                        width: 280,
+                        width: 270,
                     },
                 },
             },
@@ -39,7 +39,7 @@ const ClientChart = () => {
                 breakpoint: 640,
                 options: {
                     chart: {
-                        width: 100,
+                        width: 90,
                     },
                 },
             },

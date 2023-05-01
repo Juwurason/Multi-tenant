@@ -34,7 +34,7 @@ const Sidebar = (props) => {
 
   let pathname = props.location.pathname
   return (
-    <div id="sidebar" className="sidebar" style={{ backgroundColor: "#18225C", height: '100vh' }}>
+    <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75BC", height: '100vh' }}>
       <Scrollbars
         autoHide
         autoHideTimeout={1000}
@@ -49,7 +49,7 @@ const Sidebar = (props) => {
 
       >
         <div className="sidebar-inner slimscroll">
-          <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#18225C", height: '100vh' }}>
+          <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75BC", height: '100vh' }}>
 
 
             { /*Vertical Sidebar starts here*/}

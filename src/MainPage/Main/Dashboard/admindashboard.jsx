@@ -5,22 +5,21 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, withRouter } from 'react-router-dom';
-import { User, Avatar_19, Avatar_07, Avatar_06, Avatar_14 } from '../../../Entryfile/imagepath.jsx'
-
-import {
-  BarChart, Bar, Cell, ResponsiveContainer,
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-} from 'recharts';
+import man from "../../../assets/img/man.png"
 import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
-import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaRegUser, FaTicketAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import ClientChart from '../../../_components/chart/ClientChart.jsx';
 import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineGroup, MdOutlinePages, MdOutlinePersonOutline, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
+import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
+import {
+  BarChart, Bar, Cell, ResponsiveContainer,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+} from 'recharts';
 
 
 const barchartdata = [
@@ -33,13 +32,11 @@ const barchartdata = [
   { y: '2012', "Total Income": 100, 'Total Outcome': 90 }
 ];
 const linechartdata = [
-  { y: '2006', "Total Sales": 50, 'Total Revenue': 90 },
-  { y: '2007', "Total Sales": 75, 'Total Revenue': 65 },
-  { y: '2008', "Total Sales": 50, 'Total Revenue': 40 },
-  { y: '2009', "Total Sales": 75, 'Total Revenue': 65 },
-  { y: '2010', "Total Sales": 50, 'Total Revenue': 40 },
-  { y: '2011', "Total Sales": 75, 'Total Revenue': 65 },
-  { y: '2012', "Total Sales": 100, 'Total Revenue': 50 }
+
+  { y: 'Week 1', "Total Sales": 75, 'Total Revenue': 65, 'Total Outcome': 0 },
+  { y: 'Week 2', "Total Sales": 50, 'Total Revenue': 40, 'Total Outcome': 30 },
+  { y: 'Week 3', "Total Sales": 75, 'Total Revenue': 65, 'Total Outcome': 45 },
+  { y: 'Week 4', "Total Sales": 100, 'Total Revenue': 50, 'Total Outcome': 75 }
 ];
 const AdminDashboard = () => {
   const userObj = JSON.parse(localStorage.getItem('user'));
@@ -185,24 +182,24 @@ const AdminDashboard = () => {
 
               <div className='col-md-4 p-2'>
                 {/* <ClientChart /> */}
-                <div className='p-3 shadow-sm'>
+                <div className='p-3 shadow'>
                   <h3>Clients</h3>
                   <div className='d-flex justify-content-center flex-column p-2 gap-2'>
                     <div className='d-flex justify-content-between align-items-center'>
-                      <span><MdOutlineSwitchAccount className='fs-3' /> Total number of clients</span>
+                      <span><MdOutlineSwitchAccount className='fs-2' /> Total number of clients</span>
                       <h2 className='text-primary'>
 
                         {clients.length}
                       </h2>
                     </div>
-                    <div className=''>
+                    <div className='d-flex justify-content-end'>
                       <Link style={{ fontSize: "12px" }}
 
-                        to={`/app/employees/clients`} className='pointer text-dark text-center'>View all</Link>
+                        to={`/app/employees/clients`} className='pointer text-dark'>View all</Link>
                     </div>
-                    <div className='border p-2'>
+                    <div className='p-2 bg-1 rounded-2'>
                       <div className='d-flex flex-column justify-content-start'>
-                        <span>Satisfaction Stats</span>
+                        <span className='fw-semibold'>Satisfaction Stats</span>
                         <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span>
                       </div>
                       <ClientChart />
@@ -246,13 +243,16 @@ const AdminDashboard = () => {
               <div className='col-md-3 p-2 d-flex flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h5>Recently Onboarded Clients</h5>
+
                   <div className="row mt-2">
                     <div className="col-2">
-                      <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                      </div>
                     </div>
 
                     <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-5 fw-bold'>Gary Nevile</span>
+                      <span className='text-primary fs-6 fw-bold'>Gary Nevile</span>
                       <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
                       <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
                     </div>
@@ -260,11 +260,13 @@ const AdminDashboard = () => {
                   </div>
                   <div className="row mt-2">
                     <div className="col-2">
-                      <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                      </div>
                     </div>
 
                     <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-5 fw-bold'>Gary Nevile</span>
+                      <span className='text-primary fs-6 fw-bold'>Michael Peterson</span>
                       <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
                       <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
                     </div>
@@ -272,20 +274,56 @@ const AdminDashboard = () => {
                   </div>
                   <div className="row mt-2">
                     <div className="col-2">
-                      <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                      </div>
                     </div>
 
                     <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-5 fw-bold'>Gary Nevile</span>
+                      <span className='text-primary fs-6 fw-bold text-truncate'>Susan Flemmingham</span>
                       <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
                       <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
                     </div>
 
                   </div>
+                  <div className="row mt-2">
+                    <div className="col-2">
+                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                      </div>
+                    </div>
+
+                    <div className="col-10 d-flex flex-column justify-content-start">
+                      <span className='text-primary fs-6 fw-bold text-truncate'>Orville Norris</span>
+                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
+                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
+                    </div>
+
+                  </div>
+                  <div className="row mt-2">
+                    <div className="col-2">
+                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                      </div>
+                    </div>
+
+                    <div className="col-10 d-flex flex-column justify-content-start">
+                      <span className='text-primary fs-6 fw-bold text-truncate'>Cory Brooks</span>
+                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
+                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
+                    </div>
+
+                  </div>
+                  <div className='d-flex justify-content-end mt-2'>
+                    <span className='text-primary' style={{ fontSize: "12px", }}>
+                      See all <FaLongArrowAltRight className='fs-3' />
+                    </span>
+                  </div>
+
                 </div>
-                <div className={`card shadow-none border border-info`}>
-                  <div className="card-content shadow-none">
-                    <div className="card-body shadow-none">
+                <div className={`card border border-info`}>
+                  <div className="card-content">
+                    <div className="card-body">
                       <div className="media d-flex justify-content-between">
                         <div className="media-body text-left">
                           <span>Documents</span>
@@ -304,12 +342,14 @@ const AdminDashboard = () => {
 
                           <Link style={{ fontSize: "12px" }}
 
-                            to={`/app/employee/document`} className='pointer text-dark'>View all</Link>
+                            to={`/app/employee/document`} className='pointer text-dark text-end'>View all</Link>
                         </div>
                         <div className="align-self-center">
                           <MdOutlineFolderOpen className='fs-4' />
                         </div>
                       </div>
+                      <div className='d-flex justify-content-end'>
+                        <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span></div>
                     </div>
                   </div>
                 </div>
@@ -319,10 +359,10 @@ const AdminDashboard = () => {
 
 
             </div>
-            {/* <div className="row">
+            <div className="row">
               <div className="col-md-12">
                 <div className="row">
-                  <div className="col-md-6 text-center">
+                  {/* <div className="col-md-6 text-center">
                     <div className="card">
                       <div className="card-body">
                         <h3 className="card-title">Total</h3>
@@ -347,11 +387,16 @@ const AdminDashboard = () => {
 
                       </div>
                     </div>
-                  </div>
-                  <div className="col-md-6 text-center">
+                  </div> */}
+                  <div className="col-md-7 p-2">
                     <div className="card">
                       <div className="card-body">
-                        <h3 className="card-title">Incoming</h3>
+                        <div className='d-flex justify-content-between'>
+                          <h3 className="card-title">Clients Per</h3>
+                          <div>
+
+                          </div>
+                        </div>
                         <ResponsiveContainer width='100%' height={300}>
                           <LineChart data={linechartdata}
                             margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
@@ -360,96 +405,49 @@ const AdminDashboard = () => {
                             <YAxis />
 
                             <Legend />
-                            <Line type="monotone" dataKey="Total Sales" stroke="#4256D0" fill="#18225C" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
-                            <Line type="monotone" dataKey="Total Revenue" stroke="#18225C" fill="#4256D0" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
+                            <Line type="monotone" dataKey="Total Sales" stroke="#00A31A" fill="#000" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
+                            <Line type="monotone" dataKey="Total Revenue" stroke="#C8102E" fill="#fff" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
+                            <Line type="monotone" dataKey="Total Outcome" stroke="#000" fill="#fff" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
                           </LineChart>
                         </ResponsiveContainer>
 
+                        <div className='d-flex justify-content-between'>
+                          <span>20% increase, compared to Last week</span>
+                          <div>
+
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <div className="col-md-5 p-2">
+                    <div className='p-3 shadow-sm'>
+                      <h4>Staff log</h4>
+                      <div className='d-flex mt-2 justify-content-between'>
+                        <span>John A. clocked in</span>
+                        <span>8:00AM</span>
+                      </div>
+                      <div className='d-flex mt-2 justify-content-between'>
+                        <span>Mary C. clocked in</span>
+                        <span>8:00AM</span>
+                      </div>
+                      <div className='d-flex mt-2 justify-content-between'>
+                        <span>Nelly C. clocked out</span>
+                        <span>8:00PM</span>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+
                 </div>
               </div>
-            </div> */}
+            </div>
 
 
-            {/* <div className="row">
-              <div className="col-md-12">
-                <div className="card-group m-b-30">
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="d-flex justify-content-between mb-3">
-                        <div>
-                          <span className="d-block">New Employees</span>
-                        </div>
-                        <div>
-                          <span className="text-success">+10%</span>
-                        </div>
-                      </div>
-                      <h3 className="mb-3">10</h3>
-                      <div className="progress mb-2" style={{ height: '5px' }}>
-                        <div className="progress-bar bg-primary" role="progressbar" style={{ width: '70%' }} aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} />
-                      </div>
-                      <p className="mb-0">Overall Employees 218</p>
-                    </div>
-                  </div>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="d-flex justify-content-between mb-3">
-                        <div>
-                          <span className="d-block">Earnings</span>
-                        </div>
-                        <div>
-                          <span className="text-success">+12.5%</span>
-                        </div>
-                      </div>
-                      <h3 className="mb-3">$1,42,300</h3>
-                      <div className="progress mb-2" style={{ height: '5px' }}>
-                        <div className="progress-bar bg-primary" role="progressbar" style={{ width: '70%' }} aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} />
-                      </div>
-                      <p className="mb-0">Previous Month <span className="text-muted">$1,15,852</span></p>
-                    </div>
-                  </div>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="d-flex justify-content-between mb-3">
-                        <div>
-                          <span className="d-block">Expenses</span>
-                        </div>
-                        <div>
-                          <span className="text-danger">-2.8%</span>
-                        </div>
-                      </div>
-                      <h3 className="mb-3">$8,500</h3>
-                      <div className="progress mb-2" style={{ height: '5px' }}>
-                        <div className="progress-bar bg-primary" role="progressbar" style={{ width: '70%' }} aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} />
-                      </div>
-                      <p className="mb-0">Previous Month <span className="text-muted">$7,500</span></p>
-                    </div>
-                  </div>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="d-flex justify-content-between mb-3">
-                        <div>
-                          <span className="d-block">Profit</span>
-                        </div>
-                        <div>
-                          <span className="text-danger">-75%</span>
-                        </div>
-                      </div>
-                      <h3 className="mb-3">$1,12,000</h3>
-                      <div className="progress mb-2" style={{ height: '5px' }}>
-                        <div className="progress-bar bg-primary" role="progressbar" style={{ width: '70%' }} aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} />
-                      </div>
-                      <p className="mb-0">Previous Month <span className="text-muted">$1,42,000</span></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {/* Statistics Widget */}
 
-            {/* /Statistics Widget */}
           </div>
         </div>
       </div>
@@ -459,7 +457,7 @@ const AdminDashboard = () => {
       {/* /Page Content */}
 
 
-      <Offcanvas />
+      {/* <Offcanvas /> */}
     </>
   );
 }
