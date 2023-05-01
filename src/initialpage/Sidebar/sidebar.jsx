@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { MdDashboard } from 'react-icons/md';
 
 const Sidebar = (props) => {
   const MenuMore = () => {
@@ -58,7 +59,9 @@ const Sidebar = (props) => {
               </li>
               <li className="submenu">
 
-                <Link to="/app/main/dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" />
+                <Link to="/app/main/dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}>
+                  {/* <i className="la la-dashboard" /> */}
+                  <MdDashboard className='fs-5' />
                   <span> Dashboard</span></Link>
 
 

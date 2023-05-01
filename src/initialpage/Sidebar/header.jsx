@@ -2,6 +2,7 @@
  * App Header
  */
 import React, { useEffect, useState } from 'react'
+import { FaAngleDown, FaArrowDown } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -42,7 +43,7 @@ const Header = (props) => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={headerlogo} width={40} height={40} alt="" style={{ backgroundColor: "#000" }} />
+          <img src={headerlogo} width={40} height={40} alt="" />
         </Link>
       </div>
       {/* /Logo */}
@@ -284,7 +285,7 @@ const Header = (props) => {
           <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <span className="user-img me-1"><img src={Avatar_21} alt="" />
               <span className="status online" /></span>
-            <span>Admin</span>
+            <span><FaAngleDown /></span>
           </a>
           <div className="dropdown-menu">
             <Link className="dropdown-item" to={"/app/employee/changePassword"}>Change Password</Link>

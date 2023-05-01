@@ -15,10 +15,12 @@ import Header from '../../../initialpage/Sidebar/header'
 import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
-import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaTicketAlt, FaUser, FaUsers } from 'react-icons/fa';
+import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaRegUser, FaTicketAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
+import ClientChart from '../../../_components/chart/ClientChart.jsx';
+import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineGroup, MdOutlinePages, MdOutlinePersonOutline, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
 
 
 const barchartdata = [
@@ -143,46 +145,175 @@ const AdminDashboard = () => {
               </div>
             </div>
             {/* /Page Header */}
-            <h4>Overview</h4>
-            <div className="row">
+            <div className="row g-1">
+              <div className='col-md-5'>
+                <div className="row">
+                  <h4>Overview</h4>
+                  <DashboardCard title={"Admin"} sty={'info'}
+                    content={0} icon={<MdOutlinePersonOutline className='fs-4' />}
+                    link={''}
+                  />
+                  <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
+                    linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
+                  />
+                  <DashboardCard title={"Shift Roaster"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
+                    link={``}
+                    sty={'danger'}
+                  />
+                  <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}
+                    linkTitle={"View Progress Notes"} link={``} sty={'warning'}
+                  />
+                  {/* <DashboardCard title={"Clients"} sty={'warning'}
+                    content={clients.length} icon={<MdOutlineGroup className='fs-4' />}
+                    linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
+                  /> */}
+                  <DashboardCard title={"Tickets"} sty={'danger'}
+                    content={0} icon={<MdOutlinePages className='fs-4' />}
+                    link={''}
+                  />
+                  {/* <DashboardCard title={"Document"}
+                    sty={'danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}
+                    linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
+                  /> */}
+                  <DashboardCard title={"Attendances"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
+                    link={``} sty={'warning'}
+                  />
+                </div>
 
-              <DashboardCard title={"Staffs"} bod={'border border-success'} sty={'text-success'} content={staff.length} icon={<FaUser className='fs-4
-                  text-success' />}
-                linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
-              />
-              <DashboardCard title={"Clients"} sty={'text-warning'}
-                bod={'border border-warning'}
-                content={clients.length} icon={<FaUsers className='fs-4 text-warning' />}
-                linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
-              />
-              <DashboardCard title={"Admin"} sty={'text-info'}
-                bod={'border border-info'}
-                content={0} icon={<FaUser className='fs-4 text-info' />}
-                linkTitle={"View Admin"} link={''}
-              />
-              <DashboardCard title={"Tickets"} sty={'text-primary'}
-                bod={'border border-primary'}
-                content={0} icon={<FaTicketAlt className='fs-4 text-primary' />}
-                linkTitle={"View Tickets"} link={''}
-              />
-              <DashboardCard title={"Document"}
-                bod={'border border-danger'}
-                sty={'text-danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}
-                linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
-              />
-              <DashboardCard title={"Progress Notes "} content={0} icon={<FaFileAlt className='fs-4' />}
-                linkTitle={"View Progress Notes"} link={``}
-              />
-              <DashboardCard title={"Shift Roaster"} content={0} icon={<FaCalendar className='fs-4' />}
-                linkTitle={"View Roaster"} link={``}
-              />
-              <DashboardCard title={"Attendances"} content={0} icon={<FaClock className='fs-4' />}
-                linkTitle={"View Attendance"} link={``}
-              />
-
-
+              </div>
 
 
+              <div className='col-md-4 p-2'>
+                {/* <ClientChart /> */}
+                <div className='p-3 shadow-sm'>
+                  <h3>Clients</h3>
+                  <div className='d-flex justify-content-center flex-column p-2 gap-2'>
+                    <div className='d-flex justify-content-between align-items-center'>
+                      <span><MdOutlineSwitchAccount className='fs-3' /> Total number of clients</span>
+                      <h2 className='text-primary'>
+
+                        {clients.length}
+                      </h2>
+                    </div>
+                    <div className=''>
+                      <Link style={{ fontSize: "12px" }}
+
+                        to={`/app/employees/clients`} className='pointer text-dark text-center'>View all</Link>
+                    </div>
+                    <div className='border p-2'>
+                      <div className='d-flex flex-column justify-content-start'>
+                        <span>Satisfaction Stats</span>
+                        <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span>
+                      </div>
+                      <ClientChart />
+                      <div className="row">
+                        <div className='d-flex align-items-start gap-2 col-4'>
+                          <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#5A6ACF" }}></div>
+                          <div>
+                            Excellent
+                            <br />
+                            60%
+                          </div>
+
+                        </div>
+                        <div className='d-flex align-items-start gap-2 col-4'>
+                          <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#8593ED" }}></div>
+                          <div>
+                            Fair
+                            <br />
+                            30%
+                          </div>
+
+                        </div>
+                        <div className='d-flex align-items-start gap-2 col-4'>
+                          <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#FF81C5" }}></div>
+                          <div>
+                            Poor
+                            <br />
+                            10%
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div className='col-md-3 p-2 d-flex flex-column gap-2 justify-content-start'>
+                <div className='p-3 shadow-sm'>
+                  <h5>Recently Onboarded Clients</h5>
+                  <div className="row mt-2">
+                    <div className="col-2">
+                      <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                    </div>
+
+                    <div className="col-10 d-flex flex-column justify-content-start">
+                      <span className='text-primary fs-5 fw-bold'>Gary Nevile</span>
+                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
+                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
+                    </div>
+
+                  </div>
+                  <div className="row mt-2">
+                    <div className="col-2">
+                      <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                    </div>
+
+                    <div className="col-10 d-flex flex-column justify-content-start">
+                      <span className='text-primary fs-5 fw-bold'>Gary Nevile</span>
+                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
+                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
+                    </div>
+
+                  </div>
+                  <div className="row mt-2">
+                    <div className="col-2">
+                      <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                    </div>
+
+                    <div className="col-10 d-flex flex-column justify-content-start">
+                      <span className='text-primary fs-5 fw-bold'>Gary Nevile</span>
+                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
+                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
+                    </div>
+
+                  </div>
+                </div>
+                <div className={`card shadow-none border border-info`}>
+                  <div className="card-content shadow-none">
+                    <div className="card-body shadow-none">
+                      <div className="media d-flex justify-content-between">
+                        <div className="media-body text-left">
+                          <span>Documents</span>
+
+                          {
+                            loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
+                              <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                              </div>
+                            </div>
+                            )
+
+                              :
+                              <h3 className='text-info'>{document.length}</h3>
+                          }
+
+                          <Link style={{ fontSize: "12px" }}
+
+                            to={`/app/employee/document`} className='pointer text-dark'>View all</Link>
+                        </div>
+                        <div className="align-self-center">
+                          <MdOutlineFolderOpen className='fs-4' />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
 
