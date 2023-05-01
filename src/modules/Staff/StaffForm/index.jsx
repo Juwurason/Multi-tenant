@@ -90,7 +90,7 @@ const StaffForm = () => {
             </tr>
             <tr>
               <td>Thursday</td>
-              <td>10:30 PM</td>
+              <td>10:31 PM</td>
               <td>12:30 PM</td>
             </tr>
           </tbody>
