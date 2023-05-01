@@ -75,8 +75,8 @@ const StaffForm = () => {
 
         <div className="table-responsive">
         <table className="table table-striped">
-          <thead>
-            <tr>
+          <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
+            <tr style={{ backgroundColor: "#18225C" }}>
               <th>Days</th>
               <th>From Time of Day</th>
               <th>To Time of Day</th>

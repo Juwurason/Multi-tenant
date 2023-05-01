@@ -56,7 +56,6 @@ const StaffSidebar = (props) => {
                             </li>
                             <li className="submenu">
                                 <a href="/staff/staff/staffDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
-                
                             </li>
                           
                             <li className="menu-title">
@@ -82,7 +81,7 @@ const StaffSidebar = (props) => {
                             </li>
                           
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-roster"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
+                                <Link to="/staff/staff-roster"><i className="la la-file-pdf-o" /> <span>My Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
