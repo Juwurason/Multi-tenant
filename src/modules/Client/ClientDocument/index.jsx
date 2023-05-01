@@ -164,7 +164,7 @@ const ClientDocument = () => {
                     </div>
                   </div>
                   <div className="submit-section">
-                    <button className="btn btn-primary submit-btn" disabled={loading ? true : false}>
+                    <button className="btn btn-primary submit-btn" data-bs-dismiss="modal" aria-label="Close" disabled={loading ? true : false}>
                     {loading ? <div className="spinner-grow text-light" role="status">
                  <span className="sr-only">Loading...</span>
              </div> : "Add"}

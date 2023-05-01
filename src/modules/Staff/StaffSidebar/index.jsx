@@ -56,7 +56,6 @@ const StaffSidebar = (props) => {
                             </li>
                             <li className="submenu">
                                 <a href="/staff/staff/staffDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
-                
                             </li>
                           
                             <li className="menu-title">

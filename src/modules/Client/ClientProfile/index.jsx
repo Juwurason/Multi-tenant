@@ -124,7 +124,7 @@ const ClientProfile = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="pro-edit"><Link to="/staff/staff-edit-profile" className="edit-icon">Edit</Link></div>
+                    <div className="pro-edit"><Link to="/staff/staff-edit-profile" className="edit-icon"><i className="fa fa-pencil" /></Link></div>
                   </div>
                 </div>
               </div>
@@ -148,7 +148,7 @@ const ClientProfile = () => {
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Personal Informations <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#personal_info_modal"><i className="fa fa-pencil" /></a></h3>
+                      <h3 className="card-title">Personal Informations </h3>
                       <ul className="personal-info">
                         <li>
                           <div className="title">Passport No.</div>
@@ -189,7 +189,7 @@ const ClientProfile = () => {
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Emergency Contact <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i className="fa fa-pencil" /></a></h3>
+                      <h3 className="card-title">Emergency Contact </h3>
                       <h5 className="section-title">Primary</h5>
                       <ul className="personal-info">
                         <li>
