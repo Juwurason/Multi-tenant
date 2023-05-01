@@ -1,7 +1,7 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;500;700;900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;500;700;900&display=swap'); */
 
-
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500&family=Oswald:wght@700&display=swap');
 
 /****** UTILS ******/
 /*** default values ***/
@@ -474,69 +474,7 @@ textarea:focus {
   box-shadow: none !important;
 }
 
-@font-face {
-  font-family: "Material Icons";
-  font-style: normal;
-  font-weight: 400;
-  src: url(../fonts/MaterialIcons-Regular.eot);
-  src: local("Material Icons"), local("MaterialIcons-Regular"), url(../fonts/MaterialIcons-Regular.woff2) format("woff2"), url(../fonts/MaterialIcons-Regular.woff) format("woff"), url(../fonts/MaterialIcons-Regular.ttf) format("truetype");
-}
 
-@font-face {
-  font-family: "CircularStd";
-  font-style: normal;
-  font-weight: 400;
-  src: local("Circular Std Book"), url("../fonts/CircularStd-Book.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: italic;
-  font-weight: 400;
-  src: local("Circular Std Book Italic"), url("../fonts/CircularStd-BookItalic.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: normal;
-  font-weight: 500;
-  src: local("Circular Std Medium"), url("../fonts/CircularStd-Medium.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: italic;
-  font-weight: 500;
-  src: local("Circular Std Medium Italic"), url("../fonts/CircularStd-MediumItalic.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: normal;
-  font-weight: 600;
-  src: local("Circular Std Bold"), url("../fonts/CircularStd-Bold.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: italic;
-  font-weight: 600;
-  src: local("Circular Std Bold Italic"), url("../fonts/CircularStd-BoldItalic.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: normal;
-  font-weight: 800;
-  src: local("Circular Std Black"), url("../fonts/CircularStd-Black.woff") format("woff");
-}
-
-@font-face {
-  font-family: "CircularStd";
-  font-style: italic;
-  font-weight: 800;
-  src: local("Circular Std Black Italic"), url("../fonts/CircularStd-BlackItalic.woff") format("woff");
-}
 
 h1 {
   font-weight: 500;
@@ -623,10 +561,11 @@ h6 {
 }
 
 body {
-  font-family: "Roboto", sans-serif !important;
+  font-family: 'Lexend', sans-serif !important;
+  font-family: 'Oswald', sans-serif;
   font-size: 15px;
   color: #1f1f1f;
-  background-color: #f8f8f8;
+  background-color: #fff;
   overflow-x: hidden;
 }
 

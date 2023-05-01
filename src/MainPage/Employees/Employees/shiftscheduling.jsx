@@ -281,6 +281,11 @@ const ShiftScheduling = () => {
                         <span>Kemi Spark</span>
                         <small>Lorem Ipsum dolor</small>
                       </div>
+                      <div className='bg-primary text-white rounded-2 mt-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
+                        <span className='fw-bold'>9AM - 3PM</span>
+                        <span>Kemi Spark</span>
+                        <small>Lorem Ipsum dolor</small>
+                      </div>
                       <button className='btn'>
                         <FaPlus />
                       </button>
