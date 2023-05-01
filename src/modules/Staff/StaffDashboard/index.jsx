@@ -261,12 +261,12 @@
                              )
  
                                :
-                               <h3 className='text-info'>{document.length}</h3>
+                               <h3 className='text-info'>3</h3>
                            }
  
                            <Link style={{ fontSize: "12px" }}
  
-                             to={`/app/employee/document`} className='pointer text-dark'>View all</Link>
+                             to={``} className='pointer text-dark'>View all</Link>
                          </div>
                          <div className="align-self-center">
                            <MdOutlineFolderOpen className='fs-4' />

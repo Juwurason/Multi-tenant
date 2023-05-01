@@ -102,8 +102,8 @@ const StaffDocument = () => {
 
           <div className="table-responsive">
         <table className="table table-striped">
-          <thead>
-            <tr>
+          <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
+            <tr style={{ backgroundColor: "#18225C" }}>
               <th>User</th>
               <th>Role</th>
               <th>Documnet</th>

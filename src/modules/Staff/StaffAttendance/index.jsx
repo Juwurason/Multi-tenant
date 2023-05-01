@@ -65,9 +65,9 @@ const StaffAttendance = () => {
                     </div>
                   </div>
                 </div>
-                <table className="table table-striped table-hover">
-                  <thead>
-                    <tr>
+                <table className="table table-striped">
+                  <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
+                    <tr style={{ backgroundColor: "#18225C" }}>
                       <th>#</th>
                       <th>Staff</th>
                       <th>ClockIn</th>
