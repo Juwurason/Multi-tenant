@@ -251,40 +251,29 @@ const StaffProfile = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
-                      <h3 className="card-title">Family Informations </h3>
-                      <div className="table-responsive">
-                        <table className="table table-nowrap">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Relationship</th>
-                              <th>Date of Birth</th>
-                              <th>Phone</th>
-                              <th />
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td className="text-end">
-                                <div className="dropdown dropdown-action">
-                                  <a aria-expanded="false" data-bs-toggle="dropdown" className="action-icon dropdown-toggle" href="#"><i className="material-icons">more_vert</i></a>
-                                  <div className="dropdown-menu dropdown-menu-right">
-                                    <a href="#" className="dropdown-item"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                                    <a href="#" className="dropdown-item"><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      <h3 className="card-title">Family Informations</h3>
+                      <ul className="personal-info">
+                        <li>
+                          <div className="title">Name</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Relationship</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Date of Birth</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Phone</div>
+                          <div className="text"></div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>

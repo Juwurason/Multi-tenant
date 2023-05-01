@@ -1,0 +1,156 @@
+/* a {
+    color: rgb(0 0 0 / 1);
+} */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;500;700;900&display=swap');
+
+.note-popover .popover-content,
+.note-editor .note-toolbar {
+    background: #f5f5f5 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
+}
+
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor.note-airframe .note-editing-area .note-editable {
+    background-color: white;
+}
+.recharts-cartesian-grid-vertical {
+    display: none !important;
+}
+
+.recharts-cartesian-axis-line {
+    display: none !important;
+}
+
+.recharts-legend-wrapper {
+    display: none !important;
+}
+
+.recharts-text {
+    font-size: 12px !important;
+    font-weight: normal !important;
+}
+
+.recharts-line {
+    height: 10px !important
+}
+
+.recharts-tooltip-wrapper {
+    border-radius: 5px !important;
+}
+
+.recharts-surface {
+    padding-right: 40px;
+}
+
+.recharts-default-tooltip {
+    margin: 0px;
+    white-space: nowrap;
+    border-radius: 10px;
+    padding: 6px !important;
+    color: #666 !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: solid 2px rgba(230, 230, 230, 0.8) !important;
+    font-size: 12px;
+    text-align: center;
+}
+
+.PhoneInputInput {
+    height: 3rem;
+    /* border: 1px solid gainsboro; */
+    outline: none;
+    border: none;
+    font-size: .9rem;
+    border-radius: 0.375rem;
+
+}
+
+
+
+.PhoneInput {
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    padding-left: 10px;
+}
+
+body::-webkit-scrollbar {
+    width: 12px;
+    /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background: gainsboro;
+    /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #999;
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    border: 3px solid #999;
+    /* creates padding around scroll thumb */
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+
+.items {
+    align-items: center;
+    color: #000;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+}
+
+.disabled-page {
+    color: #808e9b;
+}
+
+.actives {
+    border: solid 1px #808e9b;
+    border-radius: 40px;
+    color: #808e9b;
+}
+
+
+
+.next {
+    /* border-left: solid 1px #808e9b; */
+    font-size: 4px;
+    height: 60px;
+    /* position: absolute; */
+    right: 0;
+    width: 150px;
+}
+
+.pagination {
+    align-items: center;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    height: 60px;
+    justify-content: center;
+    list-style-type: none;
+    position: relative;
+    width: 100%;
+}
+
+.pagination-page {
+    font-weight: 700;
+}
+
+.previous {
+    /* border-right: solid 1px #808e9b; */
+    font-size: 4px;
+    height: 60px;
+    left: 0;
+    /* position: absolute; */
+    width: 150px;
+}
