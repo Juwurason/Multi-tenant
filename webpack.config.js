@@ -212,7 +212,6 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
     alias: {
       Assets: path.resolve(__dirname, 'src/assets/'),
-      'apexcharts$': 'apexcharts/dist/apexcharts.min.js'
     },
 
   },
