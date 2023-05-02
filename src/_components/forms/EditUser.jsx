@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FaBackspace } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
@@ -99,7 +100,7 @@ const EditAccount = () => {
 
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Edit User</h4>
-                                <Link to={'/app/account/alluser'} className="card-title mb-0 text-danger fs-3 "> <FaBackspace /></Link>
+                                <Link to={'/app/account/alluser'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={submitForm}>

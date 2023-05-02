@@ -207,6 +207,7 @@ module.exports = {
       publicPath: ''
     })
   },
+
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
     alias: {
