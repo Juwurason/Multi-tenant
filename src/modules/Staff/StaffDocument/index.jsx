@@ -20,10 +20,12 @@ const StaffDocument = () => {
   const [loading, setLoading] = useState(false)
   const [documentName, setDocumentName] = useState(null)
   const [expire, setExpire] = useState(null)
-  const [document, setDocument] = useState(null)
+  const [document, setDocument] = useState(null) 
+  const [staffDocument, setStaffDocument] = useState(null) 
 
 
   const id = JSON.parse(localStorage.getItem('user'))
+  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -74,6 +76,19 @@ const StaffDocument = () => {
         setLoading(false)
     }
 }
+
+useEffect(()=>{
+  const getStaffDocument = async () => {
+    try {
+        const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+        setStaffDocument(response.data)
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
+getStaffDocument()
+},[])
   
       return (
         <>
