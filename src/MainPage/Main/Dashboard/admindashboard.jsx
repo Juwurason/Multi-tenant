@@ -40,10 +40,12 @@ const linechartdata = [
 ];
 const AdminDashboard = () => {
   const userObj = JSON.parse(localStorage.getItem('user'));
+  const [admin, setAdmin] = useState([]);
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
+  const [recentUsers, setRecentUsers] = useState([]);
   const { get } = useHttp();
 
   let isMounted = true;
@@ -61,6 +63,13 @@ const AdminDashboard = () => {
   async function FetchStaff() {
     setLoading(true)
     try {
+      const { data } = await get(`Administrators?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      setAdmin(data);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    try {
       const { data } = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       setStaff(data);
       setLoading(false)
@@ -71,6 +80,8 @@ const AdminDashboard = () => {
     try {
       const clientResponse = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
+      const recentUsers = client.slice(-5);
+      setRecentUsers(recentUsers);
       setClients(client);
       setLoading(false)
     } catch (error) {
@@ -147,14 +158,14 @@ const AdminDashboard = () => {
                 <div className="row">
                   <h4>Overview</h4>
                   <DashboardCard title={"Admin"} sty={'info'}
-                    content={0} icon={<MdOutlinePersonOutline className='fs-4' />}
-                    link={''}
+                    content={admin.length} icon={<MdOutlinePersonOutline className='fs-4' />}
+                    link={'/app/employee/alladmin'}
                   />
                   <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
                     linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
                   />
                   <DashboardCard title={"Shift Roaster"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
-                    link={``}
+                    link={`/app/employee/shift-scheduling`}
                     sty={'danger'}
                   />
                   <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}
@@ -243,81 +254,44 @@ const AdminDashboard = () => {
               <div className='col-md-3 p-2 d-flex flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h5>Recently Onboarded Clients</h5>
-
-                  <div className="row mt-2">
-                    <div className="col-2">
-                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                  {
+                    loading && <div className='text-center fs-1'>
+                      <div className="spinner-grow text-secondary" role="status">
+                        <span className="sr-only">Loading...</span>
                       </div>
                     </div>
+                  }
 
-                    <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-6 fw-bold'>Gary Nevile</span>
-                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
-                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
+                  {
+                    recentUsers.map((data, index) =>
+
+                      <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
+                        <div className="col-2">
+                          <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                            <img src={data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                          </div>
+                        </div>
+
+                        <div className="col-10 d-flex flex-column justify-content-start text-dark">
+                          <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
+                          <span style={{ fontSize: "10px", }}>{data.address}</span>
+                          <span style={{ fontSize: "7px", }}>{data.email}</span>
+                        </div>
+
+                      </Link>
+                    )
+                  }
+                  {
+                    !loading && recentUsers.length <= 0 && <div className='text-center text-danger fs-6'>
+                      <p>Not Available</p>
                     </div>
+                  }
 
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2">
-                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
-                      </div>
-                    </div>
-
-                    <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-6 fw-bold'>Michael Peterson</span>
-                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
-                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
-                    </div>
-
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2">
-                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
-                      </div>
-                    </div>
-
-                    <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-6 fw-bold text-truncate'>Susan Flemmingham</span>
-                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
-                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
-                    </div>
-
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2">
-                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
-                      </div>
-                    </div>
-
-                    <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-6 fw-bold text-truncate'>Orville Norris</span>
-                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
-                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
-                    </div>
-
-                  </div>
-                  <div className="row mt-2">
-                    <div className="col-2">
-                      <div className='rounded-circle mt-3 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
-                      </div>
-                    </div>
-
-                    <div className="col-10 d-flex flex-column justify-content-start">
-                      <span className='text-primary fs-6 fw-bold text-truncate'>Cory Brooks</span>
-                      <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
-                      <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
-                    </div>
-
-                  </div>
                   <div className='d-flex justify-content-end mt-2'>
-                    <span className='text-primary' style={{ fontSize: "12px", }}>
+                    <Link to={'/app/employees/clients'}
+                      className='text-primary pointer' style={{ fontSize: "12px", }}>
                       See all <FaLongArrowAltRight className='fs-3' />
-                    </span>
+                    </Link>
                   </div>
 
                 </div>

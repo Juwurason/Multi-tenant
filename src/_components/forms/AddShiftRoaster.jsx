@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FaBackspace } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
 import { Link } from 'react-router-dom';
 import { useCompanyContext } from '../../context';
@@ -93,7 +94,7 @@ const AddShiftRoaster = () => {
 
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Add To Shift Roaster</h4>
-                                <Link to={'/app/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <FaBackspace /></Link>
+                                <Link to={'/app/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">
                                 <form>

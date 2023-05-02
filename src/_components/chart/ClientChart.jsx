@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
 const ClientChart = () => {
-    const [series] = useState([60, 10, 30]);
+    const [series] = useState([60, 30, 10]);
 
     const [options] = useState({
         chart: {
@@ -10,7 +10,7 @@ const ClientChart = () => {
             type: 'donut',
         },
         colors: ['#5A6ACF', '#8593ED', '#FF81C5'],
-        labels: ['Excellent', 'Poor', 'Fair'],
+        labels: ['Excellent', 'Fair', 'Poor'],
         legend: {
             show: false,
             position: 'bottom',

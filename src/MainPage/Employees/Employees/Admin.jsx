@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import AddAdmin from '../../../_components/modelbox/AddAdmin';
 import { useCompanyContext } from '../../../context';
+import { FaEllipsisV } from 'react-icons/fa';
 
 const AllAdmin = () => {
     const privateHttp = useHttp();
@@ -149,17 +150,17 @@ const AllAdmin = () => {
                                     </div>
                                 </div>
                             }
-                            <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" >
 
-                                {
-                                    admin.map((data, index) =>
+                            {
+                                admin.map((data, index) =>
 
+                                    <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
                                         <div className="profile-widget">
                                             <div className="profile-img">
                                                 <Link to={``} className="avatar"><img src={Avatar_02} alt="" /></Link>
                                             </div>
                                             <div className="dropdown profile-action">
-                                                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                                                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
                                                 <div className="dropdown-menu dropdown-menu-right">
                                                     <Link to={``} className="dropdown-item">
                                                         <i className="fa fa-pencil m-r-5" /> Edit</Link>
@@ -170,16 +171,16 @@ const AllAdmin = () => {
 
                                                 </div>
                                             </div>
-                                            <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={``}>Admin Personnel</Link></h4>
+                                            <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={``}>{data.firstName} {data.surName}</Link></h4>
 
 
                                         </div>
-                                    )
-                                }
+                                    </div>
+                                )
+                            }
 
 
 
-                            </div>
 
                             {
                                 !loading && admin.length <= 0 && <div className='text-danger fs-6'>
