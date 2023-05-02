@@ -15,8 +15,6 @@ const StaffRoster = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
-  const [staff, setStaff] = useState([]);
-  const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [isClockedIn, setIsClockedIn] = useState(false);
 
@@ -34,32 +32,14 @@ const StaffRoster = () => {
   const FetchSchedule = async () => {
     setLoading(true)
     try {
-      const scheduleResponse = await get(`ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const scheduleResponse = await get(`ShiftRosters/get_shifts_by_user?client=${null}&staff=${2}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
       setSchedule(schedule);
       setLoading(false)
     } catch (error) {
       console.log(error);
     }
-    try {
-      const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const staff = staffResponse.data;
-      setStaff(staff);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-
-    try {
-      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const client = clientResponse.data;
-      setClients(client);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false)
-    }
+    
 
   };
   useEffect(() => {
