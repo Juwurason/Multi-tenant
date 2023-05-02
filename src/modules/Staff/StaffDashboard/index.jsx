@@ -154,7 +154,7 @@
                      sty={'danger'}
                    />
                    <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}
-                     linkTitle={"View Progress Notes"} link={``} sty={'warning'}
+                     linkTitle={"View Progress Notes"} link={``} sty={'success'}
                    />
                   
                    <DashboardCard title={"Attendances"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}

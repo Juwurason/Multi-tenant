@@ -48,7 +48,7 @@ const StaffSidebar = (props) => {
                 hideTracksWhenNotNeeded={true}
               >
                 <div className="sidebar-inner slimscroll">
-                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor:"#18225C", height:'100vh'}}>
+                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor: "#1C75B9", height:'100vh'}}>
                         
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">

@@ -18,6 +18,18 @@ const StaffRoster = () => {
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [isClockedIn, setIsClockedIn] = useState(false);
+
+  const handleClockInClick = () => {
+    setIsClockedIn(true);
+  };
+
+  const shiftEnd = new Date();
+  shiftEnd.setHours(18);
+
+  const now = new Date();
+
+  const isOnTime = now <= shiftEnd;
 
   const FetchSchedule = async () => {
     setLoading(true)
@@ -67,7 +79,7 @@ const StaffRoster = () => {
     }
   });
 
-  const [list, setList] = useState([1, 2, 3,4,5])
+  const [list, setList] = useState([1, 2, 3, 4, 5])
   const [startIndex, setStartIndex] = useState(0);
 
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -149,7 +161,7 @@ const StaffRoster = () => {
 
 
 
-          
+
 
 
 
@@ -224,12 +236,28 @@ const StaffRoster = () => {
                       <div className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
                         <span className='fw-bold'>9AM - 3PM</span>
                         <span>Rose Mary</span>
-                        <small className='bg-danger rounded-3 p-1'>Absent</small>
+                        {/* <small className='bg-success rounded-3 p-1'>Clock-in</small> */}
+                        <small
+                          className={`bg-${isClockedIn ? (isOnTime ? "success" : "danger") : "success"} rounded-3 p-1`}
+                          onClick={handleClockInClick}
+                          disabled={isClockedIn}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {isClockedIn ? (isOnTime ? "Present" : "Absent") : "Clock In"}
+                        </small>
+
                       </div>
                       <div className='bg-primary text-white rounded-2 mt-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
                         <span className='fw-bold'>9AM - 3PM</span>
                         <span>Rose Mary</span>
-                        <small className='bg-success rounded-3 p-1'>Present</small>
+                        <small
+                          className={`bg-${isClockedIn ? (isOnTime ? "success" : "danger") : "success"} rounded-3 p-1`}
+                          onClick={handleClockInClick}
+                          disabled={isClockedIn}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {isClockedIn ? (isOnTime ? "Present" : "Absent") : "Clock In"}
+                        </small>
                       </div>
                       {/* <div className='bg-primary text-white rounded-2 mt-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
                         <span className='fw-bold'>9AM - 3PM</span>
