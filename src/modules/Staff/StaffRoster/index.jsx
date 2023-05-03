@@ -4,11 +4,9 @@ import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath"
 import Offcanvas from '../../../Entryfile/offcanvance';
-import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
 import '../../../assets/css/table2.css'
-import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaSearch, FaSlidersH } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
+import { FaAngleLeft, FaAngleRight, FaSlidersH } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 
 const StaffRoster = () => {
@@ -32,8 +30,9 @@ const StaffRoster = () => {
   const FetchSchedule = async () => {
     setLoading(true)
     try {
-      const scheduleResponse = await get(`ShiftRosters/get_shifts_by_user?client=${null}&staff=${2}`, { cacheTimeout: 300000 });
+      const scheduleResponse = await get(`ShiftRosters/get_shifts_by_user?client=${0}&staff=${2}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
+      console.log(schedule)
       setSchedule(schedule);
       setLoading(false)
     } catch (error) {
