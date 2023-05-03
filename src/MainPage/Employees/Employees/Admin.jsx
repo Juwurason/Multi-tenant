@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Papa from 'papaparse';
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import ExcelJS from 'exceljs';
+import moment from "moment";
 import {
     Avatar_02
 } from "../../../Entryfile/imagepath"
@@ -16,16 +26,77 @@ import { useCompanyContext } from '../../../context';
 import { FaEllipsisV } from 'react-icons/fa';
 
 const AllAdmin = () => {
-    const privateHttp = useHttp();
+    const { get } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const id = JSON.parse(localStorage.getItem('user'));
     const [admin, setAdmin] = useState([]);
+
+    const columns = [
+
+        {
+            name: 'ID',
+            selector: row => row.id,
+            sortable: true
+        },
+        {
+            name: 'Full Name',
+            selector: row => row.fullName,
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <a href={`https://example.com/${row.id}`} className="font-bold text-brand-600">
+                    {row.fullName}
+                </a>
+            ),
+        },
+        {
+            name: 'Email',
+            selector: row => row.email,
+            sortable: true
+        },
+        {
+            name: 'Address',
+            selector: row => row.address,
+            sortable: true,
+            // cell: row => {
+            //     return (
+            //         <span> {!row.createdDate ? "Not Modified" : moment(row.createdDate).format('LLL')}</span>
+            //     )
+            // },
+        },
+
+
+        // {
+        //     name: "Actions",
+        //     cell: (row) => (
+        //         <div className="d-flex gap-2">
+        //             <button
+        //                 onClick={() => {
+        //                     // handle action here, e.g. open a modal or navigate to a new page
+        //                     alert(`Action button clicked for row with ID ${row.fullName}`);
+        //                 }}
+        //             >
+        //                 <FaTrash />
+        //             </button>
+        //             <button
+        //                 onClick={() => {
+        //                     // handle action here, e.g. open a modal or navigate to a new page
+        //                     alert(`Action button clicked to edit with ID ${row.fullName}`);
+        //                 }}
+        //             >
+        //                 <FaEdit className="text-info" />
+        //             </button>
+        //         </div>
+        //     ),
+        // },
+
+    ];
+
+
     const FetchStaff = async () => {
         try {
             setLoading(true)
-            const { data } = await privateHttp.get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            console.log(data);
-
+            const { data } = await get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             setAdmin(data);
             setLoading(false)
         } catch (error) {
@@ -36,6 +107,7 @@ const AllAdmin = () => {
 
         FetchStaff()
     }, []);
+
 
     const [menu, setMenu] = useState(false);
 
@@ -80,6 +152,89 @@ const AllAdmin = () => {
         }
     });
 
+    const handleExcelDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet('Sheet1');
+
+        // Add headers
+        const headers = columns.map((column) => column.name);
+        sheet.addRow(headers);
+
+        // Add data
+        admin.forEach((dataRow) => {
+            const values = columns.map((column) => {
+                if (typeof column.selector === 'function') {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            });
+            sheet.addRow(values);
+        });
+
+        // Generate Excel file
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'data.xlsx';
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    };
+
+
+
+    const handleCSVDownload = () => {
+        const csvData = Papa.unparse(admin);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "data.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handlePDFDownload = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+        doc.setFontSize(15);
+        doc.text("User Table", marginLeft, 40);
+        const headers = columns.map((column) => column.name);
+        const dataValues = admin.map((dataRow) =>
+            columns.map((column) => {
+                if (typeof column.selector === "function") {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            })
+        );
+
+        doc.autoTable({
+            startY: 50,
+            head: [headers],
+            body: dataValues,
+            margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+        });
+        doc.save("data.pdf");
+    };
+
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-4">
+                {data.fullName}
+
+            </div>
+        );
+    };
 
     return (
         <>
@@ -140,53 +295,47 @@ const AllAdmin = () => {
                             </div>
                         </div>
                         {/* Search Filter */}
-                        <div className="row staff-grid-row">
-
-
-                            {
-                                loading && <div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-                            }
-
-                            {
-                                admin.map((data, index) =>
-
-                                    <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
-                                        <div className="profile-widget">
-                                            <div className="profile-img">
-                                                <Link to={``} className="avatar"><img src={Avatar_02} alt="" /></Link>
-                                            </div>
-                                            <div className="dropdown profile-action">
-                                                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
-                                                <div className="dropdown-menu dropdown-menu-right">
-                                                    <Link to={``} className="dropdown-item">
-                                                        <i className="fa fa-pencil m-r-5" /> Edit</Link>
-                                                    <a className="dropdown-item" href="#" ><i className="fa fa-trash-o m-r-5" /> Delete</a>
 
 
 
+                        <>
+                            <div className="d-flex mt-4 border-2 py-4 justify-content-center gap-4">
+                                <CSVLink
+                                    data={admin}
+                                    filename={"data.csv"}
+                                >
+                                    <FaFileCsv />
+                                </CSVLink>
+                                <button
 
-                                                </div>
-                                            </div>
-                                            <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={``}>{data.firstName} {data.surName}</Link></h4>
+                                    onClick={handlePDFDownload}
+                                >
+                                    <FaFilePdf />
+                                </button>
+                                <button
+
+                                    onClick={handleExcelDownload}
+                                >
+                                    <FaFileExcel />
+                                </button>
+                                <CopyToClipboard text={JSON.stringify(admin)}>
+                                    <button >
+                                        <FaCopy />
+                                    </button>
+                                </CopyToClipboard>
+                            </div>
+                            <DataTable data={admin} columns={columns}
+                                pagination
+                                highlightOnHover
+                                expandableRows
+                                expandableRowsComponent={ButtonRow}
 
 
-                                        </div>
-                                    </div>
-                                )
-                            }
+                                className="bg-dark"
+                            />
 
 
-
-
-                            {
-                                !loading && admin.length <= 0 && <div className='text-danger fs-6'>
-                                    <p className='text-center'>No data found</p>
-                                </div>
-                            }
+                        </>
 
 
 
@@ -194,9 +343,6 @@ const AllAdmin = () => {
 
 
 
-
-
-                        </div>
                     </div>
                     {/* /Page Content */}
                     {/* Add Employee Modal */}
@@ -210,28 +356,7 @@ const AllAdmin = () => {
                     {/* /Delete Employee Modal */}
                 </div>
             </div>
-            <div className="modal custom-modal fade" id="delete_employee" role="dialog">
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-body">
-                            <div className="form-header">
-                                <h3>Delete Staff</h3>
-                                <p>Are you sure want to delete?</p>
-                            </div>
-                            <div className="modal-btn delete-action">
-                                <div className="row">
-                                    <div className="col-6">
-                                        <a className="btn btn-primary continue-btn" >Delete</a>
-                                    </div>
-                                    <div className="col-6">
-                                        <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <Offcanvas />
         </>
 
