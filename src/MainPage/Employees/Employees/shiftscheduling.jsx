@@ -24,6 +24,7 @@ const ShiftScheduling = () => {
     try {
       const scheduleResponse = await get(`ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
+      console.log(schedule);
       setSchedule(schedule);
       setLoading(false)
     } catch (error) {

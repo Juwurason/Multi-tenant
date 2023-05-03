@@ -161,7 +161,7 @@ table.table .avatar {
 }
 
 .pagination li a:hover {
-    /* color: #666; */
+    color: #666;
 }
 
 .pagination li.active a,
