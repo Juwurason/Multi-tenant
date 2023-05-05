@@ -18,9 +18,9 @@ const StaffDocument = () => {
   });  
 
   const [loading, setLoading] = useState(false)
-  const [documentName, setDocumentName] = useState(null)
-  const [expire, setExpire] = useState(null)
-  const [document, setDocument] = useState(null) 
+  const [documentName, setDocumentName] = useState("")
+  const [expire, setExpire] = useState("")
+  const [document, setDocument] = useState("") 
   const [staffDocument, setStaffDocument] = useState(null) 
 
 

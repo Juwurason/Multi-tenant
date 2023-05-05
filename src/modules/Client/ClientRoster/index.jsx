@@ -9,7 +9,7 @@ import '../../../assets/css/table2.css'
 import { FaAngleLeft, FaAngleRight, FaSlidersH } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 
-const StaffRoster = () => {
+const ClientRoster = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -214,17 +214,14 @@ const StaffRoster = () => {
                     <div className="col-sm-12 text-center py-3">
                       <div className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
                         <span className='fw-bold'>9AM - 3PM</span>
-                        <span>Rose Mary</span>
+                         <div><span className='fw-bold'>Staff :</span> <span>John Dave</span></div>
                         {/* <small className='bg-success rounded-3 p-1'>Clock-in</small> */}
-                        <small
-                          className={`bg-${isClockedIn ? (isOnTime ? "success" : "danger") : "success"} rounded-3 p-1`}
-                          onClick={handleClockInClick}
-                          disabled={isClockedIn}
-                          style={{ cursor: "pointer" }}
-                        >
-                          {isClockedIn ? (isOnTime ? "Present" : "Absent") : "Clock In"}
-                        </small>
-
+                       
+                        <div style={{display:'flex', justifyContent:"center", alignItems:'center'}}>
+                            <span className='fw-bold'>Activities : </span>
+                            {/* <span>Domestic Cleaning, Dog training</span> */}
+                        </div>
+                      
                       </div>
                       <div className='bg-primary text-white rounded-2 mt-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
                         <span className='fw-bold'>9AM - 3PM</span>
@@ -282,4 +279,4 @@ const StaffRoster = () => {
 
 }
 
-export default StaffRoster;
+export default ClientRoster;
