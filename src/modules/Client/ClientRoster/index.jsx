@@ -13,47 +13,20 @@ import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 
 const ClientRoster = () => {
-    const id = JSON.parse(localStorage.getItem('user'));
+    const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
     const { get } = useHttp();
     const { loading, setLoading } = useCompanyContext();
-    const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
-    const [schedule, setSchedule] = useState([]);
-    const [staffOne, setStaffOne] = useState({});
-    let staffNo;
 
     const FetchSchedule = async () => {
         setLoading(true)
-        try {
-            const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const schedule = scheduleResponse.data;
-            console.log(schedule);
-            setSchedule(schedule);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            setStaff(staff);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
 
         try {
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const clientResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
-            setClients(client);
+            console.log(client.shiftRoster);
+            setClients(client.shiftRoster);
             setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const { data } = await privateHttp.get(`/Staffs/${staffNo}`, { cacheTimeout: 300000 })
-            setStaffOne(data)
-
         } catch (error) {
             console.log(error);
         }
@@ -102,7 +75,7 @@ const ClientRoster = () => {
     const endDate = currentDate.add(2, 'day');
 
     const activitiesByDay = daysOfWeek.map((day) =>
-        schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+        clients.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
     );
 
     return (
@@ -176,21 +149,19 @@ const ClientRoster = () => {
                                                 <span className="sr-only">Loading...</span>
                                             </div>
                                         }
-                                        
+
                                         <div className="col-sm-12 text-center border p-2">
 
                                             {activitiesByDay[index].map((activity, activityIndex) => (
 
-                                                <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
-                                                    <span className='fw-bold'>{dayjs(activity.dateFrom).format('hh:mm A')}</span>
-                                                    <span>Kemi Spark</span>
-                                                    <small className='text-truncate'>{activity.activities}</small>
+                                                <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                                                    <div>
+                                                        <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
+                                                    </div>
+                                                    <span><b>Staff</b> {activity.staff.firstName} {activity.staff.surName}</span>
+                                                    <small className='text-truncate'> {activity.activities}</small>
                                                 </div>
                                             ))}
-
-                                            {/* <button className='btn'>
-                        <FaPlus />
-                      </button> */}
 
                                         </div>
                                     </div>
