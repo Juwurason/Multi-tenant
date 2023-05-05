@@ -81,10 +81,10 @@ const StaffSidebar = (props) => {
                             </li>
                           
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-roster"><i className="la la-file-pdf-o" /> <span>My Shift Roster</span></Link>
+                                <Link to="/staff/staff-roster"><i className="la la-calendar" /> <span>My Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
+                                <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
                         </ul>
                     </div>

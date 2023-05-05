@@ -44,7 +44,7 @@ const StaffHeader = (props) => {
             {/* Logo */}
             <div className="header-left">
                 <Link to="/app/main/dashboard" className="logo">
-                    <img src={headerlogo} width={40} height={40} alt="" style={{backgroundColor: "black"}} />
+                    <img src={headerlogo} width={40} height={40} alt="" />
                 </Link>
             </div>
             {/* /Logo */}
