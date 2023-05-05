@@ -148,8 +148,8 @@ const StaffRoster = () => {
                       {activitiesByDay[index].map((activity, activityIndex) => (
 
                         <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                          <div className='d-flex justify-content-between'>
-                            <span className='fw-bold'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
+                          <div>
+                            <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
                           </div>
                           <span>Rose John</span>
                           {/* <small className='text-truncate'>{activity.activities}</small> */}
