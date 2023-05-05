@@ -78,7 +78,6 @@ const ShiftScheduling = () => {
     }
   });
 
-  const [list, setList] = useState([1, 2, 3, 4, 5, 6])
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs());
 
@@ -136,7 +135,7 @@ const ShiftScheduling = () => {
           {/* Search Filter */}
 
           <div className='row filter-row '>
-            <div className="col-md-4 col-lg-2 " style={{ height: "50vh" }}>
+            {/* <div className="col-md-4 col-lg-2 " style={{ height: "50vh" }}>
 
               <div className=''>
                 <div className="form-group">
@@ -174,12 +173,12 @@ const ShiftScheduling = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
 
 
 
-            <div className="col-md-8 col-lg-10 ">
+            <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
                   <FaAngleLeft className='pointer' onClick={handlePrevClick} />

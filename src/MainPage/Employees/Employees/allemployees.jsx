@@ -370,6 +370,11 @@ const AllEmployees = () => {
                 searchable
                 searchTerm={searchText}
                 progressPending={loading}
+                progressComponent={<div className='text-center fs-1'>
+                  <div className="spinner-grow text-secondary" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                </div>}
                 expandableRows
                 expandableRowsComponent={ButtonRow}
                 paginationTotalRows={filteredData.length}
