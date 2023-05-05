@@ -4661,9 +4661,9 @@ input[type=file].form-control {
   display: none;
 } */
 [data-layout=horizontal],
-div,
+
 .sidebar>div>div {
-  overflow: unset !important;
+  overflow: hidden !important;
 }
 
 [data-layout=vertical] .sidebar>div>div {
@@ -4673,7 +4673,7 @@ div,
 [data-layout=twocolumn] .sidebar>div {
   /* overflow: scroll !important;  */
   overflow-y: scroll !important;
-  overflow-x: unset !important;
+  overflow-x: auto !important;
 }
 
 .table-responsive {
@@ -5732,7 +5732,7 @@ div,
 [data-layout=horizontal] body .sidebar .slimScrollDiv,
 [data-layout=horizontal] body .sidebar .sidebar-inner {
   height: auto !important;
-  overflow: inherit !important;
+  overflow: auto !important;
 }
 
 [data-layout=horizontal] body .sidebar .hidden {

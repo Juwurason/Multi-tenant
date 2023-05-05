@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -10,10 +9,6 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import moment from "moment";
-import {
-    Avatar_02
-} from "../../../Entryfile/imagepath"
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -22,7 +17,8 @@ import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import AddAdmin from '../../../_components/modelbox/AddAdmin';
 import { useCompanyContext } from '../../../context';
-import { FaEllipsisV } from 'react-icons/fa';
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+import { SlSettings } from 'react-icons/sl'
 
 const AllAdmin = () => {
     const { get } = useHttp();
@@ -31,8 +27,6 @@ const AllAdmin = () => {
     const [admin, setAdmin] = useState([]);
 
     const columns = [
-
-
         {
             name: 'Staff ID',
             selector: row => row.maxStaffId,
@@ -44,9 +38,9 @@ const AllAdmin = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <a href={`https://example.com/${row.id}`} className="font-bold text-brand-600">
-                    {row.fullName}
-                </a>
+                <Link href={`https://example.com/${row.id}`} className="fw-bold text-dark">
+                    {row.firstName} {row.surName}
+                </Link>
             ),
         },
         {
@@ -59,10 +53,51 @@ const AllAdmin = () => {
             selector: row => row.email,
             sortable: true
         },
+        {
+            name: 'Phone Number',
+            selector: row => row.phoneNumber,
+            sortable: true
+        }, {
+            name: "Actions",
+            cell: (row) => (
+                <div className="d-flex gap-1">
+                    <Link
+                        className='btn'
+                        title='Edit'
+                        to={''}
+                    >
+                        <SlSettings />
+                    </Link>
+                    <button
+                        className='btn'
+                        title='Delete'
+                        onClick={() => {
+                            // handle action here, e.g. open a modal or navigate to a new page
+                            alert(`Action button clicked for row with ID ${row.id}`);
+                        }}
+                    >
+                        <GoTrashcan />
+                    </button>
+
+                </div>
+            ),
+        },
+
 
 
     ];
-
+    // const customStyles = {
+    //     rows: {
+    //         style: {
+    //             minHeight: "72px", // Sets the height of the rows
+    //         },
+    //     },
+    //     headCells: {
+    //         style: {
+    //             backgroundColor: "#f5f5f5", // Sets the background color of the header
+    //         },
+    //     },
+    // };
 
     const FetchStaff = async () => {
         try {
@@ -178,7 +213,7 @@ const AllAdmin = () => {
         const orientation = "portrait"; // portrait or landscape
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
-        doc.setFontSize(15);
+        doc.setFontSize(13);
         doc.text("User Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
         const dataValues = admin.map((dataRow) =>
@@ -196,7 +231,7 @@ const AllAdmin = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("data.pdf");
+        doc.save("Admin.pdf");
     };
 
     const ButtonRow = ({ data }) => {
@@ -207,6 +242,15 @@ const AllAdmin = () => {
             </div>
         );
     };
+    const [searchText, setSearchText] = useState("");
+
+    const handleSearch = (event) => {
+        setSearchText(event.target.value);
+    };
+
+    const filteredData = admin.filter((item) =>
+        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    );
 
     return (
         <>
@@ -219,9 +263,9 @@ const AllAdmin = () => {
                         <title>Admin</title>
                         <meta name="description" content="Login page" />
                     </Helmet>
-                    {/* Page Content */}
+
                     <div className="content container-fluid">
-                        {/* Page Header */}
+
                         <div className="page-header">
                             <div className="row align-items-center">
                                 <div className="col">
@@ -232,17 +276,15 @@ const AllAdmin = () => {
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">
-                                    <Link to={'/app/employee/addadmin'} className="btn add-btn"><i className="fa fa-plus" />
-                                        Create New Admin</Link>
+
                                     <div className="view-icons">
                                         <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {/* /Page Header */}
-                        {/* Search Filter */}
-                        <div className="row filter-row">
+
+                        {/* <div className="row filter-row">
                             <div className="col-sm-6 col-md-3">
                                 <div className="form-group form-focus">
                                     <label className="focus-label">Admin ID</label>
@@ -265,53 +307,85 @@ const AllAdmin = () => {
                             <div className="col-sm-6 col-md-3">
                                 <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
                             </div>
-                        </div>
-                        {/* Search Filter */}
+                        </div> */}
 
 
 
-                        <>
-                            <div className="d-flex mt-4 border-2 py-4 justify-content-center gap-4">
-                                <CSVLink
-                                    data={admin}
-                                    filename={"data.csv"}
-                                >
-                                    <FaFileCsv />
-                                </CSVLink>
-                                <button
-                                    className='btn'
-                                    onClick={handlePDFDownload}
-                                >
-                                    <FaFilePdf />
-                                </button>
-                                <button
-                                    className='btn'
 
-                                    onClick={handleExcelDownload}
-                                >
-                                    <FaFileExcel />
-                                </button>
-                                <CopyToClipboard text={JSON.stringify(admin)}>
-                                    <button
 
-                                        className='btn'
+                        <div className='mt-4 border'>
+                            <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search Admins" className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
+                                </div>
+                                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                                    <CSVLink
+                                        data={admin}
+                                        filename={"data.csv"}
+
                                     >
-                                        <FaCopy />
+                                        <button
+
+                                            className='btn text-info'
+                                            title="Export as CSV"
+                                        >
+                                            <FaFileCsv />
+                                        </button>
+
+                                    </CSVLink>
+                                    <button
+                                        className='btn text-danger'
+                                        onClick={handlePDFDownload}
+                                        title="Export as PDF"
+                                    >
+                                        <FaFilePdf />
                                     </button>
-                                </CopyToClipboard>
+                                    <button
+                                        className='btn text-primary'
+
+                                        onClick={handleExcelDownload}
+                                        title="Export as Excel"
+                                    >
+                                        <FaFileExcel />
+                                    </button>
+                                    <CopyToClipboard text={JSON.stringify(admin)}>
+                                        <button
+
+                                            className='btn text-warning'
+                                            title="Copy Table"
+                                            onClick={() => toast("Table Copied")}
+                                        >
+                                            <FaCopy />
+                                        </button>
+                                    </CopyToClipboard>
+                                </div>
+                                <div>
+                                    <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
+                                        Create New Admin</Link>
+                                </div>
                             </div>
-
-
-                            <DataTable data={admin} columns={columns}
+                            <DataTable data={filteredData} columns={columns}
                                 pagination
                                 highlightOnHover
+                                searchable
+                                searchTerm={searchText}
+                                progressPending={loading}
                                 expandableRows
                                 expandableRowsComponent={ButtonRow}
+                                paginationTotalRows={filteredData.length}
+
+
+
                             />
 
 
-                        </>
 
+
+
+
+                        </div>
 
 
 

@@ -57,7 +57,7 @@
 
 .PhoneInputInput {
     height: 3rem;
-    /* border: 1px solid gainsboro; */
+    /* border: 1px solid #eeeeee; */
     outline: none;
     border: none;
     font-size: .9rem;
@@ -68,7 +68,7 @@
 
 
 .PhoneInput {
-    border: 1px solid gainsboro;
+    border: 1px solid #eeeeee;
     display: flex;
     align-items: center;
     border-radius: 0.375rem;
@@ -81,7 +81,7 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-    background: gainsboro;
+    background: #eeeeee;
     /* color of the tracking area */
 }
 
@@ -159,3 +159,69 @@ body::-webkit-scrollbar-thumb {
 .bg-1 {
     background: linear-gradient(135deg, #fcedf0, #f0eff6, #e4f2fc);
 }
+
+
+.dlUCce {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.rdt_TableCell {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border: 1px solid #eeeeee;
+
+
+}
+
+.rdt_TableRow {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rdt_TableHeadRow {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: transparent;
+    border: 1px solid #eeeeee;
+}
+
+.rdt_TableCol {
+    display: flex;
+    align-items: center;
+    border: 1px solid #eeeeee;
+}
+
+.rdt_TableCol_Sortable {
+    cursor: pointer;
+}
+
+.rdt_TableCol_Sortable:hover {
+    text-decoration: underline;
+}
+
+.rdt_TableCell_Sortable {
+    position: relative;
+}
+
+.rdt_TableCell_Sortable .rdt_TableCell_SortDirection {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+}
+
+.jlPZUL {
+    color: #1C75BC;
+}
+
+/* .current-date {
+    background-color: gainsboro;
+    padding: 5px;
+    border-radius: 5px;
+
+} */

@@ -7,11 +7,21 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaArrowCircleLeft, FaArrowCircleRight, FaChartBar, FaDharmachakra, FaEdit, FaFileExport, FaSearch, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaSearch, FaTrash } from 'react-icons/fa';
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+import { SlSettings } from 'react-icons/sl'
 import { useCompanyContext } from '../../../context';
-import ReactPaginate from 'react-paginate';
 import '../../../assets/css/table2.css'
 import EditUser from '../../../_components/modelbox/EditUser';
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Papa from 'papaparse';
+import ExcelJS from 'exceljs';
+import Editemployee from "../../../_components/modelbox/Editemployee"
+import AddAdmin from '../../../_components/modelbox/AddAdmin';
 
 
 const AllUser = () => {
@@ -20,24 +30,76 @@ const AllUser = () => {
     const [users, setUsers] = useState([]);
     const { loading, setLoading } = useCompanyContext();
     const id = JSON.parse(localStorage.getItem('user'));
-    const [pageNumber, setPageNumber] = useState(0);
-    const [searchQuery, setSearchQuery] = useState("");
 
 
 
-    const filteredUsers = users.filter((user) =>
-        user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
 
-    const itemsPerPage = 10;
-    const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
-    const displayData = filteredUsers.slice(
-        pageNumber * itemsPerPage,
-        (pageNumber + 1) * itemsPerPage
 
-    );
+
+    const columns = [
+
+
+
+        {
+            name: '',
+            cell: (row) => (
+                <button className='btn' style={{ width: "20px" }}><FaDharmachakra className='text-warning' /></button>
+            ),
+        },
+        {
+            name: 'Full Name',
+            selector: row => row.fullName,
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <Link href={`https://example.com/${row.id}`} className="fw-bold text-dark">
+                    {row.fullName}
+                </Link>
+            ),
+        },
+
+
+        {
+            name: 'Role',
+            selector: row => row.role,
+            sortable: true
+        },
+        {
+            name: 'Email',
+            selector: row => row.email,
+            sortable: true
+        },
+        {
+            name: "Actions",
+            cell: (row) => (
+                <div className="d-flex gap-1">
+                    <Link
+                        className='btn'
+                        title='Edit'
+                        to={`/app/account/edituser/${row.id}`}
+                    >
+                        <SlSettings />
+                    </Link>
+                    <button
+                        className='btn'
+                        title='Delete'
+                        onClick={() => {
+                            // handle action here, e.g. open a modal or navigate to a new page
+                            alert(`Action button clicked for row with ID ${row.id}`);
+                        }}
+                    >
+                        <GoTrashcan />
+                    </button>
+
+                </div>
+            ),
+        },
+
+
+
+
+    ];
 
     const FetchStaff = async () => {
         try {
@@ -45,6 +107,7 @@ const AllUser = () => {
             const UserResponse = await get(`Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const users = UserResponse.data;
             setUsers(users);
+            console.log(users);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -59,6 +122,92 @@ const AllUser = () => {
 
         FetchStaff()
     }, []);
+
+    const handleExcelDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet('Sheet1');
+
+        // Add headers
+        const headers = columns.map((column) => column.name);
+        sheet.addRow(headers);
+
+        // Add data
+        users.forEach((dataRow) => {
+            const values = columns.map((column) => {
+                if (typeof column.selector === 'function') {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            });
+            sheet.addRow(values);
+        });
+
+        // Generate Excel file
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'data.xlsx';
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    };
+
+
+
+    const handleCSVDownload = () => {
+        const csvData = Papa.unparse(users);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "data.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handlePDFDownload = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+        doc.setFontSize(13);
+        doc.text("User Table", marginLeft, 40);
+        const headers = columns.map((column) => column.name);
+        const dataValues = users.map((dataRow) =>
+            columns.map((column) => {
+                if (typeof column.selector === "function") {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            })
+        );
+
+        doc.autoTable({
+            startY: 50,
+            head: [headers],
+            body: dataValues,
+            margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+        });
+        doc.save("Users.pdf");
+    };
+
+
+    const [searchText, setSearchText] = useState("");
+
+    const handleSearch = (event) => {
+        setSearchText(event.target.value);
+    };
+
+    const filteredData = users.filter((item) =>
+        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    );
 
 
 
@@ -105,120 +254,75 @@ const AllUser = () => {
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">
-                                    {/* <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#edit_user"><i className="fa fa-plus" /> Add New User</a> */}
 
                                 </div>
                             </div>
                         </div>
-                        <main className='table'>
-                            <section className="table__header">
 
-                                <div className="input-group">
-                                    <input type="search" className='form-control' placeholder="Search Data..."
-                                        value={searchQuery}
-                                        onChange={e => setSearchQuery(e.target.value)} />
-                                    <FaSearch className='text-dark' />
+
+                        <div className='mt-4 border'>
+                            <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search Users" className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
                                 </div>
-                                {/* <div className="export__file">
-                                    <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
-                                        <FaFileExport className='text-white fs-3' /></label>
-                                    <input type="checkbox" id="export-file" />
-                                    <div className="export__file-options ">
-                                        <label>Export As &nbsp; ➜</label>
-                                        <label htmlFor="export-file" id="toPDF">PDF <img src="images/pdf.png" alt /></label>
-                                        <label htmlFor="export-file" id="toJSON">JSON <img src="images/json.png" alt /></label>
-                                        <label htmlFor="export-file" id="toCSV">CSV <img src="images/csv.png" alt /></label>
-                                        <label htmlFor="export-file" id="toEXCEL">EXCEL <img src="images/excel.png" alt /></label>
-                                    </div>
-                                </div> */}
-                            </section>
-                            <section className="table__body">
-                                <table>
-                                    <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
-                                        <tr style={{ backgroundColor: "#18225C" }}>
+                                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                                    <CSVLink
+                                        data={users}
+                                        filename={"data.csv"}
 
-                                            <th>#</th>
-                                            <th></th>
-                                            <th>FullName</th>
-                                            <th>Email</th>
-                                            <th>Actions</th>
+                                    >
+                                        <button
 
+                                            className='btn text-info'
+                                            title="Export as CSV"
+                                        >
+                                            <FaFileCsv />
+                                        </button>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {loading && <tr>
+                                    </CSVLink>
+                                    <button
+                                        className='btn text-danger'
+                                        onClick={handlePDFDownload}
+                                        title="Export as PDF"
+                                    >
+                                        <FaFilePdf />
+                                    </button>
+                                    <button
+                                        className='btn text-primary'
 
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><div className="spinner-grow text-secondary" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div></td>
-                                            <td></td>
+                                        onClick={handleExcelDownload}
+                                        title="Export as Excel"
+                                    >
+                                        <FaFileExcel />
+                                    </button>
+                                    <CopyToClipboard text={JSON.stringify(users)}>
+                                        <button
 
-                                        </tr>}
-                                        {
-                                            displayData.map((data, index) =>
-                                                <tr key={index}>
-
-                                                    <td>{index + 1}</td>
-                                                    <td><button className='btn'><FaDharmachakra className='text-warning' /></button></td>
-                                                    <td className='fw-bold'>{data.fullName}</td>
-                                                    <td><a href="#"> {data.email}</a></td>
-
-
-                                                    <td>
-                                                        <span className='d-flex gap-4 align-items-center'>
-                                                            <Link to={`/app/account/edituser/${data.id}`} className="settings" title="Settings" data-toggle="tooltip">
-                                                                <FaEdit className='text-info' />
-
-                                                            </Link>
-                                                            <a href="#" className="delete" title="Delete" data-toggle="tooltip"><FaTrash className='text-danger' /></a>
-                                                        </span>
-                                                    </td>
-
-
-                                                </tr>
-                                            )
-                                        }
-                                        {!loading && displayData.length <= 0 && <tr>
-
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td className='text-danger fs-6'>No user found</td>
-                                            <td></td>
-
-                                        </tr>}
-
-
-
-
-                                    </tbody>
-                                </table>
-                                <div className="clearfix">
-                                    <div className="hint-text">Showing <b>{itemsPerPage}</b> out of <b>{filteredUsers.length}</b> entries</div>
-
-                                    <ReactPaginate
-                                        pageCount={pageCount}
-                                        onPageChange={page => setPageNumber(page.selected)}
-                                        activeClassName={'items actives'}
-                                        breakClassName={'items break-me '}
-                                        breakLabel={'...'}
-                                        containerClassName={'pagination'}
-                                        disabledClassName={'disabled-page'}
-                                        marginPagesDisplayed={2}
-                                        nextClassName={"items next "}
-                                        nextLabel={< FaArrowCircleRight style={{ fontSize: 18, width: 150 }} />}
-                                        pageClassName={'items pagination-page '}
-                                        pageRangeDisplayed={2}
-                                        previousClassName={"items previous"}
-                                        previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
-                                    />
+                                            className='btn text-warning'
+                                            title="Copy Table"
+                                            onClick={() => toast("Table Copied")}
+                                        >
+                                            <FaCopy />
+                                        </button>
+                                    </CopyToClipboard>
                                 </div>
-                            </section>
-                        </main>
+                                <div>
+                                    <button className='btn add-btn rounded-2'>Add New User</button>
+                                </div>
+                            </div>
+
+
+                            <DataTable data={filteredData} columns={columns}
+                                pagination
+                                highlightOnHover
+                                searchable
+                                searchTerm={searchText}
+                                progressPending={loading}
+                            />
+                        </div>
+
                     </div>
                     {/* /Page Content */}
 
