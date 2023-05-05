@@ -6,7 +6,6 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AllEmployees from './allemployees';
-import AllEmployeesList from './employeeslist';
 import Holidays from './holidays';
 import LeaveAdmin from './leave_admin';
 import LeaveEmployee from './leaveemployee';
@@ -36,7 +35,6 @@ const EmployeesRoute = ({ match }) => (
       <Route path={`${match.url}/addadmin`} component={AddAdministrator} />
       <Route path={`${match.url}/addstaff`} component={AddStaff} />
       <Route path={`${match.url}/changePassword`} component={ChangePassword} />
-      <Route path={`${match.url}/employees-list`} component={AllEmployeesList} />
       <Route path={`${match.url}/delete-staff`} component={DeleteStaff} />
       <Route path={`${match.url}/holidays`} component={Holidays} />
 

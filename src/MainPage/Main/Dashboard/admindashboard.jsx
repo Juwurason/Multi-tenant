@@ -263,12 +263,12 @@ const AdminDashboard = () => {
                   }
 
                   {
-                    recentUsers.map((data, index) =>
+                    !loading && recentUsers.length >= 1 && recentUsers.map((data, index) =>
 
                       <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
                         <div className="col-2">
                           <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                            <img src={data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                            <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
                           </div>
                         </div>
 

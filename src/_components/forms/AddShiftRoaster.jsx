@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { FaBackspace } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
@@ -34,6 +34,7 @@ const AddShiftRoaster = () => {
     const { loading, setLoading } = useCompanyContext()
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
+    const navigate = useHistory();
     const [selected, setSelected] = useState([]);
     const [staffId, setStaffId] = useState(0);
     const [dateFrom, setDatefrom] = useState("");
@@ -136,11 +137,11 @@ const AddShiftRoaster = () => {
             const { data } = await post(`/ShiftRosters/add_shift?userId=${id.userId}`,
                 {
                     comapanyId: id.comapanyId,
-                    staffId,
+                    staffId: Number(staffId),
                     dateFrom,
                     dateTo,
                     activities: selectedValues,
-                    profileId,
+                    profileId: Number(profileId),
                     isNightShift,
                     isExceptionalShift,
                     repeat,
@@ -155,7 +156,7 @@ const AddShiftRoaster = () => {
                 }
             )
             toast.success(data.message)
-
+            // navigate.push('/app/employee/shift-scheduling')
             setLoading(false)
 
         } catch (error) {
