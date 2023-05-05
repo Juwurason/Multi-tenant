@@ -46,7 +46,7 @@ const ClientHeader = (props) => {
             {/* Logo */}
             <div className="header-left">
                 <Link to="/" className="logo">
-                    <img src={headerlogo} width={40} height={40} alt="" style={{ backgroundColor: "black" }} />
+                    <img src={headerlogo} width={40} height={40} alt="" />
                 </Link>
             </div>
             {/* /Logo */}

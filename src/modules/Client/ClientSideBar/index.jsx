@@ -51,7 +51,7 @@ const ClientSidebar = (props) => {
 
             >
                 <div className="sidebar-inner slimscroll">
-                    <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#18225C", height: '100vh' }}>
+                    <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
 
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
@@ -80,7 +80,7 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
+                                <Link to="/client/client-roster"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/client/client-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>

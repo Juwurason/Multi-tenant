@@ -154,7 +154,7 @@
                      sty={'danger'}
                    />
                    <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}
-                     linkTitle={"View Progress Notes"} link={``} sty={'warning'}
+                     linkTitle={"View Progress Notes"} link={``} sty={'success'}
                    />
                   
                    <DashboardCard title={"Attendances"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
@@ -185,13 +185,56 @@
  
                          to={``} className='pointer text-dark text-center'>View all</Link>
                      </div>
+
                      <div className='border p-2'>
-                       <div className='d-flex flex-column justify-content-start'>
+                      <div>
+                      <div className={`card shadow-none border border-primary`}>
+                   <div className="card-content shadow-none">
+                     <div className="card-body shadow-none">
+                       <div className="media d-flex justify-content-between">
+                         <div className="media-body text-left">
+                           <span>Attendance</span>
+ 
+                           {/* {
+                             loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
+                               <div className="spinner-grow text-light" role="status">
+                                 <span className="sr-only">Loading...</span>
+                               </div>
+                             </div>
+                             )
+ 
+                               : */}
+                               <div>
+                                <h4>3/26/2023</h4>
+                               <h4>6:12:00 PM</h4>
+                               </div>
+                           {/* } */}
+{/*  
+                           <Link style={{ fontSize: "12px" }}
+ 
+                             to={``} className='pointer text-dark'>Last Clock In</Link> */}
+                             <small style={{ fontSize: "12px" }}>Last Clock in</small>
+                         </div>
+                         <div className="align-self-center pt-3">
+                         <div>
+                                <h4>3/26/2023</h4>
+                               <h4>6:12:00 PM</h4>
+                               </div>
+                               <small style={{ fontSize: "12px" }}>Last Clock out</small>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                      </div>
+                     </div>
+                     {/* <div className='border p-2'> */}
+                       {/* <div className='d-flex flex-column justify-content-start'>
                          <span>Satisfaction Stats</span>
                          <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span>
-                       </div>
-                       <ClientChart />
-                       <div className="row">
+                       </div> */}
+                       {/* <ClientChart /> */}
+                       {/* <div className="row">
                          <div className='d-flex align-items-start gap-2 col-4'>
                            <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#5A6ACF" }}></div>
                            <div>
@@ -220,8 +263,10 @@
  
                          </div>
  
-                       </div>
-                     </div>
+                       </div> */}
+
+                     {/* </div> */}
+
                    </div>
                  </div>
                </div>

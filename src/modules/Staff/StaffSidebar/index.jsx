@@ -48,7 +48,7 @@ const StaffSidebar = (props) => {
                 hideTracksWhenNotNeeded={true}
               >
                 <div className="sidebar-inner slimscroll">
-                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor:"#18225C", height:'100vh'}}>
+                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor: "#1C75B9", height:'100vh'}}>
                         
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
@@ -81,10 +81,10 @@ const StaffSidebar = (props) => {
                             </li>
                           
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-roster"><i className="la la-file-pdf-o" /> <span>My Shift Roster</span></Link>
+                                <Link to="/staff/staff-roster"><i className="la la-calendar" /> <span>My Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
+                                <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
                         </ul>
                     </div>

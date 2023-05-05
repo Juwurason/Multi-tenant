@@ -5,7 +5,7 @@ import ClientChangePassword from '../modules/Client/ClientChangePassword';
 import ClientProfile from '../modules/Client/ClientProfile';
 import ClientEditProfile from '../modules/Client/ClientEditProfile';
 import ClientDocument from '../modules/Client/ClientDocument';
-
+import ClientRoster from '../modules/Client/ClientRoster';
 
 export default [
 
@@ -28,6 +28,10 @@ export default [
     {
         path: 'client-document',
         component: ClientDocument
+    },
+    {
+        path: 'client-roster',
+        component: ClientRoster
     },
 
 ]
