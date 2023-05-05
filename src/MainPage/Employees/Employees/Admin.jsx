@@ -14,7 +14,6 @@ import moment from "moment";
 import {
     Avatar_02
 } from "../../../Entryfile/imagepath"
-import Addemployee from "../../../_components/modelbox/Addemployee"
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -33,9 +32,10 @@ const AllAdmin = () => {
 
     const columns = [
 
+
         {
-            name: 'ID',
-            selector: row => row.id,
+            name: 'Staff ID',
+            selector: row => row.maxStaffId,
             sortable: true
         },
         {
@@ -50,45 +50,16 @@ const AllAdmin = () => {
             ),
         },
         {
+            name: 'Address',
+            selector: row => row.address,
+            sortable: true,
+        },
+        {
             name: 'Email',
             selector: row => row.email,
             sortable: true
         },
-        {
-            name: 'Address',
-            selector: row => row.address,
-            sortable: true,
-            // cell: row => {
-            //     return (
-            //         <span> {!row.createdDate ? "Not Modified" : moment(row.createdDate).format('LLL')}</span>
-            //     )
-            // },
-        },
 
-
-        // {
-        //     name: "Actions",
-        //     cell: (row) => (
-        //         <div className="d-flex gap-2">
-        //             <button
-        //                 onClick={() => {
-        //                     // handle action here, e.g. open a modal or navigate to a new page
-        //                     alert(`Action button clicked for row with ID ${row.fullName}`);
-        //                 }}
-        //             >
-        //                 <FaTrash />
-        //             </button>
-        //             <button
-        //                 onClick={() => {
-        //                     // handle action here, e.g. open a modal or navigate to a new page
-        //                     alert(`Action button clicked to edit with ID ${row.fullName}`);
-        //                 }}
-        //             >
-        //                 <FaEdit className="text-info" />
-        //             </button>
-        //         </div>
-        //     ),
-        // },
 
     ];
 
@@ -97,6 +68,7 @@ const AllAdmin = () => {
         try {
             setLoading(true)
             const { data } = await get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            console.log(data);
             setAdmin(data);
             setLoading(false)
         } catch (error) {
@@ -307,31 +279,34 @@ const AllAdmin = () => {
                                     <FaFileCsv />
                                 </CSVLink>
                                 <button
-
+                                    className='btn'
                                     onClick={handlePDFDownload}
                                 >
                                     <FaFilePdf />
                                 </button>
                                 <button
+                                    className='btn'
 
                                     onClick={handleExcelDownload}
                                 >
                                     <FaFileExcel />
                                 </button>
                                 <CopyToClipboard text={JSON.stringify(admin)}>
-                                    <button >
+                                    <button
+
+                                        className='btn'
+                                    >
                                         <FaCopy />
                                     </button>
                                 </CopyToClipboard>
                             </div>
+
+
                             <DataTable data={admin} columns={columns}
                                 pagination
                                 highlightOnHover
                                 expandableRows
                                 expandableRowsComponent={ButtonRow}
-
-
-                                className="bg-dark"
                             />
 
 
