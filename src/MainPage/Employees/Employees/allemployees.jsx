@@ -1,24 +1,86 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import {
-  Avatar_02
-} from "../../../Entryfile/imagepath"
-import Addemployee from "../../../_components/modelbox/Addemployee"
-import Editemployee from "../../../_components/modelbox/Editemployee"
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Papa from 'papaparse';
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import ExcelJS from 'exceljs';
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
-import { FaEllipsisV } from 'react-icons/fa';
 const AllEmployees = () => {
   const privateHttp = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
   const [staff, setStaff] = useState([]);
   const { loading, setLoading } = useCompanyContext();
+
+  const columns = [
+    {
+      name: 'Staff ID',
+      selector: row => row.maxStaffId,
+      sortable: true
+    },
+    {
+      name: 'Full Name',
+      selector: row => row.fullName,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <Link to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`} className="fw-bold text-dark">
+          {row.firstName} {row.surName}
+        </Link>
+      ),
+    },
+    {
+      name: 'Address',
+      selector: row => row.address,
+      sortable: true,
+    },
+    {
+      name: 'Email',
+      selector: row => row.email,
+      sortable: true
+    },
+    {
+      name: 'Phone Number',
+      selector: row => row.phoneNumber,
+      sortable: true
+    }, {
+      name: "Actions",
+      cell: (row) => (
+        <div className="d-flex gap-1">
+          <Link to={`/app/profile/edit-profile/${row.staffId}`}
+            className="btn"
+            title='edit'
+          >
+            <SlSettings />
+          </Link>
+          <button
+            className='btn'
+            title='Delete'
+            onClick={() => handleDelete(row.staffId)}
+          >
+            <GoTrashcan />
+          </button>
+
+        </div>
+      ),
+    },
+
+
+
+  ];
+
   const FetchStaff = async () => {
     try {
       setLoading(true);
@@ -44,9 +106,10 @@ const AllEmployees = () => {
       html: `<h3>Are you sure? you want to delete this staff</h3></br><p>You won't be able to revert this!</p>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: 'rgb(29 78 216)',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'transparent',
+      cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
+      confirmButtonClass: 'btn btn-outline-warning text-danger',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -91,6 +154,99 @@ const AllEmployees = () => {
     }
   });
 
+  const handleExcelDownload = () => {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Sheet1');
+
+    // Add headers
+    const headers = columns.map((column) => column.name);
+    sheet.addRow(headers);
+
+    // Add data
+    staff.forEach((dataRow) => {
+      const values = columns.map((column) => {
+        if (typeof column.selector === 'function') {
+          return column.selector(dataRow);
+        }
+        return dataRow[column.selector];
+      });
+      sheet.addRow(values);
+    });
+
+    // Generate Excel file
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Staff.xlsx';
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+
+
+
+  const handleCSVDownload = () => {
+    const csvData = Papa.unparse(staff);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Staff.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handlePDFDownload = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(13);
+    doc.text("Staff Table", marginLeft, 40);
+    const headers = columns.map((column) => column.name);
+    const dataValues = staff.map((dataRow) =>
+      columns.map((column) => {
+        if (typeof column.selector === "function") {
+          return column.selector(dataRow);
+        }
+        return dataRow[column.selector];
+      })
+    );
+
+    doc.autoTable({
+      startY: 50,
+      head: [headers],
+      body: dataValues,
+      margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+    });
+    doc.save("staff.pdf");
+  };
+
+  const ButtonRow = ({ data }) => {
+    return (
+      <div className="p-4">
+        {data.fullName}
+
+      </div>
+    );
+  };
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredData = staff.filter((item) =>
+    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+  );
+
 
   return (
     <>
@@ -105,7 +261,7 @@ const AllEmployees = () => {
           </Helmet>
           {/* Page Content */}
           <div className="content container-fluid">
-            {/* Page Header */}
+
             <div className="page-header">
               <div className="row align-items-center">
                 <div className="col">
@@ -116,18 +272,16 @@ const AllEmployees = () => {
                   </ul>
                 </div>
                 <div className="col-auto float-end ml-auto">
-                  <Link to={'/app/employee/addstaff'} className="btn add-btn"><i className="fa fa-plus" /> Add New Staff</Link>
-                  {/* <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee"><i className="fa fa-plus" /> Add New Staff</a> */}
-                  <div className="view-icons">
-                    <Link to="/app/employee/allemployees" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                    <Link to="/app/employee/employees-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
-                  </div>
+
                 </div>
               </div>
             </div>
-            {/* /Page Header */}
-            {/* Search Filter */}
-            <div className="row filter-row">
+
+
+
+
+
+            {/* <div className="row filter-row">
               <div className="col-sm-6 col-md-3">
                 <div className="form-group form-focus">
                   <label className="focus-label">Staff ID</label>
@@ -150,9 +304,93 @@ const AllEmployees = () => {
               <div className="col-sm-6 col-md-3">
                 <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
               </div>
-            </div>
+            </div> */}
+
+
+
             {/* Search Filter */}
-            <div className="row staff-grid-row">
+
+
+            <div className='mt-4 border'>
+              <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+
+                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                  <input type="text" placeholder="Search staffs" className='border-0 outline-none' onChange={handleSearch} />
+                  <GoSearch />
+                </div>
+                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                  <CSVLink
+                    data={staff}
+                    filename={"data.csv"}
+
+                  >
+                    <button
+
+                      className='btn text-info'
+                      title="Export as CSV"
+                    >
+                      <FaFileCsv />
+                    </button>
+
+                  </CSVLink>
+                  <button
+                    className='btn text-danger'
+                    onClick={handlePDFDownload}
+                    title="Export as PDF"
+                  >
+                    <FaFilePdf />
+                  </button>
+                  <button
+                    className='btn text-primary'
+
+                    onClick={handleExcelDownload}
+                    title="Export as Excel"
+                  >
+                    <FaFileExcel />
+                  </button>
+                  <CopyToClipboard text={JSON.stringify(staff)}>
+                    <button
+
+                      className='btn text-warning'
+                      title="Copy Table"
+                      onClick={() => toast("Table Copied")}
+                    >
+                      <FaCopy />
+                    </button>
+                  </CopyToClipboard>
+                </div>
+                <div>
+                  <Link to={'/app/employee/addstaff'} className="btn add-btn rounded-2">
+                    Create New staff</Link>
+                </div>
+              </div>
+              <DataTable data={filteredData} columns={columns}
+                pagination
+                highlightOnHover
+                searchable
+                searchTerm={searchText}
+                progressPending={loading}
+                expandableRows
+                expandableRowsComponent={ButtonRow}
+                paginationTotalRows={filteredData.length}
+
+
+
+              />
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+            {/* <div className="row staff-grid-row">
               {
                 loading && <div className='text-center fs-1'>
                   <div className="spinner-grow text-secondary" role="status">
@@ -202,7 +440,7 @@ const AllEmployees = () => {
 
 
 
-            </div>
+            </div> */}
           </div>
           {/* /Page Content */}
           {/* Add Employee Modal */}

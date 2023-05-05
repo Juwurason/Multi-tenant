@@ -1,4 +1,4 @@
-.table-responsive {
+/* .table-responsive {
     margin: 30px 0;
 }
 
@@ -74,7 +74,7 @@ table.table-striped tbody tr:nth-of-type(odd) {
 }
 
 table.table-striped.table-hover tbody tr:hover {
-    /* background: #f5f5f5; */
+    background: #f5f5f5;
 }
 
 table.table th i {
@@ -161,7 +161,7 @@ table.table .avatar {
 }
 
 .pagination li a:hover {
-    /* color: #666; */
+    color: #666;
 }
 
 .pagination li.active a,
@@ -186,4 +186,4 @@ table.table .avatar {
     float: left;
     margin-top: 10px;
     font-size: 13px;
-}
+} */

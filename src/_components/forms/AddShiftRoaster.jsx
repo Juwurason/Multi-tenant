@@ -4,7 +4,8 @@ import { Helmet } from 'react-helmet';
 import { FaBackspace } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 
@@ -29,15 +30,32 @@ const options = [
 ];
 const AddShiftRoaster = () => {
     const id = JSON.parse(localStorage.getItem('user'));
-    const privateHttp = useHttp();
+    const { get, post } = useHttp();
     const { loading, setLoading } = useCompanyContext()
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
+    const navigate = useHistory();
     const [selected, setSelected] = useState([]);
+    const [staffId, setStaffId] = useState(0);
+    const [dateFrom, setDatefrom] = useState("");
+    const [dateTo, setDateTo] = useState("");
+    const [profileId, setProfileId] = useState(0);
+    const [isNightShift, setIsNightShift] = useState(false);
+    const [isExceptionalShift, setIsExceptionalShift] = useState(false);
+    const [days, setDays] = useState({
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false
+    });
+    const [stopDate, setStopDate] = useState("");
     const FetchSchedule = async () => {
 
         try {
-            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const staff = staffResponse.data;
             setStaff(staff);
             setLoading(false)
@@ -46,7 +64,7 @@ const AddShiftRoaster = () => {
         }
 
         try {
-            const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
             setClients(client);
             setLoading(false)
@@ -67,18 +85,90 @@ const AddShiftRoaster = () => {
     const handleRepeatChange = (e) => {
         setRepeat(e.target.checked);
     };
-
-    const handleNumOfDaysChange = (e, day) => {
-        // get the value of the checkbox (true or false)
-        const checked = e.target.checked;
-
-        // update the state based on the checked value
-        if (checked) {
-            setNumOfDays(numOfDays + 1);
-        } else {
-            setNumOfDays(numOfDays - 1);
-        }
+    const handleExceptionChange = (e) => {
+        setIsExceptionalShift(e.target.checked);
     };
+    const handleNightChange = (e) => {
+        setIsNightShift(e.target.checked);
+    };
+    const handleCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
+    };
+
+
+    const handleSelected = (selectedOptions) => {
+        setSelected(selectedOptions);
+    }
+
+    const selectedValues = selected.map(option => option.label).join(', ');
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        // console.table(
+        //     // comapanyId,
+        //     "StaffID", staffId,
+        //     "ClientID", profileId,
+        //     "DateFrom", dateFrom,
+        //     "DateTo", dateTo,
+        //     "Activities", selectedValues,
+        //     "Repeat", repeat,
+        //     "isException", isExceptionalShift,
+        //     "IsNight", isNightShift,
+        //     "Sunday", days.sunday,
+        //     "Monday", days.monday,
+        //     "Tuesday", days.tuesday,
+        //     "Wednesday", days.wednesday,
+        //     "Thursday", days.thursday,
+        //     "Friday", days.friday,
+        //     "Saturday", days.saturday,
+        //     "Sunday", days.sunday,
+        //     "stopDate", stopDate
+        // );
+
+
+        if (staffId === 0 || profileId === 0
+        ) {
+            return toast.error("Invalid Request")
+        }
+        try {
+            setLoading(true)
+            const { data } = await post(`/ShiftRosters/add_shift?userId=${id.userId}`,
+                {
+                    comapanyId: id.comapanyId,
+                    staffId: Number(staffId),
+                    dateFrom,
+                    dateTo,
+                    activities: selectedValues,
+                    profileId: Number(profileId),
+                    isNightShift,
+                    isExceptionalShift,
+                    repeat,
+                    monday: days.monday,
+                    tuesday: days.tuesday,
+                    wednesday: days.wednesday,
+                    thursday: days.thursday,
+                    friday: days.friday,
+                    saturday: days.saturday,
+                    sunday: days.sunday,
+                    stopDate: stopDate
+                }
+            )
+            toast.success(data.message)
+            // navigate.push('/app/employee/shift-scheduling')
+            setLoading(false)
+
+        } catch (error) {
+            toast.error(error.response?.data?.message)
+
+            setLoading(false)
+
+        } finally {
+            setLoading(false)
+        }
+
+    }
 
 
     return (
@@ -97,14 +187,14 @@ const AddShiftRoaster = () => {
                                 <Link to={'/app/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">
-                                <form>
+                                <form onSubmit={handleSubmit}>
                                     <div className="row">
 
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Staff Name</label>
                                                 <div>
-                                                    <select className="form-select">
+                                                    <select className="form-select" onChange={e => setStaffId(e.target.value)}>
                                                         <option defaultValue hidden>--Select a staff--</option>
                                                         {
                                                             staff.map((data, index) =>
@@ -117,11 +207,11 @@ const AddShiftRoaster = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">Client Name</label>
                                                 <div>
-                                                    <select className="form-select">
+                                                    <select className="form-select" onChange={e => setProfileId(e.target.value)}>
                                                         <option defaultValue hidden>--Select a Client--</option>
                                                         {
                                                             clients.map((data, index) =>
-                                                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
                                                         }
                                                     </select></div>
                                             </div>
@@ -129,13 +219,19 @@ const AddShiftRoaster = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Start Time</label>
-                                                <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                                                <div><input className="form-control datetimepicker" type="datetime-local"
+                                                    onChange={e => setDatefrom(e.target.value)}
+                                                    value={dateFrom}
+                                                /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">End Time</label>
-                                                <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                                                <div><input className="form-control datetimepicker" type="datetime-local"
+                                                    onChange={e => setDateTo(e.target.value)}
+                                                    value={dateTo}
+                                                /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-12">
@@ -146,28 +242,26 @@ const AddShiftRoaster = () => {
                                                 <MultiSelect
                                                     options={options}
                                                     value={selected}
-                                                    onChange={setSelected}
+                                                    onChange={handleSelected}
                                                     labelledBy="Select Task"
                                                 />
                                             </div>
                                         </div>
 
-                                        <hr />
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <input type="checkbox" />
+                                                <input type="checkbox" checked={isExceptionalShift} onChange={handleExceptionChange} />
                                                 &nbsp; &nbsp;
                                                 <label className="col-form-label">Is Exceptional Shift</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <input type="checkbox" />
+                                                <input type="checkbox" checked={isNightShift} onChange={handleNightChange} />
                                                 &nbsp; &nbsp;
                                                 <label className="col-form-label">Is Night Shift</label>
                                             </div>
                                         </div>
-                                        <hr />
 
 
 
@@ -182,49 +276,67 @@ const AddShiftRoaster = () => {
                                                 <div>
                                                     <p>Select days:</p>
                                                     <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Monday')} />
+                                                        <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
                                                         &nbsp;
-                                                        Monday
+                                                        Sunday
                                                     </label>
                                                     &nbsp; &nbsp;
                                                     <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Tuesday')} />
+                                                        <input type="checkbox" name="monday" checked={days.monday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Monday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="tuesday" checked={days.tuesday} onChange={handleCheckboxChange} />
                                                         &nbsp;
                                                         Tuesday
                                                     </label> &nbsp; &nbsp;
                                                     <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Wednesday')} />
+                                                        <input type="checkbox" name="wednesday" checked={days.wednesday} onChange={handleCheckboxChange} />
                                                         &nbsp;
-                                                        Wednesday
+                                                        wednesday
                                                     </label> &nbsp; &nbsp;
                                                     <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Thursday')} />
+                                                        <input type="checkbox" name="thursday" checked={days.thursday} onChange={handleCheckboxChange} />
                                                         &nbsp;
                                                         Thursday
                                                     </label> &nbsp; &nbsp;
                                                     <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Friday')} />
+                                                        <input type="checkbox" name="friday" checked={days.friday} onChange={handleCheckboxChange} />
                                                         &nbsp;
                                                         Friday
                                                     </label> &nbsp; &nbsp;
                                                     <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Saturday')} />
+                                                        <input type="checkbox" name="saturday" checked={days.saturday} onChange={handleCheckboxChange} />
                                                         &nbsp;
                                                         Saturday
                                                     </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" onChange={(e) => handleNumOfDaysChange(e, 'Sunday')} />
-                                                        &nbsp;
-                                                        Sunday
-                                                    </label> &nbsp; &nbsp;
-                                                    {/* <p>Number of days to repeat: {numOfDays}</p> */}
+                                                    <br />
+
+                                                    <div className='row'>
+
+                                                        <div className="col-sm-6">
+                                                            <div className="form-group">
+                                                                <label className="col-form-label">Select Date to End the Repitition</label>
+                                                                <div><input className="form-control datetimepicker" type="datetime-local"
+                                                                    onChange={e => setStopDate(e.target.value)}
+                                                                /></div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
                                     </div>
 
                                     <div className="submit-section">
-                                        <button className="btn btn-primary submit-btn">Submit</button>
+                                        <button className="btn btn-primary submit-btn" type='submit'>
+
+                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div> : "Submit"}
+                                        </button>
                                     </div>
                                 </form>
                             </div>

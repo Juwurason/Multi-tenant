@@ -49,7 +49,7 @@ const Sidebar = (props) => {
 
       >
         <div className="sidebar-inner slimscroll">
-          <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
+          <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh', paddingRight: "10px" }}>
 
 
             { /*Vertical Sidebar starts here*/}

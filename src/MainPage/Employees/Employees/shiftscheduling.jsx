@@ -10,6 +10,7 @@ import '../../../assets/css/table2.css'
 import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaSearch, FaSlidersH } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
 import { useCompanyContext } from '../../../context';
+import dayjs from 'dayjs';
 
 const ShiftScheduling = () => {
   const id = JSON.parse(localStorage.getItem('user'));
@@ -18,19 +19,22 @@ const ShiftScheduling = () => {
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [staffOne, setStaffOne] = useState({});
+  let staffNo;
 
   const FetchSchedule = async () => {
     setLoading(true)
     try {
-      const scheduleResponse = await get(`ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
+      console.log(schedule);
       setSchedule(schedule);
       setLoading(false)
     } catch (error) {
       console.log(error);
     }
     try {
-      const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       setStaff(staff);
       setLoading(false)
@@ -45,10 +49,17 @@ const ShiftScheduling = () => {
       setLoading(false)
     } catch (error) {
       console.log(error);
-    } finally {
+    }
+    try {
+      const { data } = await privateHttp.get(`/Staffs/${staffNo}`, { cacheTimeout: 300000 })
+      setStaffOne(data)
+
+    } catch (error) {
+      console.log(error);
+    }
+    finally {
       setLoading(false)
     }
-
   };
   useEffect(() => {
     FetchSchedule()
@@ -68,53 +79,31 @@ const ShiftScheduling = () => {
   });
 
   const [list, setList] = useState([1, 2, 3, 4, 5, 6])
-  const [startIndex, setStartIndex] = useState(0);
+  // Get the current date
+  const [currentDate, setCurrentDate] = useState(dayjs());
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-  currentDate.setDate(1); // Set the date to the 1st of the current month
-
-  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-  // Get the number of days in the current month
-  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-
-
-  // Generate an array of dates for the current month
-  const currentMonthDates = [];
-  for (let i = startIndex + 1; i <= daysInMonth; i++) {
-    if (currentMonthDates.length === 6) {
-      break;
-    }
-    currentMonthDates.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), i));
-  }
-
-
-  // Generate an array of date strings for the current month
-  const currentMonthDateStrings = currentMonthDates.map(date => `${weekdays[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}`);
-
-  // Handler for previous button click
-  const handlePrevClick = () => {
-    setStartIndex(startIndex - 6);
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getDate() - 1, 1));
-  };
-
-  // Handler for next button click
   const handleNextClick = () => {
-    setStartIndex(startIndex + 6);
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getDate() + 1, 1));
+    setCurrentDate(currentDate.add(6, 'day'));
   };
 
+  const handlePrevClick = () => {
+    setCurrentDate(currentDate.subtract(6, 'day'));
+  };
 
+  const daysOfWeek = [
+    currentDate.subtract(3, 'day'),
+    currentDate.subtract(2, 'day'),
+    currentDate.subtract(1, 'day'),
+    currentDate,
+    currentDate.add(1, 'day'),
+    currentDate.add(2, 'day'),
+  ];
+  const startDate = currentDate.subtract(3, 'day');
+  const endDate = currentDate.add(2, 'day');
 
-  // Get the start and end dates for the current range
-  const startDate = currentMonthDates[0];
-  const endDate = currentMonthDates[5]; // Get the 6th date (0-based index)
-
-
-
-
-
+  const activitiesByDay = daysOfWeek.map((day) =>
+    schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+  );
 
   return (
     <>
@@ -146,64 +135,8 @@ const ShiftScheduling = () => {
           {/* Content Starts */}
           {/* Search Filter */}
 
-
-
-
-          {/* <div className="row filter-row  align-items-center border border-2">
-            <div className="col-sm-6 col-md-3">
-              <div className="form-group">
-                <label className="col-form-label">Client Name</label>
-                <div>
-                  <select className="form-select">
-                    <option defaultValue hidden>--Select a Client--</option>
-                    {
-                      staff.map((data, index) =>
-                        <option value={data.staffId} key={index}>{data.fullName}</option>)
-                    }
-                  </select></div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-3">
-              <div className="form-group">
-                <label className="col-form-label">Client Name</label>
-                <div>
-                  <select className="form-select">
-                    <option defaultValue hidden>--Select a Client--</option>
-                    {
-                      clients.map((data, index) =>
-                        <option value={data.staffId} key={index}>{data.fullName}</option>)
-                    }
-                  </select></div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-2">
-              <div className="form-group">
-                <label className="col-form-label">Date From</label>
-                <div>
-                  <input className="form-control floating datetimepicker" type="date" />
-
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-2">
-              <div className="form-group">
-                <label className="col-form-label">Date To</label>
-                <div>
-                  <input className="form-control floating datetimepicker" type="date" />
-
-                </div>
-              </div>
-            </div>
-
-            <div className="col-sm-6 col-md-2 ">
-              <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
-            </div>
-          </div> */}
-
-
-
           <div className='row filter-row '>
-            <div className="col-sm-2" style={{ height: "50vh" }}>
+            <div className="col-md-4 col-lg-2 " style={{ height: "50vh" }}>
 
               <div className=''>
                 <div className="form-group">
@@ -230,11 +163,11 @@ const ShiftScheduling = () => {
                   <div>
 
                     {
-                      list.map((data, index) =>
-                        <div className='d-flex align-items-center gap-2 p-2' key={index}>
-                          <span className='rounded-circle bg-danger' style={{ width: "10px", height: "10px" }}></span>
-                          <span className='rounded-circle bg-dark' style={{ width: "35px", height: "35px" }}></span>
-                          <span className='text-truncate' style={{ fontSize: '12px' }}>Kemi Spark {data}</span>
+                      staff.map((data, index) =>
+                        <div className='d-flex gap-2 align-items-center overflow-hidden p-2' key={index}>
+                          <span className='rounded-circle bg-success' style={{ width: "10px", height: "10px" }}></span>
+                          <span className='rounded-circle bg-dark' style={{ width: "30px", height: "30px" }}></span>
+                          <span className='text-truncate' style={{ fontSize: '12px' }}>{data.firstName} {data.surName}</span>
                         </div>
                       )
                     }
@@ -246,12 +179,12 @@ const ShiftScheduling = () => {
 
 
 
-            <div className="col-sm-10">
+            <div className="col-md-8 col-lg-10 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
-                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }}>
-                  <FaAngleLeft onClick={handlePrevClick} style={{ cursor: "pointer" }} />
-                  <span className='fw-bold text-muted'> {`${startDate.getDate()} ${months[startDate.getMonth()]} - ${endDate.getDate()} ${months[endDate.getMonth()]}`} </span>
-                  <FaAngleRight onClick={handleNextClick} style={{ cursor: "pointer" }} />
+                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
+                  <FaAngleLeft className='pointer' onClick={handlePrevClick} />
+                  <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <FaAngleRight className='pointer' onClick={handleNextClick} />
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
@@ -264,40 +197,36 @@ const ShiftScheduling = () => {
                   </select>
                 </span>
               </div>
-              <div className='row'>
-                {currentMonthDateStrings.map((dateString, index) =>
-                  <div key={index} className="col-sm-2 border py-2">
-                    <span className='text-muted' style={{ fontSize: '12px' }}>
-                      {dateString}
-                    </span>
-                    <div className="col-sm-12 text-center py-3">
-                      <div className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
-                        <span className='fw-bold'>9AM - 3PM</span>
-                        <span>Kemi Spark</span>
-                        <small>Lorem Ipsum dolor</small>
-                      </div>
-                      <div className='bg-primary text-white rounded-2 mt-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
-                        <span className='fw-bold'>9AM - 3PM</span>
-                        <span>Kemi Spark</span>
-                        <small>Lorem Ipsum dolor</small>
-                      </div>
-                      <div className='bg-primary text-white rounded-2 mt-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
-                        <span className='fw-bold'>9AM - 3PM</span>
-                        <span>Kemi Spark</span>
-                        <small>Lorem Ipsum dolor</small>
-                      </div>
-                      <button className='btn'>
+              <div className='row g-0'>
+
+                {daysOfWeek.map((day, index) => (
+                  <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
+                    <div className='border p-2'>
+                      <span
+                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                        style={{ fontSize: '12px' }}>
+                        {day.format('dddd, MMMM D')}
+
+                      </span>
+                    </div>
+                    <div className="col-sm-12 text-center border p-2">
+
+                      {activitiesByDay[index].map((activity, activityIndex) => (
+
+                        <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
+                          <span className='fw-bold'>{dayjs(activity.dateFrom).format('hh:mm A')}</span>
+                          <span>Kemi Spark</span>
+                          <small className='text-truncate'>{activity.activities}</small>
+                        </div>
+                      ))}
+
+                      {/* <button className='btn'>
                         <FaPlus />
-                      </button>
+                      </button> */}
 
                     </div>
                   </div>
-
-                )
-                }
-
-              </div>
-              <div className='row'>
+                ))}
 
               </div>
 
