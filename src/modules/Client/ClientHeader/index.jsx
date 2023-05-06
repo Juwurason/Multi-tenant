@@ -2,12 +2,15 @@
  * App Header
  */
 import React, { useEffect, useState } from 'react'
+import { FaAngleDown } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
     headerlogo, lnEnglish, lnFrench, lnSpanish, lnGerman, Avatar_02, Avatar_03, Avatar_05,
     Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
 } from '../../../Entryfile/imagepath'
+import man from "../../../assets/img/user.jpg"
+
 
 const ClientHeader = (props) => {
     const navigate = useHistory()
@@ -18,17 +21,17 @@ const ClientHeader = (props) => {
         props.onMenuClick()
     }
 
-    const staffRole = JSON.parse(localStorage.getItem('user'))
 
     const handleLogout = () => {
         localStorage.removeItem('user')
-        localStorage.removeItem('staffProfile')
+        localStorage.removeItem('clientProfile')
         navigate.push("/login")
     }
 
     let pathname = location.pathname
 
     const [currentTime, setCurrentTime] = useState(new Date());
+    const userObj = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -279,17 +282,36 @@ const ClientHeader = (props) => {
                 </li>
                 {/* /Message Notifications */}
                 <li className="nav-item dropdown has-arrow main-drop">
-                    <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span className="user-img me-1"><img src={Avatar_21} alt="" />
-                            <span className="status online" /></span>
-                        <span>Client</span>
-                    </a>
-                    <div className="dropdown-menu">
-                        <Link className="dropdown-item" to="/client/client-profile">My Profile</Link>
-                        <Link className="dropdown-item" to="/client/change-password">Change Password</Link>
-                        <Link className="dropdown-item" onClick={handleLogout} to="/">Logout</Link>
-                    </div>
-                </li>
+          <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+            <span className="user-img me-1">
+
+              <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+
+              <span className="status online" /></span>
+            <span><FaAngleDown /></span>
+          </a>
+          <div className="dropdown-menu">
+            <div className='bg-primary p-2'>
+              <div className="row mt-2">
+                <div className="col-2">
+                  <div className='rounded-circle bg-secondary' style={{ width: "35px", height: "35px" }}>
+                    <img src={Avatar_02} alt="" width={50} height={50} className='rounded-circle' />
+                  </div>
+                </div>
+
+                <div className="col-10 d-flex flex-column justify-content-start text-white">
+                  <span className='fw-bold'>{userObj.fullName}</span>
+                  <span style={{ fontSize: "7px", }}>{userObj.email}</span>
+                </div>
+
+              </div>
+            </div>
+            <Link className="dropdown-item" to={"/client/clientchange-password"}>Change Password</Link>
+            <Link className="dropdown-item" to={"/client/client-profile"}>Profile</Link>
+            <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+
+          </div>
+        </li>
             </ul>
             {/* /Header Menu */}
             {/* Mobile Menu */}

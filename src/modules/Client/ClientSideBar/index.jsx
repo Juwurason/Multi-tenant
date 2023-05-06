@@ -80,14 +80,14 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/client/client-roster"><i className="la la-file-pdf-o" /> <span>Shift Roster</span></Link>
+                                <Link to="/client/client-roster"><i className="la la-calendar" /> <span>Shift Roster</span></Link>
                             </li>
                             <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/client/client-document"><i className="la la-file-pdf-o" /> <span>Documents</span></Link>
+                                <Link to="/client/client-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
+                            {/* <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to=""><i className="la la-file-pdf-o" /> <span>Representative</span></Link>
-                            </li>
+                            </li> */}
                             {/* <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to=""><i className="la la-file-pdf-o" /> <span>Disability Support Needs</span></Link>
                             </li>
