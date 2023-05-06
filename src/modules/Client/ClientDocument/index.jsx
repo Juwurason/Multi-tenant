@@ -23,6 +23,7 @@ const ClientDocument = () => {
   const [document, setDocument] = useState("")
 
   const id = JSON.parse(localStorage.getItem('user'))
+  const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -47,6 +48,7 @@ const ClientDocument = () => {
     formData.append("CompanyId", id.companyId);
     formData.append("DocumentFile", document);
     formData.append("DocumentName", documentName);
+    formData.append("UserId", clientProfile.profileId);
     formData.append("ExpirationDate", expire);
     formData.append("User", id.fullName);
     formData.append("UserRole", id.role);
