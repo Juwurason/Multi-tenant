@@ -174,7 +174,7 @@ const StaffRoster = () => {
                           <div>
                             <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
                           </div>
-                          <span>Rose John</span>
+                          <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
                           {/* <small
                             className='text-truncate bg-success p-1 rounded'
                             style={{ cursor: "pointer" }}
