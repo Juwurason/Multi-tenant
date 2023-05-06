@@ -28,14 +28,14 @@ const OnlineStatus = () => {
 
     const handleOffline = () => {
         setOnline(false);
-        toast.error("You are now offline.", {
-            position: "top-right",
-            autoClose: false,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-        });
+        // toast.error("You are offline.", {
+        //     position: "top-right",
+        //     autoClose: false,
+        //     hideProgressBar: true,
+        //     closeOnClick: true,
+        //     pauseOnHover: false,
+        //     draggable: true,
+        // });
     };
 
     return (

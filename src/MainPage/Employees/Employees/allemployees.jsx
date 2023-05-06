@@ -25,6 +25,10 @@ const AllEmployees = () => {
   const { loading, setLoading } = useCompanyContext();
 
   const columns = [
+    // {
+    //   name: '#',
+    //   cell: (row, index) => index + 1
+    // },
     {
       name: 'Staff ID',
       selector: row => row.maxStaffId,
@@ -246,7 +250,21 @@ const AllEmployees = () => {
   const filteredData = staff.filter((item) =>
     item.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
+  const customStyles = {
 
+    headCells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for head cells
+        paddingRight: '8px',
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for data cells
+        paddingRight: '8px',
+      },
+    },
+  };
 
   return (
     <>
@@ -312,16 +330,18 @@ const AllEmployees = () => {
 
 
             <div className='mt-4 border'>
-              <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+              <div className="row px-2 py-3">
 
-                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                  <input type="text" placeholder="Search staffs" className='border-0 outline-none' onChange={handleSearch} />
-                  <GoSearch />
+                <div className="col-md-3">
+                  <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                    <input type="text" placeholder="Search staffs" className='border-0 outline-none' onChange={handleSearch} />
+                    <GoSearch />
+                  </div>
                 </div>
-                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                   <CSVLink
                     data={staff}
-                    filename={"data.csv"}
+                    filename={"staff.csv"}
 
                   >
                     <button
@@ -359,7 +379,7 @@ const AllEmployees = () => {
                     </button>
                   </CopyToClipboard>
                 </div>
-                <div>
+                <div className='col-md-4'>
                   <Link to={'/app/employee/addstaff'} className="btn add-btn rounded-2">
                     Create New staff</Link>
                 </div>
@@ -378,15 +398,10 @@ const AllEmployees = () => {
                 expandableRows
                 expandableRowsComponent={ButtonRow}
                 paginationTotalRows={filteredData.length}
-
+                customStyles={customStyles}
 
 
               />
-
-
-
-
-
 
             </div>
 

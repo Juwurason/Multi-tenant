@@ -20,8 +20,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
 import ExcelJS from 'exceljs';
-import Editemployee from "../../../_components/modelbox/Editemployee"
-import AddAdmin from '../../../_components/modelbox/AddAdmin';
+
 
 
 const AllUser = () => {
@@ -38,7 +37,6 @@ const AllUser = () => {
 
 
     const columns = [
-
 
 
         {
@@ -261,13 +259,15 @@ const AllUser = () => {
 
 
                         <div className='mt-4 border'>
-                            <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+                            <div className="row px-2 py-3">
 
-                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                    <input type="text" placeholder="Search Users" className='border-0 outline-none' onChange={handleSearch} />
-                                    <GoSearch />
+                                <div className='col-md-3'>
+                                    <div className=' d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                        <input type="text" placeholder="Search Users" className='border-0 outline-none' onChange={handleSearch} />
+                                        <GoSearch />
+                                    </div>
                                 </div>
-                                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                                     <CSVLink
                                         data={users}
                                         filename={"data.csv"}
@@ -308,7 +308,7 @@ const AllUser = () => {
                                         </button>
                                     </CopyToClipboard>
                                 </div>
-                                <div>
+                                <div className='col-md-4'>
                                     <button className='btn add-btn rounded-2'>Add New User</button>
                                 </div>
                             </div>

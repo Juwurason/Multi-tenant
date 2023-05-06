@@ -314,13 +314,15 @@ const AllAdmin = () => {
 
 
                         <div className='mt-4 border'>
-                            <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+                            <div className="row px-2 py-3">
 
-                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                    <input type="text" placeholder="Search Admins" className='border-0 outline-none' onChange={handleSearch} />
-                                    <GoSearch />
+                                <div className="col-md-3">
+                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                        <input type="text" placeholder="Search Admins" className='border-0 outline-none' onChange={handleSearch} />
+                                        <GoSearch />
+                                    </div>
                                 </div>
-                                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                                     <CSVLink
                                         data={admin}
                                         filename={"data.csv"}
@@ -361,7 +363,7 @@ const AllAdmin = () => {
                                         </button>
                                     </CopyToClipboard>
                                 </div>
-                                <div>
+                                <div className='col-md-4'>
                                     <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
                                         Create New Admin</Link>
                                 </div>

@@ -1480,14 +1480,14 @@ button.bg-success:hover {
 
 .bg-info,
 .badge-info {
-  background-color: #009efb !important;
+  background-color: #1C75BC !important;
 }
 
 a.bg-info:focus,
 a.bg-info:hover,
 button.bg-info:focus,
 button.bg-info:hover {
-  background-color: #028ee1 !important;
+  background-color: #1C75BC !important;
 }
 
 .bg-warning,
@@ -1586,16 +1586,16 @@ button.bg-danger:hover {
 .btn-primary:active,
 .btn-primary.active {
   color: #ffffff;
-  background-color: #18225C;
-  border-color: #18225C;
+  background-color: #1C75BC;
+  border-color: #1C75BC;
 }
 
 .btn-primary:focus .open>.dropdown-toggle.btn-primary,
 .btn-primary:hover .open>.dropdown-toggle.btn-primary,
 .btn-primary:active .open>.dropdown-toggle.btn-primary,
 .btn-primary.active .open>.dropdown-toggle.btn-primary {
-  background-color: #18225C;
-  border: 1px solid #18225C;
+  background-color: #1C75BC;
+  border: 1px solid #1C75BC;
 }
 
 .btn-primary.active.focus .open>.dropdown-toggle.btn-primary.focus,
@@ -1616,20 +1616,20 @@ button.bg-danger:hover {
 .btn-primary .focus:hover .open>.dropdown-toggle.btn-primary.focus,
 .btn-primary .focus:hover .open>.dropdown-toggle.btn-primary:focus,
 .btn-primary .focus:hover .open>.dropdown-toggle.btn-primary:hover {
-  background-color: #18225C;
-  border: 1px solid #18225C;
+  background-color: #1C75BC;
+  border: 1px solid #1C75BC;
 }
 
 .btn-primary:active:focus,
 .btn-primary:active:hover {
-  background-color: #18225C;
-  border: 1px solid #18225C;
+  background-color: #1C75BC;
+  border: 1px solid #1C75BC;
 }
 
 .btn-primary .active:not(:disabled):not(.disabled),
 .btn-primary:active:not(:disabled):not(.disabled) {
-  background-color: #18225C;
-  border-color: #18225C;
+  background-color: #1C75BC;
+  border-color: #1C75BC;
   color: #ffffff;
 }
 
@@ -2818,7 +2818,7 @@ input[type=file].form-control {
 
 .header {
   background: #1C75BC;
-  background: linear-gradient(to right, #1C75BC 0%, #18225C 100%);
+  background: linear-gradient(to right, #1C75BC 0%, #1C75BC 100%);
   border-bottom: 1px solid transparent;
   height: 60px;
   z-index: 1002;
@@ -6149,7 +6149,7 @@ input[type=file].form-control {
 
 [data-layout-mode=orange] body .header {
 
-  background: #18225C;
+  background: #1C75BC;
   background: white;
 }
 
@@ -8271,7 +8271,7 @@ textarea.form-control {
 
 .dash-widget .card-body .dash-widget-icon {
 
-  background-color: #18225C;
+  background-color: #1C75BC;
   color: #fff;
 
   font-size: 30px;

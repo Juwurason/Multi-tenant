@@ -209,19 +209,25 @@ const ShiftScheduling = () => {
                       </span>
                     </div>
                     <div className="col-sm-12 text-center border p-2">
+                      {loading &&
+
+                        <div className="spinner-grow text-secondary" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      }
 
                       {activitiesByDay[index].map((activity, activityIndex) => (
 
-                        <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2' style={{ fontSize: '10px' }}>
-                          <span className='fw-bold'>{dayjs(activity.dateFrom).format('hh:mm A')}</span>
-                          <span>Kemi Spark</span>
+                        <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                          <span className='fw-bold'>{dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}</span>
+                          <span className='text-warning'>Promax Staff</span>
                           <small className='text-truncate'>{activity.activities}</small>
                         </div>
                       ))}
 
-                      {/* <button className='btn'>
+                      <button className='btn'>
                         <FaPlus />
-                      </button> */}
+                      </button>
 
                     </div>
                   </div>

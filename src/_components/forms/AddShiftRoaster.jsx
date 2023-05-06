@@ -136,7 +136,7 @@ const AddShiftRoaster = () => {
             setLoading(true)
             const { data } = await post(`/ShiftRosters/add_shift?userId=${id.userId}`,
                 {
-                    comapanyId: id.comapanyId,
+                    companyId: id.companyId,
                     staffId: Number(staffId),
                     dateFrom,
                     dateTo,

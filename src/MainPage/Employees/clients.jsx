@@ -1,23 +1,87 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { FaEllipsisV } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Papa from 'papaparse';
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../context';
-// import { useCompanyContext } from '../../context';
-import { Avatar_19, } from "../../Entryfile/imagepath"
 import useHttp from '../../hooks/useHttp';
-import AddClient from '../../_components/modelbox/Addclient';
-import Editclient from "../../_components/modelbox/Editclient"
-
 
 const Clients = () => {
   const { loading, setLoading } = useCompanyContext()
   const id = JSON.parse(localStorage.getItem('user'));
   const [clients, setClients] = useState([]);
   const { get } = useHttp();
+
+  const columns = [
+    // {
+    //   name: '#',
+    //   cell: (row, index) => index + 1
+    // },
+
+    {
+      name: 'Full Name',
+      selector: row => row.fullName,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <Link to={`/app/profile/client-profile/${row.profileId}/${row.firstName}`} className="fw-bold text-dark">
+          {row.firstName} {row.surName}
+        </Link>
+      ),
+    },
+    {
+      name: 'Address',
+      selector: row => row.address,
+      sortable: true,
+    },
+    {
+      name: 'Email',
+      selector: row => row.email,
+      sortable: true
+    },
+    {
+      name: 'Phone Number',
+      selector: row => row.phoneNumber,
+      sortable: true
+    },
+
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="d-flex gap-1">
+          <Link to={`/app/profile/edit-client/${row.profileId}`}
+            className="btn"
+            title='edit'
+          >
+            <SlSettings />
+          </Link>
+          <button
+            className='btn'
+            title='Delete'
+            onClick={() => handleDelete(row.profileId)}
+          >
+            <GoTrashcan />
+          </button>
+
+        </div>
+      ),
+    },
+
+
+
+  ];
+
   const FetchClient = async () => {
     try {
       setLoading(true)
@@ -45,6 +109,115 @@ const Clients = () => {
       });
     }
   });
+
+  const handleExcelDownload = () => {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Sheet1');
+
+    // Add headers
+    const headers = columns.map((column) => column.name);
+    sheet.addRow(headers);
+
+    // Add data
+    clients.forEach((dataRow) => {
+      const values = columns.map((column) => {
+        if (typeof column.selector === 'function') {
+          return column.selector(dataRow);
+        }
+        return dataRow[column.selector];
+      });
+      sheet.addRow(values);
+    });
+
+    // Generate Excel file
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'clients.xlsx';
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+
+
+
+  const handleCSVDownload = () => {
+    const csvData = Papa.unparse(clients);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "clients.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handlePDFDownload = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(13);
+    doc.text("clients Table", marginLeft, 40);
+    const headers = columns.map((column) => column.name);
+    const dataValues = clients.map((dataRow) =>
+      columns.map((column) => {
+        if (typeof column.selector === "function") {
+          return column.selector(dataRow);
+        }
+        return dataRow[column.selector];
+      })
+    );
+
+    doc.autoTable({
+      startY: 50,
+      head: [headers],
+      body: dataValues,
+      margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+    });
+    doc.save("clients.pdf");
+  };
+
+  const ButtonRow = ({ data }) => {
+    return (
+      <div className="p-4">
+        {data.fullName}
+
+      </div>
+    );
+  };
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredData = clients.filter((item) =>
+    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+  );
+  const customStyles = {
+
+    headCells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for head cells
+        paddingRight: '8px',
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for data cells
+        paddingRight: '8px',
+      },
+    },
+  };
+
   const handleDelete = async (e) => {
     Swal.fire({
       html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3></br><p>This decision cannot be reverted!</p>`,
@@ -98,19 +271,11 @@ const Clients = () => {
                 <li className="breadcrumb-item active">Clients</li>
               </ul>
             </div>
-            <div className="col-auto float-end ml-auto">
-              <Link to="/app/employees/addclients" className="btn add-btn"><i className="fa fa-plus" /> Add Client</Link>
-              {/* <a href="javascript:void(0)" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a> */}
-              <div className="view-icons">
-                <Link to="/app/employees/clients" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
-              </div>
-            </div>
           </div>
         </div>
         {/* /Page Header */}
         {/* Search Filter */}
-        <div className="row filter-row">
+        {/* <div className="row filter-row">
           <div className="col-sm-6 col-md-3">
             <div className="form-group form-focus">
               <input type="text" className="form-control floating" />
@@ -133,83 +298,98 @@ const Clients = () => {
           <div className="col-sm-6 col-md-3">
             <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
           </div>
-        </div>
+        </div> */}
         {/* Search Filter */}
 
-        <div className="row staff-grid-row">
-          {
-            loading && <div className='text-center fs-1'>
+
+
+        <div className='mt-4 border'>
+          <div className="row px-2 py-3">
+
+            <div className="col-md-3">
+              <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                <input type="text" placeholder="Search clientss" className='border-0 outline-none' onChange={handleSearch} />
+                <GoSearch />
+              </div>
+            </div>
+            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+              <CSVLink
+                data={clients}
+                filename={"clients.csv"}
+
+              >
+                <button
+
+                  className='btn text-info'
+                  title="Export as CSV"
+                >
+                  <FaFileCsv />
+                </button>
+
+              </CSVLink>
+              <button
+                className='btn text-danger'
+                onClick={handlePDFDownload}
+                title="Export as PDF"
+              >
+                <FaFilePdf />
+              </button>
+              <button
+                className='btn text-primary'
+
+                onClick={handleExcelDownload}
+                title="Export as Excel"
+              >
+                <FaFileExcel />
+              </button>
+              <CopyToClipboard text={JSON.stringify(clients)}>
+                <button
+
+                  className='btn text-warning'
+                  title="Copy Table"
+                  onClick={() => toast("Table Copied")}
+                >
+                  <FaCopy />
+                </button>
+              </CopyToClipboard>
+            </div>
+            <div className='col-md-4'>
+              <Link to="/app/employees/addclients" className="btn add-btn rounded-2">
+                Create New clients</Link>
+            </div>
+          </div>
+          <DataTable data={filteredData} columns={columns}
+            pagination
+            highlightOnHover
+            searchable
+            searchTerm={searchText}
+            progressPending={loading}
+            progressComponent={<div className='text-center fs-1'>
               <div className="spinner-grow text-secondary" role="status">
                 <span className="sr-only">Loading...</span>
               </div>
-            </div>
-          }
+            </div>}
+            expandableRows
+            expandableRowsComponent={ButtonRow}
+            paginationTotalRows={filteredData.length}
+            customStyles={customStyles}
 
-          {
-            clients.map((data, index) =>
-              <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
-                <div className="profile-widget">
-                  <div className="profile-img">
-                    <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="avatar"><img alt="" src={Avatar_19} /></Link>
-                  </div>
-                  <div className="dropdown profile-action">
-                    <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <Link className="dropdown-item" to={`/app/profile/edit-client/${data.profileId}`}><i className="fa fa-pencil m-r-5" /> Edit</Link>
-                      <a className="dropdown-item" href="javascript:void(0)" onClick={() => handleDelete(data)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                    </div>
-                  </div>
-                  <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
-                  <h5 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`}>{data.email}</Link></h5>
-                  {/* <div className="small text-muted">CEO</div> */}
-                  {/* <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat" className="btn btn-white btn-sm m-t-10 mr-1">Message</Link> */}
-                  {/* <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="btn btn-white btn-sm m-t-10">View Profile</Link> */}
-                </div>
-              </div>
-            )
-          }
-          {
-            !loading && clients.length <= 0 && <div className='text-center text-danger fs-6'>
-              <p>No data found</p>
-            </div>
-          }
+
+          />
+
+
+
+
 
 
         </div>
 
 
-      </div>
+        {/* </div> */}
 
 
-      {/* /Add Client Modal */}
-      <AddClient />
-      {/* Edit Client Modal */}
-      <Editclient />
-      {/* /Edit Client Modal */}
-      {/* Delete Client Modal */}
-      <div className="modal custom-modal fade" id="delete_client" role="dialog">
-        <div className="modal-dialog modal-dialog-scrollable modal-lg">
-          <div className="modal-content">
-            <div className="modal-body">
-              <div className="form-header">
-                <h3>Delete Client</h3>
-                <p>Are you sure want to delete?</p>
-              </div>
-              <div className="modal-btn delete-action">
-                <div className="row">
-                  <div className="col-6">
-                    <a href="" className="btn btn-primary continue-btn">Delete</a>
-                  </div>
-                  <div className="col-6">
-                    <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-      {/* /Delete Client Modal */}
+
     </div>
   );
 }

@@ -1,19 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import Editemployee from "../../../_components/modelbox/Editemployee"
-import Addemployee from "../../../_components/modelbox/Addemployee"
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Papa from 'papaparse';
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaEye } from "react-icons/fa";
+import ExcelJS from 'exceljs';
+import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
-import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
-import moment from 'moment';
-import { FaArrowCircleLeft, FaArrowCircleRight, FaCheck, FaDownload, FaEye, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaSearch, FaTrash } from 'react-icons/fa';
-import ReactPaginate from 'react-paginate';
-import '../../../assets/css/table2.css'
+import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
+import { GoSearch } from 'react-icons/go';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
+
+import moment from 'moment';
+
 const Document = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const { loading, setLoading } = useCompanyContext();
@@ -21,6 +27,68 @@ const Document = () => {
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
     const privateHttp = useHttp();
+    const columns = [
+        // {
+        //   name: '#',
+        //   cell: (row, index) => index + 1
+        // },
+        {
+            name: 'User',
+            selector: row => row.user,
+            sortable: true
+        },
+        {
+            name: 'Role',
+            selector: row => row.userRole,
+            sortable: true
+        },
+        {
+            name: 'Document',
+            selector: row => row.documentName,
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <div className='d-flex flex-column gap-1 p-2'>
+                    <span> {row.documentName}</span>
+                    <span className='d-flex'>
+                        <span className='bg-primary text-white pointer px-2 py-1 rounded-2'
+                            title='View'
+                            onClick={() => handleView(row.documentUrl)}
+                        >
+
+                            <FaEye />
+                        </span>
+
+                        <a ref={downloadLinkRef} style={{ display: 'none' }} />
+                    </span>
+                </div>
+            ),
+        },
+        {
+            name: 'Expiration Date',
+            selector: row => row.expirationDate,
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <span>
+                    {row.expirationDate === "null" || undefined
+                        ? "" : moment(row.expirationDate).format('ll')}
+                </span>
+            ),
+        },
+        {
+            name: 'Status',
+            selector: row => row.status,
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+            ),
+        },
+
+    ];
+
+
 
     const FetchDocument = async () => {
         setLoading(true);
@@ -59,9 +127,174 @@ const Document = () => {
 
     const [menu, setMenu] = useState(false)
     const downloadLinkRef = useRef(null);
-    const [pageNumber, setPageNumber] = useState(0);
-    const [searchQuery, setSearchQuery] = useState("");
 
+
+
+
+
+
+
+
+    const handleView = (documentUrl) => {
+        window.open(documentUrl, '_blank');
+    };
+
+    const handleDownload = (documentUrl, documentName) => {
+        downloadLinkRef.current.href = documentUrl;
+        downloadLinkRef.current.download = documentName;
+        downloadLinkRef.current.click();
+    };
+
+
+    const toggleMobileMenu = () => {
+        setMenu(!menu)
+    }
+
+
+
+
+
+    useEffect(() => {
+        if ($('.select').length > 0) {
+            $('.select').select2({
+                minimumResultsForSearch: -1,
+                width: '100%'
+            });
+        }
+    });
+    const handleExcelDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet('Sheet1');
+
+        // Add headers
+        const headers = columns.map((column) => column.name);
+        sheet.addRow(headers);
+
+        // Add data
+        document.forEach((dataRow) => {
+            const values = columns.map((column) => {
+                if (typeof column.selector === 'function') {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            });
+            sheet.addRow(values);
+        });
+
+        // Generate Excel file
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Document.xlsx';
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    };
+
+
+
+    const handleCSVDownload = () => {
+        const csvData = Papa.unparse(document);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "Document.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handlePDFDownload = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+        doc.setFontSize(13);
+        doc.text("Document Table", marginLeft, 40);
+        const headers = columns.map((column) => column.name);
+        const dataValues = document.map((dataRow) =>
+            columns.map((column) => {
+                if (typeof column.selector === "function") {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            })
+        );
+
+        doc.autoTable({
+            startY: 50,
+            head: [headers],
+            body: dataValues,
+            margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+        });
+        doc.save("document.pdf");
+    };
+
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-4">
+                <table className='table'>
+
+                    <thead>
+                        <tr>
+                            <th>User created</th>
+                            <th>Date Created</th>
+                            <th>Date Modified</th>
+                            <th>Actions </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{data.createdBy}</td>
+                            <td>{moment(data.dateCreated).format('lll')}</td>
+                            <td>{moment(data.dateModified).format('lll')}</td>
+                            <td>
+                                <div className="d-flex gap-1">
+
+                                    <span
+                                        className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Edit'
+                                    >
+                                        Edit
+                                    </span>
+                                    <span
+                                        className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Delete'
+                                        onClick={() => handleDelete(data.documentId)}
+                                    >
+                                        Delete
+                                    </span>
+                                    <span
+                                        className='bg-danger text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Reject'
+                                    // onClick={() => handleDelete(row.documentId)}
+                                    >
+                                        Reject
+                                    </span>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+
+            </div>
+        );
+    };
+    const [searchText, setSearchText] = useState("");
+
+    const handleSearch = (event) => {
+        setSearchText(event.target.value);
+    };
     const handleDelete = async (e) => {
         Swal.fire({
             html: `<h3>Are you sure? you want to delete this Document</h3>`,
@@ -99,46 +332,24 @@ const Document = () => {
 
     }
 
-    const filteredData = document.filter((data) =>
-        data?.documentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data?.user.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredData = document.filter((item) =>
+        item.documentName.toLowerCase().includes(searchText.toLowerCase())
     );
+    const customStyles = {
 
-    const itemsPerPage = 10;
-    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
-    const displayData = filteredData.slice(
-        pageNumber * itemsPerPage,
-        (pageNumber + 1) * itemsPerPage
-
-    );
-
-    const handleView = (documentUrl) => {
-        window.open(documentUrl, '_blank');
+        headCells: {
+            style: {
+                paddingLeft: '8px', // override the cell padding for head cells
+                paddingRight: '8px',
+            },
+        },
+        cells: {
+            style: {
+                paddingLeft: '8px', // override the cell padding for data cells
+                paddingRight: '8px',
+            },
+        },
     };
-
-    const handleDownload = (documentUrl, documentName) => {
-        downloadLinkRef.current.href = documentUrl;
-        downloadLinkRef.current.download = documentName;
-        downloadLinkRef.current.click();
-    };
-
-
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    }
-
-
-
-
-
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
     return (
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -240,11 +451,9 @@ const Document = () => {
                                 </div>
 
                             </div>
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <button className="btn btn-primary submit-btn">Load</button>
+                            <div className="col-sm-4 text-left">
+                                <button className="btn btn-primary rounded-2">Load</button>
 
-                                </div>
 
                             </div>
 
@@ -257,174 +466,89 @@ const Document = () => {
                         {/* /Search Filter */}
 
 
-                        <main className="table bg-white">
-                            <section className="table__header">
-                                {/* <h1>Customer's Orders</h1> */}
-                                <div className="input-group">
-                                    <input type="search" className='form-control' placeholder="Search documents..."
-                                        value={searchQuery}
-                                        onChange={e => setSearchQuery(e.target.value)}
-                                    />
-                                    <FaSearch className='text-dark' />
-                                </div>
-                                {/* <div className="export__file">
-                                    <label htmlFor="export-file" className="export__file-btn d-flex justify-content-center align-items-center" title="Export File" >
-                                        <FaFileExport className='text-white fs-3' /></label>
-                                    <input type="checkbox" id="export-file" />
-                                    <div className="export__file-options ">
-                                        <label>Export As &nbsp; ➜</label>
-                                        <label htmlFor="export-file" id="toPDF">PDF <FaFilePdf className='text-danger' /></label>
-                                        <label htmlFor="export-file" id="toCSV">CSV <FaFileCsv className='text-info' /></label>
-                                        <label htmlFor="export-file" id="toEXCEL">EXCEL <FaFileExcel className='text-warning' /></label>
+
+
+
+                        <div className='mt-4 border'>
+                            <div className="row px-2 py-3">
+
+                                <div className="col-md-3">
+                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                        <input type="text" placeholder="Search Documents" className='border-0 outline-none' onChange={handleSearch} />
+                                        <GoSearch />
                                     </div>
-                                </div> */}
-                            </section>
-                            <section className="table__body">
-                                <table>
-                                    <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
-                                        <tr style={{ backgroundColor: "#18225C" }}>
-                                            <th>#</th>
-                                            <th>User</th>
-                                            <th>Role</th>
-                                            <th>Document</th>
-                                            <th>Expiration Date</th>
-                                            <th>Status</th>
-                                            <th>Date Created</th>
-                                            <th>Date Modified</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {loading && <tr>
-
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><div className="spinner-grow text-secondary" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div></td>
-                                            <td></td>
-                                            <td></td>
-
-                                        </tr>}
-                                        {
-                                            displayData.map((data, index) =>
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{data.user}</td>
-                                                    <td>{data.userRole}</td>
-                                                    <td className='fw-bold'>
-                                                        <div className='d-flex flex-column'>
-                                                            <span> {data.documentName}</span>
-                                                            <span className='d-flex gap-2'>
-                                                                <button className='btn text-primary btn-sm'
-                                                                    title='View'
-                                                                    onClick={() => handleView(data.documentUrl)}
-                                                                >
-
-                                                                    <FaEye />
-                                                                </button>
-                                                                {/* <button className='btn text-info btn-sm'
-                                                                    title='Download'
-                                                                    onClick={() => handleDownload(data.documentUrl, data.documentName)}
-                                                                >
-                                                                    <FaDownload />
-                                                                </button> */}
-                                                                <a ref={downloadLinkRef} style={{ display: 'none' }} />
-                                                            </span>
-                                                        </div>
-
-                                                    </td>
-                                                    <td>{moment(data.expirationDate).format('ll')}</td>
-                                                    <td><span className='bg-warning px-2 py-1 rounded-pill fw-bold'>{data.status}</span></td>
-                                                    <td>{moment(data.dateCreated).format('lll')}</td>
-                                                    <td>{moment(data.dateModified).format('lll')}</td>
-                                                    <td>
-                                                        <span className='d-flex gap-2'>
-
-                                                            <button className='btn text-white bg-success  px-2 py-1 rounded-2 btn-sm '
-                                                                title='Accept'
-                                                            >
-
-                                                                Accept
-                                                            </button>
-                                                            <button className='btn text-white bg-danger  px-2 py-1 rounded-2 btn-sm '
-                                                                title='Delete'
-                                                                onClick={() => handleDelete(data.documentId)}
-                                                            >
-
-                                                                Delete
-                                                            </button>
-                                                            {/* <button className='btn text-danger btn-sm'
-                                                                title='Delete'
-                                                            >
-                                                                <FaTrash />
-                                                            </button> */}
-                                                        </span>
-
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
-
-
-                                        {!loading && displayData.length <= 0 && <tr>
-
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td className='text-danger fs-6'>No document found</td>
-                                            <td></td>
-                                            <td></td>
-
-                                        </tr>}
-
-
-                                    </tbody>
-                                </table>
-                                <div className="clearfix">
-                                    <div className="hint-text"> <b>Page {pageNumber + 1}</b></div>
-
-                                    <ReactPaginate
-                                        pageCount={pageCount}
-                                        onPageChange={page => setPageNumber(page.selected)}
-                                        activeClassName={'items actives'}
-                                        breakClassName={'items break-me '}
-                                        breakLabel={'...'}
-                                        containerClassName={'pagination'}
-                                        disabledClassName={'disabled-page'}
-                                        marginPagesDisplayed={2}
-                                        nextClassName={"items next "}
-                                        nextLabel={< FaArrowCircleRight style={{ fontSize: 18, width: 150 }} />}
-                                        pageClassName={'items pagination-page '}
-                                        pageRangeDisplayed={2}
-                                        previousClassName={"items previous"}
-                                        previousLabel={<FaArrowCircleLeft style={{ fontSize: 18, width: 150 }} />}
-                                    />
                                 </div>
-                            </section>
-                        </main>
+                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                    <CSVLink
+                                        data={document}
+                                        filename={"document.csv"}
+
+                                    >
+                                        <button
+
+                                            className='btn text-info'
+                                            title="Export as CSV"
+                                        >
+                                            <FaFileCsv />
+                                        </button>
+
+                                    </CSVLink>
+                                    <button
+                                        className='btn text-danger'
+                                        onClick={handlePDFDownload}
+                                        title="Export as PDF"
+                                    >
+                                        <FaFilePdf />
+                                    </button>
+                                    <button
+                                        className='btn text-primary'
+
+                                        onClick={handleExcelDownload}
+                                        title="Export as Excel"
+                                    >
+                                        <FaFileExcel />
+                                    </button>
+                                    <CopyToClipboard text={JSON.stringify(document)}>
+                                        <button
+
+                                            className='btn text-warning'
+                                            title="Copy Table"
+                                            onClick={() => toast("Table Copied")}
+                                        >
+                                            <FaCopy />
+                                        </button>
+                                    </CopyToClipboard>
+                                </div>
+                                <div className='col-md-4'>
+                                    <Link to={''} className="btn add-btn rounded-2">
+                                        Add New Document</Link>
+                                </div>
+                            </div>
+                            <DataTable data={filteredData} columns={columns}
+                                pagination
+                                highlightOnHover
+                                searchable
+                                searchTerm={searchText}
+                                progressPending={loading}
+                                progressComponent={<div className='text-center fs-1'>
+                                    <div className="spinner-grow text-secondary" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </div>}
+                                expandableRows
+                                expandableRowsComponent={ButtonRow}
+                                paginationTotalRows={filteredData.length}
+                                customStyles={customStyles}
 
 
+                            />
 
+                        </div>
 
 
 
                     </div>
-                    {/* /Page Content */}
-                    {/* Add Employee Modal */}
-                    <Addemployee />
-                    {/* /Add Employee Modal */}
-                    {/* Edit Employee Modal */}
-                    <Editemployee />
-                    {/* /Edit Employee Modal */}
-                    {/* Delete Employee Modal */}
 
-                    {/* /Delete Employee Modal */}
                 </div>
             </div>
             <Offcanvas />
