@@ -8,12 +8,20 @@ import '../../../assets/css/table2.css'
 import { FaAngleLeft, FaAngleRight, FaSlidersH } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const StaffRoster = () => {
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [staff, setStaff] = useState([]);
+
+  const AustraliaTimezone = 'Australia/Sydney';
+
 
   const FetchSchedule = async () => {
     setLoading(true)
@@ -73,6 +81,21 @@ const StaffRoster = () => {
   const activitiesByDay = daysOfWeek.map((day) =>
     staff.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
   );
+
+  function getActivityStatus(activity) {
+    const nowInAustraliaTime = dayjs().tz(AustraliaTimezone);
+    const activityDateFrom = dayjs(activity.dateFrom).tz(AustraliaTimezone);
+    const activityDateTo = dayjs(activity.dateTo).tz(AustraliaTimezone);
+
+    if (activityDateFrom.isAfter(nowInAustraliaTime, 'date')) {
+      return 'Upcoming';
+    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+      return activity.isClockedIn ? 'Present' : 'Absent';
+    } else {
+      return 'Clock-In';
+    }
+  }
+
 
   return (
     <>
@@ -139,10 +162,10 @@ const StaffRoster = () => {
                     </div>
                     {loading &&
 
-                     <div className="spinner-grow text-secondary" role="status">
+                      <div className="spinner-grow text-secondary" role="status">
                         <span className="sr-only">Loading...</span>
-                     </div>
-                  }
+                      </div>
+                    }
                     <div className="col-sm-12 text-center border p-2">
 
                       {activitiesByDay[index].map((activity, activityIndex) => (
@@ -151,18 +174,24 @@ const StaffRoster = () => {
                           <div>
                             <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
                           </div>
-                          <span>Rose John</span>
-                          {/* <small className='text-truncate'>{activity.activities}</small> */}
-                          <small
+                          <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
+                          {/* <small
                             className='text-truncate bg-success p-1 rounded'
                             style={{ cursor: "pointer" }}
-                          >Clock-In</small>
+                          >Clock-In</small> */}
+                          <small
+                            className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming'
+                                ? 'bg-warning'
+                                : getActivityStatus(activity) === 'Absent'
+                                  ? 'bg-danger'
+                                  : 'bg-success'
+                              }`}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            {getActivityStatus(activity)}
+                          </small>
                         </div>
                       ))}
-
-                      {/* <button className='btn'>
-                        <FaPlus />
-                      </button> */}
 
                     </div>
                   </div>

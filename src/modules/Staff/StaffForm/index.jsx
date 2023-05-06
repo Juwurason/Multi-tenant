@@ -1,10 +1,21 @@
 /**
  * Form Elemets
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import StaffTable from '../StaffTable';
+import useHttp from '../../../hooks/useHttp';
+import { useCompanyContext } from '../../../context';
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import Offcanvas from '../../../Entryfile/offcanvance';
+import { toast } from 'react-toastify';
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+
 
 const StaffForm = () => {
   useEffect(() => {
@@ -15,6 +26,150 @@ const StaffForm = () => {
       });
     }
   });
+
+  const [staffDocument, setStaffDocument] = useState([]);
+  const { loading, setLoading } = useCompanyContext();
+
+
+
+  const columns = [
+    {
+      name: 'User',
+      selector: row => row.user,
+      sortable: true
+    },
+    {
+      name: 'Role',
+      selector: row => row.user,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <Link href={`https://example.com/${row.userId}`} className="fw-bold text-dark">
+          {row.userRole}
+        </Link>
+      ),
+    },
+    {
+      name: 'Documnet Name',
+      selector: row => row.documentName,
+      sortable: true,
+    },
+    {
+      name: 'Expiration Date',
+      selector: row => row.expirationDate,
+      sortable: true
+    },
+    {
+      name: 'Status',
+      selector: row => row.status,
+      sortable: true
+    }, {
+      name: "Actions",
+      // cell: (row) => (
+      //   <div className="d-flex gap-1">
+      //     <Link
+      //       className='btn'
+      //       title='Edit'
+      //       to={''}
+      //     >
+      //       <SlSettings />
+      //     </Link>
+      //     <button
+      //       className='btn'
+      //       title='Delete'
+      //       onClick={() => {
+      //         alert(`Action button clicked for row with ID ${'row.id'}`);
+      //       }}
+      //     >
+      //       <GoTrashcan />
+      //     </button>
+
+      //   </div>
+      // ),
+    },
+
+
+
+  ];
+
+  const handleExcelDownload = () => {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Sheet1');
+
+    // Add headers
+    const headers = columns.map((column) => column.name);
+    sheet.addRow(headers);
+
+    // Add data
+    staffDocument.forEach((dataRow) => {
+        const values = columns.map((column) => {
+            if (typeof column.selector === 'function') {
+                return column.selector(dataRow);
+            }
+            return dataRow[column.selector];
+        });
+        sheet.addRow(values);
+    });
+
+    // Generate Excel file
+    workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'data.xlsx';
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+};
+
+  const handlePDFDownload = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(13);
+    doc.text("User Table", marginLeft, 40);
+    const headers = columns.map((column) => column.name);
+    const dataValues = staffDocument.map((dataRow) =>
+        columns.map((column) => {
+            if (typeof column.selector === "function") {
+                return column.selector(dataRow);
+            }
+            return dataRow[column.selector];
+        })
+    );
+
+    doc.autoTable({
+        startY: 50,
+        head: [headers],
+        body: dataValues,
+        margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+    });
+    doc.save("Admin.pdf");
+};
+
+const ButtonRow = ({ data }) => {
+  return (
+      <div className="p-4">
+          {data.fullName}
+
+      </div>
+  );
+};
+
+  const [searchText, setSearchText] = useState("");
+
+const handleSearch = (event) => {
+  setSearchText(event.target.value);
+};
+
+const filteredData = staffDocument.filter((item) =>
+  item.user.toLowerCase().includes(searchText.toLowerCase())
+);
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -73,7 +228,81 @@ const StaffForm = () => {
           </div>
         </div>
 
-        <div className="table-responsive">
+        <div className='mt-4 border'>
+                            <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search....." className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
+                                </div>
+                                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                                    <CSVLink
+                                        data={staffDocument}
+                                        filename={"data.csv"}
+
+                                    >
+                                        <button
+
+                                            className='btn text-info'
+                                            title="Export as CSV"
+                                        >
+                                            <FaFileCsv />
+                                        </button>
+
+                                    </CSVLink>
+                                    <button
+                                        className='btn text-danger'
+                                        onClick={handlePDFDownload}
+                                        title="Export as PDF"
+                                    >
+                                        <FaFilePdf />
+                                    </button>
+                                    <button
+                                        className='btn text-primary'
+
+                                        onClick={handleExcelDownload}
+                                        title="Export as Excel"
+                                    >
+                                        <FaFileExcel />
+                                    </button>
+                                    <CopyToClipboard text={JSON.stringify(staffDocument)}>
+                                        <button
+
+                                            className='btn text-warning'
+                                            title="Copy Table"
+                                            onClick={() => toast("Table Copied")}
+                                        >
+                                            <FaCopy />
+                                        </button>
+                                    </CopyToClipboard>
+                                </div>
+                                {/* <div>
+                                    <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
+                                        Create New Admin</Link>
+                                </div> */}
+                            </div>
+                            <DataTable data={filteredData} columns={columns}
+                                pagination
+                                highlightOnHover
+                                searchable
+                                searchTerm={searchText}
+                                progressPending={loading}
+                                progressComponent={<div className='text-center fs-1'>
+                                    <div className="spinner-grow text-secondary" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </div>}
+                                expandableRows
+                                expandableRowsComponent={ButtonRow}
+                                paginationTotalRows={filteredData.length}
+
+
+
+                            />
+
+
+                        </div>
+        {/* <div className="table-responsive">
         <table className="table table-striped">
           <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
             <tr style={{ backgroundColor: "#18225C" }}>
@@ -95,7 +324,7 @@ const StaffForm = () => {
             </tr>
           </tbody>
         </table>
-      </div>
+      </div> */}
 
       </div>
     

@@ -1,113 +1,389 @@
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import Offcanvas from '../../../Entryfile/offcanvance';
 import { Link } from 'react-router-dom';
+import useHttp from '../../../hooks/useHttp';
+import { useCompanyContext } from '../../../context';
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import Offcanvas from '../../../Entryfile/offcanvance';
+import { toast } from 'react-toastify';
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+import { SlSettings } from 'react-icons/sl'
 
 const StaffAttendance = () => {
+  useEffect(() => {
+    if ($('.select').length > 0) {
+      $('.select').select2({
+        minimumResultsForSearch: -1,
+        width: '100%'
+      });
+    }
+  });
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const data = [
-    { staff: 'Ajibola Sunday', clockIn: '2/8/2023 9:50:00 AM', duration: '8 Hrs 10 min', clockOut: '2/8/2023 6:00:00 PM' },
-    { staff: 'John Doe', clockIn: '2/8/2023 8:30:00 AM', duration: '9 Hrs 30 min', clockOut: '2/8/2023 6:00:00 PM' }
+  const { get } = useHttp();
+  const { loading, setLoading } = useCompanyContext();
+  const [documentName, setDocumentName] = useState("")
+  const [expire, setExpire] = useState("")
+  const [document, setDocument] = useState("")
+  const [staffDocument, setStaffDocument] = useState([]);
+  const id = JSON.parse(localStorage.getItem('user'));
+
+
+  const columns = [
+    {
+      name: 'User',
+      selector: row => row.user,
+      sortable: true
+    },
+    {
+      name: 'Role',
+      selector: row => row.user,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <Link href={`https://example.com/${row.userId}`} className="fw-bold text-dark">
+          {row.userRole}
+        </Link>
+      ),
+    },
+    {
+      name: 'Documnet Name',
+      selector: row => row.documentName,
+      sortable: true,
+    },
+    {
+      name: 'Expiration Date',
+      selector: row => row.expirationDate,
+      sortable: true
+    },
+    {
+      name: 'Status',
+      selector: row => row.status,
+      sortable: true
+    }, {
+      name: "Actions",
+      // cell: (row) => (
+      //   <div className="d-flex gap-1">
+      //     <Link
+      //       className='btn'
+      //       title='Edit'
+      //       to={''}
+      //     >
+      //       <SlSettings />
+      //     </Link>
+      //     <button
+      //       className='btn'
+      //       title='Delete'
+      //       onClick={() => {
+      //         alert(`Action button clicked for row with ID ${'row.id'}`);
+      //       }}
+      //     >
+      //       <GoTrashcan />
+      //     </button>
+
+      //   </div>
+      // ),
+    },
+
+
+
   ];
-  const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  const handlePrevClick = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+
+  // const id = JSON.parse(localStorage.getItem('user'))
+  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const allowedExtensions = /(\.pdf|\.doc)$/i;
+
+    if (allowedExtensions.exec(selectedFile.name)) {
+      setDocument(selectedFile);
+    } else {
+      alert('Please select a PDF or DOC file');
     }
   };
 
-  const handleNextClick = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  const handleExcelDownload = () => {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Sheet1');
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = data.slice(startIndex, endIndex);
+    // Add headers
+    const headers = columns.map((column) => column.name);
+    sheet.addRow(headers);
+
+    // Add data
+    staffDocument.forEach((dataRow) => {
+        const values = columns.map((column) => {
+            if (typeof column.selector === 'function') {
+                return column.selector(dataRow);
+            }
+            return dataRow[column.selector];
+        });
+        sheet.addRow(values);
+    });
+
+    // Generate Excel file
+    workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'data.xlsx';
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+};
+
+
+  const privateHttp = useHttp()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (documentName === "" || expire.length === 0 || document === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+
+    const formData = new FormData()
+    formData.append("CompanyId", id.companyId);
+    formData.append("DocumentFile", document);
+    formData.append("DocumentName", documentName);
+    formData.append("ExpirationDate", expire);
+    formData.append("User", id.fullName);
+    formData.append("UserRole", id.role);
+    formData.append("Status", "Pending");
+    formData.append("UserId", getStaffProfile.staffId);
+
+    try {
+      setLoading(true)
+      const { data } = await privateHttp.post(`/Staffs/document_upload?userId=${id.userId}`,
+        formData
+
+      )
+      // console.log(data);
+      toast.success(data.message)
+
+      setLoading(false)
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+      setLoading(false);
+
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    const getStaffDocument = async () => {
+      try {
+        const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+        setStaffDocument(response.data.staffDocuments)
+        console.log(response.data.staffDocuments);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getStaffDocument()
+  }, [])
+
+  const handlePDFDownload = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(13);
+    doc.text("User Table", marginLeft, 40);
+    const headers = columns.map((column) => column.name);
+    const dataValues = staffDocument.map((dataRow) =>
+        columns.map((column) => {
+            if (typeof column.selector === "function") {
+                return column.selector(dataRow);
+            }
+            return dataRow[column.selector];
+        })
+    );
+
+    doc.autoTable({
+        startY: 50,
+        head: [headers],
+        body: dataValues,
+        margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+    });
+    doc.save("Admin.pdf");
+};
+
+const ButtonRow = ({ data }) => {
+  return (
+      <div className="p-4">
+          {data.fullName}
+
+      </div>
+  );
+};
+
+const [searchText, setSearchText] = useState("");
+
+const handleSearch = (event) => {
+  setSearchText(event.target.value);
+};
+
+const filteredData = staffDocument.filter((item) =>
+  item.user.toLowerCase().includes(searchText.toLowerCase())
+);
+
+
   return (
     <>
       <div className="page-wrapper">
         <Helmet>
-          <title> Attendance </title>
-          <meta name="description" content="Attendance page" />
+          <title> Attendance</title>
+          <meta name="description" content="Login page" />
         </Helmet>
-
-        <div className='content container-fluid'>
-
-        <div className="page-header">
-            <div className="row">
-              <div className="col-sm-12">
+        {/* Page Content */}
+        <div className="content container-fluid">
+          {/* Page Header */}
+          <div className="page-header">
+            <div className="row align-items-center">
+              <div className="col">
                 <h3 className="page-title">Attendance</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Attendance</li>
                 </ul>
               </div>
+              {/* <div className="col-auto float-end ml-auto">
+                <a href="" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
+              </div> */}
             </div>
           </div>
-       
-        <div className="">
-            <div className="table-responsive">
-              <div className="table-wrapper">
-                <div className="table-title bg-primary">
-                  <div className="row">
-                    <div className="col-sm-5">
 
-                    </div>
-                    <div className="col-sm-7">
-                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Download PDF</span></a>
-                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Export to Excel</span></a>
+<div className='mt-4 border'>
+                            <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search..." className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
+                                </div>
+                                <div className='d-flex  justify-content-center align-items-center gap-4'>
+                                    <CSVLink
+                                        data={staffDocument}
+                                        filename={"data.csv"}
+
+                                    >
+                                        <button
+
+                                            className='btn text-info'
+                                            title="Export as CSV"
+                                        >
+                                            <FaFileCsv />
+                                        </button>
+
+                                    </CSVLink>
+                                    <button
+                                        className='btn text-danger'
+                                        onClick={handlePDFDownload}
+                                        title="Export as PDF"
+                                    >
+                                        <FaFilePdf />
+                                    </button>
+                                    <button
+                                        className='btn text-primary'
+
+                                        onClick={handleExcelDownload}
+                                        title="Export as Excel"
+                                    >
+                                        <FaFileExcel />
+                                    </button>
+                                    <CopyToClipboard text={JSON.stringify(staffDocument)}>
+                                        <button
+
+                                            className='btn text-warning'
+                                            title="Copy Table"
+                                            onClick={() => toast("Table Copied")}
+                                        >
+                                            <FaCopy />
+                                        </button>
+                                    </CopyToClipboard>
+                                </div>
+                                {/* <div>
+                                    <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
+                                        Create New Admin</Link>
+                                </div> */}
+                            </div>
+                            <DataTable data={filteredData} columns={columns}
+                                pagination
+                                highlightOnHover
+                                searchable
+                                searchTerm={searchText}
+                                progressPending={loading}
+                                progressComponent={<div className='text-center fs-1'>
+                                    <div className="spinner-grow text-secondary" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </div>}
+                                expandableRows
+                                expandableRowsComponent={ButtonRow}
+                                paginationTotalRows={filteredData.length}
+
+
+
+                            />
+
+
+                        </div>
+
+        </div>
+        {/* /Page Content */}
+        {/* Add Policy Modal */}
+        <div id="add_policy" className="modal custom-modal fade" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Upload Documents</h5>
+                <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label>Document Name <span className="text-danger">*</span></label>
+                    <input className="form-control" type="text" onChange={e => setDocumentName(e.target.value)} />
+                  </div>
+                  <div className="form-group">
+                    <label>Expiration Date <span className="text-danger">*</span></label>
+                    <input className="form-control" type="date" onChange={e => setExpire(e.target.value)} />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Upload Document <span className="text-danger">*</span></label>
+                    <div className="custom-file">
+                      <input type="file" className="custom-file-input" accept=".pdf,.doc" id="policy_upload" onChange={handleFileChange} />
                     </div>
                   </div>
-                </div>
-                <table className="table table-striped">
-                  <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
-                    <tr style={{ backgroundColor: "#18225C" }}>
-                      <th>#</th>
-                      <th>Staff</th>
-                      <th>ClockIn</th>
-                      <th>Duration</th>
-                      <th>ClockOut</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td><a href="#">Michael Holz</a></td>
-                      <td>2/8/2023 9:50:00 AM</td>
-                      <td>8 Hrs 10 min</td>
-                      <td>2/8/2023 6:00:00 PM</td>
-                      <td>
-                        <a href="#" className="settings" title="Settings" data-toggle="tooltip"><i className="material-icons"></i></a>
-                        <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
-                      </td>
-                    </tr>
-          
-                  </tbody>
-                </table>
-                <div className="clearfix">
-                  <div className="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
-                  <ul className="pagination">
-                    <li className="page-item disabled"><a href="#">Previous</a></li>
-                    <li className="page-item active"><a href="#" className="page-link">1</a></li>
-                    <li className="page-item"><a href="#" className="page-link">2</a></li>
-                    <li className="page-item"><a href="#" className="page-link">3</a></li>
-                    <li className="page-item"><a href="#" className="page-link">4</a></li>
-                    <li className="page-item"><a href="#" className="page-link">5</a></li>
-                    <li className="page-item"><a href="#" className="page-link">Next</a></li>
-                  </ul>
-                </div>
+                  <div className="submit-section">
+                    <button className="btn btn-primary submit-btn" data-bs-dismiss="modal" aria-label="Close" disabled={loading ? true : false} >
+                      {loading ? <div className="spinner-grow text-light" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div> : "Add"}
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-
         </div>
+
 
       </div>
       <Offcanvas />

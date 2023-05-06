@@ -159,7 +159,7 @@ const ClientRoster = () => {
                                                         <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
                                                     </div>
                                                     <span><b>Staff</b> {activity.staff.firstName} {activity.staff.surName}</span>
-                                                    <small className='text-truncate'> {activity.activities}</small>
+                                                    <small className='text-truncate'><b>Activities</b> {activity.activities}</small>
                                                 </div>
                                             ))}
 

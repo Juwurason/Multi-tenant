@@ -5,42 +5,19 @@
  import React, { useEffect, useState } from 'react';
  import { Helmet } from "react-helmet";
  import { Link, withRouter } from 'react-router-dom';
- import { User, Avatar_19, Avatar_07, Avatar_06, Avatar_14 } from '../../../Entryfile/imagepath.jsx'
  
- import {
-   BarChart, Bar, Cell, ResponsiveContainer,
-   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
- } from 'recharts';
  import Header from '../../../initialpage/Sidebar/header'
  import Sidebar from '../../../initialpage/Sidebar/sidebar';
  import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
  import "../../index.css"
- import { FaCalendar, FaClock, FaFile, FaFileAlt, FaFolderOpen, FaRegUser, FaTicketAlt, FaUser, FaUsers } from 'react-icons/fa';
  import { useCompanyContext } from '../../../context/index.jsx';
  import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
  import useHttp from '../../../hooks/useHttp.jsx';
- import ClientChart from '../../../_components/chart/ClientChart.jsx';
  import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineSummarize, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
+ import man from "../../../assets/img/user.jpg"
+
  
  
- const barchartdata = [
-   { y: '2006', "Total Income": 100, 'Total Outcome': 90 },
-   { y: '2007', "Total Income": 75, 'Total Outcome': 65 },
-   { y: '2008', "Total Income": 50, 'Total Outcome': 40 },
-   { y: '2009', "Total Income": 75, 'Total Outcome': 65 },
-   { y: '2010', "Total Income": 50, 'Total Outcome': 40 },
-   { y: '2011', "Total Income": 75, 'Total Outcome': 65 },
-   { y: '2012', "Total Income": 100, 'Total Outcome': 90 }
- ];
- const linechartdata = [
-   { y: '2006', "Total Sales": 50, 'Total Revenue': 90 },
-   { y: '2007', "Total Sales": 75, 'Total Revenue': 65 },
-   { y: '2008', "Total Sales": 50, 'Total Revenue': 40 },
-   { y: '2009', "Total Sales": 75, 'Total Revenue': 65 },
-   { y: '2010', "Total Sales": 50, 'Total Revenue': 40 },
-   { y: '2011', "Total Sales": 75, 'Total Revenue': 65 },
-   { y: '2012', "Total Sales": 100, 'Total Revenue': 50 }
- ];
  const StaffDashboard = () => {
    const userObj = JSON.parse(localStorage.getItem('user'));
    const [staff, setStaff] = useState([]);
@@ -208,11 +185,7 @@
                                 <h4>3/26/2023</h4>
                                <h4>6:12:00 PM</h4>
                                </div>
-                           {/* } */}
-{/*  
-                           <Link style={{ fontSize: "12px" }}
- 
-                             to={``} className='pointer text-dark'>Last Clock In</Link> */}
+                       
                              <small style={{ fontSize: "12px" }}>Last Clock in</small>
                          </div>
                          <div className="align-self-center pt-3">
@@ -228,44 +201,7 @@
                  </div>
                       </div>
                      </div>
-                     {/* <div className='border p-2'> */}
-                       {/* <div className='d-flex flex-column justify-content-start'>
-                         <span>Satisfaction Stats</span>
-                         <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span>
-                       </div> */}
-                       {/* <ClientChart /> */}
-                       {/* <div className="row">
-                         <div className='d-flex align-items-start gap-2 col-4'>
-                           <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#5A6ACF" }}></div>
-                           <div>
-                             Excellent
-                             <br />
-                             60%
-                           </div>
- 
-                         </div>
-                         <div className='d-flex align-items-start gap-2 col-4'>
-                           <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#8593ED" }}></div>
-                           <div>
-                             Fair
-                             <br />
-                             30%
-                           </div>
- 
-                         </div>
-                         <div className='d-flex align-items-start gap-2 col-4'>
-                           <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#FF81C5" }}></div>
-                           <div>
-                             Poor
-                             <br />
-                             10%
-                           </div>
- 
-                         </div>
- 
-                       </div> */}
-
-                     {/* </div> */}
+                  
 
                    </div>
                  </div>
@@ -278,7 +214,9 @@
                    <h5>Recently Assign Clients</h5>
                    <div className="row mt-2">
                      <div className="col-2">
-                       <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px", backgroundColor: "#5A6ACF" }}></div>
+                       <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px"}}>
+                       <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                       </div>
                      </div>
  
                      <div className="col-10 d-flex flex-column justify-content-start">
