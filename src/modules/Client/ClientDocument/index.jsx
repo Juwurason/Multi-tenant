@@ -39,7 +39,7 @@ const ClientDocument = () => {
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (documentName === "" ||  expire === "" || document === "")
+    if (documentName === "" || expire.length === 0 || document === "")
      {
       return toast.error("Input Fields cannot be empty")
     }

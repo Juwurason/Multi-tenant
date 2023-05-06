@@ -27,7 +27,6 @@ const StaffDocument = () => {
 
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
-  // const [loading, setLoading] = useState(false)
   const [documentName, setDocumentName] = useState("")
   const [expire, setExpire] = useState("")
   const [document, setDocument] = useState("")
@@ -147,7 +146,7 @@ const StaffDocument = () => {
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (documentName === "" || expire === "" || document === "") {
+    if (documentName === "" || expire.length === 0 || document === "") {
       return toast.error("Input Fields cannot be empty")
     }
 
@@ -272,7 +271,7 @@ const filteredData = staffDocument.filter((item) =>
                             <div className="d-flex p-2 justify-content-between align-items-center gap-4">
 
                                 <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                    <input type="text" placeholder="Search Admins" className='border-0 outline-none' onChange={handleSearch} />
+                                    <input type="text" placeholder="Search Staff" className='border-0 outline-none' onChange={handleSearch} />
                                     <GoSearch />
                                 </div>
                                 <div className='d-flex  justify-content-center align-items-center gap-4'>
