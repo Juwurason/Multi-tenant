@@ -19,6 +19,7 @@ import AddAdmin from '../../../_components/modelbox/AddAdmin';
 import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
+import Swal from 'sweetalert2';
 
 const AllAdmin = () => {
     const { get } = useHttp();
@@ -38,7 +39,7 @@ const AllAdmin = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <Link href={`https://example.com/${row.id}`} className="fw-bold text-dark">
+                <Link to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`} className="fw-bold text-dark">
                     {row.firstName} {row.surName}
                 </Link>
             ),
@@ -64,7 +65,7 @@ const AllAdmin = () => {
                     <Link
                         className='btn'
                         title='Edit'
-                        to={''}
+                        to={`/app/profile/edit-admin/${row.administratorId}`}
                     >
                         <SlSettings />
                     </Link>
@@ -73,7 +74,7 @@ const AllAdmin = () => {
                         title='Delete'
                         onClick={() => {
                             // handle action here, e.g. open a modal or navigate to a new page
-                            alert(`Action button clicked for row with ID ${row.id}`);
+                            handleDelete(row.administratorId)
                         }}
                     >
                         <GoTrashcan />
@@ -103,7 +104,6 @@ const AllAdmin = () => {
         try {
             setLoading(true)
             const { data } = await get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            console.log(data);
             setAdmin(data);
             setLoading(false)
         } catch (error) {
@@ -119,30 +119,38 @@ const AllAdmin = () => {
     const [menu, setMenu] = useState(false);
 
     const handleDelete = async (e) => {
-        try {
-            setLoading(true)
-            const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
-                { userId: id.userId }
-            )
-            if (data.status === 'Success') {
-                toast.success(data.message);
-                FetchStaff()
-            } else {
-                toast.error(data.message);
+        Swal.fire({
+            html: `<h3>Are you sure? you want to delete this user</h3></br><p>You won't be able to revert this!</p>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#777',
+            confirmButtonText: 'Confirm Delete',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await privateHttp.post(`/Administrators/delete/${e}?userId=${id.userId}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchStaff()
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
             }
-
-            setLoading(false)
-
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-            setLoading(false);
-
-        }
-        finally {
-            setLoading(false)
-        }
+        })
     }
 
 

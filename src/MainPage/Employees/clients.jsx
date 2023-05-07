@@ -223,8 +223,8 @@ const Clients = () => {
       html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3></br><p>This decision cannot be reverted!</p>`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: 'rgb(29 78 216)',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
