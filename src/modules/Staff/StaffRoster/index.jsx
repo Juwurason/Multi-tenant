@@ -10,6 +10,7 @@ import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { Modal } from 'react-bootstrap';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -86,8 +87,8 @@ const StaffRoster = () => {
     const nowInAustraliaTime = dayjs().tz(AustraliaTimezone);
     const activityDateFrom = dayjs(activity.dateFrom).tz(AustraliaTimezone);
     const activityDateTo = dayjs(activity.dateTo).tz(AustraliaTimezone);
-
-    if (activityDateFrom.isAfter(nowInAustraliaTime, 'date')) {
+  
+    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
       return activity.isClockedIn ? 'Present' : 'Absent';
@@ -95,7 +96,15 @@ const StaffRoster = () => {
       return 'Clock-In';
     }
   }
+  
 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+
+  const handleActivityClick = (activity) => {
+    setSelectedActivity(activity);
+    setShowModal(true);
+  };
 
   return (
     <>
@@ -166,10 +175,12 @@ const StaffRoster = () => {
                         <span className="sr-only">Loading...</span>
                       </div>
                     }
-                    <div className="col-sm-12 text-center border p-2">
+                    <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
                       {activitiesByDay[index].length > 0 ?
                         activitiesByDay[index].map((activity, activityIndex) => (
-                          <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                          <div key={activityIndex} 
+                          onClick={() => handleActivityClick(activity)}
+                          className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
                             <div>
                               <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
                             </div>
@@ -188,9 +199,29 @@ const StaffRoster = () => {
                           </div>
                         )) :
                         <button className='btn'>
-                          <FaPlus />
+                          {/* <FaPlus /> */}
+                          <h5>No Activities</h5>
                         </button>
                       }
+
+                       {/* Modal */}
+                       <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Activity Details</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          {selectedActivity && (
+                            <>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                            </>
+                          )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        </Modal.Footer>
+                      </Modal>
                     </div>
                   </div>
                 ))}

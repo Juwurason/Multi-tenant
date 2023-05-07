@@ -246,7 +246,7 @@
  
                            <Link style={{ fontSize: "12px" }}
  
-                             to={``} className='pointer text-dark'>View all</Link>
+                             to={`/staff/staff-document`} className='pointer text-dark'>View all</Link>
                          </div>
                          <div className="align-self-center">
                            <MdOutlineFolderOpen className='fs-4' />

@@ -11,6 +11,7 @@ import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArr
 import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
+import { Modal } from 'react-bootstrap';
 
 const ClientRoster = () => {
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
@@ -77,6 +78,14 @@ const ClientRoster = () => {
     const activitiesByDay = daysOfWeek.map((day) =>
         clients.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
     );
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+  
+    const handleActivityClick = (activity) => {
+      setSelectedActivity(activity);
+      setShowModal(true);
+    };
 
     return (
         <>
@@ -150,11 +159,13 @@ const ClientRoster = () => {
                                             </div>
                                         }
 
-                                        <div className="col-sm-12 text-center border p-2">
+                                        <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
 
                                             {activitiesByDay[index].map((activity, activityIndex) => (
 
-                                                <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                                                <div key={activityIndex} 
+                                                onClick={() => handleActivityClick(activity)}
+                                                className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
                                                     <div>
                                                         <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
                                                     </div>
@@ -162,6 +173,25 @@ const ClientRoster = () => {
                                                     <small className='text-truncate'><b>Activities</b> {activity.activities}</small>
                                                 </div>
                                             ))}
+
+                                            {/* Modal */}
+                                            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                                                <Modal.Header closeButton>
+                                                    <Modal.Title>Activity Details</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    {selectedActivity && (
+                                                        <>
+                                                            <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
+                                                            <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                                                            <p><b>Description:</b> {selectedActivity.activities}</p>
+                                                        </>
+                                                    )}
+                                                </Modal.Body>
+                                                <Modal.Footer>
+                                                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                                                </Modal.Footer>
+                                            </Modal>
 
                                         </div>
                                     </div>
