@@ -27,6 +27,8 @@
    const { get } = useHttp();
  
    let isMounted = true;
+
+   
  
    useEffect(() => {
      if (isMounted) {
@@ -37,25 +39,20 @@
        isMounted = false;
      };
    }, []);
+
+   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
  
    async function FetchStaff() {
      setLoading(true)
-     try {
-       const { data } = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-       setStaff(data);
-       setLoading(false)
-     } catch (error) {
-       console.log(error);
-     }
- 
-     try {
-       const clientResponse = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-       const client = clientResponse.data;
-       setClients(client);
-       setLoading(false)
-     } catch (error) {
-       console.log(error);
-     }
+      try {
+        const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+        const staff = staffResponse.data;
+        console.log(staff.shiftRoster);
+        setStaff(staff.shiftRoster);
+        setLoading(false)
+      } catch (error) {
+        console.log(error);
+      }
  
      try {
        const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
@@ -126,8 +123,8 @@
                <div className='col-md-5'>
                  <div className="row">
                    <h4>Overview</h4>
-                   <DashboardCard title={"Total Shift Roster"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
-                     link={``}
+                   <DashboardCard title={"Total Shift Roster"} content={staff.length} icon={<MdOutlineEventNote className='fs-4' />}
+                     link={`/staff/staff-roster`}
                      sty={'danger'}
                    />
                    <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import '../../../assets/css/table2.css'
-import { FaAngleLeft, FaAngleRight, FaSlidersH } from 'react-icons/fa';
+import { FaAngleLeft, FaAngleRight, FaPlus } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -167,32 +167,30 @@ const StaffRoster = () => {
                       </div>
                     }
                     <div className="col-sm-12 text-center border p-2">
-
-                      {activitiesByDay[index].map((activity, activityIndex) => (
-
-                        <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                          <div>
-                            <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
-                          </div>
-                          <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
-                          {/* <small
-                            className='text-truncate bg-success p-1 rounded'
-                            style={{ cursor: "pointer" }}
-                          >Clock-In</small> */}
-                          <small
-                            className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming'
+                      {activitiesByDay[index].length > 0 ?
+                        activitiesByDay[index].map((activity, activityIndex) => (
+                          <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                            <div>
+                              <span className='fw-bold me-1'>{dayjs(activity.dateFrom).format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).format('hh:mm A')}</span>
+                            </div>
+                            <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
+                            <small
+                              className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming'
                                 ? 'bg-warning'
                                 : getActivityStatus(activity) === 'Absent'
                                   ? 'bg-danger'
                                   : 'bg-success'
-                              }`}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            {getActivityStatus(activity)}
-                          </small>
-                        </div>
-                      ))}
-
+                                }`}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              {getActivityStatus(activity)}
+                            </small>
+                          </div>
+                        )) :
+                        <button className='btn'>
+                          <FaPlus />
+                        </button>
+                      }
                     </div>
                   </div>
                 ))}
