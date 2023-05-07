@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import useHttp from '../../../hooks/useHttp';
@@ -9,11 +9,12 @@ import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaEye } from "react-icons/fa";
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
+import moment from 'moment';
 
 const ClientDocument = () => {
   useEffect(() => {
@@ -32,6 +33,11 @@ const ClientDocument = () => {
   const [document, setDocument] = useState("")
   const [staffDocument, setStaffDocument] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
+
+  const handleView = (documentUrl) => {
+    window.open(documentUrl, '_blank');
+};
+const downloadLinkRef = useRef(null);
 
 
   const columns = [
@@ -52,9 +58,26 @@ const ClientDocument = () => {
       ),
     },
     {
-      name: 'Documnet Name',
-      selector: row => row.documentName,
-      sortable: true,
+      name: 'Document',
+            selector: row => row.documentName,
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <div className='d-flex flex-column gap-1 p-2'>
+                    <span> {row.documentName}</span>
+                    <span className='d-flex'>
+                        <span className='bg-primary text-white pointer px-2 py-1 rounded-2'
+                            title='View'
+                            onClick={() => handleView(row.documentUrl)}
+                        >
+
+                            <FaEye />
+                        </span>
+
+                        <a ref={downloadLinkRef} style={{ display: 'none' }} />
+                    </span>
+                </div>
+            ),
     },
     {
       name: 'Expiration Date',
@@ -225,9 +248,31 @@ const ClientDocument = () => {
 const ButtonRow = ({ data }) => {
   return (
       <div className="p-4">
-          {data.fullName}
+         <table className='table'>
 
-      </div>
+<thead>
+    <tr>
+        <th>User</th>
+        <th>Date Created</th>
+        <th>Date Modified</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>{data.user}</td>
+        <td>{moment(data.dateCreated).format('lll')}</td>
+        <td>{moment(data.dateModified).format('lll')}</td>
+        <td>
+            
+        </td>
+    </tr>
+</tbody>
+
+</table>
+
+
+</div>
+
   );
 };
 
