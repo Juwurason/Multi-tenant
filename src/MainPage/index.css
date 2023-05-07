@@ -222,9 +222,15 @@ body::-webkit-scrollbar-thumb {
 
 
 
-/* .current-date {
-    background-color: gainsboro;
-    padding: 5px;
-    border-radius: 5px;
+.modal-backdrop {
+    /* Adjust the transparency by changing the alpha value */
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
 
-} */
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    /* Adjust the value to leave space for header/footer if necessary */
+}

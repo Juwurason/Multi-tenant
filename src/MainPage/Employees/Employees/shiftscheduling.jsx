@@ -2,15 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath"
 import Offcanvas from '../../../Entryfile/offcanvance';
-import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
 import '../../../assets/css/table2.css'
-import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaSearch, FaSlidersH } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
+import { FaAngleLeft, FaAngleRight, FaPlus, } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
+import { Modal } from 'react-bootstrap';
 
 const ShiftScheduling = () => {
   const id = JSON.parse(localStorage.getItem('user'));
@@ -27,7 +25,6 @@ const ShiftScheduling = () => {
     try {
       const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
-      console.log(schedule);
       setSchedule(schedule);
       setLoading(false)
     } catch (error) {
@@ -103,10 +100,18 @@ const ShiftScheduling = () => {
   const activitiesByDay = daysOfWeek.map((day) =>
     schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
   );
+  const currentDateTime = dayjs().utcOffset(10);
 
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+
+  const handleActivityClick = (activity) => {
+    setSelectedActivity(activity);
+    setShowModal(true);
+  };
   return (
     <>
-      {/* Page Wrapper */}
       <div className="page-wrapper">
         <Helmet>
           <title>Shift Roaster</title>
@@ -115,6 +120,7 @@ const ShiftScheduling = () => {
         {/* Page Content */}
         <div className="content container-fluid">
           <div className="page-header">
+
             <div className="row">
               <div className="col">
                 <h3 className="page-title">Shift Roaster</h3>
@@ -124,59 +130,50 @@ const ShiftScheduling = () => {
                   <li className="breadcrumb-item active">Shift Roaster</li>
                 </ul>
               </div>
-              <div className="col-auto float-end ml-auto">
-                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5">Add New Roaster</Link>
-                {/* <a href="#" className="btn add-btn m-r-5" data-bs-toggle="modal" data-bs-target="#add_schedule"> Assign Shifts</a> */}
+              <div className="col-auto float-end ml-auto p-4">
+                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5 rounded-2">Add New Roaster</Link>
               </div>
             </div>
           </div>
-          {/* /Page Header */}
-          {/* Content Starts */}
-          {/* Search Filter */}
 
-          <div className='row filter-row '>
-            {/* <div className="col-md-4 col-lg-2 " style={{ height: "50vh" }}>
-
-              <div className=''>
-                <div className="form-group">
-                  <select className="form-select border-0 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
-                    <option defaultValue hidden>All clients</option>
+          <div className="row align-items-center">
+            <div className="col-md-5">
+              <div className="form-group">
+                <label className="col-form-label">Staff Name</label>
+                <div>
+                  <select className="form-select" onChange={e => setStaffId(e.target.value)}>
+                    <option defaultValue hidden>--Select a staff--</option>
                     {
                       staff.map((data, index) =>
                         <option value={data.staffId} key={index}>{data.fullName}</option>)
                     }
                   </select></div>
-                <div className="d-flex flex-column gap-2 px-2 py-3" style={{ backgroundColor: "#F3FEFF" }}>
-                  <div className='d-flex justify-content-between align-items-center'>
-                    <span className='fw-bold'>
-                      All Staffs
-
-                    </span>
-                    <span> <FaSlidersH /></span>
-                  </div>
-
-                  <div className=''>
-                    <input className="form-control" type="search" placeholder='Search staff' />
-
-                  </div>
-                  <div>
-
-                    {
-                      staff.map((data, index) =>
-                        <div className='d-flex gap-2 align-items-center overflow-hidden p-2' key={index}>
-                          <span className='rounded-circle bg-success' style={{ width: "10px", height: "10px" }}></span>
-                          <span className='rounded-circle bg-dark' style={{ width: "30px", height: "30px" }}></span>
-                          <span className='text-truncate' style={{ fontSize: '12px' }}>{data.firstName} {data.surName}</span>
-                        </div>
-                      )
-                    }
-                  </div>
-                </div>
               </div>
+            </div>
+            <div className="col-md-5">
+              <div className="form-group">
+                <label className="col-form-label">Client Name</label>
+                <div>
+                  <select className="form-select" onChange={e => setProfileId(e.target.value)}>
+                    <option defaultValue hidden>--Select a Client--</option>
+                    {
+                      clients.map((data, index) =>
+                        <option value={data.profileId} key={index}>{data.fullName}</option>)
+                    }
+                  </select></div>
+              </div>
+            </div>
+            <div className="col-auto mt-2">
+              <div className="form-group">
+                <Link to="" className="btn add-btn rounded-2 m-r-5">Load</Link>
+
+              </div>
+            </div>
+
+            {/* <div className="col-auto float-end ml-auto">
             </div> */}
-
-
-
+          </div>
+          <div className='row filter-row '>
 
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
@@ -216,14 +213,46 @@ const ShiftScheduling = () => {
                         </div>
                       }
 
-                      {activitiesByDay[index].map((activity, activityIndex) => (
 
+
+                      {/* {activitiesByDay[index].map((activity, activityIndex) => (
                         <div key={activityIndex} className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                          <span className='fw-bold'>{dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}</span>
+                          <span className='fw-bold'>{currentDateTime.format('hh:mm A')} - {currentDateTime.add(6, 'hour').format('hh:mm A')}</span>
+                          <span className='text-warning'>Promax Staff</span>
+                          <small className='text-truncate'>{activity.activities}</small>
+                        </div>
+                      ))} */}
+
+                      {activitiesByDay[index].map((activity, activityIndex) => (
+                        <div key={activityIndex}
+                          onClick={() => handleActivityClick(activity)}
+                          className='bg-primary text-white pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                          <span className='fw-bold' >
+                            {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
+                          </span>
                           <span className='text-warning'>Promax Staff</span>
                           <small className='text-truncate'>{activity.activities}</small>
                         </div>
                       ))}
+
+                      {/* Modal */}
+                      <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Activity Details</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          {selectedActivity && (
+                            <>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                            </>
+                          )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        </Modal.Footer>
+                      </Modal>
 
                       <button className='btn'>
                         <FaPlus />
@@ -237,22 +266,12 @@ const ShiftScheduling = () => {
 
             </div>
           </div>
-          {/* /Content End */}
+
         </div>
-        {/* /Page Content */}
+
 
       </div>
-      {/* /Page Wrapper */}
-      {/* Add Schedule Modal */}
-      {/* /Add Schedule Modal */}
-      {/* Edit Schedule Modal */}
 
-
-
-
-
-
-      {/* /Edit Schedule Modal */}
       <Offcanvas />
     </>
   );
