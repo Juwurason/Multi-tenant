@@ -225,7 +225,7 @@ const ClientDocument = () => {
 const ButtonRow = ({ data }) => {
   return (
       <div className="p-4">
-          {data.fullName}
+          {data.user}
 
       </div>
   );
