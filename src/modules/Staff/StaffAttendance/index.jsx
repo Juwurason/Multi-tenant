@@ -183,11 +183,13 @@ const StaffAttendance = () => {
   }
 
   useEffect(() => {
+    setLoading(true)
     const getStaffDocument = async () => {
       try {
         const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-        setStaffDocument(response.data.staffDocuments)
-        console.log(response.data.staffDocuments);
+        // setStaffDocument(response.data.staffDocuments)
+        // console.log(response.data.staffDocuments);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }

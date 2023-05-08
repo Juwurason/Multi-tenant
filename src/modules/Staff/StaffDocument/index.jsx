@@ -206,11 +206,14 @@ const downloadLinkRef = useRef(null);
   }
 
   useEffect(() => {
+    setLoading(true)
     const getStaffDocument = async () => {
       try {
         const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
         setStaffDocument(response.data.staffDocuments)
-        console.log(response.data.staffDocuments);
+        setLoading(false)
+        // console.log(response.data.staffDocuments);
+
       } catch (error) {
         console.log(error);
       }
@@ -364,6 +367,7 @@ const filteredData = staffDocument.filter((item) =>
                                     <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
                                         Create New Admin</Link>
                                 </div> */}
+                                
                             </div>
                             <DataTable data={filteredData} columns={columns}
                                 pagination

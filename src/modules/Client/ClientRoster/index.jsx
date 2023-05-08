@@ -25,7 +25,7 @@ const ClientRoster = () => {
         try {
             const clientResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
-            console.log(client.shiftRoster);
+            // console.log(client.shiftRoster);
             setClients(client.shiftRoster);
             setLoading(false)
         } catch (error) {
@@ -81,10 +81,10 @@ const ClientRoster = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
-  
+
     const handleActivityClick = (activity) => {
-      setSelectedActivity(activity);
-      setShowModal(true);
+        setSelectedActivity(activity);
+        setShowModal(true);
     };
 
     return (
@@ -152,20 +152,22 @@ const ClientRoster = () => {
                                             </span>
                                         </div>
 
-                                        {loading &&
 
-                                            <div className="spinner-grow text-secondary" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div>
-                                        }
 
                                         <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
 
+                                            {loading &&
+
+                                                <div className="spinner-grow text-secondary" role="status">
+                                                    <span className="sr-only">Loading...</span>
+                                                </div>
+                                            }
+
                                             {activitiesByDay[index].map((activity, activityIndex) => (
 
-                                                <div key={activityIndex} 
-                                                onClick={() => handleActivityClick(activity)}
-                                                className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                                                <div key={activityIndex}
+                                                    onClick={() => handleActivityClick(activity)}
+                                                    className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
                                                     <div>
                                                         <span className='fw-bold me-1'>{dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</span>
                                                     </div>

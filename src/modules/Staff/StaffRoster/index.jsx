@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import '../../../assets/css/table2.css'
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { Modal } from 'react-bootstrap';
+import { useHistory } from "react-router-dom"
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -22,6 +23,7 @@ const StaffRoster = () => {
   const [staff, setStaff] = useState([]);
 
   const AustraliaTimezone = 'Australia/Sydney';
+  const navigate = useHistory()
 
 
   const FetchSchedule = async () => {
@@ -29,7 +31,7 @@ const StaffRoster = () => {
     try {
       const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      console.log(staff.shiftRoster);
+      // console.log(staff.shiftRoster);
       setStaff(staff.shiftRoster);
       setLoading(false)
     } catch (error) {
@@ -60,6 +62,10 @@ const StaffRoster = () => {
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs());
 
+  const Move = () => {
+    console.log(33);
+    // navigate.push("/staff/staff-progress")
+  };
   const handleNextClick = () => {
     setCurrentDate(currentDate.add(6, 'day'));
   };
@@ -87,7 +93,7 @@ const StaffRoster = () => {
     const nowInAustraliaTime = dayjs().tz(AustraliaTimezone);
     const activityDateFrom = dayjs(activity.dateFrom).tz(AustraliaTimezone);
     const activityDateTo = dayjs(activity.dateTo).tz(AustraliaTimezone);
-  
+
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
@@ -96,7 +102,7 @@ const StaffRoster = () => {
       return 'Clock-In';
     }
   }
-  
+
 
   const [showModal, setShowModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
@@ -169,43 +175,81 @@ const StaffRoster = () => {
 
                       </span>
                     </div>
-                    {loading &&
 
-                      <div className="spinner-grow text-secondary" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    }
                     <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
-                      {activitiesByDay[index].length > 0 ?
-                        activitiesByDay[index].map((activity, activityIndex) => (
-                          <div key={activityIndex} 
-                          onClick={() => handleActivityClick(activity)}
-                          className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                            <div>
-                              <span className='fw-bold me-1'>{dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</span>
-                            </div>
-                            <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
-                            <small
-                              className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming'
-                                ? 'bg-warning'
-                                : getActivityStatus(activity) === 'Absent'
-                                  ? 'bg-danger'
-                                  : 'bg-success'
-                                }`}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              {getActivityStatus(activity)}
-                            </small>
-                          </div>
-                        )) :
-                        <button className='btn'>
-                          {/* <FaPlus /> */}
-                          <h5>No Activities</h5>
-                        </button>
-                      }
+                      {loading &&
 
-                       {/* Modal */}
-                       <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <div className="spinner-grow text-secondary" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      }
+                      {loading ? (
+                        <div> </div>
+                      ) : (
+                        staff.length <= 0 ? (
+                          <div>
+                            <h5>No Activities</h5>
+                          </div>
+                        ) : (
+                          activitiesByDay[index].length > 0 ? (
+                            activitiesByDay[index].map((activity, activityIndex) => (
+                              <div key={activityIndex}
+                                className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                                style={{ fontSize: '10px' }}
+                              >
+                                <div onClick={() => handleActivityClick(activity)}>
+                                  <div>
+                                    <span className='fw-bold me-1'>
+                                      {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}
+                                    </span> - <span className='fw-bold me-1'>
+                                      {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
+                                    </span>
+                                  </div>
+                                  <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
+                                </div>
+
+                                <small
+                                  className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
+                                    getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
+                                      getActivityStatus(activity) === 'Clock-In' ? 'bg-success' : ''
+                                    }`}
+                                  style={{ cursor: getActivityStatus(activity) === 'Clock-In' ? 'pointer' : 'default' }}
+                                  onClick={() => {
+                                    if (getActivityStatus(activity) === 'Clock-In') {
+                                      if (navigator.geolocation) {
+                                        navigator.geolocation.getCurrentPosition(
+                                          (position) => {
+                                            const latitude = position.coords.latitude;
+                                            const longitude = position.coords.longitude;
+                                            navigate.push(`/staff/staff-progress?lat=${latitude}&lng=${longitude}`);
+                                          },
+                                          (error) => {
+                                            console.error('Error getting location:', error.message);
+                                          }
+                                        );
+                                      } else {
+                                        console.error('Geolocation is not supported');
+                                      }
+                                    }
+                                  }}
+                                >
+                                  {getActivityStatus(activity)}
+                                </small>
+                              </div>
+                            ))
+                          ) : (
+                            <div>
+                              <h5>No Activities</h5>
+                            </div>
+                          )
+                        )
+                      )}
+
+
+
+
+                      {/* Modal */}
+                      <Modal show={showModal} onHide={() => setShowModal(false)}>
                         <Modal.Header closeButton>
                           <Modal.Title>Activity Details</Modal.Title>
                         </Modal.Header>

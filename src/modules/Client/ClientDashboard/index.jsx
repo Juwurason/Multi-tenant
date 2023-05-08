@@ -6,15 +6,15 @@
  import { Helmet } from "react-helmet";
  import { Link, withRouter } from 'react-router-dom'; 
  
- import Header from '../../../initialpage/Sidebar/header'
- import Sidebar from '../../../initialpage/Sidebar/sidebar';
  import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
  import "../../index.css"
  import { useCompanyContext } from '../../../context/index.jsx';
  import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
  import useHttp from '../../../hooks/useHttp.jsx';
  import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineSummarize, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
- 
+import ClientSideBar from '../ClientSideBar/index.jsx';
+import ClientHeader from '../ClientHeader/index.jsx';
+
  
 
  const ClientDashboard = () => {
@@ -99,10 +99,10 @@
    return (
      <>
        <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
- 
-         <Header onMenuClick={(value) => toggleMobileMenu()} />
-         <Sidebar />
-         <div className="page-wrapper">
+
+          <ClientHeader />
+         <ClientSideBar />
+                  <div className="page-wrapper">
            <Helmet>
              <title>Dashboard - Promax Client Dashboard</title>
              <meta name="description" content="Dashboard" />
