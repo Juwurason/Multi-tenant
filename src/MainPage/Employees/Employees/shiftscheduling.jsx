@@ -9,6 +9,9 @@ import { FaAngleLeft, FaAngleRight, FaPlus, } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const ShiftScheduling = () => {
   const id = JSON.parse(localStorage.getItem('user'));
@@ -18,6 +21,8 @@ const ShiftScheduling = () => {
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [staffOne, setStaffOne] = useState({});
+  const [cli, setCli] = useState('');
+  const [sta, setSta] = useState('');
   let staffNo;
 
   const FetchSchedule = async () => {
@@ -47,24 +52,34 @@ const ShiftScheduling = () => {
     } catch (error) {
       console.log(error);
     }
-    try {
-      const { data } = await privateHttp.get(`/Staffs/${staffNo}`, { cacheTimeout: 300000 })
-      setStaffOne(data)
-
-    } catch (error) {
-      console.log(error);
-    }
-    finally {
-      setLoading(false)
-    }
   };
   useEffect(() => {
     FetchSchedule()
   }, []);
 
 
+  const FilterSchedule = async () => {
 
+    if (sta === "") {
+      return Swal.fire(
+        "",
+        "Select either a staff or client",
+        "error"
+      )
 
+    } else {
+
+      try {
+        const shiftResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${cli}&staff=${sta}`, { cacheTimeout: 300000 });
+        const shift = shiftResponse.data?.shiftRoster;
+        setSchedule(shift);
+        setLoading(false)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+  }
 
   useEffect(() => {
     if ($('.select').length > 0) {
@@ -137,11 +152,12 @@ const ShiftScheduling = () => {
           </div>
 
           <div className="row align-items-center">
-            <div className="col-md-5">
+            <span className='fw-bold'>Filter Shift Roaster By User</span>
+            <div className="col-md-4">
               <div className="form-group">
                 <label className="col-form-label">Staff Name</label>
                 <div>
-                  <select className="form-select" onChange={e => setStaffId(e.target.value)}>
+                  <select className="form-select" onChange={e => setSta(e.target.value)}>
                     <option defaultValue hidden>--Select a staff--</option>
                     {
                       staff.map((data, index) =>
@@ -150,11 +166,11 @@ const ShiftScheduling = () => {
                   </select></div>
               </div>
             </div>
-            <div className="col-md-5">
+            <div className="col-md-4">
               <div className="form-group">
                 <label className="col-form-label">Client Name</label>
                 <div>
-                  <select className="form-select" onChange={e => setProfileId(e.target.value)}>
+                  <select className="form-select" onChange={e => setCli(e.target.value)}>
                     <option defaultValue hidden>--Select a Client--</option>
                     {
                       clients.map((data, index) =>
@@ -163,9 +179,15 @@ const ShiftScheduling = () => {
                   </select></div>
               </div>
             </div>
-            <div className="col-auto mt-2">
+            <div className="col-auto mt-3">
               <div className="form-group">
-                <Link to="" className="btn add-btn rounded-2 m-r-5">Load</Link>
+                <button onClick={FilterSchedule} className="btn btn-info add-btn rounded-2 m-r-5">Load</button>
+
+              </div>
+            </div>
+            <div className="col-auto mt-3">
+              <div className="form-group">
+                <button onClick={FetchSchedule} className="btn btn-secondary add-btn rounded-2 m-r-5">All Shifts</button>
 
               </div>
             </div>
@@ -212,6 +234,12 @@ const ShiftScheduling = () => {
                           <span className="sr-only">Loading...</span>
                         </div>
                       }
+                      {!loading && schedule.length <= 0 &&
+
+                        <div>
+                          <span>No Activity</span>
+                        </div>
+                      }
 
 
 
@@ -250,14 +278,17 @@ const ShiftScheduling = () => {
                           )}
                         </Modal.Body>
                         <Modal.Footer>
-                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                          <button className="btn btn-primary" onClick={() => setShowModal(false)}>Edit</button>
+                          <button className="ml-4 btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
                         </Modal.Footer>
                       </Modal>
 
-                      <button className='btn'>
-                        <FaPlus />
-                      </button>
 
+                      <div>
+                        <button className='btn'>
+                          <FaPlus />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}

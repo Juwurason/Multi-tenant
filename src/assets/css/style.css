@@ -1812,8 +1812,8 @@ button.bg-danger:hover {
 }
 
 .btn-info {
-  background-color: #009efb;
-  border: 1px solid #009efb;
+  background-color: #00AEEF;
+  border: 1px solid #00AEEF;
 }
 
 .btn-info:hover,
@@ -9136,8 +9136,8 @@ textarea.form-control {
 }
 
 .add-btn {
-  background-color: #00AEEF;
-  border: 1px solid #00AEEF;
+  /* background-color: #00AEEF;
+  border: 1px solid #00AEEF; */
   color: #ffffff;
   float: right;
   font-weight: 500;
