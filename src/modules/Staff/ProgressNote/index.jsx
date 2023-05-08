@@ -56,21 +56,22 @@ const ProgressNote = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Progress Note</title>
-          <meta name="description" content="Login page" />
+          <meta name="description" content="Progress Note" />
         </Helmet>
         <div className="content container-fluid">
+        <h3 className="page-title">Progress Note</h3>
           <div className="row">
             <div className="col-md-6 offset-md-3">
               {/* Page Header */}
               <div className="page-header">
                 <div className="row">
                   <div className="col-sm-12">
-                    <h3 className="page-title">Progress Note</h3>
+                  {/* <h3 className="page-title">Progress Note</h3> */}
                   </div>
                 </div>
               </div>
               {/* /Page Header */}
-              <form onSubmit={handleSubmit}>
+              {/* <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>Email</label>
                   <input type="email" ref={email} value={mail.email} readOnly className="form-control" />
@@ -93,7 +94,7 @@ const ProgressNote = () => {
                       <span className="sr-only">Loading...</span>
                     </div> : "Update Password"}</button>
                 </div>
-              </form>
+              </form> */}
             </div>
           </div>
         </div>

@@ -56,7 +56,7 @@ const StaffChangePassword = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Change Password</title>
-          <meta name="description" content="Login page" />
+          <meta name="description" content="Forget Password" />
         </Helmet>
         <div className="content container-fluid">
           <div className="row">
