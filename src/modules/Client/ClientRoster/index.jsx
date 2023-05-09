@@ -145,9 +145,9 @@ const ClientRoster = () => {
                                     <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
                                         <div className='border p-2'>
                                             <span
-                                                className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                                                className={`calendar-date text-muted text-truncate overflow-hidden ${day.tz('Australia/Sydney').isSame(currentDate, 'day') ? 'current-date' : ''}`}
                                                 style={{ fontSize: '12px' }}>
-                                                {day.format('dddd, MMMM D')}
+                                                {day.tz('Australia/Sydney').format('dddd, MMMM D')}
 
                                             </span>
                                         </div>
