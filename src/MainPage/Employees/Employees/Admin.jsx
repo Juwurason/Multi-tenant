@@ -245,8 +245,8 @@ const AllAdmin = () => {
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-4">
-                {data.fullName}
-
+                <div className='fw-bold'><span>Full NAME</span> {data.fullName}</div>
+                <div>{data.email}</div>
             </div>
         );
     };

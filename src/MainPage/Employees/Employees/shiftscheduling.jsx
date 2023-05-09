@@ -146,7 +146,7 @@ const ShiftScheduling = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto p-4">
-                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5 rounded-2">Add New Roaster</Link>
+                <Link to="/app/employee/add-shift" className="btn btn-info add-btn m-r-5 rounded-2">Add New Roaster</Link>
               </div>
             </div>
           </div>
@@ -234,12 +234,6 @@ const ShiftScheduling = () => {
                           <span className="sr-only">Loading...</span>
                         </div>
                       }
-                      {!loading && schedule.length <= 0 &&
-
-                        <div>
-                          <span>No Activity</span>
-                        </div>
-                      }
 
 
 
@@ -258,27 +252,37 @@ const ShiftScheduling = () => {
                           <span className='fw-bold' >
                             {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
                           </span>
-                          <span className='text-warning'>Promax Staff</span>
-                          <small className='text-truncate'>{activity.activities}</small>
+                          <span><span className='fw-bold'>Staff: </span><span className='text-warning'>{activity.staff.fullName}</span></span>
+                          <span><span className='fw-bold'>Client: </span><span className='text-warning'>{activity.profile.fullName}</span></span>
+                          <small><span className='text-truncate'>{activity.activities}</span></small>
                         </div>
                       ))}
+                      {!loading && activitiesByDay[index] <= 0 &&
+
+                        <div>
+                          <span>No Activity</span>
+                        </div>
+                      }
+
 
                       {/* Modal */}
                       <Modal show={showModal} onHide={() => setShowModal(false)}>
                         <Modal.Header closeButton>
-                          <Modal.Title>Activity Details</Modal.Title>
+                          <Modal.Title>Shift Details</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           {selectedActivity && (
                             <>
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
-                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                              <p><b>Staff:</b> {selectedActivity.staff.fullName}</p>
+                              <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
+                              <p><b>Activities:</b> {selectedActivity.activities}</p>
                             </>
                           )}
                         </Modal.Body>
                         <Modal.Footer>
-                          <button className="btn btn-primary" onClick={() => setShowModal(false)}>Edit</button>
+                          <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
                           <button className="ml-4 btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
                         </Modal.Footer>
                       </Modal>
