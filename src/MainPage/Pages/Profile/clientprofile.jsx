@@ -45,6 +45,7 @@ const ClientProfile = () => {
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/app/employees/clients">Client</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
               </div>
@@ -108,66 +109,7 @@ const ClientProfile = () => {
               </div>
             </div>
           </div>
-          <div className="">
-            <div className="table-responsive">
-              <div className="table-wrapper">
-                <div className="table-title bg-primary">
-                  <div className="row">
-                    <div className="col-sm-5">
-                      <h3 className='text-white'>Client Shift Roaster</h3>
-                    </div>
-                    <div className="col-sm-7">
-                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Download PDF</span></a>
-                      <a href="#" className="btn btn-secondary"><i className="material-icons"></i> <span>Export to Excel</span></a>
-                    </div>
-                  </div>
-                </div>
-                <table className="table table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Date</th>
-                      <th>Staff</th>
-                      <th>Start Time</th>
-                      <th>End Time</th>
-                      <th>Activities</th>
-                      <th>Attendance</th>
-                      <th>Duration</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* <tr>
-                      <td>1</td>
-                      <td><a href="#">Michael Holz</a></td>
-                      <td>04/10/2013</td>
-                      <td>Admin</td>
-                      <td><span className="status text-success">•</span> Active</td>
-                      <td>
-                        <a href="#" className="settings" title="Settings" data-toggle="tooltip"><i className="material-icons"></i></a>
-                        <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="material-icons"></i></a>
-                      </td>
-                    </tr> */}
 
-
-
-
-                  </tbody>
-                </table>
-                <div className="clearfix">
-                  <div className="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                  <ul className="pagination">
-                    <li className="page-item disabled"><a href="#">Previous</a></li>
-                    <li className="page-item"><a href="#" className="page-link">1</a></li>
-                    <li className="page-item"><a href="#" className="page-link">2</a></li>
-                    <li className="page-item active"><a href="#" className="page-link">3</a></li>
-                    <li className="page-item"><a href="#" className="page-link">4</a></li>
-                    <li className="page-item"><a href="#" className="page-link">5</a></li>
-                    <li className="page-item"><a href="#" className="page-link">Next</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
 
