@@ -50,7 +50,7 @@ export default [
       component: StaffDocument
    },
    {
-      path: 'staff-progress',
+      path: 'staff-progress/:uid/:name',
       component: ProgressNote
    },
    {

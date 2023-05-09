@@ -21,17 +21,19 @@ const StaffRoster = () => {
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [staff, setStaff] = useState([]);
+  const [staffCancel, setStaffCancel] = useState('');
+  const [reason, setReason] = useState('');
+
 
   const AustraliaTimezone = 'Australia/Sydney';
   const navigate = useHistory()
-
 
   const FetchSchedule = async () => {
     setLoading(true)
     try {
       const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      // console.log(staff.shiftRoster);
+      console.log(staff.shiftRoster);
       setStaff(staff.shiftRoster);
       setLoading(false)
     } catch (error) {
@@ -40,10 +42,39 @@ const StaffRoster = () => {
     finally {
       setLoading(false)
     }
+
+
   };
   useEffect(() => {
     FetchSchedule()
   }, []);
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  const privateHttp = useHttp()
+  const CancelShift = async () => {
+    setLoading(true)
+    if (reason === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+    const info = {
+      userId: user.userId,
+      reason: reason
+    }
+    try {
+      const cancelShif = await privateHttp.post(`/ShiftRosters/shift_cancellation/${staffCancel}?userId=${user.userId}&reason=${reason}`);
+      const cancel = cancelShif.data;
+      console.log(cancel);
+      // setStaffCancel(cancel);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    finally {
+      setLoading(false)
+      setReasonModal(false)
+    }
+  };
+
 
 
 
@@ -58,7 +89,6 @@ const StaffRoster = () => {
     }
   });
 
-  const [list, setList] = useState([1, 2, 3, 4, 5, 6])
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs());
 
@@ -74,6 +104,10 @@ const StaffRoster = () => {
     setCurrentDate(currentDate.subtract(6, 'day'));
   };
 
+  const HandleSubmit = (e) => {
+    setReasonModal(true)
+    setStaffCancel(e)
+  };
   const daysOfWeek = [
     currentDate.subtract(3, 'day'),
     currentDate.subtract(2, 'day'),
@@ -104,7 +138,9 @@ const StaffRoster = () => {
   }
 
 
+
   const [showModal, setShowModal] = useState(false);
+  const [reasonModal, setReasonModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
@@ -198,30 +234,25 @@ const StaffRoster = () => {
                                 style={{ fontSize: '10px' }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
-                                  <div>
-                                    <span className='fw-bold me-1'>
-                                      {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}
-                                    </span> - <span className='fw-bold me-1'>
-                                      {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
+                                  <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
+                                    <span className='fw-bold'>
+                                      {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
                                     </span>
                                   </div>
-                                  <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
+                                  <span><span className='fw-bold'>Client :</span> {activity.profile.firstName} {activity.profile.surName}</span>
                                 </div>
 
-                                <small
-                                  className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
-                                    getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
-                                      getActivityStatus(activity) === 'Clock-In' ? 'bg-success' : ''
-                                    }`}
-                                  style={{ cursor: getActivityStatus(activity) === 'Clock-In' ? 'pointer' : 'default' }}
-                                  onClick={() => {
-                                    if (getActivityStatus(activity) === 'Clock-In') {
+                                {getActivityStatus(activity) === 'Clock-In' ? (
+                                  <div className='d-flex gap-2'>
+                                    <small onClick={() => {
                                       if (navigator.geolocation) {
                                         navigator.geolocation.getCurrentPosition(
                                           (position) => {
                                             const latitude = position.coords.latitude;
                                             const longitude = position.coords.longitude;
-                                            navigate.push(`/staff/staff-progress?lat=${latitude}&lng=${longitude}`);
+                                            localStorage.setItem("latit", latitude)
+                                            localStorage.setItem("log", longitude)
+                                            navigate.push(`/staff/staff-progress/${activity.shiftRosterId}/${activity.profile.firstName} ${activity.profile.surName}`);
                                           },
                                           (error) => {
                                             console.error('Error getting location:', error.message);
@@ -230,11 +261,47 @@ const StaffRoster = () => {
                                       } else {
                                         console.error('Geolocation is not supported');
                                       }
-                                    }
-                                  }}
-                                >
-                                  {getActivityStatus(activity)}
-                                </small>
+                                    }}
+                                      className="bg-success p-1 rounded"
+                                    >Clock-In</small>
+                                    <small className='bg-secondary p-1 rounded'
+                                      onClick={() => HandleSubmit(activity.shiftRosterId)}
+                                    >
+                                      Cancel shift
+                                    </small>
+                                  </div>
+                                ) : (
+                                  <small
+                                    className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
+                                      getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
+                                        getActivityStatus(activity) === 'Present' ? 'bg-primary' : ''
+                                      }`}
+                                    style={{ cursor: getActivityStatus(activity) === 'Clock-In' ? 'pointer' : 'default' }}
+                                    onClick={() => {
+                                      if (getActivityStatus(activity) === 'Clock-In') {
+                                        if (navigator.geolocation) {
+                                          navigator.geolocation.getCurrentPosition(
+                                            (position) => {
+                                              const latitude = position.coords.latitude;
+                                              const longitude = position.coords.longitude;
+                                              navigate.push(`/staff/staff-progress/${activity.shiftRosterId}/${activity.profile.firstName} ${activity.profile.surName}?lat=${latitude}&lng=${longitude}`);
+                                            },
+                                            (error) => {
+                                              console.error('Error getting location:', error.message);
+                                            }
+                                          );
+                                        } else {
+                                          console.error('Geolocation is not supported');
+                                        }
+                                      }
+                                    }}
+                                  >
+                                    {getActivityStatus(activity)}
+                                  </small>
+                                )}
+
+
+
                               </div>
                             ))
                           ) : (
@@ -264,6 +331,21 @@ const StaffRoster = () => {
                         </Modal.Body>
                         <Modal.Footer>
                           <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        </Modal.Footer>
+                      </Modal>
+
+                      <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Request to Cancel Shift</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <div>
+                            <label htmlFor="">Please provide reasons for cancelling shift</label>
+                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setReason(e.target.value)} />
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button onClick={CancelShift} className="btn btn-success">Submit</button>
                         </Modal.Footer>
                       </Modal>
                     </div>
