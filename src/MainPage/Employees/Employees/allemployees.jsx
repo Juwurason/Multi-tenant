@@ -110,10 +110,9 @@ const AllEmployees = () => {
       html: `<h3>Are you sure? you want to delete this staff</h3></br><p>You won't be able to revert this!</p>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: 'transparent',
+      confirmButtonColor: '#dc2626',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
-      confirmButtonClass: 'btn btn-outline-warning text-danger',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
       if (result.isConfirmed) {

@@ -106,27 +106,6 @@ const AddShiftRoaster = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        // console.table(
-        //     // comapanyId,
-        //     "StaffID", staffId,
-        //     "ClientID", profileId,
-        //     "DateFrom", dateFrom,
-        //     "DateTo", dateTo,
-        //     "Activities", selectedValues,
-        //     "Repeat", repeat,
-        //     "isException", isExceptionalShift,
-        //     "IsNight", isNightShift,
-        //     "Sunday", days.sunday,
-        //     "Monday", days.monday,
-        //     "Tuesday", days.tuesday,
-        //     "Wednesday", days.wednesday,
-        //     "Thursday", days.thursday,
-        //     "Friday", days.friday,
-        //     "Saturday", days.saturday,
-        //     "Sunday", days.sunday,
-        //     "stopDate", stopDate
-        // );
-
 
         if (staffId === 0 || profileId === 0
         ) {
@@ -156,7 +135,7 @@ const AddShiftRoaster = () => {
                 }
             )
             toast.success(data.message)
-            // navigate.push('/app/employee/shift-scheduling')
+            navigate.push('/app/employee/shift-scheduling')
             setLoading(false)
 
         } catch (error) {

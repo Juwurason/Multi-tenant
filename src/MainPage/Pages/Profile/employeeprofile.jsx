@@ -49,6 +49,7 @@ const EmployeeProfile = () => {
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/app/employee/allemployees">Staff</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
               </div>

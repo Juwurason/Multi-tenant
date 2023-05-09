@@ -46,6 +46,7 @@ const AdminDashboard = () => {
   const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
   const [recentUsers, setRecentUsers] = useState([]);
+  const [schedule, setSchedule] = useState([]);
   const { get } = useHttp();
 
   let isMounted = true;
@@ -95,6 +96,14 @@ const AdminDashboard = () => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+    }
+    try {
+      const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const schedule = scheduleResponse.data;
+      setSchedule(schedule);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
     }
 
     finally {
@@ -164,7 +173,7 @@ const AdminDashboard = () => {
                   <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
                     linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
                   />
-                  <DashboardCard title={"Shift Roaster"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
+                  <DashboardCard title={"Shift Roaster"} content={schedule.length} icon={<MdOutlineEventNote className='fs-4' />}
                     link={`/app/employee/shift-scheduling`}
                     sty={'danger'}
                   />
