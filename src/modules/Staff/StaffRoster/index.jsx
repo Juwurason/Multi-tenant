@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import { Link, Redirect } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
+
 import { FaAngleLeft, FaAngleRight, FaPlus } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
@@ -136,10 +137,7 @@ const StaffRoster = () => {
     }
   }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 6fa6a8f3b24a8b7998b5f66db55d5641642736a1
 
   const [showModal, setShowModal] = useState(false);
   const [reasonModal, setReasonModal] = useState(false);
@@ -215,7 +213,6 @@ const StaffRoster = () => {
                     </div>
 
                     <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
-<<<<<<< HEAD
                       {loading &&
 
                         <div className="spinner-grow text-secondary" role="status">
@@ -318,36 +315,6 @@ const StaffRoster = () => {
 
 
 
-=======
-                      {activitiesByDay[index].length > 0 ?
-                        activitiesByDay[index].map((activity, activityIndex) => (
-                          <div key={activityIndex}
-                            onClick={() => handleActivityClick(activity)}
-                            className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                            <div>
-                              <span className='fw-bold me-1'>{dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</span>
-                            </div>
-                            <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
-                            <small
-                              className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming'
-                                ? 'bg-warning'
-                                : getActivityStatus(activity) === 'Absent'
-                                  ? 'bg-danger'
-                                  : 'bg-success'
-                                }`}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              {getActivityStatus(activity)}
-                            </small>
-                          </div>
-                        )) :
-                        <button className='btn'>
-                          {/* <FaPlus /> */}
-                          <h5>No Activities</h5>
-                        </button>
-                      }
-
->>>>>>> 6fa6a8f3b24a8b7998b5f66db55d5641642736a1
                       {/* Modal */}
                       <Modal show={showModal} onHide={() => setShowModal(false)}>
                         <Modal.Header closeButton>
