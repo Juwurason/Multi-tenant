@@ -1,15 +1,17 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
+
 import { FaAngleLeft, FaAngleRight, FaPlus } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { Modal } from 'react-bootstrap';
+import { useHistory } from "react-router-dom"
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -19,16 +21,19 @@ const StaffRoster = () => {
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [staff, setStaff] = useState([]);
+  const [staffCancel, setStaffCancel] = useState('');
+  const [reason, setReason] = useState('');
+
 
   const AustraliaTimezone = 'Australia/Sydney';
-
+  const navigate = useHistory()
 
   const FetchSchedule = async () => {
     setLoading(true)
     try {
       const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      console.log(staff.shiftRoster);
+      // console.log(staff.shiftRoster);
       setStaff(staff.shiftRoster);
       setLoading(false)
     } catch (error) {
@@ -37,10 +42,39 @@ const StaffRoster = () => {
     finally {
       setLoading(false)
     }
+
+
   };
   useEffect(() => {
     FetchSchedule()
   }, []);
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  const privateHttp = useHttp()
+  const CancelShift = async () => {
+    setLoading(true)
+    if (reason === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+    const info = {
+      userId: user.userId,
+      reason: reason
+    }
+    try {
+      const cancelShif = await privateHttp.post(`/ShiftRosters/shift_cancellation/${staffCancel}?userId=${user.userId}&reason=${reason}`);
+      const cancel = cancelShif.data;
+      console.log(cancel);
+      // setStaffCancel(cancel);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    finally {
+      setLoading(false)
+      setReasonModal(false)
+    }
+  };
+
 
 
 
@@ -55,10 +89,13 @@ const StaffRoster = () => {
     }
   });
 
-  const [list, setList] = useState([1, 2, 3, 4, 5, 6])
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs());
 
+  const Move = () => {
+    console.log(33);
+    // navigate.push("/staff/staff-progress")
+  };
   const handleNextClick = () => {
     setCurrentDate(currentDate.add(6, 'day'));
   };
@@ -67,6 +104,10 @@ const StaffRoster = () => {
     setCurrentDate(currentDate.subtract(6, 'day'));
   };
 
+  const HandleSubmit = (e) => {
+    setReasonModal(true)
+    setStaffCancel(e)
+  };
   const daysOfWeek = [
     currentDate.subtract(3, 'day'),
     currentDate.subtract(2, 'day'),
@@ -97,7 +138,9 @@ const StaffRoster = () => {
   }
 
 
+
   const [showModal, setShowModal] = useState(false);
+  const [reasonModal, setReasonModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
@@ -162,46 +205,115 @@ const StaffRoster = () => {
                   <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
                     <div className='border p-2'>
                       <span
-                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.tz('Australia/Sydney').isSame(currentDate, 'day') ? 'current-date' : ''}`}
                         style={{ fontSize: '12px' }}>
-                        {day.format('dddd, MMMM D')}
+                        {day.tz('Australia/Sydney').format('dddd, MMMM D')}
 
                       </span>
                     </div>
-                    {loading &&
 
-                      <div className="spinner-grow text-secondary" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    }
                     <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
-                      {activitiesByDay[index].length > 0 ?
-                        activitiesByDay[index].map((activity, activityIndex) => (
-                          <div key={activityIndex}
-                            onClick={() => handleActivityClick(activity)}
-                            className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                            <div>
-                              <span className='fw-bold me-1'>{dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</span>
-                            </div>
-                            <span><b>Client</b> {activity.profile.firstName} {activity.profile.surName}</span>
-                            <small
-                              className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming'
-                                ? 'bg-warning'
-                                : getActivityStatus(activity) === 'Absent'
-                                  ? 'bg-danger'
-                                  : 'bg-success'
-                                }`}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              {getActivityStatus(activity)}
-                            </small>
-                          </div>
-                        )) :
-                        <button className='btn'>
-                          {/* <FaPlus /> */}
-                          <h5>No Activities</h5>
-                        </button>
+                      {loading &&
+
+                        <div className="spinner-grow text-secondary" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div>
                       }
+                      {loading ? (
+                        <div> </div>
+                      ) : (
+                        staff.length <= 0 ? (
+                          <div>
+                            <h5>No Activities</h5>
+                          </div>
+                        ) : (
+                          activitiesByDay[index].length > 0 ? (
+                            activitiesByDay[index].map((activity, activityIndex) => (
+                              <div key={activityIndex}
+                                className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                                style={{ fontSize: '10px' }}
+                              >
+                                <div onClick={() => handleActivityClick(activity)}>
+                                  <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
+                                    <span className='fw-bold'>
+                                      {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
+                                    </span>
+                                  </div>
+                                  <span><span className='fw-bold'>Client :</span> {activity.profile.firstName} {activity.profile.surName}</span>
+                                </div>
+
+                                {getActivityStatus(activity) === 'Clock-In' ? (
+                                  <div className='d-flex gap-2'>
+                                    <small onClick={() => {
+                                      if (navigator.geolocation) {
+                                        navigator.geolocation.getCurrentPosition(
+                                          (position) => {
+                                            const latitude = position.coords.latitude;
+                                            const longitude = position.coords.longitude;
+                                            localStorage.setItem("latit", latitude)
+                                            localStorage.setItem("log", longitude)
+                                            navigate.push(`/staff/staff-progress/${activity.shiftRosterId}/${activity.profile.firstName} ${activity.profile.surName}`);
+                                          },
+                                          (error) => {
+                                            console.error('Error getting location:', error.message);
+                                          }
+                                        );
+                                      } else {
+                                        console.error('Geolocation is not supported');
+                                      }
+                                    }}
+                                      className="bg-success p-1 rounded"
+                                    >Clock-In</small>
+                                    <small className='bg-secondary p-1 rounded'
+                                      onClick={() => HandleSubmit(activity.shiftRosterId)}
+                                    >
+                                      Cancel shift
+                                    </small>
+                                  </div>
+                                ) : (
+                                  <small
+                                    className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
+                                      getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
+                                        getActivityStatus(activity) === 'Present' ? 'bg-primary' : ''
+                                      }`}
+                                    style={{ cursor: getActivityStatus(activity) === 'Clock-In' ? 'pointer' : 'default' }}
+                                    onClick={() => {
+                                      if (getActivityStatus(activity) === 'Clock-In') {
+                                        if (navigator.geolocation) {
+                                          navigator.geolocation.getCurrentPosition(
+                                            (position) => {
+                                              const latitude = position.coords.latitude;
+                                              const longitude = position.coords.longitude;
+                                              navigate.push(`/staff/staff-progress/${activity.shiftRosterId}/${activity.profile.firstName} ${activity.profile.surName}?lat=${latitude}&lng=${longitude}`);
+                                            },
+                                            (error) => {
+                                              console.error('Error getting location:', error.message);
+                                            }
+                                          );
+                                        } else {
+                                          console.error('Geolocation is not supported');
+                                        }
+                                      }
+                                    }}
+                                  >
+                                    {getActivityStatus(activity)}
+                                  </small>
+                                )}
+
+
+
+                              </div>
+                            ))
+                          ) : (
+                            <div>
+                              <h5>No Activities</h5>
+                            </div>
+                          )
+                        )
+                      )}
+
+
+
 
                       {/* Modal */}
                       <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -219,6 +331,21 @@ const StaffRoster = () => {
                         </Modal.Body>
                         <Modal.Footer>
                           <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        </Modal.Footer>
+                      </Modal>
+
+                      <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Request to Cancel Shift</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <div>
+                            <label htmlFor="">Please provide reasons for cancelling shift</label>
+                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setReason(e.target.value)} />
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button onClick={CancelShift} className="btn btn-success">Submit</button>
                         </Modal.Footer>
                       </Modal>
                     </div>

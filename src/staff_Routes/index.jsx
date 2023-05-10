@@ -34,6 +34,7 @@ import Employee from '../MainPage/Employees/Employees';
 import ProjectList from '../MainPage/Employees/Projects/projectlist'
 import StaffAttendance from '../modules/Staff/StaffAttendance';
 import StaffTable from '../modules/Staff/StaffTable';
+import ProgressNote from '../modules/Staff/ProgressNote'
 
 export default [
    {
@@ -47,6 +48,10 @@ export default [
    {
       path: 'staff-document',
       component: StaffDocument
+   },
+   {
+      path: 'staff-progress/:uid/:name',
+      component: ProgressNote
    },
    {
       path: 'staff-table',

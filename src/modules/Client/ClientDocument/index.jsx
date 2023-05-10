@@ -206,11 +206,13 @@ const downloadLinkRef = useRef(null);
   }
 
   useEffect(() => {
+    setLoading(true)
     const getStaffDocument = async () => {
       try {
         const response = await privateHttp.get(`/Documents/get_all_client_documents?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 })
         setStaffDocument(response.data.clientDocuments)
-        console.log(response.data.clientDocuments);
+        setLoading(false)
+        // console.log(response.data.clientDocuments);
       } catch (error) {
         console.log(error);
       }

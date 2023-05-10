@@ -23,7 +23,7 @@ const ClientEditProfile = () => {
         const response = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`, { cacheTimeout: 300000 })
         setProfile(response.data)
         setEditedProfile(response.data)
-        console.log(response.data);
+        // console.log(response.data);
 
       } catch (error) {
         console.log(error);

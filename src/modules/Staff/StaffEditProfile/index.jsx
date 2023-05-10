@@ -128,7 +128,7 @@ const StaffEditProfile = () => {
       const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
         formData
       )
-      console.log(data);
+      // console.log(data);
       if (data.status === 'Success') {
         toast.success(data.message);
       } else {

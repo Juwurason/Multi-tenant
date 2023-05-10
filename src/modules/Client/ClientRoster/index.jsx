@@ -24,7 +24,7 @@ const ClientRoster = () => {
         try {
             const clientResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
-            console.log(client.shiftRoster);
+            // console.log(client.shiftRoster);
             setClients(client.shiftRoster);
             setLoading(false)
         } catch (error) {
@@ -144,21 +144,23 @@ const ClientRoster = () => {
                                     <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
                                         <div className='border p-2'>
                                             <span
-                                                className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                                                className={`calendar-date text-muted text-truncate overflow-hidden ${day.tz('Australia/Sydney').isSame(currentDate, 'day') ? 'current-date' : ''}`}
                                                 style={{ fontSize: '12px' }}>
-                                                {day.format('dddd, MMMM D')}
+                                                {day.tz('Australia/Sydney').format('dddd, MMMM D')}
 
                                             </span>
                                         </div>
 
-                                        {loading &&
 
-                                            <div className="spinner-grow text-secondary" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div>
-                                        }
 
                                         <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
+
+                                            {loading &&
+
+                                                <div className="spinner-grow text-secondary" role="status">
+                                                    <span className="sr-only">Loading...</span>
+                                                </div>
+                                            }
 
                                             {activitiesByDay[index].map((activity, activityIndex) => (
 
