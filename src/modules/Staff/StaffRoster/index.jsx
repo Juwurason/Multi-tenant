@@ -33,7 +33,7 @@ const StaffRoster = () => {
     try {
       const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      console.log(staff.shiftRoster);
+      // console.log(staff.shiftRoster);
       setStaff(staff.shiftRoster);
       setLoading(false)
     } catch (error) {

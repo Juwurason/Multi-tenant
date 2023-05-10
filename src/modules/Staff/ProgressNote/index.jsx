@@ -58,7 +58,7 @@ import useHttp from '../../../hooks/useHttp';
     }
 
     try {
-      const staffLocation = await get(`/Attendances/clock_in?userId=${user.userId}&shiftId=33&lat=${lat}&lng=${log}`, { cacheTimeout: 300000 });
+      const staffLocation = await get(`/Attendances/clock_in?userId=${user.userId}&shiftId=${uid}&lat=${lat}&lng=${log}`, { cacheTimeout: 300000 });
       const staffLocate = staffLocation;
       console.log(staffLocate);
       setLoading(false)
