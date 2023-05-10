@@ -153,7 +153,7 @@ const ClientRoster = () => {
 
 
 
-                                        <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
+                                        <div className="col-sm-12 text-center border p-2" style={{ height: "50vh", overflow: "auto", overflowX: "hidden", cursor: 'pointer' }}>
 
                                             {loading &&
 
