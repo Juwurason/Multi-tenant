@@ -41,7 +41,10 @@ const AllUser = () => {
         {
             name: '',
             cell: (row) => (
-                <button className='btn' style={{ width: "20px" }}><FaDharmachakra className='text-warning' /></button>
+                <span className='w-100 d-flex justify-content-center'>
+                    <button className='btn' style={{ width: "20px" }}><FaDharmachakra className='text-warning' /></button>
+
+                </span>
             ),
         },
         {

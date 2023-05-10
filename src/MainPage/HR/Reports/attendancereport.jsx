@@ -18,6 +18,24 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import moment from 'moment';
+
+const formatDuration = (duration) => {
+  const milliseconds = duration % 1000;
+  const seconds = Math.floor((duration / 1000) % 60);
+  const minutes = Math.floor((duration / (1000 * 60)) % 60);
+  const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+
+  const parts = [];
+  if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+  if (hours > 0) parts.push(`${hours} Hr${hours > 1 ? 's' : ''}`);
+  if (minutes > 0) parts.push(`${minutes} min`);
+  if (seconds > 0) parts.push(`${seconds} sec`);
+  if (milliseconds > 0) parts.push(`${milliseconds} ms`);
+
+  return parts.join(' ');
+};
 
 const AttendanceReport = () => {
   const { get } = useHttp();
@@ -25,33 +43,42 @@ const AttendanceReport = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   const [attendance, setAttendance] = useState([]);
 
+
+
   const columns = [
     {
       name: 'Staff',
-      selector: row => row.maxStaffId,
+      selector: row => row.staff.fullName,
       sortable: true
     },
     {
       name: 'Clock-In',
-      selector: row => row.fullName,
+      selector: row => row.clockIn,
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <Link to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`} className="fw-bold text-dark">
-          {row.firstName} {row.surName}
-        </Link>
+        <span style={{ overflow: "hidden" }}> {!row.clockIn ? "Not Modified" : moment(row.clockIn).format('LLL')}</span>
       ),
     },
     {
       name: 'Duration',
-      selector: row => row.address,
+      selector: row => row.clockIn,
       sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <span style={{ overflow: "hidden" }}> {formatDuration(row.duration)}</span>
+      ),
     },
+
 
     {
       name: 'Clock-Out',
-      selector: row => row.email,
-      sortable: true
+      selector: row => row.clockIn,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <span style={{ overflow: "hidden" }}> {!row.clockOut ? "Not Modified" : moment(row.clockOut).format('LLL')}</span>
+      ),
     },
     {
       name: 'Location',
@@ -107,6 +134,7 @@ const AttendanceReport = () => {
 
 
   const [menu, setMenu] = useState(false);
+
 
   // const handleDelete = async (e) => {
   //   Swal.fire({
@@ -247,7 +275,7 @@ const AttendanceReport = () => {
   };
 
   const filteredData = attendance.filter((item) =>
-    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (

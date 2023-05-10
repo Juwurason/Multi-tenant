@@ -111,7 +111,7 @@ const ShiftScheduling = () => {
   const endDate = currentDate.add(2, 'day');
 
   const activitiesByDay = daysOfWeek.map((day) =>
-    schedule.filter((activity) => dayjs(activity.dateFrom).tz('Australia/Sydney').isSame(day, 'day'))
+    schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
   );
   const currentDateTime = dayjs().utcOffset(10);
 
@@ -255,9 +255,9 @@ const ShiftScheduling = () => {
                   <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')} >
                     <div className='border p-2' >
                       <span
-                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.tz('Australia/Sydney').isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
                         style={{ fontSize: '12px' }}>
-                        {day.tz('Australia/Sydney').format('dddd, MMMM D')}
+                        {day.format('dddd, MMMM D')}
 
                       </span>
                     </div>
@@ -327,8 +327,8 @@ const ShiftScheduling = () => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Staff:</b> {selectedActivity.staff.fullName}</p>
                               <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
                               <p><b>Activities:</b> {selectedActivity.activities}</p>
@@ -342,11 +342,11 @@ const ShiftScheduling = () => {
                       </Modal>
 
 
-                      <div>
+                      {/* <div>
                         <button className='btn'>
                           <FaPlus />
                         </button>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}
