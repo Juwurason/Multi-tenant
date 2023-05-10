@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { Link, Redirect } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
-
 import { FaAngleLeft, FaAngleRight, FaPlus } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
@@ -124,9 +123,9 @@ const StaffRoster = () => {
   );
 
   function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs().tz(AustraliaTimezone);
-    const activityDateFrom = dayjs(activity.dateFrom).tz(AustraliaTimezone);
-    const activityDateTo = dayjs(activity.dateTo).tz(AustraliaTimezone);
+    const nowInAustraliaTime = dayjs()
+    const activityDateFrom = dayjs(activity.dateFrom)
+    const activityDateTo = dayjs(activity.dateTo)
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
@@ -205,9 +204,9 @@ const StaffRoster = () => {
                   <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
                     <div className='border p-2'>
                       <span
-                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.tz('Australia/Sydney').isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
                         style={{ fontSize: '12px' }}>
-                        {day.tz('Australia/Sydney').format('dddd, MMMM D')}
+                        {day.format('dddd, MMMM D')}
 
                       </span>
                     </div>
@@ -236,7 +235,7 @@ const StaffRoster = () => {
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
                                     <span className='fw-bold'>
-                                      {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
+                                      {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                     </span>
                                   </div>
                                   <span><span className='fw-bold'>Client :</span> {activity.profile.firstName} {activity.profile.surName}</span>
@@ -252,7 +251,7 @@ const StaffRoster = () => {
                                             const longitude = position.coords.longitude;
                                             localStorage.setItem("latit", latitude)
                                             localStorage.setItem("log", longitude)
-                                            navigate.push(`/staff/staff-progress/${activity.shiftRosterId}/${activity.profile.firstName} ${activity.profile.surName}`);
+                                            navigate.push(`/staff/staff-progress/${activity.shiftRosterId}`);
                                           },
                                           (error) => {
                                             console.error('Error getting location:', error.message);
@@ -323,8 +322,8 @@ const StaffRoster = () => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}
