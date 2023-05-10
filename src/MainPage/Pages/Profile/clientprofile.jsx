@@ -7,7 +7,6 @@ import { Link, useParams } from 'react-router-dom';
 import { Avatar_01, Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_11, Avatar_12, Avatar_13, Avatar_16, Avatar_19 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
-import '../../../assets/css/table.css';
 import moment from 'moment';
 
 const ClientProfile = () => {

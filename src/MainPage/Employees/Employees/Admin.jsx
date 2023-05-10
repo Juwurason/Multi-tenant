@@ -87,18 +87,7 @@ const AllAdmin = () => {
 
 
     ];
-    // const customStyles = {
-    //     rows: {
-    //         style: {
-    //             minHeight: "72px", // Sets the height of the rows
-    //         },
-    //     },
-    //     headCells: {
-    //         style: {
-    //             backgroundColor: "#f5f5f5", // Sets the background color of the header
-    //         },
-    //     },
-    // };
+
 
     const FetchStaff = async () => {
         try {
@@ -245,8 +234,8 @@ const AllAdmin = () => {
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-4">
-                {data.fullName}
-
+                <div className='fw-bold'><span>Full NAME</span> {data.fullName}</div>
+                <div>{data.email}</div>
             </div>
         );
     };
@@ -408,16 +397,7 @@ const AllAdmin = () => {
 
 
                     </div>
-                    {/* /Page Content */}
-                    {/* Add Employee Modal */}
-                    <AddAdmin />
-                    {/* /Add Employee Modal */}
-                    {/* Edit Employee Modal */}
-                    <Editemployee />
-                    {/* /Edit Employee Modal */}
-                    {/* Delete Employee Modal */}
 
-                    {/* /Delete Employee Modal */}
                 </div>
             </div>
 

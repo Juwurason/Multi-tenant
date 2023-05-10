@@ -17,7 +17,7 @@ const OnlineStatus = () => {
     const handleOnline = () => {
         setOnline(true);
         toast.success("You are now online!", {
-            position: "bottom-right",
+            position: "top-right",
             autoClose: 3000,
             hideProgressBar: true,
             closeOnClick: true,

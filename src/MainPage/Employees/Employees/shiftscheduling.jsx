@@ -4,18 +4,16 @@ import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
-import '../../../assets/css/table2.css'
 import { FaAngleLeft, FaAngleRight, FaPlus, } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 const ShiftScheduling = () => {
   const id = JSON.parse(localStorage.getItem('user'));
-  const { get } = useHttp();
+  const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
@@ -23,7 +21,7 @@ const ShiftScheduling = () => {
   const [staffOne, setStaffOne] = useState({});
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
-  let staffNo;
+
 
   const FetchSchedule = async () => {
     setLoading(true)
@@ -113,7 +111,7 @@ const ShiftScheduling = () => {
   const endDate = currentDate.add(2, 'day');
 
   const activitiesByDay = daysOfWeek.map((day) =>
-    schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+    schedule.filter((activity) => dayjs(activity.dateFrom).tz('Australia/Sydney').isSame(day, 'day'))
   );
   const currentDateTime = dayjs().utcOffset(10);
 
@@ -125,6 +123,42 @@ const ShiftScheduling = () => {
     setSelectedActivity(activity);
     setShowModal(true);
   };
+  const handleDelete = async (e) => {
+    Swal.fire({
+      html: `<h3>Are you sure? you want to delete this shift</h3>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#777',
+      confirmButtonText: 'Confirm Delete',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await post(`/ShiftRosters/delete/${e}?userId=${id.userId}`,
+          )
+          if (data.status === 'Success') {
+            toast.success(data.message);
+            FetchSchedule()
+          } else {
+            toast.error(data.message);
+          }
+
+
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+
+
+        }
+
+
+      }
+    })
+
+
+  }
   return (
     <>
       <div className="page-wrapper">
@@ -146,7 +180,7 @@ const ShiftScheduling = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto p-4">
-                <Link to="/app/employee/add-shift" className="btn add-btn m-r-5 rounded-2">Add New Roaster</Link>
+                <Link to="/app/employee/add-shift" className="btn btn-info add-btn m-r-5 rounded-2">Add New Roaster</Link>
               </div>
             </div>
           </div>
@@ -218,26 +252,20 @@ const ShiftScheduling = () => {
               <div className='row g-0'>
 
                 {daysOfWeek.map((day, index) => (
-                  <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
-                    <div className='border p-2'>
+                  <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')} >
+                    <div className='border p-2' >
                       <span
-                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
+                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.tz('Australia/Sydney').isSame(currentDate, 'day') ? 'current-date' : ''}`}
                         style={{ fontSize: '12px' }}>
-                        {day.format('dddd, MMMM D')}
+                        {day.tz('Australia/Sydney').format('dddd, MMMM D')}
 
                       </span>
                     </div>
-                    <div className="col-sm-12 text-center border p-2">
+                    <div className="col-sm-12 text-center border p-2" style={{ height: "50vh", overflow: "auto", overflowX: "hidden" }}>
                       {loading &&
 
                         <div className="spinner-grow text-secondary" role="status">
                           <span className="sr-only">Loading...</span>
-                        </div>
-                      }
-                      {!loading && schedule.length <= 0 &&
-
-                        <div>
-                          <span>No Activity</span>
                         </div>
                       }
 
@@ -253,32 +281,62 @@ const ShiftScheduling = () => {
 
                       {activitiesByDay[index].map((activity, activityIndex) => (
                         <div key={activityIndex}
-                          onClick={() => handleActivityClick(activity)}
-                          className='bg-primary text-white pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                          <span className='fw-bold' >
-                            {dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}
-                          </span>
-                          <span className='text-warning'>Promax Staff</span>
-                          <small className='text-truncate'>{activity.activities}</small>
+                          className='bg-primary text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}
+                        >
+                          <div
+                            onClick={() => handleActivityClick(activity)}
+                            className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
+                            <span className='fw-bold' >
+                              {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
+                            </span>
+                            <span><span className='fw-bold'>Staff: </span><span className=''>{activity.staff.fullName}</span></span>
+                            <span><span className='fw-bold'>Client: </span><span className=''>{activity.profile.fullName}</span></span>
+                            <span className='text-truncate'><span className='fw-bold'>Task: </span><span>{activity.activities}</span></span>
+                          </div>
+                          <div className='d-flex gap-2'>
+                            <small
+                              className={`text-truncate p-1 rounded bg-danger pointer`}
+
+                              onClick={() => handleDelete(activity?.shiftRosterId)}
+                            >
+                              Delete
+                            </small>
+                            <Link
+                              to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                              className={`text-truncate p-1 rounded bg-light text-dark pointer`}
+
+                            >
+                              Edit
+                            </Link>
+                          </div>
                         </div>
                       ))}
+                      {!loading && activitiesByDay[index] <= 0 &&
+
+                        <div>
+                          <span>No Activity</span>
+                        </div>
+                      }
+
 
                       {/* Modal */}
                       <Modal show={showModal} onHide={() => setShowModal(false)}>
                         <Modal.Header closeButton>
-                          <Modal.Title>Activity Details</Modal.Title>
+                          <Modal.Title>Shift Details</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           {selectedActivity && (
                             <>
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
-                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                              <p><b>Staff:</b> {selectedActivity.staff.fullName}</p>
+                              <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
+                              <p><b>Activities:</b> {selectedActivity.activities}</p>
                             </>
                           )}
                         </Modal.Body>
                         <Modal.Footer>
-                          <button className="btn btn-primary" onClick={() => setShowModal(false)}>Edit</button>
+                          <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
                           <button className="ml-4 btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
                         </Modal.Footer>
                       </Modal>
