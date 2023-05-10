@@ -4,19 +4,17 @@
 
  import React, { Component, useState, useEffect } from 'react';
  import { Helmet } from "react-helmet";
- import { Link, useParams, useHistory } from 'react-router-dom';
+ import { Link, useParams } from 'react-router-dom';
  import { toast } from 'react-toastify';
  import "../../index.css";
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
  
- const ProgressNote = () => {
+ const EditProgressNote = () => {
   const lat = JSON.parse(localStorage.getItem('latit'))
   const log = JSON.parse(localStorage.getItem('log'))
   const user = JSON.parse(localStorage.getItem('user'));
- const navigate = useHistory()
    // const id = "my-unique-id";
    const {uid, name} = useParams()
   //  console.log(uid, name);
@@ -94,11 +92,10 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
       companyID: companyId
     }
     try {
-      const {data} = await privateHttp.post(`/ProgressNotes/save_progressnote/${''}?userId=${user.userId}`, info);
-      if (data.success === true) {
-        navigate.push(`staff/staff/EditProgressNotes`)
-      }
-      toast.success(savePro.message)
+      const saveProgress = await privateHttp.post(`/ProgressNotes/save_progressnote/${''}?userId=${user.userId}`, info);
+      const savePro = saveProgress.data;
+      // console.log(savePro);
+      toast.success(savePro)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -127,10 +124,6 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
       const createPro = CreateProgress.data;
       console.log(createPro);
       setLoading(false)
-      if (data.success === true) {
-        // navigate.push(`/EditProgressNotes`)
-        navi
-      }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -168,10 +161,10 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
                  <div className="card-body">
                    <form>
                      <div className='col-md-4'>
-                     <div className="form-group">
+                     {/* <div className="form-group">
                       <label htmlFor="">Input Your Starting Kilometer</label>
                        <input type="text" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
-                     </div>
+                     </div> */}
                      </div>
                      <div className="row">
                        <div className="col-md-4">
@@ -212,9 +205,7 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
                      </div>
                      <div className="form-group text-center mb-0">
                        <div className="text-center d-flex gap-2">
-                         <button className="btn btn-primary" onClick={SaveProgress}>{loading ? <div className="spinner-grow text-light" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div> : "Save"}</button>
+                         <button className="btn btn-primary" onClick={SaveProgress}>Save</button>
                          <button className="btn btn-primary ml-4" onClick={CreateProgress}>Submit</button>
                        </div>
                      </div>
@@ -234,4 +225,4 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
  }
  
 
-export default ProgressNote;
+export default EditProgressNote;
