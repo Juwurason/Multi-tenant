@@ -194,6 +194,12 @@ const Sidebar = (props) => {
                 <span>Report Management</span>
               </li>
 
+              <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
+                <Link to="/app/reports/attendance-reports"><i className="la la-calendar-check-o" /> <span>Attendance Report</span></Link>
+              </li>
+              <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
+                <Link to="/app/reports/progress-reports"><i className="la la-file-o" /> <span>Progress Report</span></Link>
+              </li>
               <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
                 <Link to="/app/employee/document"><i className="la la-book" /> <span>Documents</span></Link>
               </li>

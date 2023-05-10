@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
-import '../../../assets/css/table2.css'
 import { FaAngleLeft, FaAngleRight, FaPlus } from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
@@ -87,7 +86,7 @@ const StaffRoster = () => {
     const nowInAustraliaTime = dayjs().tz(AustraliaTimezone);
     const activityDateFrom = dayjs(activity.dateFrom).tz(AustraliaTimezone);
     const activityDateTo = dayjs(activity.dateTo).tz(AustraliaTimezone);
-  
+
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
@@ -96,7 +95,7 @@ const StaffRoster = () => {
       return 'Clock-In';
     }
   }
-  
+
 
   const [showModal, setShowModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
@@ -178,9 +177,9 @@ const StaffRoster = () => {
                     <div className="col-sm-12 text-center border p-2" style={{ cursor: 'pointer' }}>
                       {activitiesByDay[index].length > 0 ?
                         activitiesByDay[index].map((activity, activityIndex) => (
-                          <div key={activityIndex} 
-                          onClick={() => handleActivityClick(activity)}
-                          className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
+                          <div key={activityIndex}
+                            onClick={() => handleActivityClick(activity)}
+                            className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
                             <div>
                               <span className='fw-bold me-1'>{dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</span>
                             </div>
@@ -204,8 +203,8 @@ const StaffRoster = () => {
                         </button>
                       }
 
-                       {/* Modal */}
-                       <Modal show={showModal} onHide={() => setShowModal(false)}>
+                      {/* Modal */}
+                      <Modal show={showModal} onHide={() => setShowModal(false)}>
                         <Modal.Header closeButton>
                           <Modal.Title>Activity Details</Modal.Title>
                         </Modal.Header>

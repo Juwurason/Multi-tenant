@@ -13,6 +13,7 @@
 .note-editor.note-airframe .note-editing-area .note-editable {
     background-color: white;
 }
+
 .recharts-cartesian-grid-vertical {
     display: none !important;
 }
@@ -87,9 +88,28 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
     background-color: #999;
     /* color of the scroll thumb */
-    border-radius: 20px;
+    border-radius: 1px;
     /* roundness of the scroll thumb */
-    border: 3px solid #999;
+    border: 1px solid #999;
+    /* creates padding around scroll thumb */
+}
+
+.rdt_TableCell::-webkit-scrollbar {
+    width: 8px;
+    /* width of the entire scrollbar */
+}
+
+.rdt_TableCell::-webkit-scrollbar-track {
+    background: gainsboro;
+    /* color of the tracking area */
+}
+
+.rdt_TableCell::-webkit-scrollbar-thumb {
+    background-color: #999;
+    /* color of the scroll thumb */
+    border-radius: 8px;
+    /* roundness of the scroll thumb */
+    border: 1px solid #999;
     /* creates padding around scroll thumb */
 }
 

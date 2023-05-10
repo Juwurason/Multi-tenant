@@ -37,7 +37,6 @@ const EditShiftRoaster = () => {
     const [clients, setClients] = useState([]);
     const navigate = useHistory();
     const [shiftOne, setShiftOne] = useState({});
-    const [selected, setSelected] = useState([]);
     const [staffId, setStaffId] = useState(0);
     const [dateFrom, setDatefrom] = useState("");
     const [dateTo, setDateTo] = useState("");
@@ -46,25 +45,24 @@ const EditShiftRoaster = () => {
     const [isExceptionalShift, setIsExceptionalShift] = useState(false);
     const [activities, setActivities] = useState([]);
     const [selectedActivities, setSelectedActivities] = useState([]);
+    const [selectedStaff, setSelectedStaff] = useState("");
+    const [selectedClient, setSelectedClient] = useState("");
 
-    const [days, setDays] = useState({
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false
-    });
-    const [stopDate, setStopDate] = useState("");
     const FetchSchedule = async () => {
 
         try {
             const { data } = await get(`ShiftRosters/${uid}`, { cacheTimeout: 300000 });
+            console.log(data);
             setShiftOne(data);
             const { activities } = data;
             setActivities(activities.split(',').map((activity) => ({ label: activity, value: activity })));
             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
+            setSelectedStaff(data.staff.fullName);
+            setSelectedClient(data.profile.fullName);
+            setStaffId(data.staff.staffId);
+            setProfileId(data.profile.profileId);
+            setDatefrom(data.dateFrom);
+            setDateTo(data.dateTo);
 
 
             setLoading(false)
@@ -97,7 +95,6 @@ const EditShiftRoaster = () => {
     }, []);
 
     const [repeat, setRepeat] = useState(false);
-    const [numOfDays, setNumOfDays] = useState(1);
 
     const handleRepeatChange = (e) => {
         setRepeat(e.target.checked);
@@ -108,23 +105,23 @@ const EditShiftRoaster = () => {
     const handleNightChange = (e) => {
         setIsNightShift(e.target.checked);
     };
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
-    };
 
-    const handleSelected = (selectedOptions) => {
-        setSelected(selectedOptions);
-    }
     const handleActivityChange = (selected) => {
         setSelectedActivities(selected);
     };
 
-    // const selectedValues = selected.map(option => option.label).join(', ');
-
+    const selectedValues = selectedActivities.map(option => option.label).join(', ');
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        // console.log(" shiftRosterId", uid,
+        //     staffId,
+        //     dateFrom,
+        //     dateTo,
+        //     "activities", selectedValues,
+        //     "profileId", Number(profileId),
+        //     isNightShift,
+        //     isExceptionalShift,);
 
         if (staffId === 0 || profileId === 0
         ) {
@@ -132,9 +129,9 @@ const EditShiftRoaster = () => {
         }
         try {
             setLoading(true)
-            const { data } = await post(`/ShiftRosters/add_shift?userId=${id.userId}`,
+            const { data } = await post(`/ShiftRosters/edit_shift/${uid}?userId=${id.userId}`,
                 {
-                    companyId: id.companyId,
+                    shiftRosterId: uid,
                     staffId: Number(staffId),
                     dateFrom,
                     dateTo,
@@ -142,15 +139,7 @@ const EditShiftRoaster = () => {
                     profileId: Number(profileId),
                     isNightShift,
                     isExceptionalShift,
-                    repeat,
-                    monday: days.monday,
-                    tuesday: days.tuesday,
-                    wednesday: days.wednesday,
-                    thursday: days.thursday,
-                    friday: days.friday,
-                    saturday: days.saturday,
-                    sunday: days.sunday,
-                    stopDate: stopDate
+
                 }
             )
             toast.success(data.message)
@@ -192,8 +181,10 @@ const EditShiftRoaster = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">Staff Name</label>
                                                 <div>
-                                                    <select className="form-select" onChange={e => setStaffId(e.target.value)}>
-                                                        <option defaultValue hidden>--Select a staff--</option>
+                                                    <select className="form-select"
+
+                                                        onChange={e => setStaffId(e.target.value)}>
+                                                        <option defaultValue hidden>{selectedStaff}</option>
                                                         {
                                                             staff.map((data, index) =>
                                                                 <option value={data.staffId} key={index}>{data.fullName}</option>)
@@ -206,7 +197,7 @@ const EditShiftRoaster = () => {
                                                 <label className="col-form-label">Client Name</label>
                                                 <div>
                                                     <select className="form-select" onChange={e => setProfileId(e.target.value)}>
-                                                        <option defaultValue hidden>--Select a Client--</option>
+                                                        <option defaultValue hidden>{selectedClient}</option>
                                                         {
                                                             clients.map((data, index) =>
                                                                 <option value={data.profileId} key={index}>{data.fullName}</option>)
@@ -219,7 +210,7 @@ const EditShiftRoaster = () => {
                                                 <label className="col-form-label">Start Time</label>
                                                 <div><input className="form-control datetimepicker" type="datetime-local"
                                                     onChange={e => setDatefrom(e.target.value)}
-                                                    value={shiftOne.dateFrom}
+                                                    value={dateFrom}
                                                 /></div>
                                             </div>
                                         </div>
@@ -228,7 +219,7 @@ const EditShiftRoaster = () => {
                                                 <label className="col-form-label">End Time</label>
                                                 <div><input className="form-control datetimepicker" type="datetime-local"
                                                     onChange={e => setDateTo(e.target.value)}
-                                                    value={shiftOne.dateTo}
+                                                    value={dateTo}
                                                 /></div>
                                             </div>
                                         </div>
@@ -260,71 +251,12 @@ const EditShiftRoaster = () => {
                                                 <label className="col-form-label">Is Night Shift</label>
                                             </div>
                                         </div>
-
-
-
-                                        <div>
+                                        <div className="col-sm-6">
                                             <div className="form-group">
-                                                <input type="checkbox" checked={repeat} onChange={handleRepeatChange} />
+                                                <input type="checkbox" checked={isNightShift} onChange={handleNightChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Repeat</label>
+                                                <label className="col-form-label">Apply to Repeated Shifts </label>
                                             </div>
-
-                                            {repeat && (
-                                                <div>
-                                                    <p>Select days:</p>
-                                                    <label>
-                                                        <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Sunday
-                                                    </label>
-                                                    &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="monday" checked={days.monday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Monday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="tuesday" checked={days.tuesday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Tuesday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="wednesday" checked={days.wednesday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        wednesday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="thursday" checked={days.thursday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Thursday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="friday" checked={days.friday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Friday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="saturday" checked={days.saturday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Saturday
-                                                    </label> &nbsp; &nbsp;
-                                                    <br />
-
-                                                    <div className='row'>
-
-                                                        <div className="col-sm-6">
-                                                            <div className="form-group">
-                                                                <label className="col-form-label">Select Date to End the Repitition</label>
-                                                                <div><input className="form-control datetimepicker" type="datetime-local"
-                                                                    onChange={e => setStopDate(e.target.value)}
-                                                                /></div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
 
