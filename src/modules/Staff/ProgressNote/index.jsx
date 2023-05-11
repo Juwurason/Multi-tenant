@@ -39,7 +39,7 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
    const [report, setReport] = useState('')
    const [progress, setProgress] = useState('')
    const [follow, setFollow] = useState('')
-   const [kilometer, setKilometer] = useState('')
+   const [kilometer, setKilometer] = useState(0)
    const [companyId, setCompanyId] = useState('')
    const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -95,10 +95,11 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
     }
     try {
       const {data} = await privateHttp.post(`/ProgressNotes/save_progressnote/${''}?userId=${user.userId}`, info);
-      if (data.success === true) {
-        navigate.push(`staff/staff/EditProgressNotes`)
+      console.log(data);
+      if (data.status === 'Success') {
+        navigate.push(`/staff/staff-edit-progress/${uid}/${data.progressNote.progressNoteId}`)
       }
-      toast.success(savePro.message)
+      toast.success(data.message)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -127,10 +128,6 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
       const createPro = CreateProgress.data;
       console.log(createPro);
       setLoading(false)
-      if (data.success === true) {
-        // navigate.push(`/EditProgressNotes`)
-        navi
-      }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -155,7 +152,7 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
                <div className="col-sm-12">
                  <h3 className="page-title">Progress Note</h3>
                  <ul className="breadcrumb">
-                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                   <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
                    <li className="breadcrumb-item active">Progress Note</li>
                  </ul>
                </div>

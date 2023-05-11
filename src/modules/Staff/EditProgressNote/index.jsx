@@ -12,12 +12,10 @@ import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
  
  const EditProgressNote = () => {
-  const lat = JSON.parse(localStorage.getItem('latit'))
-  const log = JSON.parse(localStorage.getItem('log'))
   const user = JSON.parse(localStorage.getItem('user'));
    // const id = "my-unique-id";
-   const {uid, name} = useParams()
-  //  console.log(uid, name);
+   const {uid, pro} = useParams()
+  //  console.log(pro);
    const [html, setHtml] = React.useState('my <b>HTML</b>');
    
    function onChange(e) {
@@ -34,10 +32,8 @@ import useHttp from '../../../hooks/useHttp';
    }
    const [details, setDetails] = useState('')
    const [staff, setStaff] = useState('')
-   const [report, setReport] = useState('')
-   const [progress, setProgress] = useState('')
-   const [follow, setFollow] = useState('')
    const [kilometer, setKilometer] = useState('')
+   const [editpro, setEditPro] = useState({})
    const [companyId, setCompanyId] = useState('')
    const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -62,9 +58,10 @@ import useHttp from '../../../hooks/useHttp';
     }
 
     try {
-      const staffLocation = await get(`/Attendances/clock_in?userId=${user.userId}&shiftId=${uid}&lat=${lat}&lng=${log}`, { cacheTimeout: 300000 });
-      const staffLocate = staffLocation;
-      console.log(staffLocate);
+      const editProgress = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
+      const editpro = editProgress;
+      // console.log(editpro.data);
+      setEditPro(editpro.data);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -78,21 +75,32 @@ import useHttp from '../../../hooks/useHttp';
     FetchSchedule()
   }, []);
 
+  function handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const newValue = value === "" ? "" : value;
+    setEditPro({
+      ...editpro,
+      [name]: newValue
+    });
+  }
   const SaveProgress = async(e) => {
     e.preventDefault()
     setLoading(true)
     const info = {
-      report: report,
-      progress: progress,
-      position: "",
-      followUp: follow,
+      report: editpro.report,
+      progress: editpro.progress,
+      position: 0,
+      followUp: editpro.followUp,
       staff: staff,
-      startKm: kilometer,
+      startKm: editpro.startKm,
       profileId: details.profileId,
-      companyID: companyId
+      companyID: companyId,
+      date: "2023-05-11"
     }
     try {
-      const saveProgress = await privateHttp.post(`/ProgressNotes/save_progressnote/${''}?userId=${user.userId}`, info);
+      const saveProgress = await privateHttp.post(`/ProgressNotes/save_progressnote/${pro}?userId=${user.userId}`, info);
       const savePro = saveProgress.data;
       // console.log(savePro);
       toast.success(savePro)
@@ -109,18 +117,20 @@ import useHttp from '../../../hooks/useHttp';
     e.preventDefault()
     setLoading(true)
     const info = {
-      report: report,
-      progress: progress,
+      progressNoteId: Number(pro),
+      report: editpro.report,
+      progress: editpro.progress,
       position: "",
-      followUp: follow,
+      followUp: editpro.follow,
       staff: staff,
-      startKm: kilometer,
+      startKm: editpro.startKm,
       profileId: details.profileId,
-      companyID: companyId
+      companyID: companyId,
+      date: "2023-05-11"
     }
 
     try {
-      const CreateProgress = await privateHttp.post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+      const CreateProgress = await privateHttp.post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
       const createPro = CreateProgress.data;
       console.log(createPro);
       setLoading(false)
@@ -137,8 +147,8 @@ import useHttp from '../../../hooks/useHttp';
      <>
        <div className="page-wrapper">
          <Helmet>
-           <title>Progress Note</title>
-           <meta name="description" content="Progress Note" />
+           <title>Edit Progress Note</title>
+           <meta name="description" content="Edit Progress Note" />
          </Helmet>
          {/* Page Content */}
          <div className="content container-fluid">
@@ -148,8 +158,8 @@ import useHttp from '../../../hooks/useHttp';
                <div className="col-sm-12">
                  <h3 className="page-title">Progress Note</h3>
                  <ul className="breadcrumb">
-                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                   <li className="breadcrumb-item active">Progress Note</li>
+                   <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                   <li className="breadcrumb-item active">Edit Progress Note</li>
                  </ul>
                </div>
              </div>
@@ -193,20 +203,27 @@ import useHttp from '../../../hooks/useHttp';
                      <div className="form-group">
                       {/* <DefaultEditor value={html} onChange={onChange} /> */}
                       <label htmlFor="">Report <span className='text-success' style={{fontSize:'10px'}}>Only Include factual informations observations</span></label>
-                       <textarea rows={3} className="form-control summernote" placeholder="" onChange={e => setReport(e.target.value)} />
+                       <textarea rows={3} className="form-control summernote" placeholder="" name="report" value={editpro.report || ''} onChange={handleInputChange} />
                      </div>
                      <div className="form-group">
                      <label htmlFor="">Progress towards goals</label>
-                       <textarea rows={3} className="form-control summernote" placeholder="" onChange={e => setProgress(e.target.value)} />
+                       <textarea rows={3} className="form-control summernote" placeholder="" name="progress" value={editpro.progress || ''} onChange={handleInputChange} />
                      </div>
                      <div className="form-group">
                         <label htmlFor="">Follow up <span className='text-success' style={{fontSize:'10px'}}>Note: If restrictive practices were used or a serious included occurred, It must be reported immediately to the Position Title </span></label>
-                       <textarea rows={3} className="form-control summernote" placeholder="" onChange={e => setFollow(e.target.value)} />
+                       <textarea rows={3} className="form-control summernote" placeholder="" name="followUp" value={editpro.followUp || ''} onChange={handleInputChange} />
                      </div>
                      <div className="form-group text-center mb-0">
                        <div className="text-center d-flex gap-2">
-                         <button className="btn btn-primary" onClick={SaveProgress}>Save</button>
-                         <button className="btn btn-primary ml-4" onClick={CreateProgress}>Submit</button>
+                         <button className="btn btn-primary" onClick={SaveProgress}>{loading ? <div className="spinner-grow text-light" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div> : "Save"}</button>
+
+                         <div>
+                         <button className="btn btn-success ml-4" onClick={CreateProgress}>{loading ? <div className="spinner-grow text-light" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div> : "Submit"}</button>
+                         </div>
                        </div>
                      </div>
                    </form>
