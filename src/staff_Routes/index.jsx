@@ -36,6 +36,7 @@ import StaffAttendance from '../modules/Staff/StaffAttendance';
 import StaffTable from '../modules/Staff/StaffTable';
 import ProgressNote from '../modules/Staff/ProgressNote'
 import EditProgressNote from '../modules/Staff/EditProgressNote';
+import StaffProgressNote from '../modules/Staff/StaffProgressNote';
 
 export default [
    {
@@ -55,7 +56,11 @@ export default [
       component: ProgressNote
    },
    {
-      path: 'staff-edit-progress/:uid',
+      path: 'staff-progressNote',
+      component: StaffProgressNote
+   },
+   {
+      path: 'staff-edit-progress/:uid/:pro',
       component: EditProgressNote
    },
    {

@@ -283,7 +283,7 @@ const StaffRoster = () => {
                                             (position) => {
                                               const latitude = position.coords.latitude;
                                               const longitude = position.coords.longitude;
-                                              navigate.push(`/staff/staff-progress/${activity.shiftRosterId}/${activity.profile.firstName} ${activity.profile.surName}?lat=${latitude}&lng=${longitude}`);
+                                              navigate.push(`/staff/staff-progress/${activity.shiftRosterId}?lat=${latitude}&lng=${longitude}`);
                                             },
                                             (error) => {
                                               console.error('Error getting location:', error.message);
