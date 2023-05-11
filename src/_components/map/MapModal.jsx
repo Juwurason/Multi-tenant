@@ -1,27 +1,49 @@
-import React from 'react';
-import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+import React, { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 
-const MapModal = ({ google, latitude, longitude, onClose }) => {
-    const mapStyles = {
-        width: '400px',
-        height: '300px',
+const LocationMapModal = ({ latitude, longitude }) => {
+    const [showModal, setShowModal] = useState(false);
+
+    const embedUrl = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+
+    const openModal = () => {
+        setShowModal(true);
     };
 
-    const center = {
-        lat: latitude,
-        lng: longitude,
+    const closeModal = () => {
+        setShowModal(false);
     };
 
     return (
         <div>
-            <Map google={google} zoom={14} style={mapStyles} initialCenter={center}>
-                <Marker position={center} />
-            </Map>
-            <button onClick={onClose}>Close</button>
+            <small
+                onClick={openModal}
+                className="pointer p-1 bg-success text-white rounded"
+                style={{ fontSize: "10px" }}
+            >
+                Show Location on map
+            </small>
+
+            <Modal show={showModal} onHide={closeModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title style={{ fontSize: "10px" }}>Location of time clocked in</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <iframe
+                            width="400"
+                            height="270"
+                            frameBorder="0"
+                            style={{ border: 0 }}
+                            src={embedUrl}
+                            title="Location Map"
+                        ></iframe>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer></Modal.Footer>
+            </Modal>
         </div>
     );
 };
 
-export default GoogleApiWrapper({
-    apiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
-})(MapModal);
+export default LocationMapModal;

@@ -19,23 +19,15 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import LocationMapModal from '../../../_components/map/MapModal';
 
-const formatDuration = (duration) => {
-  const milliseconds = duration % 1000;
-  const seconds = Math.floor((duration / 1000) % 60);
-  const minutes = Math.floor((duration / (1000 * 60)) % 60);
-  const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-  const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+function formatDuration(duration) {
+  const durationInMinutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
+  const durationHours = Math.floor(durationInMinutes / 60);
+  const durationMinutes = durationInMinutes % 60;
 
-  const parts = [];
-  if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
-  if (hours > 0) parts.push(`${hours} Hr${hours > 1 ? 's' : ''}`);
-  if (minutes > 0) parts.push(`${minutes} min`);
-  if (seconds > 0) parts.push(`${seconds} sec`);
-  if (milliseconds > 0) parts.push(`${milliseconds} ms`);
-
-  return parts.join(' ');
-};
+  return `${durationHours} Hrs ${durationMinutes} min`;
+}
 
 const AttendanceReport = () => {
   const { get } = useHttp();
@@ -82,9 +74,14 @@ const AttendanceReport = () => {
     },
     {
       name: 'Location',
-      selector: row => row.phoneNumber,
-      sortable: true
-    }, {
+      selector: row => row.clockIn,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <LocationMapModal latitude={row.inLatitude} longitude={row.inLongitude} />
+      ),
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">
@@ -125,6 +122,9 @@ const AttendanceReport = () => {
       setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
+    } finally {
+      setLoading(false)
     }
   };
   useEffect(() => {
