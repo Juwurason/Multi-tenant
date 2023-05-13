@@ -111,7 +111,7 @@ const EditProgressNote = () => {
       startKm: editpro.startKm,
       profileId: details.profileId,
       companyID: companyId,
-      date: "2023-05-11"
+      date: ""
     }
     Swal.fire({
       html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 

@@ -310,7 +310,7 @@ const filteredData = staffDocument.filter((item) =>
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto">
-                <a href="" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
+                <a href="" className="btn add-btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
               </div>
             </div>
           </div>
