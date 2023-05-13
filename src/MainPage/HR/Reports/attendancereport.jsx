@@ -18,6 +18,16 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import moment from 'moment';
+import LocationMapModal from '../../../_components/map/MapModal';
+
+function formatDuration(duration) {
+  const durationInMinutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
+  const durationHours = Math.floor(durationInMinutes / 60);
+  const durationMinutes = durationInMinutes % 60;
+
+  return `${durationHours} Hrs ${durationMinutes} min`;
+}
 
 const AttendanceReport = () => {
   const { get } = useHttp();
@@ -25,39 +35,56 @@ const AttendanceReport = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   const [attendance, setAttendance] = useState([]);
 
+
+
   const columns = [
     {
       name: 'Staff',
-      selector: row => row.maxStaffId,
+      selector: row => row.staff.fullName,
       sortable: true
     },
     {
       name: 'Clock-In',
-      selector: row => row.fullName,
+      selector: row => row.clockIn,
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <Link to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`} className="fw-bold text-dark">
-          {row.firstName} {row.surName}
-        </Link>
+        <span style={{ overflow: "hidden" }}> {!row.clockIn ? "Not Modified" : moment(row.clockIn).format('LLL')}</span>
       ),
     },
     {
       name: 'Duration',
-      selector: row => row.address,
+      selector: row => row.clockIn,
       sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <span style={{ overflow: "hidden" }}> {formatDuration(row.duration)}</span>
+      ),
     },
+
 
     {
       name: 'Clock-Out',
-      selector: row => row.email,
-      sortable: true
+      selector: row => row.clockIn,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <span style={{ overflow: "hidden" }}> {!row.clockOut ? "Not Modified" : moment(row.clockOut).format('LLL')}</span>
+      ),
     },
     {
       name: 'Location',
-      selector: row => row.phoneNumber,
-      sortable: true
-    }, {
+      selector: row => row.clockIn,
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+        <span style={{ overflow: "hidden" }}>
+
+          <LocationMapModal latitude={row.inLatitude} longitude={row.inLongitude} />
+        </span>
+      ),
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">
@@ -98,6 +125,9 @@ const AttendanceReport = () => {
       setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
+    } finally {
+      setLoading(false)
     }
   };
   useEffect(() => {
@@ -107,6 +137,7 @@ const AttendanceReport = () => {
 
 
   const [menu, setMenu] = useState(false);
+
 
   // const handleDelete = async (e) => {
   //   Swal.fire({
@@ -247,7 +278,7 @@ const AttendanceReport = () => {
   };
 
   const filteredData = attendance.filter((item) =>
-    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (

@@ -7,123 +7,123 @@ import { Boxed, Close, compact, Compact, dark, Detached, Horizontal, small_hover
 const Offcanvas = () => {
     function refreshPage() {
         window.location.reload(false);
-      }
-    const changes=()=>{
-        const Themes =document.querySelector("html");
-        document.querySelector("#horizantal-sidebar").style.display="block";
-        document.querySelector("#veritical-sidebar").style.display="none";
-        document.querySelector(".two-col-bar").style.display="none";
+    }
+    const changes = () => {
+        const Themes = document.querySelector("html");
+        document.querySelector("#horizantal-sidebar").style.display = "block";
+        document.querySelector("#veritical-sidebar").style.display = "none";
+        document.querySelector(".two-col-bar").style.display = "none";
         document.querySelector(".sidebar").classList.remove("sidebar-verticalset");
-        console.log(Themes.setAttribute("data-layout","horizontal"));
+        console.log(Themes.setAttribute("data-layout", "horizontal"));
     }
-    const Vertical=()=>{
-        const VeriticalLayout =document.querySelector("html");
-        document.querySelector("#horizantal-sidebar").style.display="none";
+    const Vertical = () => {
+        const VeriticalLayout = document.querySelector("html");
+        document.querySelector("#horizantal-sidebar").style.display = "none";
         // document.querySelector("#more-menu").style.display="none";
-        document.querySelector(".two-col-bar").style.display="none";
-        document.querySelector("#veritical-sidebar").style.display="block";
+        document.querySelector(".two-col-bar").style.display = "none";
+        document.querySelector("#veritical-sidebar").style.display = "block";
         document.querySelector("#sidebar").classList.add("sidebar-verticalset");
-        console.log(VeriticalLayout.setAttribute("data-layout","vertical"));
+        console.log(VeriticalLayout.setAttribute("data-layout", "vertical"));
     }
-    const TwoColumn=()=>{
-        const TwoColumnLayout =document.querySelector("html");
-        document.querySelector("#horizantal-sidebar").style.display="none";
-        document.querySelector("#veritical-sidebar").style.display="none";
-        document.querySelector("#two-col-bar").style.display="block";
-        console.log(TwoColumnLayout.setAttribute("data-layout","twocolumn"));
+    const TwoColumn = () => {
+        const TwoColumnLayout = document.querySelector("html");
+        document.querySelector("#horizantal-sidebar").style.display = "none";
+        document.querySelector("#veritical-sidebar").style.display = "none";
+        document.querySelector("#two-col-bar").style.display = "block";
+        console.log(TwoColumnLayout.setAttribute("data-layout", "twocolumn"));
     }
-    const OrangeThemes=()=>{
-        const OrangesThemes =document.querySelector("html");
-        console.log(OrangesThemes.setAttribute("data-layout-mode","orange"));
+    const OrangeThemes = () => {
+        const OrangesThemes = document.querySelector("html");
+        console.log(OrangesThemes.setAttribute("data-layout-mode", "orange"));
     }
-    const DarkThemes=()=>{
-        const DarksThemes =document.querySelector("html");
-        console.log(DarksThemes.setAttribute("data-layout-mode","dark"));
+    const DarkThemes = () => {
+        const DarksThemes = document.querySelector("html");
+        console.log(DarksThemes.setAttribute("data-layout-mode", "dark"));
     }
-    const LightThemes=()=>{
-        const LightsThemes =document.querySelector("html");
-        console.log(LightsThemes.setAttribute("data-layout-mode","light"));
+    const LightThemes = () => {
+        const LightsThemes = document.querySelector("html");
+        console.log(LightsThemes.setAttribute("data-layout-mode", "light"));
     }
-    const BlueThemes=()=>{
-        const BluesThemes =document.querySelector("html");
-        console.log(BluesThemes.setAttribute("data-layout-mode","blue","data-topbar","blue"));
-        console.log(BluesThemes.setAttribute("data-topbar","blue"));
+    const BlueThemes = () => {
+        const BluesThemes = document.querySelector("html");
+        console.log(BluesThemes.setAttribute("data-layout-mode", "blue", "data-topbar", "blue"));
+        console.log(BluesThemes.setAttribute("data-topbar", "blue"));
     }
-    const MaroonThemes=()=>{
-        const MaroonsThemes =document.querySelector("html");
-        console.log(MaroonsThemes.setAttribute("data-layout-mode","maroon"));
-        console.log(MaroonsThemes.setAttribute("data-topbar","maroon"));
+    const MaroonThemes = () => {
+        const MaroonsThemes = document.querySelector("html");
+        console.log(MaroonsThemes.setAttribute("data-layout-mode", "maroon"));
+        console.log(MaroonsThemes.setAttribute("data-topbar", "maroon"));
     }
-    const PurpleThemes=()=>{
-        const PurplesThemes =document.querySelector("html");
-        console.log(PurplesThemes.setAttribute("data-layout-mode","purple"));
-        console.log(PurplesThemes.setAttribute("data-topbar","purple"));
+    const PurpleThemes = () => {
+        const PurplesThemes = document.querySelector("html");
+        console.log(PurplesThemes.setAttribute("data-layout-mode", "purple"));
+        console.log(PurplesThemes.setAttribute("data-topbar", "purple"));
     }
-    const LightBarThemes=()=>{
-        const LightBarsThemes =document.querySelector("html");
-        console.log(LightBarsThemes.setAttribute("data-topbar","light"));
-        console.log(LightBarsThemes.setAttribute("data-sidebar","light"));
+    const LightBarThemes = () => {
+        const LightBarsThemes = document.querySelector("html");
+        console.log(LightBarsThemes.setAttribute("data-topbar", "light"));
+        console.log(LightBarsThemes.setAttribute("data-sidebar", "light"));
     }
-    const DarkBarThemes=()=>{
-        const DarkBarsThemes =document.querySelector("html");
-        console.log(DarkBarsThemes.setAttribute("data-topbar","dark"));
-        console.log(DarkBarsThemes.setAttribute("data-sidebar","light"));
+    const DarkBarThemes = () => {
+        const DarkBarsThemes = document.querySelector("html");
+        console.log(DarkBarsThemes.setAttribute("data-topbar", "dark"));
+        console.log(DarkBarsThemes.setAttribute("data-sidebar", "light"));
     }
-    const BoxThemes=()=>{
-        const BoxsThemes =document.querySelector("html");
-        console.log(BoxsThemes.setAttribute("data-layout-width","boxed"));
-        console.log(BoxsThemes.setAttribute("data-sidebar-size","sm-hover"));
-        
+    const BoxThemes = () => {
+        const BoxsThemes = document.querySelector("html");
+        console.log(BoxsThemes.setAttribute("data-layout-width", "boxed"));
+        console.log(BoxsThemes.setAttribute("data-sidebar-size", "sm-hover"));
+
     }
-    const Fluid=()=>{
-        const FluidThemes =document.querySelector("html");
-        console.log(FluidThemes.setAttribute("data-layout-width","fluid"));
-        console.log(FluidThemes.setAttribute("data-sidebar-size","lg"));
-        
+    const Fluid = () => {
+        const FluidThemes = document.querySelector("html");
+        console.log(FluidThemes.setAttribute("data-layout-width", "fluid"));
+        console.log(FluidThemes.setAttribute("data-sidebar-size", "lg"));
+
     }
-    const Default=()=>{
-        const DefaultThemes =document.querySelector("html");
-        console.log(DefaultThemes.setAttribute("data-sidebar-size","lg"));
-        
+    const Default = () => {
+        const DefaultThemes = document.querySelector("html");
+        console.log(DefaultThemes.setAttribute("data-sidebar-size", "lg"));
+
     }
-    const Compact=()=>{
-        const CompactThemes =document.querySelector("html");
-        console.log(CompactThemes.setAttribute("data-sidebar-size","md"));
-        
+    const Compact = () => {
+        const CompactThemes = document.querySelector("html");
+        console.log(CompactThemes.setAttribute("data-sidebar-size", "md"));
+
     }
-    const SmallHoverView=()=>{
-        const SmallHoverViewThemes =document.querySelector("html");
-        console.log(SmallHoverViewThemes.setAttribute("data-sidebar-size","sm-hover"));
-        
+    const SmallHoverView = () => {
+        const SmallHoverViewThemes = document.querySelector("html");
+        console.log(SmallHoverViewThemes.setAttribute("data-sidebar-size", "sm-hover"));
+
     }
-    const DefaultStyle=()=>{
-        const DefaultStylesThemes =document.querySelector("html");
-        console.log(DefaultStylesThemes.setAttribute("data-layout-style","default"));
-        
+    const DefaultStyle = () => {
+        const DefaultStylesThemes = document.querySelector("html");
+        console.log(DefaultStylesThemes.setAttribute("data-layout-style", "default"));
+
     }
-    const DetachedStyle=()=>{
-        const DetachedStylesThemes =document.querySelector("html");DetachedStyle
-        console.log(DetachedStylesThemes.setAttribute("data-layout-style","detached"));
-        
+    const DetachedStyle = () => {
+        const DetachedStylesThemes = document.querySelector("html"); DetachedStyle
+        console.log(DetachedStylesThemes.setAttribute("data-layout-style", "detached"));
+
     }
-    const LightStyle=()=>{
-        const LightStylesThemes =document.querySelector("html");DetachedStyle
-        console.log(LightStylesThemes.setAttribute("data-sidebar","light"));
-        
+    const LightStyle = () => {
+        const LightStylesThemes = document.querySelector("html"); DetachedStyle
+        console.log(LightStylesThemes.setAttribute("data-sidebar", "light"));
+
     }
-    const DarkStyle=()=>{
-        const DarkStylesThemes =document.querySelector("html");DetachedStyle
-        console.log(DarkStylesThemes.setAttribute("data-sidebar","dark"));
-        
+    const DarkStyle = () => {
+        const DarkStylesThemes = document.querySelector("html"); DetachedStyle
+        console.log(DarkStylesThemes.setAttribute("data-sidebar", "dark"));
+
     }
-    const GradientStyle=()=>{
-        const GradientsThemes =document.querySelector("html");DetachedStyle
-        console.log(GradientsThemes.setAttribute("data-sidebar","gradient"));
-        
+    const GradientStyle = () => {
+        const GradientsThemes = document.querySelector("html"); DetachedStyle
+        console.log(GradientsThemes.setAttribute("data-sidebar", "gradient"));
+
     }
     return (
         <>
-        
+            {/*         
             <div>
                 <div className="settings-icon">
                     <span data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas"><i className="las la-cog" /></span>
@@ -457,7 +457,7 @@ const Offcanvas = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }

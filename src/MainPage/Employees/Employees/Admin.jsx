@@ -39,7 +39,7 @@ const AllAdmin = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <Link to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`} className="fw-bold text-dark">
+                <Link style={{ overflow: "hidden" }} to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`} className="fw-bold text-dark">
                     {row.firstName} {row.surName}
                 </Link>
             ),
@@ -109,7 +109,7 @@ const AllAdmin = () => {
 
     const handleDelete = async (e) => {
         Swal.fire({
-            html: `<h3>Are you sure? you want to delete this user</h3></br><p>You won't be able to revert this!</p>`,
+            html: `<h3>Are you sure? you want to delete this Administrator</h3>`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#dc2626',

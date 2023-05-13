@@ -1,46 +1,31 @@
-/**
- * Signin Firebase
- */
 
- import React, { Component, useState, useEffect } from 'react';
- import { Helmet } from "react-helmet";
- import { Link, useParams } from 'react-router-dom';
- import { toast } from 'react-toastify';
- import "../../index.css";
+import React, { Component, useState, useEffect } from 'react';
+import { Helmet } from "react-helmet";
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import "../../index.css";
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
- 
- const EditProgressNote = () => {
+import Swal from 'sweetalert2';
+
+const EditProgressNote = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-   // const id = "my-unique-id";
-   const {uid, pro} = useParams()
-  //  console.log(pro);
-   const [html, setHtml] = React.useState('my <b>HTML</b>');
-   
-   function onChange(e) {
-     setHtml(e.target.value);
-   }
-   const onImageUpload = (fileList) => {
- 
-     const reader = new FileReader();
-     reader.onloadend = () => {
-       ReactSummernote.insertImage(reader.result);
-     }
-     reader.readAsDataURL(fileList[0]);
- 
-   }
-   const [details, setDetails] = useState('')
-   const [staff, setStaff] = useState('')
-   const [kilometer, setKilometer] = useState('')
-   const [editpro, setEditPro] = useState({})
-   const [companyId, setCompanyId] = useState('')
-   const { get } = useHttp();
+  const { uid, pro } = useParams()
+
+  const [details, setDetails] = useState('')
+  const [staff, setStaff] = useState('')
+  const [kilometer, setKilometer] = useState('')
+  const [editpro, setEditPro] = useState({})
+  const [companyId, setCompanyId] = useState('')
+  const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
-  const privateHttp = useHttp()
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
+  const navigate = useHistory()
 
 
-   const FetchSchedule = async () => {
+  const FetchSchedule = async () => {
     setLoading(true)
     try {
       const staffResponse = await get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
@@ -85,9 +70,9 @@ import useHttp from '../../../hooks/useHttp';
       [name]: newValue
     });
   }
-  const SaveProgress = async(e) => {
+  const SaveProgress = async (e) => {
     e.preventDefault()
-    setLoading(true)
+    setLoading1(true)
     const info = {
       report: editpro.report,
       progress: editpro.progress,
@@ -97,25 +82,25 @@ import useHttp from '../../../hooks/useHttp';
       startKm: editpro.startKm,
       profileId: details.profileId,
       companyID: companyId,
-      date: "2023-05-11"
+      date: ""
     }
     try {
-      const saveProgress = await privateHttp.post(`/ProgressNotes/save_progressnote/${pro}?userId=${user.userId}`, info);
+      const saveProgress = await post(`/ProgressNotes/save_progressnote/${pro}?userId=${user.userId}`, info);
       const savePro = saveProgress.data;
       // console.log(savePro);
       toast.success(savePro)
-      setLoading(false)
+      setLoading1(false)
     } catch (error) {
       console.log(error);
     }
     finally {
-      setLoading(false)
+      setLoading1(false)
     }
   }
 
-  const CreateProgress = async(e) => {
+  const CreateProgress = async (e) => {
+    setLoading2(true)
     e.preventDefault()
-    setLoading(true)
     const info = {
       progressNoteId: Number(pro),
       report: editpro.report,
@@ -128,118 +113,140 @@ import useHttp from '../../../hooks/useHttp';
       companyID: companyId,
       date: "2023-05-11"
     }
+    Swal.fire({
+      html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
+      <h5>Do you wish to proceed ?<h5/>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#1C75BC',
+      cancelButtonColor: '#777',
+      confirmButtonText: 'Proceed',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
+          if (data.status === "Success") {
+            Swal.fire(
+              '',
+              `${data.message}`,
+              'success'
+            )
+            navigate.push(`/staff/staff-report/${uid}`)
+          }
+          setLoading2(false)
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response.data.message);
+        }
+        finally {
+          setLoading2(false)
+        }
 
-    try {
-      const CreateProgress = await privateHttp.post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
-      const createPro = CreateProgress.data;
-      console.log(createPro);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-    finally {
-      setLoading(false)
-    }
+
+      }
+    })
+
+
   }
 
-   return (
-     <>
-       <div className="page-wrapper">
-         <Helmet>
-           <title>Edit Progress Note</title>
-           <meta name="description" content="Edit Progress Note" />
-         </Helmet>
-         {/* Page Content */}
-         <div className="content container-fluid">
-           {/* Page Header */}
-           <div className="page-header">
-             <div className="row">
-               <div className="col-sm-12">
-                 <h3 className="page-title">Progress Note</h3>
-                 <ul className="breadcrumb">
-                   <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
-                   <li className="breadcrumb-item active">Edit Progress Note</li>
-                 </ul>
-               </div>
-             </div>
-           </div>
-           {/* /Page Header */}
-           <div className="row">
-             <div className="col-sm-12">
-               <div className="card">
-                 <div className="card-body">
-                   <form>
-                     <div className='col-md-4'>
-                     {/* <div className="form-group">
-                      <label htmlFor="">Input Your Starting Kilometer</label>
-                       <input type="text" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
-                     </div> */}
-                     </div>
-                     <div className="row">
-                       <div className="col-md-4">
-                         <div className="form-group">
-                          <label htmlFor="">Client</label>
-                           <input type="text" placeholder="Client" className="form-control" value={details.fullName} readOnly/>
-                         </div>
-                       </div>
-                       <div className="col-md-4">
-                         <div className="form-group">
-                          <label htmlFor="">Staff</label>
-                           <input type="text" placeholder="Staff" className="form-control" value={staff} readOnly/>
-                         </div>
-                       </div>
-                       <div className="col-md-4">
-                         <div className="form-group">
-                          <label htmlFor="">Position</label>
-                           <input type="text" placeholder="Position" className="form-control" readOnly/>
-                         </div>
-                       </div>
-                     </div>
-                     {/* <div className="form-group">
-                       <input type="text" placeholder="Subject" className="form-control" />
-                     </div> */}
- 
-                     <div className="form-group">
-                      {/* <DefaultEditor value={html} onChange={onChange} /> */}
-                      <label htmlFor="">Report <span className='text-success' style={{fontSize:'10px'}}>Only Include factual informations observations</span></label>
-                       <textarea rows={3} className="form-control summernote" placeholder="" name="report" value={editpro.report || ''} onChange={handleInputChange} />
-                     </div>
-                     <div className="form-group">
-                     <label htmlFor="">Progress towards goals</label>
-                       <textarea rows={3} className="form-control summernote" placeholder="" name="progress" value={editpro.progress || ''} onChange={handleInputChange} />
-                     </div>
-                     <div className="form-group">
-                        <label htmlFor="">Follow up <span className='text-success' style={{fontSize:'10px'}}>Note: If restrictive practices were used or a serious included occurred, It must be reported immediately to the Position Title </span></label>
-                       <textarea rows={3} className="form-control summernote" placeholder="" name="followUp" value={editpro.followUp || ''} onChange={handleInputChange} />
-                     </div>
-                     <div className="form-group text-center mb-0">
-                       <div className="text-center d-flex gap-2">
-                         <button className="btn btn-primary" onClick={SaveProgress}>{loading ? <div className="spinner-grow text-light" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div> : "Save"}</button>
+  return (
+    <>
+      <div className="page-wrapper">
+        <Helmet>
+          <title>Edit Progress Note</title>
+          <meta name="description" content="Edit Progress Note" />
+        </Helmet>
+        {/* Page Content */}
+        <div className="content container-fluid">
+          {/* Page Header */}
+          <div className="page-header">
+            <div className="row">
+              <div className="col-sm-12">
+                <h3 className="page-title">Progress Note</h3>
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item active">Edit Progress Note</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          {/* /Page Header */}
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="card">
+                <div className="card-body">
+                  <form>
+                    <div className='col-md-4'>
 
-                         <div>
-                         <button className="btn btn-success ml-4" onClick={CreateProgress}>{loading ? <div className="spinner-grow text-light" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div> : "Submit"}</button>
-                         </div>
-                       </div>
-                     </div>
-                   </form>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-         {/* /Page Content */}
-       </div>
-       <Offcanvas />
-     </>
- 
-   );
- 
- }
- 
+                    </div>
+                    <div className="row">
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Client</label>
+                          <input type="text" placeholder="Client" className="form-control" value={details.fullName} readOnly />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Staff</label>
+                          <input type="text" placeholder="Staff" className="form-control" value={staff} readOnly />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Position</label>
+                          <input type="text" placeholder="Position" className="form-control" readOnly />
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="form-group">
+
+                      <label htmlFor="">Report <span className='text-success' style={{ fontSize: '10px' }}>Only Include factual informations observations</span></label>
+                      <textarea rows={3} className="form-control summernote" placeholder="" name="report" value={editpro.report || ''} onChange={handleInputChange} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="">Progress towards goals</label>
+                      <textarea rows={3} className="form-control summernote" placeholder="" name="progress" value={editpro.progress || ''} onChange={handleInputChange} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="">Follow up <span className='text-success' style={{ fontSize: '10px' }}>Note: If restrictive practices were used or a serious included occurred, It must be reported immediately to the Position Title </span></label>
+                      <textarea rows={3} className="form-control summernote" placeholder="" name="followUp" value={editpro.followUp || ''} onChange={handleInputChange} />
+                    </div>
+                    <div className="form-group text-center mb-0">
+                      <div className="text-center d-flex gap-2">
+                        <button
+                          disabled={loading1 ? true : false}
+                          className="btn btn-info add-btn text-white rounded-2 m-r-5" onClick={SaveProgress}>{loading1 ? <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div> : "Save"}</button>
+
+                        <div>
+                          <button
+                            disabled={loading2 ? true : false}
+                            className="btn btn-primary add-btn text-white rounded-2 m-r-5 ml-4" onClick={CreateProgress}>{loading2 ? <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div> : "Submit"}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* /Page Content */}
+      </div>
+      <Offcanvas />
+    </>
+
+  );
+
+}
+
 
 export default EditProgressNote;

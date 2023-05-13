@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaEye, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -18,89 +18,86 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import moment from 'moment';
 
 const ProgressReport = () => {
     const { get } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const id = JSON.parse(localStorage.getItem('user'));
-    const [attendance, setAttendance] = useState([]);
+    const [progress, setProgress] = useState([]);
 
     const columns = [
         {
-            name: 'Staff',
-            selector: row => row.maxStaffId,
-            sortable: true
-        },
-        {
-            name: 'Client',
-            selector: row => row.fullName,
+            name: '',
+            selector: row => row,
             sortable: true,
-            expandable: true,
             cell: (row) => (
-                <Link to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`} className="fw-bold text-dark">
-                    {row.firstName} {row.surName}
+                <Link to={`/app/reports/progress-reportsDetails/${row.progressNoteId}`} className='d-flex justify-content-center w-100 text-info pointer'>
+                    view
                 </Link>
             ),
         },
         {
+            name: 'Staff',
+            selector: row => row.staff,
+            sortable: true
+        },
+        {
+            name: 'Clients',
+            selector: row => row.profileId,
+            sortable: true
+        },
+
+
+
+        {
             name: 'Date',
-            selector: row => row.address,
+            selector: row => row.date,
             sortable: true,
-        },
-
-        {
-            name: 'Clock-Out',
-            selector: row => row.email,
-            sortable: true
-        },
-        {
-            name: 'Location',
-            selector: row => row.phoneNumber,
-            sortable: true
-        }, {
-            name: "Actions",
+            expandable: true,
             cell: (row) => (
-                <div className="d-flex gap-1">
-                    <Link
-                        className='btn'
-                        title='Edit'
-                        to={`/app/profile/edit-admin/${row.administratorId}`}
-                    >
-                        <SlSettings />
-                    </Link>
-                    <button
-                        className='btn'
-                        title='Delete'
-                        onClick={() => {
-                            // handle action here, e.g. open a modal or navigate to a new page
-                            handleDelete(row.administratorId)
-                        }}
-                    >
-                        <GoTrashcan />
-                    </button>
-
-                </div>
+                <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
             ),
         },
+        {
+            name: "Actions",
+            cell: (row) => (
 
+
+                <button
+                    className='btn'
+                    title='Delete'
+                    onClick={() => {
+                        // handle action here, e.g. open a modal or navigate to a new page
+
+                    }}
+                >
+                    <GoTrashcan />
+                </button>
+
+            ),
+        },
 
 
     ];
 
 
-    const FetchAttendance = async () => {
+    const FetchProgress = async () => {
         try {
             setLoading(true)
             const { data } = await get(`ProgressNotes/get_all_progressnote_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setAttendance(data);
+            setProgress(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false);
+        } finally {
+            setLoading(false)
         }
     };
     useEffect(() => {
 
-        FetchAttendance()
+        FetchProgress()
     }, []);
 
 
@@ -164,7 +161,7 @@ const ProgressReport = () => {
         sheet.addRow(headers);
 
         // Add data
-        attendance.forEach((dataRow) => {
+        progress.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -191,7 +188,7 @@ const ProgressReport = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(attendance);
+        const csvData = Papa.unparse(progress);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -212,7 +209,7 @@ const ProgressReport = () => {
         doc.setFontSize(13);
         doc.text("User Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = attendance.map((dataRow) =>
+        const dataValues = progress.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -227,25 +224,18 @@ const ProgressReport = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("Attendance.pdf");
+        doc.save("ProgressReport.pdf");
     };
 
-    const ButtonRow = ({ data }) => {
-        return (
-            <div className="p-4">
-                <div className='fw-bold'><span>Full NAME</span> {data.fullName}</div>
-                <div>{data.email}</div>
-            </div>
-        );
-    };
+
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = attendance.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = progress.filter((item) =>
+        item.staff.toLowerCase().includes(searchText.toLowerCase())
     );
 
     return (
@@ -314,7 +304,7 @@ const ProgressReport = () => {
                                 </div>
                                 <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                                     <CSVLink
-                                        data={attendance}
+                                        data={progress}
                                         filename={"data.csv"}
 
                                     >
@@ -342,7 +332,7 @@ const ProgressReport = () => {
                                     >
                                         <FaFileExcel />
                                     </button>
-                                    <CopyToClipboard text={JSON.stringify(attendance)}>
+                                    <CopyToClipboard text={JSON.stringify(progress)}>
                                         <button
 
                                             className='btn text-warning'
@@ -366,8 +356,7 @@ const ProgressReport = () => {
                                         <span className="sr-only">Loading...</span>
                                     </div>
                                 </div>}
-                                expandableRows
-                                expandableRowsComponent={ButtonRow}
+
                                 paginationTotalRows={filteredData.length}
 
 

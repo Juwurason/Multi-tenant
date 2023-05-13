@@ -47,6 +47,8 @@ const AdminDashboard = () => {
   const [document, setDocument] = useState([]);
   const [recentUsers, setRecentUsers] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [attendance, setAttendance] = useState([]);
+  const [progress, setProgress] = useState([]);
   const { get } = useHttp();
 
   let isMounted = true;
@@ -101,6 +103,22 @@ const AdminDashboard = () => {
       const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
       setSchedule(schedule);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      const attendanceResponse = await get(`/Attendances/get_all_attendances_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const attendance = attendanceResponse.data;
+      setAttendance(attendance);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      const progressResponse = await get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const progress = progressResponse.data;
+      setProgress(progress);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -177,8 +195,8 @@ const AdminDashboard = () => {
                     link={`/app/employee/shift-scheduling`}
                     sty={'danger'}
                   />
-                  <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}
-                    linkTitle={"View Progress Notes"} link={``} sty={'warning'}
+                  <DashboardCard title={"Progress Notes "} content={progress.length} icon={<MdOutlineFeed className='fs-4' />}
+                    linkTitle={"View Progress Notes"} link={`/app/reports/progress-reports`} sty={'warning'}
                   />
                   {/* <DashboardCard title={"Clients"} sty={'warning'}
                     content={clients.length} icon={<MdOutlineGroup className='fs-4' />}
@@ -192,8 +210,8 @@ const AdminDashboard = () => {
                     sty={'danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}
                     linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
                   /> */}
-                  <DashboardCard title={"Attendances"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
-                    link={``} sty={'warning'}
+                  <DashboardCard title={"Attendances"} content={attendance.length} icon={<MdOutlineQueryBuilder className='fs-4' />}
+                    link={`/app/reports/attendance-reports`} sty={'warning'}
                   />
                 </div>
 
@@ -220,7 +238,7 @@ const AdminDashboard = () => {
                     <div className='p-2 bg-1 rounded-2'>
                       <div className='d-flex flex-column justify-content-start'>
                         <span className='fw-semibold'>Satisfaction Stats</span>
-                        <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span>
+                        {/* <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span> */}
                       </div>
                       <ClientChart />
                       <div className="row">
@@ -371,7 +389,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </div> */}
-                  <div className="col-md-7 p-2">
+                  {/* <div className="col-md-7 p-2">
                     <div className="card">
                       <div className="card-body">
                         <div className='d-flex justify-content-between'>
@@ -402,7 +420,7 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-md-5 p-2">
                     <div className='p-3 shadow-sm'>

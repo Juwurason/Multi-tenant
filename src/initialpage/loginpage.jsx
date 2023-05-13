@@ -13,12 +13,12 @@ import usePublicHttp from '../hooks/usePublicHttp';
 const Loginpage = () => {
   const [email, setEmail] = useState('teecreations8@gmail.com');
   const [password, setPassword] = useState('1234567');
-  const [pwdVisible, setPwdVisible] = useState(false)
+  const [pwdVisible, setPwdVisible] = useState(false);
   let errorsObj = { email: '', password: '' };
   const [errorss, setErrorss] = useState(errorsObj);
   const [loading, setLoading] = useState(false);
   const navigate = useHistory();
-  const publicHttp = usePublicHttp()
+  const publicHttp = usePublicHttp();
 
 
 
@@ -70,7 +70,7 @@ const Loginpage = () => {
 
     } catch (error) {
 
-      console.log(error);
+      toast.error(error.message);
       if (error.response?.data?.message === 'User Not Found') {
         toast.error('User not found')
       }

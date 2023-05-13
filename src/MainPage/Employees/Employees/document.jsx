@@ -50,8 +50,9 @@ const Document = () => {
             cell: (row) => (
                 <div className='d-flex flex-column gap-1 p-2'>
                     <span> {row.documentName}</span>
+
                     <span className='d-flex'>
-                        <span className='bg-primary text-white pointer px-2 py-1 rounded-2'
+                        <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
                             title='View'
                             onClick={() => handleView(row.documentUrl)}
                         >
