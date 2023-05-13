@@ -16,6 +16,7 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 const StaffProgressNote = () => {
     useEffect(() => {
@@ -124,7 +125,7 @@ const StaffProgressNote = () => {
             try {
                 const response = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
                 setStaffPro(response.data.progressNote);
-                console.log(response.data.progressNote);
+                // console.log(response.data.progressNote);
                 // console.log(staffPro.profile);
                 setLoading(false);
             } catch (error) {
@@ -167,17 +168,15 @@ const StaffProgressNote = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
 
-    const handleActivityClick = (e) => {
-      setSelectedActivity(e);
-        console.log(e);
-        // try {
-        //     const {data} = await privateHttp.get(`/ProgressNotes/${21}`, { cacheTimeout: 300000 })
-        //     console.log(data);
-        //     // console.log(staffPro.profile);
-        //     setLoading(false);
-        // } catch (error) {
-        //     console.log(error);
-        // } 
+    const handleActivityClick = async(e) => {
+        try {
+            const {data} = await privateHttp.get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
+            setSelectedActivity(data);
+            // console.log(data.progress);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        } 
       setShowModal(true);
     };
 
@@ -302,13 +301,13 @@ const StaffProgressNote = () => {
                           <Modal.Title>Progress Notes Details</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          {/* {selectedActivity && (
+                          {selectedActivity && (
                             <>
-                              <p><b>FollowUp:</b> {dayjs(selectedActivity.followUp)}</p>
-                              <p><b>Progress</b> {dayjs(selectedActivity.progress)}</p>
-                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                              <p><b>FollowUp:</b> {selectedActivity.followUp}</p>
+                              <p><b>Progress:</b> {selectedActivity.progress}</p>
+                              <p><b>Report:</b> {selectedActivity.report}</p>
                             </>
-                          )} */}
+                          )}
                         </Modal.Body>
                         <Modal.Footer>
                           <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>

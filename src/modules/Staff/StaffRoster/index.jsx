@@ -258,43 +258,36 @@ const StaffRoster = () => {
                                       }
                                     }}
                                       className="bg-info p-1 rounded"
-                                    >Clock-In</small>
-                                    <small className='bg-secondary p-1 rounded'
+                                    >
+                                      Clock-In
+                                    </small>
+                                    <small
+                                      className='bg-secondary p-1 rounded'
                                       onClick={() => HandleSubmit(activity.shiftRosterId)}
                                     >
                                       Cancel shift
                                     </small>
                                   </div>
                                 ) : (
-                                  <small
-                                    className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
-                                      getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
-                                        getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
-                                      }`}
-                                    style={{ cursor: getActivityStatus(activity) === 'Clock-In' ? 'pointer' : 'default' }}
-                                    onClick={() => {
-                                      if (getActivityStatus(activity) === 'Clock-In') {
-                                        if (navigator.geolocation) {
-                                          navigator.geolocation.getCurrentPosition(
-                                            (position) => {
-                                              const latitude = position.coords.latitude;
-                                              const longitude = position.coords.longitude;
-                                              navigate.push(`/staff/staff-progress/${activity.shiftRosterId}?lat=${latitude}&lng=${longitude}`);
-                                            },
-                                            (error) => {
-                                              toast.error('Error getting location:', error.message);
-                                            }
-                                          );
-                                        } else {
-                                          toast.error('Geolocation is not supported');
-                                        }
-                                      }
-                                    }}
-                                  >
-                                    {getActivityStatus(activity)}
-                                  </small>
+                                  <div className='d-flex gap-2'>
+                                    <small
+                                      className={`p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
+                                        getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
+                                          getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
+                                        }`}
+                                    >
+                                      {getActivityStatus(activity)}
+                                    </small>
+                                    {getActivityStatus(activity) === 'Upcoming' && (
+                                      <small
+                                        className='bg-secondary p-1 rounded'
+                                        onClick={() => HandleSubmit(activity.shiftRosterId)}
+                                      >
+                                        Cancel shift
+                                      </small>
+                                    )}
+                                  </div>
                                 )}
-
 
 
                               </div>
