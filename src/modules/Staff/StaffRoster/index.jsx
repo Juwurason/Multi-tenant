@@ -62,8 +62,8 @@ const StaffRoster = () => {
     try {
       const cancelShif = await privateHttp.post(`/ShiftRosters/shift_cancellation/${staffCancel}?userId=${user.userId}&reason=${reason}`);
       const cancel = cancelShif.data;
-      console.log(cancel);
-      // setStaffCancel(cancel);
+      // console.log(cancel);
+      setStaffCancel(cancel);
       setLoading(false)
     } catch (error) {
       console.log(error);
