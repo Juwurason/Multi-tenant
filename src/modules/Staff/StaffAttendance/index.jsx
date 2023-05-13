@@ -55,7 +55,7 @@ const StaffAttendance = () => {
       name: 'End Time',
       selector: row => {
         const dateObject = new Date(row.clockOut);
-        return dayjs(dateObject).format('dddd, MMMM D, YYYY h:mm A');
+        return dayjs(dateObject).format('h:mm A');
       },
       sortable: true
     },
@@ -124,7 +124,7 @@ const StaffAttendance = () => {
       try {
         const { data } = await privateHttp.get(`/Attendances/get_staff_attendances?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
         setStaffAttendance(data)
-        console.log(data);
+        // console.log(data);
         setLoading(false);
       } catch (error) {
         console.log(error);
