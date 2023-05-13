@@ -53,7 +53,10 @@ const StaffAttendance = () => {
     },
     {
       name: 'End Time',
-      selector: row => row.clockOut,
+      selector: row => {
+        const dateObject = new Date(row.clockOut);
+        return dayjs(dateObject).format('dddd, MMMM D, YYYY h:mm A');
+      },
       sortable: true
     },
     {
