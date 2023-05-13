@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
@@ -13,7 +14,9 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
-import useHttp from '../../../hooks/useHttp';
+import { Modal } from 'react-bootstrap';
+import dayjs from 'dayjs';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 const StaffProgressNote = () => {
     useEffect(() => {
@@ -25,7 +28,7 @@ const StaffProgressNote = () => {
         }
     });
 
-    const { get, } = useHttp();
+    const { get } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const [documentName, setDocumentName] = useState("")
     const [expire, setExpire] = useState("")
@@ -41,14 +44,8 @@ const StaffProgressNote = () => {
         },
         {
             name: 'Client',
-            selector: row => row.user,
-            sortable: true,
-            expandable: true,
-            cell: (row) => (
-                <Link href={`https://example.com/${row.userId}`} className="fw-bold text-dark">
-                    {row.userRole}
-                </Link>
-            ),
+            selector: row => row.profile.fullName,
+            sortable: true
         },
         {
             name: 'Date',
@@ -57,12 +54,12 @@ const StaffProgressNote = () => {
         },
         {
             name: 'DateCreated',
-            selector: row => row.dateCreated,
+            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
             sortable: true
         },
         {
             name: 'DateModified',
-            selector: row => row.dateModified,
+            selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
             sortable: true
         }
 
@@ -119,59 +116,23 @@ const StaffProgressNote = () => {
     };
 
 
-   
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (documentName === "" || expire.length === 0 || document === "") {
-            return toast.error("Input Fields cannot be empty")
-        }
-
-        const formData = new FormData()
-        formData.append("CompanyId", id.companyId);
-        formData.append("DocumentFile", document);
-        formData.append("DocumentName", documentName);
-        formData.append("ExpirationDate", expire);
-        formData.append("User", id.fullName);
-        formData.append("UserRole", id.role);
-        formData.append("Status", "Pending");
-        formData.append("UserId", getStaffProfile.staffId);
-
-        try {
-            setLoading(true)
-            const { data } = await privateHttp.post(`/Staffs/document_upload?userId=${id.userId}`,
-                formData
-
-            )
-            // console.log(data);
-            toast.success(data.message)
-
-            setLoading(false)
-
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message)
-            setLoading(false);
-
-        }
-        finally {
-            setLoading(false)
-        }
-    }
+    const privateHttp = useHttp()
+    
 
     useEffect(() => {
         setLoading(true)
         const getStaffProgressNote = async () => {
             try {
-                const response = await privateHttp.get(`/ProgressNotes/${19}`, { cacheTimeout: 300000 })
-                // setStaffPro(response.data)
-                console.log(response.data);
+                const response = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
+                setStaffPro(response.data.progressNote);
+                // console.log(response.data.progressNote);
+                // console.log(staffPro.profile);
                 setLoading(false);
             } catch (error) {
                 console.log(error);
-                setLoading(false);
-            }
-            finally{
-                setLoading(false);
+            } 
+            finally {
+                setLoading(false)
             }
         }
         getStaffProgressNote()
@@ -204,11 +165,25 @@ const StaffProgressNote = () => {
         doc.save("Admin.pdf");
     };
 
+    const [showModal, setShowModal] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+
+    const handleActivityClick = async(e) => {
+        try {
+            const {data} = await privateHttp.get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
+            setSelectedActivity(data);
+            // console.log(data.progress);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        } 
+      setShowModal(true);
+    };
+
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-4">
-                {data.staff}
-
+                <button className='btn btn-primary' onClick={() => handleActivityClick(data.progressNoteId)}>view</button>
             </div>
         );
     };
@@ -220,7 +195,7 @@ const StaffProgressNote = () => {
     };
 
     const filteredData = staffPro.filter((item) =>
-        item.staff.includes(searchText.toLowerCase())
+        item.staff.toLowerCase().includes(searchText.toLowerCase())
     );
 
 
@@ -321,6 +296,23 @@ const StaffProgressNote = () => {
 
                         />
 
+                    <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Progress Notes Details</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          {selectedActivity && (
+                            <>
+                              <p><b>FollowUp:</b> {selectedActivity.followUp}</p>
+                              <p><b>Progress:</b> {selectedActivity.progress}</p>
+                              <p><b>Report:</b> {selectedActivity.report}</p>
+                            </>
+                          )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        </Modal.Footer>
+                      </Modal>
 
                     </div>
 

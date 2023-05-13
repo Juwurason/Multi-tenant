@@ -14,6 +14,7 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
+import dayjs from 'dayjs';
 
 const StaffAttendance = () => {
   useEffect(() => {
@@ -30,68 +31,39 @@ const StaffAttendance = () => {
   const [documentName, setDocumentName] = useState("")
   const [expire, setExpire] = useState("")
   const [document, setDocument] = useState("")
-  const [staffDocument, setStaffDocument] = useState([]);
+  const [staffAtten, setStaffAttendance] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
 
 
   const columns = [
     {
-      name: 'User',
-      selector: row => row.user,
+      name: 'Date',
+      selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
       sortable: true
     },
     {
-      name: 'Role',
-      selector: row => row.user,
-      sortable: true,
-      expandable: true,
-      cell: (row) => (
-        <Link href={`https://example.com/${row.userId}`} className="fw-bold text-dark">
-          {row.userRole}
-        </Link>
-      ),
-    },
-    {
-      name: 'Documnet Name',
-      selector: row => row.documentName,
+      name: 'Staff',
+      selector: row => row.staff.fullName,
       sortable: true,
     },
     {
-      name: 'Expiration Date',
-      selector: row => row.expirationDate,
+      name: 'Start Time',
+      selector: row => dayjs(row.clockIn).format("h:mm A"),
+      sortable: true,
+    },
+    {
+      name: 'End Time',
+      selector: row => {
+        const dateObject = new Date(row.clockOut);
+        return dayjs(dateObject).format('h:mm A');
+      },
       sortable: true
     },
     {
-      name: 'Status',
-      selector: row => row.status,
+      name: 'DateModified',
+      selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
       sortable: true
-    }, {
-      name: "Actions",
-      // cell: (row) => (
-      //   <div className="d-flex gap-1">
-      //     <Link
-      //       className='btn'
-      //       title='Edit'
-      //       to={''}
-      //     >
-      //       <SlSettings />
-      //     </Link>
-      //     <button
-      //       className='btn'
-      //       title='Delete'
-      //       onClick={() => {
-      //         alert(`Action button clicked for row with ID ${'row.id'}`);
-      //       }}
-      //     >
-      //       <GoTrashcan />
-      //     </button>
-
-      //   </div>
-      // ),
-    },
-
-
-
+    }
   ];
 
 
@@ -118,7 +90,7 @@ const StaffAttendance = () => {
     sheet.addRow(headers);
 
     // Add data
-    staffDocument.forEach((dataRow) => {
+    staffAtten.forEach((dataRow) => {
       const values = columns.map((column) => {
         if (typeof column.selector === 'function') {
           return column.selector(dataRow);
@@ -144,57 +116,21 @@ const StaffAttendance = () => {
 
 
   const privateHttp = useHttp()
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (documentName === "" || expire.length === 0 || document === "") {
-      return toast.error("Input Fields cannot be empty")
-    }
-
-    const formData = new FormData()
-    formData.append("CompanyId", id.companyId);
-    formData.append("DocumentFile", document);
-    formData.append("DocumentName", documentName);
-    formData.append("ExpirationDate", expire);
-    formData.append("User", id.fullName);
-    formData.append("UserRole", id.role);
-    formData.append("Status", "Pending");
-    formData.append("UserId", getStaffProfile.staffId);
-
-    try {
-      setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/document_upload?userId=${id.userId}`,
-        formData
-
-      )
-      // console.log(data);
-      toast.success(data.message)
-
-      setLoading(false)
-
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message)
-      setLoading(false);
-
-    }
-    finally {
-      setLoading(false)
-    }
-  }
+  
 
   useEffect(() => {
     setLoading(true)
-    const getStaffDocument = async () => {
+    const getStaffAttendance = async () => {
       try {
-        const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-        // setStaffDocument(response.data.staffDocuments)
-        // console.log(response.data.staffDocuments);
+        const { data } = await privateHttp.get(`/Attendances/get_staff_attendances?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+        setStaffAttendance(data)
+        // console.log(data);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
-    getStaffDocument()
+    getStaffAttendance()
   }, [])
 
   const handlePDFDownload = () => {
@@ -206,7 +142,7 @@ const StaffAttendance = () => {
     doc.setFontSize(13);
     doc.text("User Table", marginLeft, 40);
     const headers = columns.map((column) => column.name);
-    const dataValues = staffDocument.map((dataRow) =>
+    const dataValues = staffAtten.map((dataRow) =>
       columns.map((column) => {
         if (typeof column.selector === "function") {
           return column.selector(dataRow);
@@ -227,7 +163,7 @@ const StaffAttendance = () => {
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-4">
-        {data.fullName}
+        {data.staff.fullName}
 
       </div>
     );
@@ -239,8 +175,8 @@ const StaffAttendance = () => {
     setSearchText(event.target.value);
   };
 
-  const filteredData = staffDocument.filter((item) =>
-    item.user.toLowerCase().includes(searchText.toLowerCase())
+  const filteredData = staffAtten.filter((item) =>
+    item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
 
 
@@ -278,7 +214,7 @@ const StaffAttendance = () => {
               </div>
               <div className='d-flex  justify-content-center align-items-center gap-4'>
                 <CSVLink
-                  data={staffDocument}
+                  data={staffAtten}
                   filename={"data.csv"}
 
                 >
@@ -306,7 +242,7 @@ const StaffAttendance = () => {
                 >
                   <FaFileExcel />
                 </button>
-                <CopyToClipboard text={JSON.stringify(staffDocument)}>
+                <CopyToClipboard text={JSON.stringify(staffAtten)}>
                   <button
 
                     className='btn text-warning'
@@ -345,46 +281,7 @@ const StaffAttendance = () => {
           </div>
 
         </div>
-        {/* /Page Content */}
-        {/* Add Policy Modal */}
-        <div id="add_policy" className="modal custom-modal fade" role="dialog">
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Upload Documents</h5>
-                <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label>Document Name <span className="text-danger">*</span></label>
-                    <input className="form-control" type="text" onChange={e => setDocumentName(e.target.value)} />
-                  </div>
-                  <div className="form-group">
-                    <label>Expiration Date <span className="text-danger">*</span></label>
-                    <input className="form-control" type="date" onChange={e => setExpire(e.target.value)} />
-                  </div>
 
-                  <div className="form-group">
-                    <label>Upload Document <span className="text-danger">*</span></label>
-                    <div className="custom-file">
-                      <input type="file" className="custom-file-input" accept=".pdf,.doc" id="policy_upload" onChange={handleFileChange} />
-                    </div>
-                  </div>
-                  <div className="submit-section">
-                    <button className="btn btn-primary submit-btn" data-bs-dismiss="modal" aria-label="Close" disabled={loading ? true : false} >
-                      {loading ? <div className="spinner-grow text-light" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div> : "Add"}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
 
 
       </div>
