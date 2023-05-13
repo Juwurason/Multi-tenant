@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -19,7 +19,7 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 const AllEmployees = () => {
-  const privateHttp = useHttp();
+  const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
   const [staff, setStaff] = useState([]);
   const { loading, setLoading } = useCompanyContext();
@@ -40,7 +40,7 @@ const AllEmployees = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <Link to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`} className="fw-bold text-dark">
+        <Link style={{ overflow: "hidden" }} to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`} className="fw-bold text-dark">
           {row.firstName} {row.surName}
         </Link>
       ),
@@ -77,6 +77,7 @@ const AllEmployees = () => {
             <GoTrashcan />
           </button>
 
+
         </div>
       ),
     },
@@ -88,7 +89,7 @@ const AllEmployees = () => {
   const FetchStaff = async () => {
     try {
       setLoading(true);
-      const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       setStaff(staff);
       setLoading(false);
@@ -107,7 +108,7 @@ const AllEmployees = () => {
 
   const handleDelete = async (e) => {
     Swal.fire({
-      html: `<h3>Are you sure? you want to delete this staff</h3></br><p>You won't be able to revert this!</p>`,
+      html: `<h3>Are you sure? you want to delete this staff</h3>`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#dc2626',
@@ -117,7 +118,7 @@ const AllEmployees = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const { data } = await privateHttp.post(`/Staffs/delete/${e}?userId=${id.userId}`,
+          const { data } = await post(`/Staffs/delete/${e}?userId=${id.userId}`,
             { userId: id.userId }
           )
           if (data.status === 'Success') {
@@ -139,6 +140,45 @@ const AllEmployees = () => {
 
       }
     })
+
+
+  }
+  const handleActivate = async (e) => {
+    try {
+      const response = await get(`Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
+
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+  const handleDeactivate = async (e) => {
+    try {
+      const response = await get(`Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
 
 
   }
@@ -234,8 +274,16 @@ const AllEmployees = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        {data.fullName}
+      <div className="p-4 d-flex gap-3 align-items-center">
+        <span>{data.fullName}</span>
+        <div>
+          <button onClick={() => handleActivate(data.staffId)} className="btn text-primary" style={{ fontSize: "12px" }}>
+            Activate Staff
+          </button> |
+          <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger" style={{ fontSize: "12px" }}>
+            Deactivate Staff
+          </button>
+        </div>
 
       </div>
     );

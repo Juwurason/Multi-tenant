@@ -389,7 +389,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </div> */}
-                  <div className="col-md-7 p-2">
+                  {/* <div className="col-md-7 p-2">
                     <div className="card">
                       <div className="card-body">
                         <div className='d-flex justify-content-between'>
@@ -420,7 +420,7 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-md-5 p-2">
                     <div className='p-3 shadow-sm'>

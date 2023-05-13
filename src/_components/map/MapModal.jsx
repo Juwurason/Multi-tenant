@@ -18,7 +18,7 @@ const LocationMapModal = ({ latitude, longitude }) => {
         <div>
             <small
                 onClick={openModal}
-                className="pointer p-1 bg-success text-white rounded"
+                className="pointer p-1 bg-success text-white rounded d-flex justify-content-center align-items-center"
                 style={{ fontSize: "10px" }}
             >
                 Show Location on map

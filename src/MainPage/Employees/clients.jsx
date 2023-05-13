@@ -35,7 +35,7 @@ const Clients = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <Link to={`/app/profile/client-profile/${row.profileId}/${row.firstName}`} className="fw-bold text-dark">
+        <Link style={{ overflow: "hidden" }} to={`/app/profile/client-profile/${row.profileId}/${row.firstName}`} className="fw-bold text-dark">
           {row.firstName} {row.surName}
         </Link>
       ),
@@ -220,7 +220,7 @@ const Clients = () => {
 
   const handleDelete = async (e) => {
     Swal.fire({
-      html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3></br><p>This decision cannot be reverted!</p>`,
+      html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3>`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#dc2626',

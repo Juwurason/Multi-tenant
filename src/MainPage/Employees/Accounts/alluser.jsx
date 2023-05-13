@@ -19,11 +19,12 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
 import ExcelJS from 'exceljs';
+import Swal from 'sweetalert2';
 
 
 
 const AllUser = () => {
-    const { get } = useHttp()
+    const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
     const [users, setUsers] = useState([]);
     const { loading, setLoading } = useCompanyContext();
@@ -42,7 +43,9 @@ const AllUser = () => {
             name: '',
             cell: (row) => (
                 <span className='w-100 d-flex justify-content-center'>
-                    <button className='btn' style={{ width: "20px" }}><FaDharmachakra className='text-warning' /></button>
+                    <small className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center'>
+                        <FaDharmachakra className='text-white' />
+                    </small>
 
                 </span>
             ),
@@ -84,10 +87,7 @@ const AllUser = () => {
                     <button
                         className='btn'
                         title='Delete'
-                        onClick={() => {
-                            // handle action here, e.g. open a modal or navigate to a new page
-                            alert(`Action button clicked for row with ID ${row.id}`);
-                        }}
+                        onClick={() => handleDelete(row.id)}
                     >
                         <GoTrashcan />
                     </button>
@@ -104,8 +104,9 @@ const AllUser = () => {
     const FetchStaff = async () => {
         try {
             setLoading(true);
-            const UserResponse = await get(`Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const UserResponse = await get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const users = UserResponse.data;
+            console.log(users);
             setUsers(users);
             console.log(users);
             setLoading(false)
@@ -122,6 +123,42 @@ const AllUser = () => {
 
         FetchStaff()
     }, []);
+
+    const handleDelete = async (e) => {
+
+        Swal.fire({
+            html: `<h3>Are you sure? you want to delete this user</h3>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#777',
+            confirmButtonText: 'Confirm Delete',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await post(`/Account/delete_user/${e}?userId=${id.userId}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchStaff()
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
+            }
+        })
+    }
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();

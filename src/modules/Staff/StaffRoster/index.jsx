@@ -11,6 +11,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { Modal } from 'react-bootstrap';
 import { useHistory } from "react-router-dom"
+import { toast } from 'react-toastify';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -130,7 +131,7 @@ const StaffRoster = () => {
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
-      return activity.isClockedIn ? 'Present' : 'Absent';
+      return activity.attendance === true ? 'Present' : 'Absent';
     } else {
       return 'Clock-In';
     }
@@ -153,29 +154,23 @@ const StaffRoster = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Shift Roster</title>
-          <meta name="description" content="Login page" />
+          <meta name="description" content="Staff Shift Roaster" />
         </Helmet>
         {/* Page Content */}
         <div className="content container-fluid">
           <div className="page-header">
             <div className="row">
               <div className="col">
-                <h3 className="page-title">Shift Roster</h3>
+                <h3 className="page-title">Shift Roaster</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Staff</Link></li>
-                  <li className="breadcrumb-item active">Shift Roster</li>
+                  <li className="breadcrumb-item active">Shift Roaster</li>
                 </ul>
               </div>
-              <div className="col-auto float-end ml-auto">
-                {/* <Link to="/app/employee/add-shift" className="btn add-btn m-r-5">Add New Roaster</Link> */}
-                {/* <a href="#" className="btn add-btn m-r-5" data-bs-toggle="modal" data-bs-target="#add_schedule"> Assign Shifts</a> */}
-              </div>
+
             </div>
           </div>
-          {/* /Page Header */}
-          {/* Content Starts */}
-          {/* Search Filter */}
+
 
           <div className='row filter-row '>
 
@@ -229,16 +224,17 @@ const StaffRoster = () => {
                           activitiesByDay[index].length > 0 ? (
                             activitiesByDay[index].map((activity, activityIndex) => (
                               <div key={activityIndex}
-                                className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                                style={{ fontSize: '10px' }}
+                                className='text-white rounded-2 d-flex flex-column gap-1 align-items-start p-2 mt-2'
+                                style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
                                     <span className='fw-bold'>
                                       {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                     </span>
+                                    <span><span className='fw-bold'>Client:</span> {activity.profile.firstName} {activity.profile.surName}</span>
+                                    <span><span className='fw-bold'>Status:</span> {activity.status}</span>
                                   </div>
-                                  <span><span className='fw-bold'>Client :</span> {activity.profile.firstName} {activity.profile.surName}</span>
                                 </div>
 
                                 {getActivityStatus(activity) === 'Clock-In' ? (
@@ -254,14 +250,14 @@ const StaffRoster = () => {
                                             navigate.push(`/staff/staff-progress/${activity.shiftRosterId}`);
                                           },
                                           (error) => {
-                                            console.error('Error getting location:', error.message);
+                                            toast.error('Error getting location:', error.message);
                                           }
                                         );
                                       } else {
-                                        console.error('Geolocation is not supported');
+                                        toast.error('Geolocation is not supported');
                                       }
                                     }}
-                                      className="bg-success p-1 rounded"
+                                      className="bg-info p-1 rounded"
                                     >Clock-In</small>
                                     <small className='bg-secondary p-1 rounded'
                                       onClick={() => HandleSubmit(activity.shiftRosterId)}
@@ -273,7 +269,7 @@ const StaffRoster = () => {
                                   <small
                                     className={`text-truncate p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
                                       getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
-                                        getActivityStatus(activity) === 'Present' ? 'bg-primary' : ''
+                                        getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
                                       }`}
                                     style={{ cursor: getActivityStatus(activity) === 'Clock-In' ? 'pointer' : 'default' }}
                                     onClick={() => {
@@ -286,11 +282,11 @@ const StaffRoster = () => {
                                               navigate.push(`/staff/staff-progress/${activity.shiftRosterId}?lat=${latitude}&lng=${longitude}`);
                                             },
                                             (error) => {
-                                              console.error('Error getting location:', error.message);
+                                              toast.error('Error getting location:', error.message);
                                             }
                                           );
                                         } else {
-                                          console.error('Geolocation is not supported');
+                                          toast.error('Geolocation is not supported');
                                         }
                                       }
                                     }}
@@ -315,7 +311,7 @@ const StaffRoster = () => {
 
 
                       {/* Modal */}
-                      <Modal show={showModal} onHide={() => setShowModal(false)}>
+                      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                         <Modal.Header closeButton>
                           <Modal.Title>Activity Details</Modal.Title>
                         </Modal.Header>
@@ -355,22 +351,15 @@ const StaffRoster = () => {
 
             </div>
           </div>
-          {/* /Content End */}
         </div>
-        {/* /Page Content */}
 
       </div>
-      {/* /Page Wrapper */}
-      {/* Add Schedule Modal */}
-      {/* /Add Schedule Modal */}
-      {/* Edit Schedule Modal */}
 
 
 
 
 
 
-      {/* /Edit Schedule Modal */}
       <Offcanvas />
     </>
   );

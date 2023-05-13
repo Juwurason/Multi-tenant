@@ -78,7 +78,10 @@ const AttendanceReport = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <LocationMapModal latitude={row.inLatitude} longitude={row.inLongitude} />
+        <span style={{ overflow: "hidden" }}>
+
+          <LocationMapModal latitude={row.inLatitude} longitude={row.inLongitude} />
+        </span>
       ),
     },
     {

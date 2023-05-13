@@ -31,12 +31,10 @@ const ProgressReport = () => {
             name: '',
             selector: row => row,
             sortable: true,
-            expandable: true,
             cell: (row) => (
-                <span className='d-flex justify-content-center w-100 text-info pointer'>
-                    {/* <FaEye className='fs-6' /> */}
+                <Link to={`/app/reports/progress-reportsDetails/${row.progressNoteId}`} className='d-flex justify-content-center w-100 text-info pointer'>
                     view
-                </span>
+                </Link>
             ),
         },
         {
@@ -44,12 +42,17 @@ const ProgressReport = () => {
             selector: row => row.staff,
             sortable: true
         },
+        {
+            name: 'Clients',
+            selector: row => row.profileId,
+            sortable: true
+        },
 
 
 
         {
             name: 'Date',
-            selector: row => row.dateCreated,
+            selector: row => row.date,
             sortable: true,
             expandable: true,
             cell: (row) => (
@@ -57,10 +60,6 @@ const ProgressReport = () => {
             ),
         },
         {
-            name: 'Location',
-            selector: row => row.phoneNumber,
-            sortable: true
-        }, {
             name: "Actions",
             cell: (row) => (
 
@@ -70,7 +69,7 @@ const ProgressReport = () => {
                     title='Delete'
                     onClick={() => {
                         // handle action here, e.g. open a modal or navigate to a new page
-                        handleDelete(row.administratorId)
+
                     }}
                 >
                     <GoTrashcan />
@@ -228,14 +227,7 @@ const ProgressReport = () => {
         doc.save("ProgressReport.pdf");
     };
 
-    const ButtonRow = ({ data }) => {
-        return (
-            <div className="p-4">
-                <div className='fw-bold'><span>Full NAME</span> {data.fullName}</div>
-                <div>{data.email}</div>
-            </div>
-        );
-    };
+
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
@@ -364,8 +356,7 @@ const ProgressReport = () => {
                                         <span className="sr-only">Loading...</span>
                                     </div>
                                 </div>}
-                                expandableRows
-                                expandableRowsComponent={ButtonRow}
+
                                 paginationTotalRows={filteredData.length}
 
 

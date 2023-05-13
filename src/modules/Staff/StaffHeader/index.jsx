@@ -2,7 +2,7 @@
  * App Header
  */
 import React, { useState, useEffect } from 'react'
-import { FaAngleDown} from 'react-icons/fa';
+import { FaAngleDown } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -26,13 +26,13 @@ const StaffHeader = (props) => {
     const userObj = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrentTime(new Date());
-      }, 1000);
-  
-      return () => clearInterval(interval);
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(interval);
     }, []);
-  
+
     const options = { timeZone: 'Australia/Sydney' };
     const timeString = currentTime.toLocaleTimeString('en-AU', options);
 
@@ -51,7 +51,7 @@ const StaffHeader = (props) => {
                 </Link>
             </div>
             {/* /Logo */}
-            <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : ""}} onClick={handlesidebar}>
+            <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
                 <span className="bar-icon"><span />
                     <span />
                     <span />
@@ -79,20 +79,21 @@ const StaffHeader = (props) => {
                 </li>
                 {/* /Search */}
                 {/* Flag */}
-                 <li className="nav-item dropdown has-arrow flag-nav">
-          <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
-            <span className='fw-bold'>
-              {timeString}
+                <li className="nav-item dropdown has-arrow flag-nav">
+                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
+                        <span className='fw-bold'>
+                            {timeString}
 
-            </span>
-          </a>
+                        </span>
+                    </a>
 
-        </li>
+                </li>
                 {/* /Flag */}
                 {/* Notifications */}
                 <li className="nav-item dropdown">
                     <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <i className="fa fa-bell-o" /> <span className="badge badge-pill">3</span>
+                        <i className="fa fa-bell-o" />
+                        {/* <span className="badge badge-pill">3</span> */}
                     </a>
                     <div className="dropdown-menu notifications">
                         <div className="topnav-dropdown-header">
@@ -177,7 +178,8 @@ const StaffHeader = (props) => {
                 {/* Message Notifications */}
                 <li className="nav-item dropdown">
                     <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <i className="fa fa-comment-o" /> <span className="badge badge-pill">8</span>
+                        <i className="fa fa-comment-o" />
+                        {/* <span className="badge badge-pill">8</span> */}
                     </a>
                     <div className="dropdown-menu notifications">
                         <div className="topnav-dropdown-header">
@@ -278,39 +280,39 @@ const StaffHeader = (props) => {
                         </div>
                     </div>
                 </li>
-                
+
                 {/* /Message Notifications */}
                 <li className="nav-item dropdown has-arrow main-drop">
-          <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-            <span className="user-img me-1">
+                    <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span className="user-img me-1">
 
-              <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                            <img src={man} alt="" width={50} height={50} className='rounded-circle' />
 
-              <span className="status online" /></span>
-            <span><FaAngleDown /></span>
-          </a>
-          <div className="dropdown-menu">
-            <div className='bg-primary p-2'>
-              <div className="row mt-2">
-                <div className="col-2">
-                  <div className='rounded-circle bg-secondary' style={{ width: "35px", height: "35px" }}>
-                    <img src={Avatar_02} alt="" width={50} height={50} className='rounded-circle' />
-                  </div>
-                </div>
+                            <span className="status online" /></span>
+                        <span><FaAngleDown /></span>
+                    </a>
+                    <div className="dropdown-menu">
+                        <div className='bg-primary p-2'>
+                            <div className="row mt-2">
+                                <div className="col-2">
+                                    <div className='rounded-circle bg-secondary' style={{ width: "35px", height: "35px" }}>
+                                        <img src={Avatar_02} alt="" width={50} height={50} className='rounded-circle' />
+                                    </div>
+                                </div>
 
-                <div className="col-10 d-flex flex-column justify-content-start text-white">
-                  <span className='fw-bold'>{userObj.fullName}</span>
-                  <span style={{ fontSize: "7px", }}>{userObj.email}</span>
-                </div>
+                                <div className="col-10 d-flex flex-column justify-content-start text-white">
+                                    <span className='fw-bold'>{userObj.fullName}</span>
+                                    <span style={{ fontSize: "7px", }}>{userObj.email}</span>
+                                </div>
 
-              </div>
-            </div>
-            <Link className="dropdown-item" to={"/staff/staffchangepassword"}>Change Password</Link>
-            <Link className="dropdown-item" to={"/staff/staffprofile"}>Profile</Link>
-            <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+                            </div>
+                        </div>
+                        <Link className="dropdown-item" to={"/staff/staffchangepassword"}>Change Password</Link>
+                        <Link className="dropdown-item" to={"/staff/staffprofile"}>Profile</Link>
+                        <button className="dropdown-item" onClick={handleLogout}>Logout</button>
 
-          </div>
-        </li>
+                    </div>
+                </li>
             </ul>
             {/* /Header Menu */}
             {/* Mobile Menu */}

@@ -16,6 +16,7 @@ import PayslipReport from './payslipreport';
 import AttendanceReport from './attendancereport';
 import LeaveReport from './leavereport';
 import ProgressReport from './progressreport';
+import ProgressReportDetails from '../../../_components/reports/ProgressReportDetails';
 
 const ReportsRoute = ({ match }) => (
    <Switch>
@@ -31,6 +32,7 @@ const ReportsRoute = ({ match }) => (
       <Route path={`${match.url}/attendance-reports`} component={AttendanceReport} />
       <Route path={`${match.url}/leave-reports`} component={LeaveReport} />
       <Route path={`${match.url}/progress-reports`} component={ProgressReport} />
+      <Route path={`${match.url}/progress-reportsDetails/:uid`} component={ProgressReportDetails} />
    </Switch>
 );
 

@@ -114,14 +114,6 @@ const EditShiftRoaster = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        // console.log(" shiftRosterId", uid,
-        //     staffId,
-        //     dateFrom,
-        //     dateTo,
-        //     "activities", selectedValues,
-        //     "profileId", Number(profileId),
-        //     isNightShift,
-        //     isExceptionalShift,);
 
         if (staffId === 0 || profileId === 0
         ) {
@@ -131,6 +123,7 @@ const EditShiftRoaster = () => {
             setLoading(true)
             const { data } = await post(`/ShiftRosters/edit_shift/${uid}?userId=${id.userId}`,
                 {
+                    companyId: id.companyId,
                     shiftRosterId: uid,
                     staffId: Number(staffId),
                     dateFrom,
@@ -251,13 +244,13 @@ const EditShiftRoaster = () => {
                                                 <label className="col-form-label">Is Night Shift</label>
                                             </div>
                                         </div>
-                                        <div className="col-sm-6">
+                                        {/* <div className="col-sm-6">
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isNightShift} onChange={handleNightChange} />
                                                 &nbsp; &nbsp;
                                                 <label className="col-form-label">Apply to Repeated Shifts </label>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className="submit-section">
