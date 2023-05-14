@@ -187,6 +187,7 @@ const AdminDashboard = () => {
                   <DashboardCard title={"Admin"} sty={'info'}
                     content={admin.length} icon={<MdOutlinePersonOutline className='fs-4' />}
                     link={'/app/employee/alladmin'}
+                    loading={loading}
                   />
                   <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
                     linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
@@ -194,9 +195,12 @@ const AdminDashboard = () => {
                   <DashboardCard title={"Shift Roaster"} content={schedule.length} icon={<MdOutlineEventNote className='fs-4' />}
                     link={`/app/employee/shift-scheduling`}
                     sty={'danger'}
+
+                    loading={loading}
                   />
                   <DashboardCard title={"Progress Notes "} content={progress.length} icon={<MdOutlineFeed className='fs-4' />}
                     linkTitle={"View Progress Notes"} link={`/app/reports/progress-reports`} sty={'warning'}
+                    loading={loading}
                   />
                   {/* <DashboardCard title={"Clients"} sty={'warning'}
                     content={clients.length} icon={<MdOutlineGroup className='fs-4' />}
@@ -211,7 +215,7 @@ const AdminDashboard = () => {
                     linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
                   /> */}
                   <DashboardCard title={"Attendances"} content={attendance.length} icon={<MdOutlineQueryBuilder className='fs-4' />}
-                    link={`/app/reports/attendance-reports`} sty={'warning'}
+                    link={`/app/reports/attendance-reports`} sty={'warning'} loading={loading}
                   />
                 </div>
 

@@ -128,7 +128,7 @@ const AllUser = () => {
             html: `<h3>Are you sure? you want to delete this user</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#dc2626',
+            confirmButtonColor: '#00AEEF',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,

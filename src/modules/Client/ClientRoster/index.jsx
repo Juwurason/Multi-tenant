@@ -11,22 +11,50 @@ import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icon
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
+import { GoTrashcan } from 'react-icons/go';
+import { MdOutlineEditCalendar } from 'react-icons/md';
+import { MultiSelect } from 'react-multi-select-component';
+
+
+const options = [
+    { label: "Medication Supervision", value: "Medication Supervision" },
+    { label: "Medication administering", value: "Medication administering" },
+    { label: "Personal Support", value: "Personal Support" },
+    { label: "Domestic Cleaning", value: "Domestic Cleaning" },
+    { label: "Transport", value: "Transport" },
+    { label: "Dog training", value: "Dog training" },
+    { label: "Install phone", value: "Install phone" },
+    { label: "Welfare check", value: "Welfare check" },
+    { label: "Support Groceries shopping", value: "Support Groceries shopping" },
+    { label: "Pick up", value: "Pick up" },
+    { label: "Baby sitting", value: "Baby sitting" },
+    { label: "Taking to solicitors appointment", value: "Taking to solicitors appointment" },
+    { label: "Meal Preparation", value: "Meal Preparation" },
+    { label: "Shopping", value: "Shopping" },
+    { label: "Groceries Transport", value: "Groceries Transport" },
+    { label: "Domestics Social Support", value: "Domestics Social Support" },
+
+];
 
 const ClientRoster = () => {
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
     const { get } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const [clients, setClients] = useState([]);
+    const [activities, setActivities] = useState([]);
+    const [selectedActivities, setSelectedActivities] = useState([]);
+    const [reasonModal, setReasonModal] = useState(false)
 
     const FetchSchedule = async () => {
         setLoading(true)
 
+
         try {
             const clientResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
-            // console.log(client.shiftRoster);
             setClients(client.shiftRoster);
-            setLoading(false)
+            setLoading(false);
+
         } catch (error) {
             console.log(error);
         }
@@ -51,7 +79,6 @@ const ClientRoster = () => {
         }
     });
 
-    const [list, setList] = useState([1, 2, 3, 4, 5, 6])
     // Get the current date
     const [currentDate, setCurrentDate] = useState(dayjs());
 
@@ -62,6 +89,14 @@ const ClientRoster = () => {
     const handlePrevClick = () => {
         setCurrentDate(currentDate.subtract(6, 'day'));
     };
+    const handleActivityChange = (selected) => {
+        setSelectedActivities(selected);
+    };
+    const cancelShift = () => {
+        setReasonModal(true)
+    }
+
+    const selectedValues = selectedActivities.map(option => option.label).join(', ');
 
     const daysOfWeek = [
         currentDate.subtract(3, 'day'),
@@ -77,21 +112,39 @@ const ClientRoster = () => {
     const activitiesByDay = daysOfWeek.map((day) =>
         clients.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
     );
+    const submitActivity = async () => {
+        // ShiftRosters/edit_activities?userId=&shiftId=&activities
+    }
 
     const [showModal, setShowModal] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
+    const [lgShow, setLgShow] = useState(false);
 
     const handleActivityClick = (activity) => {
         setSelectedActivity(activity);
         setShowModal(true);
     };
+    const editActivity = async (e) => {
+        setLgShow(true)
+        try {
+            const { data } = await get(`ShiftRosters/${e}`, { cacheTimeout: 300000 });
+            const { activities } = data;
+            setActivities(activities.split(',').map((activity) => ({ label: activity, value: activity })));
+            setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
+
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
             {/* Page Wrapper */}
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Shift Roster</title>
+                    <title>Shift Roaster</title>
                     <meta name="description" content="Login page" />
                 </Helmet>
                 {/* Page Content */}
@@ -99,7 +152,7 @@ const ClientRoster = () => {
                     <div className="page-header">
                         <div className="row">
                             <div className="col">
-                                <h3 className="page-title">Shift Roster</h3>
+                                <h3 className="page-title">Shift Roaster</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/client/client/Dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item"><Link to="/client/client/Dashboard">Client</Link></li>
@@ -165,15 +218,53 @@ const ClientRoster = () => {
                                             {activitiesByDay[index].map((activity, activityIndex) => (
 
                                                 <div key={activityIndex}
-                                                    onClick={() => handleActivityClick(activity)}
-                                                    className='bg-primary text-white rounded-2 d-flex flex-column align-items-start p-2 mt-2' style={{ fontSize: '10px' }}>
-                                                    <div>
-                                                        <span className='fw-bold me-1'>{dayjs(activity.dateFrom).tz('Australia/Sydney').format('hh:mm A')}</span> - <span className='fw-bold me-1'>{dayjs(activity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</span>
+
+                                                    className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                                                    style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                                                >
+                                                    <div
+                                                        onClick={() => handleActivityClick(activity)}
+                                                        className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
+                                                        <span className='fw-bold' >
+                                                            {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
+                                                        </span>
+                                                        <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
+                                                        <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
+                                                        <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                                     </div>
-                                                    <span><b>Staff</b> {activity.staff.firstName} {activity.staff.surName}</span>
-                                                    <small className='text-truncate'><b>Activities</b> {activity.activities}</small>
+                                                    <div className='d-flex gap-2'>
+                                                        <small
+
+                                                            className={`text-truncate d-flex 
+                                                            align-items-center
+                                                            justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                            onClick={() => editActivity(activity.shiftRosterId)}
+                                                            title="Edit"
+
+                                                        >
+                                                            <MdOutlineEditCalendar className='fs-6 text-dark' />
+
+                                                        </small>
+                                                        <small
+                                                            className={`text-truncate d-flex 
+                                                            align-items-center
+                                                            justify-content-center px-2 py-1 rounded bg-danger pointer`}
+                                                            title="Cancel"
+                                                            onClick={() => cancelShift()}
+
+                                                        >
+                                                            <GoTrashcan className='fs-6' />
+                                                        </small>
+
+                                                    </div>
                                                 </div>
                                             ))}
+                                            {!loading && activitiesByDay[index] <= 0 &&
+
+                                                <div>
+                                                    <span>No Activity</span>
+                                                </div>
+                                            }
 
                                             {/* Modal */}
                                             <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -193,6 +284,56 @@ const ClientRoster = () => {
                                                     <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
                                                 </Modal.Footer>
                                             </Modal>
+
+
+                                            <Modal
+                                                size="lg"
+                                                show={lgShow}
+                                                onHide={() => setLgShow(false)}
+                                                backdrop="static"
+                                                keyboard={false}
+                                                aria-labelledby="example-modal-sizes-title-lg"
+                                            >
+                                                <Modal.Header closeButton>
+                                                    <Modal.Title id="example-modal-sizes-title-lg">
+                                                        Edit Activities
+                                                    </Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <div className="form-group">
+                                                        <label className="col-form-label fw-bold">Activities</label>
+
+
+                                                        <MultiSelect
+                                                            options={options.concat(activities)}
+                                                            value={selectedActivities}
+                                                            onChange={handleActivityChange}
+                                                            labelledBy={'Select Activities'}
+                                                        />
+                                                    </div>
+                                                </Modal.Body>
+                                                <Modal.Footer>
+                                                    <button className="btn btn-secondary" onClick={submitActivity}>
+                                                        Submit
+                                                    </button>
+                                                </Modal.Footer>
+                                            </Modal>
+
+                                            <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
+                                                <Modal.Header closeButton>
+                                                    <Modal.Title>Request to Cancel Shift</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <div>
+                                                        <label htmlFor="">Please provide reasons for cancelling shift</label>
+                                                        <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setReason(e.target.value)} />
+                                                    </div>
+                                                </Modal.Body>
+                                                <Modal.Footer>
+                                                    <button className="btn btn-primary">Submit</button>
+                                                </Modal.Footer>
+                                            </Modal>
+
 
                                         </div>
                                     </div>

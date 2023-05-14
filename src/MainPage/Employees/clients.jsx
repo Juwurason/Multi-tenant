@@ -223,7 +223,7 @@ const Clients = () => {
       html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3>`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc2626',
+      confirmButtonColor: '#00AEEF',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -309,7 +309,7 @@ const Clients = () => {
 
             <div className="col-md-3">
               <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                <input type="text" placeholder="Search clientss" className='border-0 outline-none' onChange={handleSearch} />
+                <input type="text" placeholder="Search clients" className='border-0 outline-none' onChange={handleSearch} />
                 <GoSearch />
               </div>
             </div>

@@ -52,7 +52,6 @@ const EditShiftRoaster = () => {
 
         try {
             const { data } = await get(`ShiftRosters/${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
             setShiftOne(data);
             const { activities } = data;
             setActivities(activities.split(',').map((activity) => ({ label: activity, value: activity })));

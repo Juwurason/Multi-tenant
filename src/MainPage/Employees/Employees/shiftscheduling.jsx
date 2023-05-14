@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { GoTrashcan } from 'react-icons/go';
+import { MdOutlineEditCalendar } from 'react-icons/md';
 
 const ShiftScheduling = () => {
   const id = JSON.parse(localStorage.getItem('user'));
@@ -22,6 +24,7 @@ const ShiftScheduling = () => {
   const [staffOne, setStaffOne] = useState({});
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
+
 
 
   const FetchSchedule = async () => {
@@ -131,7 +134,7 @@ const ShiftScheduling = () => {
       html: `<h3>Are you sure? you want to delete this shift</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#dc2626',
+      confirmButtonColor: '#00AEEF',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -161,6 +164,11 @@ const ShiftScheduling = () => {
     })
 
 
+  }
+  const markAttendance = () => {
+    Swal.fire(
+      "", "Don't do it", "warning"
+    )
   }
   return (
     <>
@@ -301,24 +309,30 @@ const ShiftScheduling = () => {
                             <span className='fw-bold' >
                               {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                             </span>
-                            <span><span className='fw-bold'>Staff: </span><span className=''>{activity.staff.fullName}</span></span>
-                            <span><span className='fw-bold'>Client: </span><span className=''>{activity.profile.fullName}</span></span>
-                            <span className='text-truncate'><span className='fw-bold'>Task: </span><span>{activity.activities}</span></span>
+                            <span><span className='fw-bold'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
+                            <span><span className='fw-bold'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
+                            <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                           </div>
                           <div className='d-flex gap-2'>
                             <small
-                              className={`text-truncate p-1 rounded bg-danger pointer`}
+                              className={`text-truncate d-flex 
+                             align-items-center
+                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
 
                               onClick={() => handleDelete(activity?.shiftRosterId)}
+                              title="Delete"
                             >
-                              Delete
+                              <GoTrashcan className='fs-6' />
                             </small>
                             <Link
                               to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                              className={`text-truncate p-1 rounded bg-light text-dark pointer`}
+                              className={`text-truncate d-flex 
+                              align-items-center
+                              justify-content-center px-2 py-1 rounded bg-light pointer`}
+                              title="Edit"
 
                             >
-                              Edit
+                              <MdOutlineEditCalendar className='fs-6 text-dark' />
                             </Link>
                           </div>
                         </div>
@@ -339,7 +353,7 @@ const ShiftScheduling = () => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')} - {dayjs(selectedActivity.dateTo).format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Staff:</b> {selectedActivity.staff.fullName}</p>
                               <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
@@ -349,7 +363,9 @@ const ShiftScheduling = () => {
                         </Modal.Body>
                         <Modal.Footer>
                           <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
-                          <button className="ml-4 btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                          <button className="ml-4 btn btn-secondary" onClick={() => markAttendance()}>
+                            Mark attendance for staff
+                          </button>
                         </Modal.Footer>
                       </Modal>
 

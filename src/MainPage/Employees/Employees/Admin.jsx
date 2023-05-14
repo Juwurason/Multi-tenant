@@ -112,7 +112,7 @@ const AllAdmin = () => {
             html: `<h3>Are you sure? you want to delete this Administrator</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#dc2626',
+            confirmButtonColor: '#00AEEF',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
@@ -266,10 +266,10 @@ const AllAdmin = () => {
                         <div className="page-header">
                             <div className="row align-items-center">
                                 <div className="col">
-                                    <h3 className="page-title">Admin</h3>
+                                    <h3 className="page-title">Administrators</h3>
                                     <ul className="breadcrumb">
                                         <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                        <li className="breadcrumb-item active">Admin</li>
+                                        <li className="breadcrumb-item active">Administrators</li>
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">
