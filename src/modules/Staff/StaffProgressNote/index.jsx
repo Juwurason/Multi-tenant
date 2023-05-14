@@ -229,7 +229,7 @@ const StaffProgressNote = () => {
 
                             <div className="col-md-3">
                                 <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                    <input type="text" placeholder="Search Documents" className='border-0 outline-none' onChange={handleSearch} />
+                                    <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
                                     <GoSearch />
                                 </div>
                             </div>
