@@ -117,7 +117,7 @@ const StaffProgressNote = () => {
 
 
     const privateHttp = useHttp()
-    
+
 
     useEffect(() => {
         setLoading(true)
@@ -130,14 +130,14 @@ const StaffProgressNote = () => {
                 setLoading(false);
             } catch (error) {
                 console.log(error);
-            } 
+            }
             finally {
                 setLoading(false)
             }
         }
         getStaffProgressNote()
     }, [])
-    
+
     const handlePDFDownload = () => {
         const unit = "pt";
         const size = "A4"; // Use A1, A2, A3 or A4
@@ -168,16 +168,16 @@ const StaffProgressNote = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
 
-    const handleActivityClick = async(e) => {
+    const handleActivityClick = async (e) => {
         try {
-            const {data} = await privateHttp.get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
+            const { data } = await privateHttp.get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
             setSelectedActivity(data);
             // console.log(data.progress);
             setLoading(false);
         } catch (error) {
             console.log(error);
-        } 
-      setShowModal(true);
+        }
+        setShowModal(true);
     };
 
     const ButtonRow = ({ data }) => {
@@ -225,16 +225,18 @@ const StaffProgressNote = () => {
                     </div>
 
                     <div className='mt-4 border'>
-                        <div className="d-flex p-2 justify-content-between align-items-center gap-4">
+                        <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 
-                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                <input type="text" placeholder="Search..." className='border-0 outline-none' onChange={handleSearch} />
-                                <GoSearch />
+                            <div className="col-md-3">
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
+                                </div>
                             </div>
-                            <div className='d-flex  justify-content-center align-items-center gap-4'>
+                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                                 <CSVLink
                                     data={staffPro}
-                                    filename={"data.csv"}
+                                    filename={"document.csv"}
 
                                 >
                                     <button
@@ -272,10 +274,6 @@ const StaffProgressNote = () => {
                                     </button>
                                 </CopyToClipboard>
                             </div>
-                            {/* <div>
-                                    <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
-                                        Create New Admin</Link>
-                                </div> */}
                         </div>
                         <DataTable data={filteredData} columns={columns}
                             pagination
@@ -296,23 +294,23 @@ const StaffProgressNote = () => {
 
                         />
 
-                    <Modal show={showModal} onHide={() => setShowModal(false)}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Progress Notes Details</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          {selectedActivity && (
-                            <>
-                              <p><b>FollowUp:</b> {selectedActivity.followUp}</p>
-                              <p><b>Progress:</b> {selectedActivity.progress}</p>
-                              <p><b>Report:</b> {selectedActivity.report}</p>
-                            </>
-                          )}
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                        </Modal.Footer>
-                      </Modal>
+                        <Modal show={showModal} onHide={() => setShowModal(false)}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Progress Notes Details</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                {selectedActivity && (
+                                    <>
+                                        <p><b>FollowUp:</b> {selectedActivity.followUp}</p>
+                                        <p><b>Progress:</b> {selectedActivity.progress}</p>
+                                        <p><b>Report:</b> {selectedActivity.report}</p>
+                                    </>
+                                )}
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                            </Modal.Footer>
+                        </Modal>
 
                     </div>
 
