@@ -361,7 +361,7 @@ const AllAdmin = () => {
                                     </CopyToClipboard>
                                 </div>
                                 <div className='col-md-4'>
-                                    <Link to={'/app/employee/addadmin'} className="btn add-btn rounded-2">
+                                    <Link to={'/app/employee/addadmin'} className="btn btn-info add-btn rounded-2">
                                         Create New Admin</Link>
                                 </div>
                             </div>

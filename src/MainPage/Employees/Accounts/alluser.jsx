@@ -106,9 +106,7 @@ const AllUser = () => {
             setLoading(true);
             const UserResponse = await get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const users = UserResponse.data;
-            console.log(users);
             setUsers(users);
-            console.log(users);
             setLoading(false)
         } catch (error) {
             console.log(error);

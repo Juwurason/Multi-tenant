@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
+import man from "../../../assets/img/user.jpg"
 const AdminProfile = () => {
     const { uid } = useParams()
     const [staffOne, setStaffOne] = useState({});
@@ -62,8 +63,8 @@ const AdminProfile = () => {
                                 <div className="col-md-12">
                                     <div className="profile-view">
                                         <div className="profile-img-wrap">
-                                            <div className="profile-img">
-                                                <a href="#"><img alt="" src={Avatar_02} /></a>
+                                            <div className='rounded-circle mt-2 d-flex justify-content-center' style={{ width: "120px", height: "120px" }}>
+                                                <img src={!staffOne.imageUrl ? man : staffOne.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
                                             </div>
                                         </div>
                                         <div className="profile-basic">
