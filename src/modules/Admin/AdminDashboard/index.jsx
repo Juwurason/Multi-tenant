@@ -7,7 +7,10 @@ import "../../index.css"
 import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
-import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineSummarize, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
+import { MdOutlineEventNote, MdOutlineFolderOpen, MdOutlinePeople, MdOutlineQueryBuilder } from 'react-icons/md';
+import { GoNote } from 'react-icons/go';
+import { GiNotebook } from 'react-icons/gi';
+import { AiOutlineFolder } from 'react-icons/ai';
 import man from "../../../assets/img/user.jpg"
 import AdminHeader from '../Components/AdminHeader';
 import AdminSidebar from '../Components/AdminSidebar';
@@ -99,8 +102,8 @@ const AdminDashboard = () => {
                 <AdminSidebar />
                 <div className="page-wrapper">
                     <Helmet>
-                        <title>Dashboard - Promax Staff Dashboard</title>
-                        <meta name="description" content="Dashboard" />
+                        <title>Dashboard - Promax Admin Dashboard</title>
+                        <meta name="description" content="Admin Dashboard" />
                     </Helmet>
                     {/* Page Content */}
                     <div className="content container-fluid">
@@ -117,46 +120,52 @@ const AdminDashboard = () => {
                         </div>
                         {/* /Page Header */}
                         <div className="row g-1">
-                            <div className='col-md-5'>
+                            <div className='col-md-7'>
                                 <div className="row">
                                     <h4>Overview</h4>
-                                    <DashboardCard title={"Total Shift Roster"} content={staff.length} icon={<MdOutlineEventNote className='fs-4' />}
-                                        link={`/staff/staff-roster`}
+                                    <DashboardCard title={"Total Client"} content={staff.length} icon={<MdOutlinePeople className='fs-4' />}
+                                        link={``}
+                                        sty={'primary'}
+                                    />
+                                    <DashboardCard title={"Total Staff"} content={staff.length} icon={<MdOutlinePeople className='fs-4' />}
+                                        link={``}
                                         sty={'danger'}
                                     />
-                                    <DashboardCard title={"Progress Notes "} content={0} icon={<MdOutlineFeed className='fs-4' />}
-                                        linkTitle={"View Progress Notes"} link={``} sty={'success'}
+                                    <DashboardCard title={"Total Tickets"} content={staff.length} icon={<MdOutlineEventNote className='fs-4' />}
+                                        link={``}
+                                        sty={'warning'}
+                                    />
+                                    <DashboardCard title={"Total Documents"} content={0} icon={<AiOutlineFolder className='fs-4' />}
+                                        linkTitle={"View Progress Notes"} link={``} sty={'info'}
                                     />
 
-                                    <DashboardCard title={"Attendances"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
-                                        link={``} sty={'warning'}
+                                    <DashboardCard title={"Total Progress Notes"} content={0} icon={<GoNote className='fs-4' />}
+                                        link={``} sty={'danger'}
+                                    /> 
+                                    
+                                    <DashboardCard title={"Total Shift Roster"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
+                                        link={``} sty={'success'}
                                     />
-                                    <DashboardCard title={"Roster Summary"} content={0} icon={<MdOutlineSummarize className='fs-4' />}
-                                        link={``} sty={'warning'}
+                                    <DashboardCard title={"Total Attendances"} content={0} icon={<GiNotebook className='fs-4' />}
+                                        link={``} sty={'info'}
+                                    />
+                                    {/* <DashboardCard title={"Total Shift Roster For May"} content={0} icon={<MdOutlineSummarize className='fs-4' />}
+                                        link={``} sty={'info'}
+                                    /> */}
+                                    <DashboardCard title={"Total Shift Roster for Today"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
+                                        link={``} sty={'danger'}
                                     />
                                 </div>
 
                             </div>
 
 
-                            <div className='col-md-4 p-2'>
+                            <div className='col-md-5 p-2'>
 
                                 <div className='p-3 shadow-sm'>
-                                    <h3>Clients</h3>
+                                    
                                     <div className='d-flex justify-content-center flex-column p-2 gap-2'>
-                                        <div className='d-flex justify-content-between align-items-center'>
-                                            <span><MdOutlineSwitchAccount className='fs-3' /> Assign clients</span>
-                                            <h2 className='text-primary'>
-
-                                                {clients.length}
-                                            </h2>
-                                        </div>
-                                        <div className=''>
-                                            <Link style={{ fontSize: "12px" }}
-
-                                                to={``} className='pointer text-dark text-center'>View all</Link>
-                                        </div>
-
+                                       
                                         <div className='border p-2'>
                                             <div>
                                                 <div className={`card shadow-none border border-primary`}>
@@ -200,60 +209,6 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             </div>
-
-
-
-                            <div className='col-md-3 p-2 d-flex flex-column gap-2 justify-content-start'>
-                                <div className='p-3 shadow-sm'>
-                                    <h5>Recently Assign Clients</h5>
-                                    <div className="row mt-2">
-                                        <div className="col-2">
-                                            <div className='rounded-circle mt-3' style={{ width: "35px", height: "35px" }}>
-                                                <img src={man} alt="" width={50} height={50} className='rounded-circle' />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-10 d-flex flex-column justify-content-start">
-                                            <span className='text-primary fs-5 fw-bold'>Joe Cole</span>
-                                            <span style={{ fontSize: "10px", }}>Gum Nut Close, Kellyville, NSW, Australia</span>
-                                            <span style={{ fontSize: "7px", }}>garyneville@gmail.com</span>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div className={`card shadow-none border border-info`}>
-                                    <div className="card-content shadow-none">
-                                        <div className="card-body shadow-none">
-                                            <div className="media d-flex justify-content-between">
-                                                <div className="media-body text-left">
-                                                    <span>Client Documents</span>
-
-                                                    {
-                                                        loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                                                            <div className="spinner-grow text-light" role="status">
-                                                                <span className="sr-only">Loading...</span>
-                                                            </div>
-                                                        </div>
-                                                        )
-
-                                                            :
-                                                            <h3 className='text-info'>3</h3>
-                                                    }
-
-                                                    <Link style={{ fontSize: "12px" }}
-
-                                                        to={`/staff/staff-document`} className='pointer text-dark'>View all</Link>
-                                                </div>
-                                                <div className="align-self-center">
-                                                    <MdOutlineFolderOpen className='fs-4' />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
 
 
 

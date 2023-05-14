@@ -41,7 +41,7 @@ const AdminHeader = (props) => {
 
     const handleLogout = () => {
         localStorage.removeItem('user')
-        localStorage.removeItem('staffProfile')
+        localStorage.removeItem('adminProfile')
         navigate.push("/login")
     }
 
