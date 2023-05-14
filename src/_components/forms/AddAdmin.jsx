@@ -17,7 +17,8 @@ const AddAdministrator = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [offerLetter, setOfferLetter] = useState(null);
     const privateHttp = useHttp();
-    const navigate = useHistory()
+    const navigate = useHistory();
+    const [loading1, setLoading1] = useState(false)
 
 
     const submitForm = async (e) => {
@@ -42,7 +43,7 @@ const AddAdministrator = () => {
 
 
         try {
-            setLoading(true)
+            setLoading1(true)
             const { data } = await privateHttp.post(`/Administrators/add_administrator?userId=${userProfile.userId}`,
                 formData
             )
@@ -53,10 +54,10 @@ const AddAdministrator = () => {
         } catch (error) {
             toast.error(error.response?.data?.message)
 
-            setLoading(false)
+            setLoading1(false)
 
         } finally {
-            setLoading(false)
+            setLoading1(false)
         }
 
     }
@@ -130,7 +131,7 @@ const AddAdministrator = () => {
                                     <div className="submit-section">
                                         <button className="btn btn-primary submit-btn" type='submit'>
 
-                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                            {loading1 ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>
                                             </div> : "Submit"}
                                         </button>

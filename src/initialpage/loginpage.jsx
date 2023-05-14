@@ -46,7 +46,6 @@ const Loginpage = () => {
     try {
       setLoading(true)
       const { data } = await publicHttp.post('/Account/auth_login', info)
-      console.log(data);
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         localStorage.setItem("user", JSON.stringify(data.userProfile))
@@ -64,6 +63,11 @@ const Loginpage = () => {
       if (data.userProfile?.role === "Client") {
         navigate.push('/client/client/Dashboard')
         localStorage.setItem("clientProfile", JSON.stringify(data.clientProfile))
+
+      }
+      if (data.userProfile?.role === "Admin") {
+        navigate.push('/administrator/administrator/adminDashboard')
+        localStorage.setItem("adminProfile", JSON.stringify(data.adminProfile))
 
       }
 
@@ -106,6 +110,9 @@ const Loginpage = () => {
     if (user && user.token && user.role === "Client") {
       navigate.push('/client/client/Dashboard');
     }
+    if (user && user.token && user.role === "Admin") {
+      navigate.push('/administrator/administrator/adminDashboard');
+    }
   }, []);
   return (
 
@@ -133,7 +140,7 @@ const Loginpage = () => {
               value={password}
               type={pwdVisible ? "text" : "password"}
               name="password"
-              minLength="6"
+              minLength="4"
               maxLength="15"
               required
               className="form-control border-0" placeholder="password" />
