@@ -24,6 +24,7 @@ import CompanySetup from './CompanySetup';
 import AdminRegistration from './AdminRegistration';
 import StaffLayout from './Sidebar/StaffLayout';
 import ClientLayout from './Sidebar/ClientLayout';
+import AdminLayout from './Sidebar/AdminLayout';
 
 
 
@@ -57,6 +58,7 @@ export default class App extends Component {
                 <Route path="/applyjob" component={ApplyJobs} />
                 <Route path="/app" component={DefaultLayout} />
                 <Route path="/staff" component={StaffLayout} />
+                <Route path="/administrator" component={AdminLayout} />
                 <Route path="/client" component={ClientLayout} />
 
                 <Route path="/settings" component={Settinglayout} />

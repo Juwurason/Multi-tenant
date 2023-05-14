@@ -427,7 +427,7 @@ const AllEmployees = () => {
                   </CopyToClipboard>
                 </div>
                 <div className='col-md-4'>
-                  <Link to={'/app/employee/addstaff'} className="btn add-btn rounded-2">
+                  <Link to={'/app/employee/addstaff'} className="btn btn-info add-btn rounded-2">
                     Create New staff</Link>
                 </div>
               </div>

@@ -21,7 +21,7 @@ const Clients = () => {
   const { loading, setLoading } = useCompanyContext()
   const id = JSON.parse(localStorage.getItem('user'));
   const [clients, setClients] = useState([]);
-  const { get } = useHttp();
+  const { get, post } = useHttp();
 
   const columns = [
     // {
@@ -69,7 +69,7 @@ const Clients = () => {
           <button
             className='btn'
             title='Delete'
-            onClick={() => handleDelete(row.profileId)}
+            onClick={() => handleDelete(row)}
           >
             <GoTrashcan />
           </button>
@@ -230,11 +230,12 @@ const Clients = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const { data } = await privateHttp.post(`Profiles/delete/${e.profileId}?userId=${id.userId}`,
+          const { data } = await post(`Profiles/delete/${e.profileId}?userId=${id.userId}`,
             { userId: id.userId }
           )
           if (data.status === 'Success') {
             toast.success(data.message);
+            FetchClient();
           } else {
             toast.error(data.message);
           }
@@ -354,7 +355,7 @@ const Clients = () => {
               </CopyToClipboard>
             </div>
             <div className='col-md-4'>
-              <Link to="/app/employees/addclients" className="btn add-btn rounded-2">
+              <Link to="/app/employees/addclients" className="btn btn-info add-btn rounded-2">
                 Create New clients</Link>
             </div>
           </div>

@@ -237,8 +237,7 @@ const ShiftScheduling = () => {
               </div>
             </div>
 
-            {/* <div className="col-auto float-end ml-auto">
-            </div> */}
+
           </div>
           <div className='row filter-row '>
 
