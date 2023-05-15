@@ -45,7 +45,6 @@ const EditProgressNote = () => {
     try {
       const editProgress = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
       const editpro = editProgress;
-      // console.log(editpro.data);
       setEditPro(editpro.data);
       setLoading(false)
     } catch (error) {
@@ -87,8 +86,7 @@ const EditProgressNote = () => {
     try {
       const saveProgress = await post(`/ProgressNotes/save_progressnote/${pro}?userId=${user.userId}`, info);
       const savePro = saveProgress.data;
-      // console.log(savePro);
-      toast.success(savePro)
+      toast.success(savePro.message)
       setLoading1(false)
     } catch (error) {
       console.log(error);
@@ -99,7 +97,6 @@ const EditProgressNote = () => {
   }
 
   const CreateProgress = async (e) => {
-    setLoading2(true)
     e.preventDefault()
     const info = {
       progressNoteId: Number(pro),
@@ -124,7 +121,9 @@ const EditProgressNote = () => {
       confirmButtonText: 'Proceed',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
+
       if (result.isConfirmed) {
+        setLoading2(false)
         try {
           const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
           if (data.status === "Success") {
@@ -133,12 +132,13 @@ const EditProgressNote = () => {
               `${data.message}`,
               'success'
             )
+            setLoading2(false)
             navigate.push(`/staff/staff-report/${uid}`)
           }
-          setLoading2(false)
         } catch (error) {
           console.log(error);
           toast.error(error.response.data.message);
+          setLoading2(false)
         }
         finally {
           setLoading2(false)

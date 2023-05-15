@@ -309,8 +309,8 @@ const ShiftScheduling = () => {
                             <span className='fw-bold' >
                               {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                             </span>
-                            <span><span className='fw-bold'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
-                            <span><span className='fw-bold'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
+                            <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
+                            <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
                             <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                           </div>
                           <div className='d-flex gap-2'>

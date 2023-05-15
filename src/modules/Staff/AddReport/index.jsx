@@ -1,34 +1,34 @@
 
 import React, { Component, useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import "../../index.css";
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
-import useHttp from '../../../hooks/useHttp';
 import moment from 'moment';
+import useHttp from '../../../hooks/useHttp';
+import Swal from 'sweetalert2';
 
 const AddReport = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, } = useParams();
     const [attendance, setAttendance] = useState({});
-    const { get, post } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const [loading1, setLoading1] = useState(false);
+    const navigate = useHistory();
+    const privateHttp = useHttp();
 
 
 
     const FetchData = async () => {
         setLoading(true);
         try {
-            const { data } = await get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
+            const { data } = await privateHttp.get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
             const attendId = data.attendId;
 
             try {
-                const attendanceData = await get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
-                console.log(attendanceData.data);
+                const attendanceData = await privateHttp.get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
                 setAttendance(attendanceData.data);
                 // Process the attendance data here
             } catch (attendanceError) {
@@ -74,10 +74,17 @@ const AddReport = () => {
         setLoading1(true)
 
         try {
-            const { data } = await post(`/Attendances/add_report/${uid}?userId=${user.userId}&attendanceId=${attendance.attendanceId}`,
+            const { data } = await privateHttp.post(`/Attendances/add_report/${uid}?userId=${user.userId}&attendanceId=${attendance.attendanceId}`,
                 formData);
-            console.log(data);
-            // toast.success(savePro)
+            if (data.status === "Success") {
+                Swal.fire(
+                    '',
+                    `${data.message}`,
+                    'success'
+                )
+                setLoading1(false)
+                navigate.push(`/staff/staff-roster`)
+            }
             setLoading1(false)
         } catch (error) {
             console.log(error);

@@ -103,7 +103,6 @@ const ProgressNote = () => {
     }
     try {
       const { data } = await post(`/ProgressNotes/save_progressnote/${''}?userId=${user.userId}`, info);
-      // console.log(data);
       if (data.status === 'Success') {
         navigate.push(`/staff/staff-edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
@@ -137,7 +136,7 @@ const ProgressNote = () => {
     try {
       const CreateProgress = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
       const createPro = CreateProgress.data;
-      console.log(createPro);
+      toast.warning(createPro.message)
       setLoading2(false)
     } catch (error) {
       console.log(error);
@@ -175,9 +174,13 @@ const ProgressNote = () => {
               <div className="card">
                 <div className="card-body">
                   {
-                    loading ? <div className="spinner-grow text-light fs-1" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div> :
+                    loading ? <div className='d-flex justify-content-center w-100'>
+                      <div className="spinner-grow text-secondary fs-1" role="status">
+                        <span className="sr-only fs-1">Loading...</span>
+                      </div>
+                    </div>
+
+                      :
                       <form>
                         <div className='col-md-4'>
                           <div className="form-group">
