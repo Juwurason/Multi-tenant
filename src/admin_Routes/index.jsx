@@ -2,6 +2,7 @@
 import AdminDashboard from '../modules/Admin/AdminDashboard';
 import AllClients from '../modules/Admin/AllClient';
 import AllStaff from '../modules/Admin/AllStaff';
+import AllUsers from '../modules/Admin/AllUsers';
 import ClientDocum from '../modules/Admin/ClientDocum';
 import ClientsProfile from '../modules/Admin/ClientsProfile';
 import AdminProfile from '../modules/Admin/Components/AdminProfile';
@@ -9,6 +10,7 @@ import CreateClient from '../modules/Admin/CreateClient';
 import CreateStaff from '../modules/Admin/CreateStaff';
 import EditClientPro from '../modules/Admin/EditClientPro';
 import EditStaffProfile from '../modules/Admin/EditStaffProfile';
+import EditUsers from '../modules/Admin/EditUsers';
 import StaffDocum from '../modules/Admin/StaffDocum';
 import StaffProfile from '../modules/Admin/StaffProfile.jsx';
 
@@ -62,6 +64,14 @@ export default [
     {
         path: 'clientDocum/:uid',
         component: ClientDocum
+    },
+    {
+        path: 'allUsers',
+        component: AllUsers
+    },
+    {
+        path: 'editUsers/:uid',
+        component: EditUsers
     },
 
 ]
