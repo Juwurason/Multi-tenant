@@ -319,6 +319,8 @@ const ClientRoster = () => {
                                                 </Modal.Footer>
                                             </Modal>
 
+
+
                                             <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
                                                 <Modal.Header closeButton>
                                                     <Modal.Title>Request to Cancel Shift</Modal.Title>

@@ -25,7 +25,11 @@ const ProgressReport = () => {
     const { loading, setLoading } = useCompanyContext();
     const id = JSON.parse(localStorage.getItem('user'));
     const [progress, setProgress] = useState([]);
-
+    const [staff, setStaff] = useState([]);
+    const [clients, setClients] = useState([]);
+    const [loading1, setLoading1] = useState(false);
+    const [cli, setCli] = useState('');
+    const [sta, setSta] = useState('');
     const columns = [
         {
             name: '',
@@ -94,11 +98,55 @@ const ProgressReport = () => {
         } finally {
             setLoading(false)
         }
+        try {
+            const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const staff = staffResponse.data;
+            setStaff(staff);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+
+        try {
+            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const client = clientResponse.data;
+            setClients(client);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+
+
+
     };
     useEffect(() => {
 
         FetchProgress()
     }, []);
+
+    const FilterReport = async () => {
+
+        if (sta === "") {
+            return Swal.fire(
+                "Select either a staff or client",
+                "",
+                "error"
+            )
+
+        } else {
+            setLoading1(true)
+
+            try {
+                const { data } = await get(`/ProgressNotes/get_progressnote_by_user?staffname=${sta}&profileId=${cli}`, { cacheTimeout: 300000 });
+                setProgress(data.progressNote);
+                setLoading1(false)
+            } catch (error) {
+                console.log(error);
+                setLoading1(false)
+            }
+        }
+
+    }
 
 
     const [menu, setMenu] = useState(false);
@@ -238,6 +286,10 @@ const ProgressReport = () => {
         item.staff.toLowerCase().includes(searchText.toLowerCase())
     );
 
+
+
+
+
     return (
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -264,30 +316,64 @@ const ProgressReport = () => {
                             </div>
                         </div>
 
-                        {/* <div className="row filter-row">
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin ID</label>
-                                    <input type="text" className="form-control floating" />
+                        <div className="row align-items-center">
+                            <span className='fw-bold'>Filter Progress Reports </span>
+                            <br />
+                            <br />
+                            <br />
+                            <div className="col-md-4">
+                                <div className="form-group">
+                                    <label className="col-form-label">Staff Name</label>
+                                    <div>
+                                        <select className="form-select" onChange={e => setSta(e.target.value)}>
+                                            <option defaultValue value={""}>--Select a staff--</option>
+                                            {
+                                                staff.map((data, index) =>
+                                                    <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                            }
+                                        </select></div>
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Name</label>
-                                    <input type="text" className="form-control floating" />
+                            <div className="col-md-4">
+                                <div className="form-group">
+                                    <label className="col-form-label">Client Name</label>
+                                    <div>
+                                        <select className="form-select" onChange={e => setCli(e.target.value)}>
+                                            <option defaultValue value={""}>--Select a Client--</option>
+                                            {
+                                                clients.map((data, index) =>
+                                                    <option value={data.profileId} key={index}>{data.fullName}</option>)
+                                            }
+                                        </select></div>
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Email</label>
-                                    <input type="text" className="form-control " />
+                            <div className="col-auto mt-3">
+                                <div className="form-group">
+                                    <button
+                                        onClick={FilterReport}
+                                        className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                        disabled={loading1 ? true : false}
+                                    >
+
+
+                                        {loading1 ? <div className="spinner-grow text-light" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div> : "Load"}
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div className="col-auto mt-3">
+                                <div className="form-group">
+                                    <button
+                                        onClick={FetchProgress}
+                                        className="btn btn-secondary add-btn rounded-2 m-r-5">All Progress Report</button>
+
                                 </div>
                             </div>
 
-                            <div className="col-sm-6 col-md-3">
-                                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
-                            </div>
-                        </div> */}
+
+                        </div>
 
 
 

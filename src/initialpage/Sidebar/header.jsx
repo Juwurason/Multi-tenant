@@ -2,7 +2,7 @@
  * App Header
  */
 import React, { useEffect, useState } from 'react'
-import { FaAngleDown, FaArrowDown } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp, FaArrowDown } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -286,7 +286,7 @@ const Header = (props) => {
         <li className={`nav-item dropdown has-arrow main-drop ${isDropdownOpen ? 'show' : ''}`}>
           <a
             className="nav-link dropdown-toggle"
-            href="/"
+            href="javascript:void(0)"
             onClick={(e) => {
               e.preventDefault();
               setDropdownOpen(!isDropdownOpen);
@@ -298,7 +298,16 @@ const Header = (props) => {
               <img src={man} alt="" width={50} height={50} className='rounded-circle' />
 
               <span className="status online" /></span>
-            <span><FaAngleDown /></span>
+            <span>
+              {
+                isDropdownOpen ?
+                  <FaAngleUp />
+
+                  :
+                  <FaAngleDown />
+
+              }
+            </span>
           </a>
           <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
             <div className='bg-primary p-2'>
@@ -335,7 +344,7 @@ const Header = (props) => {
       <div className="dropdown mobile-user-menu">
         <a
           className="nav-link dropdown-toggle"
-          href="/"
+          href="javascript:void(0)"
           onClick={(e) => {
             e.preventDefault();
             setDropdownOpen(!isDropdownOpen);

@@ -182,8 +182,8 @@ const AdminDashboard = () => {
             {/* /Page Header */}
             <div className="row g-1">
               <div className='col-md-5'>
+                <h4>Overview</h4>
                 <div className="row">
-                  <h4>Overview</h4>
                   <DashboardCard title={"Admin"} sty={'info'}
                     content={admin.length} icon={<MdOutlinePersonOutline className='fs-4' />}
                     link={'/app/employee/alladmin'}
@@ -224,7 +224,7 @@ const AdminDashboard = () => {
 
               <div className='col-md-4 p-2'>
                 {/* <ClientChart /> */}
-                <div className='p-3 shadow'>
+                <div className='p-3 shadow-sm'>
                   <h3>Clients</h3>
                   <div className='d-flex justify-content-center flex-column p-2 gap-2'>
                     <div className='d-flex justify-content-between align-items-center'>
@@ -353,8 +353,9 @@ const AdminDashboard = () => {
                           <MdOutlineFolderOpen className='fs-4' />
                         </div>
                       </div>
-                      <div className='d-flex justify-content-end'>
-                        <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span></div>
+                      {/* <div className='d-flex justify-content-end'>
+                        <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -426,7 +427,7 @@ const AdminDashboard = () => {
                     </div>
                   </div> */}
 
-                  <div className="col-md-5 p-2">
+                  {/* <div className="col-md-5 p-2">
                     <div className='p-3 shadow-sm'>
                       <h4>Staff log</h4>
                       <div className='d-flex mt-2 justify-content-between'>
@@ -444,7 +445,7 @@ const AdminDashboard = () => {
                     </div>
 
 
-                  </div>
+                  </div> */}
 
 
                 </div>

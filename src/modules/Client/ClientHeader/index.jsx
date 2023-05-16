@@ -2,7 +2,7 @@
  * App Header
  */
 import React, { useEffect, useState } from 'react'
-import { FaAngleDown } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -10,6 +10,7 @@ import {
     Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
 } from '../../../Entryfile/imagepath'
 import man from "../../../assets/img/user.jpg"
+import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineVerifiedUser, MdPersonOutline } from 'react-icons/md';
 
 
 const ClientHeader = (props) => {
@@ -20,7 +21,7 @@ const ClientHeader = (props) => {
     const onMenuClik = () => {
         props.onMenuClick()
     }
-
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem('user')
@@ -281,48 +282,84 @@ const ClientHeader = (props) => {
                     </div>
                 </li>
                 {/* /Message Notifications */}
-                <li className="nav-item dropdown has-arrow main-drop">
-          <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-            <span className="user-img me-1">
 
-              <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+                <li className={`nav-item dropdown has-arrow main-drop ${isDropdownOpen ? 'show' : ''}`}>
+                    <a
+                        className="nav-link dropdown-toggle"
+                        href="javascript:void(0)"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setDropdownOpen(!isDropdownOpen);
+                        }}
+                        data-bs-toggle="dropdown"
+                    >
+                        <span className="user-img me-1">
 
-              <span className="status online" /></span>
-            <span><FaAngleDown /></span>
-          </a>
-          <div className="dropdown-menu">
-            <div className='bg-primary p-2'>
-              <div className="row mt-2">
-                <div className="col-2">
-                  <div className='rounded-circle bg-secondary' style={{ width: "35px", height: "35px" }}>
-                    <img src={Avatar_02} alt="" width={50} height={50} className='rounded-circle' />
-                  </div>
-                </div>
+                            <img src={man} alt="" width={50} height={50} className='rounded-circle' />
 
-                <div className="col-10 d-flex flex-column justify-content-start text-white">
-                  <span className='fw-bold'>{userObj.fullName}</span>
-                  <span style={{ fontSize: "7px", }}>{userObj.email}</span>
-                </div>
+                            <span className="status online" /></span>
+                        <span>
+                            {
+                                isDropdownOpen ?
+                                    <FaAngleUp />
 
-              </div>
-            </div>
-            <Link className="dropdown-item" to={"/client/clientchange-password"}>Change Password</Link>
-            <Link className="dropdown-item" to={"/client/client-profile"}>Profile</Link>
-            <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+                                    :
+                                    <FaAngleDown />
 
-          </div>
-        </li>
+                            }
+                        </span>
+
+                    </a>
+                    <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
+                        <div className='bg-primary p-2'>
+                            <div className="row mt-2">
+                                <div className="col-2">
+                                    <div className='rounded-circle bg-secondary' style={{ width: "35px", height: "35px" }}>
+                                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+
+                                    </div>
+                                </div>
+                                &nbsp;
+                                &nbsp;
+
+                                <div className="col-8 d-flex flex-column justify-content-start text-white">
+                                    <span className='fw-bold'>{userObj.fullName}</span>
+                                    <span style={{ fontSize: "7px", }}>{userObj.email}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <Link className="dropdown-item" to={"/client/clientchange-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                        <Link className="dropdown-item" to={"/client/client-profile"}><MdPersonOutline /> &nbsp; Profile</Link>
+                        <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
+
+                    </div>
+                </li>
+
+
             </ul>
             {/* /Header Menu */}
             {/* Mobile Menu */}
             <div className="dropdown mobile-user-menu">
-                <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="fa fa-ellipsis-v" /></a>
-                <div className="dropdown-menu dropdown-menu-right">
-                    <Link className="dropdown-item" to="/client/client-profile">My Profile</Link>
-                    <Link className="dropdown-item" to="/client/change-password">Change Password</Link>
-                    <Link className="dropdown-item" onClick={handleLogout} to={'/'} >Logout</Link>
+                <a
+                    className="nav-link dropdown-toggle"
+                    href="javascript:void(0)"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setDropdownOpen(!isDropdownOpen);
+                    }}
+                    data-bs-toggle="dropdown"
+                >
+                    <i className="fa fa-ellipsis-v" /></a>
+                <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
+
+                    <Link className="dropdown-item" to={"/client/client-profile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                    <Link className="dropdown-item" to={"/client/change-password"}><MdPersonOutline /> &nbsp; Profile</Link>
+                    <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
+
                 </div>
             </div>
+
             {/* /Mobile Menu */}
         </div>
 
