@@ -11,6 +11,7 @@ import CreateStaff from '../modules/Admin/CreateStaff';
 import EditClientPro from '../modules/Admin/EditClientPro';
 import EditStaffProfile from '../modules/Admin/EditStaffProfile';
 import EditUsers from '../modules/Admin/EditUsers';
+import Referrals from '../modules/Admin/Referal';
 import StaffDocum from '../modules/Admin/StaffDocum';
 import StaffProfile from '../modules/Admin/StaffProfile.jsx';
 
@@ -72,6 +73,10 @@ export default [
     {
         path: 'editUsers/:uid',
         component: EditUsers
+    },
+    {
+        path: 'referrals',
+        component: Referrals
     },
 
 ]

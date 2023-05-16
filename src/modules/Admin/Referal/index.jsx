@@ -23,7 +23,7 @@ import Swal from 'sweetalert2';
 
 
 
-const AllUsers = () => {
+const Referrals = () => {
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
     const [users, setUsers] = useState([]);
@@ -100,7 +100,7 @@ const AllUsers = () => {
             setLoading(true);
             const UserResponse = await get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const users = UserResponse.data;
-            setUsers(users);
+            // setUsers(users);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -294,7 +294,7 @@ const AllUsers = () => {
 
                                 <div className='col-md-3'>
                                     <div className=' d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                        <input type="text" placeholder="Search Users" className='border-0 outline-none' onChange={handleSearch} />
+                                        <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
                                         <GoSearch />
                                     </div>
                                 </div>
@@ -375,4 +375,4 @@ const AllUsers = () => {
     );
 }
 
-export default AllUsers;
+export default Referrals;
