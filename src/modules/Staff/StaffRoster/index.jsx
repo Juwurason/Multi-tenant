@@ -229,11 +229,11 @@ const StaffRoster = () => {
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
-                                    <span className='fw-bold'>
+                                    <span className='fw-bold text-trucate'>
                                       {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                     </span>
-                                    <span><span className='fw-bold'>Client:</span> {activity.profile.firstName} {activity.profile.surName}</span>
-                                    <span><span className='fw-bold'>Status:</span> {activity.status}</span>
+                                    <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
+                                    <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
                                   </div>
                                 </div>
 
@@ -278,6 +278,7 @@ const StaffRoster = () => {
                                     >
                                       {getActivityStatus(activity)}
                                     </small>
+                                    
                                     {getActivityStatus(activity) === 'Upcoming' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
