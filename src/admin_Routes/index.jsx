@@ -1,8 +1,13 @@
 
 import AdminDashboard from '../modules/Admin/AdminDashboard';
+import AllClients from '../modules/Admin/AllClient';
 import AllStaff from '../modules/Admin/AllStaff';
+import ClientDocum from '../modules/Admin/ClientDocum';
+import ClientsProfile from '../modules/Admin/ClientsProfile';
 import AdminProfile from '../modules/Admin/Components/AdminProfile';
+import CreateClient from '../modules/Admin/CreateClient';
 import CreateStaff from '../modules/Admin/CreateStaff';
+import EditClientPro from '../modules/Admin/EditClientPro';
 import EditStaffProfile from '../modules/Admin/EditStaffProfile';
 import StaffDocum from '../modules/Admin/StaffDocum';
 import StaffProfile from '../modules/Admin/StaffProfile.jsx';
@@ -38,6 +43,25 @@ export default [
         path: 'staffDocum/:uid',
         component: StaffDocum
     },
-
+    {
+        path: 'allClient',
+        component: AllClients
+    },
+    {
+        path: 'clientProfile/:uid',
+        component: ClientsProfile
+    },
+    {
+        path: 'editClientPro/:uid',
+        component: EditClientPro
+    },
+    {
+        path: 'createClient',
+        component: CreateClient
+    },
+    {
+        path: 'clientDocum/:uid',
+        component: ClientDocum
+    },
 
 ]
