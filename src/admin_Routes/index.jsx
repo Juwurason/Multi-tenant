@@ -11,6 +11,7 @@ import CreateStaff from '../modules/Admin/CreateStaff';
 import EditClientPro from '../modules/Admin/EditClientPro';
 import EditStaffProfile from '../modules/Admin/EditStaffProfile';
 import EditUsers from '../modules/Admin/EditUsers';
+import PublicHoliday from '../modules/Admin/PublicHoliday';
 import Referrals from '../modules/Admin/Referal';
 import StaffDocum from '../modules/Admin/StaffDocum';
 import StaffProfile from '../modules/Admin/StaffProfile.jsx';
@@ -77,6 +78,10 @@ export default [
     {
         path: 'referrals',
         component: Referrals
+    },
+    {
+        path: 'publicHoliday',
+        component: PublicHoliday
     },
 
 ]

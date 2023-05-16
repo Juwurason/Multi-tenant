@@ -81,6 +81,23 @@ const AdminSidebar = (props) => {
                             <li className={pathname.includes('referrals') ? "active" : ""}>
                                 <Link to="/administrator/referrals"><i className="la la-user-plus" /> <span>Referrals</span></Link>
                             </li>
+
+                            <li className="menu-title">
+                                <span>Staff-Client Management</span>
+                            </li>
+
+                            <li className={pathname.includes('holidays') ? "active" : ""}>
+                                <Link to="/administrator/publicHoliday"><i className="la la-map" /> <span>Public Holidays</span></Link>
+                            </li>
+
+                            {/* <li className={pathname.includes('supports') ? "active" : ""}>
+                                <Link to="/administrator/referrals"><i className="la la-user-plus" /> <span>Schedule Supports</span></Link>
+                            </li>
+
+                            <li className={pathname.includes('type') ? "active" : ""}>
+                                <Link to="/administrator/referrals"><i className="la la-user-plus" /> <span>Support Type</span></Link>
+                            </li> */}
+
                             {/* <li className={pathname.includes('leads') ? "active" : ""}>
                                 <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
                             </li>

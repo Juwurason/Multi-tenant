@@ -267,8 +267,8 @@ const Referrals = () => {
                 <Sidebar />
                 <div className="page-wrapper">
                     <Helmet>
-                        <title>All User</title>
-                        <meta name="description" content="All user" />
+                        <title>Referrals</title>
+                        <meta name="description" content="Referrals" />
                     </Helmet>
                     {/* Page Content */}
                     <div className="content container-fluid">
@@ -276,10 +276,10 @@ const Referrals = () => {
                         <div className="page-header">
                             <div className="row align-items-center">
                                 <div className="col">
-                                    <h3 className="page-title">Users List</h3>
+                                    <h3 className="page-title">Referrals</h3>
                                     <ul className="breadcrumb">
                                         <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
-                                        <li className="breadcrumb-item active">users</li>
+                                        <li className="breadcrumb-item active">referrals</li>
                                     </ul>
                                 </div>
                                 <div className="col-auto float-end ml-auto">

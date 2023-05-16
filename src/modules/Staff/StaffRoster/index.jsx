@@ -278,6 +278,7 @@ const StaffRoster = () => {
                                     >
                                       {getActivityStatus(activity)}
                                     </small>
+                                    
                                     {getActivityStatus(activity) === 'Upcoming' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
