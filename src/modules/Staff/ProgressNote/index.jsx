@@ -131,20 +131,45 @@ const ProgressNote = () => {
       profileId: details.profileId,
       companyID: companyId
     }
+    Swal.fire({
+      html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
+      <h5>Do you wish to proceed ?<h5/>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#1C75BC',
+      cancelButtonColor: '#777',
+      confirmButtonText: 'Proceed',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+
+      if (result.isConfirmed) {
+        setLoading2(false)
+        try {
+          const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+          if (data.status === "Success") {
+            Swal.fire(
+              '',
+              `${data.message}`,
+              'success'
+            )
+            setLoading2(false)
+            navigate.push(`/staff/staff-report/${uid}`)
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response.data.message);
+          setLoading2(false)
+        }
+        finally {
+          setLoading2(false)
+        }
 
 
-    try {
-      const CreateProgress = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
-      const createPro = CreateProgress.data;
-      toast.warning(createPro.message)
-      setLoading2(false)
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-    finally {
-      setLoading2(false)
-    }
+      }
+    })
+
+
   }
 
   return (

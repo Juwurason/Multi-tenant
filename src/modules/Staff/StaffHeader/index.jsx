@@ -10,6 +10,7 @@ import {
     Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
 } from '../../../Entryfile/imagepath'
 import man from "../../../assets/img/user.jpg"
+import {MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout} from "react-icons/md"
 
 const StaffHeader = (props) => {
     const navigate = useHistory()
@@ -24,6 +25,8 @@ const StaffHeader = (props) => {
 
     const [currentTime, setCurrentTime] = useState(new Date());
     const userObj = JSON.parse(localStorage.getItem('user'));
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -291,37 +294,53 @@ const StaffHeader = (props) => {
                             <span className="status online" /></span>
                         <span><FaAngleDown /></span>
                     </a>
-                    <div className="dropdown-menu">
+                    <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
                         <div className='bg-primary p-2'>
                             <div className="row mt-2">
                                 <div className="col-2">
                                     <div className='rounded-circle bg-secondary' style={{ width: "35px", height: "35px" }}>
-                                        <img src={Avatar_02} alt="" width={50} height={50} className='rounded-circle' />
+                                        <img src={man} alt="" width={50} height={50} className='rounded-circle' />
+
                                     </div>
                                 </div>
+                                &nbsp;
+                                &nbsp;
 
-                                <div className="col-10 d-flex flex-column justify-content-start text-white">
+                                <div className="col-8 d-flex flex-column justify-content-start text-white">
                                     <span className='fw-bold'>{userObj.fullName}</span>
                                     <span style={{ fontSize: "7px", }}>{userObj.email}</span>
                                 </div>
 
                             </div>
                         </div>
-                        <Link className="dropdown-item" to={"/staff/staffchangepassword"}>Change Password</Link>
-                        <Link className="dropdown-item" to={"/staff/staffprofile"}>Profile</Link>
-                        <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+                        <Link className="dropdown-item" to={"/staff/staffchangepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                        <Link className="dropdown-item" to={"/staff/staffprofile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                        <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
+                   
                 </li>
             </ul>
             {/* /Header Menu */}
             {/* Mobile Menu */}
+
             <div className="dropdown mobile-user-menu">
-                <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="fa fa-ellipsis-v" /></a>
-                <div className="dropdown-menu dropdown-menu-right">
-                    <Link className="dropdown-item" to="/staff/staffprofile">My Profile</Link>
-                    <Link className="dropdown-item" to="/staff/staffchangepassword">Change Password</Link>
-                    <Link className="dropdown-item" onClick={handleLogout} to="/login">Logout</Link>
+                <a
+                    className="nav-link dropdown-toggle"
+                    href="/"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setDropdownOpen(!isDropdownOpen);
+                    }}
+                    data-bs-toggle="dropdown"
+                >
+                    <i className="fa fa-ellipsis-v" /></a>
+                <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
+
+                    <Link className="dropdown-item" to={"/staff/staffprofile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                    <Link className="dropdown-item" to={"/staff/staffchangepassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
+
                 </div>
             </div>
             {/* /Mobile Menu */}

@@ -49,7 +49,7 @@ const AdminHeader = (props) => {
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
-                <Link to="/app/main/dashboard" className="logo">
+                <Link to="/administrator/administrator/adminDashboard" className="logo">
                     <img src={headerlogo} width={40} height={40} alt="" />
                 </Link>
             </div>
@@ -106,7 +106,7 @@ const AdminHeader = (props) => {
                         <div className="noti-content">
                             <ul className="notification-list">
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="media">
                                             <span className="avatar">
                                                 <img alt="" src={Avatar_02} />
@@ -119,7 +119,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="media">
                                             <span className="avatar">
                                                 <img alt="" src={Avatar_03} />
@@ -132,7 +132,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="media">
                                             <span className="avatar">
                                                 <img alt="" src={Avatar_06} />
@@ -145,7 +145,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="media">
                                             <span className="avatar">
                                                 <img alt="" src={Avatar_17} />
@@ -158,7 +158,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="media">
                                             <span className="avatar">
                                                 <img alt="" src={Avatar_13} />
@@ -173,7 +173,7 @@ const AdminHeader = (props) => {
                             </ul>
                         </div>
                         <div className="topnav-dropdown-footer">
-                            <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">View all Notifications</Link>
+                            <Link onClick={() => localStorage.setItem("minheight", "true")} to="">View all Notifications</Link>
                         </div>
                     </div>
                 </li>
@@ -192,7 +192,7 @@ const AdminHeader = (props) => {
                         <div className="noti-content">
                             <ul className="notification-list">
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="list-item">
                                             <div className="list-left">
                                                 <span className="avatar">
@@ -209,7 +209,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="list-item">
                                             <div className="list-left">
                                                 <span className="avatar">
@@ -226,7 +226,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="list-item">
                                             <div className="list-left">
                                                 <span className="avatar">
@@ -243,7 +243,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="list-item">
                                             <div className="list-left">
                                                 <span className="avatar">
@@ -260,7 +260,7 @@ const AdminHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="notification-message">
-                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">
+                                    <Link onClick={() => localStorage.setItem("minheight", "true")} to="">
                                         <div className="list-item">
                                             <div className="list-left">
                                                 <span className="avatar">
@@ -279,7 +279,7 @@ const AdminHeader = (props) => {
                             </ul>
                         </div>
                         <div className="topnav-dropdown-footer">
-                            <Link onClick={() => localStorage.setItem("minheight", "true")} to="/conversation/chat">View all Messages</Link>
+                            <Link onClick={() => localStorage.setItem("minheight", "true")} to="">View all Messages</Link>
                         </div>
                     </div>
                 </li>
@@ -313,8 +313,8 @@ const AdminHeader = (props) => {
 
                             </div>
                         </div>
-                        <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                        <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                        <Link className="dropdown-item" to={""}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                        <Link className="dropdown-item" to={""}><MdOutlineSettings /> &nbsp; Settings</Link>
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
@@ -335,8 +335,8 @@ const AdminHeader = (props) => {
                     <i className="fa fa-ellipsis-v" /></a>
                 <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-                    <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                    <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <Link className="dropdown-item" to={""}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                    <Link className="dropdown-item" to={""}><MdOutlineSettings /> &nbsp; Settings</Link>
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>

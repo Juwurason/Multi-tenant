@@ -58,15 +58,15 @@ const AdminSidebar = (props) => {
                                 <a href="/administrator/administrator/adminDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
                             </li>
 
-                            {/* <li className="menu-title">
-                                <span>Account Management</span>
+                            <li className="menu-title">
+                                <span>User Management</span>
                             </li>
                            
                             <li className={pathname.includes('clients') ? "active" : ""}>
-                                <Link to="/staff/staffprofile"><i className="la la-user" /> <span>Profile</span></Link>
+                                <Link to="/administrator/allStaff"><i className="la la-user" /> <span>Staff</span></Link>
                             </li>
                            
-                            <li className={pathname.includes('leads') ? "active" : ""}>
+                            {/* <li className={pathname.includes('leads') ? "active" : ""}>
                                 <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
                             </li>
                             <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
