@@ -17,45 +17,44 @@ import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { Modal } from 'react-bootstrap';
+import dayjs from 'dayjs';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const PublicHoliday = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
-    const [clients, setClients] = useState([]);
+    const [getHoli, setGetHoli] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const [loading1, setLoading1] = useState(false);
+    const [editpro, setEditPro] = useState({})
     const { get, post } = useHttp();
 
     const columns = [
-        // {
-        //   name: '#',
-        //   cell: (row, index) => index + 1
-        // },
+        {
+          name: '#',
+          cell: (row, index) => index + 1
+        },
 
         {
-            name: 'Full Name',
-            selector: row => row.fullName,
-            sortable: true,
-            expandable: true,
-            cell: (row) => (
-                <Link style={{ overflow: "hidden" }} to={`/administrator/clientProfile/${row.profileId}/${row.firstName}`} className="fw-bold text-dark">
-                    {row.firstName} {row.surName}
-                </Link>
-            ),
-        },
-        {
-            name: 'Address',
-            selector: row => row.address,
+            name: 'Name',
+            selector: row => row.name,
             sortable: true,
         },
         {
-            name: 'Email',
-            selector: row => row.email,
+            name: 'Date',
+            selector: row => row.date,
+            sortable: true,
+        },
+        {
+            name: 'Date Created',
+            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
             sortable: true
         },
         {
-            name: 'Phone Number',
-            selector: row => row.phoneNumber,
+            name: 'Date Modified',
+            selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
             sortable: true
         },
 
@@ -63,12 +62,13 @@ const PublicHoliday = () => {
             name: "Actions",
             cell: (row) => (
                 <div className="d-flex gap-1">
-                    <Link to={`/administrator/editClientPro/${row.profileId}`}
+                    <button 
                         className="btn"
                         title='edit'
+                        onClick={() => handleEdit(row.holidayId)}
                     >
                         <SlSettings />
-                    </Link>
+                    </button>
                     <button
                         className='btn'
                         title='Delete'
@@ -81,16 +81,42 @@ const PublicHoliday = () => {
             ),
         },
 
+ ];
 
+ const handleEdit = async(e) => {
+    // console.log(e);
+    setEditModal(true);
+    try {
+        setLoading(true)
+        const {data} = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
+        // console.log(data);
+        setEditPro(data);
+        setLoading(false)
+    } catch (error) {
+        console.log(error);
+        setLoading(false)
+    } finally {
+        setLoading(false)
+    }
+  };
 
-    ];
+  function handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const newValue = value === "" ? "" : value;
+    setEditPro({
+      ...editpro,
+      [name]: newValue
+    });
+  }
 
     const FetchClient = async () => {
         try {
             setLoading(true)
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            //   setClients(client);
+            const {data} = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
+            // console.log(data);
+              setGetHoli(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -125,7 +151,7 @@ const PublicHoliday = () => {
         sheet.addRow(headers);
 
         // Add data
-        clients.forEach((dataRow) => {
+        getHoli.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -141,7 +167,7 @@ const PublicHoliday = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'clients.xlsx';
+            link.download = 'getHoli.xlsx';
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -152,12 +178,12 @@ const PublicHoliday = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(clients);
+        const csvData = Papa.unparse(getHoli);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "clients.csv");
+        link.setAttribute("download", "getHoli.csv");
         link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
@@ -171,9 +197,9 @@ const PublicHoliday = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("clients Table", marginLeft, 40);
+        doc.text("getHoli Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = clients.map((dataRow) =>
+        const dataValues = getHoli.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -188,13 +214,13 @@ const PublicHoliday = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("clients.pdf");
+        doc.save("getHoli.pdf");
     };
 
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-4">
-                {data.fullName}
+                {data.name}
 
             </div>
         );
@@ -205,8 +231,8 @@ const PublicHoliday = () => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = clients.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = getHoli.filter((item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -226,7 +252,7 @@ const PublicHoliday = () => {
 
     const handleDelete = async (e) => {
         Swal.fire({
-            html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3>`,
+            html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#00AEEF',
@@ -236,8 +262,8 @@ const PublicHoliday = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`Profiles/delete/${e.profileId}?userId=${id.userId}`,
-                        { userId: id.userId }
+                    const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
+                        // { userId: id.userId }
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
@@ -258,8 +284,42 @@ const PublicHoliday = () => {
             }
         })
 
-
     }
+
+    const [holidayName, setHolidayName] = useState('')
+    const [holidayDate, setHolidayDate] = useState('')
+
+
+    const addHoliday = async () => {
+
+        if ( holidayName === '' || holidayDate.length === 0) {
+            return toast.error("Input Fields cannot be empty")
+        }
+
+        setLoading1(true)
+        const info = {
+            name: holidayName,
+            date: holidayDate
+          }
+                try {
+                    const { data } = await post(`/SetUp/add_holiday`, info )
+                    // console.log(data);
+                    toast.success(data.message)
+                    setShowModal(false)
+                    FetchClient()
+                    setLoading1(false)
+                    setHolidayName('')
+                    setHolidayDate('')
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+                }
+                finally{
+                    setLoading1(false)
+                }
+            }
+
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -280,35 +340,8 @@ const PublicHoliday = () => {
                         </div>
                     </div>
                 </div>
-                {/* /Page Header */}
+            
                 {/* Search Filter */}
-                {/* <div className="row filter-row">
-          <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client ID</label>
-            </div>
-          </div>
-          <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client Name</label>
-            </div>
-          </div>
-          <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client Email</label>
-            </div>
-          </div>
-
-          <div className="col-sm-6 col-md-3">
-            <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
-          </div>
-        </div> */}
-                {/* Search Filter */}
-
-
 
                 <div className='mt-4 border'>
                     <div className="row px-2 py-3">
@@ -321,8 +354,8 @@ const PublicHoliday = () => {
                         </div>
                         <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
-                                data={clients}
-                                filename={"clients.csv"}
+                                data={getHoli}
+                                filename={"getHoli.csv"}
 
                             >
                                 <button
@@ -349,7 +382,7 @@ const PublicHoliday = () => {
                             >
                                 <FaFileExcel />
                             </button>
-                            <CopyToClipboard text={JSON.stringify(clients)}>
+                            <CopyToClipboard text={JSON.stringify(getHoli)}>
                                 <button
 
                                     className='btn text-warning'
@@ -363,7 +396,7 @@ const PublicHoliday = () => {
                         <div className='col-md-4'>
                             {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
                 Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2" onClick={handleActivityClick}>Add New Holiday</button>
+                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add New Holiday</button>
                         </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
@@ -385,9 +418,6 @@ const PublicHoliday = () => {
 
                     />
 
-
-
-
                     {/* Modal */}
                     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                         <Modal.Header closeButton>
@@ -400,25 +430,60 @@ const PublicHoliday = () => {
                                 <div className="form-group">
                                     <label className="col-form-label">Name of Holiday</label>
                                     <div>
-                                        <input type="text" className='form-control' />
+                                        <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group">
                                     <label className="col-form-label">Date</label>
-                                    <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                                    <div><input className="form-control date" type="date" onChange={e => setHolidayDate(e.target.value)} /></div>
                                 </div>
 
-                            <div className="col-sm-4 text-left">
-                                <button className="btn btn-primary rounded-2">Add</button>
-
-                            </div>
+                            {/* <div className="col-sm-4 text-left">
+                                <button className="btn btn-primary add-btn rounded-2" onClick={addHoliday}>Add</button>
+                            </div> */}
 
                         </div>
                            </div>
                         </Modal.Body>
                         <Modal.Footer>
-                            <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        <button 
+                        disabled={loading1 ? true : false}
+                        className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>
+                        {loading1 ? <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div> : "Add"}
+                        </button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    {/*Edit Modal */}
+                    <Modal show={editModal} onHide={() => setEditModal(false)} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>View Holiday</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                           <div>
+                           <div className="row">
+                            <div className="">
+                                <div className="form-group">
+                                    <label className="col-form-label">Name of Holiday</label>
+                                    <div>
+                                        <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                    <label className="col-form-label">Date</label>
+                                    <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
+                                </div>
+
+                        </div>
+                           </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}
+                            <button className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
                         </Modal.Footer>
                     </Modal>
 

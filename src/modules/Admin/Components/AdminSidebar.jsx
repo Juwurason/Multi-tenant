@@ -62,11 +62,11 @@ const AdminSidebar = (props) => {
                                 <span>User Management</span>
                             </li>
 
-                            <li className={pathname.includes('staff') ? "active" : ""}>
+                            <li className={pathname.includes('allStaff') ? "active" : ""}>
                                 <Link to="/administrator/allStaff"><i className="la la-user" /> <span>Staffs</span></Link>
                             </li>
 
-                            <li className={pathname.includes('clients') ? "active" : ""}>
+                            <li className={pathname.includes('allClient') ? "active" : ""}>
                                 <Link to="/administrator/allClient"><i className="la la-users" /> <span>Clients</span></Link>
                             </li>
 
@@ -74,7 +74,7 @@ const AdminSidebar = (props) => {
                                 <span>Account Management</span>
                             </li>
 
-                            <li className={pathname.includes('users') ? "active" : ""}>
+                            <li className={pathname.includes('allUsers') ? "active" : ""}>
                                 <Link to="/administrator/allUsers"><i className="la la-tools" /> <span>Manage Users</span></Link>
                             </li>
 
@@ -86,7 +86,7 @@ const AdminSidebar = (props) => {
                                 <span>Staff-Client Management</span>
                             </li>
 
-                            <li className={pathname.includes('holidays') ? "active" : ""}>
+                            <li className={pathname.includes('publicHoliday') ? "active" : ""}>
                                 <Link to="/administrator/publicHoliday"><i className="la la-map" /> <span>Public Holidays</span></Link>
                             </li>
 
