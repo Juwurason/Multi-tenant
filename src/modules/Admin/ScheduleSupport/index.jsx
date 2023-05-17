@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
-const PublicHoliday = () => {
+const ScheduleSupport = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
     const [getHoli, setGetHoli] = useState([]);
@@ -29,12 +29,13 @@ const PublicHoliday = () => {
     const [editModal, setEditModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [editpro, setEditPro] = useState({})
+    const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
 
     const columns = [
         {
-          name: '#',
-          cell: (row, index) => index + 1
+            name: '#',
+            cell: (row, index) => index + 1
         },
 
         {
@@ -62,7 +63,7 @@ const PublicHoliday = () => {
             name: "Actions",
             cell: (row) => (
                 <div className="d-flex gap-1">
-                    <button 
+                    <button
                         className="btn"
                         title='edit'
                         onClick={() => handleEdit(row.holidayId)}
@@ -81,42 +82,71 @@ const PublicHoliday = () => {
             ),
         },
 
- ];
+    ];
 
- const handleEdit = async(e) => {
-    // console.log(e);
-    setEditModal(true);
-    try {
-        setLoading(true)
-        const {data} = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-        // console.log(data);
-        setEditPro(data);
-        setLoading(false)
-    } catch (error) {
-        console.log(error);
-        setLoading(false)
-    } finally {
-        setLoading(false)
-    }
-  };
-
-  function handleInputChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    const newValue = value === "" ? "" : value;
-    setEditPro({
-      ...editpro,
-      [name]: newValue
+    const [days, setDays] = useState({
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false
     });
-  }
 
-    const FetchClient = async () => {
+    const handleCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
+    };
+
+    const handleEdit = async (e) => {
+        // console.log(e);
+        setEditModal(true);
         try {
             setLoading(true)
-            const {data} = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
+            const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
             // console.log(data);
-              setGetHoli(data);
+            setEditPro(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditPro({
+            ...editpro,
+            [name]: newValue
+        });
+    }
+
+
+
+    const FetchClient = async () => {
+        setLoading(true)
+        try {
+            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
+            // console.log(data);
+            //   setGetHoli(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
+
+        try {
+            const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setClients(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -292,7 +322,7 @@ const PublicHoliday = () => {
 
     const addHoliday = async () => {
 
-        if ( holidayName === '' || holidayDate.length === 0) {
+        if (holidayName === '' || holidayDate.length === 0) {
             return toast.error("Input Fields cannot be empty")
         }
 
@@ -300,31 +330,31 @@ const PublicHoliday = () => {
         const info = {
             name: holidayName,
             date: holidayDate
-          }
-                try {
-                    const { data } = await post(`/SetUp/add_holiday`, info )
-                    // console.log(data);
-                    toast.success(data.message)
-                    setShowModal(false)
-                    FetchClient()
-                    setLoading1(false)
-                    setHolidayName('')
-                    setHolidayDate('')
-                } catch (error) {
-                    console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
-                }
-                finally{
-                    setLoading1(false)
-                }
-            }
+        }
+        try {
+            const { data } = await post(`/SetUp/add_holiday`, info)
+            // console.log(data);
+            toast.success(data.message)
+            setShowModal(false)
+            FetchClient()
+            setLoading1(false)
+            setHolidayName('')
+            setHolidayDate('')
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+        }
+        finally {
+            setLoading1(false)
+        }
+    }
 
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Public Holiday</title>
-                <meta name="description" content="Public Holiday" />
+                <title>Schedule Supports</title>
+                <meta name="description" content="Schedule Supports" />
             </Helmet>
             {/* Page Content */}
             <div className="content container-fluid">
@@ -332,15 +362,15 @@ const PublicHoliday = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Public Holiday</h3>
+                            <h3 className="page-title">Schedule Supports</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Public Holiday</li>
+                                <li className="breadcrumb-item active">Schedule Supports</li>
                             </ul>
                         </div>
                     </div>
                 </div>
-            
+
                 {/* Search Filter */}
 
                 <div className='mt-4 border'>
@@ -396,7 +426,7 @@ const PublicHoliday = () => {
                         <div className='col-md-4'>
                             {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
                 Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add New Holiday</button>
+                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add to Schedule Support</button>
                         </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
@@ -421,39 +451,116 @@ const PublicHoliday = () => {
                     {/* Modal */}
                     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                         <Modal.Header closeButton>
-                            <Modal.Title>Add Holiday</Modal.Title>
+                            <Modal.Title>Crate A Schedule</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                           <div>
-                           <div className="row">
-                            <div className="">
-                                <div className="form-group">
-                                    <label className="col-form-label">Name of Holiday</label>
-                                    <div>
-                                        <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                            <div>
+                                <div className="row">
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Participant</label>
+                                        <div>
+                                            <select className="form-select" 
+                                            // onChange={e => setSta(e.target.value)}
+                                            >
+                                                <option defaultValue hidden>Select Client / Participant</option>
+                                                {
+                                                    clients.map((data, index) =>
+                                                        <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Support Type</label>
+                                        <div>
+                                            <select name="" id="" className='form-select'>
+                                                <option defaultValue hidden>Select Support Type</option>
+                                                {/* <option value="male">male</option> */}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Quantity of Service</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Cost of Service per hour ($)</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} readOnly />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Frequency of Support</label>
+                                        <div>
+                                                    <label>
+                                                        <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Sunday
+                                                    </label>
+                                                    &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="monday" checked={days.monday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Monday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="tuesday" checked={days.tuesday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Tuesday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="wednesday" checked={days.wednesday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        wednesday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="thursday" checked={days.thursday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Thursday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="friday" checked={days.friday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Friday
+                                                    </label> &nbsp; &nbsp;
+                                                    <label>
+                                                        <input type="checkbox" name="saturday" checked={days.saturday} onChange={handleCheckboxChange} />
+                                                        &nbsp;
+                                                        Saturday
+                                                    </label> &nbsp; &nbsp;
+                                                 
+
+                                                </div>
+                                    </div>
+                                
+                                    <div className="form-group">
+                                        <label className="col-form-label">Item Number</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} readOnly />
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
-                            <div className="form-group">
-                                    <label className="col-form-label">Date</label>
-                                    <div><input className="form-control date" type="date" onChange={e => setHolidayDate(e.target.value)} /></div>
-                                </div>
 
-                            {/* <div className="col-sm-4 text-left">
-                                <button className="btn btn-primary add-btn rounded-2" onClick={addHoliday}>Add</button>
-                            </div> */}
 
-                        </div>
-                           </div>
                         </Modal.Body>
                         <Modal.Footer>
-                        <button 
-                        disabled={loading1 ? true : false}
-                        className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>
-                        {loading1 ? <div className="spinner-grow text-light" role="status">
-                            <span className="sr-only">Loading...</span>
-                          </div> : "Add"}
-                        </button>
+                            <button
+                                disabled={loading1 ? true : false}
+                                className="btn btn-primary add-btn rounded-2 text-white" >
+                                {loading1 ? <div className="spinner-grow text-light" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : "Create"}
+                            </button>
                         </Modal.Footer>
                     </Modal>
 
@@ -463,23 +570,23 @@ const PublicHoliday = () => {
                             <Modal.Title>View Holiday</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                           <div>
-                           <div className="row">
-                            <div className="">
-                                <div className="form-group">
-                                    <label className="col-form-label">Name of Holiday</label>
-                                    <div>
-                                        <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
+                            <div>
+                                <div className="row">
+                                    <div className="">
+                                        <div className="form-group">
+                                            <label className="col-form-label">Name of Holiday</label>
+                                            <div>
+                                                <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div className="form-group">
+                                        <label className="col-form-label">Date</label>
+                                        <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div className="form-group">
-                                    <label className="col-form-label">Date</label>
-                                    <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
-                                </div>
-
-                        </div>
-                           </div>
                         </Modal.Body>
                         <Modal.Footer>
                             {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}
@@ -499,4 +606,4 @@ const PublicHoliday = () => {
     );
 }
 
-export default PublicHoliday;
+export default ScheduleSupport;

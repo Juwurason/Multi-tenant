@@ -48,7 +48,7 @@ const AdminSidebar = (props) => {
                 hideTracksWhenNotNeeded={true}
             >
                 <div className="sidebar-inner slimscroll">
-                    <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
+                    <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh', paddingRight: '10px' }}>
 
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
@@ -70,56 +70,50 @@ const AdminSidebar = (props) => {
                                 <Link to="/administrator/allClient"><i className="la la-users" /> <span>Clients</span></Link>
                             </li>
 
-                            <li className="menu-title">
-                                <span>Account Management</span>
+
+                            <li className="submenu">
+                                <a href="javascript:void(0)" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-tools" /> <span>Account Management</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "sales" ?
+                                    <ul>
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('sales-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/allUsers">Manage Users</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('sales-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/referrals">Referrals</Link>
+                                        </li>
+
+                                    </ul>
+                                    : ""
+                                }
                             </li>
 
-                            <li className={pathname.includes('allUsers') ? "active" : ""}>
-                                <Link to="/administrator/allUsers"><i className="la la-tools" /> <span>Manage Users</span></Link>
-                            </li>
-
-                            <li className={pathname.includes('referrals') ? "active" : ""}>
-                                <Link to="/administrator/referrals"><i className="la la-user-plus" /> <span>Referrals</span></Link>
-                            </li>
-
-                            <li className="menu-title">
-                                <span>Staff-Client Management</span>
-                            </li>
-
-                            <li className={pathname.includes('publicHoliday') ? "active" : ""}>
-                                <Link to="/administrator/publicHoliday"><i className="la la-map" /> <span>Public Holidays</span></Link>
-                            </li>
-
-                            {/* <li className={pathname.includes('supports') ? "active" : ""}>
-                                <Link to="/administrator/referrals"><i className="la la-user-plus" /> <span>Schedule Supports</span></Link>
-                            </li>
-
-                            <li className={pathname.includes('type') ? "active" : ""}>
-                                <Link to="/administrator/referrals"><i className="la la-user-plus" /> <span>Support Type</span></Link>
-                            </li> */}
-
-                            {/* <li className={pathname.includes('leads') ? "active" : ""}>
-                                <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
-                            </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
-                                <Link to="/staff/staff-form"><i className="la la-book" /> <span>My Availabilities</span></Link>
-                            </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
-                                <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>My Attendances</span></Link>
-                            </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
-                                <Link to="/staff/staff-progressNote"><i className="la la-clipboard" /> <span>My Progress Note</span></Link>
-                            </li>
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
-                          
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-roster"><i className="la la-calendar" /> <span>My Shift Roster</span></Link>
+
+                            <li className="submenu">
+                                <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "projects" ?
+                                    <ul>
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/publicHoliday">Public Holidays</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/scheduleSupport">Schedule Supports</Link>
+                                        </li>
+
+                                    </ul>
+                                    : ""
+                                }
                             </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
-                            </li> */}
+
+
                         </ul>
                     </div>
                 </div>
