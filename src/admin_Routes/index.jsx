@@ -13,6 +13,7 @@ import EditStaffProfile from '../modules/Admin/EditStaffProfile';
 import EditUsers from '../modules/Admin/EditUsers';
 import PublicHoliday from '../modules/Admin/PublicHoliday';
 import Referrals from '../modules/Admin/Referal';
+import ScheduleSupport from '../modules/Admin/ScheduleSupport';
 import StaffDocum from '../modules/Admin/StaffDocum';
 import StaffProfile from '../modules/Admin/StaffProfile.jsx';
 
@@ -82,6 +83,10 @@ export default [
     {
         path: 'publicHoliday',
         component: PublicHoliday
+    },
+    {
+        path: 'scheduleSupport',
+        component: ScheduleSupport
     },
 
 ]

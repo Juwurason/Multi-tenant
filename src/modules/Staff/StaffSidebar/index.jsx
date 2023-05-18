@@ -62,31 +62,31 @@ const StaffSidebar = (props) => {
                                 <span>Account Management</span>
                             </li>
                            
-                            <li className={pathname.includes('clients') ? "active" : ""}>
+                            <li className={pathname.includes('staffprofile') ? "active" : ""}>
                                 <Link to="/staff/staffprofile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
                            
-                            <li className={pathname.includes('leads') ? "active" : ""}>
+                            <li className={pathname.includes('staffchangepassword') ? "active" : ""}>
                                 <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+                            <li className={pathname.includes('staff-form') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
                                 <Link to="/staff/staff-form"><i className="la la-book" /> <span>My Availabilities</span></Link>
                             </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+                            <li className={pathname.includes('staff-attendance') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
                                 <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>My Attendances</span></Link>
                             </li>
-                            <li className={pathname.includes('tickets') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+                            <li className={pathname.includes('staff-progressNote') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
                                 <Link to="/staff/staff-progressNote"><i className="la la-clipboard" /> <span>My Progress Note</span></Link>
                             </li>
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
                           
-                            <li className={pathname.includes('policies') ? "active" : ""}>
+                            <li className={pathname.includes('staff-roster') ? "active" : ""}>
                                 <Link to="/staff/staff-roster"><i className="la la-calendar" /> <span>My Shift Roster</span></Link>
                             </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
+                            <li className={pathname.includes('staff-document') ? "active" : ""}>
                                 <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
                         </ul>

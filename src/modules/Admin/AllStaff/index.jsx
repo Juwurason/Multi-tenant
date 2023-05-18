@@ -318,7 +318,7 @@ const AllStaff = () => {
         <div className="page-wrapper">
           <Helmet>
             <title>Staff</title>
-            <meta name="description" content="Login page" />
+            <meta name="description" content="Staff" />
           </Helmet>
           {/* Page Content */}
           <div className="content container-fluid">
