@@ -14,6 +14,8 @@ import EditClientPro from '../modules/Admin/EditClientPro';
 import EditShiftRoaster from '../modules/Admin/EditShiftRoster';
 import EditStaffProfile from '../modules/Admin/EditStaffProfile';
 import EditUsers from '../modules/Admin/EditUsers';
+import ProgressReport from '../modules/Admin/ProgressReport';
+import ProgressReportDetails from '../modules/Admin/ProgressReportDetails';
 import PublicHoliday from '../modules/Admin/PublicHoliday';
 import Referrals from '../modules/Admin/Referal';
 import ScheduleSupport from '../modules/Admin/ScheduleSupport';
@@ -112,6 +114,14 @@ export default [
     {
         path: 'attendanceReport',
         component: AttendanceReport
+    },
+    {
+        path: 'progressReport',
+        component: ProgressReport
+    },
+    {
+        path: 'progressReportDetails/:uid',
+        component: ProgressReportDetails
     },
 
 ]
