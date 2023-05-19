@@ -16,7 +16,7 @@ import Offcanvas from '../../../../Entryfile/offcanvance';
    const [profile, setProfile] = useState([])
    const [userId, setUserId] = useState([""])
    const privateHttp = useHttp()
-   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
+   const getStaffProfile = JSON.parse(localStorage.getItem('adminProfile'))
  
    useEffect(() => {
      if ($('.select').length > 0) {
@@ -30,9 +30,9 @@ import Offcanvas from '../../../../Entryfile/offcanvance';
    useEffect(()=>{
      const fetchProfile = async () => {
        try {
-           const response = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-           setProfile(response.data)
-           // console.log(response.data);
+           const {data} = await privateHttp.get(`/Administrators/${getStaffProfile.administratorId}`, { cacheTimeout: 300000 })
+           setProfile(data)
+          //  console.log(data);
        } catch (error) {
            console.log(error);
        }
@@ -58,7 +58,7 @@ import Offcanvas from '../../../../Entryfile/offcanvance';
                <div className="col-sm-12">
                  <h3 className="page-title">Profile</h3>
                  <ul className="breadcrumb">
-                   <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                   <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
                    <li className="breadcrumb-item active">Profile</li>
                  </ul>
                </div>
@@ -82,9 +82,9 @@ import Offcanvas from '../../../../Entryfile/offcanvance';
                              <h3 className="user-name m-t-0 mb-0">{profile.fullName}</h3>
                              {/* <h6 className="text-muted">MCP202224</h6> */}
                              {/* <small className="text-muted">{profile.email}</small> */}
-                             <div className="staff-id">Staff ID : {profile.maxStaffId}</div>
+                             {/* <div className="staff-id"> {profile.maxStaffId}</div> */}
                              {/* <div className="small doj text-muted">{profile.address}</div> */}
-                             <div className="staff-msg"><Link className="btn btn-primary" to="/staff/staff-edit-profile">Edit Profile</Link></div>
+                             <div className="staff-msg"><Link className="btn btn-primary" to="/administrator/profile">Edit Profile</Link></div>
                            </div>
                          </div>
                          <div className="col-md-7">
@@ -126,7 +126,7 @@ import Offcanvas from '../../../../Entryfile/offcanvance';
                          </div>
                        </div>
                      </div>
-                     <div className="pro-edit"><Link to="/staff/staff-edit-profile" className="edit-icon"><i className="fa fa-pencil" /></Link></div>
+                     <div className="pro-edit"><Link to="/administrator/profile" className="edit-icon"><i className="fa fa-pencil" /></Link></div>
                    </div>
                  </div>
                </div>

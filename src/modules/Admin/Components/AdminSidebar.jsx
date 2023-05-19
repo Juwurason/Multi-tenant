@@ -138,6 +138,14 @@ const AdminSidebar = (props) => {
                                 <Link to="/app/employee/document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li> */}
 
+                            <li className="menu-title">
+                                <span>Communication</span>
+                            </li>
+
+                            <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""}>
+                                <Link to="/administrator/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
+                            </li>
+
                         </ul>
                     </div>
                 </div>

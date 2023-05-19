@@ -11,6 +11,8 @@ import {
 } from '../../../Entryfile/imagepath'
 import man from "../../../assets/img/user.jpg"
 import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineSettings } from 'react-icons/md';
+import { BiUserCircle, BiMessageDetail } from 'react-icons/bi';
+import { IoMdHelpCircleOutline } from 'react-icons/io';
 
 const AdminHeader = (props) => {
     const navigate = useHistory()
@@ -313,8 +315,10 @@ const AdminHeader = (props) => {
 
                             </div>
                         </div>
-                        <Link className="dropdown-item" to={""}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                        <Link className="dropdown-item" to={""}><MdOutlineSettings /> &nbsp; Settings</Link>
+                        <Link className="dropdown-item" to={"/administrator/profile"}><BiUserCircle /> &nbsp; Profile</Link>
+                        <Link className="dropdown-item" to={"/administrator/messageInbox"}><BiMessageDetail /> &nbsp; Message</Link>
+                        <Link className="dropdown-item" to={""}><IoMdHelpCircleOutline /> &nbsp; Help</Link>
+                        <Link className="dropdown-item" to={"/administrator/changePassword"}><MdOutlineSettings /> &nbsp; Setting</Link>
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
@@ -335,8 +339,10 @@ const AdminHeader = (props) => {
                     <i className="fa fa-ellipsis-v" /></a>
                 <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-                    <Link className="dropdown-item" to={""}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                    <Link className="dropdown-item" to={""}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <Link className="dropdown-item" to={""}><BiUserCircle /> &nbsp; Profile</Link>
+                    <Link className="dropdown-item" to={""}><BiMessageDetail /> &nbsp; Message</Link>
+                    <Link className="dropdown-item" to={""}><IoMdHelpCircleOutline /> &nbsp; Help</Link>
+                        <Link className="dropdown-item" to={""}><MdOutlineSettings /> &nbsp; Setting</Link>
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>

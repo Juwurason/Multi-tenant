@@ -7,6 +7,8 @@ import AttendanceReport from '../modules/Admin/AttendanceReport';
 import ClientDocum from '../modules/Admin/ClientDocum';
 import ClientsProfile from '../modules/Admin/ClientsProfile';
 import AdminProfile from '../modules/Admin/Components/AdminProfile';
+import ChangePassword from '../modules/Admin/Components/ChangePassword';
+import EditAdminProfile from '../modules/Admin/Components/EditAdminProfile';
 import CreateClient from '../modules/Admin/CreateClient';
 import CreateShift from '../modules/Admin/CreateShift';
 import CreateStaff from '../modules/Admin/CreateStaff';
@@ -14,6 +16,7 @@ import EditClientPro from '../modules/Admin/EditClientPro';
 import EditShiftRoaster from '../modules/Admin/EditShiftRoster';
 import EditStaffProfile from '../modules/Admin/EditStaffProfile';
 import EditUsers from '../modules/Admin/EditUsers';
+import MessageInbox from '../modules/Admin/Message';
 import ProgressReport from '../modules/Admin/ProgressReport';
 import ProgressReportDetails from '../modules/Admin/ProgressReportDetails';
 import PublicHoliday from '../modules/Admin/PublicHoliday';
@@ -34,6 +37,14 @@ export default [
     {
         path: 'profile',
         component: AdminProfile
+    },
+    {
+        path: 'editProfile',
+        component: EditAdminProfile
+    },
+    {
+        path: 'changePassword',
+        component: ChangePassword
     },
     {
         path: 'allStaff',
@@ -122,6 +133,10 @@ export default [
     {
         path: 'progressReportDetails/:uid',
         component: ProgressReportDetails
+    },
+    {
+        path: 'messageInbox',
+        component: MessageInbox
     },
 
 ]
