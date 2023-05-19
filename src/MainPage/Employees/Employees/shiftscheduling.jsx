@@ -55,6 +55,8 @@ const ShiftScheduling = () => {
       setLoading(false)
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -64,10 +66,10 @@ const ShiftScheduling = () => {
 
   const FilterSchedule = async () => {
 
-    if (sta === "") {
+    if (sta === '' && cli === '') {
       return Swal.fire(
-        "",
         "Select either a staff or client",
+        "",
         "error"
       )
 
@@ -319,9 +321,9 @@ const ShiftScheduling = () => {
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer' onClick={handlePrevClick} />
+                  <FaAngleLeft className='pointer fs-5' onClick={handlePrevClick} />
                   <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer' onClick={handleNextClick} />
+                  <FaAngleRight className='pointer fs-5' onClick={handleNextClick} />
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>

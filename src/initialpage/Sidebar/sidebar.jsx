@@ -49,7 +49,7 @@ const Sidebar = (props) => {
 
       >
         <div className="sidebar-inner slimscroll">
-          <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh', paddingRight: "10px" }}>
+          <div id="sidebar-menu" className="sidebar-menu pb-5" style={{ backgroundColor: "#1C75B9", height: '100vh', paddingRight: "10px" }}>
 
 
             { /*Vertical Sidebar starts here*/}
@@ -187,9 +187,39 @@ const Sidebar = (props) => {
                 <Link to="/app/employees/tickets"><i className="la la-ticket" /> <span>Tickets</span></Link>
               </li> */}
 
+
+
+
+              <li className="menu-title">
+                <span>Staff-Client Management</span>
+              </li>
+              <li className="submenu">
+                <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "projects" ?
+                  <ul>
+                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                      to="/app/setup/public-holiday">Public Holidays</Link>
+                    </li>
+
+                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                      to="/app/setup/schedule-support">Schedule Supports</Link>
+                    </li>
+
+                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                      to="/app/setup/support-type">Support Type</Link>
+                    </li>
+
+                  </ul>
+                  : ""
+                }
+              </li>
               <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
                 <Link to="/app/employee/shift-scheduling"><i className="la la-calendar" /> <span>Shift Roaster</span></Link>
               </li>
+
               <li className="menu-title">
                 <span>Report Management</span>
               </li>
@@ -202,6 +232,13 @@ const Sidebar = (props) => {
               </li>
               <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
                 <Link to="/app/employee/document"><i className="la la-book" /> <span>Documents</span></Link>
+              </li>
+
+              <li className="menu-title">
+                <span>Communication</span>
+              </li>
+              <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
+                <Link to="/app/message/inbox"><i className="la la-comment" /> <span>Messages</span></Link>
               </li>
               {/*               
               <li className="menu-title">
@@ -485,6 +522,8 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> */}
+              <br />
+              <br />
             </ul>
           </div>
         </div>

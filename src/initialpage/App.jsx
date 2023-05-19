@@ -7,7 +7,6 @@ import RegistrationPage from './RegistrationPage'
 import ForgotPassword from './forgotpassword'
 import OTP from './otp'
 import LockScreen from './lockscreen'
-import ApplyJobs from './ApplyJob';
 
 //Main App
 import DefaultLayout from './Sidebar/DefaultLayout';
@@ -55,7 +54,6 @@ export default class App extends Component {
                 {/* <Route path="/register" component={RegistrationPage} /> */}
                 <Route path="/otp" component={OTP} />
                 <Route path="/lockscreen" component={LockScreen} />
-                <Route path="/applyjob" component={ApplyJobs} />
                 <Route path="/app" component={DefaultLayout} />
                 <Route path="/staff" component={StaffLayout} />
                 <Route path="/administrator" component={AdminLayout} />

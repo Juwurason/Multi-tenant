@@ -82,15 +82,15 @@ const AdminDashboard = () => {
         FetchStaff()
     }, []);
 
-    useEffect(() => {
-        let firstload = localStorage.getItem("firstload")
-        if (firstload === "false") {
-            setTimeout(function () {
-                window.location.reload(1)
-                localStorage.removeItem("firstload")
-            }, 1000)
-        }
-    });
+    // useEffect(() => {
+    //     let firstload = localStorage.getItem("firstload")
+    //     if (firstload === "false") {
+    //         setTimeout(function () {
+    //             window.location.reload(1)
+    //             localStorage.removeItem("firstload")
+    //         }, 1000)
+    //     }
+    // });
 
 
 
@@ -141,8 +141,8 @@ const AdminDashboard = () => {
 
                                     <DashboardCard title={"Total Progress Notes"} content={0} icon={<GoNote className='fs-4' />}
                                         link={``} sty={'danger'}
-                                    /> 
-                                    
+                                    />
+
                                     <DashboardCard title={"Total Shift Roster"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
                                         link={``} sty={'success'}
                                     />
@@ -163,9 +163,9 @@ const AdminDashboard = () => {
                             <div className='col-md-5 p-2'>
 
                                 <div className='p-3 shadow-sm'>
-                                    
+
                                     <div className='d-flex justify-content-center flex-column p-2 gap-2'>
-                                       
+
                                         <div className='border p-2'>
                                             <div>
                                                 <div className={`card shadow-none border border-primary`}>

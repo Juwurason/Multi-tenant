@@ -22,12 +22,15 @@ import Sales from '../MainPage/HR/Sales';
 import Accounts from '../MainPage/HR/Accounts'
 import Payroll from '../MainPage/HR/Payroll';
 import Account from '../MainPage/Employees/Accounts'
+import Setup from '../MainPage/Employees/Setup'
 //Employees
 import Employees from '../MainPage/Employees';
 import Projects from '../MainPage/Employees/Projects';
 import Employee from '../MainPage/Employees/Employees';
 import ProjectList from '../MainPage/Employees/Projects/projectlist'
 import ChangePassword from '../MainPage/Administration/Settings/changepassword';
+//Messages
+import Message from '../MainPage/HR/Message'
 
 export default [
    {
@@ -108,8 +111,16 @@ export default [
       component: Sales
    },
    {
+      path: 'message',
+      component: Message
+   },
+   {
       path: 'accounts',
       component: Accounts
+   },
+   {
+      path: 'setup',
+      component: Setup
    },
    {
       path: 'payroll',

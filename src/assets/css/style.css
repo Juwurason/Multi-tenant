@@ -4678,7 +4678,8 @@ input[type=file].form-control {
 [data-layout=horizontal],
 
 .sidebar>div>div {
-  overflow: hidden !important;
+  overflow: scroll !important;
+  scroll-behavior: smooth;
 }
 
 [data-layout=vertical] .sidebar>div>div {
@@ -8239,7 +8240,7 @@ textarea.form-control {
 }
 
 .error-page {
-  background-color: rgba(255, 155, 68, 0.2);
+  background-color: #F2F2F2;
   color: #1f1f1f;
 }
 
@@ -9153,7 +9154,7 @@ textarea.form-control {
 .add-btn {
   /* background-color: #00AEEF;
   border: 1px solid #00AEEF; */
-  color: #ffffff;
+  /* color: #ffffff; */
   float: right;
   font-weight: 500;
   min-width: 140px;
