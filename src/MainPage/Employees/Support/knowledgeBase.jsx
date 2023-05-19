@@ -11,7 +11,7 @@ import Papa from 'papaparse';
 import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
-import { GoSearch, GoTrashcan } from 'react-icons/go';
+import { GoEye, GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
@@ -20,7 +20,7 @@ import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
 
 
-const PublicHoliday = () => {
+const KnowledgeBase = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
     const [getHoli, setGetHoli] = useState([]);
@@ -28,6 +28,7 @@ const PublicHoliday = () => {
     const [editModal, setEditModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [editpro, setEditPro] = useState({})
+    const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
 
     const columns = [
@@ -37,43 +38,33 @@ const PublicHoliday = () => {
         },
 
         {
-            name: 'Name',
+            name: 'Subject',
             selector: row => row.name,
             sortable: true,
         },
         {
-            name: 'Date',
+            name: 'User',
             selector: row => row.date,
             sortable: true,
         },
         {
-            name: 'Date Created',
+            name: 'Status',
             selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
             sortable: true
         },
-        {
-            name: 'Date Modified',
-            selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
-            sortable: true
-        },
+
 
         {
             name: "Actions",
             cell: (row) => (
                 <div className="d-flex gap-1">
-                    <button
-                        className="btn"
-                        title='edit'
-                        onClick={() => handleEdit(row.holidayId)}
-                    >
-                        <SlSettings />
-                    </button>
+
                     <button
                         className='btn'
                         title='Delete'
-                        onClick={() => handleDelete(row)}
+                        onClick={() => handleView(row)}
                     >
-                        <GoTrashcan />
+                        <GoEye />
                     </button>
 
                 </div>
@@ -81,6 +72,13 @@ const PublicHoliday = () => {
         },
 
     ];
+
+
+
+    const handleCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
+    };
 
     const handleEdit = async (e) => {
         // console.log(e);
@@ -110,12 +108,26 @@ const PublicHoliday = () => {
         });
     }
 
+
+
     const FetchClient = async () => {
+        setLoading(true)
         try {
-            setLoading(true)
             const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
             // console.log(data);
-            setGetHoli(data);
+            //   setGetHoli(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
+
+        try {
+            const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setClients(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -322,8 +334,8 @@ const PublicHoliday = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Public Holiday</title>
-                <meta name="description" content="Public Holiday" />
+                <title>Knowledge Base</title>
+                <meta name="description" content="Knowledge Base" />
             </Helmet>
             {/* Page Content */}
             <div className="content container-fluid">
@@ -331,10 +343,10 @@ const PublicHoliday = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Public Holiday</h3>
+                            <h3 className="page-title">Knowledge Base</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Public Holiday</li>
+                                <li className="breadcrumb-item active">Knowledge Base</li>
                             </ul>
                         </div>
                     </div>
@@ -351,7 +363,7 @@ const PublicHoliday = () => {
                                 <GoSearch />
                             </div>
                         </div>
-                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                        <div className='col-md-8 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
                                 data={getHoli}
                                 filename={"getHoli.csv"}
@@ -392,11 +404,7 @@ const PublicHoliday = () => {
                                 </button>
                             </CopyToClipboard>
                         </div>
-                        <div className='col-md-4'>
-                            {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
-                Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add New Holiday</button>
-                        </div>
+
                     </div>
                     <DataTable data={filteredData} columns={columns}
                         pagination
@@ -420,38 +428,67 @@ const PublicHoliday = () => {
                     {/* Modal */}
                     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                         <Modal.Header closeButton>
-                            <Modal.Title>Add Holiday</Modal.Title>
+                            <Modal.Title> Add Support Type </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <div>
                                 <div className="row">
-                                    <div className="">
-                                        <div className="form-group">
-                                            <label className="col-form-label">Name of Holiday</label>
-                                            <div>
-                                                <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                            </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Item Number</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
+
                                     <div className="form-group">
-                                        <label className="col-form-label">Date</label>
-                                        <div><input className="form-control date" type="date" onChange={e => setHolidayDate(e.target.value)} /></div>
+                                        <label className="col-form-label">Item Name</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                        </div>
                                     </div>
 
-                                    {/* <div className="col-sm-4 text-left">
-                                <button className="btn btn-primary add-btn rounded-2" onClick={addHoliday}>Add</button>
-                            </div> */}
+                                    <div className="form-group">
+                                        <label className="col-form-label">Unit</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">National</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Remote</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Very Remote</label>
+                                        <div>
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                        </div>
+                                    </div>
+
 
                                 </div>
                             </div>
+
+
                         </Modal.Body>
                         <Modal.Footer>
                             <button
                                 disabled={loading1 ? true : false}
-                                className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>
+                                className="btn btn-primary add-btn rounded-2 text-white" >
                                 {loading1 ? <div className="spinner-grow text-light" role="status">
                                     <span className="sr-only">Loading...</span>
-                                </div> : "Add"}
+                                </div> : "Create"}
                             </button>
                         </Modal.Footer>
                     </Modal>
@@ -498,4 +535,4 @@ const PublicHoliday = () => {
     );
 }
 
-export default PublicHoliday;
+export default KnowledgeBase;

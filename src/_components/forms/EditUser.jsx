@@ -137,7 +137,7 @@ const EditAccount = () => {
                                     </div>
 
                                     <div className="submit-section">
-                                        <button className="btn btn-primary submit-btn" type='submit'>
+                                        <button className="btn btn-primary rounded submit-btn" type='submit'>
 
                                             {loading ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>

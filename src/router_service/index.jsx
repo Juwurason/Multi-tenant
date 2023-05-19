@@ -23,6 +23,7 @@ import Accounts from '../MainPage/HR/Accounts'
 import Payroll from '../MainPage/HR/Payroll';
 import Account from '../MainPage/Employees/Accounts'
 import Setup from '../MainPage/Employees/Setup'
+import Support from '../MainPage/Employees/Support'
 //Employees
 import Employees from '../MainPage/Employees';
 import Projects from '../MainPage/Employees/Projects';
@@ -89,6 +90,10 @@ export default [
    {
       path: 'goals',
       component: Goals
+   },
+   {
+      path: 'support',
+      component: Support
    },
    {
       path: 'performances',

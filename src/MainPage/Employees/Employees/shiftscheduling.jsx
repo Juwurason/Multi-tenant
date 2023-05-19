@@ -252,7 +252,7 @@ const ShiftScheduling = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto p-4">
-                <Link to="/app/employee/add-shift" className="btn btn-info add-btn m-r-5 rounded-2">Add New Roaster</Link>
+                <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roaster</Link>
               </div>
             </div>
           </div>
