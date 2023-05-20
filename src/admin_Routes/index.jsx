@@ -25,6 +25,9 @@ import ScheduleSupport from '../modules/Admin/ScheduleSupport';
 import ShiftRoster from '../modules/Admin/ShiftRoster';
 import StaffDocum from '../modules/Admin/StaffDocum';
 import StaffProfile from '../modules/Admin/StaffProfile.jsx';
+import KnowledgeBase from '../modules/Admin/Support/knowledgeBase';
+import RaiseTicket from '../modules/Admin/Support/raiseTicket';
+import ViewTicket from '../modules/Admin/Support/viewTicket';
 import SupportType from '../modules/Admin/SupportType';
 
 
@@ -137,6 +140,18 @@ export default [
     {
         path: 'messageInbox',
         component: MessageInbox
+    },
+    {
+        path: 'viewTickets',
+        component: ViewTicket
+    },
+    {
+        path: 'raiseTicket',
+        component: RaiseTicket
+    },
+    {
+        path: 'knowledge',
+        component: KnowledgeBase
     },
 
 ]
