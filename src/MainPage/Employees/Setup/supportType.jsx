@@ -364,7 +364,7 @@ const SupportType = () => {
                         <div className="col">
                             <h3 className="page-title">Support Type</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Support Type</li>
                             </ul>
                         </div>

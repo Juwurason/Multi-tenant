@@ -346,7 +346,7 @@ const AllUser = () => {
                                     </CopyToClipboard>
                                 </div>
                                 <div className='col-md-4'>
-                                    <button className='btn add-btn rounded-2'>Add New User</button>
+                                    <button className='btn add-btn btn-info text-white rounded-2'>Add New User</button>
                                 </div>
                             </div>
 
