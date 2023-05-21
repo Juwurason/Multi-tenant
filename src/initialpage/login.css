@@ -1,14 +1,23 @@
+.cover-bg {
+    background-image: url(../assets/img/Login.jpg);
+    height: 100vh;
+    padding-bottom: 50px;
+    background-repeat: no-repeat;
+    background-color: #fffffff2;
+    background-blend-mode: lighten;
+}
+
 .login-form {
     max-width: 550px;
     margin: 0 auto;
-    padding-top: 100px;
-    /* margin-top: 100px; */
+    padding-top: 10px;
+    margin-top: 50px;
 }
 
 .login-form form {
     margin-bottom: 15px;
     background: #fff;
-    padding: 30px 20px;
+    padding: 10px 20px;
 }
 
 .login-form h2 {

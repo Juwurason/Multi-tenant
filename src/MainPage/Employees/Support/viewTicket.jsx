@@ -81,40 +81,13 @@ const ViewTicket = () => {
         setDays((prevDays) => ({ ...prevDays, [name]: checked }));
     };
 
-    const handleEdit = async (e) => {
-        // console.log(e);
-        setEditModal(true);
-        try {
-            setLoading(true)
-            const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setEditPro(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-    };
-
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditPro({
-            ...editpro,
-            [name]: newValue
-        });
-    }
 
 
 
-    const FetchClient = async () => {
+    const FetchTicket = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
+            const { data } = await get(`Tickets/get_all_tickets?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             // console.log(data);
             //   setGetHoli(data);
             setLoading(false)
@@ -125,20 +98,9 @@ const ViewTicket = () => {
             setLoading(false)
         }
 
-        try {
-            const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setClients(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
     };
     useEffect(() => {
-        FetchClient()
+        FetchTicket()
     }, []);
 
     const handleActivityClick = () => {
@@ -406,9 +368,10 @@ const ViewTicket = () => {
                             </CopyToClipboard>
                         </div>
                         <div className='col-md-4'>
-                            {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
-                Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Contact Service Provider</button>
+
+                            <Link to={'/app/support/raise-ticket'} className="btn btn-info add-btn rounded-2 text-white">
+                                Contact Service Provider
+                            </Link>
                         </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
@@ -430,103 +393,7 @@ const ViewTicket = () => {
 
                     />
 
-                    {/* Modal */}
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title> Add Support Type </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
 
-                                    <div className="form-group">
-                                        <label className="col-form-label">Item Number</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Item Name</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Unit</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">National</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Remote</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Very Remote</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button
-                                disabled={loading1 ? true : false}
-                                className="btn btn-primary add-btn rounded-2 text-white" >
-                                {loading1 ? <div className="spinner-grow text-light" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div> : "Create"}
-                            </button>
-                        </Modal.Footer>
-                    </Modal>
-
-                    {/*Edit Modal */}
-                    <Modal show={editModal} onHide={() => setEditModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>View Holiday</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
-                                    <div className="">
-                                        <div className="form-group">
-                                            <label className="col-form-label">Name of Holiday</label>
-                                            <div>
-                                                <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="col-form-label">Date</label>
-                                        <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}
-                            <button className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
-                        </Modal.Footer>
-                    </Modal>
 
                 </div>
 

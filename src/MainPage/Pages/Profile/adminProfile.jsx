@@ -1,44 +1,192 @@
 
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
-import { Link, useParams } from 'react-router-dom';
+import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
-import man from "../../../assets/img/user.jpg"
+import man from '../../../assets/img/man.png'
+import { toast } from 'react-toastify';
 const AdminProfile = () => {
     const { uid } = useParams()
     const [staffOne, setStaffOne] = useState({});
+    const [profile, setProfile] = useState({})
+    const [editedProfile, setEditedProfile] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [image, setImage] = useState('');
+    const [informModal, setInformModal] = useState(false);
+    const [stateModal, setStateModal] = useState(false);
+    const [kinModal, setKinModal] = useState(false);
+    const [bankModal, setBankModal] = useState(false);
+    const [socialModal, setSocialModal] = useState(false);
+
 
     const privateHttp = useHttp()
-    useEffect(() => {
-        const FetchStaff = async () => {
-            try {
-                const { data } = await privateHttp.get(`/Administrators/${uid}`, { cacheTimeout: 300000 })
-                setStaffOne(data)
+    const FetchStaff = async () => {
+        try {
+            const { data } = await privateHttp.get(`/Administrators/${uid}`, { cacheTimeout: 300000 })
+            setStaffOne(data)
 
-            } catch (error) {
-                console.log(error);
-            }
+
+
+        } catch (error) {
+            console.log(error);
         }
+    }
+    useEffect(() => {
         FetchStaff()
     }, []);
-
-
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
+                width: '100%',
                 minimumResultsForSearch: -1,
-                width: '100%'
             });
         }
     });
+    const styles = {
+        main: {
+            backgroundColor: 'black',
+            display: 'none',
+
+        },
+        label: {
+            width: '130px',
+            height: '130px',
+            borderRadius: "50%",
+            cursor: "pointer",
+            display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
+        }
+    }
+    const FetchExising = async (e) => {
+        try {
+            const response = await privateHttp.get(`/Administrators/${e}`, { cacheTimeout: 300000 })
+            setProfile(response.data);
+            setEditedProfile(response.data)
+        } catch (error) {
+            console.log(error);
+
+
+        }
+    }
+
+    const handleModal0 = (e) => {
+        setInformModal(true)
+        FetchExising(e);
+
+    }
+    const handleModal1 = (e) => {
+        setStateModal(true)
+        FetchExising(e);
+
+    }
+    const handleModal2 = (e) => {
+        setKinModal(true)
+        FetchExising(e);
+    }
+    const handleModal3 = (e) => {
+        setBankModal(true)
+        FetchExising(e);
+    }
+    const handleModal4 = (e) => {
+        setSocialModal(true);
+        FetchExising(e);
+    }
+
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditedProfile({
+            ...editedProfile,
+            [name]: newValue
+        });
+    }
+    const handlechange = (e) => {
+        setImage(e.target.files[0]);
+    }
+
+    const id = JSON.parse(localStorage.getItem('user'))
+
+    const handleSave = async (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append("CompanyId", id.companyId);
+        formData.append("StaffId", uid);
+        formData.append("firstName", profile.firstName);
+        formData.append("email", profile.email);
+        formData.append("phoneNumber", profile.phoneNumber);
+        formData.append("surName", profile.surName);
+        formData.append("middleName", editedProfile.middleName);
+        formData.append("gender", editedProfile.gender);
+        formData.append("dateOfBirth", editedProfile.dateOfBirth);
+        formData.append("aboutMe", editedProfile.aboutMe);
+        formData.append("address", profile.address);
+        formData.append("city", editedProfile.city);
+        formData.append("country", editedProfile.country);
+        formData.append("state", editedProfile.state);
+        formData.append("postcode", editedProfile.postalCode);
+        formData.append("accountName", editedProfile.accountName);
+        formData.append("accountNumber", editedProfile.accountNumber);
+        formData.append("bankName", editedProfile.bankName);
+        formData.append("branch", editedProfile.branch);
+        formData.append("bsb", editedProfile.bsb);
+        formData.append("suburb", editedProfile.kinSuburb);
+        formData.append("NextOfKin", editedProfile.kinName);
+        formData.append("kinAddress", editedProfile.kinAddress);
+        formData.append("kinCity", editedProfile.kinCity);
+        formData.append("kinCountry", editedProfile.kinCountry);
+        formData.append("kinEmail", editedProfile.kinEmail);
+        formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
+        formData.append("kinPostcode", editedProfile.kinPostCode);
+        formData.append("kinState", editedProfile.kinState);
+        formData.append("relationship", editedProfile.relationship);
+        formData.append("imageFile", editedProfile.image);
+        formData.append("twitter", editedProfile.tweet);
+        formData.append("linkedIn", editedProfile.linkd);
+        formData.append("instagram", editedProfile.insta);
+        formData.append("facebook", editedProfile.fbook);
+        try {
+            setLoading(true)
+            const { data } = await privateHttp.post(`/Staffs/edit/${uid}?userId=${id.userId}`,
+                formData
+            )
+            if (data.status === 'Success') {
+                toast.success(data.message);
+                setInformModal(false);
+                setKinModal(false);
+                setBankModal(false);
+                setSocialModal(false);
+                FetchStaff();
+            } else {
+                toast.error(data.message);
+            }
+
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+            setLoading(false);
+
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+
     return (
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Admin Profile </title>
+                    <title>Staff Profile </title>
                     <meta name="description" content="Reactify Blank Page" />
                 </Helmet>
                 {/* Page Content */}
@@ -50,7 +198,7 @@ const AdminProfile = () => {
                                 <h3 className="page-title">Profile</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item"><Link to="/app/employee/alladmin">Admin</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/app/employee/allemployees">Staff</Link></li>
                                     <li className="breadcrumb-item active">Profile</li>
                                 </ul>
                             </div>
@@ -63,8 +211,8 @@ const AdminProfile = () => {
                                 <div className="col-md-12">
                                     <div className="profile-view">
                                         <div className="profile-img-wrap">
-                                            <div className='rounded-circle mt-2 d-flex justify-content-center' style={{ width: "120px", height: "120px" }}>
-                                                <img src={!staffOne.imageUrl ? man : staffOne.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                                            <div className="profile-img">
+                                                <a className='text-primary' href="#"><img alt="" src={Avatar_02} /></a>
                                             </div>
                                         </div>
                                         <div className="profile-basic">
@@ -75,8 +223,8 @@ const AdminProfile = () => {
                                                         <div className="staff-id">Staff ID : {staffOne.maxStaffId}</div>
                                                         <div className="small doj text-muted">{staffOne.aboutMe}</div>
                                                         <div className="staff-msg d-flex gap-2">
-                                                            <Link to={`/app/profile/edit-admin/${staffOne.administratorId}`} className="btn btn-primary" >Edit Profile</Link>
-                                                            <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`} className="btn btn-danger">Admin Doc</Link>
+                                                            {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
+                                                            <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`} className="py-1 px-2 rounded text-white bg-danger">Admin Doc</Link>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -84,11 +232,11 @@ const AdminProfile = () => {
                                                     <ul className="personal-info">
                                                         <li>
                                                             <div className="title">Phone:</div>
-                                                            <div className="text"><a href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
+                                                            <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                                                         </li>
                                                         <li>
                                                             <div className="title">Email:</div>
-                                                            <div className="text"><a href={`mailto:${staffOne.email}`}>{staffOne.email}</a></div>
+                                                            <div className="text"><a className='text-primary' href={`mailto:${staffOne.email}`}>{staffOne.email}</a></div>
                                                         </li>
                                                         <li>
                                                             <div className="title">Birthday:</div>
@@ -102,36 +250,133 @@ const AdminProfile = () => {
                                                             <div className="title">Gender:</div>
                                                             <div className="text">{staffOne.gender || "None"}</div>
                                                         </li>
-                                                        {/* <li>
-                              <div className="title">Reports to:</div>
-                              <div className="text">
-                                <div className="avatar-box">
-                                  <div className="avatar avatar-xs">
-                                    <img src={Avatar_16} alt="" />
-                                  </div>
-                                </div>
-                                <Link to="/app/profile/employee-profile">
-                                  Jeffery Lalor
-                                </Link>
-                              </div>
-                            </li> */}
+
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="pro-edit"><Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="edit-icon" ><i className="fa fa-pencil" /></Link></div>
+
+                                        <div className="pro-edit">
+                                            <a className="edit-icon bg-info text-white" onClick={() => handleModal0(staffOne.administratorId)}>
+                                                <i className="fa fa-pencil" />
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+                    <Modal
+                        show={informModal}
+                        onHide={() => setInformModal(false)}
+                        size="lg"
+                        aria-labelledby="contained-modal-title-vcenter"
+
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                                Update profile for {profile.firstName} {profile.lastName}
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div className="row">
+                                <div style={{ display: "flex", justifyContent: 'center' }}>
+                                    <div className="form-group">
+                                        <label style={styles.label} className="border border-2 rounded-circle">
+                                            <img className="rounded-circle" style={{ width: '100%', height: '100%' }}
+                                                src={image === "" ? man : URL.createObjectURL(image)} alt="profile image" />
+                                        </label>
+
+                                        <label style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <FaCamera />
+                                            <input type="file" accept="image/jpeg, image/png" required style={styles.main} onChange={handlechange} />
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <div className="form-group col-md-4">
+                                    <label>SurName</label>
+                                    <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
+                                </div>
+                                <div className="form-group col-md-4">
+                                    <label>First Name</label>
+                                    <input type="text" className="form-control" value={profile.firstName} readOnly />
+                                </div>
+                                <div className="form-group col-md-4">
+                                    <label>Last Name</label>
+                                    <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
+                                </div>
+                                <div className="form-group col-md-4">
+                                    <label>Phone Number</label>
+                                    <input type="number" className="form-control" value={profile.phoneNumber} readOnly />
+                                </div>
+                                <div className="form-group col-md-4">
+                                    <label>Date Of Birth</label>
+                                    <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} onChange={handleInputChange} />
+                                </div>
+
+                                <div className="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="text" className="form-control" value={profile.email} readOnly />
+                                </div>
+                                <div className="form-group col-md-4">
+                                    <label>Gender:</label>
+                                    <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+
+                                </div>
+                                <div className="form-group col-md-8">
+                                    <label>Address</label>
+                                    <input type="text" className="form-control" name='address' value={editedProfile.address || ''} onChange={handleInputChange} />
+                                </div>
+
+
+                                <div className="form-group col-md-12">
+                                    <label>About Me</label><br />
+                                    <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
+                                </div>
+
+
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <button
+                                className="btn add-btn rounded btn-outline-danger"
+                                onClick={() => setInformModal(false)}
+                            >
+                                Close
+                            </button>
+                            <button
+                                className="ml-2 btn add-btn rounded text-white btn-info"
+                                onClick={handleSave}
+                            >
+                                {loading ? <div className="spinner-grow text-light" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : "Send"}
+                            </button>
+                        </Modal.Footer>
+
+                    </Modal>
+
+
+
+
+
+
+
+
+
                     <div className="card tab-box">
                         <div className="row user-tabs">
                             <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
                                 <ul className="nav nav-tabs nav-tabs-bottom">
-                                    <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active">Profile</a></li>
-                                    {/* <li className="nav-item"><a href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
-                                    <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li>
+                                    <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
+                                    {/* <li className="nav-item"><a  href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
+                                    <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link text-primary">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -139,12 +384,91 @@ const AdminProfile = () => {
                     <div className="tab-content">
                         {/* Profile Info Tab */}
                         <div id="emp_profile" className="pro-overview tab-pane fade show active">
+
                             <div className="row">
                                 <div className="col-md-6 d-flex">
                                     <div className="card profile-box flex-fill">
                                         <div className="card-body">
+                                            <div className="pro-edit">
+                                                <a className="edit-icon bg-info text-white" onClick={() => handleModal1(staffOne.administratorId)}>
+                                                    <i className="fa fa-pencil" />
+                                                </a>
+                                                <Modal
+                                                    show={stateModal}
+                                                    onHide={() => setStateModal(false)}
+                                                    size="lg"
+                                                    aria-labelledby="contained-modal-title-vcenter"
+
+                                                >
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                                                            Update profile for {profile.firstName} {profile.lastName}
+                                                        </Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="row">
+
+
+
+
+
+
+                                                            <div className="form-group col-md-6">
+                                                                <label>State</label>
+                                                                <input type="text" className="form-control" name='state' value={editedProfile.state || ''} onChange={handleInputChange} />
+                                                            </div>
+
+
+                                                            <div className="form-group col-md-6">
+                                                                <label>City</label>
+                                                                <input type="text" className="form-control" name='city' value={editedProfile.city || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-6">
+                                                                <label>Country</label>
+                                                                <input type="text" className="form-control" name='country' value={editedProfile.country || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-6">
+                                                                <label>Post Code</label>
+                                                                <input type="text" className="form-control" name='postalCode' value={editedProfile.postcode || ''} onChange={handleInputChange} />
+                                                            </div>
+
+
+                                                        </div>
+                                                    </Modal.Body>
+                                                    <Modal.Footer>
+                                                        <button
+                                                            className="btn add-btn rounded btn-outline-danger"
+                                                            onClick={() => setStateModal(false)}
+                                                        >
+                                                            Close
+                                                        </button>
+                                                        <button
+                                                            className="ml-2 btn add-btn rounded text-white btn-info"
+                                                            onClick={handleSave}
+                                                        >
+                                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div> : "Send"}
+                                                        </button>
+                                                    </Modal.Footer>
+
+                                                </Modal>
+
+                                            </div>
                                             <h3 className="card-title">Personal Informations</h3>
                                             <ul className="personal-info">
+                                                <li>
+                                                    <div className="title">Nationality</div>
+                                                    <div className="text">{staffOne.country}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">State</div>
+                                                    <div className="text">{staffOne.state}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">Post Code</div>
+                                                    <div className="text">{staffOne.postcode}</div>
+                                                </li>
                                                 <li>
                                                     <div className="title">Passport No.</div>
                                                     <div className="text"></div>
@@ -155,11 +479,7 @@ const AdminProfile = () => {
                                                 </li>
                                                 <li>
                                                     <div className="title">Tel</div>
-                                                    <div className="text"><a href="">{staffOne.phoneNumber}</a></div>
-                                                </li>
-                                                <li>
-                                                    <div className="title">Nationality</div>
-                                                    <div className="text">{staffOne.country}</div>
+                                                    <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                                                 </li>
                                                 <li>
                                                     <div className="title">Religion</div>
@@ -169,78 +489,228 @@ const AdminProfile = () => {
                                                     <div className="title">Marital status</div>
                                                     <div className="text"></div>
                                                 </li>
-                                                <li>
-                                                    <div className="title">Employment of spouse</div>
-                                                    <div className="text"></div>
-                                                </li>
-                                                <li>
-                                                    <div className="title">No. of children</div>
-                                                    <div className="text"></div>
-                                                </li>
+
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Emergency Contact Info */}
                                 <div className="col-md-6 d-flex">
                                     <div className="card profile-box flex-fill">
                                         <div className="card-body">
+                                            <div className="pro-edit">
+                                                <a className="edit-icon bg-info text-white" onClick={() => handleModal2(staffOne.administratorId)}>
+                                                    <i className="fa fa-pencil" />
+                                                </a>
+                                                <Modal
+                                                    show={kinModal}
+                                                    onHide={() => setKinModal(false)}
+                                                    size="lg"
+                                                    aria-labelledby="contained-modal-title-vcenter"
+
+                                                >
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                                                            Emergency Contact Information
+                                                        </Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="row">
+                                                            <div className="form-group col-md-4">
+                                                                <label>Emergency Contact FullName</label>
+                                                                <input type="text" className="form-control" name='kinName' value={editedProfile.nextOfKin || ''} onChange={handleInputChange} />
+                                                            </div>
+
+                                                            <div className="form-group col-md-4">
+                                                                <label>Relationship</label>
+                                                                <input type="text" className="form-control" name='relationship' value={editedProfile.relationship || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>State</label>
+                                                                <input type="text" className="form-control" name='kinState' value={editedProfile.kinState || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Email</label>
+                                                                <input type="email" className="form-control" name='kinEmail' value={editedProfile.kinEmail || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Post Code</label>
+                                                                <input type="email" className="form-control" name='kinPostCode' value={editedProfile.kinPostCode || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Address</label>
+                                                                <input type="text" className="form-control" name='kinAddress' value={editedProfile.kinAddress || ''} onChange={handleInputChange} />
+                                                            </div>
+
+                                                            <div className="form-group col-md-4">
+                                                                <label>Country</label>
+                                                                <input type="text" className="form-control" name='kinCountry' value={editedProfile.kinCountry || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>City</label>
+                                                                <input type="text" className="form-control" name='kinCity' value={editedProfile.kinCity || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Phone Number</label>
+                                                                <input type="email" className="form-control" name='kinPhoneNumber' value={editedProfile.kinPhoneNumber || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Suburb</label>
+                                                                <input type="email" className="form-control" name='kinSuburb' value={editedProfile.kinSuburb || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                        </div>
+                                                    </Modal.Body>
+                                                    <Modal.Footer>
+                                                        <button
+                                                            className="btn add-btn rounded btn-outline-danger"
+                                                            onClick={() => setKinModal(false)}
+                                                        >
+                                                            Close
+                                                        </button>
+                                                        <button
+                                                            className="ml-2 btn add-btn rounded text-white btn-info"
+                                                            onClick={handleSave}
+                                                        >
+                                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div> : "Send"}
+                                                        </button>
+                                                    </Modal.Footer>
+
+                                                </Modal>
+                                            </div>
                                             <h3 className="card-title">Emergency Contact </h3>
-                                            <h5 className="section-title">Primary</h5>
                                             <ul className="personal-info">
                                                 <li>
                                                     <div className="title">Name</div>
-                                                    <div className="text">{staffOne.nextOfKin}</div>
+                                                    <div className="text">{staffOne.nextOfKin === "null" ? "---" : staffOne.nextOfKin}</div>
                                                 </li>
                                                 <li>
                                                     <div className="title">Relationship</div>
-                                                    <div className="text">{staffOne.relationship}</div>
+                                                    <div className="text">{staffOne.relationship === "null" ? "---" : staffOne.relationship}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">Email</div>
+                                                    <div className="text">{staffOne.kinEmail === "null" ? "---" : staffOne.kinEmail}</div>
                                                 </li>
                                                 <li>
                                                     <div className="title">Phone </div>
-                                                    <div className="text">{staffOne.kinPhoneNumber}</div>
+                                                    <div className="text">{staffOne.kinPhoneNumber === "null" ? "---" : staffOne.kinPhoneNumber}</div>
                                                 </li>
+
+                                                <li>
+                                                    <div className="title">Country</div>
+                                                    <div className="text">{staffOne.kinCountry === "null" ? "---" : staffOne.kinCountry}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">State</div>
+                                                    <div className="text">{staffOne.kinState === "null" ? "---" : staffOne.kinState}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">City</div>
+                                                    <div className="text">{staffOne.kinCity === "null" ? "---" : staffOne.kinState}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">Post Code</div>
+                                                    <div className="text">{staffOne.kinPostcode === "null" ? "---" : staffOne.kinPostCode}</div>
+                                                </li>
+
                                             </ul>
-                                            <hr />
-                                            <h5 className="section-title">Secondary</h5>
-                                            <ul className="personal-info">
-                                                <li>
-                                                    <div className="title">Name</div>
-                                                    <div className="text"></div>
-                                                </li>
-                                                <li>
-                                                    <div className="title">Relationship</div>
-                                                    <div className="text"></div>
-                                                </li>
-                                                <li>
-                                                    <div className="title">Phone </div>
-                                                    <div className="text"></div>
-                                                </li>
-                                            </ul>
+
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Bank Info */}
                             <div className="row">
                                 <div className="col-md-6 d-flex">
                                     <div className="card profile-box flex-fill">
                                         <div className="card-body">
+                                            <div className="pro-edit">
+                                                <a className="edit-icon bg-info text-white" onClick={() => handleModal3(staffOne.administratorId)}>
+                                                    <i className="fa fa-pencil" />
+                                                </a>
+                                                <Modal
+                                                    show={bankModal}
+                                                    onHide={() => setBankModal(false)}
+                                                    size="lg"
+                                                    aria-labelledby="contained-modal-title-vcenter"
+
+                                                >
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                                                            Bank Information
+                                                        </Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="row">
+                                                            <div className="form-group col-md-4">
+                                                                <label>Account Name</label>
+                                                                <input type="text" className="form-control" name='accountName' value={editedProfile.accountName || ''} onChange={handleInputChange} />
+                                                            </div>
+
+                                                            <div className="form-group col-md-4">
+                                                                <label>Bank Name</label>
+                                                                <input type="text" className="form-control" name='bankName' value={editedProfile.bankName || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>BSB</label>
+                                                                <input type="text" className="form-control" name='bsb' value={editedProfile.bsb || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Account Number</label>
+                                                                <input type="text" className="form-control" name='accountNumber' value={editedProfile.accountNumber || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                            <div className="form-group col-md-4">
+                                                                <label>Branch</label>
+                                                                <input type="text" className="form-control" name='branch' value={editedProfile.branch || ''} onChange={handleInputChange} />
+                                                            </div>
+                                                        </div>
+                                                    </Modal.Body>
+                                                    <Modal.Footer>
+                                                        <button
+                                                            className="btn add-btn rounded btn-outline-danger"
+                                                            onClick={() => setBankModal(false)}
+                                                        >
+                                                            Close
+                                                        </button>
+                                                        <button
+                                                            className="ml-2 btn add-btn rounded text-white btn-info"
+                                                            onClick={handleSave}
+                                                        >
+                                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div> : "Send"}
+                                                        </button>
+                                                    </Modal.Footer>
+
+                                                </Modal>
+
+                                            </div>
                                             <h3 className="card-title">Bank information</h3>
                                             <ul className="personal-info">
                                                 <li>
                                                     <div className="title">Bank name</div>
-                                                    <div className="text">{staffOne.bankName}</div>
+                                                    <div className="text">{staffOne.bankName === "null" ? "---" : staffOne.bankName}</div>
                                                 </li>
                                                 <li>
-                                                    <div className="title">Bank account No.</div>
-                                                    <div className="text">{staffOne.accountNumber}</div>
+                                                    <div className="title">Account Name</div>
+                                                    <div className="text">{staffOne.accountName === "null" ? "---" : staffOne.accountName}</div>
                                                 </li>
                                                 <li>
-                                                    <div className="title">IFSC Code</div>
-                                                    <div className="text"></div>
+                                                    <div className="title">Account Number</div>
+                                                    <div className="text">{staffOne.accountNumber === "null" ? "---" : staffOne.accountNumber}</div>
                                                 </li>
                                                 <li>
-                                                    <div className="title">PAN No</div>
-                                                    <div className="text"></div>
+                                                    <div className="title">Branch</div>
+                                                    <div className="text">{staffOne.branch === "null" ? "---" : staffOne.branch}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title">BSB</div>
+                                                    <div className="text">{staffOne.bsb === "null" ? "---" : staffOne.bsb}</div>
                                                 </li>
                                             </ul>
                                         </div>
@@ -249,46 +719,103 @@ const AdminProfile = () => {
                                 <div className="col-md-6 d-flex">
                                     <div className="card profile-box flex-fill">
                                         <div className="card-body">
-                                            <h3 className="card-title">Family Informations</h3>
-                                            <div className="table-responsive">
-                                                <table className="table table-nowrap">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Name</th>
-                                                            <th>Relationship</th>
-                                                            <th>Date of Birth</th>
-                                                            <th>Phone</th>
-                                                            <th />
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td className="text-end">
-                                                                <div className="dropdown dropdown-action">
-                                                                    <a aria-expanded="false" data-bs-toggle="dropdown" className="action-icon dropdown-toggle" href="#"><i className="material-icons">more_vert</i></a>
-                                                                    <div className="dropdown-menu dropdown-menu-right">
-                                                                        <a href="#" className="dropdown-item"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                                                                        <a href="#" className="dropdown-item"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                                            <div className="pro-edit">
+                                                <a className="edit-icon bg-info text-white" onClick={() => handleModal4(staffOne.administratorId)}>
+                                                    <i className="fa fa-pencil" />
+                                                    <Modal
+                                                        show={socialModal}
+                                                        onHide={() => setSocialModal(false)}
+                                                        size="lg"
+                                                        aria-labelledby="contained-modal-title-vcenter"
+
+                                                    >
+                                                        <Modal.Header closeButton>
+                                                            <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                                                                Other Information
+                                                            </Modal.Title>
+                                                        </Modal.Header>
+                                                        <Modal.Body>
+                                                            <div className="row">
+                                                                <div className="col-md-6">
+                                                                    <div className="form-group">
+                                                                        <label>Instagram</label>
+                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
+                                                                    </div>
+
+                                                                    <div className="form-group">
+                                                                        <label>Facebook</label>
+                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
                                                                     </div>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                                <div className="col-md-6">
+                                                                    <div className="form-group">
+                                                                        <label>Twitter</label>
+                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
+                                                                    </div>
+                                                                    <div className="form-group">
+                                                                        <label>LinkedIn</label>
+                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </Modal.Body>
+                                                        <Modal.Footer>
+                                                            <button
+                                                                className="btn add-btn rounded btn-outline-danger"
+                                                                onClick={() => setSocialModal(false)}
+                                                            >
+                                                                Close
+                                                            </button>
+                                                            <button
+                                                                className="ml-2 btn add-btn rounded text-white btn-info"
+                                                                onClick={handleSave}
+                                                            >
+                                                                {loading ? <div className="spinner-grow text-light" role="status">
+                                                                    <span className="sr-only">Loading...</span>
+                                                                </div> : "Send"}
+                                                            </button>
+                                                        </Modal.Footer>
+
+                                                    </Modal>
+                                                </a>
                                             </div>
+                                            <h3 className="card-title">Other Informations</h3>
+                                            <ul className="personal-info">
+                                                <li>
+                                                    <div className="title"><FaInstagram /> Instagram</div>
+                                                    <div className="text">{staffOne.instagram === "null" || "" ? "---" : staffOne.instagram}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title"><FaFacebook /> Facebook</div>
+                                                    <div className="text">{staffOne.facebook === "null" || "" ? "---" : staffOne.facebook}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title"><FaTwitter /> Twitter</div>
+                                                    <div className="text">{staffOne.twitter === "null" || "" ? "---" : staffOne.twitter}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title"><FaLinkedin /> Linked-In</div>
+                                                    <div className="text">{staffOne.linkedIn === "null" || "" ? "---" : staffOne.linkedIn}</div>
+                                                </li>
+                                                <li>
+                                                    <div className="title"><FaYoutube /> Youtube</div>
+                                                    <div className="text">{staffOne.youtube === "null" || "" ? "---" : staffOne.youtube}</div>
+                                                </li>
+
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+
+
                             <div className="row">
                                 <div className="col-md-6 d-flex">
                                     <div className="card profile-box flex-fill">
                                         <div className="card-body">
-                                            <h3 className="card-title">Education Information <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i className="fa fa-pencil" /></a></h3>
+                                            <h3 className="card-title">Education Information <a href="#" className="edit-icon text-primary" data-bs-toggle="modal" data-bs-target="#education_info"><i className="fa fa-pencil" /></a></h3>
                                             <div className="experience-box">
                                                 <ul className="experience-list">
                                                     <li>
@@ -297,7 +824,7 @@ const AdminProfile = () => {
                                                         </div>
                                                         <div className="experience-content">
                                                             <div className="timeline-content">
-                                                                {/* <a href="/" className="name">International College of Arts and Science (UG)</a>
+                                                                {/* <a className='text-primary' href="/" className="name">International College of Arts and Science (UG)</a>
                                 <div>Bsc Computer Science</div>
                                 <span className="time">2000 - 2003</span> */}
                                                             </div>
@@ -309,7 +836,7 @@ const AdminProfile = () => {
                                                         </div>
                                                         <div className="experience-content">
                                                             <div className="timeline-content">
-                                                                {/* <a href="/" className="name">International College of Arts and Science (PG)</a>
+                                                                {/* <a className='text-primary' href="/" className="name">International College of Arts and Science (PG)</a>
                                 <div>Msc Computer Science</div>
                                 <span className="time">2000 - 2003</span> */}
                                                             </div>
@@ -323,7 +850,7 @@ const AdminProfile = () => {
                                 <div className="col-md-6 d-flex">
                                     <div className="card profile-box flex-fill">
                                         <div className="card-body">
-                                            <h3 className="card-title">Experience <a href="#" className="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i className="fa fa-pencil" /></a></h3>
+                                            <h3 className="card-title">Experience <a href="#" className="edit-icon text-primary" data-bs-toggle="modal" data-bs-target="#experience_info"><i className="fa fa-pencil" /></a></h3>
                                             <div className="experience-box">
                                                 <ul className="experience-list">
                                                     <li>
@@ -332,7 +859,17 @@ const AdminProfile = () => {
                                                         </div>
                                                         <div className="experience-content">
                                                             <div className="timeline-content">
-                                                                {/* <a href="/" className="name">Web Designer at Zen Corporation</a>
+
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="experience-user">
+                                                            <div className="before-circle" />
+                                                        </div>
+                                                        <div className="experience-content">
+                                                            <div className="timeline-content">
+                                                                {/* <a className='text-primary' href="/" className="name">Web Designer at Ron-tech</a>
                                 <span className="time">Jan 2013 - Present (5 years 2 months)</span> */}
                                                             </div>
                                                         </div>
@@ -343,18 +880,7 @@ const AdminProfile = () => {
                                                         </div>
                                                         <div className="experience-content">
                                                             <div className="timeline-content">
-                                                                {/* <a href="/" className="name">Web Designer at Ron-tech</a>
-                                <span className="time">Jan 2013 - Present (5 years 2 months)</span> */}
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div className="experience-user">
-                                                            <div className="before-circle" />
-                                                        </div>
-                                                        <div className="experience-content">
-                                                            <div className="timeline-content">
-                                                                {/* <a href="/" className="name">Web Designer at Dalt Technology</a>
+                                                                {/* <a className='text-primary' href="/" className="name">Web Designer at Dalt Technology</a>
                                 <span className="time">Jan 2013 - Present (5 years 2 months)</span> */}
                                                             </div>
                                                         </div>
@@ -401,7 +927,7 @@ const AdminProfile = () => {
                                                 <div>Project Leader :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -409,19 +935,19 @@ const AdminProfile = () => {
                                                 <div>Team :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" className="all-users">+15</a>
+                                                        <a href="#" className="all-users text-primary">+15</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -463,7 +989,7 @@ const AdminProfile = () => {
                                                 <div>Project Leader :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -471,19 +997,19 @@ const AdminProfile = () => {
                                                 <div>Team :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" className="all-users">+15</a>
+                                                        <a href="#" className="all-users text-primary">+15</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -525,7 +1051,7 @@ const AdminProfile = () => {
                                                 <div>Project Leader :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -533,19 +1059,19 @@ const AdminProfile = () => {
                                                 <div>Team :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" className="all-users">+15</a>
+                                                        <a href="#" className="all-users text-primary">+15</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -587,7 +1113,7 @@ const AdminProfile = () => {
                                                 <div>Project Leader :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img alt="" src={Avatar_16} /></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -595,19 +1121,19 @@ const AdminProfile = () => {
                                                 <div>Team :</div>
                                                 <ul className="team-members">
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Doe"><img alt="" src={Avatar_02} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Richard Miles"><img alt="" src={Avatar_09} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="John Smith"><img alt="" src={Avatar_10} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
+                                                        <a className='text-primary' href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img alt="" src={Avatar_05} /></a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" className="all-users">+15</a>
+                                                        <a href="#" className="all-users text-primary">+15</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -1055,7 +1581,7 @@ const AdminProfile = () => {
                                     <div className="form-scroll">
                                         <div className="card">
                                             <div className="card-body">
-                                                <h3 className="card-title">Family Member <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
+                                                <h3 className="card-title">Family Member <a href="" className="delete-icon text-primary"><i className="fa fa-trash-o" /></a></h3>
                                                 <div className="row">
                                                     <div className="col-md-6">
                                                         <div className="form-group">
@@ -1086,7 +1612,7 @@ const AdminProfile = () => {
                                         </div>
                                         {/* <div className="card">
                       <div className="card-body">
-                        <h3 className="card-title">Education Informations <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
+                        <h3 className="card-title">Education Informations <a className='text-primary' href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
                         <div className="row">
                           <div className="col-md-6">
                             <div className="form-group">
@@ -1114,7 +1640,7 @@ const AdminProfile = () => {
                           </div>
                         </div>
                         <div className="add-more">
-                          <a href=""><i className="fa fa-plus-circle" /> Add More</a>
+                          <a className='text-primary' href=""><i className="fa fa-plus-circle" /> Add More</a>
                         </div>
                       </div>
                     </div> */}
@@ -1226,7 +1752,7 @@ const AdminProfile = () => {
                                     <div className="form-scroll">
                                         <div className="card">
                                             <div className="card-body">
-                                                <h3 className="card-title">Education Informations <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
+                                                <h3 className="card-title">Education Informations <a href="" className="delete-icon text-primary"><i className="fa fa-trash-o" /></a></h3>
                                                 <div className="row">
                                                     <div className="col-md-6">
                                                         <div className="form-group form-focus focused">
@@ -1273,7 +1799,7 @@ const AdminProfile = () => {
                                         </div>
                                         <div className="card">
                                             <div className="card-body">
-                                                <h3 className="card-title">Education Informations <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
+                                                <h3 className="card-title">Education Informations <a href="" className="delete-icon text-primary"><i className="fa fa-trash-o" /></a></h3>
                                                 <div className="row">
                                                     <div className="col-md-6">
                                                         <div className="form-group form-focus focused">
@@ -1317,7 +1843,7 @@ const AdminProfile = () => {
                                                     </div>
                                                 </div>
                                                 <div className="add-more">
-                                                    <a href=""><i className="fa fa-plus-circle" /> Add More</a>
+                                                    <a className='text-primary' href=""><i className="fa fa-plus-circle" /> Add More</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1346,7 +1872,7 @@ const AdminProfile = () => {
                                     <div className="form-scroll">
                                         <div className="card">
                                             <div className="card-body">
-                                                <h3 className="card-title">Experience Informations <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
+                                                <h3 className="card-title">Experience Informations <a href="" className="delete-icon text-primary"><i className="fa fa-trash-o" /></a></h3>
                                                 <div className="row">
                                                     <div className="col-md-6">
                                                         <div className="form-group form-focus">
@@ -1387,7 +1913,7 @@ const AdminProfile = () => {
                                         </div>
                                         <div className="card">
                                             <div className="card-body">
-                                                <h3 className="card-title">Experience Informations <a href="" className="delete-icon"><i className="fa fa-trash-o" /></a></h3>
+                                                <h3 className="card-title">Experience Informations <a href="" className="delete-icon text-primary"><i className="fa fa-trash-o" /></a></h3>
                                                 <div className="row">
                                                     <div className="col-md-6">
                                                         <div className="form-group form-focus">
@@ -1425,7 +1951,7 @@ const AdminProfile = () => {
                                                     </div>
                                                 </div>
                                                 <div className="add-more">
-                                                    <a href=""><i className="fa fa-plus-circle" /> Add More</a>
+                                                    <a className='text-primary' href=""><i className="fa fa-plus-circle" /> Add More</a>
                                                 </div>
                                             </div>
                                         </div>

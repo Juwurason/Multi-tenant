@@ -29,7 +29,7 @@ const ClientChart = () => {
 
     return (
         <div className="d-flex justify-content-center w-100">
-            <div style={{ width: "250px", height: "250px" }}>
+            <div style={{ width: "200px", height: "200px" }}>
                 <Doughnut data={data} />
             </div>
 

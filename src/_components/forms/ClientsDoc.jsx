@@ -109,9 +109,10 @@ const ClientDoc = () => {
     }, [])
 
 
-    const [documentName, setDocumentName] = useState("")
-    const [expire, setExpire] = useState("")
-    const [document, setDocument] = useState(null)
+    const [documentName, setDocumentName] = useState("");
+    const [expire, setExpire] = useState("");
+    const [document, setDocument] = useState(null);
+    const [loading1, setLoading1] = useState(false);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -141,13 +142,13 @@ const ClientDoc = () => {
         formData.append("UserId", clientOne.profileId);
 
         try {
-            setLoading(true)
+            setLoading1(true)
             const { data } = await post(`/Profiles/document_upload?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
 
-            setLoading(false)
+            setLoading1(false)
             FetchClient();
             setDocumentName("");
             setDocument(null);
@@ -156,11 +157,11 @@ const ClientDoc = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.message)
-            setLoading(false);
+            setLoading1(false);
 
         }
         finally {
-            setLoading(false)
+            setLoading1(false)
         }
     }
     const downloadLinkRef = useRef(null);
@@ -383,7 +384,7 @@ const ClientDoc = () => {
                                         <div className="submit-section">
                                             <button className="btn btn-primary rounded submit-btn" type='submit'>
 
-                                                {loading ? <div className="spinner-grow text-light" role="status">
+                                                {loading1 ? <div className="spinner-grow text-light" role="status">
                                                     <span className="sr-only">Loading...</span>
                                                 </div> : "Add"}
                                             </button>

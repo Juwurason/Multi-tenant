@@ -97,7 +97,7 @@ const AdminDoc = () => {
             console.log(error);
         }
         try {
-            const { data } = await get(`Documents/get_all_staff_documents?staffId=${uid}`, { cacheTimeout: 300000 })
+            const { data } = await get(`Docume${uid}`, { cacheTimeout: 300000 })
             setDocumentOne(data.staffDocuments)
 
         } catch (error) {
@@ -112,9 +112,10 @@ const AdminDoc = () => {
     }, [])
 
 
-    const [documentName, setDocumentName] = useState(null)
-    const [expire, setExpire] = useState(null)
-    const [document, setDocument] = useState(null)
+    const [documentName, setDocumentName] = useState(null);
+    const [expire, setExpire] = useState(null);
+    const [document, setDocument] = useState(null);
+    const [loading1, setLoading1] = useState(false);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -150,7 +151,7 @@ const AdminDoc = () => {
             )
             toast.success(data.message)
 
-            setLoading(false)
+            setLoading1(false)
             FetchStaff();
             setDocumentName("");
             setDocument(null);
@@ -159,11 +160,11 @@ const AdminDoc = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.message)
-            setLoading(false);
+            setLoading1(false);
 
         }
         finally {
-            setLoading(false)
+            setLoading1(false)
         }
     }
     const downloadLinkRef = useRef(null);
@@ -342,7 +343,7 @@ const AdminDoc = () => {
 
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">Upload Document for {staffOne.fullName} </h4>
-                                    <Link to={`/app/profile/employee-profile/${uid}/${staffOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                    <Link to={`/app/profile/admin-profile/${uid}/${staffOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className="card-body">
                                     <form
@@ -385,7 +386,7 @@ const AdminDoc = () => {
                                         <div className="submit-section">
                                             <button className="btn btn-primary rounded submit-btn" type='submit'>
 
-                                                {loading ? <div className="spinner-grow text-light" role="status">
+                                                {loading1 ? <div className="spinner-grow text-light" role="status">
                                                     <span className="sr-only">Loading...</span>
                                                 </div> : "Add"}
                                             </button>

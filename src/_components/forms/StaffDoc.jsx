@@ -79,6 +79,8 @@ const StaffDoc = () => {
 
     ];
     const { loading, setLoading } = useCompanyContext();
+    const { loading1, setLoading1 } = useState(false);
+    2
     const { uid } = useParams()
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
@@ -128,7 +130,7 @@ const StaffDoc = () => {
     };
     const id = JSON.parse(localStorage.getItem('user'));
     const handleSubmit = async (e) => {
-        setLoading(true);
+        setLoading1(true);
         e.preventDefault()
         if (documentName === "" || document === "") {
             return toast.error("Fields marked red cannot be empty")
@@ -150,7 +152,7 @@ const StaffDoc = () => {
             )
             toast.success(data.message)
 
-            setLoading(false)
+            setLoading1(false)
             FetchStaff();
             setDocumentName("");
             setDocument(null);
@@ -159,11 +161,11 @@ const StaffDoc = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.message)
-            setLoading(false);
+            setLoading1(false);
 
         }
         finally {
-            setLoading(false)
+            setLoading1(false)
         }
     }
     const downloadLinkRef = useRef(null);
@@ -385,7 +387,7 @@ const StaffDoc = () => {
                                         <div className="submit-section">
                                             <button className="btn btn-primary rounded submit-btn" type='submit'>
 
-                                                {loading ? <div className="spinner-grow text-light" role="status">
+                                                {loading1 ? <div className="spinner-grow text-light" role="status">
                                                     <span className="sr-only">Loading...</span>
                                                 </div> : "Add"}
                                             </button>
