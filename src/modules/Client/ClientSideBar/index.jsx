@@ -58,7 +58,7 @@ const ClientSidebar = (props) => {
                                 <span>Main</span>
                             </li>
                             <li className="submenu">
-                                <a href="/client/client/Dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
+                                <a href="/client/client" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
 
                             </li>
 

@@ -57,17 +57,17 @@ const Loginpage = () => {
       }
 
       if (data.userProfile?.role === "Staff") {
-        navigate.push('/staff/staff/staffDashboard')
+        navigate.push('/staff/staff')
         localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }
       if (data.userProfile?.role === "Client") {
-        navigate.push('/client/client/Dashboard')
+        navigate.push('/client/client')
         localStorage.setItem("clientProfile", JSON.stringify(data.clientProfile))
 
       }
       if (data.userProfile?.role === "Admin") {
-        navigate.push('/administrator/administrator/adminDashboard')
+        navigate.push('/administrator/administrator')
         localStorage.setItem("adminProfile", JSON.stringify(data.adminProfile))
 
       }
@@ -106,13 +106,13 @@ const Loginpage = () => {
       navigate.push('/app/main/dashboard');
     }
     if (user && user.token && user.role === "Staff") {
-      navigate.push('/staff/staff/staffDashboard');
+      navigate.push('/staff/staff');
     }
     if (user && user.token && user.role === "Client") {
-      navigate.push('/client/client/Dashboard');
+      navigate.push('/client/client');
     }
     if (user && user.token && user.role === "Admin") {
-      navigate.push('/administrator/administrator/adminDashboard');
+      navigate.push('/administrator/administrator');
     }
   }, []);
   return (

@@ -1,6 +1,4 @@
-/**
- * App Header
- */
+
 import React, { useEffect, useState } from 'react'
 import { FaAngleDown, FaAngleUp, FaArrowDown } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';

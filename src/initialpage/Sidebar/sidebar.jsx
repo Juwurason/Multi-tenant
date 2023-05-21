@@ -34,7 +34,7 @@ const Sidebar = (props) => {
 
   let pathname = props.location.pathname
   return (
-    <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
+    <div id="sidebar" className="sidebar" >
       <Scrollbars
         autoHide
         autoHideTimeout={1000}
@@ -45,7 +45,7 @@ const Sidebar = (props) => {
         thumbMinSize={30}
         universal={false}
         hideTracksWhenNotNeeded={true}
-      // horizontal="false"
+
 
       >
         <div className="sidebar-inner slimscroll">
