@@ -282,7 +282,7 @@ const AdminDashboard = () => {
 
 
 
-              <div className='col-md-3 p-2 d-flex flex-column gap-2 justify-content-start'>
+              <div className='col-md-3 p-2 d-flex  flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h5>Recently Onboarded Clients</h5>
                   {

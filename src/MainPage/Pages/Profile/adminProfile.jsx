@@ -117,7 +117,7 @@ const AdminProfile = () => {
         e.preventDefault()
         const formData = new FormData()
         formData.append("CompanyId", id.companyId);
-        formData.append("StaffId", uid);
+        formData.append("AdminstratorId", uid);
         formData.append("firstName", profile.firstName);
         formData.append("email", profile.email);
         formData.append("phoneNumber", profile.phoneNumber);
@@ -153,7 +153,7 @@ const AdminProfile = () => {
         formData.append("facebook", editedProfile.fbook);
         try {
             setLoading(true)
-            const { data } = await privateHttp.post(`/Staffs/edit/${uid}?userId=${id.userId}`,
+            const { data } = await privateHttp.post(`/Administrators/edit/${uid}?userId=${id.userId}`,
                 formData
             )
             if (data.status === 'Success') {
@@ -722,63 +722,64 @@ const AdminProfile = () => {
                                             <div className="pro-edit">
                                                 <a className="edit-icon bg-info text-white" onClick={() => handleModal4(staffOne.administratorId)}>
                                                     <i className="fa fa-pencil" />
-                                                    <Modal
-                                                        show={socialModal}
-                                                        onHide={() => setSocialModal(false)}
-                                                        size="lg"
-                                                        aria-labelledby="contained-modal-title-vcenter"
+                                                </a>
 
-                                                    >
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                                                                Other Information
-                                                            </Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                            <div className="row">
-                                                                <div className="col-md-6">
-                                                                    <div className="form-group">
-                                                                        <label>Instagram</label>
-                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
-                                                                    </div>
+                                                <Modal
+                                                    show={socialModal}
+                                                    onHide={() => setSocialModal(false)}
+                                                    size="lg"
+                                                    aria-labelledby="contained-modal-title-vcenter"
 
-                                                                    <div className="form-group">
-                                                                        <label>Facebook</label>
-                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
-                                                                    </div>
+                                                >
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                                                            Other Information
+                                                        </Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="row">
+                                                            <div className="col-md-6">
+                                                                <div className="form-group">
+                                                                    <label>Instagram</label>
+                                                                    <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
                                                                 </div>
-                                                                <div className="col-md-6">
-                                                                    <div className="form-group">
-                                                                        <label>Twitter</label>
-                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
-                                                                    </div>
-                                                                    <div className="form-group">
-                                                                        <label>LinkedIn</label>
-                                                                        <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
-                                                                    </div>
 
+                                                                <div className="form-group">
+                                                                    <label>Facebook</label>
+                                                                    <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
                                                                 </div>
                                                             </div>
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <button
-                                                                className="btn add-btn rounded btn-outline-danger"
-                                                                onClick={() => setSocialModal(false)}
-                                                            >
-                                                                Close
-                                                            </button>
-                                                            <button
-                                                                className="ml-2 btn add-btn rounded text-white btn-info"
-                                                                onClick={handleSave}
-                                                            >
-                                                                {loading ? <div className="spinner-grow text-light" role="status">
-                                                                    <span className="sr-only">Loading...</span>
-                                                                </div> : "Send"}
-                                                            </button>
-                                                        </Modal.Footer>
+                                                            <div className="col-md-6">
+                                                                <div className="form-group">
+                                                                    <label>Twitter</label>
+                                                                    <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <label>LinkedIn</label>
+                                                                    <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
+                                                                </div>
 
-                                                    </Modal>
-                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </Modal.Body>
+                                                    <Modal.Footer>
+                                                        <button
+                                                            className="btn add-btn rounded btn-outline-danger"
+                                                            onClick={() => setSocialModal(false)}
+                                                        >
+                                                            Close
+                                                        </button>
+                                                        <button
+                                                            className="ml-2 btn add-btn rounded text-white btn-info"
+                                                            onClick={handleSave}
+                                                        >
+                                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div> : "Send"}
+                                                        </button>
+                                                    </Modal.Footer>
+
+                                                </Modal>
                                             </div>
                                             <h3 className="card-title">Other Informations</h3>
                                             <ul className="personal-info">
