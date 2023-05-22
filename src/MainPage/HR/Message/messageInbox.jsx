@@ -230,7 +230,7 @@ const MessageInbox = () => {
                                 >
                                     <MdMoveToInbox className='fs-4' />
                                     <span className='fw-bold'>Inbox</span>
-                                    <span className='text-warning'>2</span>
+                                    <span className='text-warning'>0</span>
                                 </a>
                                 {/* Other tabs */}
                                 <a

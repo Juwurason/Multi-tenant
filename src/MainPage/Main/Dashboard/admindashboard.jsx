@@ -190,7 +190,7 @@ const AdminDashboard = () => {
                     loading={loading}
                   />
                   <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
-                    linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
+                    linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allstaff`}
                   />
                   <DashboardCard title={"Shift Roaster"} content={schedule.length} icon={<MdOutlineEventNote className='fs-4' />}
                     link={`/app/employee/shift-scheduling`}

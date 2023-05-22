@@ -47,8 +47,8 @@ const ProgressReport = () => {
             sortable: true
         },
         {
-            name: 'Clients',
-            selector: row => row.profileId,
+            name: 'Client',
+            selector: row => row.profile.fullName,
             sortable: true
         },
 

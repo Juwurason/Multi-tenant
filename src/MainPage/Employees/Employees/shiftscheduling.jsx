@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -15,22 +15,33 @@ import { MdDoneOutline, MdOutlineEditCalendar } from 'react-icons/md';
 import moment from 'moment';
 
 const ShiftScheduling = () => {
+  //Declaring Variables
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false)
+  const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false)
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
-  const [staffOne, setStaffOne] = useState({});
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
   const [lgShow, setLgShow] = useState(false);
+  const [report, setReport] = useState("");
+  const [startKm, setStartKm] = useState(0);
+  const [endKm, setEndKm] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [periodicModal, setPeriodicModal] = useState(false);
+  const dateFrom = useRef(null);
+  const dateTo = useRef(null);
 
 
-
+  //Fetching From the endpoints
   const FetchSchedule = async () => {
     setLoading(true)
+    //All shift Roasters
     try {
       const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
@@ -39,6 +50,7 @@ const ShiftScheduling = () => {
     } catch (error) {
       console.log(error);
     }
+    // All staff
     try {
       const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
@@ -47,7 +59,7 @@ const ShiftScheduling = () => {
     } catch (error) {
       console.log(error);
     }
-
+    //All Client
     try {
       const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
@@ -63,7 +75,7 @@ const ShiftScheduling = () => {
     FetchSchedule()
   }, []);
 
-
+  // Filtering Schedule either by user or Client
   const FilterSchedule = async () => {
 
     if (sta === '' && cli === '') {
@@ -89,15 +101,7 @@ const ShiftScheduling = () => {
 
   }
 
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
-
+  //Calendar Logic Starts here
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs());
 
@@ -123,7 +127,6 @@ const ShiftScheduling = () => {
   const activitiesByDay = daysOfWeek.map((day) =>
     schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
   );
-  const currentDateTime = dayjs().utcOffset(10);
 
   function getActivityStatus(activity) {
     const nowInAustraliaTime = dayjs()
@@ -140,13 +143,14 @@ const ShiftScheduling = () => {
   }
 
 
-  const [showModal, setShowModal] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState(null);
 
+  //To view details of a shift roaster
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
     setShowModal(true);
   };
+
+  // Delete a Shift Roaster
   const handleDelete = async (e) => {
     Swal.fire({
       html: `<h3>Are you sure? you want to delete this shift</h3>`,
@@ -183,14 +187,13 @@ const ShiftScheduling = () => {
 
 
   }
+
+  //Mark attendance on behalf of staff
   const markAttendance = (activity) => {
     setSelectedActivity(activity);
     setLgShow(true);
   }
-  const [report, setReport] = useState("");
-  const [startKm, setStartKm] = useState(0);
-  const [endKm, setEndKm] = useState(0);
-  const [loading2, setLoading2] = useState(false);
+
   const handleConfirmation = async (e) => {
     if (report === "" || endKm === 0) {
       return toast.error("EndKm and Report cannot be empty")
@@ -203,7 +206,6 @@ const ShiftScheduling = () => {
       staffId: e.staff.staffId,
       companyID: id.companyId
     }
-
     setLoading2(true)
 
     try {
@@ -229,15 +231,39 @@ const ShiftScheduling = () => {
       setLgShow(false);
     }
 
-
   }
+  //Get periodic shift roaster
+  const GetPeriodic = async () => {
+    if (sta === '' && cli === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
+      return Swal.fire(
+        "Select either a staff or client and time range",
+        "",
+        "error"
+      )
+
+    } else {
+      setLoading3(true)
+
+      try {
+        const { data } = await get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&clientId=${cli}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+        setSchedule(data);
+        setLoading3(false);
+        setPeriodicModal(false);
+      } catch (error) {
+        console.log(error);
+        setLoading3(false)
+      }
+    }
+  }
+
   return (
     <>
       <div className="page-wrapper">
         <Helmet>
           <title>Shift Roaster</title>
-          <meta name="description" content="Login page" />
+          <meta name="description" content="Shift Roaster" />
         </Helmet>
+
         {/* Page Content */}
         <div className="content container-fluid">
           <div className="page-header">
@@ -310,6 +336,15 @@ const ShiftScheduling = () => {
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
+
+              </div>
+            </div>
+            <div className="col-auto mt-3">
+              <div className="form-group">
+                <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
+                  onClick={() => setPeriodicModal(true)}
+
+                >Get Periodic Shift Roaster</button>
 
               </div>
             </div>
@@ -588,6 +623,68 @@ const ShiftScheduling = () => {
                         </Modal.Footer>
                       </Modal>
 
+                      <Modal show={periodicModal}
+                        size="lg"
+                        onHide={() => setPeriodicModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Get periodic Shift Roaster</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <div className="row">
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">Staff Name</label>
+                                <div>
+                                  <select className="form-select" onChange={e => setSta(e.target.value)}>
+                                    <option defaultValue hidden>--Select a staff--</option>
+                                    {
+                                      staff.map((data, index) =>
+                                        <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                    }
+                                  </select></div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">Client Name</label>
+                                <div>
+                                  <select className="form-select" onChange={e => setCli(e.target.value)}>
+                                    <option defaultValue hidden>--Select a Client--</option>
+                                    {
+                                      clients.map((data, index) =>
+                                        <option value={data.profileId} key={index}>{data.fullName}</option>)
+                                    }
+                                  </select></div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">Start Date</label>
+                                <div>
+                                  <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">End Date</label>
+                                <div>
+                                  <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button className="ml-4 text-white add-btn rounded btn btn-info"
+                            onClick={GetPeriodic}
+                          >
+                            {loading3 ? <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div> : "Load"}
+                          </button>
+                        </Modal.Footer>
+                      </Modal>
 
 
                       {/* <div>

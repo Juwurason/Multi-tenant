@@ -106,7 +106,7 @@ const CompanySetup = () => {
                 <title>Company Setup - Promax Multitenant APP</title>
                 <meta name="description" content="Company Registration Page" />
             </Helmet>
-            <div className="cover-bg">
+            <div className="cover2-bg">
                 <div className="header-left p-4">
                     <span className="logo p-4">
                         <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
@@ -126,25 +126,26 @@ const CompanySetup = () => {
                                                     <input type="text"
                                                         ref={companyName}
                                                         placeholder="Enter company name"
-                                                        className="form-control" name="name" />
+                                                        className="form-control" name="name" required />
                                                 </div>
 
                                             </div>
                                         </div>
                                         <div className="form-group mt-3">
-                                            <label htmlFor="email" className="cols-sm-2 control-label text-muted">Company Email</label>
+                                            <label className="cols-sm-2 control-label text-muted">Company Email</label>
                                             <div className="cols-sm-10">
                                                 <div className="input-group">
                                                     <input type="email"
                                                         ref={companyEmail}
 
-                                                        className="form-control" name="email" id="email" placeholder="Enter company Email" />
+                                                        className="form-control" name="email" id="email" placeholder="Enter company Email"
+                                                        required />
                                                 </div>
 
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="email" className="cols-sm-2 control-label text-muted">Company Phone Number</label>
+                                            <label className="cols-sm-2 control-label text-muted">Company Phone Number</label>
 
                                             <Phone
                                                 value={value}
@@ -155,12 +156,12 @@ const CompanySetup = () => {
                                             )}
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="email" className="cols-sm-2 control-label text-muted">Company Address</label>
+                                            <label className="cols-sm-2 control-label text-muted">Company Address</label>
                                             <div className="cols-sm-10">
                                                 <div className="input-group">
                                                     <input type="text"
                                                         ref={companyAddress}
-                                                        className="form-control" name="email" id="email" placeholder="Enter company Address" />
+                                                        className="form-control" placeholder="Enter company Address" required />
                                                 </div>
                                                 {errors.companyAddress && (
                                                     <span className="text-danger">{errors.companyAddress}</span>
@@ -168,7 +169,7 @@ const CompanySetup = () => {
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="email" className="cols-sm-2 control-label text-muted">Company Head</label>
+                                            <label className="cols-sm-2 control-label text-muted">Company Head</label>
                                             <div className="cols-sm-10">
                                                 <div className="input-group">
                                                     <input type="text"
@@ -176,7 +177,9 @@ const CompanySetup = () => {
 
 
 
-                                                        className="form-control" name="email" id="email" placeholder="Name of Company Head" />
+                                                        className="form-control" autoComplete="false" placeholder="Name of Company Head"
+                                                        required
+                                                    />
                                                 </div>
                                                 {errors.companyHead && (
                                                     <span className="text-danger">{errors.companyHead}</span>

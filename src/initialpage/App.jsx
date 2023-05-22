@@ -3,16 +3,13 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 // We will create these two pages in a moment
 //Authendication
 import LoginPage from './loginpage'
-import RegistrationPage from './RegistrationPage'
 import ForgotPassword from './forgotpassword'
 import OTP from './otp'
 import LockScreen from './lockscreen'
 
 //Main App
 import DefaultLayout from './Sidebar/DefaultLayout';
-import Settinglayout from './Sidebar/Settinglayout';
 import Tasklayout from './Sidebar/tasklayout';
-import Emaillayout from './Sidebar/emaillayout';
 import chatlayout from './Sidebar/chatlayout';
 
 import uicomponents from '../MainPage/UIinterface/components';
@@ -59,9 +56,7 @@ export default class App extends Component {
                 <Route path="/administrator" component={AdminLayout} />
                 <Route path="/client" component={ClientLayout} />
 
-                <Route path="/settings" component={Settinglayout} />
                 <Route path="/tasks" component={Tasklayout} />
-                <Route path="/email" component={Emaillayout} />
                 <Route path="/conversation" component={chatlayout} />
 
                 <Route path="/ui-components" component={uicomponents} />

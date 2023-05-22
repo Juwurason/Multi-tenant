@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -7,7 +7,7 @@ import usePublicHttp from '../../../hooks/usePublicHttp';
 import { toast } from "react-toastify";
 
 
-const DeleteStaff = () => {
+const ChangePassword = () => {
     const mail = JSON.parse(localStorage.getItem('user'))
     const navigate = useHistory()
     //   const [password, setPassword] = useState()
@@ -16,7 +16,8 @@ const DeleteStaff = () => {
     const oldPassword = useRef(null)
     const password = useRef(null)
     const confirmPassword = useRef(null)
-    const publicHttp = usePublicHttp()
+    const publicHttp = usePublicHttp();
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (email === "" || oldPassword === "" || password === "" || confirmPassword === "") {
@@ -34,7 +35,7 @@ const DeleteStaff = () => {
             console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message)
-                navigate.push("staff/staff/staffDashboard")
+                navigate.push("/app/main/dashboard")
             } else {
                 toast.error(data.message)
                 return
@@ -55,8 +56,8 @@ const DeleteStaff = () => {
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Delete Staff</title>
-                    <meta name="description" content="Login page" />
+                    <title>Change Password</title>
+                    <meta name="description" content="Forget Password" />
                 </Helmet>
                 <div className="content container-fluid">
                     <div className="row">
@@ -65,7 +66,7 @@ const DeleteStaff = () => {
                             <div className="page-header">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <h3 className="page-title">Delete Staff</h3>
+                                        <h3 className="page-title">Change Password</h3>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +88,12 @@ const DeleteStaff = () => {
                                     <label>Confirm password</label>
                                     <input type="text" ref={confirmPassword} className="form-control" />
                                 </div>
-
+                                <div className="submit-section">
+                                    <button className="btn btn-info text-white rounded add-btn" disabled={loading ? true : false}>
+                                        {loading ? <div className="spinner-grow text-light" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div> : "Update Password"}</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -100,4 +106,4 @@ const DeleteStaff = () => {
     );
 }
 
-export default DeleteStaff;
+export default ChangePassword;

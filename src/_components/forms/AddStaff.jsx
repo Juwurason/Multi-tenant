@@ -47,7 +47,7 @@ const AddStaff = () => {
                 formData
             )
             toast.success(data.message)
-            navigate.push('/app/employee/allemployees')
+            navigate.push('/app/employee/allstaff')
             setLoading(false)
 
         } catch (error) {
@@ -72,7 +72,7 @@ const AddStaff = () => {
                         <div className="card">
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Add New Staff</h4>
-                                <Link to={'/app/employee/allemployees'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                <Link to={'/app/employee/allstaff'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
 
                             <div className="card-body">

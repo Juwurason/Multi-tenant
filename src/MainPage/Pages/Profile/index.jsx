@@ -6,7 +6,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 
 import EmployeeProfile from "./employeeprofile"
 import ClientProfile from "./clientprofile"
-import EditStaff from '../../Employees/Employees/editStaff';
 import ClientDoc from '../../../_components/forms/ClientsDoc';
 import EditClient from '../../Employees/editclient';
 import StaffDoc from '../../../_components/forms/StaffDoc';
@@ -25,7 +24,6 @@ const ProfileRoute = ({ match }) => (
         <Route path={`${match.url}/client-docUpload/:uid`} component={ClientDoc} />
         <Route path={`${match.url}/staff-docUpload/:uid`} component={StaffDoc} />
         <Route path={`${match.url}/admin-docUpload/:uid`} component={AdminDoc} />
-        <Route path={`${match.url}/edit-profile/:uid`} component={EditStaff} />
         <Route path={`${match.url}/edit-admin/:uid`} component={EditAdmin} />
     </Switch>
 );
