@@ -339,10 +339,10 @@ const AdminHeader = (props) => {
                     <i className="fa fa-ellipsis-v" /></a>
                 <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-                    <Link className="dropdown-item" to={""}><BiUserCircle /> &nbsp; Profile</Link>
-                    <Link className="dropdown-item" to={""}><BiMessageDetail /> &nbsp; Message</Link>
+                    <Link className="dropdown-item" to={"/administrator/profile"}><BiUserCircle /> &nbsp; Profile</Link>
+                    <Link className="dropdown-item" to={"/administrator/messageInbox"}><BiMessageDetail /> &nbsp; Message</Link>
                     <Link className="dropdown-item" to={""}><IoMdHelpCircleOutline /> &nbsp; Help</Link>
-                        <Link className="dropdown-item" to={""}><MdOutlineSettings /> &nbsp; Setting</Link>
+                        <Link className="dropdown-item" to={"/administrator/changePassword"}><MdOutlineSettings /> &nbsp; Setting</Link>
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>
