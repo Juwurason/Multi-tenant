@@ -3,11 +3,11 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Link, Route, useHistory, withRouter } from 'react-router-dom';
-import ClientHeader from '../../modules/Client/ClientHeader';
-import ClientSideBar from '../../modules/Client/ClientSideBar';
 
 // router service
 import routerService from "../../client_Routes";
+import ClientHeader from '../../modules/Client/Components/ClientHeader';
+import ClientSideBar from '../../modules/Client/Components/ClientSideBar';
 
 
 const ClientLayout = (props) => {

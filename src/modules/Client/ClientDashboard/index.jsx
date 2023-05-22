@@ -12,8 +12,8 @@ import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineSummarize, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
-import ClientSideBar from '../ClientSideBar/index.jsx';
-import ClientHeader from '../ClientHeader/index.jsx';
+import ClientHeader from '../Components/ClientHeader/index.jsx';
+import ClientSideBar from '../Components/ClientSideBar/index.jsx';
 
 
 

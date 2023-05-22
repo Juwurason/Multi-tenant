@@ -130,14 +130,14 @@ const EmployeeProfile = () => {
     formData.append("city", editedProfile.city);
     formData.append("country", editedProfile.country);
     formData.append("state", editedProfile.state);
-    formData.append("postcode", editedProfile.postalCode);
+    formData.append("Postcode", editedProfile.postcode);
     formData.append("accountName", editedProfile.accountName);
     formData.append("accountNumber", editedProfile.accountNumber);
     formData.append("bankName", editedProfile.bankName);
     formData.append("branch", editedProfile.branch);
     formData.append("bsb", editedProfile.bsb);
     formData.append("suburb", editedProfile.kinSuburb);
-    formData.append("NextOfKin", editedProfile.kinName);
+    formData.append("NextOfKin", editedProfile.nextOfKin);
     formData.append("kinAddress", editedProfile.kinAddress);
     formData.append("kinCity", editedProfile.kinCity);
     formData.append("kinCountry", editedProfile.kinCountry);
@@ -159,6 +159,7 @@ const EmployeeProfile = () => {
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
+        setStateModal(false);
         setKinModal(false);
         setBankModal(false);
         setSocialModal(false);
@@ -429,7 +430,7 @@ const EmployeeProfile = () => {
                               </div>
                               <div className="form-group col-md-6">
                                 <label>Post Code</label>
-                                <input type="text" className="form-control" name='postalCode' value={editedProfile.postcode || ''} onChange={handleInputChange} />
+                                <input type="text" className="form-control" name='postcode' value={editedProfile.postcode || ''} onChange={handleInputChange} />
                               </div>
 
 
@@ -519,7 +520,7 @@ const EmployeeProfile = () => {
                             <div className="row">
                               <div className="form-group col-md-4">
                                 <label>Emergency Contact FullName</label>
-                                <input type="text" className="form-control" name='kinName' value={editedProfile.nextOfKin || ''} onChange={handleInputChange} />
+                                <input type="text" className="form-control" name='nextOfKin' value={editedProfile.nextOfKin || ''} onChange={handleInputChange} />
                               </div>
 
                               <div className="form-group col-md-4">
