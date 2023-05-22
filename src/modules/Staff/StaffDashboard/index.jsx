@@ -84,15 +84,15 @@ const StaffDashboard = () => {
     FetchStaff()
   }, []);
 
-  //  useEffect(() => {
-  //    let firstload = localStorage.getItem("firstload")
-  //    if (firstload === "false") {
-  //      setTimeout(function () {
-  //        window.location.reload(1)
-  //        localStorage.removeItem("firstload")
-  //      }, 1000)
-  //    }
-  //  });
+  useEffect(() => {
+    let firstload = localStorage.getItem("firstload")
+    if (firstload === "false") {
+      setTimeout(function () {
+        window.location.reload(1)
+        localStorage.removeItem("firstload")
+      }, 1000)
+    }
+  });
 
 
 

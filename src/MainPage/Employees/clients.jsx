@@ -184,11 +184,59 @@ const Clients = () => {
     });
     doc.save("clients.pdf");
   };
+  const handleActivate = async (e) => {
+    try {
+      const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+  const handleDeactivate = async (e) => {
+    try {
+      const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        {data.fullName}
+
+      <div className="p-4 d-flex gap-3 align-items-center">
+        <span>{data.fullName}</span>
+        <div>
+          <button onClick={() => handleActivate(data.profileId)} className="btn text-primary" style={{ fontSize: "12px" }}>
+            Activate Client
+          </button> |
+          <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger" style={{ fontSize: "12px" }}>
+            Deactivate Client
+          </button>
+        </div>
 
       </div>
     );

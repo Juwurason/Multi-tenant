@@ -190,7 +190,7 @@ const AdminDashboard = () => {
                     loading={loading}
                   />
                   <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
-                    linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allemployees`}
+                    linkTitle={"View Staffs"} loading={loading} link={`/app/employee/allstaff`}
                   />
                   <DashboardCard title={"Shift Roaster"} content={schedule.length} icon={<MdOutlineEventNote className='fs-4' />}
                     link={`/app/employee/shift-scheduling`}
@@ -242,13 +242,13 @@ const AdminDashboard = () => {
                     <div className='p-2 bg-1 rounded-2'>
                       <div className='d-flex flex-column justify-content-start'>
                         <span className='fw-semibold'>Satisfaction Stats</span>
-                        {/* <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span> */}
+                        <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span>
                       </div>
                       <ClientChart />
                       <div className="row">
                         <div className='d-flex align-items-start gap-2 col-4'>
                           <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#5A6ACF" }}></div>
-                          <div>
+                          <div style={{ fontSize: "10px" }}>
                             Excellent
                             <br />
                             60%
@@ -257,7 +257,7 @@ const AdminDashboard = () => {
                         </div>
                         <div className='d-flex align-items-start gap-2 col-4'>
                           <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#8593ED" }}></div>
-                          <div>
+                          <div style={{ fontSize: "10px" }}>
                             Fair
                             <br />
                             30%
@@ -266,7 +266,7 @@ const AdminDashboard = () => {
                         </div>
                         <div className='d-flex align-items-start gap-2 col-4'>
                           <div className='rounded-circle mt-2' style={{ width: "10px", height: "10px", backgroundColor: "#FF81C5" }}></div>
-                          <div>
+                          <div style={{ fontSize: "10px" }}>
                             Poor
                             <br />
                             10%
@@ -282,7 +282,7 @@ const AdminDashboard = () => {
 
 
 
-              <div className='col-md-3 p-2 d-flex flex-column gap-2 justify-content-start'>
+              <div className='col-md-3 p-2 d-flex  flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h5>Recently Onboarded Clients</h5>
                   {

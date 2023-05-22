@@ -3231,7 +3231,7 @@ input[type=file].form-control {
 
 .sidebar,
 .two-col-bar {
-  background-color: #34444c;
+  background-color: #1C75BC;
   border-right: 1px solid transparent;
   margin-top: 0;
   position: fixed;
@@ -4803,7 +4803,7 @@ input[type=file].form-control {
 }
 
 [data-layout-mode=light] .sidebar-twocol.sidebar .sidebar-left .nav-link.active {
-  background: #34444c;
+  background: #1C75BC;
   color: #fff;
 }
 
@@ -4883,7 +4883,7 @@ input[type=file].form-control {
 }
 
 [data-layout-mode=blue] .sidebar-twocol.sidebar .sidebar-left {
-  background: #34444c;
+  background: #1C75BC;
 }
 
 [data-layout-mode=blue] .sidebar-twocol.sidebar .sidebar-right ul li a.active {
@@ -10841,7 +10841,7 @@ button.close {
 }
 
 .bg-sidebarcolor.bg-darks {
-  background: #34444c;
+  background: #1C75BC;
 }
 
 .bg-sidebarcolor.bg-gradients {

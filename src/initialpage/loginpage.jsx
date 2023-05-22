@@ -4,10 +4,11 @@ import { Helmet } from "react-helmet";
 import { Link, useHistory } from 'react-router-dom';
 import './login.css'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import http from '../api/http.jsx';
 import { toast } from 'react-toastify';
-import { useCompanyContext } from '../context';
 import usePublicHttp from '../hooks/usePublicHttp';
+import {
+  headerlogo,
+} from '../Entryfile/imagepath'
 
 
 const Loginpage = () => {
@@ -56,17 +57,17 @@ const Loginpage = () => {
       }
 
       if (data.userProfile?.role === "Staff") {
-        navigate.push('/staff/staff/staffDashboard')
+        navigate.push('/staff/staff')
         localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }
       if (data.userProfile?.role === "Client") {
-        navigate.push('/client/client/Dashboard')
+        navigate.push('/client/client')
         localStorage.setItem("clientProfile", JSON.stringify(data.clientProfile))
 
       }
       if (data.userProfile?.role === "Admin") {
-        navigate.push('/administrator/administrator/adminDashboard')
+        navigate.push('/administrator/administrator')
         localStorage.setItem("adminProfile", JSON.stringify(data.adminProfile))
 
       }
@@ -105,13 +106,13 @@ const Loginpage = () => {
       navigate.push('/app/main/dashboard');
     }
     if (user && user.token && user.role === "Staff") {
-      navigate.push('/staff/staff/staffDashboard');
+      navigate.push('/staff/staff');
     }
     if (user && user.token && user.role === "Client") {
-      navigate.push('/client/client/Dashboard');
+      navigate.push('/client/client');
     }
     if (user && user.token && user.role === "Admin") {
-      navigate.push('/administrator/administrator/adminDashboard');
+      navigate.push('/administrator/administrator');
     }
   }, []);
   return (
@@ -124,54 +125,61 @@ const Loginpage = () => {
       </Helmet>
 
 
-      <div className="login-form px-2" >
-        <form onSubmit={handleLogin}>
-          <h4 className="text-center">Login to your account</h4>
-          <div className="form-group mt-4">
-            <input type="email" className="form-control" placeholder="Email"
-              onChange={e => setEmail(e.target.value)}
-              value={email}
-              required />
-          </div>
-          <div className="form-group d-flex justify-content-between border mt-4">
-            <input
+      <div className='cover-bg'>
+        <div className="header-left p-4">
+          <span className="logo p-4">
+            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
+          </span>
+        </div>
+        <div className="login-form px-3 shadow bg-white rounded" >
+          <form onSubmit={handleLogin}>
+            <h3 className="text-center text-primary">Sign in to your account</h3>
+            <div className="form-group mt-4">
+              <input type="email" className="form-control" placeholder="Email"
+                onChange={e => setEmail(e.target.value)}
+                value={email}
+                required />
+            </div>
+            <div className="form-group d-flex justify-content-between border mt-4">
+              <input
 
-              onChange={e => setPassword(e.target.value)}
-              value={password}
-              type={pwdVisible ? "text" : "password"}
-              name="password"
-              minLength="4"
-              maxLength="15"
-              required
-              className="form-control border-0" placeholder="password" />
-            <button onClick={() => setPwdVisible(!pwdVisible)} type='button' className="btn">
-              {pwdVisible ? <FaEye /> : <FaEyeSlash />}
+                onChange={e => setPassword(e.target.value)}
+                value={password}
+                type={pwdVisible ? "text" : "password"}
+                name="password"
+                minLength="4"
+                maxLength="15"
+                required
+                className="form-control border-0" placeholder="password" />
+              <button onClick={() => setPwdVisible(!pwdVisible)} type='button' className="btn">
+                {pwdVisible ? <FaEye /> : <FaEyeSlash />}
 
 
-            </button>
-            {/* <input type="password" className="form-control" placeholder="Password" required="required" /> */}
-          </div>
+              </button>
+              {/* <input type="password" className="form-control" placeholder="Password" required="required" /> */}
+            </div>
 
 
-          <div className="form-group mt-4">
-            <button type="submit" className="btn btn-primary btn-lg w-100"
-              disabled={loading ? true : false}
-            >{loading ? <div className="spinner-grow text-light" role="status">
-              <span className="sr-only">Loading...</span>
-            </div> : "Log in"}
+            <div className="form-group mt-4">
+              <button type="submit" className="btn btn-info  text-white btn-lg w-100"
+                disabled={loading ? true : false}
+              >{loading ? <div className="spinner-grow text-light" role="status">
+                <span className="sr-only">Loading...</span>
+              </div> : "Log in"}
 
-            </button>
-          </div>
-          <div className="clearfix mt-4">
-            <label className="pull-left checkbox-inline"><input type="checkbox" defaultChecked /> Remember me</label>
-            <Link to={'/forgotpassword'} className="pull-right">Forgot Password?</Link>
-          </div>
-          <div className="form-group mt-4">
+              </button>
+            </div>
+            <div className="clearfix mt-4">
+              <label className="pull-left checkbox-inline"><input type="checkbox" defaultChecked /> Remember me</label>
+              <Link to={'/forgotpassword'} className="pull-right text-info">Forgot Password?</Link>
+            </div>
+            <div className="form-group mt-4">
 
-            <p className="text-center"><span>Don't have an account?  </span> &nbsp; <Link to={'/register'}> Create an Account</Link></p>
+              <p><span>Don't have an account?  </span> &nbsp; <Link to={'/register'} className="text-info"> Create an Account</Link></p>
 
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
       </div>
 
     </>

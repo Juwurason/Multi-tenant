@@ -1,13 +1,10 @@
-/**
- * App Header
- */
+
 import React, { useEffect, useState } from 'react'
 import { FaAngleDown, FaAngleUp, FaArrowDown } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
-  headerlogo, lnEnglish, lnFrench, lnSpanish, lnGerman, Avatar_02, Avatar_03, Avatar_05,
-  Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
+  headerlogo,
 } from '../../Entryfile/imagepath'
 import man from "../../assets/img/user.jpg"
 import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineSettings } from 'react-icons/md';

@@ -160,7 +160,7 @@ const MessageInbox = () => {
             };
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`Messages/send_message?userId=${id.userId}`,
+                const { data } = await privateHttp.post(`Messages/send_message`,
                     payload
                 )
                 toast.success(data.message)
@@ -182,9 +182,9 @@ const MessageInbox = () => {
 
 
     const inboxEmails = [
-        { id: 1, sender: 'John Doe', subject: 'Hello', body: 'This is the email body of the first email.', time: "22-05-2023" },
-        { id: 2, sender: 'Jane Smith', subject: 'Meeting Reminder', body: 'This is the email body of the second email.', time: "22-05-2023" },
-        { id: 3, sender: 'Bob Johnson', subject: 'Important Update', body: 'This is the email body of the third email.', time: "22-05-2023" },
+        // { id: 1, sender: 'John Doe', subject: 'Hello', body: 'This is the email body of the first email.', time: "22-05-2023" },
+        // { id: 2, sender: 'Jane Smith', subject: 'Meeting Reminder', body: 'This is the email body of the second email.', time: "22-05-2023" },
+        // { id: 3, sender: 'Bob Johnson', subject: 'Important Update', body: 'This is the email body of the third email.', time: "22-05-2023" },
     ];
     return (
         <div className="page-wrapper">
@@ -230,7 +230,7 @@ const MessageInbox = () => {
                                 >
                                     <MdMoveToInbox className='fs-4' />
                                     <span className='fw-bold'>Inbox</span>
-                                    <span className='text-warning'>2</span>
+                                    <span className='text-warning'>0</span>
                                 </a>
                                 {/* Other tabs */}
                                 <a
@@ -614,7 +614,7 @@ const MessageInbox = () => {
                             Close
                         </button>
                         <button
-                            className="ml-2 btn add-btn rounded btn-success"
+                            className="ml-2 btn add-btn rounded text-white btn-info"
                             onClick={handleSendMessage}
                         >
                             {loading ? <div className="spinner-grow text-light" role="status">

@@ -34,7 +34,7 @@ const Sidebar = (props) => {
 
   let pathname = props.location.pathname
   return (
-    <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
+    <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9" }}>
       <Scrollbars
         autoHide
         autoHideTimeout={1000}
@@ -45,7 +45,7 @@ const Sidebar = (props) => {
         thumbMinSize={30}
         universal={false}
         hideTracksWhenNotNeeded={true}
-      // horizontal="false"
+
 
       >
         <div className="sidebar-inner slimscroll">
@@ -75,8 +75,8 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li>
 
-              <li className={pathname.includes('allemployees') ? "active" : ""}>
-                <Link to="/app/employee/allemployees"><i className="la la-user" /> <span>Staffs</span></Link>
+              <li className={pathname.includes('allstaff') ? "active" : ""}>
+                <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
               </li>
               <li className={pathname.includes('clients') ? "active" : ""}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>

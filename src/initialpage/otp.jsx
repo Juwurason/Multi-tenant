@@ -6,8 +6,11 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useCompanyContext } from '../context/index.jsx';
-import http from '../api/http.jsx';
+import './login.css';
 import usePublicHttp from '../hooks/usePublicHttp.jsx';
+import {
+  headerlogo,
+} from '../Entryfile/imagepath';
 
 const OTPscreen = () => {
   // const { email, companyId } = useCompanyContext();
@@ -77,60 +80,67 @@ const OTPscreen = () => {
     <>
       <Helmet>
         <title>OTP - Promax Multitenant APP</title>
-        <meta name="description" content="Login page" />
+        <meta name="description" content="Auth page" />
       </Helmet>
-      <div className='authincation h-100 p-meddle'>
-        <div className='container h-100  mt-5'>
-          <div className='row justify-content-center h-100 align-items-center'>
-            <div className='col-md-7   py-5'>
-              <div className='text-center w-100 d-flex flex-column gap-4'>
-                <h1 className='text-center fw-2 mb-2 fs-1'>Check your email for a code</h1>
-                <h4>
-                  We've sent a 6-digit code to <span className="text-primary"> {dmail} </span>
-                  The code expires shortly.
-                </h4>
+      <div className="cover-bg">
+        <div className="header-left p-4">
+          <span className="logo p-4">
+            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
+          </span>
+        </div>
+        <div >
+          <div className='container pt-3'>
+            <div className='row justify-content-center align-items-center'>
+              <div className='col-md-7 '>
+                <div className='text-center w-100 d-flex flex-column gap-4'>
+                  <h1 className='text-center fw-bold mb-2 fs-1 text-primary'>Check your email for a code</h1>
+                  <h5>
+                    We've sent a 6-digit code to <span className="text-danger fw-bold"> {dmail} </span>
+                    The code expires shortly.
+                  </h5>
 
-                <div className="d-flex justify-content-center flex-column align-items-center">
-                  <div className="d-flex gap-2">
-                    {
-                      otp.map((value, i) =>
+                  <div className="d-flex justify-content-center flex-column align-items-center">
+                    <div className="d-flex gap-2">
+                      {
+                        otp.map((value, i) =>
 
-                        <input
-                          type="text"
-                          maxLength={1}
-                          className="form-control fs-3 mb-2 rounded-sm border border-2 bg-none "
-                          style={{ width: '3.2rem', height: "3.2rem", textAlign: "center" }}
-                          key={i}
-                          value={value}
-                          onChange={(e) => handleChange(e.target, i)}
-                          onFocus={e => e.target.select()}
-                        />
-                      )
-                    }
+                          <input
+                            type="text"
+                            maxLength={1}
+                            className="form-control fs-3 mb-2 rounded-sm border border-2 bg-none "
+                            style={{ width: '3.2rem', height: "3.2rem", textAlign: "center" }}
+                            key={i}
+                            value={value}
+                            onChange={(e) => handleChange(e.target, i)}
+                            onFocus={e => e.target.select()}
+                          />
+                        )
+                      }
+                    </div>
+                    <button className="btn"
+                      onClick={e => setOtp([...otp.map(v => "")])}
+                    ><FaRegTrashAlt /></button>
+
+
                   </div>
-                  <button className="btn"
-                    onClick={e => setOtp([...otp.map(v => "")])}
-                  ><FaRegTrashAlt /></button>
 
+                  <div>
+                    <button className='btn btn-info btn-lg rounded text-white w-50' to='/dashboard'
+                      onClick={handleSubmit}
+                      disabled={loading ? true : false}
+                    >{loading ? <div className="spinner-grow text-light" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div> : "Verify"}
+                    </button>
+                  </div>
+                  <div>
+                    <span> Can't find your code? Check your spam folder. or </span>
+                    <a className="text-primary"
+                      onClick={e => setOtp([...otp.map(v => "")])}
+                    >Resend OTP</a>
+                  </div>
 
                 </div>
-
-                <div>
-                  <button className='btn btn-primary btn-lg rounded-sm w-50' to='/dashboard'
-                    onClick={handleSubmit}
-                    disabled={loading ? true : false}
-                  >{loading ? <div className="spinner-grow text-light" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div> : "Verify"}
-                  </button>
-                </div>
-                <div>
-                  <span> Can't find your code? Check your spam folder. or </span>
-                  <a className="text-primary"
-                    onClick={e => setOtp([...otp.map(v => "")])}
-                  >Resend OTP</a>
-                </div>
-
               </div>
             </div>
           </div>

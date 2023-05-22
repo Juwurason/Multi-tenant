@@ -32,7 +32,7 @@ const StaffSidebar = (props) => {
         setLevel3Menu(value)
     }
 
-    
+
     let pathname = props.location.pathname
     return (
         <div id="sidebar" className="sidebar" >
@@ -46,26 +46,26 @@ const StaffSidebar = (props) => {
                 thumbMinSize={30}
                 universal={false}
                 hideTracksWhenNotNeeded={true}
-              >
+            >
                 <div className="sidebar-inner slimscroll">
-                    <div id="sidebar-menu" className="sidebar-menu" style={{backgroundColor: "#1C75B9", height:'100vh'}}>
-                        
+                    <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
+
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
                                 <span>Main</span>
                             </li>
                             <li className="submenu">
-                                <a href="/staff/staff/staffDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
+                                <Link to="/staff/staff" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </Link>
                             </li>
-                          
+
                             <li className="menu-title">
                                 <span>Account Management</span>
                             </li>
-                           
+
                             <li className={pathname.includes('staffprofile') ? "active" : ""}>
                                 <Link to="/staff/staffprofile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
-                           
+
                             <li className={pathname.includes('staffchangepassword') ? "active" : ""}>
                                 <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
                                 {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
@@ -82,7 +82,7 @@ const StaffSidebar = (props) => {
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
-                          
+
                             <li className={pathname.includes('staff-roster') ? "active" : ""}>
                                 <Link to="/staff/staff-roster"><i className="la la-calendar" /> <span>My Shift Roster</span></Link>
                             </li>
@@ -95,7 +95,7 @@ const StaffSidebar = (props) => {
 
 
             </Scrollbars>
-            
+
         </div>
 
 
