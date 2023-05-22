@@ -138,6 +138,40 @@ const AdminSidebar = (props) => {
                                 <Link to="/app/employee/document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li> */}
 
+                            <li className="menu-title">
+                                <span>Communication</span>
+                            </li>
+
+                            <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""}>
+                                <Link to="/administrator/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
+                            </li>
+
+                            <li className="submenu">
+                                <a href="javascript:void(0)" className={isSideMenu == "ticket" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "ticket" ? "" : "ticket")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "ticket" ?
+                                    <ul>
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/viewTickets">View Tickets</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/raiseTicket">Raise a Ticket</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/administrator/knowledge">Knowledge Base</Link>
+                                        </li>
+
+                                    </ul>
+                                    : ""
+                                }
+                            </li>
+
+                            <br />
+                           
                         </ul>
                     </div>
                 </div>

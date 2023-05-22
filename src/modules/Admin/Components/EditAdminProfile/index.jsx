@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa'
-import man from "../../../assets/img/man.png"
-import useHttp from '../../../hooks/useHttp';
+import man from "../../../../assets/img/man.png"
 import { useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
+import useHttp from '../../../../hooks/useHttp';
 
-const EditStaffProfile = () => {
+const EditAdminProfile = () => {
 
     useEffect(() => {
         if ($('.select').length > 0) {
@@ -73,9 +73,10 @@ const EditStaffProfile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await privateHttp.get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
-                setProfile(response.data);
-                setEditedProfile(response.data)
+                const {data} = await privateHttp.get(`/Administrators/${uid}`, { cacheTimeout: 300000 })
+                setProfile(data);
+                console.log(data);
+                setEditedProfile(data)
             } catch (error) {
                 console.log(error);
             }
@@ -425,4 +426,4 @@ const EditStaffProfile = () => {
     )
 };
 
-export default EditStaffProfile;
+export default EditAdminProfile;
