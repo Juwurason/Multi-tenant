@@ -189,7 +189,7 @@ const ClientRoster = () => {
             {/* Page Wrapper */}
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Shift Roaster</title>
+                    <title>Shift Roster</title>
                     <meta name="description" content="Login page" />
                 </Helmet>
                 {/* Page Content */}
@@ -197,7 +197,7 @@ const ClientRoster = () => {
                     <div className="page-header">
                         <div className="row">
                             <div className="col">
-                                <h3 className="page-title">Shift Roaster</h3>
+                                <h3 className="page-title">Shift Roster</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/client/client/Dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item"><Link to="/client/client/Dashboard">Client</Link></li>
