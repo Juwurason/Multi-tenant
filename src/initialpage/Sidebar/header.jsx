@@ -150,8 +150,8 @@ const Header = (props) => {
 
               </div>
             </div>
-            <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-            <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+            <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+            <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineSettings /> &nbsp; Settings</Link>
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
           </div>
@@ -176,8 +176,8 @@ const Header = (props) => {
           <i className="fa fa-ellipsis-v" /></a>
         <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-          <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-          <Link className="dropdown-item" to={"/app/employee/changePassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+          <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+          <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineSettings /> &nbsp; Settings</Link>
           <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
         </div>

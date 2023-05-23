@@ -15,7 +15,6 @@ import AllAdmin from './Admin';
 import AddStaff from '../../../_components/forms/AddStaff';
 import AddAdministrator from '../../../_components/forms/AddAdmin';
 import AddShiftRoaster from '../../../_components/forms/AddShiftRoaster';
-import ChangePassword from './ChangePassword';
 
 const EmployeesRoute = ({ match }) => (
    <Switch>
@@ -24,7 +23,6 @@ const EmployeesRoute = ({ match }) => (
       <Route path={`${match.url}/alladmin`} component={AllAdmin} />
       <Route path={`${match.url}/addadmin`} component={AddAdministrator} />
       <Route path={`${match.url}/addstaff`} component={AddStaff} />
-      <Route path={`${match.url}/changePassword`} component={ChangePassword} />
       <Route path={`${match.url}/document`} component={Document} />
       <Route path={`${match.url}/refferals`} component={Refferal} />
       <Route path={`${match.url}/departments`} component={Department} />
