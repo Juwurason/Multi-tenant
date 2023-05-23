@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 import {
     headerlogo, lnEnglish, lnFrench, lnSpanish, lnGerman, Avatar_02, Avatar_03, Avatar_05,
     Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
-} from '../../../Entryfile/imagepath'
-import man from "../../../assets/img/user.jpg"
-import {MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout} from "react-icons/md"
+} from '../../../../Entryfile/imagepath'
+import man from "../../../../assets/img/user.jpg"
+import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout } from "react-icons/md"
 
 const StaffHeader = (props) => {
     const navigate = useHistory()
@@ -318,7 +318,7 @@ const StaffHeader = (props) => {
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
-                   
+
                 </li>
             </ul>
             {/* /Header Menu */}

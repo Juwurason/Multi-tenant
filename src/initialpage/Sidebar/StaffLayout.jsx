@@ -3,14 +3,14 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Link, Route, useHistory, withRouter } from 'react-router-dom';
-import StaffHeader from '../../modules/Staff/StaffHeader';
-import StaffSidebar from '../../modules/Staff/StaffSidebar';
 
 // router service
 import routerService from "../../staff_Routes";
 
 import Header from './header.jsx';
 import SidebarContent from './sidebar';
+import StaffHeader from '../../modules/Staff/Components/StaffHeader';
+import StaffSidebar from '../../modules/Staff/Components/StaffSidebar';
 
 const StaffLayout = (props) => {
     const navigate = useHistory()
