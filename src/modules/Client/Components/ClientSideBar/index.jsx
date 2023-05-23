@@ -63,7 +63,7 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className="menu-title">
-                                <span>Account Management</span>
+                                <span>Profile Management</span>
                             </li>
 
                             <li className={pathname.includes('clients') ? "active" : ""}>
@@ -76,7 +76,7 @@ const ClientSidebar = (props) => {
                             </li>
 
                             <li className="menu-title">
-                                <span>Staff-Client Management</span>
+                                <span>Client Management</span>
                             </li>
 
                             <li className={pathname.includes('policies') ? "active" : ""}>
@@ -112,6 +112,35 @@ const ClientSidebar = (props) => {
                             {/* <li className={pathname.includes('policies') ? "active" : ""}>
                                 <Link to="/staff/staff-table"><i className="la la-file-pdf-o" /> <span>Tab</span></Link>
                             </li> */}
+                            <li className="menu-title">
+                                <span>Communication</span>
+                            </li>
+                            <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
+                                <Link to="/client/client-message"><i className="la la-comment" /> <span>Messages</span></Link>
+                            </li>
+                            <li className="submenu">
+                                <a href="javascript:void(0)" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "sales" ?
+                                    <ul>
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/client/client-view_ticket">View Tickets</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/client/client-raise_ticket">Raise a Ticket</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/client/client-knowledge_base">Knowledge Base</Link>
+                                        </li>
+
+                                    </ul>
+                                    : ""
+                                }
+                            </li>
 
                         </ul>
                     </div>

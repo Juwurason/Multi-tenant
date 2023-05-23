@@ -402,7 +402,7 @@ const ClientRoster = () => {
                                                 </Modal.Header>
                                                 <Modal.Body>
                                                     <div>
-                                                        <label htmlFor="">Please Provide Appointment</label>
+                                                        <label htmlFor="">Please Provide Appointment Details</label>
                                                         <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setAppoint(e.target.value)} />
                                                     </div>
                                                 </Modal.Body>

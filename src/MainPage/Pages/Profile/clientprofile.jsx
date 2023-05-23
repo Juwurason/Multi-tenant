@@ -108,6 +108,233 @@ const ClientProfile = () => {
               </div>
             </div>
           </div>
+          <div className="card tab-box">
+            <div className="row user-tabs">
+              <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                <ul className="nav nav-tabs nav-tabs-bottom">
+                  <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active">Profile</a></li>
+                  {/* <li className="nav-item"><a href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
+                  {/* <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li> */}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="tab-content">
+            {/* Profile Info Tab */}
+            <div id="emp_profile" className="pro-overview tab-pane fade show active">
+              <div className="row">
+                <div className="col-md-6 d-flex">
+                  <div className="card profile-box flex-fill">
+                    <div className="card-body">
+                      <h3 className="card-title">Personal Informations </h3>
+                      <ul className="personal-info">
+                        <li>
+                          <div className="title">Passport No.</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Passport Exp Date.</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Tel</div>
+                          <div className="text"><a href=""></a></div>
+                        </li>
+                        <li>
+                          <div className="title">Nationality</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Religion</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Marital status</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Employment of spouse</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">No. of children</div>
+                          <div className="text"></div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 d-flex">
+                  <div className="card profile-box flex-fill">
+                    <div className="card-body">
+                      <h3 className="card-title">Emergency Contact </h3>
+                      <h5 className="section-title">Primary</h5>
+                      <ul className="personal-info">
+                        <li>
+                          <div className="title">Name</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Relationship</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Phone </div>
+                          <div className="text"></div>
+                        </li>
+                      </ul>
+                      <hr />
+                      <h5 className="section-title">Secondary</h5>
+                      <ul className="personal-info">
+                        <li>
+                          <div className="title">Name</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Relationship</div>
+                          <div className="text"></div>
+                        </li>
+                        <li>
+                          <div className="title">Phone </div>
+                          <div className="text"></div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div className="modal-content">
+              <div className="modal-header text-center">
+                <h5 className="modal-title" id="staticBackdropLabel">Profile Information</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              </div>
+              <div className="modal-body overflow-scroll">
+                <form>
+                  <div className="row ">
+                    <div className="col-md-12">
+                      <div className="profile-img-wrap edit-img">
+                        <img className="inline-block" src={Avatar_02} alt="user" />
+                        <div className="fileupload btn">
+                          <span className="btn-text">edit</span>
+                          <input className="upload" type="file" />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>First Name</label>
+                            <input type="text" className="form-control" defaultValue="John" />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Last Name</label>
+                            <input type="text" className="form-control" defaultValue="Doe" />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Birth Date</label>
+                            <div>
+                              <input className="form-control datetimepicker" type="date" defaultValue="05/06/1985" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Gender</label>
+                            <select className="select form-control">
+                              <option value="male selected">Male</option>
+                              <option value="female">Female</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <label>Address</label>
+                        <input type="text" className="form-control" defaultValue="4487 Snowbird Lane" />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>State</label>
+                        <input type="text" className="form-control" defaultValue="New York" />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Country</label>
+                        <input type="text" className="form-control" defaultValue="United States" />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Pin Code</label>
+                        <input type="text" className="form-control" defaultValue={10523} />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" className="form-control" defaultValue="631-889-3206" />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Department <span className="text-danger">*</span></label>
+                        <select className="select">
+                          <option>Select Department</option>
+                          <option>Web Development</option>
+                          <option>IT Management</option>
+                          <option>Marketing</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Designation <span className="text-danger">*</span></label>
+                        <select className="select">
+                          <option>Select Designation</option>
+                          <option>Web Designer</option>
+                          <option>Web Developer</option>
+                          <option>Android Developer</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Reports To <span className="text-danger">*</span></label>
+                        <select className="select">
+                          <option>-</option>
+                          <option>Wilmer Deluna</option>
+                          <option>Lesley Grauer</option>
+                          <option>Jeffery Lalor</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="submit-section">
+                      <button className="btn btn-primary submit-btn">Submit</button>
+                    </div>
+                  </div>
+                  <div className="row">
+                  </div>
+
+                </form>
+              </div>
+
+            </div>
+          </div>
+
 
         </div>
 

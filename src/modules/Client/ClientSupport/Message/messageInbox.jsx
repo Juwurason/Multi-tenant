@@ -9,11 +9,11 @@ import { Link } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import './message.css';
 import Editor from './editor';
-import useHttp from '../../../hooks/useHttp';
 import { MultiSelect } from 'react-multi-select-component';
 import { toast } from 'react-toastify';
+import useHttp from '../../../../hooks/useHttp';
 
-const MessageInbox = () => {
+const ClientMessage = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
     const [activeTab, setActiveTab] = useState('inbox');
@@ -476,7 +476,7 @@ const MessageInbox = () => {
                     <Modal.Body>
                         <div className="form-group">
                             <div className="fw-bold">
-                                <label>
+                                {/* <label>
                                     <input
                                         type="checkbox"
                                         name="toAllAdmins"
@@ -507,7 +507,7 @@ const MessageInbox = () => {
                                     />
                                     &nbsp;
                                     To All Clients
-                                </label> &nbsp; &nbsp;
+                                </label> &nbsp; &nbsp; */}
                                 <label>
                                     <input
                                         type="checkbox"
@@ -525,25 +525,26 @@ const MessageInbox = () => {
                                     <div className="form-group">
                                         <label className="col-form-label fw-semibold">To: </label>
                                         {/* ... Rest of the recipient selection code ... */}
-                                        <div className=" d-flex justify-content-between align-items-center">
-
+                                        <div className="form-control d-flex justify-content-between align-items-center">
+                                            {/* 
                                             <MultiSelect
                                                 options={options}
                                                 value={selectedOptions}
                                                 onChange={handleSelectionChange}
                                                 labelledBy="To..."
                                                 className="custom-multiselect"
-                                                disabled={toAllAdmins || toAllStaffs || toAllClients} // Disable when any of the "To All" checkboxes is checked
 
 
 
-                                            />
-                                            <span className="w-25 d-flex border justify-content-end">
+                                            /> */}
+                                            <input className="form-control border-0 bg-transparent w-75" type="text" placeholder="To...." />
+
+                                            <span className="w-25 d-flex justify-content-end">
                                                 <button className="btn" onClick={toggleCc}>
-                                                    Cc
+                                                    CC
                                                 </button>
                                                 <button className="btn" onClick={toggleBcc}>
-                                                    Bcc
+                                                    BCC
                                                 </button>
                                             </span>
                                         </div>
@@ -632,4 +633,4 @@ const MessageInbox = () => {
 
 }
 
-export default MessageInbox;
+export default ClientMessage;
