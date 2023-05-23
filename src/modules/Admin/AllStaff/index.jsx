@@ -63,7 +63,7 @@ const AllStaff = () => {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">
-          <Link to={`/administrator/editStaffProfile/${row.staffId}`}
+          <Link to={`/administrator/staffProfile/${row.staffId}/${row.firstName}`}
             className="btn"
             title='edit'
           >

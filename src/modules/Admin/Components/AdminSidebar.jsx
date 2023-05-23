@@ -35,7 +35,7 @@ const AdminSidebar = (props) => {
 
     let pathname = props.location.pathname
     return (
-        <div id="sidebar" className="sidebar" >
+        <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9"}}>
             <Scrollbars
                 autoHide
                 autoHideTimeout={1000}
