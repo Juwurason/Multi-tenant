@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-import "../../Staff/StaffSidebar/style.css"
+import "../../Staff/Components/StaffSidebar/style.css"
 
 const AdminSidebar = (props) => {
     const MenuMore = () => {
