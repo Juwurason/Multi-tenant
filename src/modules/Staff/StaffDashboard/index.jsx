@@ -169,7 +169,7 @@ const StaffDashboard = () => {
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesYesterday[0]?.profile.firstName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A')}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesYesterday[0]?.dateFrom === "" ? "---" : dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A')}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A')}</span></span>
                       </div>
                       <div className="card-footer text-body-light bg-light text-muted">
