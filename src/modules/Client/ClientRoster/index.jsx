@@ -12,8 +12,9 @@ import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
 import { GoTrashcan } from 'react-icons/go';
-import { MdOutlineEditCalendar } from 'react-icons/md';
+import { MdOutlineEditCalendar, MdLibraryAdd } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
+import { toast } from 'react-toastify';
 
 
 const options = [
@@ -38,12 +39,17 @@ const options = [
 
 const ClientRoster = () => {
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
-    const { get } = useHttp();
+    const userProfile = JSON.parse(localStorage.getItem('user'));
+    const { get, post } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const [clients, setClients] = useState([]);
+    const [cli, setCli] = useState("");
     const [activities, setActivities] = useState([]);
+    const [reason, setReason] = useState();
+    const [appoint, setAppoint] = useState("");
     const [selectedActivities, setSelectedActivities] = useState([]);
     const [reasonModal, setReasonModal] = useState(false)
+    const [appointModal, setAppointModal] = useState(false)
 
     const FetchSchedule = async () => {
         setLoading(true)
@@ -65,8 +71,6 @@ const ClientRoster = () => {
     useEffect(() => {
         FetchSchedule()
     }, []);
-
-
 
 
 
@@ -108,13 +112,10 @@ const ClientRoster = () => {
     ];
     const startDate = currentDate.subtract(3, 'day');
     const endDate = currentDate.add(2, 'day');
-
     const activitiesByDay = daysOfWeek.map((day) =>
         clients.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
     );
-    const submitActivity = async () => {
-        // ShiftRosters/edit_activities?userId=&shiftId=&activities
-    }
+
 
     const [showModal, setShowModal] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
@@ -124,8 +125,10 @@ const ClientRoster = () => {
         setSelectedActivity(activity);
         setShowModal(true);
     };
+
     const editActivity = async (e) => {
         setLgShow(true)
+        setCli(e)
         try {
             const { data } = await get(`ShiftRosters/${e}`, { cacheTimeout: 300000 });
             const { activities } = data;
@@ -138,6 +141,48 @@ const ClientRoster = () => {
             console.log(error);
         }
     }
+
+    const submitActivity = async () => {
+
+        try {
+            setLoading(true)
+            const { data } = await post(`ShiftRosters/edit_activities?userId=${userProfile.userId}&shiftId=${cli}&activities=${selectedValues}`);
+            // console.log(data);
+            toast.success(data.message);
+            setLoading(false);
+            setLgShow(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+    const addAppoint = (e) => {
+        setAppointModal(true)
+        setCli(e)
+    }
+    const addAppointment = async () => {
+        if (appoint === "") {
+            return toast.error("Input Fields cannot be empty")
+        }
+        try {
+            setLoading(true)
+            const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${appoint}`);
+            // console.log(data);
+            toast.success(data.message);
+            setLoading(false);
+            setAppointModal(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
@@ -240,11 +285,11 @@ const ClientRoster = () => {
                                                             justify-content-center px-2 py-1 rounded bg-light pointer`}
                                                             onClick={() => editActivity(activity.shiftRosterId)}
                                                             title="Edit"
-
                                                         >
                                                             <MdOutlineEditCalendar className='fs-6 text-dark' />
 
                                                         </small>
+
                                                         <small
                                                             className={`text-truncate d-flex 
                                                             align-items-center
@@ -254,6 +299,17 @@ const ClientRoster = () => {
 
                                                         >
                                                             <GoTrashcan className='fs-6' />
+                                                        </small>
+
+                                                        <small
+                                                            className={`text-truncate d-flex 
+                                                            align-items-center
+                                                            justify-content-center px-2 py-1 rounded bg-success pointer`}
+                                                            title="Add Appointment"
+                                                            onClick={() => addAppoint(activity.shiftRosterId)}
+
+                                                        >
+                                                            <MdLibraryAdd className='fs-6' />
                                                         </small>
 
                                                     </div>
@@ -300,9 +356,9 @@ const ClientRoster = () => {
                                                     </Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body>
+                                                    <label className="col-form-label fw-bold text-danger">Add or Remove From Activities</label>
                                                     <div className="form-group">
                                                         <label className="col-form-label fw-bold">Activities</label>
-
 
                                                         <MultiSelect
                                                             options={options.concat(activities)}
@@ -313,8 +369,10 @@ const ClientRoster = () => {
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>
-                                                    <button className="btn btn-secondary" onClick={submitActivity}>
-                                                        Submit
+                                                    <button className="btn btn-info add-btn text-white rounded" onClick={submitActivity}>
+                                                        {loading ? <div className="spinner-grow text-light" role="status">
+                                                            <span className="sr-only">Loading...</span>
+                                                        </div> : "Submit"}
                                                     </button>
                                                 </Modal.Footer>
                                             </Modal>
@@ -332,7 +390,26 @@ const ClientRoster = () => {
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>
-                                                    <button className="btn btn-primary">Submit</button>
+                                                    <button className="btn btn-primary">{loading ? <div className="spinner-grow text-light" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div> : "Submit"}</button>
+                                                </Modal.Footer>
+                                            </Modal>
+
+                                            <Modal show={appointModal} onHide={() => setAppointModal(false)}>
+                                                <Modal.Header closeButton>
+                                                    <Modal.Title>Add Appointment</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <div>
+                                                        <label htmlFor="">Please Provide Appointment</label>
+                                                        <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setAppoint(e.target.value)} />
+                                                    </div>
+                                                </Modal.Body>
+                                                <Modal.Footer>
+                                                    <button className="btn btn-primary" onClick={addAppointment}>{loading ? <div className="spinner-grow text-light" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div> : "Submit"}</button>
                                                 </Modal.Footer>
                                             </Modal>
 
