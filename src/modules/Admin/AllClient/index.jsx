@@ -61,7 +61,7 @@ const AllClients = () => {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">
-          <Link to={`/administrator/editClientPro/${row.profileId}`}
+          <Link to={`/administrator/clientProfile/${row.profileId}/${row.firstName}`}
             className="btn"
             title='edit'
           >

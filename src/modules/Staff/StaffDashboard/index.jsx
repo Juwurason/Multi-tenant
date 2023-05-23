@@ -104,18 +104,31 @@ const StaffDashboard = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useHistory()
 
   const handleClockIn = () => {
     setIsLoading(true);
-
     // Simulating an asynchronous action, such as an API call
     setTimeout(() => {
       // Perform any necessary logic here before routing to the clock-in page
-
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            localStorage.setItem("latit", latitude)
+            localStorage.setItem("log", longitude)
+            navigate.push(`/staff/staff-progress/${activitiesToday[0]?.shiftRosterId}`);
+          },
+          (error) => {
+            toast.error('Error getting location:', error.message);
+          }
+        );
+      } else {
+        toast.error('Geolocation is not supported');
+      }
       // Route to the clock-in page
       // history.push('/clock-in');
-      console.log("welldone");
     }, 2000); // Set an appropriate delay to simulate the loading time
 
     // Optionally, you can clear the loading state after the specified time
@@ -123,7 +136,22 @@ const StaffDashboard = () => {
       setIsLoading(false);
     }, 3000);
   };
-  console.log();
+
+  function getActivityStatus(activity) {
+    const nowInAustraliaTime = dayjs()
+    const activityDateFrom = dayjs(activitiesToday[0]?.dateFrom)
+    const activityDateTo = dayjs(activitiesToday[0]?.dateTo)
+
+    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+      return 'Upcoming';
+    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+
+      return activitiesToday[0]?.attendance === true ? 'Present' : 'Absent';
+    } else {
+      return 'Clock-In';
+    }
+  }
+
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -202,27 +230,48 @@ const StaffDashboard = () => {
                       </div>
 
                       <div className='px-5 py-4'>
-                        <span>
-                          {activitiesToday[0]?.activities}
-                        </span>
+                        <span>{activitiesToday[0]?.activities}</span>
                         <br />
                         <br />
-                        <span className={`pointer btn text-white  rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                          {isLoading ? (
-                            <>
-                              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                              Please wait...
-                            </>
-                          ) : (
-                            <>
-                              <BiStopwatch className="fs-4" /> Clock In
-                            </>
-                          )}
-                        </span>
+                        {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
+                          <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-warning"}`}>
+                            {isLoading ? (
+                              <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Please wait...
+                              </>
+                            ) : (
+                              <>
+                                <BiStopwatch className="fs-4" /> Upcoming
+                              </>
+                            )}
+                          </span>
+                        ) : (
+                          <span
+                            className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
+                            onClick={getActivityStatus(activitiesToday[0]) === 'Clock-In' ? handleClockIn : null}
+                          >
+                            {isLoading ? (
+                              <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Please wait...
+                              </>
+                            ) : (
+                              <>
+                                <BiStopwatch className="fs-4" /> {getActivityStatus(activitiesToday[0]) === 'Present' ? 'Present' : 'Absent'}
+                              </>
+                            )}
+                          </span>
+                        )}
                         <br />
                         <br />
-                        <span className='fw-bold text-warning pointer'>Request Cancellation</span>
+                        {getActivityStatus(activitiesToday[0]) === 'Clock-In' || getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
+                          <span className='fw-bold text-warning pointer'>Request Cancellation</span>
+                        ) : null}
                       </div>
+
+
+
                     </div>
 
 
