@@ -3,7 +3,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import EditAccount from '../../../_components/forms/EditUser';
 import AllUser from './alluser';
-import ChangePassword from '../Employees/ChangePassword';
+import ChangePassword from './changePassword';
 
 const AccountRoute = ({ match }) => (
     <Switch>
