@@ -120,7 +120,7 @@ const AttendanceReport = () => {
       setLoading(true)
       // const { data } = await get(`Attendances/get_staff_attendances?staffId=2${id.companyId}`, { cacheTimeout: 300000 });
       const { data } = await get(`Attendances/get_all_attendances_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      console.log(data);
+      // console.log(data);
       setAttendance(data);
       setLoading(false)
     } catch (error) {

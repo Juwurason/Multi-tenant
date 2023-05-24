@@ -22,6 +22,8 @@ const AdminDashboard = () => {
     const userObj = JSON.parse(localStorage.getItem('user'));
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
+    const [rosters, setRosters] = useState([]);
+    const [progressNote, setProgressNote] = useState([]);
     const { loading, setLoading } = useCompanyContext();
     const [document, setDocument] = useState([]);
     const { get } = useHttp();
@@ -45,10 +47,24 @@ const AdminDashboard = () => {
     async function FetchStaff() {
         setLoading(true)
         try {
-            const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            // console.log(staff.shiftRoster);
-            setStaff(staff.shiftRoster);
+            const {data} = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            setClients(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+
+        try {
+            const {data} = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            setStaff(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+        }
+
+        try {
+            const {data} = await get(`ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            setRosters(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -57,6 +73,15 @@ const AdminDashboard = () => {
         try {
             const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
             setDocument(data)
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+
+        try {
+            const { data } = await get(`ProgressNotes/get_all_progressnote_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            setProgressNote(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -123,31 +148,31 @@ const AdminDashboard = () => {
                             <div className='col-md-7'>
                                 <div className="row">
                                     <h4>Overview</h4>
-                                    <DashboardCard title={"Total Client"} content={staff.length} icon={<MdOutlinePeople className='fs-4' />}
-                                        link={``}
+                                    <DashboardCard title={"Total Client"} content={clients.length} icon={<MdOutlinePeople className='fs-4' />}
+                                        link={`/administrator/allClient`}
                                         sty={'primary'}
                                     />
                                     <DashboardCard title={"Total Staff"} content={staff.length} icon={<MdOutlinePeople className='fs-4' />}
-                                        link={``}
+                                        link={`/administrator/allStaff`}
                                         sty={'danger'}
                                     />
-                                    <DashboardCard title={"Total Tickets"} content={staff.length} icon={<MdOutlineEventNote className='fs-4' />}
-                                        link={``}
+                                    <DashboardCard title={"Total Tickets"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
+                                        link={`/administrator/viewTicket`}
                                         sty={'warning'}
                                     />
-                                    <DashboardCard title={"Total Documents"} content={0} icon={<AiOutlineFolder className='fs-4' />}
-                                        linkTitle={"View Progress Notes"} link={``} sty={'info'}
+                                    <DashboardCard title={"Total Documents"} content={document.length} icon={<AiOutlineFolder className='fs-4' />}
+                                        linkTitle={"Total Documents"} link={`/administrator/allDocuments`} sty={'info'}
                                     />
 
-                                    <DashboardCard title={"Total Progress Notes"} content={0} icon={<GoNote className='fs-4' />}
-                                        link={``} sty={'danger'}
+                                    <DashboardCard title={"Total Progress Notes"} content={progressNote.length} icon={<GoNote className='fs-4' />}
+                                        link={`/administrator/progressReport`} sty={'danger'}
                                     />
 
-                                    <DashboardCard title={"Total Shift Roster"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
-                                        link={``} sty={'success'}
+                                    <DashboardCard title={"Total Shift Roster"} content={rosters.length} icon={<MdOutlineQueryBuilder className='fs-4' />}
+                                        link={`/administrator/shiftRoster`} sty={'success'}
                                     />
                                     <DashboardCard title={"Total Attendances"} content={0} icon={<GiNotebook className='fs-4' />}
-                                        link={``} sty={'info'}
+                                        link={`/administrator/attendanceReport`} sty={'info'}
                                     />
                                     {/* <DashboardCard title={"Total Shift Roster For May"} content={0} icon={<MdOutlineSummarize className='fs-4' />}
                                         link={``} sty={'info'}

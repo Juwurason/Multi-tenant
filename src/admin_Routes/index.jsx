@@ -1,6 +1,7 @@
 
 import AdminDashboard from '../modules/Admin/AdminDashboard';
 import AllClients from '../modules/Admin/AllClient';
+import AllDocumnet from '../modules/Admin/AllDocument';
 import AllStaff from '../modules/Admin/AllStaff';
 import AllUsers from '../modules/Admin/AllUsers';
 import AttendanceReport from '../modules/Admin/AttendanceReport';
@@ -152,6 +153,10 @@ export default [
     {
         path: 'knowledge',
         component: KnowledgeBase
+    },
+    {
+        path: 'allDocuments',
+        component: AllDocumnet
     },
 
 ]

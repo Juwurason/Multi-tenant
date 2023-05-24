@@ -55,7 +55,7 @@ const AdminSidebar = (props) => {
                                 <span>Main</span>
                             </li>
                             <li className="submenu">
-                                <a href="/administrator/administrator" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </a>
+                                <Link to="/administrator/administrator/adminDashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </Link>
                             </li>
 
                             <li className="menu-title">
