@@ -19,14 +19,20 @@ import { GoSearch } from 'react-icons/go';
 import Swal from 'sweetalert2';
 
 import moment from 'moment';
+import { Modal } from 'react-bootstrap';
 
 const Document = () => {
+    //Declaring Variables
     const id = JSON.parse(localStorage.getItem('user'));
     const { loading, setLoading } = useCompanyContext();
     const [document, setDocument] = useState([]);
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
     const privateHttp = useHttp();
+    const [rejectModal, setRejectModal] = useState(false);
+    const [reason, setReason] = useState("");
+    const [deadline, setDeadline] = useState("");
+    const [selectedDocument, setSelectedDocument] = useState(0);
     const columns = [
         // {
         //   name: '#',
@@ -94,7 +100,7 @@ const Document = () => {
     const FetchDocument = async () => {
         setLoading(true);
         try {
-            const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const documentResponse = await privateHttp.get(`/Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const document = documentResponse.data;
             console.log(document);
             setDocument(document);
@@ -102,7 +108,7 @@ const Document = () => {
             console.log(error);
         }
         try {
-            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const staffResponse = await privateHttp.get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const staff = staffResponse.data;
             setStaff(staff);
             setLoading(false)
@@ -152,7 +158,11 @@ const Document = () => {
     }
 
 
+    const handleRejectModal = (e) => {
+        setRejectModal(true)
+        setSelectedDocument(e);
 
+    }
 
 
     useEffect(() => {
@@ -245,7 +255,6 @@ const Document = () => {
 
                     <thead>
                         <tr>
-                            <th>User created</th>
                             <th>Date Created</th>
                             <th>Date Modified</th>
                             <th>Actions </th>
@@ -253,7 +262,6 @@ const Document = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{data.createdBy}</td>
                             <td>{moment(data.dateCreated).format('lll')}</td>
                             <td>{moment(data.dateModified).format('lll')}</td>
                             <td>
@@ -273,9 +281,16 @@ const Document = () => {
                                         Delete
                                     </span>
                                     <span
+                                        className='bg-success text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Accept'
+                                        onClick={() => handleAccept(data.documentId)}
+                                    >
+                                        Accept
+                                    </span>
+                                    <span
                                         className='bg-danger text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
                                         title='Reject'
-                                    // onClick={() => handleDelete(row.documentId)}
+                                        onClick={() => handleRejectModal(data.documentId)}
                                     >
                                         Reject
                                     </span>
@@ -301,8 +316,8 @@ const Document = () => {
             html: `<h3>Are you sure? you want to delete this Document</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: 'rgb(29 78 216)',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#1C75BC',
+            cancelButtonColor: '#C8102E',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
         }).then(async (result) => {
@@ -331,6 +346,65 @@ const Document = () => {
         })
 
 
+    }
+    const handleAccept = async (e) => {
+        Swal.fire({
+            html: `<h3>Accept This Document</h3>`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#1C75BC',
+            cancelButtonColor: '#C8102E',
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await privateHttp.post(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchDocument()
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
+            }
+        })
+
+
+    }
+    const handleReject = async () => {
+        if (reason.trim() === "" || deadline === "") {
+            toast.error("provide valid reason and deadline")
+        }
+        try {
+            const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
+            )
+            if (data.status === 'Success') {
+                toast.success(data.message);
+                FetchDocument()
+            } else {
+                toast.error(data.message);
+            }
+
+
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+
+
+        }
     }
 
     const filteredData = document.filter((item) =>
@@ -521,7 +595,7 @@ const Document = () => {
                                     </CopyToClipboard>
                                 </div>
                                 <div className='col-md-4'>
-                                    <Link to={''} className="btn add-btn rounded-2">
+                                    <Link to={''} className="btn add-btn btn-info text-white rounded-2">
                                         Add New Document</Link>
                                 </div>
                             </div>
@@ -549,6 +623,30 @@ const Document = () => {
 
 
                     </div>
+                    <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Reject Modal</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div>
+                                <label htmlFor="">Please provide reasons for rejecting document</label>
+                                <br />
+                                <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
+                                    onChange={e => setReason(e.target.value)} />
+                            </div>
+                            <br />
+                            <div>
+                                <label htmlFor="">Set a new deadline</label>
+                                <br />
+                                <input type="date" className='form-control'
+                                    onChange={e => setDeadline(e.target.value)}
+                                />
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <button onClick={handleReject} className="btn btn-danger">Reject Document</button>
+                        </Modal.Footer>
+                    </Modal>
 
                 </div>
             </div>

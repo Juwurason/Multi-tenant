@@ -33,7 +33,7 @@ const ProgressReport = () => {
     const columns = [
         {
             name: '',
-            selector: row => row,
+            selector: row => "",
             sortable: true,
             cell: (row) => (
                 <Link to={`/app/reports/progress-reportsDetails/${row.progressNoteId}`} className='d-flex justify-content-center w-100 text-info pointer'>

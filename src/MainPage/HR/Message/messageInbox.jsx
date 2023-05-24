@@ -12,6 +12,9 @@ import Editor from './editor';
 import useHttp from '../../../hooks/useHttp';
 import { MultiSelect } from 'react-multi-select-component';
 import { toast } from 'react-toastify';
+import moment from 'moment';
+import ReactHtmlParser from 'react-html-parser';
+import Swal from 'sweetalert2';
 
 const MessageInbox = () => {
     const id = JSON.parse(localStorage.getItem('user'));
@@ -30,6 +33,7 @@ const MessageInbox = () => {
     const [toAllStaffs, setToAllStaffs] = useState(false);
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [sentEmail, setSentEmail] = useState([]);
 
     const handleSendAsSMSChange = (event) => {
         setSendAsSMS(event.target.checked);
@@ -101,6 +105,13 @@ const MessageInbox = () => {
         } catch (error) {
             console.log(error);
         }
+        try {
+            const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
+            console.log(data);
+            setSentEmail(data.message);
+        } catch (error) {
+            console.log(error);
+        }
     }
     useEffect(() => {
         FetchClient()
@@ -129,11 +140,11 @@ const MessageInbox = () => {
             // 
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`Messages/send_message`,
+                const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
                 toast.success(data.message)
-
+                FetchClient();
                 setLoading(false)
 
             } catch (error) {
@@ -145,7 +156,9 @@ const MessageInbox = () => {
                 setLoading(false)
             }
 
-        } else {
+        }
+        // else Send as normal email
+        else {
             const payload = {
                 content: editorValue,
                 subject: subject.current.value,
@@ -160,10 +173,16 @@ const MessageInbox = () => {
             };
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`Messages/send_message`,
+                const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
                 toast.success(data.message)
+                setEditorValue("");
+                subject.current.value = ''
+                setSelectedOptions([]);
+                FetchClient();
+                setLgShow(false);
+
 
                 setLoading(false)
 
@@ -179,12 +198,46 @@ const MessageInbox = () => {
 
     };
 
+    const handleDelete = async (e) => {
+        Swal.fire({
+            html: `<h3>Are you sure? you want to delete this message</h3>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00AEEF',
+            cancelButtonColor: '#777',
+            confirmButtonText: 'Confirm Delete',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await post(`Messages/delete/${e}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchClient();
+                    } else {
+                        toast.error(data.message);
+                    }
 
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+                }
+
+
+            }
+        })
+
+
+    }
 
     const inboxEmails = [
-        // { id: 1, sender: 'John Doe', subject: 'Hello', body: 'This is the email body of the first email.', time: "22-05-2023" },
-        // { id: 2, sender: 'Jane Smith', subject: 'Meeting Reminder', body: 'This is the email body of the second email.', time: "22-05-2023" },
-        // { id: 3, sender: 'Bob Johnson', subject: 'Important Update', body: 'This is the email body of the third email.', time: "22-05-2023" },
+        { id: 1, sender: 'John Doe', subject: 'Hello', body: 'This is the email body of the first email.', time: "22-05-2023" },
+        { id: 2, sender: 'Jane Smith', subject: 'Meeting Reminder', body: 'This is the email body of the second email.', time: "22-05-2023" },
+        { id: 3, sender: 'Bob Johnson', subject: 'Important Update', body: 'This is the email body of the third email.', time: "22-05-2023" },
     ];
     return (
         <div className="page-wrapper">
@@ -219,7 +272,7 @@ const MessageInbox = () => {
                                     Compose &nbsp; <FaPlusCircle />
                                 </button>
                                 <a
-                                    className={`nav-link text-dark d-flex gap-4 align-items-center ${activeTab === 'inbox' ? 'active' : ''}`}
+                                    className={`nav-link text-dark d-flex justify-content-between align-items-center ${activeTab === 'inbox' ? 'active' : ''}`}
                                     id="v-pills-inbox-tab"
                                     data-toggle="pill"
                                     href="#v-pills-inbox"
@@ -228,13 +281,15 @@ const MessageInbox = () => {
                                     aria-selected={activeTab === 'inbox'}
                                     onClick={() => handleTabChange('inbox')}
                                 >
-                                    <MdMoveToInbox className='fs-4' />
-                                    <span className='fw-bold'>Inbox</span>
+                                    <div className='d-flex gap-4 align-items-center'>
+                                        <MdMoveToInbox className='fs-4' />
+                                        <span className='fw-bold'>Inbox</span>
+                                    </div>
                                     <span className='text-warning'>0</span>
                                 </a>
                                 {/* Other tabs */}
                                 <a
-                                    className={`nav-link text-dark d-flex gap-4 align-items-center ${activeTab === 'sent' ? 'active' : ''}`}
+                                    className={`nav-link text-dark d-flex justify-content-between align-items-center ${activeTab === 'sent' ? 'active' : ''}`}
                                     id="v-pills-sent-tab"
                                     data-toggle="pill"
                                     href="#v-pills-sent"
@@ -243,8 +298,12 @@ const MessageInbox = () => {
                                     aria-selected={activeTab === 'sent'}
                                     onClick={() => handleTabChange('sent')}
                                 >
-                                    <MdSend className='fs-4' />
-                                    <span className='fw-bold'>Sent</span>
+                                    <div className='d-flex gap-4 align-items-center'>
+                                        <MdSend className='fs-4' />
+                                        <span className='fw-bold'>Sent</span>
+                                    </div>
+                                    <span className='text-danger'>{sentEmail.length}</span>
+
                                 </a>
                                 <a
                                     className={`nav-link text-dark d-flex gap-4 align-items-center ${activeTab === 'drafts' ? 'active' : ''}`}
@@ -323,7 +382,11 @@ const MessageInbox = () => {
                                 </a>
                             </div>
                         </div>
-                        <div className="col-md-9 col-lg-9 col-xl-9  border">
+
+
+
+
+                        <div className="col-md-9 col-lg-9 col-xl-9  border" style={{ height: "80vh" }}>
                             <div className="tab-content" id="v-pills-tabContent">
                                 <div
                                     className={`tab-pane fade ${activeTab === 'inbox' ? 'show active' : ''}`}
@@ -362,6 +425,13 @@ const MessageInbox = () => {
 
                                                     style={{ cursor: 'pointer' }}
                                                     className="table email-table no-wrap table-hover v-middle mb-0 ">
+                                                    <thead>
+                                                        <th></th>
+                                                        <th>Sender</th>
+                                                        <th>Title</th>
+                                                        <th className='text-end'>Time</th>
+                                                        <th className='text-end'>Actions</th>
+                                                    </thead>
                                                     <tbody>
                                                         {inboxEmails.map((email) => (
                                                             <tr key={email.id}
@@ -384,20 +454,16 @@ const MessageInbox = () => {
                                                                     </a>
                                                                 </td>
                                                                 {/* Attachment */}
-                                                                <td><i className="fa fa-paperclip text-muted" /></td>
                                                                 {/* Time */}
-                                                                <td className="text-muted text-end">{email.time}</td>
+                                                                <td className="text-muted">{email.time}</td>
+                                                                <td className="text-muted text-end"> <button className='btn'
+                                                                    onClick={handleDelete}
+                                                                ><GoTrashcan /></button></td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
                                                 </table>
                                             </div>
-
-
-
-
-
-
                                         </ul>
                                     )}
                                 </div>
@@ -408,8 +474,80 @@ const MessageInbox = () => {
                                     role="tabpanel"
                                     aria-labelledby="v-pills-sent-tab"
                                 >
-                                    <h3>Sent</h3>
-                                    <p>Display sent emails here.</p>
+                                    {selectedEmail ? (
+                                        <div>
+                                            <h4>{selectedEmail.subject}</h4>
+                                            <p>From: {selectedEmail.emailFrom}</p>
+                                            <p>{ReactHtmlParser(selectedEmail.content)}</p>
+                                        </div>
+                                    ) : (
+                                        <ul className="list-group">
+
+                                            <div className="table-responsive">
+                                                <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                                    <span className='d-flex gap-4 align-items-center'>
+                                                        <input type="checkbox" className="custom-control-input" id="cst1" />
+                                                        <GoTrashcan />
+                                                    </span>
+                                                    <span>
+                                                        <MdOutlineRefresh className='fs-5' />
+                                                    </span>
+                                                </div>
+                                                <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                                    <span className='ml-4 d-flex gap-2 align-items-center text-primary fw-bold border-bottom-danger'>
+                                                        <MdMoveToInbox /> Primary
+                                                    </span>
+                                                    <span>
+                                                        {sentEmail.length} Message(s)
+                                                    </span>
+                                                </div>
+                                                <table
+
+                                                    style={{ cursor: 'pointer' }}
+                                                    className="table email-table no-wrap table-hover v-middle mb-0 ">
+                                                    <thead>
+                                                        <th></th>
+                                                        <th>Sent To</th>
+                                                        <th>Title</th>
+                                                        <th>Time</th>
+                                                        <th className='text-end'></th>
+                                                    </thead>
+                                                    <tbody style={{ overflow: 'scroll', height: "20vh" }}>
+                                                        {sentEmail.map((email) => (
+                                                            <tr key={email.id}
+
+
+                                                            >
+                                                                {/* label */}
+                                                                <td className="" style={{ width: "20px" }}>
+                                                                    <input type="checkbox" className="custom-control-input" id="cst1" />
+                                                                </td>
+                                                                {/* star */}
+                                                                {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
+                                                                <td style={{ width: "100px", fontSize: "12px" }}>
+                                                                    <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
+                                                                </td>
+                                                                {/* Message */}
+                                                                <td>
+                                                                    <a className="link" href="javascript: void(0)" >
+                                                                        <span className="text-dark fw-bold text-truncate"
+                                                                            onClick={() => handleEmailClick(email)}
+                                                                        >{email.subject}</span>
+                                                                    </a>
+                                                                </td>
+                                                                {/* Attachment */}
+                                                                {/* Time */}
+                                                                <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).startOf('hour').fromNow()}</td>
+                                                                <td className="text-end" style={{ width: "20px" }}
+                                                                    onClick={() => handleDelete(email.messageId)}>
+                                                                    <GoTrashcan className='pointer' /></td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </ul>
+                                    )}
                                 </div>
                                 <div
                                     className={`tab-pane fade ${activeTab === 'drafts' ? 'show active' : ''}`}

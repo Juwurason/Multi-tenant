@@ -2,7 +2,7 @@
  * Signin Firebase
  */
 
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -17,23 +17,8 @@ const ProgressNote = () => {
   const log = JSON.parse(localStorage.getItem('log'))
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useHistory()
-  // const id = "my-unique-id";
   const { uid, name } = useParams()
-  //  console.log(uid, name);
-  const [html, setHtml] = React.useState('my <b>HTML</b>');
 
-  function onChange(e) {
-    setHtml(e.target.value);
-  }
-  const onImageUpload = (fileList) => {
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      ReactSummernote.insertImage(reader.result);
-    }
-    reader.readAsDataURL(fileList[0]);
-
-  }
   const [details, setDetails] = useState('')
   const [staff, setStaff] = useState('')
   const [report, setReport] = useState('')
@@ -44,7 +29,7 @@ const ProgressNote = () => {
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false);
-  const [loading2, setLoading2] = useState(false);
+
 
 
   const FetchSchedule = async () => {
@@ -52,7 +37,6 @@ const ProgressNote = () => {
     try {
       const staffResponse = await get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      // console.log(staff);
       setCompanyId(staff.companyID)
       setStaff(staff.staff.fullName);
       setDetails(staff.profile);
@@ -119,7 +103,7 @@ const ProgressNote = () => {
 
   const CreateProgress = async (e) => {
     e.preventDefault()
-    setLoading2(true)
+
     const info = {
       report: report,
       progress: progress,
@@ -144,7 +128,7 @@ const ProgressNote = () => {
     }).then(async (result) => {
 
       if (result.isConfirmed) {
-        setLoading2(false)
+
         try {
           const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
           if (data.status === "Success") {
@@ -153,16 +137,13 @@ const ProgressNote = () => {
               `${data.message}`,
               'success'
             )
-            setLoading2(false)
+
             navigate.push(`/staff/staff-report/${uid}`)
           }
         } catch (error) {
           console.log(error);
           toast.error(error.response.data.message);
-          setLoading2(false)
-        }
-        finally {
-          setLoading2(false)
+
         }
 
 
@@ -259,11 +240,8 @@ const ProgressNote = () => {
                                 <span className="sr-only">Loading...</span>
                               </div> : "Save"}</button>
                             <button
-                              disabled={loading2 ? true : false}
                               className="btn add-btn text-white rounded-2 m-r-5 btn-primary ml-4" onClick={CreateProgress}>
-                              {loading2 ? <div className="spinner-grow text-light" role="status">
-                                <span className="sr-only">Loading...</span>
-                              </div> : "Submit"}
+                              Submit
                             </button>
                           </div>
                         </div>
