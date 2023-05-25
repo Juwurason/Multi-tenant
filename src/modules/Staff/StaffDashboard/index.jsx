@@ -256,7 +256,7 @@ const StaffDashboard = () => {
                             <br />
                             <small
                               className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
-                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger' :
+                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
                                   getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
                                 }`}
                             >
@@ -264,21 +264,21 @@ const StaffDashboard = () => {
                             </small>
                             <br />
                             <br />
-                            {getActivityStatus(activitiesToday[0]) === 'Clock-In' || getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
+                            {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Request Cancellation</span>
-                            ) : (
-                              <span
-                                className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
-                                onClick={handleClockIn}
-                              >
+                            ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
+                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
                                 <BiStopwatch /> Clock In
                               </span>
+                            ) : (
+                              <span></span>
                             )}
                           </>
                         ) : (
                           <span>No Shift Today</span>
                         )}
                       </div>
+
 
 
 
