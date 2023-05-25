@@ -34,6 +34,7 @@ const MessageInbox = () => {
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
     const [sentEmail, setSentEmail] = useState([]);
+    const [receiveEmail, setReceiveEmail] = useState([]);
 
     const handleSendAsSMSChange = (event) => {
         setSendAsSMS(event.target.checked);
@@ -105,9 +106,18 @@ const MessageInbox = () => {
         } catch (error) {
             console.log(error);
         }
+
+        try {
+            const { data } = await privateHttp.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
+            console.log(data);
+            // setReceiveEmail(data.message);
+        } catch (error) {
+            console.log(error);
+        }
+
         try {
             const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
-            console.log(data);
+            // console.log(data);
             setSentEmail(data.message);
         } catch (error) {
             console.log(error);
