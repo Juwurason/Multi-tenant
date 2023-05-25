@@ -86,7 +86,8 @@ const ProgressNote = () => {
       companyID: companyId
     }
     try {
-      const { data } = await post(`/ProgressNotes/save_progressnote/${''}?userId=${user.userId}`, info);
+
+      const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
       if (data.status === 'Success') {
         navigate.push(`/staff/staff-edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)

@@ -69,6 +69,17 @@ const EditProgressNote = () => {
       [name]: newValue
     });
   }
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const today = new Date();
+  const formattedDate = formatDate(today);
+
+
+  // Pass `formattedDate` to your endpoint or perform any other actions here
   const SaveProgress = async (e) => {
     e.preventDefault()
     setLoading1(true)
@@ -81,10 +92,10 @@ const EditProgressNote = () => {
       startKm: editpro.startKm,
       profileId: details.profileId,
       companyID: companyId,
-      date: ""
+      date: formattedDate
     }
     try {
-      const saveProgress = await post(`/ProgressNotes/save_progressnote/${pro}?userId=${user.userId}`, info);
+      const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);
       const savePro = saveProgress.data;
       toast.success(savePro.message)
       setLoading1(false)

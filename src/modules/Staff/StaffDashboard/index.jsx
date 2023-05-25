@@ -91,6 +91,10 @@ const StaffDashboard = () => {
     setMenu(!menu)
   };
 
+
+
+
+
   useEffect(() => {
     FetchStaff()
   }, []);
@@ -152,6 +156,8 @@ const StaffDashboard = () => {
     if (!activity) {
       return 'No Shift Today';
     }
+
+
 
     const nowInAustraliaTime = dayjs();
     const activityDateFrom = dayjs(activity.dateFrom);
@@ -353,24 +359,24 @@ const StaffDashboard = () => {
 
             </div>
 
-                           {/* Modal */}
-                      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Activity Details</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          {selectedActivity && (
-                            <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
-                              <p><b>Description:</b> {selectedActivity.activities}</p>
-                            </>
-                          )}
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                        </Modal.Footer>
-                      </Modal>
+            {/* Modal */}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Activity Details</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {selectedActivity && (
+                  <>
+                    <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                    <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
+                    <p><b>Description:</b> {selectedActivity.activities}</p>
+                  </>
+                )}
+              </Modal.Body>
+              <Modal.Footer>
+                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+              </Modal.Footer>
+            </Modal>
 
 
           </div>
