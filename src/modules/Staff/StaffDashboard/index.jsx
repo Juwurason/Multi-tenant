@@ -19,6 +19,7 @@ import StaffSidebar from '../Components/StaffSidebar';
 import { BsClockHistory } from 'react-icons/bs';
 import { BiStopwatch } from 'react-icons/bi';
 import { FaLongArrowAltRight } from 'react-icons/fa';
+import { Modal } from 'react-bootstrap';
 
 dayjs.extend(isBetween);
 
@@ -62,6 +63,7 @@ const StaffDashboard = () => {
 
       setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
       setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
+      // console.log(activities[0].dateFrom);
       setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
 
       setLoading(false);
@@ -137,16 +139,28 @@ const StaffDashboard = () => {
     }, 3000);
   };
 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+
+  const handleActivityClick = (activitiesTomorrow) => {
+    setSelectedActivity(activitiesTomorrow);
+    setShowModal(true);
+  };
+
+
   function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs()
-    const activityDateFrom = dayjs(activitiesToday[0]?.dateFrom)
-    const activityDateTo = dayjs(activitiesToday[0]?.dateTo)
+    if (!activity) {
+      return 'No Shift Today';
+    }
+
+    const nowInAustraliaTime = dayjs();
+    const activityDateFrom = dayjs(activity.dateFrom);
+    const activityDateTo = dayjs(activity.dateTo);
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
-
-      return activitiesToday[0]?.attendance === true ? 'Present' : 'Absent';
+      return activity.attendance === true ? 'Present' : 'Absent';
     } else {
       return 'Clock-In';
     }
@@ -198,7 +212,7 @@ const StaffDashboard = () => {
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesYesterday[0]?.profile.firstName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesYesterday[0]?.dateFrom === "" ? "---" : dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A')}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A')}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activitiesYesterday[0]?.dateTo).format('hh:mm A')}</span></span>
                       </div>
                       <div className="card-footer text-body-light bg-light text-muted">
                         View Details
@@ -222,7 +236,7 @@ const StaffDashboard = () => {
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesToday[0]?.profile.fullName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {dayjs(activitiesToday[0]?.dateFrom).format('hh:mm A')}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesYesterday[0]?.dateFrom === "" ? "---" : dayjs(activitiesToday[0]?.dateFrom).format('hh:mm A')}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {dayjs(activitiesToday[0]?.dateTo).format('hh:mm A')}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
@@ -230,45 +244,43 @@ const StaffDashboard = () => {
                       </div>
 
                       <div className='px-5 py-4'>
-                        <span>{activitiesToday[0]?.activities}</span>
-                        <br />
-                        <br />
-                        {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
-                          <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-warning"}`}>
-                            {isLoading ? (
-                              <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Please wait...
-                              </>
+                        {activitiesToday[0] ? (
+                          <>
+                            <span>{activitiesToday[0]?.activities}</span>
+                            <br />
+                            <br />
+                            <small
+                              className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
+                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger' :
+                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success' : ''
+                                }`}
+                            >
+                              {getActivityStatus(activitiesToday[0])}
+                            </small>
+                            <br />
+                            <br />
+                            {getActivityStatus(activitiesToday[0]) === 'Clock-In' || getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
+                              <span className='fw-bold text-warning pointer'>Request Cancellation</span>
                             ) : (
-                              <>
-                                <BiStopwatch className="fs-4" /> Upcoming
-                              </>
+                              <span
+                                className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
+                                onClick={getActivityStatus(activitiesToday[0]) === 'Clock-In' ? handleClockIn : null}
+                              >
+                                {isLoading ? (
+                                  <>
+                                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    Please wait...
+                                  </>
+                                ) : ''}
+                              </span>
                             )}
-                          </span>
+                          </>
                         ) : (
-                          <span
-                            className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
-                            onClick={getActivityStatus(activitiesToday[0]) === 'Clock-In' ? handleClockIn : null}
-                          >
-                            {isLoading ? (
-                              <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Please wait...
-                              </>
-                            ) : (
-                              <>
-                                <BiStopwatch className="fs-4" /> {getActivityStatus(activitiesToday[0]) === 'Present' ? 'Present' : 'Absent'}
-                              </>
-                            )}
-                          </span>
+                          <span>No Shift Today</span>
                         )}
-                        <br />
-                        <br />
-                        {getActivityStatus(activitiesToday[0]) === 'Clock-In' || getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
-                          <span className='fw-bold text-warning pointer'>Request Cancellation</span>
-                        ) : null}
                       </div>
+
+
 
 
 
@@ -298,7 +310,7 @@ const StaffDashboard = () => {
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A')}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A')}</span></span>
                       </div>
-                      <div className="card-footer text-body-danger bg-danger text-white">
+                      <div className="card-footer text-body-danger bg-danger text-white pointer" onClick={() => handleActivityClick(activitiesTomorrow)}>
                         View Details
 
                       </div>
@@ -340,6 +352,26 @@ const StaffDashboard = () => {
               </div>
 
             </div>
+
+                           {/* Modal */}
+                      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Activity Details</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          {selectedActivity && (
+                            <>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
+                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                            </>
+                          )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                        </Modal.Footer>
+                      </Modal>
+
 
           </div>
         </div>
