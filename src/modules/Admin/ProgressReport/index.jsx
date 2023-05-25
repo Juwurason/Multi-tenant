@@ -48,7 +48,7 @@ const ProgressReport = () => {
         },
         {
             name: 'Clients',
-            selector: row => row.profileId,
+            selector: row => row.profile.fullName,
             sortable: true
         },
 
@@ -90,6 +90,7 @@ const ProgressReport = () => {
         try {
             setLoading(true)
             const { data } = await get(`ProgressNotes/get_all_progressnote_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            // console.log(data);
             setProgress(data);
             setLoading(false)
         } catch (error) {
