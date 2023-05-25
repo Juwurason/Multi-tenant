@@ -355,6 +355,7 @@ const AllUser = () => {
                                 pagination
                                 highlightOnHover
                                 searchable
+                                responsive
                                 searchTerm={searchText}
                                 progressPending={loading}
                                 progressComponent={<div className='text-center fs-1'>

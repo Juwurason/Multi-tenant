@@ -444,7 +444,7 @@ const SupportType = () => {
                         expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
-
+                        responsive
 
                     />
 
@@ -460,14 +460,14 @@ const SupportType = () => {
                                     <div className="form-group">
                                         <label className="col-form-label">Item Number</label>
                                         <div>
-                                        <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
                                     <div className="form-group">
                                         <label className="col-form-label">Item Name</label>
                                         <div>
-                                        <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
@@ -484,7 +484,7 @@ const SupportType = () => {
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
-                                
+
                                     <div className="form-group">
                                         <label className="col-form-label">Remote</label>
                                         <div>

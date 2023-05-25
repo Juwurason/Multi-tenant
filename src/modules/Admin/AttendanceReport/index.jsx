@@ -402,12 +402,13 @@ const AttendanceReport = () => {
                 expandableRows
                 expandableRowsComponent={ButtonRow}
                 paginationTotalRows={filteredData.length}
+                responsive
 
               />
 
 
             </div>
-     </div>
+          </div>
 
         </div>
       </div>

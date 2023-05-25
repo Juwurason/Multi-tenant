@@ -237,54 +237,54 @@ const StaffForm = () => {
         <div className='mt-4 border'>
           <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 
-                            <div className="col-md-3">
-                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                    <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
-                                    <GoSearch />
-                                </div>
-                            </div>
-                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                <CSVLink
-                                    data={staffDocument}
-                                    filename={"document.csv"}
+            <div className="col-md-3">
+              <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
+                <GoSearch />
+              </div>
+            </div>
+            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+              <CSVLink
+                data={staffDocument}
+                filename={"document.csv"}
 
-                                >
-                                    <button
+              >
+                <button
 
-                                        className='btn text-info'
-                                        title="Export as CSV"
-                                    >
-                                        <FaFileCsv />
-                                    </button>
+                  className='btn text-info'
+                  title="Export as CSV"
+                >
+                  <FaFileCsv />
+                </button>
 
-                                </CSVLink>
-                                <button
-                                    className='btn text-danger'
-                                    onClick={handlePDFDownload}
-                                    title="Export as PDF"
-                                >
-                                    <FaFilePdf />
-                                </button>
-                                <button
-                                    className='btn text-primary'
+              </CSVLink>
+              <button
+                className='btn text-danger'
+                onClick={handlePDFDownload}
+                title="Export as PDF"
+              >
+                <FaFilePdf />
+              </button>
+              <button
+                className='btn text-primary'
 
-                                    onClick={handleExcelDownload}
-                                    title="Export as Excel"
-                                >
-                                    <FaFileExcel />
-                                </button>
-                                <CopyToClipboard text={JSON.stringify(staffDocument)}>
-                                    <button
+                onClick={handleExcelDownload}
+                title="Export as Excel"
+              >
+                <FaFileExcel />
+              </button>
+              <CopyToClipboard text={JSON.stringify(staffDocument)}>
+                <button
 
-                                        className='btn text-warning'
-                                        title="Copy Table"
-                                        onClick={() => toast("Table Copied")}
-                                    >
-                                        <FaCopy />
-                                    </button>
-                                </CopyToClipboard>
-                            </div>
-                        </div>
+                  className='btn text-warning'
+                  title="Copy Table"
+                  onClick={() => toast("Table Copied")}
+                >
+                  <FaCopy />
+                </button>
+              </CopyToClipboard>
+            </div>
+          </div>
           <DataTable data={filteredData} columns={columns}
             pagination
             highlightOnHover
@@ -299,7 +299,7 @@ const StaffForm = () => {
             expandableRows
             expandableRowsComponent={ButtonRow}
             paginationTotalRows={filteredData.length}
-
+            responsive
 
 
           />

@@ -33,8 +33,8 @@ const PublicHoliday = () => {
 
     const columns = [
         {
-          name: '#',
-          cell: (row, index) => index + 1
+            name: '#',
+            cell: (row, index) => index + 1
         },
 
         {
@@ -62,7 +62,7 @@ const PublicHoliday = () => {
             name: "Actions",
             cell: (row) => (
                 <div className="d-flex gap-1">
-                    <button 
+                    <button
                         className="btn"
                         title='edit'
                         onClick={() => handleEdit(row.holidayId)}
@@ -81,42 +81,42 @@ const PublicHoliday = () => {
             ),
         },
 
- ];
+    ];
 
- const handleEdit = async(e) => {
-    // console.log(e);
-    setEditModal(true);
-    try {
-        setLoading(true)
-        const {data} = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-        // console.log(data);
-        setEditPro(data);
-        setLoading(false)
-    } catch (error) {
-        console.log(error);
-        setLoading(false)
-    } finally {
-        setLoading(false)
+    const handleEdit = async (e) => {
+        // console.log(e);
+        setEditModal(true);
+        try {
+            setLoading(true)
+            const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setEditPro(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditPro({
+            ...editpro,
+            [name]: newValue
+        });
     }
-  };
-
-  function handleInputChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    const newValue = value === "" ? "" : value;
-    setEditPro({
-      ...editpro,
-      [name]: newValue
-    });
-  }
 
     const FetchClient = async () => {
         try {
             setLoading(true)
-            const {data} = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
+            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
             // console.log(data);
-              setGetHoli(data);
+            setGetHoli(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -292,7 +292,7 @@ const PublicHoliday = () => {
 
     const addHoliday = async () => {
 
-        if ( holidayName === '' || holidayDate.length === 0) {
+        if (holidayName === '' || holidayDate.length === 0) {
             return toast.error("Input Fields cannot be empty")
         }
 
@@ -300,25 +300,25 @@ const PublicHoliday = () => {
         const info = {
             name: holidayName,
             date: holidayDate
-          }
-                try {
-                    const { data } = await post(`/SetUp/add_holiday`, info )
-                    // console.log(data);
-                    toast.success(data.message)
-                    setShowModal(false)
-                    FetchClient()
-                    setLoading1(false)
-                    setHolidayName('')
-                    setHolidayDate('')
-                } catch (error) {
-                    console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
-                }
-                finally{
-                    setLoading1(false)
-                }
-            }
+        }
+        try {
+            const { data } = await post(`/SetUp/add_holiday`, info)
+            // console.log(data);
+            toast.success(data.message)
+            setShowModal(false)
+            FetchClient()
+            setLoading1(false)
+            setHolidayName('')
+            setHolidayDate('')
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+        }
+        finally {
+            setLoading1(false)
+        }
+    }
 
     return (
         <div className="page-wrapper">
@@ -340,7 +340,7 @@ const PublicHoliday = () => {
                         </div>
                     </div>
                 </div>
-            
+
                 {/* Search Filter */}
 
                 <div className='mt-4 border'>
@@ -414,6 +414,7 @@ const PublicHoliday = () => {
                         expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
+                        responsive
 
 
                     />
@@ -424,36 +425,36 @@ const PublicHoliday = () => {
                             <Modal.Title>Add Holiday</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                           <div>
-                           <div className="row">
-                            <div className="">
-                                <div className="form-group">
-                                    <label className="col-form-label">Name of Holiday</label>
-                                    <div>
-                                        <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                            <div>
+                                <div className="row">
+                                    <div className="">
+                                        <div className="form-group">
+                                            <label className="col-form-label">Name of Holiday</label>
+                                            <div>
+                                                <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                    <label className="col-form-label">Date</label>
-                                    <div><input className="form-control date" type="date" onChange={e => setHolidayDate(e.target.value)} /></div>
-                                </div>
+                                    <div className="form-group">
+                                        <label className="col-form-label">Date</label>
+                                        <div><input className="form-control date" type="date" onChange={e => setHolidayDate(e.target.value)} /></div>
+                                    </div>
 
-                            {/* <div className="col-sm-4 text-left">
+                                    {/* <div className="col-sm-4 text-left">
                                 <button className="btn btn-primary add-btn rounded-2" onClick={addHoliday}>Add</button>
                             </div> */}
 
-                        </div>
-                           </div>
+                                </div>
+                            </div>
                         </Modal.Body>
                         <Modal.Footer>
-                        <button 
-                        disabled={loading1 ? true : false}
-                        className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>
-                        {loading1 ? <div className="spinner-grow text-light" role="status">
-                            <span className="sr-only">Loading...</span>
-                          </div> : "Add"}
-                        </button>
+                            <button
+                                disabled={loading1 ? true : false}
+                                className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>
+                                {loading1 ? <div className="spinner-grow text-light" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : "Add"}
+                            </button>
                         </Modal.Footer>
                     </Modal>
 
@@ -463,23 +464,23 @@ const PublicHoliday = () => {
                             <Modal.Title>View Holiday</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                           <div>
-                           <div className="row">
-                            <div className="">
-                                <div className="form-group">
-                                    <label className="col-form-label">Name of Holiday</label>
-                                    <div>
-                                        <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
+                            <div>
+                                <div className="row">
+                                    <div className="">
+                                        <div className="form-group">
+                                            <label className="col-form-label">Name of Holiday</label>
+                                            <div>
+                                                <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div className="form-group">
+                                        <label className="col-form-label">Date</label>
+                                        <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div className="form-group">
-                                    <label className="col-form-label">Date</label>
-                                    <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
-                                </div>
-
-                        </div>
-                           </div>
                         </Modal.Body>
                         <Modal.Footer>
                             {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}

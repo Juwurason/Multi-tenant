@@ -381,6 +381,7 @@ const AllAdmin = () => {
                                     </div>
                                 </div>}
                                 expandableRows
+                                responsive
                                 expandableRowsComponent={ButtonRow}
                                 paginationTotalRows={filteredData.length}
 

@@ -442,6 +442,7 @@ const ProgressReport = () => {
                                 </div>}
 
                                 paginationTotalRows={filteredData.length}
+                                responsive
 
 
 

@@ -614,7 +614,7 @@ const Document = () => {
                                 expandableRowsComponent={ButtonRow}
                                 paginationTotalRows={filteredData.length}
                                 customStyles={customStyles}
-
+                                responsive
 
                             />
 

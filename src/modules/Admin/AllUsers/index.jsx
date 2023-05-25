@@ -351,11 +351,14 @@ const AllUsers = () => {
                                 searchable
                                 searchTerm={searchText}
                                 progressPending={loading}
+                                responsive
                                 progressComponent={<div className='text-center fs-1'>
                                     <div className="spinner-grow text-secondary" role="status">
                                         <span className="sr-only">Loading...</span>
                                     </div>
-                                </div>}
+                                </div>
+
+                                }
                             />
                         </div>
 

@@ -33,6 +33,7 @@ const MessageInbox = () => {
     const [toAllStaffs, setToAllStaffs] = useState(false);
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [inbox, setInbox] = useState([]);
     const [sentEmail, setSentEmail] = useState([]);
 
     const handleSendAsSMSChange = (event) => {
@@ -107,8 +108,15 @@ const MessageInbox = () => {
         }
         try {
             const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
-            console.log(data);
             setSentEmail(data.message);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+        try {
+            const { data } = await privateHttp.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
+            setInbox(data.message);
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -397,8 +405,8 @@ const MessageInbox = () => {
                                     {selectedEmail ? (
                                         <div>
                                             <h4>{selectedEmail.subject}</h4>
-                                            <p>From: {selectedEmail.sender}</p>
-                                            <p>{selectedEmail.body}</p>
+                                            <p>From: {selectedEmail.emailFrom}</p>
+                                            <p>{ReactHtmlParser(selectedEmail.content)}</p>
                                         </div>
                                     ) : (
                                         <ul className="list-group">
@@ -418,47 +426,49 @@ const MessageInbox = () => {
                                                         <MdMoveToInbox /> Primary
                                                     </span>
                                                     <span>
-                                                        0 Message(s)
+                                                        {sentEmail.length} Message(s)
                                                     </span>
                                                 </div>
                                                 <table
 
                                                     style={{ cursor: 'pointer' }}
                                                     className="table email-table no-wrap table-hover v-middle mb-0 ">
-                                                    <thead>
+                                                    {/* <thead>
                                                         <th></th>
-                                                        <th>Sender</th>
+                                                        <th>Sent To</th>
                                                         <th>Title</th>
-                                                        <th className='text-end'>Time</th>
-                                                        <th className='text-end'>Actions</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        {inboxEmails.map((email) => (
+                                                        <th>Time</th>
+                                                        <th className='text-end'></th>
+                                                    </thead> */}
+                                                    <tbody style={{ overflow: 'scroll', height: "20vh" }}>
+                                                        {sentEmail.map((email) => (
                                                             <tr key={email.id}
 
 
                                                             >
                                                                 {/* label */}
-                                                                <td className="">
+                                                                <td className="" style={{ width: "20px" }}>
                                                                     <input type="checkbox" className="custom-control-input" id="cst1" />
                                                                 </td>
                                                                 {/* star */}
                                                                 {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
-                                                                <td>
-                                                                    <span className="mb-0 text-muted"> {email.sender} </span>
+                                                                <td style={{ width: "100px", fontSize: "12px" }}>
+                                                                    <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
                                                                 </td>
                                                                 {/* Message */}
                                                                 <td>
-                                                                    <a className="link" href="javascript: void(0)" onClick={() => handleEmailClick(email)}>
-                                                                        <span className="text-dark fw-bold text-truncate">{email.subject}</span>
+                                                                    <a className="link" href="javascript: void(0)" >
+                                                                        <span className="text-dark fw-bold text-truncate"
+                                                                            onClick={() => handleEmailClick(email)}
+                                                                        >{email.subject}</span>
                                                                     </a>
                                                                 </td>
                                                                 {/* Attachment */}
                                                                 {/* Time */}
-                                                                <td className="text-muted">{email.time}</td>
-                                                                <td className="text-muted text-end"> <button className='btn'
-                                                                    onClick={handleDelete}
-                                                                ><GoTrashcan /></button></td>
+                                                                <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).startOf('hour').fromNow()}</td>
+                                                                <td className="text-end" style={{ width: "20px" }}
+                                                                    onClick={() => handleDelete(email.messageId)}>
+                                                                    <GoTrashcan className='pointer' /></td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -494,8 +504,8 @@ const MessageInbox = () => {
                                                     </span>
                                                 </div>
                                                 <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
-                                                    <span className='ml-4 d-flex gap-2 align-items-center text-primary fw-bold border-bottom-danger'>
-                                                        <MdMoveToInbox /> Primary
+                                                    <span className='ml-4 d-flex gap-2 align-items-center text-warning fw-bold border-bottom-danger'>
+                                                        <MdMoveToInbox /> Sent
                                                     </span>
                                                     <span>
                                                         {sentEmail.length} Message(s)
@@ -505,13 +515,13 @@ const MessageInbox = () => {
 
                                                     style={{ cursor: 'pointer' }}
                                                     className="table email-table no-wrap table-hover v-middle mb-0 ">
-                                                    <thead>
+                                                    {/* <thead>
                                                         <th></th>
                                                         <th>Sent To</th>
                                                         <th>Title</th>
                                                         <th>Time</th>
                                                         <th className='text-end'></th>
-                                                    </thead>
+                                                    </thead> */}
                                                     <tbody style={{ overflow: 'scroll', height: "20vh" }}>
                                                         {sentEmail.map((email) => (
                                                             <tr key={email.id}
