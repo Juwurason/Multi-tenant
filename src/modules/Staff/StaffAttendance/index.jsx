@@ -270,7 +270,7 @@ const StaffAttendance = () => {
               expandableRows
               expandableRowsComponent={ButtonRow}
               paginationTotalRows={filteredData.length}
-
+              responsive
 
 
             />

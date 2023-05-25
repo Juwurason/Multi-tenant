@@ -444,7 +444,7 @@ const SupportType = () => {
                         expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
-
+                        responsive
 
                     />
 

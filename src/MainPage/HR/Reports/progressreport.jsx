@@ -442,7 +442,7 @@ const ProgressReport = () => {
                                         <span className="sr-only">Loading...</span>
                                     </div>
                                 </div>}
-
+                                responsive
                                 paginationTotalRows={filteredData.length}
 
 

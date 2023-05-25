@@ -421,7 +421,7 @@ const KnowledgeBase = () => {
                         expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
-
+                        responsive
 
                     />
 

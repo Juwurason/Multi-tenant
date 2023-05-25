@@ -274,7 +274,7 @@ const AllStaff = () => {
         <span>{data.fullName}</span>
         <div>
           <button onClick={() => handleActivate(data.staffId)} className="btn text-primary" style={{ fontSize: "12px" }}>
-            Activate Staff  
+            Activate Staff
           </button> |
           <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger" style={{ fontSize: "12px" }}>
             Deactivate Staff
@@ -442,7 +442,7 @@ const AllStaff = () => {
                 expandableRowsComponent={ButtonRow}
                 paginationTotalRows={filteredData.length}
                 customStyles={customStyles}
-
+                responsive
 
               />
 

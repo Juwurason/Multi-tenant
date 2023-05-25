@@ -444,7 +444,7 @@ const ScheduleSupport = () => {
                         expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
-
+                        responsive
 
                     />
 
@@ -460,7 +460,7 @@ const ScheduleSupport = () => {
                                     <div className="form-group">
                                         <label className="col-form-label">Participant</label>
                                         <div>
-                                            <select className="form-select" 
+                                            <select className="form-select"
                                             // onChange={e => setSta(e.target.value)}
                                             >
                                                 <option defaultValue hidden>Select Client / Participant</option>
@@ -499,47 +499,47 @@ const ScheduleSupport = () => {
                                     <div className="form-group">
                                         <label className="col-form-label">Frequency of Support</label>
                                         <div>
-                                                    <label>
-                                                        <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Sunday
-                                                    </label>
-                                                    &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="monday" checked={days.monday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Monday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="tuesday" checked={days.tuesday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Tuesday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="wednesday" checked={days.wednesday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        wednesday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="thursday" checked={days.thursday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Thursday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="friday" checked={days.friday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Friday
-                                                    </label> &nbsp; &nbsp;
-                                                    <label>
-                                                        <input type="checkbox" name="saturday" checked={days.saturday} onChange={handleCheckboxChange} />
-                                                        &nbsp;
-                                                        Saturday
-                                                    </label> &nbsp; &nbsp;
-                                                 
+                                            <label>
+                                                <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                Sunday
+                                            </label>
+                                            &nbsp; &nbsp;
+                                            <label>
+                                                <input type="checkbox" name="monday" checked={days.monday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                Monday
+                                            </label> &nbsp; &nbsp;
+                                            <label>
+                                                <input type="checkbox" name="tuesday" checked={days.tuesday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                Tuesday
+                                            </label> &nbsp; &nbsp;
+                                            <label>
+                                                <input type="checkbox" name="wednesday" checked={days.wednesday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                wednesday
+                                            </label> &nbsp; &nbsp;
+                                            <label>
+                                                <input type="checkbox" name="thursday" checked={days.thursday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                Thursday
+                                            </label> &nbsp; &nbsp;
+                                            <label>
+                                                <input type="checkbox" name="friday" checked={days.friday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                Friday
+                                            </label> &nbsp; &nbsp;
+                                            <label>
+                                                <input type="checkbox" name="saturday" checked={days.saturday} onChange={handleCheckboxChange} />
+                                                &nbsp;
+                                                Saturday
+                                            </label> &nbsp; &nbsp;
 
-                                                </div>
+
+                                        </div>
                                     </div>
-                                
+
                                     <div className="form-group">
                                         <label className="col-form-label">Item Number</label>
                                         <div>

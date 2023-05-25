@@ -382,7 +382,7 @@ const StaffDocument = () => {
               expandableRows
               expandableRowsComponent={ButtonRow}
               paginationTotalRows={filteredData.length}
-
+              responsive
 
 
             />
