@@ -271,7 +271,7 @@ const StaffDashboard = () => {
                                     <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                                     Please wait...
                                   </>
-                                ) : ''}
+                                ) : 'Clock-In'}
                               </span>
                             )}
                           </>
