@@ -12,6 +12,9 @@ import ProgressNote from '../modules/Staff/ProgressNote'
 import EditProgressNote from '../modules/Staff/EditProgressNote';
 import StaffProgressNote from '../modules/Staff/StaffProgressNote';
 import AddReport from '../modules/Staff/AddReport';
+import ViewTicket from '../modules/Staff/Support/viewTicket';
+import RaiseTicket from '../modules/Staff/Support/raiseTicket';
+import KnowledgeBase from '../modules/Staff/Support/knowledgeBase';
 
 export default [
 
@@ -64,6 +67,21 @@ export default [
       path: 'staffprofile',
       component: StaffProfile
    },
+
+   {
+      path: 'view-ticket',
+      component: ViewTicket
+  },
+
+  {
+      path: 'raise-ticket',
+      component: RaiseTicket
+  },
+
+  {
+      path: 'knowledge',
+      component: KnowledgeBase
+  },
 
    {
       path: 'staff-form',

@@ -117,7 +117,7 @@ const StaffDashboard = () => {
     setIsLoading(true);
     // Simulating an asynchronous action, such as an API call
     setTimeout(() => {
-      // Perform any necessary logic here before routing to the clock-in page
+      // Perform any necessary logic here before routing to the - page
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -134,8 +134,8 @@ const StaffDashboard = () => {
       } else {
         toast.error('Geolocation is not supported');
       }
-      // Route to the clock-in page
-      // history.push('/clock-in');
+      // Route to the - page
+      // history.push('/-');
     }, 2000); // Set an appropriate delay to simulate the loading time
 
     // Optionally, you can clear the loading state after the specified time
@@ -167,7 +167,7 @@ const StaffDashboard = () => {
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
       return activity.attendance === true ? 'Present' : 'Absent';
     } else {
-      return 'Clock-In';
+      return '-';
     }
   }
 
@@ -267,20 +267,19 @@ const StaffDashboard = () => {
                             {getActivityStatus(activitiesToday[0]) === 'Clock-In' || getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Request Cancellation</span>
                             ) : (
-                              getActivityStatus(activitiesToday[0]) === 'Clock-In' && (
-                                <span
-                                  className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
-                                  onClick={handleClockIn}
-                                >
-                                  <BiStopwatch /> Clock-In
-                                </span>
-                              )
+                              <span
+                                className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
+                                onClick={handleClockIn}
+                              >
+                                <BiStopwatch /> Clock In
+                              </span>
                             )}
                           </>
                         ) : (
                           <span>No Shift Today</span>
                         )}
                       </div>
+
 
 
 

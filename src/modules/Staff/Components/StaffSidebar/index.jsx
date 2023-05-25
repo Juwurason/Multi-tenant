@@ -89,6 +89,35 @@ const StaffSidebar = (props) => {
                             <li className={pathname.includes('staff-document') ? "active" : ""}>
                                 <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
+
+                            <li className="menu-title">
+                                <span>Communication</span>
+                            </li>
+                            
+                            <li className="submenu">
+                                <a href="javascript:void(0)" className={isSideMenu == "ticket" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "ticket" ? "" : "ticket")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "ticket" ?
+                                    <ul>
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/staff/view-ticket">View Tickets</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/staff/raise-ticket">Raise a Ticket</Link>
+                                        </li>
+
+                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
+                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                            to="/staff/knowledge">Knowledge Base</Link>
+                                        </li>
+
+                                    </ul>
+                                    : ""
+                                }
+                            </li>
+
                         </ul>
                     </div>
                 </div>
