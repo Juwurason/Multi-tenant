@@ -98,7 +98,7 @@ const ClientDocum = () => {
         try {
             const { data } = await get(`/Documents/get_all_client_documents?clientId=${uid}`, { cacheTimeout: 300000 })
             setDocumentOne(data.clientDocuments);
- 
+
 
         } catch (error) {
             console.log(error);
@@ -462,6 +462,7 @@ const ClientDocum = () => {
                             expandableRowsComponent={ButtonRow}
                             paginationTotalRows={filteredData.length}
                             customStyles={customStyles}
+                            responsive
 
 
                         />

@@ -356,6 +356,7 @@ const Referrals = () => {
                                         <span className="sr-only">Loading...</span>
                                     </div>
                                 </div>}
+                                responsive
                             />
                         </div>
 

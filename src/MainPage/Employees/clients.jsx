@@ -419,6 +419,7 @@ const Clients = () => {
               </div>
             </div>}
             expandableRows
+            responsive
             expandableRowsComponent={ButtonRow}
             paginationTotalRows={filteredData.length}
             customStyles={customStyles}

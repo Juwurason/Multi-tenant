@@ -289,7 +289,7 @@ const StaffProgressNote = () => {
                             expandableRows
                             expandableRowsComponent={ButtonRow}
                             paginationTotalRows={filteredData.length}
-
+                            responsive
 
 
                         />
