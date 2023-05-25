@@ -19,7 +19,7 @@ const StaffSidebar = (props) => {
 
 
     const toggleSidebar = (value) => {
-        console.log(value);
+        // console.log(value);
         setSideMenu(value);
         setSideMenuNew(value);
 

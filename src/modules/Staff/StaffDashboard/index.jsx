@@ -29,6 +29,7 @@ const StaffDashboard = () => {
   const [activitiesYesterday, setActivitiesYesterday] = useState([]);
   const [activitiesToday, setActivitiesToday] = useState([]);
   const [activitiesTomorrow, setActivitiesTomorrow] = useState([]);
+  const [upcomingActivities, setUpcomingActivities] = useState([]);
   const [clients, setClients] = useState([]);
   const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
@@ -54,22 +55,26 @@ const StaffDashboard = () => {
     setLoading(true)
     try {
       const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-      const activities = data.shiftRoster
-      setRoster(activities)
-      const now = dayjs(); // Get the current date and time
-      const yesterday = now.subtract(1, 'day').startOf('day'); // Get the start of yesterday
-      const today = now.startOf('day'); // Get the start of today
-      const tomorrow = now.add(1, 'day').startOf('day'); // Get the start of tomorrow
+      const activities = data.shiftRoster;
+      setRoster(activities);
+      const now = dayjs();
+      const yesterday = now.subtract(1, 'day').startOf('day');
+      const today = now.startOf('day');
+      const tomorrow = now.add(1, 'day').startOf('day');
+
+      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(now, 'hour'));
+      const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
 
       setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
       setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
-      // console.log(activities[0].dateFrom);
       setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
+      setUpcomingActivities(sortedUpcomingActivities);
 
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
+
 
     try {
       const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
@@ -205,14 +210,14 @@ const StaffDashboard = () => {
                       <div className="card-header bg-secondary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
                           <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesYesterday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-dark rounded px-2'>{activitiesYesterday[0]?.status}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-dark rounded px-2'>{activitiesYesterday[0]?.status === "string" ? "Active" : activitiesYesterday[0]?.status}</span>
                         </div>
                       </div>
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesYesterday[0]?.profile.firstName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesYesterday[0]?.dateFrom === "" ? "---" : dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A')}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activitiesYesterday[0]?.dateTo).format('hh:mm A')}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesYesterday.length > 0 ? dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesYesterday.length > 0 ? dayjs(activitiesYesterday[0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-light bg-light text-muted">
                         View Details
@@ -236,8 +241,8 @@ const StaffDashboard = () => {
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesToday[0]?.profile.fullName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesYesterday[0]?.dateFrom === "" ? "---" : dayjs(activitiesToday[0]?.dateFrom).format('hh:mm A')}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {dayjs(activitiesToday[0]?.dateTo).format('hh:mm A')}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesToday.length > 0 ? dayjs(activitiesToday[0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesToday.length > 0 ? dayjs(activitiesToday[0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
@@ -252,7 +257,7 @@ const StaffDashboard = () => {
                             <small
                               className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
                                 getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger' :
-                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success' : ''
+                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
                                 }`}
                             >
                               {getActivityStatus(activitiesToday[0])}
@@ -262,17 +267,14 @@ const StaffDashboard = () => {
                             {getActivityStatus(activitiesToday[0]) === 'Clock-In' || getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Request Cancellation</span>
                             ) : (
-                              <span
-                                className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
-                                onClick={getActivityStatus(activitiesToday[0]) === 'Clock-In' ? handleClockIn : null}
-                              >
-                                {isLoading ? (
-                                  <>
-                                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                    Please wait...
-                                  </>
-                                ) : ''}
-                              </span>
+                              getActivityStatus(activitiesToday[0]) === 'Clock-In' && (
+                                <span
+                                  className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`}
+                                  onClick={handleClockIn}
+                                >
+                                  <BiStopwatch /> Clock-In
+                                </span>
+                              )
                             )}
                           </>
                         ) : (
@@ -307,8 +309,8 @@ const StaffDashboard = () => {
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesTomorrow[0]?.profile.firstName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A')}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A')}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-danger bg-danger text-white pointer" onClick={() => handleActivityClick(activitiesTomorrow)}>
                         View Details
@@ -321,7 +323,35 @@ const StaffDashboard = () => {
 
               </div>
 
-              <div className='col-md-4 p-2 d-flex  flex-column gap-2 justify-content-start'>
+              <div className='col-md-4 p-2 d-flex flex-column gap-2 justify-content-start'>
+                <div className='p-3 shadow-sm'>
+                  <h3>Upcoming Shift</h3>
+                  {upcomingActivities.length > 0 ? (
+                    upcomingActivities.map(activity => (
+                      <span className="mt-2" key={activity.id}>
+                        <div className="d-flex justify-content-between text-dark">
+                          <div className='d-flex flex-column justify-content-start'>
+                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
+                            <span className='text-dark fs-5 fw-bold'>{activity.staffName}</span>
+                          </div>
+                          <div>
+                            <span className='bg-secondary px-2 py-1 text-white pointer rounded-2'>view</span>
+                          </div>
+                        </div>
+                      </span>
+                    ))
+                  ) : (
+                    <span>No upcoming shifts</span>
+                  )}
+                  <div className='d-flex justify-content-end mt-2'>
+                    <Link to="/staff/staff-roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
+                      See all <FaLongArrowAltRight className='fs-3' />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className='col-md-4 p-2 d-flex  flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h3>Upcoming Shift</h3>
 
@@ -349,28 +379,28 @@ const StaffDashboard = () => {
 
                 </div>
 
-              </div>
+              </div> */}
 
             </div>
 
-                           {/* Modal */}
-                      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Activity Details</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          {selectedActivity && (
-                            <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
-                              <p><b>Description:</b> {selectedActivity.activities}</p>
-                            </>
-                          )}
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                        </Modal.Footer>
-                      </Modal>
+            {/* Modal */}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Activity Details</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {selectedActivity && (
+                  <>
+                    <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                    <p><b>Time:</b> {selectedActivity.length > 0 ? dayjs(selectedActivity.dateFrom).format('dddd, MMMM D, YYYY') : '--'} - {selectedActivity.length > 0 ? dayjs(selectedActivity.dateTo).format('dddd, MMMM D, YYYY') : '--'}</p>
+                    <p><b>Description:</b> {selectedActivity.activities}</p>
+                  </>
+                )}
+              </Modal.Body>
+              <Modal.Footer>
+                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+              </Modal.Footer>
+            </Modal>
 
 
           </div>
