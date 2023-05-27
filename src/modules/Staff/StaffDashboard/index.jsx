@@ -153,21 +153,21 @@ const StaffDashboard = () => {
   };
 
 
-  function getActivityStatus(activity) {
-    if (!activity) {
+  function getActivityStatus(activitiesToday) {
+    if (!activitiesToday) {
       return 'No Shift Today';
     }
 
     const nowInAustraliaTime = dayjs();
-    const activityDateFrom = dayjs(activity.dateFrom);
-    const activityDateTo = dayjs(activity.dateTo);
+    const activityDateFrom = dayjs(activitiesToday.dateFrom);
+    const activityDateTo = dayjs(activitiesToday.dateTo);
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
     } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
-      return activity.attendance === true ? 'Present' : 'Absent';
+      return activitiesToday.attendance === true ? 'Present' : 'Absent';
     } else {
-      return '-';
+      return 'Clock-In';
     }
   }
 
@@ -254,16 +254,7 @@ const StaffDashboard = () => {
                             <span>{activitiesToday[0]?.activities}</span>
                             <br />
                             <br />
-                            <small
-                              className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
-                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
-                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
-                                }`}
-                            >
-                              {getActivityStatus(activitiesToday[0])}
-                            </small>
-                            <br />
-                            <br />
+                            
                             {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Request Cancellation</span>
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
@@ -271,7 +262,14 @@ const StaffDashboard = () => {
                                 <BiStopwatch /> Clock In
                               </span>
                             ) : (
-                              <span></span>
+                              <small
+                              className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
+                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
+                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
+                                }`}
+                            >
+                              {getActivityStatus(activitiesToday[0])}
+                            </small>
                             )}
                           </>
                         ) : (
