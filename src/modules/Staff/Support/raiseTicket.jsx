@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
-import Editor from '../../Admin/Message/editor';
+import Editor from './editor';
 
 
 const RaiseTicket = () => {

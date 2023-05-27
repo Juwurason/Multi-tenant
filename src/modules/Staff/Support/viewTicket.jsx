@@ -346,7 +346,7 @@ const ViewTicket = () => {
                         <div className="col">
                             <h3 className="page-title">View Ticket</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/staff">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">View Ticket</li>
                             </ul>
                         </div>
