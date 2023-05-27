@@ -59,7 +59,8 @@ const AllEmployees = () => {
       name: 'Phone Number',
       selector: row => row.phoneNumber,
       sortable: true
-    }, {
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">

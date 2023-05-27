@@ -59,7 +59,7 @@ const Clients = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <div className="d-flex gap-1">
+        <span className="d-flex gap-1">
           <Link to={`/app/profile/edit-client/${row.profileId}`}
             className="btn"
             title='edit'
@@ -74,7 +74,7 @@ const Clients = () => {
             <GoTrashcan />
           </button>
 
-        </div>
+        </span>
       ),
     },
 

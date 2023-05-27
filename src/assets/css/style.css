@@ -3485,7 +3485,7 @@ input[type=file].form-control {
 
 .sidebar .sidebar-menu ul ul a.active,
 .two-col-bar .sidebar-menu ul ul a.active {
-  color: #1C75BC;
+  color: #fff;
   text-decoration: underline;
 }
 

@@ -65,7 +65,7 @@ const AllAdmin = () => {
         }, {
             name: "Actions",
             cell: (row) => (
-                <div className="d-flex gap-1">
+                <div className="d-flex gap-1" style={{ overflow: "hidden" }}>
                     <Link
                         className='btn'
                         title='Edit'

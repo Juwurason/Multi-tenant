@@ -9,6 +9,10 @@ const Sidebar = (props) => {
     document.getElementById("more-menu-hidden").classList.toggle("hidden");
   }
 
+  const onMenuClik = () => {
+    props.onMenuClick()
+  }
+
   const [isSideMenu, setSideMenu] = useState("");
   const [isSideMenunew, setSideMenuNew] = useState("dashboard")
   const [level2Menu, setLevel2Menu] = useState("")
@@ -37,8 +41,8 @@ const Sidebar = (props) => {
     <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9" }}>
       <Scrollbars
         autoHide
-        autoHideTimeout={1000}
-        autoHideDuration={200}
+        // autoHideTimeout={1000}
+        // autoHideDuration={200}
         autoHeight
         autoHeightMin={0}
         autoHeightMax="95vh"
@@ -59,7 +63,7 @@ const Sidebar = (props) => {
               </li>
               <li className="submenu">
 
-                <Link to="/app/main/dashboard" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}>
+                <Link to="/app/main/dashboard" onClick={() => onMenuClik()}>
                   {/* <i className="la la-dashboard" /> */}
                   <MdDashboard className='fs-5' />
                   <span> Dashboard</span></Link>
@@ -75,18 +79,18 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li>
 
-              <li className={pathname.includes('allstaff') ? "active" : ""}>
+              <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
               </li>
               <li className={pathname.includes('clients') ? "active" : ""}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
               <li className="submenu">
-                <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-tools" /> <span>Account Management</span> <span className="menu-arrow" /></a>
-                {isSideMenu == "projects" ?
+                <a href="javascript:void(0)" className={isSideMenu == "management" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "management" ? "" : "management")}><i className="la la-tools" /> <span>Account Management</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "management" ?
                   <ul>
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('alluser') ? "active" : pathname.includes('alluser') ?
+                      "active" : pathname.includes('alluser') ? "active" : ""}
                       to="/app/account/alluser">Manage Users</Link> </li>
                     {/* <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/tasks/tasks">Manage Roles</Link></li>
                     <li><Link className={pathname.includes('task-board') ? "active" : ""} to="/app/projects/task-board">Activity Logs</Link></li> */}
@@ -98,21 +102,21 @@ const Sidebar = (props) => {
                 <span>Staff-Client Management</span>
               </li>
               <li className="submenu">
-                <a href="javascript:void(0)" className={isSideMenu == "projects" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "projects" ? "" : "projects")}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
-                {isSideMenu == "projects" ?
+                <a href="javascript:void(0)" className={isSideMenu == "setup" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "setup" ? "" : "setup")}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "setup" ?
                   <ul>
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('public-holiday') ? "active" : pathname.includes('public-holiday') ?
+                      "active" : pathname.includes('public-holiday') ? "active" : ""}
                       to="/app/setup/public-holiday">Public Holidays</Link>
                     </li>
 
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('schedule-support') ? "active" : pathname.includes('schedule-support') ?
+                      "active" : pathname.includes('schedule-support') ? "active" : ""}
                       to="/app/setup/schedule-support">Schedule Supports</Link>
                     </li>
 
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('support-type') ? "active" : pathname.includes('support-type') ?
+                      "active" : pathname.includes('support-type') ? "active" : ""}
                       to="/app/setup/support-type">Support Type</Link>
                     </li>
 
@@ -145,21 +149,21 @@ const Sidebar = (props) => {
                 <Link to="/app/message/inbox"><i className="la la-comment" /> <span>Messages</span></Link>
               </li>
               <li className="submenu">
-                <a href="javascript:void(0)" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
-                {isSideMenu == "sales" ?
+                <a href="javascript:void(0)" className={isSideMenu == "support" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "support" ? "" : "support")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "support" ?
                   <ul>
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('view-tickets') ? "active" : pathname.includes('view-tickets') ?
+                      "active" : pathname.includes('view-tickets') ? "active" : ""}
                       to="/app/support/view-tickets">View Tickets</Link>
                     </li>
 
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('raise-ticket') ? "active" : pathname.includes('raise-ticket') ?
+                      "active" : pathname.includes('raise-ticket') ? "active" : ""}
                       to="/app/support/raise-ticket">Raise a Ticket</Link>
                     </li>
 
-                    <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                      "active" : pathname.includes('cts-view') ? "active" : ""}
+                    <li><Link className={pathname.includes('knowledge-base') ? "active" : pathname.includes('knowledge-base') ?
+                      "active" : pathname.includes('knowledge-base') ? "active" : ""}
                       to="/app/support/knowledge-base">Knowledge Base</Link>
                     </li>
 

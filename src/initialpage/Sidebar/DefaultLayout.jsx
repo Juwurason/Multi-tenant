@@ -35,7 +35,7 @@ const DefaultLayout = (props) => {
 						<Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
 					))}
 				</div>
-				<SidebarContent />
+				<SidebarContent onMenuClick={(value) => toggleMobileMenu()} />
 			</div>
 		</>
 	);
