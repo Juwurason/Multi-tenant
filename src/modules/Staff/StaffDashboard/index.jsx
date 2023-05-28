@@ -260,7 +260,7 @@ const StaffDashboard = () => {
                             <span>{activitiesToday[0]?.activities}</span>
                             <br />
                             <br />
-                            
+
                             {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Request Cancellation</span>
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
@@ -269,13 +269,13 @@ const StaffDashboard = () => {
                               </span>
                             ) : (
                               <small
-                              className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
-                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
-                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
-                                }`}
-                            >
-                              {getActivityStatus(activitiesToday[0])}
-                            </small>
+                                className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
+                                  getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
+                                    getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
+                                  }`}
+                              >
+                                {getActivityStatus(activitiesToday[0])}
+                              </small>
                             )}
                           </>
                         ) : (
@@ -305,7 +305,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesTomorrow[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }}>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('dddd, MMMM D, YYYY') : "No shift yet"}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesTomorrow[0]?.status}</span>
                         </div>
                       </div>

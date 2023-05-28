@@ -80,19 +80,21 @@ const EditProgressNote = () => {
 
 
   // Pass `formattedDate` to your endpoint or perform any other actions here
+
   const SaveProgress = async (e) => {
     e.preventDefault()
     setLoading1(true)
     const info = {
+      progressNoteId: pro,
       report: editpro.report,
       progress: editpro.progress,
-      position: 0,
+      position: "0",
       followUp: editpro.followUp,
+      date: formattedDate,
       staff: staff,
       startKm: editpro.startKm,
       profileId: details.profileId,
       companyID: companyId,
-      date: formattedDate
     }
     try {
       const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);

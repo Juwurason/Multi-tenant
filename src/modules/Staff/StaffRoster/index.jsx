@@ -130,9 +130,14 @@ const StaffRoster = () => {
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
-    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    }
+    else if (activityDateTo.isBefore(nowInAustraliaTime)) {
       return activity.attendance === true ? 'Present' : 'Absent';
-    } else {
+    }
+    else if (activityDateTo.isSame(nowInAustraliaTime) && activity.attendance === true) {
+      return activity.attendance === true ? 'Present' : 'Absent';
+    }
+    else {
       return 'Clock-In';
     }
   }
@@ -278,7 +283,7 @@ const StaffRoster = () => {
                                     >
                                       {getActivityStatus(activity)}
                                     </small>
-                                    
+
                                     {getActivityStatus(activity) === 'Upcoming' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
