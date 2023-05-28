@@ -266,7 +266,7 @@ const StaffDashboard = () => {
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
                                 <BiStopwatch /> Clock In
-                              </span>
+                              </span> 
                             ) : (
                               <small
                               className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
