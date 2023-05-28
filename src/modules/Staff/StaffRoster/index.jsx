@@ -13,10 +13,14 @@ import { Modal } from 'react-bootstrap';
 import { useHistory } from "react-router-dom"
 import { toast } from 'react-toastify';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+
 
 const StaffRoster = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  // Set the default timezone to Australia/Sydney
+  dayjs.tz.setDefault('Australia/Sydney');
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -90,7 +94,8 @@ const StaffRoster = () => {
   });
 
   // Get the current date
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs().tz());
+
 
   const Move = () => {
     console.log(33);
@@ -124,9 +129,9 @@ const StaffRoster = () => {
   );
 
   function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs()
-    const activityDateFrom = dayjs(activity.dateFrom)
-    const activityDateTo = dayjs(activity.dateTo)
+    const nowInAustraliaTime = dayjs().tz();
+    const activityDateFrom = dayjs(activity.dateFrom).tz();
+    const activityDateTo = dayjs(activity.dateTo).tz();
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
@@ -235,7 +240,7 @@ const StaffRoster = () => {
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
                                     <span className='fw-bold text-trucate'>
-                                      {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
+                                      {dayjs(activity.dateFrom).tz().format('hh:mm A')} - {dayjs(activity.dateTo).tz().format('hh:mm A')}
                                     </span>
                                     <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
                                     <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
@@ -317,8 +322,8 @@ const StaffRoster = () => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz().format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz().format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz().format('hh:mm A')}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}
