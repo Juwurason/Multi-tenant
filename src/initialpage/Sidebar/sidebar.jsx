@@ -91,6 +91,7 @@ const Sidebar = (props) => {
                   <ul>
                     <li><Link className={pathname.includes('alluser') ? "active" : pathname.includes('alluser') ?
                       "active" : pathname.includes('alluser') ? "active" : ""}
+                      onClick={() => onMenuClik()}
                       to="/app/account/alluser">Manage Users</Link> </li>
                     {/* <li><Link onClick={() => localStorage.setItem("minheight", "true")} to="/tasks/tasks">Manage Roles</Link></li>
                     <li><Link className={pathname.includes('task-board') ? "active" : ""} to="/app/projects/task-board">Activity Logs</Link></li> */}

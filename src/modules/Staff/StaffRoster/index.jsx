@@ -88,23 +88,23 @@ const StaffRoster = () => {
 
 
 
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if ($('.select').length > 0) {
+  //     $('.select').select2({
+  //       minimumResultsForSearch: -1,
+  //       width: '100%'
+  //     });
+  //   }
+  // });
 
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
 
-  const Move = () => {
-    console.log(33);
-    // navigate.push("/staff/staff-progress")
-  };
+  // const Move = () => {
+  //   console.log(33);
+  // navigate.push("/staff/staff-progress")
+  // };
   const handleNextClick = () => {
     setCurrentDate(currentDate.add(6, 'day'));
   };
@@ -129,11 +129,11 @@ const StaffRoster = () => {
   const endDate = currentDate.add(2, 'day');
 
   const activitiesByDay = daysOfWeek.map((day) =>
-    staff.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+    staff.filter((activity) =>
+      dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+    )
   );
 
-  // const currentLate = dayjs().tz();
-  // console.log(currentLate.format('YYYY-MM-DD HH:mm:ss'));
 
   function getActivityStatus(activity) {
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
@@ -329,8 +329,8 @@ const StaffRoster = () => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz().format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz().format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz().format('hh:mm A')}</p>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}

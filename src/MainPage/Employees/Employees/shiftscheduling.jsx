@@ -133,19 +133,35 @@ const ShiftScheduling = () => {
   const endDate = currentDate.add(2, 'day');
 
   const activitiesByDay = daysOfWeek.map((day) =>
-    schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+    schedule.filter((activity) =>
+      dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+    )
   );
 
   function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs().tz();
-    const activityDateFrom = dayjs(activity.dateFrom).tz();
-    const activityDateTo = dayjs(activity.dateTo).tz();
+    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
-    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+    //   if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+    //     return 'Upcoming';
+    //   } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    //     return activity.attendance === true ? 'Present' : 'Absent';
+    //   } else {
+    //     return 'Active';
+    //   }
+    // }
+
+    if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
-    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    }
+    else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
-    } else {
+    }
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
+      return 'Present'
+    }
+    else {
       return 'Active';
     }
   }
@@ -525,9 +541,7 @@ const ShiftScheduling = () => {
                         </Modal.Body>
                         <Modal.Footer>
                           <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
-                          <button className="ml-4 btn btn-secondary" onClick={() => markAttendance()}>
-                            Mark attendance for staff
-                          </button>
+
                         </Modal.Footer>
                       </Modal>
                       <Modal
