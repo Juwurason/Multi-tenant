@@ -359,7 +359,7 @@ const ShiftRoster = () => {
             </div>
             <div className="col-auto mt-3">
               <div className="form-group">
-                <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
+                <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roster Notification</button>
 
               </div>
             </div>
@@ -368,7 +368,7 @@ const ShiftRoster = () => {
                 <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
                   onClick={() => setPeriodicModal(true)}
 
-                >Get Periodic Shift Roaster</button>
+                >Get Periodic Shift Roster</button>
 
               </div>
             </div>
@@ -649,7 +649,7 @@ const ShiftRoster = () => {
                         size="lg"
                         onHide={() => setPeriodicModal(false)}>
                         <Modal.Header closeButton>
-                          <Modal.Title>Get periodic Shift Roaster</Modal.Title>
+                          <Modal.Title>Get periodic Shift Roster</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <div className="row">
