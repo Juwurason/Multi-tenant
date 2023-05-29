@@ -7,6 +7,8 @@ import { Helmet } from "react-helmet";
 import { Link, withRouter, useHistory } from 'react-router-dom';
 import isBetween from 'dayjs/plugin/isBetween';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
 import { useCompanyContext } from '../../../context/index.jsx';
@@ -24,6 +26,11 @@ import { Modal } from 'react-bootstrap';
 dayjs.extend(isBetween);
 
 const StaffDashboard = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  // Set the default timezone to Australia/Sydney
+  dayjs.tz.setDefault('Australia/Sydney');
   const userObj = JSON.parse(localStorage.getItem('user'));
   const [roster, setRoster] = useState([]);
   const [activitiesYesterday, setActivitiesYesterday] = useState([]);
@@ -57,17 +64,17 @@ const StaffDashboard = () => {
       const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const activities = data.shiftRoster;
       setRoster(activities);
-      const now = dayjs();
+      const now = dayjs().tz();
       const yesterday = now.subtract(1, 'day').startOf('day');
       const today = now.startOf('day');
       const tomorrow = now.add(1, 'day').startOf('day');
 
-      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(now, 'hour'));
-      const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
+      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).tz().isAfter(now, 'hour'));
+      const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).tz().diff(dayjs(b.dateFrom).tz())).slice(0, 5);
 
-      setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
-      setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
-      setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
+      setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).tz().isBetween(yesterday, today, null, '[)')));
+      setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).tz().isBetween(today, tomorrow, null, '[)')));
+      setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).tz().isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
       setUpcomingActivities(sortedUpcomingActivities);
 
       setLoading(false);
@@ -164,9 +171,9 @@ const StaffDashboard = () => {
 
 
 
-    const nowInAustraliaTime = dayjs();
-    const activityDateFrom = dayjs(activitiesToday.dateFrom);
-    const activityDateTo = dayjs(activitiesToday.dateTo);
+    const nowInAustraliaTime = dayjs().tz();
+    const activityDateFrom = dayjs(activitiesToday.dateFrom).tz();
+    const activityDateTo = dayjs(activitiesToday.dateTo).tz();
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';
@@ -215,7 +222,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-secondary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesYesterday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesYesterday[0]?.dateFrom).tz().format('dddd, MMMM D, YYYY')}`}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-dark rounded px-2'>{activitiesYesterday[0]?.status === "string" ? "Active" : activitiesYesterday[0]?.status}</span>
                         </div>
                       </div>
@@ -239,7 +246,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-primary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}> {`${dayjs(activitiesToday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }}> {`${dayjs(activitiesToday[0]?.dateFrom).tz().format('dddd, MMMM D, YYYY')}`}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesToday[0]?.status}</span>
                         </div>
                       </div>
@@ -260,7 +267,7 @@ const StaffDashboard = () => {
                             <span>{activitiesToday[0]?.activities}</span>
                             <br />
                             <br />
-                            
+
                             {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Request Cancellation</span>
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
@@ -269,13 +276,13 @@ const StaffDashboard = () => {
                               </span> 
                             ) : (
                               <small
-                              className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
-                                getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
-                                  getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
-                                }`}
-                            >
-                              {getActivityStatus(activitiesToday[0])}
-                            </small>
+                                className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
+                                  getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
+                                    getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
+                                  }`}
+                              >
+                                {getActivityStatus(activitiesToday[0])}
+                              </small>
                             )}
                           </>
                         ) : (
@@ -305,7 +312,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesTomorrow[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }}>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).tz().format('dddd, MMMM D, YYYY') : "No shift yet"}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesTomorrow[0]?.status}</span>
                         </div>
                       </div>
@@ -334,7 +341,7 @@ const StaffDashboard = () => {
                       <span className="mt-2" key={activity.id}>
                         <div className="d-flex justify-content-between text-dark">
                           <div className='d-flex flex-column justify-content-start'>
-                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
+                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).tz().format('dddd MMMM D, YYYY')}</span>
                             <span className='text-dark fs-5 fw-bold'>{activity.staffName}</span>
                           </div>
                           <div>

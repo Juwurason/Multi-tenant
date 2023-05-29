@@ -13,8 +13,16 @@ import Swal from 'sweetalert2';
 import { GoTrashcan } from 'react-icons/go';
 import { MdDoneOutline, MdOutlineEditCalendar } from 'react-icons/md';
 import moment from 'moment';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
 
 const ShiftScheduling = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  // Set the default timezone to Australia/Sydney
+  dayjs.tz.setDefault('Australia/Sydney');
   //Declaring Variables
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
@@ -103,7 +111,7 @@ const ShiftScheduling = () => {
 
   //Calendar Logic Starts here
   // Get the current date
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
   const handleNextClick = () => {
     setCurrentDate(currentDate.add(6, 'day'));
@@ -129,9 +137,9 @@ const ShiftScheduling = () => {
   );
 
   function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs()
-    const activityDateFrom = dayjs(activity.dateFrom)
-    const activityDateTo = dayjs(activity.dateTo)
+    const nowInAustraliaTime = dayjs().tz();
+    const activityDateFrom = dayjs(activity.dateFrom).tz();
+    const activityDateTo = dayjs(activity.dateTo).tz();
 
     if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
       return 'Upcoming';

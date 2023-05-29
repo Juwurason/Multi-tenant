@@ -173,11 +173,14 @@ const Loginpage = () => {
               <label className="pull-left checkbox-inline"><input type="checkbox" defaultChecked /> Remember me</label>
               <Link to={'/forgotpassword'} className="pull-right text-info">Forgot Password?</Link>
             </div>
-            <div className="form-group mt-4">
+            {/* <div className="form-group mt-4">
 
               <p><span>Don't have an account?  </span> &nbsp; <Link to={'/register'} className="text-info"> Create an Account</Link></p>
 
-            </div>
+            </div> */}
+            <br />
+            <br />
+
           </form>
         </div>
       </div>

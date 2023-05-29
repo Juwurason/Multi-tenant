@@ -61,9 +61,9 @@ const Sidebar = (props) => {
               <li className="menu-title">
                 <span>Main</span>
               </li>
-              <li className="submenu">
+              <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
-                <Link to="/app/main/dashboard" onClick={() => onMenuClik()}>
+                <Link to="/app/main/dashboard"  >
                   {/* <i className="la la-dashboard" /> */}
                   <MdDashboard className='fs-5' />
                   <span> Dashboard</span></Link>
@@ -75,14 +75,14 @@ const Sidebar = (props) => {
               <li className="menu-title">
                 <span>User Management</span>
               </li>
-              <li className={pathname.includes('admin') ? "active" : ""}>
+              <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li>
 
               <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
               </li>
-              <li className={pathname.includes('clients') ? "active" : ""}>
+              <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
               <li className="submenu">

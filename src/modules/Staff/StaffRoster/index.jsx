@@ -13,10 +13,18 @@ import { Modal } from 'react-bootstrap';
 import { useHistory } from "react-router-dom"
 import { toast } from 'react-toastify';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+
 
 const StaffRoster = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  // Set the default timezone to Australia/Sydney
+  dayjs.tz.setDefault('Australia/Sydney');
+  // const currentLate = dayjs().tz();
+  // console.log(currentLate.format('YYYY-MM-DD HH:mm:ss'));
+
+
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -90,7 +98,8 @@ const StaffRoster = () => {
   });
 
   // Get the current date
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs().tz());
+
 
   const Move = () => {
     console.log(33);
@@ -123,16 +132,24 @@ const StaffRoster = () => {
     staff.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
   );
 
-  function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs()
-    const activityDateFrom = dayjs(activity.dateFrom)
-    const activityDateTo = dayjs(activity.dateTo)
+  // const currentLate = dayjs().tz();
+  // console.log(currentLate.format('YYYY-MM-DD HH:mm:ss'));
 
-    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+  function getActivityStatus(activity) {
+    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
+
+    if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
-    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    }
+    else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
-    } else {
+    }
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
+      return 'Present'
+    }
+    else {
       return 'Clock-In';
     }
   }
@@ -278,7 +295,7 @@ const StaffRoster = () => {
                                     >
                                       {getActivityStatus(activity)}
                                     </small>
-                                    
+
                                     {getActivityStatus(activity) === 'Upcoming' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
@@ -312,8 +329,8 @@ const StaffRoster = () => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
-                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
-                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
+                              <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz().format('YYYY-MM-DD')}</p>
+                              <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz().format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz().format('hh:mm A')}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}
