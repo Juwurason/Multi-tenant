@@ -21,6 +21,10 @@ const StaffRoster = () => {
 
   // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
+  // const currentLate = dayjs().tz();
+  // console.log(currentLate.format('YYYY-MM-DD HH:mm:ss'));
+
+
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -128,19 +132,22 @@ const StaffRoster = () => {
     staff.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
   );
 
-  function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs().tz();
-    const activityDateFrom = dayjs(activity.dateFrom).tz();
-    const activityDateTo = dayjs(activity.dateTo).tz();
+  // const currentLate = dayjs().tz();
+  // console.log(currentLate.format('YYYY-MM-DD HH:mm:ss'));
 
-    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+  function getActivityStatus(activity) {
+    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
+
+    if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo.isSame(nowInAustraliaTime) && activity.attendance === true) {
-      return activity.attendance === true ? 'Present' : 'Absent';
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
+      return 'Present'
     }
     else {
       return 'Clock-In';
@@ -240,7 +247,7 @@ const StaffRoster = () => {
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>
                                     <span className='fw-bold text-trucate'>
-                                      {dayjs(activity.dateFrom).tz().format('hh:mm A')} - {dayjs(activity.dateTo).tz().format('hh:mm A')}
+                                      {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                     </span>
                                     <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
                                     <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
