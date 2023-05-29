@@ -9,8 +9,6 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
@@ -20,6 +18,8 @@ import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
+import AdminHeader from '../Components/AdminHeader';
+import AdminSidebar from '../Components/AdminSidebar';
 
 function formatDuration(duration) {
   const durationInMinutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
@@ -285,8 +285,8 @@ const AttendanceReport = () => {
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-        <Header onMenuClick={(value) => toggleMobileMenu()} />
-        <Sidebar />
+        <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
+        <AdminSidebar />
         <div className="page-wrapper">
           <Helmet>
             <title>Attendance Report</title>

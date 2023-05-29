@@ -9,8 +9,6 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
@@ -18,6 +16,8 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import AdminHeader from '../Components/AdminHeader';
+import AdminSidebar from '../Components/AdminSidebar';
 const AllStaff = () => {
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
@@ -313,8 +313,8 @@ const AllStaff = () => {
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-        <Header onMenuClick={(value) => toggleMobileMenu()} />
-        <Sidebar />
+        <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
+        <AdminSidebar />
         <div className="page-wrapper">
           <Helmet>
             <title>Staff</title>
@@ -423,7 +423,7 @@ const AllStaff = () => {
                   </CopyToClipboard>
                 </div>
                 <div className='col-md-4'>
-                  <Link to={'/administrator/createStaff'} className="btn btn-info add-btn rounded-2">
+                  <Link to={'/administrator/createStaff'} className="btn btn-info text-white add-btn rounded-2">
                     Create New staff</Link>
                 </div>
               </div>

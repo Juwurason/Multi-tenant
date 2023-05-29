@@ -356,7 +356,7 @@ const AllClients = () => {
               </CopyToClipboard>
             </div>
             <div className='col-md-4'>
-              <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
+              <Link to="/administrator/createClient" className="btn btn-info text-white add-btn rounded-2">
                 Create New clients</Link>
             </div>
           </div>

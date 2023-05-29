@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import Header from '../../../initialpage/Sidebar/header'
-import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
@@ -20,6 +18,8 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import ExcelJS from 'exceljs';
 import Swal from 'sweetalert2';
+import AdminHeader from '../Components/AdminHeader';
+import AdminSidebar from '../Components/AdminSidebar';
 
 
 
@@ -263,8 +263,8 @@ const AllUsers = () => {
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <Header onMenuClick={(value) => toggleMobileMenu()} />
-                <Sidebar />
+                <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
+                <AdminSidebar />
                 <div className="page-wrapper">
                     <Helmet>
                         <title>All User</title>
@@ -340,7 +340,7 @@ const AllUsers = () => {
                                     </CopyToClipboard>
                                 </div>
                                 <div className='col-md-4'>
-                                    <button className='btn add-btn rounded-2'>Add New User</button>
+                                    <button className='btn btn-info text-white add-btn rounded-2'>Add New User</button>
                                 </div>
                             </div>
 
