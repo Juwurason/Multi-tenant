@@ -3328,7 +3328,7 @@ input[type=file].form-control {
 .two-col-bar .sidebar-menu ul li a {
   justify-content: flex-start;
   position: relative;
-  font-size: 13px;
+  font-size: 12px;
   color: #b7c0cd;
   height: auto;
   -webkit-transition: all 0.2s ease;
