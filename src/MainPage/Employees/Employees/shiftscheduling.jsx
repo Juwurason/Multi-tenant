@@ -281,12 +281,48 @@ const ShiftScheduling = () => {
       }
     }
   }
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
+  const [selectedShift, setSelectedShift] = useState(null);
 
-    // Update the order of the activities in the activitiesByDay state
-    // based on the result.source.index and result.destination.index
+
+  const handleDragEnd = (result) => {
+    const { source, destination } = result;
+    console.log(result);
+
+    // Check if the destination is valid
+    // if (destination && source.droppableId !== destination.droppableId) {
+    //   // Get the dragged activity
+    //   const draggedActivity = activities[source.index];
+
+    //   // Extract the relevant shift details
+    //   const { shiftRosterId, dateFrom, dateTo, staff, profile, activities } = draggedActivity;
+
+    //   // Create a new shift object with the updated date and other relevant details
+    //   const updatedShift = {
+    //     shiftRosterId,
+    //     dateFrom: destination.droppableId, // Use the destination droppableId as the new date
+    //     dateTo,
+    //     staff,
+    //     profile,
+    //     activities,
+    //   };
+
+    //   // Log the updated shift details
+    // console.log('Updated Shift:', updatedShift);
+
+    // // Make your API call here to send the updated shift details to the endpoint
+    // // Use the updatedShift object to send the necessary data to the server
+
+    // // Update the state with the selected shift
+    // setSelectedShift(updatedShift);
+    // }
   };
+
+  useEffect(() => {
+    if (selectedShift) {
+      console.log('Selected Shift:', selectedShift);
+      // Perform any additional actions with the selected shift data
+    }
+  }, [selectedShift]);
 
   return (
     <>
@@ -406,31 +442,38 @@ const ShiftScheduling = () => {
                 </span>
               </div>
               <DragDropContext onDragEnd={handleDragEnd}>
+
+
                 <div className='row g-0'>
                   {daysOfWeek.map((day, index) => (
-                    <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
-                      <div className='border p-2'>
-                        <span
-                          className={`calendar-date  text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'current-date text-white' : ''}`}
-                          style={{ fontSize: '12px' }}>
-                          {day.format('dddd, MMMM D')}
-                        </span>
-                      </div>
-                      <Droppable droppableId="shifts">
-                        {(provided) => (
+
+                    <Droppable droppableId={day.format('YYYY-MM-DD')}>
+                      {(provided) => (
+                        <div className="col-md-6 col-lg-2 py-2 border border-danger" key={day.format('YYYY-MM-DD')}>
+                          <div className='border p-2'>
+                            <span
+                              className={`calendar-date  text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'current-date text-white' : ''}`}
+                              style={{ fontSize: '12px' }}>
+                              {day.format('dddd, MMMM D')}
+                            </span>
+                          </div>
+
                           <div
                             className="col-sm-12 text-center border p-2"
                             style={{ height: "50vh", overflow: "auto", overflowX: "hidden" }}
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                           >
+
                             {loading && (
                               <div className="spinner-grow text-secondary" role="status">
                                 <span className="sr-only">Loading...</span>
                               </div>
                             )}
+
+
                             {activitiesByDay[index].map((activity, activityIndex) => (
-                              <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activityIndex}>
+                              <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activity.shiftRosterId}>
                                 {(provided) => (
                                   <div
                                     ref={provided.innerRef}
@@ -440,7 +483,7 @@ const ShiftScheduling = () => {
                                     {/* Render your activity item */}
                                     <div key={activityIndex}
                                       className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                                      style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                                      style={{ fontSize: '10px', backgroundColor: "#4256D0", overflow: "hidden" }}
                                     >
                                       <div
                                         onClick={() => handleActivityClick(activity)}
@@ -536,11 +579,12 @@ const ShiftScheduling = () => {
                             )}
                             {provided.placeholder} {/* Include the placeholder element */}
                           </div>
-                        )}
-                      </Droppable>
-                    </div>
+                        </div>
+                      )}
+                    </Droppable>
                   ))}
                 </div>
+
               </DragDropContext>
 
             </div>
