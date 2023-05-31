@@ -234,3 +234,10 @@ body::-webkit-scrollbar-thumb {
     min-height: calc(100vh - 200px);
     /* Adjust the value to leave space for header/footer if necessary */
 }
+
+.current-date {
+    background-color: #1C75BC;
+    padding: 5px;
+    border-radius: 5px;
+    color: #fff !important;
+}
