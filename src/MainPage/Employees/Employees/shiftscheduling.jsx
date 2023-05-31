@@ -385,40 +385,37 @@ const ShiftScheduling = () => {
           </div>
 
 
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <div className='row filter-row shadow-sm'>
+          <div className='row filter-row shadow-sm'>
 
-              <div className="col-md-6 col-lg-12 ">
-                <div className=' py-3 d-flex justify-content-between align-items-center'>
-                  <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                    <FaAngleLeft className='pointer fs-5' onClick={handlePrevClick} />
-                    <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                    <FaAngleRight className='pointer fs-5' onClick={handleNextClick} />
-                  </span>
-                  <span>
-                    <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
-                      <option defaultValue hidden>Week</option>
+            <div className="col-md-6 col-lg-12 ">
+              <div className=' py-3 d-flex justify-content-between align-items-center'>
+                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
+                  <FaAngleLeft className='pointer fs-5' onClick={handlePrevClick} />
+                  <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <FaAngleRight className='pointer fs-5' onClick={handleNextClick} />
+                </span>
+                <span>
+                  <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
+                    <option defaultValue hidden>Week</option>
 
-                      <option value=''>Month</option>
-                      <option value=''>Week</option>
-                      <option value=''>Day</option>
+                    <option value=''>Month</option>
+                    <option value=''>Week</option>
+                    <option value=''>Day</option>
 
-                    </select>
-                  </span>
-                </div>
+                  </select>
+                </span>
+              </div>
+              <DragDropContext onDragEnd={handleDragEnd}>
                 <div className='row g-0'>
-
                   {daysOfWeek.map((day, index) => (
-                    <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')} >
-                      <div className='border p-2' >
+                    <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
+                      <div className='border p-2'>
                         <span
                           className={`calendar-date  text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'current-date text-white' : ''}`}
                           style={{ fontSize: '12px' }}>
                           {day.format('dddd, MMMM D')}
-
                         </span>
                       </div>
-
                       <Droppable droppableId="shifts">
                         {(provided) => (
                           <div
@@ -427,16 +424,11 @@ const ShiftScheduling = () => {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                           >
-
-
-
-                            {loading &&
-
-
+                            {loading && (
                               <div className="spinner-grow text-secondary" role="status">
                                 <span className="sr-only">Loading...</span>
                               </div>
-                            }
+                            )}
                             {activitiesByDay[index].map((activity, activityIndex) => (
                               <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activityIndex}>
                                 {(provided) => (
@@ -537,62 +529,22 @@ const ShiftScheduling = () => {
                                 )}
                               </Draggable>
                             ))}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            {!loading && activitiesByDay[index] <= 0 &&
-
+                            {!loading && activitiesByDay[index].length <= 0 && (
                               <div>
                                 <span>No Activity</span>
                               </div>
-                            }
+                            )}
+                            {provided.placeholder} {/* Include the placeholder element */}
                           </div>
                         )}
                       </Droppable>
                     </div>
                   ))}
-
                 </div>
+              </DragDropContext>
 
-              </div>
             </div>
-          </DragDropContext>
+          </div>
 
 
 
