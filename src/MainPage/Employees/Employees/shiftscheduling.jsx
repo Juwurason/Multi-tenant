@@ -282,39 +282,43 @@ const ShiftScheduling = () => {
     }
   }
   const [selectedShift, setSelectedShift] = useState(null);
+  const [dropModal, setDropModal] = useState(false);
 
 
   const handleDragEnd = (result) => {
     const { source, destination } = result;
-    console.log(result);
 
-    // Check if the destination is valid
-    // if (destination && source.droppableId !== destination.droppableId) {
-    //   // Get the dragged activity
-    //   const draggedActivity = activities[source.index];
+    // Check if the item was dropped outside a droppable container
+    if (!destination) {
+      return;
+    }
 
-    //   // Extract the relevant shift details
-    //   const { shiftRosterId, dateFrom, dateTo, staff, profile, activities } = draggedActivity;
+    // Check if the item was dropped into a different droppable container
+    if (source.droppableId !== destination.droppableId) {
+      // Perform the necessary actions for the cross-container drop
+      // For example, remove the item from the source and add it to the destination
+      // Update your data structure or state accordingly
 
-    //   // Create a new shift object with the updated date and other relevant details
-    //   const updatedShift = {
-    //     shiftRosterId,
-    //     dateFrom: destination.droppableId, // Use the destination droppableId as the new date
-    //     dateTo,
-    //     staff,
-    //     profile,
-    //     activities,
-    //   };
+      // return;
+    }
 
-    //   // Log the updated shift details
-    // console.log('Updated Shift:', updatedShift);
+    // Perform the necessary actions for the drop within the same droppable container
+    // Update your data structure or state to reflect the new position of the dropped item
+    const activities = [...activitiesByDay]; // Assuming activitiesByDay is your current data structure
 
-    // // Make your API call here to send the updated shift details to the endpoint
-    // // Use the updatedShift object to send the necessary data to the server
+    // Remove the dragged activity from the source index
+    const [draggedActivity] = activities[source.droppableId].splice(source.index, 1);
 
-    // // Update the state with the selected shift
-    // setSelectedShift(updatedShift);
-    // }
+    // Insert the dragged activity into the destination index
+    activities[destination.droppableId].splice(destination.index, 0, draggedActivity);
+
+    // Update your data structure or state with the updated activities
+    // setActivitiesByDay(activities);
+    console.log(activities);
+
+    console.log("Same-container drop");
+    console.log("Source:", source);
+    console.log("Destination:", destination);
   };
 
   useEffect(() => {
@@ -426,9 +430,9 @@ const ShiftScheduling = () => {
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer fs-5' onClick={handlePrevClick} />
-                  <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer fs-5' onClick={handleNextClick} />
+                  <FaAngleLeft className='pointer fs-5 text-primary' onClick={handlePrevClick} />
+                  <span className='fw-bold text-muted'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <FaAngleRight className='pointer fs-5 text-primary' onClick={handleNextClick} />
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
@@ -447,12 +451,24 @@ const ShiftScheduling = () => {
                 <div className='row g-0'>
                   {daysOfWeek.map((day, index) => (
 
+<<<<<<< HEAD
                     <Droppable droppableId={day.format('YYYY-MM-DD')} key={day.format('YYYY-MM-DD')} >
+=======
+
+
+                    <Droppable droppableId={day.format('YYYY-MM-DD')}
+                    >
+>>>>>>> 7ae1e72550dede9926c23d376600c1ce8d23a206
                       {(provided) => (
-                        <div className="col-md-6 col-lg-2 py-2 border border-danger" key={day.format('YYYY-MM-DD')}>
+                        <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          index={index}
+
+                        >
                           <div className='border p-2'>
                             <span
-                              className={`calendar-date  text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'current-date text-white' : ''}`}
+                              className={`calendar-date  text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'fw-bold text-primary' : ''}`}
                               style={{ fontSize: '12px' }}>
                               {day.format('dddd, MMMM D')}
                             </span>
@@ -460,9 +476,8 @@ const ShiftScheduling = () => {
 
                           <div
                             className="col-sm-12 text-center border p-2"
-                            style={{ height: "50vh", overflow: "auto", overflowX: "hidden" }}
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
+                            style={{ height: "55vh", overflow: "auto", overflowX: "hidden" }}
+
                           >
 
                             {loading && (
