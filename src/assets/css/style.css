@@ -4678,7 +4678,7 @@ input[type=file].form-control {
 [data-layout=horizontal],
 
 .sidebar>div>div {
-  overflow: scroll !important;
+  overflow: scroll;
   scroll-behavior: smooth;
 }
 
