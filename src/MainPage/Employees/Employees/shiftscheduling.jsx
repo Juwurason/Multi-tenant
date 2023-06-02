@@ -447,7 +447,7 @@ const ShiftScheduling = () => {
                 <div className='row g-0'>
                   {daysOfWeek.map((day, index) => (
 
-                    <Droppable droppableId={day.format('YYYY-MM-DD')}>
+                    <Droppable droppableId={day.format('YYYY-MM-DD')} key={day.format('YYYY-MM-DD')} >
                       {(provided) => (
                         <div className="col-md-6 col-lg-2 py-2 border border-danger" key={day.format('YYYY-MM-DD')}>
                           <div className='border p-2'>
