@@ -160,11 +160,9 @@ const ShiftScheduling = () => {
     }
     const draggedTask = schedule[source.index];
     // Store the dragged task temporarily in state
-    setSchedule(draggedTask);
 
     // Call the update endpoint to update the actual data
     // You can use the updatedItems data to send the necessary updates to the server
-    console.log(draggedTask);
 
   };
 
@@ -472,7 +470,7 @@ const ShiftScheduling = () => {
 
                         >
                           <div className='border  d-flex justify-content-center py-2'>
-                            <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded bg-primary px-3 text-white ' : ''}`}>
+                            <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
                               <span
                                 className={`fw-bold fs-4`
 
