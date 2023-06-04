@@ -709,8 +709,6 @@ const MessageInbox = () => {
                                                 className="custom-multiselect"
                                                 disabled={toAllAdmins || toAllStaffs || toAllClients} // Disable when any of the "To All" checkboxes is checked
 
-
-
                                             />
                                             <span className="w-25 d-flex border justify-content-end">
                                                 <button className="btn" onClick={toggleCc}>
