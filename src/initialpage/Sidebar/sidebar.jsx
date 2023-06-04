@@ -64,8 +64,7 @@ const Sidebar = (props) => {
               <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
                 <Link to="/app/main/dashboard"  >
-                  {/* <i className="la la-dashboard" /> */}
-                  <MdDashboard className='fs-5' />
+                  <i className="la la-dashboard" />
                   <span> Dashboard</span></Link>
 
 
