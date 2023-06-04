@@ -445,9 +445,9 @@ const ShiftScheduling = () => {
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                     <option defaultValue hidden>Week</option>
 
-                    <option value=''>Month</option>
+                    {/* <option value=''>Month</option> */}
                     <option value=''>Week</option>
-                    <option value=''>Day</option>
+                    {/* <option value=''>Day</option> */}
 
                   </select>
                 </span>
@@ -469,7 +469,7 @@ const ShiftScheduling = () => {
                           index={index}
 
                         >
-                          <div className='border  d-flex justify-content-center py-2'>
+                          <div className='border  d-flex justify-content-center py-2 bg-light'>
                             <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
                               <span
                                 className={`fw-bold fs-4`

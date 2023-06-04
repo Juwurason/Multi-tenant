@@ -163,7 +163,7 @@ const EditShiftRoaster = () => {
 
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Edit Shift Details</h4>
-                                {/* <Link to="/app/employee/shift-scheduling" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link> */}
+                                <Link to="/app/employee/shift-scheduling" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
