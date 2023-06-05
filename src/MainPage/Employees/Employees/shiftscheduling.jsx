@@ -16,6 +16,7 @@ import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { set } from 'react-hook-form';
 
 
 
@@ -35,6 +36,7 @@ const ShiftScheduling = () => {
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [displaySchedule, setDisplaySchedule] = useState(schedule);
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
   const [lgShow, setLgShow] = useState(false);
@@ -133,6 +135,39 @@ const ShiftScheduling = () => {
   ];
   const startDate = currentDate.subtract(3, 'day');
   const endDate = currentDate.add(2, 'day');
+  const [selectedShift, setSelectedShift] = useState(null);
+  const [dropModal, setDropModal] = useState(false);
+  const [draggedTask, setDraggedTask] = useState(null);
+  const [targetDate, setTargetDate] = useState('');
+
+  const handleDragStart = (initial) => {
+    const { source } = initial;
+    const draggedTask = schedule[source.index];
+    // Store the dragged task temporarily in state
+    setDraggedTask(draggedTask);
+  };
+
+  const handleDragEnd = (result) => {
+    // Reset the temporary task stored in state
+    // setDraggedTask(null);
+
+    const { source, destination } = result;
+    setTargetDate(destination.droppableId)
+    console.log(targetDate);
+    // Check if the item was dropped outside a valid droppable area
+    if (!destination) {
+      return;
+    }
+    const draggedTask = schedule[source.index];
+    // Store the dragged task temporarily in state
+
+    // Call the update endpoint to update the actual data
+    // You can use the updatedItems data to send the necessary updates to the server
+
+  };
+
+
+
 
   const activitiesByDay = daysOfWeek.map((day) =>
     schedule.filter((activity) =>
@@ -281,52 +316,8 @@ const ShiftScheduling = () => {
       }
     }
   }
-  const [selectedShift, setSelectedShift] = useState(null);
-  const [dropModal, setDropModal] = useState(false);
 
 
-  const handleDragEnd = (result) => {
-    const { source, destination } = result;
-
-    // Check if the item was dropped outside a droppable container
-    if (!destination) {
-      return;
-    }
-
-    // Check if the item was dropped into a different droppable container
-    if (source.droppableId !== destination.droppableId) {
-      // Perform the necessary actions for the cross-container drop
-      // For example, remove the item from the source and add it to the destination
-      // Update your data structure or state accordingly
-
-      // return;
-    }
-
-    // Perform the necessary actions for the drop within the same droppable container
-    // Update your data structure or state to reflect the new position of the dropped item
-    const activities = [...activitiesByDay]; // Assuming activitiesByDay is your current data structure
-
-    // Remove the dragged activity from the source index
-    const [draggedActivity] = activities[source.droppableId].splice(source.index, 1);
-
-    // Insert the dragged activity into the destination index
-    activities[destination.droppableId].splice(destination.index, 0, draggedActivity);
-
-    // Update your data structure or state with the updated activities
-    // setActivitiesByDay(activities);
-    console.log(activities);
-
-    console.log("Same-container drop");
-    console.log("Source:", source);
-    console.log("Destination:", destination);
-  };
-
-  useEffect(() => {
-    if (selectedShift) {
-      console.log('Selected Shift:', selectedShift);
-      // Perform any additional actions with the selected shift data
-    }
-  }, [selectedShift]);
 
   return (
     <>
@@ -356,9 +347,9 @@ const ShiftScheduling = () => {
           </div>
 
           <div className="row align-items-center py-2">
-            <span className='fw-bold'>Filter Shift Roaster By User</span>
+            {/* <span className='fw-bold' draggable>Filter Shift Roaster By User</span>
             <br />
-            <br />
+            <br /> */}
             <div className="col-md-4">
               <div className="form-group">
                 <label className="col-form-label">Staff Name</label>
@@ -385,6 +376,22 @@ const ShiftScheduling = () => {
                   </select></div>
               </div>
             </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">Start Date</label>
+                <div>
+                  <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">End Date</label>
+                <div>
+                  <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                </div>
+              </div>
+            </div>
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button onClick={FilterSchedule} className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -399,12 +406,12 @@ const ShiftScheduling = () => {
 
               </div>
             </div>
-            <div className="col-auto mt-3">
+            {/* <div className="col-auto mt-3">
               <div className="form-group">
                 <button onClick={FetchSchedule} className="btn btn-secondary add-btn rounded-2 m-r-5">All Shifts</button>
 
               </div>
-            </div>
+            </div> */}
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
@@ -414,7 +421,7 @@ const ShiftScheduling = () => {
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
-                  onClick={() => setPeriodicModal(true)}
+                  onClick={() => GetPeriodic()}
 
                 >Get Periodic Shift Roaster</button>
 
@@ -425,27 +432,27 @@ const ShiftScheduling = () => {
           </div>
 
 
-          <div className='row filter-row shadow-sm'>
+          <div className='row  shadow-sm'>
 
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer fs-5 text-primary' onClick={handlePrevClick} />
-                  <span className='fw-bold text-muted'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer fs-5 text-primary' onClick={handleNextClick} />
+                  <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
+                  <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                     <option defaultValue hidden>Week</option>
 
-                    <option value=''>Month</option>
+                    {/* <option value=''>Month</option> */}
                     <option value=''>Week</option>
-                    <option value=''>Day</option>
+                    {/* <option value=''>Day</option> */}
 
                   </select>
                 </span>
               </div>
-              <DragDropContext onDragEnd={handleDragEnd}>
+              <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 
 
                 <div className='row g-0'>
@@ -462,17 +469,26 @@ const ShiftScheduling = () => {
                           index={index}
 
                         >
-                          <div className='border p-2'>
-                            <span
-                              className={`calendar-date  text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'fw-bold text-primary' : ''}`}
-                              style={{ fontSize: '12px' }}>
-                              {day.format('dddd, MMMM D')}
-                            </span>
+                          <div className='border  d-flex justify-content-center py-2 bg-light'>
+                            <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
+                              <span
+                                className={`fw-bold fs-4`
+
+                                }
+                              >
+                                {day.format('D')}
+                              </span>
+
+                              <span style={{ fontSize: '10px' }} className='mb-2'>
+                                {day.locale('en').format('ddd')}
+                              </span>
+
+                            </div>
                           </div>
 
                           <div
                             className="col-sm-12 text-center border p-2"
-                            style={{ height: "55vh", overflow: "auto", overflowX: "hidden" }}
+                            style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
 
                           >
 
@@ -484,17 +500,27 @@ const ShiftScheduling = () => {
 
 
                             {activitiesByDay[index].map((activity, activityIndex) => (
-                              <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activity.shiftRosterId}>
+                              <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activityIndex}>
                                 {(provided) => (
                                   <div
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
-                                    {/* Render your activity item */}
+
+
+                                    {/* Render the temporary task if it matches the current draggable item */}
+
                                     <div key={activityIndex}
                                       className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                                      style={{ fontSize: '10px', backgroundColor: "#4256D0", overflow: "hidden" }}
+                                      style={{
+                                        fontSize: '10px',
+                                        overflow: 'hidden',
+                                        backgroundColor:
+                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                            ? '#1C75BC'
+                                            : '#5fa8e8',
+                                      }}
                                     >
                                       <div
                                         onClick={() => handleActivityClick(activity)}
@@ -545,7 +571,7 @@ const ShiftScheduling = () => {
                                           )
                                           :
                                           (
-                                            <div className='d-flex gap-2'>
+                                            <div className='d-flex gap-2' >
                                               <small
                                                 className={`text-truncate d-flex 
                              align-items-center
@@ -579,8 +605,11 @@ const ShiftScheduling = () => {
 
 
                                     </div>
+
                                   </div>
                                 )}
+
+
                               </Draggable>
                             ))}
                             {!loading && activitiesByDay[index].length <= 0 && (
@@ -734,7 +763,7 @@ const ShiftScheduling = () => {
             size="lg"
             onHide={() => setPeriodicModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Get periodic Shift Roaster</Modal.Title>
+              <Modal.Title>Add New Shift Roaster</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="row">
@@ -764,32 +793,17 @@ const ShiftScheduling = () => {
                       </select></div>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">Start Date</label>
-                    <div>
-                      <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">End Date</label>
-                    <div>
-                      <input type="date" ref={dateTo} className=' form-control' name="" id="" />
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <button className="ml-4 text-white add-btn rounded btn btn-info"
+              {/* <button className="ml-4 text-white add-btn rounded btn btn-info"
                 onClick={GetPeriodic}
               >
                 {loading3 ? <div className="spinner-grow text-light" role="status">
                   <span className="sr-only">Loading...</span>
                 </div> : "Load"}
-              </button>
+              </button> */}
             </Modal.Footer>
           </Modal>
 
