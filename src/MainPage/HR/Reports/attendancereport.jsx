@@ -22,12 +22,21 @@ import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
 
 function formatDuration(duration) {
-  const durationInMinutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
-  const durationHours = Math.floor(durationInMinutes / 60);
-  const durationMinutes = durationInMinutes % 60;
+  // const durationInMinutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
+  // const durationHours = Math.floor(durationInMinutes / 60);
+  // const durationMinutes = durationInMinutes % 60;
+  const durationInTicks = BigInt(duration);
+  const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
 
-  return `${durationHours} Hrs ${durationMinutes} min`;
+  const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+  const hours = Math.floor(durationInMinutes / 60);
+  const minutes = durationInMinutes % 60;
+
+  return `${hours} Hrs ${minutes} min`;
 }
+
+
+
 
 const AttendanceReport = () => {
   const { get } = useHttp();

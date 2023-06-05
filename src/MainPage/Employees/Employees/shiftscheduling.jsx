@@ -11,13 +11,15 @@ import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { GoTrashcan } from 'react-icons/go';
-import { MdDoneOutline, MdOutlineAirlineSeatLegroomReduced, MdOutlineEditCalendar } from 'react-icons/md';
+import { MdDoneOutline, MdOutlineEditCalendar } from 'react-icons/md';
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import data from "./data.json";
-// console.log(data);
+import { set } from 'react-hook-form';
+
+
+
 const ShiftScheduling = () => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -33,7 +35,8 @@ const ShiftScheduling = () => {
   const [loading3, setLoading3] = useState(false)
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
-  const [schedule, setSchedule] = useState(data);
+  const [schedule, setSchedule] = useState([]);
+  const [displaySchedule, setDisplaySchedule] = useState(schedule);
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
   const [lgShow, setLgShow] = useState(false);
@@ -54,7 +57,7 @@ const ShiftScheduling = () => {
     try {
       const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
-      // setSchedule(schedule);
+      setSchedule(schedule);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -100,7 +103,7 @@ const ShiftScheduling = () => {
       try {
         const shiftResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${cli}&staff=${sta}`, { cacheTimeout: 300000 });
         const shift = shiftResponse.data?.shiftRoster;
-        // setSchedule(shift);
+        setSchedule(shift);
         setLoading1(false)
       } catch (error) {
         console.log(error);
@@ -132,6 +135,39 @@ const ShiftScheduling = () => {
   ];
   const startDate = currentDate.subtract(3, 'day');
   const endDate = currentDate.add(2, 'day');
+  const [selectedShift, setSelectedShift] = useState(null);
+  const [dropModal, setDropModal] = useState(false);
+  const [draggedTask, setDraggedTask] = useState(null);
+  const [targetDate, setTargetDate] = useState('');
+
+  const handleDragStart = (initial) => {
+    const { source } = initial;
+    const draggedTask = schedule[source.index];
+    // Store the dragged task temporarily in state
+    setDraggedTask(draggedTask);
+  };
+
+  const handleDragEnd = (result) => {
+    // Reset the temporary task stored in state
+    // setDraggedTask(null);
+
+    const { source, destination } = result;
+    setTargetDate(destination.droppableId)
+    console.log(targetDate);
+    // Check if the item was dropped outside a valid droppable area
+    if (!destination) {
+      return;
+    }
+    const draggedTask = schedule[source.index];
+    // Store the dragged task temporarily in state
+
+    // Call the update endpoint to update the actual data
+    // You can use the updatedItems data to send the necessary updates to the server
+
+  };
+
+
+
 
   const activitiesByDay = daysOfWeek.map((day) =>
     schedule.filter((activity) =>
@@ -271,7 +307,7 @@ const ShiftScheduling = () => {
 
       try {
         const { data } = await get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&clientId=${cli}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-        // setSchedule(data);
+        setSchedule(data);
         setLoading3(false);
         setPeriodicModal(false);
       } catch (error) {
@@ -280,100 +316,8 @@ const ShiftScheduling = () => {
       }
     }
   }
-  const [selectedShift, setSelectedShift] = useState(null);
-  const [dropModal, setDropModal] = useState(false);
 
 
-  const handleDragEnd = (result) => {
-    const { source, destination } = result;
-
-    // Check if the item was dropped outside a droppable container
-    if (!destination) {
-      return;
-    }
-
-    // Check if the item was dropped into a different droppable container
-    if (source.droppableId !== destination.droppableId) {
-      // Perform the necessary actions for the cross-container drop
-      // For example, remove the item from the source and add it to the destination
-      // Update your data structure or state accordingly
-
-      // return;
-    }
-
-    // Perform the necessary actions for the drop within the same droppable container
-    // Update your data structure or state to reflect the new position of the dropped item
-    const activities = [...activitiesByDay]; // Assuming activitiesByDay is your current data structure
-
-    // Remove the dragged activity from the source index
-    const [draggedActivity] = activities[source.droppableId].splice(source.index, 1);
-
-    // Insert the dragged activity into the destination index
-    activities[destination.droppableId].splice(destination.index, 0, draggedActivity);
-
-    // Update your data structure or state with the updated activities
-    // setActivitiesByDay(activities);
-    console.log(activities);
-
-    console.log("Same-container drop");
-    console.log("Source:", source);
-    console.log("Destination:", destination);
-  };
-
-  useEffect(() => {
-    if (selectedShift) {
-      console.log('Selected Shift:', selectedShift);
-      // Perform any additional actions with the selected shift data
-    }
-  }, [selectedShift]);
-  const [events, setEvents] = useState([
-    // { date: dayjs('2023-06-02').toDate(), title: 'appointment', color: '#238783' },
-    // { date: dayjs('2023-02-06').toDate(), title: 'doctors', color: '#708898' },
-    // { date: dayjs('2023-10-25').toDate(), title: 'bd', color: '#047106' },
-    // { date: dayjs('2023-10-03').toDate(), title: 'second', color: '#371395' },
-  ]);
-  const addEvent = (date, event) => {
-    if (!event.target.classList.contains("StyledEvent")) {
-      const text = window.prompt("name");
-      if (text) {
-        date = dayjs(date)
-          .startOf('day')
-          .toDate();
-          setSchedule((prev) => [
-          ...prev,
-          { date, activities: text, color: "white" }
-        ]);
-      }
-    }
-  };
-
-  const dragDateRef = useRef();
-  const dragindexRef = useRef();
-
-  const drag = (index, e) => {
-    dragindexRef.current = { index, target: e.target };
-  };
-
-  const onDragEnter = (date, e) => {
-    e.preventDefault();
-    dragDateRef.current = { date, target: e.target.id };
-  };
-
-  const drop = (ev, index) => {
-    ev.preventDefault();
-    setSchedule((prev) =>
-      prev.map((event, eventIndex) => {
-        console.log(eventIndex);
-        if (eventIndex === index) {
-          const format = dayjs(event.dateFrom).format('YYYY-MM-DD');
-          dragDateRef.current.date = format; // Update the date property of the dragDateRef
-        }
-        return event;
-      })
-    );
-  };
-  
-  
 
   return (
     <>
@@ -403,9 +347,9 @@ const ShiftScheduling = () => {
           </div>
 
           <div className="row align-items-center py-2">
-            <span className='fw-bold'>Filter Shift Roaster By User</span>
+            {/* <span className='fw-bold' draggable>Filter Shift Roaster By User</span>
             <br />
-            <br />
+            <br /> */}
             <div className="col-md-4">
               <div className="form-group">
                 <label className="col-form-label">Staff Name</label>
@@ -432,6 +376,22 @@ const ShiftScheduling = () => {
                   </select></div>
               </div>
             </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">Start Date</label>
+                <div>
+                  <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">End Date</label>
+                <div>
+                  <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                </div>
+              </div>
+            </div>
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button onClick={FilterSchedule} className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -446,12 +406,12 @@ const ShiftScheduling = () => {
 
               </div>
             </div>
-            <div className="col-auto mt-3">
+            {/* <div className="col-auto mt-3">
               <div className="form-group">
                 <button onClick={FetchSchedule} className="btn btn-secondary add-btn rounded-2 m-r-5">All Shifts</button>
 
               </div>
-            </div>
+            </div> */}
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
@@ -461,7 +421,7 @@ const ShiftScheduling = () => {
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
-                  onClick={() => setPeriodicModal(true)}
+                  onClick={() => GetPeriodic()}
 
                 >Get Periodic Shift Roaster</button>
 
@@ -472,136 +432,206 @@ const ShiftScheduling = () => {
           </div>
 
 
-          <div className='row filter-row shadow-sm'>
-  <div className="col-md-6 col-lg-12">
-    <div className='py-3 d-flex justify-content-between align-items-center'>
-      <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }}>
-        <FaAngleLeft className='pointer fs-5 text-primary' onClick={handlePrevClick} />
-        <span className='fw-bold text-muted'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-        <FaAngleRight className='pointer fs-5 text-primary' onClick={handleNextClick} />
-      </span>
-      <span>
-        <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
-          <option defaultValue hidden>Week</option>
-          <option value=''>Month</option>
-          <option value=''>Week</option>
-          <option value=''>Day</option>
-        </select>
-      </span>
-    </div>
-    <DragDropContext>
-      <div className='row g-0'>
-        {daysOfWeek.map((day, dayIndex) => (
-          <Droppable droppableId={day.format('YYYY-MM-DD')} key={day.format('YYYY-MM-DD')}>
-            {(provided) => (
-              <div
-                className="col-md-6 col-lg-2 py-2"
-                key={day.format('YYYY-MM-DD')}
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                onDragEnter={(e) => onDragEnter(dayjs(currentDate).format('YYYY-MM-DD'), e)}
-                onDragOver={(e) => e.preventDefault()}
-                onDragEnd={(e) => drop(e, dayIndex)}
-              >
-                <div className='border p-2'>
-                  <span
-                    className={`calendar-date text-truncate overflow-hidden ${day.format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD') ? 'fw-bold text-primary' : ''}`}
-                    style={{ fontSize: '12px' }}>
-                    {day.format('dddd, MMMM D')}
-                  </span>
-                </div>
-                <div
-                  className="col-sm-12 text-center border p-2"
-                  style={{ height: "55vh", overflow: "auto", overflowX: "hidden" }}
-                >
-                  {loading && (
-                    <div className="spinner-grow text-secondary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  )}
-                  {activitiesByDay[dayIndex].map((activity, activityIndex) => (
-                    <div
-                      key={activityIndex}
-                      draggable
-                      draggableId={activity.shiftRosterId.toString()}
-                      index={activity.shiftRosterId}
-                      onDragStart={(e) => drag(dayIndex, e)}
-                    >
-                      {/* Render your activity item */}
-                      <div
-                        className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                        style={{ fontSize: '10px', backgroundColor: "#4256D0", overflow: "hidden" }}
-                      >
-                        <div onClick={() => handleActivityClick(activity)} className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
-                          <span className='fw-bold'>
-                            {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
-                          </span>
-                          <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
-                          <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
-                          <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
-                        </div>
-                        {getActivityStatus(activity) === 'Active' ? (
-                          <div className='d-flex gap-2'>
-                            <small
-                              className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-danger pointer`}
-                              onClick={() => handleDelete(activity?.shiftRosterId)}
-                              title="Delete"
-                            >
-                              <GoTrashcan className='fs-6' />
-                            </small>
-                            <Link
-                              to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                              className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-light pointer`}
-                              title="Edit"
-                            >
-                              <MdOutlineEditCalendar className='fs-6 text-dark' />
-                            </Link>
-                            <small
-                              className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-warning pointer`}
-                              onClick={() => markAttendance(activity)}
-                              title="Mark attendance for staff"
-                            >
-                              <MdDoneOutline className='fs-6' />
-                            </small>
-                          </div>
-                        ) : (
-                          <div className='d-flex gap-2'>
-                            <small
-                              className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-danger pointer`}
-                              onClick={() => handleDelete(activity?.shiftRosterId)}
-                              title="Delete"
-                            >
-                              <GoTrashcan className='fs-6' />
-                            </small>
-                            {getActivityStatus(activity) === 'Upcoming' && (
-                              <Link
-                                to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                                className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                title="Edit"
-                              >
-                                <MdOutlineEditCalendar className='fs-6 text-dark' />
-                              </Link>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  {!loading && activitiesByDay[dayIndex].length <= 0 && (
-                    <div>
-                      <span>No Activity</span>
-                    </div>
-                  )}
-                  {provided.placeholder} {/* Include the placeholder element */}
-                </div>
+          <div className='row  shadow-sm'>
+
+            <div className="col-md-6 col-lg-12 ">
+              <div className=' py-3 d-flex justify-content-between align-items-center'>
+                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
+                  <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
+                  <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
+                </span>
+                <span>
+                  <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
+                    <option defaultValue hidden>Week</option>
+
+                    {/* <option value=''>Month</option> */}
+                    <option value=''>Week</option>
+                    {/* <option value=''>Day</option> */}
+
+                  </select>
+                </span>
               </div>
-            )}
-          </Droppable>
-        ))}
-      </div>
-    </DragDropContext>
-  </div>
-</div>
+              <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+
+
+                <div className='row g-0'>
+                  {daysOfWeek.map((day, index) => (
+
+
+
+                    <Droppable droppableId={day.format('YYYY-MM-DD')}
+                    >
+                      {(provided) => (
+                        <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          index={index}
+
+                        >
+                          <div className='border  d-flex justify-content-center py-2 bg-light'>
+                            <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
+                              <span
+                                className={`fw-bold fs-4`
+
+                                }
+                              >
+                                {day.format('D')}
+                              </span>
+
+                              <span style={{ fontSize: '10px' }} className='mb-2'>
+                                {day.locale('en').format('ddd')}
+                              </span>
+
+                            </div>
+                          </div>
+
+                          <div
+                            className="col-sm-12 text-center border p-2"
+                            style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
+
+                          >
+
+                            {loading && (
+                              <div className="spinner-grow text-secondary" role="status">
+                                <span className="sr-only">Loading...</span>
+                              </div>
+                            )}
+
+
+                            {activitiesByDay[index].map((activity, activityIndex) => (
+                              <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activityIndex}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+
+
+                                    {/* Render the temporary task if it matches the current draggable item */}
+
+                                    <div key={activityIndex}
+                                      className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                                      style={{
+                                        fontSize: '10px',
+                                        overflow: 'hidden',
+                                        backgroundColor:
+                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                            ? '#1C75BC'
+                                            : '#5fa8e8',
+                                      }}
+                                    >
+                                      <div
+                                        onClick={() => handleActivityClick(activity)}
+                                        className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
+                                        <span className='fw-bold' >
+                                          {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
+                                        </span>
+                                        <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
+                                        <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
+                                        <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
+                                      </div>
+
+                                      {
+                                        getActivityStatus(activity) === 'Active' ?
+                                          (
+                                            <div className='d-flex gap-2'>
+                                              <small
+                                                className={`text-truncate d-flex 
+                             align-items-center
+                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
+
+                                                onClick={() => handleDelete(activity?.shiftRosterId)}
+                                                title="Delete"
+                                              >
+                                                <GoTrashcan className='fs-6' />
+                                              </small>
+                                              <Link
+                                                to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                                                className={`text-truncate d-flex 
+                              align-items-center
+                              justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                title="Edit"
+
+                                              >
+                                                <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                              </Link>
+                                              <small
+                                                className={`text-truncate d-flex 
+                               align-items-center
+                               justify-content-center px-2 py-1 rounded bg-warning pointer`}
+
+                                                onClick={() => markAttendance(activity)}
+                                                title="Mark attendance for staff"
+                                              >
+                                                <MdDoneOutline className='fs-6' />
+                                              </small>
+                                            </div>
+                                          )
+                                          :
+                                          (
+                                            <div className='d-flex gap-2' >
+                                              <small
+                                                className={`text-truncate d-flex 
+                             align-items-center
+                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
+
+                                                onClick={() => handleDelete(activity?.shiftRosterId)}
+                                                title="Delete"
+                                              >
+                                                <GoTrashcan className='fs-6' />
+                                              </small>
+
+                                              {
+                                                getActivityStatus(activity) === 'Upcoming' && (
+                                                  <Link
+                                                    to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                                                    className={`text-truncate d-flex 
+                              align-items-center
+                              justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                    title="Edit"
+
+                                                  >
+                                                    <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                                  </Link>
+
+                                                )
+                                              }
+                                            </div>
+
+                                          )
+                                      }
+
+
+                                    </div>
+
+                                  </div>
+                                )}
+
+
+                              </Draggable>
+                            ))}
+                            {!loading && activitiesByDay[index].length <= 0 && (
+                              <div>
+                                <span>No Activity</span>
+                              </div>
+                            )}
+                            {provided.placeholder} {/* Include the placeholder element */}
+                          </div>
+                        </div>
+                      )}
+                    </Droppable>
+                  ))}
+                </div>
+
+              </DragDropContext>
+
+            </div>
+          </div>
+
+
+
 
 
 
@@ -733,7 +763,7 @@ const ShiftScheduling = () => {
             size="lg"
             onHide={() => setPeriodicModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Get periodic Shift Roaster</Modal.Title>
+              <Modal.Title>Add New Shift Roaster</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="row">
@@ -763,32 +793,17 @@ const ShiftScheduling = () => {
                       </select></div>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">Start Date</label>
-                    <div>
-                      <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">End Date</label>
-                    <div>
-                      <input type="date" ref={dateTo} className=' form-control' name="" id="" />
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <button className="ml-4 text-white add-btn rounded btn btn-info"
+              {/* <button className="ml-4 text-white add-btn rounded btn btn-info"
                 onClick={GetPeriodic}
               >
                 {loading3 ? <div className="spinner-grow text-light" role="status">
                   <span className="sr-only">Loading...</span>
                 </div> : "Load"}
-              </button>
+              </button> */}
             </Modal.Footer>
           </Modal>
 

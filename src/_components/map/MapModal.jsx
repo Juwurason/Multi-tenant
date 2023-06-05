@@ -4,7 +4,8 @@ import { Modal } from 'react-bootstrap';
 const LocationMapModal = ({ latitude, longitude }) => {
     const [showModal, setShowModal] = useState(false);
 
-    const embedUrl = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+    // const embedUrl = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+    const embedUrl = `https://maps.google.com/maps?q=${latitude},${longitude}&hl=en;&z=14&output=embed`;
 
     const openModal = () => {
         setShowModal(true);

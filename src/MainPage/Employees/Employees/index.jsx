@@ -15,7 +15,7 @@ import AllAdmin from './Admin';
 import AddStaff from '../../../_components/forms/AddStaff';
 import AddAdministrator from '../../../_components/forms/AddAdmin';
 import AddShiftRoaster from '../../../_components/forms/AddShiftRoaster';
-import EditShiftRoaster from '../../../modules/Admin/EditShiftRoster';
+import EditShiftRoaster from '../../../_components/forms/EditShiftRoaster';
 
 const EmployeesRoute = ({ match }) => (
    <Switch>
