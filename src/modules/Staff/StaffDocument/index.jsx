@@ -165,11 +165,29 @@ const StaffDocument = () => {
     });
   };
 
+  
+
+  const getStaffDocument = async () => {
+    try {
+      const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+      setStaffDocument(response.data.staffDocuments)
+      setLoading(false)
+      // console.log(response.data.staffDocuments);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  useEffect(() => {
+    setLoading(true)
+    getStaffDocument()
+  }, [])
 
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (documentName === "" || expire.length === 0 || document === "") {
+    if (documentName === "" || document === "") {
       return toast.error("Input Fields cannot be empty")
     }
 
@@ -191,7 +209,7 @@ const StaffDocument = () => {
       )
       // console.log(data);
       toast.success(data.message)
-
+      getStaffDocument()
       setLoading(false)
 
     } catch (error) {
@@ -205,21 +223,7 @@ const StaffDocument = () => {
     }
   }
 
-  useEffect(() => {
-    setLoading(true)
-    const getStaffDocument = async () => {
-      try {
-        const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-        setStaffDocument(response.data.staffDocuments)
-        setLoading(false)
-        // console.log(response.data.staffDocuments);
-
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getStaffDocument()
-  }, [])
+ 
 
   const handlePDFDownload = () => {
     const unit = "pt";

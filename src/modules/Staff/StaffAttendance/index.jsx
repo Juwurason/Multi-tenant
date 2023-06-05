@@ -60,6 +60,19 @@ const StaffAttendance = () => {
       sortable: true
     },
     {
+      name: 'Duration',
+      selector: row => {
+        const clockInTime = dayjs(row.clockIn);
+        const clockOutTime = dayjs(row.clockOut);
+        const duration = clockOutTime.diff(clockInTime, 'minutes');
+        const hours = Math.floor(duration / 60);
+        const minutes = duration % 60;
+    
+        return `${hours}h ${minutes}m`;
+      },
+      sortable: false,
+    },
+    {
       name: 'DateModified',
       selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
       sortable: true

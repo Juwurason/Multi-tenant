@@ -42,6 +42,8 @@ const StaffHeader = (props) => {
     const handleLogout = () => {
         localStorage.removeItem('user')
         localStorage.removeItem('staffProfile')
+        localStorage.removeItem('log')
+        localStorage.removeItem('latit')
         navigate.push("/login")
     }
 

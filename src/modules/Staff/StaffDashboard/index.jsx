@@ -64,19 +64,19 @@ const StaffDashboard = () => {
       const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const activities = data.shiftRoster;
       setRoster(activities);
-      const now = dayjs().tz();
+      const now = dayjs().tz('Australia/Sydney');
       const yesterday = now.subtract(1, 'day').startOf('day');
-      const today = now.startOf('day');
+      const today = now.startOf('day').format('YYYY-MM-DD');
       const tomorrow = now.add(1, 'day').startOf('day');
+      let nonow = dayjs().tz().format('YYYY-MM-DD')
+      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(nonow, 'hour'));
+      const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
 
-      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).tz().isAfter(now, 'hour'));
-      const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).tz().diff(dayjs(b.dateFrom).tz())).slice(0, 5);
-
-      setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).tz().isBetween(yesterday, today, null, '[)')));
-      setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).tz().isBetween(today, tomorrow, null, '[)')));
-      setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).tz().isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
+      setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
+      setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
+      setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
       setUpcomingActivities(sortedUpcomingActivities);
-
+      // console.log(sortedUpcomingActivities);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -168,22 +168,28 @@ const StaffDashboard = () => {
     if (!activitiesToday) {
       return 'No Shift Today';
     }
+    // dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activitiesToday.dateFrom).format('YYYY-MM-DD HH:mm:ss')
+    const activityDateTo = dayjs(activitiesToday.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
-
-
-    const nowInAustraliaTime = dayjs().tz();
-    const activityDateFrom = dayjs(activitiesToday.dateFrom).tz();
-    const activityDateTo = dayjs(activitiesToday.dateTo).tz();
-
-    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+    if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
-    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    }
+    else if (activityDateTo < nowInAustraliaTime) {
       return activitiesToday.attendance === true ? 'Present' : 'Absent';
-    } else {
+    }
+    else if (activityDateTo < nowInAustraliaTime || activitiesToday.attendance === true) {
+      return 'Present'
+    }
+    else {
       return 'Clock-In';
     }
   }
 
+  
+
+ 
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -222,7 +228,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-secondary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesYesterday[0]?.dateFrom).tz().format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesYesterday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-dark rounded px-2'>{activitiesYesterday[0]?.status === "string" ? "Active" : activitiesYesterday[0]?.status}</span>
                         </div>
                       </div>
@@ -246,7 +252,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-primary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}> {`${dayjs(activitiesToday[0]?.dateFrom).tz().format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }}> {`${dayjs(activitiesToday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesToday[0]?.status}</span>
                         </div>
                       </div>
@@ -273,7 +279,7 @@ const StaffDashboard = () => {
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
                                 <BiStopwatch /> Clock In
-                              </span>
+                              </span> 
                             ) : (
                               <small
                                 className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
@@ -312,7 +318,7 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).tz().format('dddd, MMMM D, YYYY') : "No shift yet"}</span>
+                          <span style={{ fontSize: '12px' }}>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('dddd, MMMM D, YYYY') : "No shift yet"}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesTomorrow[0]?.status}</span>
                         </div>
                       </div>
@@ -341,12 +347,12 @@ const StaffDashboard = () => {
                       <span className="mt-2" key={activity.id}>
                         <div className="d-flex justify-content-between text-dark">
                           <div className='d-flex flex-column justify-content-start'>
-                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).tz().format('dddd MMMM D, YYYY')}</span>
-                            <span className='text-dark fs-5 fw-bold'>{activity.staffName}</span>
+                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
+                            <span className='text-dark fs-7 fw-bold'>{activity.profile.fullName}</span>
                           </div>
-                          <div>
+                          {/* <div>
                             <span className='bg-secondary px-2 py-1 text-white pointer rounded-2'>view</span>
-                          </div>
+                          </div> */}
                         </div>
                       </span>
                     ))

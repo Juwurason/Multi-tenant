@@ -1,0 +1,19 @@
+.email-component .nav-pills .nav-link.active {
+    background-color: #f8f9fa;
+    /* Set the desired background color for the active link */
+    color: #1C75BC;
+    /* Set the desired text color for the active link */
+}
+
+.email-component .nav-pills .nav-link.active:hover {
+    background-color: #f8f9fa;
+
+}
+
+.custom-multiselect {
+    border: none !important;
+    width: 80%;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+}

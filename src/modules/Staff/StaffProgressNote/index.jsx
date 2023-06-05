@@ -123,9 +123,9 @@ const StaffProgressNote = () => {
         setLoading(true)
         const getStaffProgressNote = async () => {
             try {
-                const response = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
-                setStaffPro(response.data.progressNote);
-                // console.log(response.data.progressNote);
+                const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
+                setStaffPro(data.progressNote);
+                console.log(data.progressNote);
                 // console.log(staffPro.profile);
                 setLoading(false);
             } catch (error) {

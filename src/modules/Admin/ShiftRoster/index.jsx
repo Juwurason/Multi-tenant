@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -13,24 +13,43 @@ import Swal from 'sweetalert2';
 import { GoTrashcan } from 'react-icons/go';
 import { MdDoneOutline, MdOutlineEditCalendar } from 'react-icons/md';
 import moment from 'moment';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
 
 const ShiftRoster = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  // Set the default timezone to Australia/Sydney
+  dayjs.tz.setDefault('Australia/Sydney');
+  //Declaring Variables
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false)
+  const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false)
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
-  const [staffOne, setStaffOne] = useState({});
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
   const [lgShow, setLgShow] = useState(false);
+  const [report, setReport] = useState("");
+  const [startKm, setStartKm] = useState(0);
+  const [endKm, setEndKm] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [periodicModal, setPeriodicModal] = useState(false);
+  const dateFrom = useRef(null);
+  const dateTo = useRef(null);
 
 
-
+  //Fetching From the endpoints
   const FetchSchedule = async () => {
     setLoading(true)
+    //All shift Roasters
     try {
       const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const schedule = scheduleResponse.data;
@@ -39,6 +58,7 @@ const ShiftRoster = () => {
     } catch (error) {
       console.log(error);
     }
+    // All staff
     try {
       const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
@@ -47,7 +67,7 @@ const ShiftRoster = () => {
     } catch (error) {
       console.log(error);
     }
-
+    //All Client
     try {
       const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
@@ -55,19 +75,21 @@ const ShiftRoster = () => {
       setLoading(false)
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     FetchSchedule()
   }, []);
 
-
+  // Filtering Schedule either by user or Client
   const FilterSchedule = async () => {
 
-    if (sta === "") {
+    if (sta === '' && cli === '') {
       return Swal.fire(
-        "",
         "Select either a staff or client",
+        "",
         "error"
       )
 
@@ -87,17 +109,9 @@ const ShiftRoster = () => {
 
   }
 
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
-
+  //Calendar Logic Starts here
   // Get the current date
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
   const handleNextClick = () => {
     setCurrentDate(currentDate.add(6, 'day'));
@@ -119,32 +133,48 @@ const ShiftRoster = () => {
   const endDate = currentDate.add(2, 'day');
 
   const activitiesByDay = daysOfWeek.map((day) =>
-    schedule.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+    schedule.filter((activity) =>
+      dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+    )
   );
-  const currentDateTime = dayjs().utcOffset(10);
 
   function getActivityStatus(activity) {
-    const nowInAustraliaTime = dayjs()
-    const activityDateFrom = dayjs(activity.dateFrom)
-    const activityDateTo = dayjs(activity.dateTo)
+    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
-    if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+    //   if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
+    //     return 'Upcoming';
+    //   } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    //     return activity.attendance === true ? 'Present' : 'Absent';
+    //   } else {
+    //     return 'Active';
+    //   }
+    // }
+
+    if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
-    } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
+    }
+    else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
-    } else {
+    }
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
+      return 'Present'
+    }
+    else {
       return 'Active';
     }
   }
 
 
-  const [showModal, setShowModal] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState(null);
 
+  //To view details of a shift roaster
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
     setShowModal(true);
   };
+
+  // Delete a Shift Roaster
   const handleDelete = async (e) => {
     Swal.fire({
       html: `<h3>Are you sure? you want to delete this shift</h3>`,
@@ -181,14 +211,13 @@ const ShiftRoster = () => {
 
 
   }
+
+  //Mark attendance on behalf of staff
   const markAttendance = (activity) => {
     setSelectedActivity(activity);
     setLgShow(true);
   }
-  const [report, setReport] = useState("");
-  const [startKm, setStartKm] = useState(0);
-  const [endKm, setEndKm] = useState(0);
-  const [loading2, setLoading2] = useState(false);
+
   const handleConfirmation = async (e) => {
     if (report === "" || endKm === 0) {
       return toast.error("EndKm and Report cannot be empty")
@@ -201,7 +230,6 @@ const ShiftRoster = () => {
       staffId: e.staff.staffId,
       companyID: id.companyId
     }
-
     setLoading2(true)
 
     try {
@@ -227,15 +255,39 @@ const ShiftRoster = () => {
       setLgShow(false);
     }
 
-
   }
+  //Get periodic shift roaster
+  const GetPeriodic = async () => {
+    if (sta === '' && cli === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
+      return Swal.fire(
+        "Select either a staff or client and time range",
+        "",
+        "error"
+      )
+
+    } else {
+      setLoading3(true)
+
+      try {
+        const { data } = await get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&clientId=${cli}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+        setSchedule(data);
+        setLoading3(false);
+        setPeriodicModal(false);
+      } catch (error) {
+        console.log(error);
+        setLoading3(false)
+      }
+    }
+  }
+
   return (
     <>
       <div className="page-wrapper">
         <Helmet>
           <title>Shift Roster</title>
-          <meta name="description" content="Shift Roaster" />
+          <meta name="description" content="Shift Roster" />
         </Helmet>
+
         {/* Page Content */}
         <div className="content container-fluid">
           <div className="page-header">
@@ -250,7 +302,7 @@ const ShiftRoster = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto p-4">
-                <Link to="/administrator/createShift" className="btn btn-info add-btn m-r-5 rounded-2">Add New Roster</Link>
+                <Link to="/administrator/createShift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
               </div>
             </div>
           </div>
@@ -307,7 +359,16 @@ const ShiftRoster = () => {
             </div>
             <div className="col-auto mt-3">
               <div className="form-group">
-                <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
+                <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roster Notification</button>
+
+              </div>
+            </div>
+            <div className="col-auto mt-3">
+              <div className="form-group">
+                <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
+                  onClick={() => setPeriodicModal(true)}
+
+                >Get Periodic Shift Roster</button>
 
               </div>
             </div>
@@ -319,9 +380,9 @@ const ShiftRoster = () => {
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer' onClick={handlePrevClick} />
+                  <FaAngleLeft className='pointer fs-5' onClick={handlePrevClick} />
                   <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer' onClick={handleNextClick} />
+                  <FaAngleRight className='pointer fs-5' onClick={handleNextClick} />
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
@@ -480,9 +541,7 @@ const ShiftRoster = () => {
                         </Modal.Body>
                         <Modal.Footer>
                           <Link to={`/administrator/editShiftRoster/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
-                          <button className="ml-4 btn btn-secondary" onClick={() => markAttendance()}>
-                            Mark attendance for staff
-                          </button>
+
                         </Modal.Footer>
                       </Modal>
                       <Modal
@@ -586,6 +645,68 @@ const ShiftRoster = () => {
                         </Modal.Footer>
                       </Modal>
 
+                      <Modal show={periodicModal}
+                        size="lg"
+                        onHide={() => setPeriodicModal(false)}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Get periodic Shift Roster</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <div className="row">
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">Staff Name</label>
+                                <div>
+                                  <select className="form-select" onChange={e => setSta(e.target.value)}>
+                                    <option defaultValue hidden>--Select a staff--</option>
+                                    {
+                                      staff.map((data, index) =>
+                                        <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                    }
+                                  </select></div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">Client Name</label>
+                                <div>
+                                  <select className="form-select" onChange={e => setCli(e.target.value)}>
+                                    <option defaultValue hidden>--Select a Client--</option>
+                                    {
+                                      clients.map((data, index) =>
+                                        <option value={data.profileId} key={index}>{data.fullName}</option>)
+                                    }
+                                  </select></div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">Start Date</label>
+                                <div>
+                                  <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label className="col-form-label">End Date</label>
+                                <div>
+                                  <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button className="ml-4 text-white add-btn rounded btn btn-info"
+                            onClick={GetPeriodic}
+                          >
+                            {loading3 ? <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div> : "Load"}
+                          </button>
+                        </Modal.Footer>
+                      </Modal>
 
 
                       {/* <div>
