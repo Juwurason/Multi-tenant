@@ -252,8 +252,15 @@ const StaffRoster = () => {
                           activitiesByDay[index].length > 0 ? (
                             activitiesByDay[index].map((activity, activityIndex) => (
                               <div key={activityIndex}
-                                className='text-white rounded-2 d-flex flex-column gap-1 align-items-start p-2 mt-2'
-                                style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                              className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                              style={{
+                                fontSize: '10px',
+                                overflow: 'hidden',
+                                backgroundColor:
+                                  dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                    ? '#1C75BC'
+                                    : '#5fa8e8',
+                              }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>

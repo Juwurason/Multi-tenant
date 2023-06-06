@@ -15,6 +15,8 @@ import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import moment from 'moment';
+import Swal from 'sweetalert2';
+import { Modal } from 'react-bootstrap';
 
 const StaffDocument = () => {
   useEffect(() => {
@@ -33,6 +35,7 @@ const StaffDocument = () => {
   const [document, setDocument] = useState("")
   const [staffDocument, setStaffDocument] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
+  const [showModal2, setShowModal2] = useState(false);
 
   const handleView = (documentUrl) => {
     window.open(documentUrl, '_blank');
@@ -88,32 +91,7 @@ const StaffDocument = () => {
       name: 'Status',
       selector: row => row.status,
       sortable: true
-    }, {
-      name: "Actions",
-      // cell: (row) => (
-      //   <div className="d-flex gap-1">
-      //     <Link
-      //       className='btn'
-      //       title='Edit'
-      //       to={''}
-      //     >
-      //       <SlSettings />
-      //     </Link>
-      //     <button
-      //       className='btn'
-      //       title='Delete'
-      //       onClick={() => {
-      //         alert(`Action button clicked for row with ID ${'row.id'}`);
-      //       }}
-      //     >
-      //       <GoTrashcan />
-      //     </button>
-
-      //   </div>
-      // ),
-    },
-
-
+    }
 
   ];
 
@@ -169,13 +147,17 @@ const StaffDocument = () => {
 
   const getStaffDocument = async () => {
     try {
-      const response = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-      setStaffDocument(response.data.staffDocuments)
+      const {data} = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+      setStaffDocument(data.staffDocuments)
+    
       setLoading(false)
-      // console.log(response.data.staffDocuments);
+      // console.log(data.staffDocuments);
 
     } catch (error) {
       console.log(error);
+    }
+    finally {
+      setLoading(false)
     }
   }
   
@@ -209,8 +191,9 @@ const StaffDocument = () => {
       )
       // console.log(data);
       toast.success(data.message)
-      getStaffDocument()
       setLoading(false)
+      setShowModal2(false)
+      getStaffDocument()
 
     } catch (error) {
       console.log(error);
@@ -223,7 +206,6 @@ const StaffDocument = () => {
     }
   }
 
- 
 
   const handlePDFDownload = () => {
     const unit = "pt";
@@ -252,6 +234,121 @@ const StaffDocument = () => {
     doc.save("Admin.pdf");
   };
 
+  const handleDelete = async (e) => {
+    Swal.fire({
+      html: `<h3>Are you sure? you want to delete this Document</h3>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#1C75BC',
+      cancelButtonColor: '#C8102E',
+      confirmButtonText: 'Confirm Delete',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await privateHttp.post(`/Documents/delete/${e}`)
+          // console.log(data);
+          if (data.status === 'Success') {
+            toast.success(data.message);
+            getStaffDocument()
+          } else {
+            toast.error(data.message);
+          }
+
+
+        } catch (error) {
+          // console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+        }
+
+      }
+    })
+  }
+
+  const showModa = () =>{
+    setShowModal2(true)
+  }
+
+  const [editAvail, setEditAvail] = useState({});
+  const [loading2, setLoading2] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [documenti, setDocumenti] = useState("")
+  const [idSave, setIdSave] = useState('')
+
+  const handleEdit = async(e) => {
+    setShowModal(true);
+    setIdSave(e)
+    // setLoading2(true)
+    try {
+
+      const { data } = await get(`/Documents/get_document/${e}`, { cacheTimeout: 300000 });
+      // console.log(data.staffDocument);
+      setEditAvail(data.staffDocument);
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message);
+          toast.error(error.response.data.title);
+    }
+  };
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const newValue = value === "" ? "" : value;
+    setEditAvail({
+        ...editAvail,
+        [name]: newValue
+    });
+}
+
+const handleFileChan = (e) => {
+  const selectedFile = e.target.files[0];
+  const allowedExtensions = /(\.pdf|\.doc)$/i;
+
+  if (allowedExtensions.exec(selectedFile.name)) {
+    setDocumenti(selectedFile);
+  } else {
+    alert('Please select a PDF or DOC file');
+  }
+};
+
+const EditAvail = async (e) => {
+    e.preventDefault()
+    if (editAvail.documentName === "" || documenti === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+  
+  const formData = new FormData()
+  formData.append("CompanyId", id.companyId);
+  formData.append("DocumentId", idSave);
+  formData.append("DocumentName", editAvail.documentName);
+  formData.append("ExpirationDate", editAvail.expirationDate);
+  formData.append("User", id.fullName);
+  formData.append("UserRole", id.role);
+  formData.append("Status", "Pending");
+  formData.append("DocumentFile", documenti);
+    try {
+      setLoading2(true)
+      const { data } = await privateHttp.post(`/Documents/edit/${idSave}?userId=${id.userId}`, formData);
+      console.log(data);
+      if (data.status === 'Success') {
+        toast.success(data.message)
+      }
+      setLoading2(false)
+      setShowModal(false)
+      getStaffDocument()
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+    }
+    finally {
+      setLoading2(false)
+    }
+  }
+
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-4">
@@ -259,18 +356,32 @@ const StaffDocument = () => {
 
           <thead>
             <tr>
-              <th>User</th>
               <th>Date Created</th>
-              <th>Date Modified</th>
+              <th>Actions </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{data.user}</td>
               <td>{moment(data.dateCreated).format('lll')}</td>
-              <td>{moment(data.dateModified).format('lll')}</td>
               <td>
+                <div className="d-flex gap-1">
 
+                  <span
+                    className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                    title='Edit'
+                    onClick={() => handleEdit(data.documentId)}
+                  >
+                    Edit
+                  </span>
+                  <span
+                    className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                    title='Delete'
+                    onClick={() => handleDelete(data.documentId)}
+                  >
+                    Delete
+                  </span>
+
+                </div>
               </td>
             </tr>
           </tbody>
@@ -279,7 +390,6 @@ const StaffDocument = () => {
 
 
       </div>
-
     );
   };
 
@@ -314,7 +424,15 @@ const StaffDocument = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto">
-                <a href="" className="btn add-btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
+                {/* <a href="" className="btn add-btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_policy"> */}
+                <button
+                className="btn add-btn btn-primary"
+                onClick={showModa}
+                >
+                <i className="fa fa-plus" /> Add New Document
+                </button>
+                  
+                  {/* </a> */}
               </div>
             </div>
           </div>
@@ -397,7 +515,7 @@ const StaffDocument = () => {
         </div>
         {/* /Page Content */}
         {/* Add Policy Modal */}
-        <div id="add_policy" className="modal custom-modal fade" role="dialog">
+        {/* <div id="add_policy" className="modal custom-modal fade" role="dialog">
           <div className="modal-dialog modal-dialog-centered" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -424,7 +542,7 @@ const StaffDocument = () => {
                     </div>
                   </div>
                   <div className="submit-section">
-                    <button className="btn btn-primary submit-btn" data-bs-dismiss="modal" aria-label="Close" disabled={loading ? true : false} >
+                    <button className="btn btn-primary submit-btn"  disabled={loading ? true : false} >
                       {loading ? <div className="spinner-grow text-light" role="status">
                         <span className="sr-only">Loading...</span>
                       </div> : "Add"}
@@ -434,8 +552,111 @@ const StaffDocument = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+        <Modal show={showModal2} onHide={() => setShowModal2(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Upload Documents</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <form className="row">
+                <div className='col-md-12'>
+                  <div className="form-group">
+                    <label>Document Name</label>
+                    <input className="form-control" type="text" onChange={e => setDocumentName(e.target.value)} />
+                    
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <div className="form-group">
+                    <label>Expiration Date</label>
+                    <input className="form-control" type="date" onChange={e => setExpire(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <div className="form-group">
+                    <label>Upload Document</label>
+                    <input
+                    type="file"
+                      className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
+                      onChange={handleFileChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="submit"
+              className="btn btn-primary add-btn px-2"
+              disabled={loading2 ? true : false}
+              onClick={handleSubmit}
+            >
+              {loading2 ? (
+                <div className="spinner-grow text-light" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              ) : (
+                "Add"
+              )}
+            </button>
+          </Modal.Footer>
+        </Modal>
 
+
+
+
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Document</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <form className="row">
+                <div className='col-md-6'>
+                  <div className="form-group">
+                    <label>Document Name</label>
+                    <input className="form-control" type="text" name='documentName' value={editAvail.documentName || ''} onChange={handleInputChange} />
+                    
+                  </div>
+                </div>
+                <div className='col-md-6'>
+                  <div className="form-group">
+                    <label>Expiration Date</label>
+                    <input className="form-control" type="date" name='expirationDate' value={editAvail.expirationDate || ''} onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+                <div className='col-md-12'>
+                  <div className="form-group">
+                    <label>Upload Document</label>
+                    <input
+                    type="file"
+                      className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
+                       onChange={handleFileChan}
+                      required
+                    />
+                  </div>
+                </div>
+              </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="submit"
+              className="btn btn-primary add-btn px-2"
+              disabled={loading2 ? true : false}
+              onClick={EditAvail}
+            >
+              {loading2 ? (
+                <div className="spinner-grow text-light" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              ) : (
+                "Add"
+              )}
+            </button>
+          </Modal.Footer>
+        </Modal>
 
       </div>
       <Offcanvas />
