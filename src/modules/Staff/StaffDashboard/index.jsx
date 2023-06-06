@@ -16,12 +16,12 @@ import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineSummarize, MdOutlineQueryBuilder, MdOutlineSwitchAccount, MdHourglassTop, MdHourglassBottom, MdPerson, MdPersonOutline } from 'react-icons/md';
 import man from "../../../assets/img/user.jpg"
-import StaffHeader from '../Components/StaffHeader';
 import StaffSidebar from '../Components/StaffSidebar';
 import { BsClockHistory } from 'react-icons/bs';
 import { BiStopwatch } from 'react-icons/bi';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { Modal } from 'react-bootstrap';
+import StaffHeader from '../Components/StaffHeader/index.jsx';
 
 dayjs.extend(isBetween);
 
@@ -68,15 +68,13 @@ const StaffDashboard = () => {
       const yesterday = now.subtract(1, 'day').startOf('day');
       const today = now.startOf('day').format('YYYY-MM-DD');
       const tomorrow = now.add(1, 'day').startOf('day');
-      let nonow = dayjs().tz().format('YYYY-MM-DD')
-      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(nonow, 'hour'));
+      const nonow = dayjs().tz('Australia/Sydney').format('YYYY-MM-DD')
+      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(nonow, 'day'));
       const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
-
       setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
       setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
       setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
       setUpcomingActivities(sortedUpcomingActivities);
-      // console.log(sortedUpcomingActivities);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -187,15 +185,13 @@ const StaffDashboard = () => {
     }
   }
 
-  
-
  
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-        <StaffHeader />
-        <StaffSidebar />
+        {/* <StaffHeader />
+        <StaffSidebar /> */}
         <div className="page-wrapper">
           <Helmet>
             <title>Dashboard - Promax Staff Dashboard</title>
@@ -367,35 +363,7 @@ const StaffDashboard = () => {
                 </div>
               </div>
 
-              {/* <div className='col-md-4 p-2 d-flex  flex-column gap-2 justify-content-start'>
-                <div className='p-3 shadow-sm'>
-                  <h3>Upcoming Shift</h3>
-
-                  <span className="mt-2" >
-
-
-                    <div className=" d-flex  justify-content-between text-dark">
-                      <div className='d-flex flex-column justify-content-start'>
-                        <span style={{ fontSize: "10px", }}>Monday May 23, 2023 </span>
-                        <span className='text-dark fs-5 fw-bold'>Olakunle John</span>
-                      </div>
-                      <div>
-                        <span className='bg-secondary px-2 py-1 text-white pointer rounded-2'>view</span>
-
-                      </div>
-                    </div>
-
-                  </span>
-                  <div className='d-flex justify-content-end mt-2'>
-                    <span
-                      className='text-dark pointer' style={{ fontSize: "12px", }}>
-                      See all <FaLongArrowAltRight className='fs-3' />
-                    </span>
-                  </div>
-
-                </div>
-
-              </div> */}
+              
 
             </div>
 
@@ -407,8 +375,8 @@ const StaffDashboard = () => {
               <Modal.Body>
                 {selectedActivity && (
                   <>
-                    <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
-                    <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
+                    <p><b>Date:</b> {activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A') : '--'}</p>
+                    <p><b>Time:</b> {activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateTo).format('hh:mm A') : '--'}</p>
                     <p><b>Description:</b> {selectedActivity.activities}</p>
                   </>
                 )}

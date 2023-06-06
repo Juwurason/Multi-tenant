@@ -43,7 +43,7 @@ const StaffLayout = (props) => {
                         <Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
                     )}
                 </div>
-                <StaffSidebar />
+                <StaffSidebar onMenuClick={(value) => toggleMobileMenu()} />
 
             </div>
         </>

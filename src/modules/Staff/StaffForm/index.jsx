@@ -15,6 +15,11 @@ import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "reac
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
+import dayjs from 'dayjs';
+import moment from 'moment';
+import Swal from 'sweetalert2';
+import { Modal } from 'react-bootstrap';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const StaffForm = () => {
@@ -27,67 +32,118 @@ const StaffForm = () => {
     }
   });
 
-  const [staffDocument, setStaffDocument] = useState([]);
+  const [staffAvail, setStaffAvail] = useState([]);
   const { loading, setLoading } = useCompanyContext();
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
+  const [selectedDay, setSelectedDay] = useState("");
+  const { get, post } = useHttp();
+  const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
+  const [selectedTimeTo, setSelectedTimeTo] = useState("");
+  const id = JSON.parse(localStorage.getItem('user'))
+  const [showModal, setShowModal] = useState(false);
+  const staffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
+  const convertTo12HourFormat = (time24h) => {
+    let [hours, minutes] = time24h.split(':');
+    let suffix = 'AM';
+  
+    if (hours >= 12) {
+      suffix = 'PM';
+      hours = hours - 12;
+    }
+  
+    if (hours === 0) {
+      hours = 12;
+    }
+  
+    return `${hours}:${minutes} ${suffix}`;
+  };
+  
+
+
+  const PostAvail = async (e) => {
+    if (selectedDay === "" || selectedTimeFrom === "" || selectedTimeTo === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+    e.preventDefault()
+    setLoading1(true)
+    const info = {
+      staffId: staffProfile.staffId,
+      days: selectedDay,
+      fromTimeOfDay: selectedTimeFrom,
+      toTimeOfDay: selectedTimeTo,
+      companyID: id.companyId
+    }
+    try {
+
+      const { data } = await post(`/StaffAvailibilities/add_staff_availability?userId=${id.userId}`, info);
+      if (data.status === 'Success') {
+        toast.success(data.message)
+      }
+      setLoading1(false)
+      FetchSchedule()
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+    }
+    finally {
+      setLoading1(false)
+    }
+  }
+
+
+  const FetchSchedule = async () => {
+    // setLoading2(true)
+    try {
+      const { data } = await get(`StaffAvailibilities/get_staff_availabilities?staffId=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setStaffAvail(data)
+      // setLoading2(false);
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+    }
+    // finally {
+    //   setLoading2(false)
+    // }
+
+
+  };
+  useEffect(() => {
+    FetchSchedule()
+  }, []);
 
 
   const columns = [
+    // {
+    //   name: 'User',
+    //   selector: row => row.user,
+    //   sortable: true
+    // },
     {
-      name: 'User',
-      selector: row => row.user,
-      sortable: true
-    },
-    {
-      name: 'Role',
-      selector: row => row.user,
+      name: 'Days',
+      selector: row => row.days,
       sortable: true,
       expandable: true,
-      cell: (row) => (
-        <Link href={`https://example.com/${row.userId}`} className="fw-bold text-dark">
-          {row.userRole}
-        </Link>
-      ),
     },
     {
-      name: 'Documnet Name',
-      selector: row => row.documentName,
+      name: 'From Time of Day',
+      selector: row => convertTo12HourFormat(row.fromTimeOfDay),
       sortable: true,
     },
     {
-      name: 'Expiration Date',
-      selector: row => row.expirationDate,
+      name: 'To Time of Day',
+      selector: row => convertTo12HourFormat(row.toTimeOfDay),
       sortable: true
     },
     {
-      name: 'Status',
-      selector: row => row.status,
+      name: 'Date Created',
+      selector: row => dayjs(row.dateCreated).format('DD/MM/YYYY HH:mm:ss'),
       sortable: true
-    }, {
-      name: "Actions",
-      // cell: (row) => (
-      //   <div className="d-flex gap-1">
-      //     <Link
-      //       className='btn'
-      //       title='Edit'
-      //       to={''}
-      //     >
-      //       <SlSettings />
-      //     </Link>
-      //     <button
-      //       className='btn'
-      //       title='Delete'
-      //       onClick={() => {
-      //         alert(`Action button clicked for row with ID ${'row.id'}`);
-      //       }}
-      //     >
-      //       <GoTrashcan />
-      //     </button>
-
-      //   </div>
-      // ),
-    },
-
+    }
 
 
   ];
@@ -101,7 +157,7 @@ const StaffForm = () => {
     sheet.addRow(headers);
 
     // Add data
-    staffDocument.forEach((dataRow) => {
+    staffAvail.forEach((dataRow) => {
       const values = columns.map((column) => {
         if (typeof column.selector === 'function') {
           return column.selector(dataRow);
@@ -134,7 +190,7 @@ const StaffForm = () => {
     doc.setFontSize(13);
     doc.text("User Table", marginLeft, 40);
     const headers = columns.map((column) => column.name);
-    const dataValues = staffDocument.map((dataRow) =>
+    const dataValues = staffAvail.map((dataRow) =>
       columns.map((column) => {
         if (typeof column.selector === "function") {
           return column.selector(dataRow);
@@ -152,10 +208,144 @@ const StaffForm = () => {
     doc.save("Admin.pdf");
   };
 
+  const handleDelete = async (e) => {
+    Swal.fire({
+      html: `<h3>Are you sure? you want to delete this Document</h3>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#1C75BC',
+      cancelButtonColor: '#C8102E',
+      confirmButtonText: 'Confirm Delete',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await post(`/StaffAvailibilities/delete/${e}`)
+          // console.log(data);
+          if (data.status === 'Success') {
+            toast.success(data.message);
+            FetchSchedule()
+          } else {
+            toast.error(data.message);
+          }
+
+
+        } catch (error) {
+          // console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+
+
+        }
+
+
+      }
+    })
+
+
+  }
+
+  const [editAvail, setEditAvail] = useState({});
+  const [idSave, setIdSave] = useState('')
+
+  const handleEdit = async(e) => {
+    setShowModal(true);
+    setIdSave(e)
+    // setLoading2(true)
+    try {
+
+      const { data } = await get(`/StaffAvailibilities/get_availability/${e}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setEditAvail(data);
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+    }
+  };
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const newValue = value === "" ? "" : value;
+    setEditAvail({
+        ...editAvail,
+        [name]: newValue
+    });
+}
+
+  const EditAvail = async (e) => {
+   
+    e.preventDefault()
+    setLoading2(true)
+    const info = {
+      staffAvailibilityId: idSave,
+      staffId: staffProfile.staffId,
+      days: editAvail.days,
+      fromTimeOfDay: editAvail.fromTimeOfDay,
+      toTimeOfDay: editAvail.toTimeOfDay,
+      companyID: id.companyId
+    }
+    try {
+
+      const { data } = await post(`/StaffAvailibilities/edit/${idSave}?userId=${id.userId}`, info);
+      // console.log(data);
+      if (data.status === 'Success') {
+        toast.success(data.message)
+      }
+      setLoading2(false)
+      setShowModal(false)
+      FetchSchedule()
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+    }
+    finally {
+      setLoading2(false)
+    }
+  }
+
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-4">
-        {data.fullName}
+        <table className='table'>
+
+          <thead>
+            <tr>
+              <th>Date Created</th>
+              <th>Actions </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{moment(data.dateCreated).format('lll')}</td>
+              <td>
+                <div className="d-flex gap-1">
+
+                  <span
+                    className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                    title='Edit'
+                    onClick={() => handleEdit(data.staffAvailibilityId)}
+                  >
+                    Edit
+                  </span>
+                  <span
+                    className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                    title='Delete'
+                    onClick={() => handleDelete(data.staffAvailibilityId)}
+                  >
+                    Delete
+                  </span>
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
 
       </div>
     );
@@ -167,8 +357,8 @@ const StaffForm = () => {
     setSearchText(event.target.value);
   };
 
-  const filteredData = staffDocument.filter((item) =>
-    item.user.toLowerCase().includes(searchText.toLowerCase())
+  const filteredData = staffAvail.filter((item) =>
+    item.days.toLowerCase().includes(searchText.toLowerCase())
   );
   return (
     <div className="page-wrapper">
@@ -201,32 +391,35 @@ const StaffForm = () => {
                   <div className='col-md-6'>
                     <div className="form-group">
                       <label>Days</label>
-                      <select className='form-select'>
-                        <option>Select Days</option>
-                        <option value={1}>Monday</option>
-                        <option value={2}>Tuesday</option>
-                        <option value={3}>Wednessday</option>
-                        <option value={4}>Thursday</option>
-                        <option value={5}>Friday</option>
-                        <option value={6}>Saturday</option>
-                        <option value={7}>Sunday</option>
+                      <select className='form-select' onChange={(e) => setSelectedDay(e.target.value)} required>
+                        <option defaultValue hidden >Select Days</option>
+                        <option value={"Monday"}>Monday</option>
+                        <option value={"Tuesday"}>Tuesday</option>
+                        <option value={"Wednessday"}>Wednessday</option>
+                        <option value={"Thursday"}>Thursday</option>
+                        <option value={"Friday"}>Friday</option>
+                        <option value={"Saturday"}>Saturday</option>
+                        <option value={"Sunday"}>Sunday</option>
                       </select>
                     </div>
                   </div>
                   <div className='col-md-6'>
                     <div className="form-group">
                       <label>From Time of Day</label>
-                      <input type="time" className="form-control" />
+                      <input className="form-control" type="time" onChange={(e) => setSelectedTimeFrom(e.target.value)} required />
                     </div>
                   </div>
                   <div className='col-md-6'>
                     <div className="form-group">
                       <label>To Time of Day</label>
-                      <input type="time" className="form-control" />
+                      <input className="form-control" type="time" onChange={(e) => setSelectedTimeTo(e.target.value)} required />
                     </div>
                   </div>
                   <div className="text-start">
-                    <button type="submit" className="btn btn-primary px-2">Add</button>
+                    <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
+                      {loading1 ? <div className="spinner-grow text-light" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div> : "Add"}</button>
                   </div>
                 </form>
               </div>
@@ -245,7 +438,7 @@ const StaffForm = () => {
             </div>
             <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
               <CSVLink
-                data={staffDocument}
+                data={staffAvail}
                 filename={"document.csv"}
 
               >
@@ -273,7 +466,7 @@ const StaffForm = () => {
               >
                 <FaFileExcel />
               </button>
-              <CopyToClipboard text={JSON.stringify(staffDocument)}>
+              <CopyToClipboard text={JSON.stringify(staffAvail)}>
                 <button
 
                   className='btn text-warning'
@@ -306,29 +499,69 @@ const StaffForm = () => {
 
 
         </div>
-        {/* <div className="table-responsive">
-        <table className="table table-striped">
-          <thead className='text-white' style={{ backgroundColor: "#18225C" }}>
-            <tr style={{ backgroundColor: "#18225C" }}>
-              <th>Days</th>
-              <th>From Time of Day</th>
-              <th>To Time of Day</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Monday</td>
-              <td>08:26 AM</td>
-              <td>06:27 PM</td>
-            </tr>
-            <tr>
-              <td>Thursday</td>
-              <td>10:31 PM</td>
-              <td>12:30 PM</td>
-            </tr>
-          </tbody>
-        </table>
-      </div> */}
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Staff Availability</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <form className="row">
+                <div className='col-md-6'>
+                  <div className="form-group">
+                    <label>Days</label>
+                    <select
+                      className='form-select'
+                      name="days" value={editAvail.days || ''} onChange={handleInputChange}
+                      required
+                    >
+                      <option defaultValue hidden>Select Days</option>
+                      <option value={"Monday"}>Monday</option>
+                      <option value={"Tuesday"}>Tuesday</option>
+                      <option value={"Wednessday"}>Wednessday</option>
+                      <option value={"Thursday"}>Thursday</option>
+                      <option value={"Friday"}>Friday</option>
+                      <option value={"Saturday"}>Saturday</option>
+                      <option value={"Sunday"}>Sunday</option>
+                    </select>
+                  </div>
+                </div>
+                <div className='col-md-6'>
+                  <div className="form-group">
+                    <label>From Time of Day</label>
+                    <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+                <div className='col-md-6'>
+                  <div className="form-group">
+                    <label>To Time of Day</label>
+                    <input
+                      className="form-control"
+                      type="time"
+                      name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="submit"
+              className="btn btn-primary add-btn px-2"
+              disabled={loading2 ? true : false}
+              onClick={EditAvail}
+            >
+              {loading2 ? (
+                <div className="spinner-grow text-light" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              ) : (
+                "Add"
+              )}
+            </button>
+          </Modal.Footer>
+        </Modal>
+
 
       </div>
 

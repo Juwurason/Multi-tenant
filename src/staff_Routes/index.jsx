@@ -15,6 +15,7 @@ import AddReport from '../modules/Staff/AddReport';
 import ViewTicket from '../modules/Staff/Support/viewTicket';
 import RaiseTicket from '../modules/Staff/Support/raiseTicket';
 import KnowledgeBase from '../modules/Staff/Support/knowledgeBase';
+import MessageInbox from '../modules/Staff/Message';
 
 export default [
 
@@ -86,6 +87,11 @@ export default [
    {
       path: 'staff-form',
       component: StaffForm
+   },
+
+   {
+      path: 'messageInbox',
+      component: MessageInbox
    },
 
 ]
