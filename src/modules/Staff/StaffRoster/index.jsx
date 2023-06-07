@@ -117,6 +117,7 @@ const StaffRoster = () => {
     setReasonModal(true)
     setStaffCancel(e)
   };
+  
   const daysOfWeek = [
     currentDate.subtract(3, 'day'),
     currentDate.subtract(2, 'day'),

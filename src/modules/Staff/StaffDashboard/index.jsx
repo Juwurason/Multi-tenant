@@ -64,17 +64,19 @@ const StaffDashboard = () => {
       const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const activities = data.shiftRoster;
       setRoster(activities);
-      const now = dayjs().tz('Australia/Sydney');
-      const yesterday = now.subtract(1, 'day').startOf('day');
-      const today = now.startOf('day').format('YYYY-MM-DD');
-      const tomorrow = now.add(1, 'day').startOf('day');
-      const nonow = dayjs().tz('Australia/Sydney').format('YYYY-MM-DD')
-      const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(nonow, 'day'));
-      const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
-      setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
-      setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
-      setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
-      setUpcomingActivities(sortedUpcomingActivities);
+      // console.log(data.shiftRoster);
+      // const now = dayjs().tz('Australia/Sydney');
+      // const yesterday = now.subtract(1, 'day').startOf('day');
+      // const today = now.startOf('day').format('YYYY-MM-DD');
+      // const tomorrow = now.add(1, 'day').startOf('day');
+      // const nonow = dayjs().tz('Australia/Sydney').format('YYYY-MM-DD')
+      // const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(nonow, 'day'));
+      // const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
+      // setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
+      // setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
+      // setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
+      // setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow, null, '[]')));
+      // setUpcomingActivities(sortedUpcomingActivities);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -95,6 +97,21 @@ const StaffDashboard = () => {
     }
   }
 
+  const [currentDate, setCurrentDate] = useState(dayjs().tz());
+
+  const daysOfWeek = [
+    currentDate.subtract(1, 'day'),
+    currentDate,
+    currentDate.add(1, 'day'),
+    currentDate.add(2, 'day')
+  ];
+  
+  const activitiesByDay = daysOfWeek.map((day) =>
+   roster.filter((activity) =>
+      dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+    )
+    
+  );
 
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
@@ -123,22 +140,22 @@ const StaffDashboard = () => {
     // Simulating an asynchronous action, such as an API call
     setTimeout(() => {
       // Perform any necessary logic here before routing to the - page
-      // if (navigator.geolocation) {
-      //   navigator.geolocation.getCurrentPosition(
-      //     (position) => {
-      //       const latitude = position.coords.latitude;
-      //       const longitude = position.coords.longitude;
-      //       localStorage.setItem("latit", latitude)
-      //       localStorage.setItem("log", longitude)
-      //       navigate.push(`/staff/staff-progress/${activitiesToday[0]?.shiftRosterId}`);
-      //     },
-      //     (error) => {
-      //       toast.error('Error getting location:', error.message);
-      //     }
-      //   );
-      // } else {
-      //   toast.error('Geolocation is not supported');
-      // }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            localStorage.setItem("latit", latitude)
+            localStorage.setItem("log", longitude)
+            navigate.push(`/staff/staff-progress/${activitiesByDay[1][0]?.shiftRosterId}`);
+          },
+          (error) => {
+            toast.error('Error getting location:', error.message);
+          }
+        );
+      } else {
+        toast.error('Geolocation is not supported');
+      }
     
     }, 2000); // Set an appropriate delay to simulate the loading time
 
@@ -151,29 +168,29 @@ const StaffDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
-  const handleActivityClick = (activitiesTomorrow) => {
-    setSelectedActivity(activitiesTomorrow);
+  const handleActivityClick = (activitiesByDay) => {
+    setSelectedActivity(activitiesByDay);
     setShowModal(true);
   };
 
 
-  function getActivityStatus(activitiesToday) {
-    if (!activitiesToday) {
+  function getActivityStatus(activitiesByDay) {
+    if (!activitiesByDay) {
       return 'No Shift Today';
     }
     // dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-    const activityDateFrom = dayjs(activitiesToday.dateFrom).format('YYYY-MM-DD HH:mm:ss')
-    const activityDateTo = dayjs(activitiesToday.dateTo).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss')
+    const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
 
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
     else if (activityDateTo < nowInAustraliaTime) {
-      return activitiesToday.attendance === true ? 'Present' : 'Absent';
+      return activitiesByDay[1][0].attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo < nowInAustraliaTime || activitiesToday.attendance === true) {
-      return 'Present'
+    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true) {
+      return 'Present';
     }
     else {
       return 'Clock-In';
@@ -219,15 +236,15 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-secondary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{`${dayjs(activitiesYesterday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-dark rounded px-2'>{activitiesYesterday[0]?.status === "string" ? "Active" : activitiesYesterday[0]?.status}</span>
+                          <span style={{ fontSize: '12px' }}>{`${dayjs(daysOfWeek[0]).format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-dark rounded px-2'>{activitiesByDay[0][0]?.status === "string" ? "Active" : activitiesByDay[0][0]?.status}</span>
                         </div>
                       </div>
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesYesterday[0]?.profile.firstName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesYesterday.length > 0 ? dayjs(activitiesYesterday[0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesYesterday.length > 0 ? dayjs(activitiesYesterday[0]?.dateTo).format('hh:mm A') : '--'}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[0][0]?.profile.firstName}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[0].length > 0 ? dayjs(activitiesByDay[0][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[0].length > 0 ? dayjs(activitiesByDay[0][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-light bg-light text-muted">
                         View Details
@@ -243,31 +260,31 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-primary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}> {`${dayjs(activitiesToday[0]?.dateFrom).format('dddd, MMMM D, YYYY')}`}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesToday[0]?.status}</span>
+                          <span style={{ fontSize: '12px' }}> {`${dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}`}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesByDay[1][0]?.status}</span>
                         </div>
                       </div>
 
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesToday[0]?.profile.fullName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesToday.length > 0 ? dayjs(activitiesToday[0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesToday.length > 0 ? dayjs(activitiesToday[0]?.dateTo).format('hh:mm A') : '--'}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[1][0]?.profile.fullName}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
                       </div>
 
                       <div className='px-5 py-4'>
-                        {activitiesToday[0] ? (
+                        {activitiesByDay[1][0] ? (
                           <>
-                            <span>{activitiesToday[0]?.activities}</span>
+                            <span>{activitiesByDay[1][0]?.activities}</span>
                             <br />
                             <br />
 
-                            {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
+                            {getActivityStatus(activitiesByDay) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
-                            ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
+                            ) : getActivityStatus(activitiesByDay) === 'Clock-In' ? (
                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
                                 {isLoading ? 
                                   <div>
@@ -280,12 +297,12 @@ const StaffDashboard = () => {
                               </span> 
                             ) : (
                               <small
-                                className={`p-1 rounded ${getActivityStatus(activitiesToday[0]) === 'Upcoming' ? 'bg-warning' :
-                                  getActivityStatus(activitiesToday[0]) === 'Absent' ? 'bg-danger text-white' :
-                                    getActivityStatus(activitiesToday[0]) === 'Present' ? 'bg-success text-white' : ''
+                                className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
+                                  getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
+                                    getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
                                   }`}
                               >
-                                {getActivityStatus(activitiesToday[0])}
+                                {getActivityStatus(activitiesByDay)}
                               </small>
                             )}
                           </>
@@ -309,17 +326,17 @@ const StaffDashboard = () => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('dddd, MMMM D, YYYY') : "No shift yet"}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesTomorrow[0]?.status}</span>
+                          <span style={{ fontSize: '12px' }}>{ dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesByDay[2][0]?.status}</span>
                         </div>
                       </div>
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesTomorrow[0]?.profile.firstName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateTo).format('hh:mm A') : '--'}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.profile.firstName}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
-                      <div className="card-footer text-body-danger bg-danger text-white pointer" onClick={() => handleActivityClick(activitiesTomorrow)}>
+                      <div className="card-footer text-body-danger bg-danger text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
                         View Details
 
                       </div>
@@ -333,8 +350,8 @@ const StaffDashboard = () => {
               <div className='col-md-4 p-2 d-flex flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h3>Upcoming Shift</h3>
-                  {upcomingActivities.length > 0 ? (
-                    upcomingActivities.map(activity => (
+                  {activitiesByDay[3].length > 0 ? (
+                    activitiesByDay[3][0]?.map(activity => (
                       <span className="mt-2" key={activity.id}>
                         <div className="d-flex justify-content-between text-dark">
                           <div className='d-flex flex-column justify-content-start'>
@@ -370,8 +387,8 @@ const StaffDashboard = () => {
               <Modal.Body>
                 {selectedActivity && (
                   <>
-                    <p><b>Date:</b> {activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A') : '--'}</p>
-                    <p><b>Time:</b> {activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesTomorrow.length > 0 ? dayjs(activitiesTomorrow[0]?.dateTo).format('hh:mm A') : '--'}</p>
+                    <p><b>Date:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</p>
+                    <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
                     <p><b>Description:</b> {selectedActivity.activities}</p>
                   </>
                 )}
