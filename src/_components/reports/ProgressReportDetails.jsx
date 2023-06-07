@@ -6,6 +6,7 @@ import { useCompanyContext } from "../../context";
 import useHttp from "../../hooks/useHttp";
 import { Link } from 'react-router-dom';
 import { MdCancel } from "react-icons/md";
+import './report.css';
 const ProgressReportDetails = () => {
 
 
@@ -34,7 +35,9 @@ const ProgressReportDetails = () => {
         FetchProgress()
     }, [])
 
-
+    const handlePrint = () => {
+        window.print();
+    };
 
 
     return (
@@ -56,7 +59,7 @@ const ProgressReportDetails = () => {
                                 </div>
                                 <div className="card-body">
                                     <form
-
+                                        id="print-content"
                                     >
                                         <div className="row">
                                             <div className="col-sm-6">
@@ -103,6 +106,7 @@ const ProgressReportDetails = () => {
 
 
                                     </form>
+                                    <button className="add-btn btn btn-primary rounded-2 text-white" onClick={handlePrint}>Print</button>
                                 </div>
                             </div>
 

@@ -17,6 +17,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { set } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 
 
 
@@ -36,7 +37,7 @@ const ShiftScheduling = () => {
   const [staff, setStaff] = useState([]);
   const [clients, setClients] = useState([]);
   const [schedule, setSchedule] = useState([]);
-  const [displaySchedule, setDisplaySchedule] = useState(schedule);
+  const history = useHistory();
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
   const [lgShow, setLgShow] = useState(false);
@@ -148,17 +149,18 @@ const ShiftScheduling = () => {
   };
 
   const handleDragEnd = (result) => {
+
     // Reset the temporary task stored in state
     // setDraggedTask(null);
-
-    const { source, destination } = result;
-    setTargetDate(destination.droppableId)
-    console.log(targetDate);
-    // Check if the item was dropped outside a valid droppable area
-    if (!destination) {
-      return;
-    }
-    const draggedTask = schedule[source.index];
+    history.push('/app/employee/add-shift')
+    // const { source, destination } = result;
+    // setTargetDate(destination.droppableId)
+    // console.log(targetDate);
+    // // Check if the item was dropped outside a valid droppable area
+    // if (!destination) {
+    //   return;
+    // }
+    // const draggedTask = schedule[source.index];
     // Store the dragged task temporarily in state
 
     // Call the update endpoint to update the actual data

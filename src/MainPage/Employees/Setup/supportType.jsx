@@ -45,7 +45,7 @@ const SupportType = () => {
         },
         {
             name: 'Item Name',
-            selector: row => row.supportType,
+            selector: row => row.itemName,
             sortable: true,
             cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
                 data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.itemName}`}

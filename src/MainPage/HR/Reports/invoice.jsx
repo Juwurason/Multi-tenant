@@ -19,43 +19,47 @@ const Invoice = () => {
     const [dateTo, setDateTo] = useState('');
     const [type, setType] = useState('');
     const [invoice, setInvoice] = useState([]);
+    const [name, setName] = useState({});
 
     const columns = [
 
         {
             name: 'Description',
-            selector: row => '',
-            sortable: true
-        },
-
-
-        {
-            name: 'Date',
-            selector: row => row.date,
+            selector: row => row.description,
             sortable: true,
-            expandable: true,
-            cell: (row) => (
-                <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
-            ),
+            cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.description} (${row.itemNumber})`}
+            >{row.description} ({row.itemNumber})</span>
         },
+
+
+        // {
+        //     name: 'Date',
+        //     selector: row => row.date,
+        //     sortable: true,
+        //     expandable: true,
+        //     cell: (row) => (
+        //         <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
+        //     ),
+        // },
         {
             name: 'Actual Hours',
-            selector: row => row.totalDuration,
+            selector: row => row.duration,
             sortable: true
         },
         {
             name: 'Agreed Hours',
-            selector: row => row.totalAgreedDuration,
+            selector: row => row.agreedDuration,
             sortable: true
         },
         {
             name: 'Unit Price',
-            selector: row => row.staff,
+            selector: row => row.unitPrice,
             sortable: true
         },
         {
             name: 'Amount ($)',
-            selector: row => row.totalAmount,
+            selector: row => row.amount,
             sortable: true
         },
         {
@@ -92,8 +96,9 @@ const Invoice = () => {
         try {
             const { data } = await get(`/Invoice/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${type}`, { cacheTimeout: 300000 });
             if (data.status === "Success") {
-                toast.success(data.message)
-                setInvoice(data.invoiceItems)
+                toast.success(data.message);
+                setInvoice(data?.invoiceItems?.agreed_Actual);
+                setName(data?.invoiceItems);
             }
             setLoading1(false)
         } catch (error) {
@@ -178,7 +183,16 @@ const Invoice = () => {
         });
         doc.save("invoiceReport.pdf");
     };
-
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+                <span>
+                    <span className='fw-bold'>Description: </span>
+                    <span> {data.description} ({data.itemNumber})</span>
+                </span>
+            </div>
+        );
+    };
 
     const [searchText, setSearchText] = useState("");
 
@@ -187,7 +201,7 @@ const Invoice = () => {
     };
 
     const filteredData = invoice.filter((item) =>
-        item.staff.toLowerCase().includes(searchText.toLowerCase())
+        item.description.toLowerCase().includes(searchText.toLowerCase())
     );
 
 
@@ -276,11 +290,21 @@ const Invoice = () => {
                                     </div>
 
                                     <div className="submit-section">
-                                        <button className="btn btn-primary  rounded submit-btn" type='submit'
+                                        <button className="btn btn-info rounded submit-btn text-white" type='submit'
 
                                         >
+                                            {
+                                                loading1 ?
+                                                    <div className="spinner-grow text-white" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div>
 
-                                            Submit
+                                                    :
+
+
+                                                    "Submit"
+                                            }
+
                                         </button>
                                     </div>
                                 </form>
@@ -292,81 +316,93 @@ const Invoice = () => {
 
 
 
+                {
+                    invoice <= 0 ? "" :
+                        <div className="text-center"> <h4>Invoice for {name?.profile?.fullName} </h4></div>
+
+                }
+
+
+                {
+                    invoice <= 0 ?
+                        "" :
+
+                        <div className='mt-4 border'>
 
 
 
+                            <div className="row px-2 py-3">
 
-                <div className='mt-4 border'>
-                    <div className="row px-2 py-3">
+                                <div className="col-md-3">
+                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                        <input type="text" placeholder="Search invoice" className='border-0 outline-none' onChange={handleSearch} />
+                                        <GoSearch />
+                                    </div>
+                                </div>
+                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                    <CSVLink
+                                        data={invoice}
+                                        filename={"data.csv"}
 
-                        <div className="col-md-3">
-                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                <input type="text" placeholder="Search invoice" className='border-0 outline-none' onChange={handleSearch} />
-                                <GoSearch />
+                                    >
+                                        <button
+
+                                            className='btn text-info'
+                                            title="Export as CSV"
+                                        >
+                                            <FaFileCsv />
+                                        </button>
+
+                                    </CSVLink>
+                                    <button
+                                        className='btn text-danger'
+                                        onClick={handlePDFDownload}
+                                        title="Export as PDF"
+                                    >
+                                        <FaFilePdf />
+                                    </button>
+                                    <button
+                                        className='btn text-primary'
+
+                                        onClick={handleExcelDownload}
+                                        title="Export as Excel"
+                                    >
+                                        <FaFileExcel />
+                                    </button>
+                                    <CopyToClipboard text={JSON.stringify(invoice)}>
+                                        <button
+
+                                            className='btn text-warning'
+                                            title="Copy Table"
+                                            onClick={() => toast("Table Copied")}
+                                        >
+                                            <FaCopy />
+                                        </button>
+                                    </CopyToClipboard>
+                                </div>
+
                             </div>
+                            <DataTable data={filteredData} columns={columns}
+                                pagination
+                                highlightOnHover
+                                searchable
+                                searchTerm={searchText}
+                                invoicePending={loading}
+                                invoiceComponent={<div className='text-center fs-1'>
+                                    <div className="spinner-grow text-secondary" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </div>}
+                                responsive
+                                paginationTotalRows={filteredData.length}
+                                expandableRows
+                                expandableRowsComponent={ButtonRow}
+
+
+                            />
+
                         </div>
-                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                            <CSVLink
-                                data={invoice}
-                                filename={"data.csv"}
-
-                            >
-                                <button
-
-                                    className='btn text-info'
-                                    title="Export as CSV"
-                                >
-                                    <FaFileCsv />
-                                </button>
-
-                            </CSVLink>
-                            <button
-                                className='btn text-danger'
-                                onClick={handlePDFDownload}
-                                title="Export as PDF"
-                            >
-                                <FaFilePdf />
-                            </button>
-                            <button
-                                className='btn text-primary'
-
-                                onClick={handleExcelDownload}
-                                title="Export as Excel"
-                            >
-                                <FaFileExcel />
-                            </button>
-                            <CopyToClipboard text={JSON.stringify(invoice)}>
-                                <button
-
-                                    className='btn text-warning'
-                                    title="Copy Table"
-                                    onClick={() => toast("Table Copied")}
-                                >
-                                    <FaCopy />
-                                </button>
-                            </CopyToClipboard>
-                        </div>
-
-                    </div>
-                    <DataTable data={filteredData} columns={columns}
-                        pagination
-                        highlightOnHover
-                        searchable
-                        searchTerm={searchText}
-                        invoicePending={loading}
-                        invoiceComponent={<div className='text-center fs-1'>
-                            <div className="spinner-grow text-secondary" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>}
-                        responsive
-                        paginationTotalRows={filteredData.length}
-
-
-
-                    />
-
-                </div>
+                }
 
 
 
