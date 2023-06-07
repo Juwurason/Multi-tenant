@@ -123,24 +123,23 @@ const StaffDashboard = () => {
     // Simulating an asynchronous action, such as an API call
     setTimeout(() => {
       // Perform any necessary logic here before routing to the - page
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            localStorage.setItem("latit", latitude)
-            localStorage.setItem("log", longitude)
-            navigate.push(`/staff/staff-progress/${activitiesToday[0]?.shiftRosterId}`);
-          },
-          (error) => {
-            toast.error('Error getting location:', error.message);
-          }
-        );
-      } else {
-        toast.error('Geolocation is not supported');
-      }
-      // Route to the - page
-      // history.push('/-');
+      // if (navigator.geolocation) {
+      //   navigator.geolocation.getCurrentPosition(
+      //     (position) => {
+      //       const latitude = position.coords.latitude;
+      //       const longitude = position.coords.longitude;
+      //       localStorage.setItem("latit", latitude)
+      //       localStorage.setItem("log", longitude)
+      //       navigate.push(`/staff/staff-progress/${activitiesToday[0]?.shiftRosterId}`);
+      //     },
+      //     (error) => {
+      //       toast.error('Error getting location:', error.message);
+      //     }
+      //   );
+      // } else {
+      //   toast.error('Geolocation is not supported');
+      // }
+    
     }, 2000); // Set an appropriate delay to simulate the loading time
 
     // Optionally, you can clear the loading state after the specified time
@@ -270,7 +269,14 @@ const StaffDashboard = () => {
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                                <BiStopwatch /> Clock In
+                                {isLoading ? 
+                                  <div>
+                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                  </div> Please wait....
+                                  </div>
+                                  : <span> <BiStopwatch /> Clock In</span>
+                                }
                               </span> 
                             ) : (
                               <small
@@ -285,18 +291,11 @@ const StaffDashboard = () => {
                           </>
                         ) : (
                           <span>No Shift Today</span>
+                          
                         )}
                       </div>
 
-
-
-
-
-
-
                     </div>
-
-
 
                   </div>
 

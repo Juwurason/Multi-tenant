@@ -35,6 +35,7 @@ const StaffDocument = () => {
   const [document, setDocument] = useState("")
   const [staffDocument, setStaffDocument] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
+  const staffPro = JSON.parse(localStorage.getItem('staffProfile'));
   const [showModal2, setShowModal2] = useState(false);
 
   const handleView = (documentUrl) => {
@@ -66,8 +67,8 @@ const StaffDocument = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <div className='d-flex flex-column gap-1 p-2'>
-          <span> {row.documentName}</span>
+        <div className='d-flex flex-column gap-1 p-2 overflow-hidden'>
+          <span title={row.documentName}> {row.documentName}</span>
           <span className='d-flex'>
             <span className='bg-primary text-white pointer px-2 py-1 rounded-2'
               title='View'
@@ -165,7 +166,7 @@ const StaffDocument = () => {
     setLoading(true)
     getStaffDocument()
   }, [])
-
+  
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -326,6 +327,7 @@ const EditAvail = async (e) => {
   formData.append("DocumentName", editAvail.documentName);
   formData.append("ExpirationDate", editAvail.expirationDate);
   formData.append("User", id.fullName);
+  formData.append("UserId", staffPro.staffId);
   formData.append("UserRole", id.role);
   formData.append("Status", "Pending");
   formData.append("DocumentFile", documenti);
