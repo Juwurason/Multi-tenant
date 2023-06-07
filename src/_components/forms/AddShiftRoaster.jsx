@@ -185,14 +185,22 @@ const AddShiftRoaster = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Client Name</label>
+                                                {/* <MultiSelect
+                                                    options={options}
+                                                    value={selected}
+                                                    onChange={handleSelected}
+                                                    labelledBy="Select Task"
+                                                /> */}
                                                 <div>
                                                     <select className="form-select" onChange={e => setProfileId(e.target.value)}>
                                                         <option defaultValue hidden>--Select a Client--</option>
+
                                                         {
                                                             clients.map((data, index) =>
                                                                 <option value={data.profileId} key={index}>{data.fullName}</option>)
                                                         }
-                                                    </select></div>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">

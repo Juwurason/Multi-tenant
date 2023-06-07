@@ -8,7 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -16,6 +16,7 @@ import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
+import dayjs from 'dayjs';
 
 const Clients = () => {
   const { loading, setLoading } = useCompanyContext()
@@ -64,7 +65,7 @@ const Clients = () => {
             className="btn"
             title='edit'
           >
-            <SlSettings />
+            <FaRegEdit />
           </Link>
           <button
             className='btn'
@@ -87,6 +88,7 @@ const Clients = () => {
       setLoading(true)
       const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
       const client = clientResponse.data;
+      console.log(client);
       setClients(client);
       setLoading(false)
     } catch (error) {
@@ -226,19 +228,22 @@ const Clients = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-
-      <div className="p-4 d-flex gap-3 align-items-center">
-        <span>{data.fullName}</span>
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+        <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+        <div><span className='fw-bold'>Email: </span> {data.email}</div>
+        <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
-          <button onClick={() => handleActivate(data.profileId)} className="btn text-primary" style={{ fontSize: "12px" }}>
+          <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
             Activate Client
           </button> |
-          <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger" style={{ fontSize: "12px" }}>
+          <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
             Deactivate Client
           </button>
         </div>
 
       </div>
+
+
     );
   };
   const [searchText, setSearchText] = useState("");
@@ -248,7 +253,8 @@ const Clients = () => {
   };
 
   const filteredData = clients.filter((item) =>
-    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.email.toLowerCase().includes(searchText.toLowerCase())
   );
   const customStyles = {
 
@@ -268,12 +274,12 @@ const Clients = () => {
 
   const handleDelete = async (e) => {
     Swal.fire({
-      html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3>`,
+      html: `<h3>Delete ${e.firstName} ${e.surName}</h3>`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#00AEEF',
       cancelButtonColor: '#777',
-      confirmButtonText: 'Confirm Delete',
+      confirmButtonText: 'Confirm',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
       if (result.isConfirmed) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -20,11 +20,9 @@ import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
+import { Modal } from 'react-bootstrap';
 
 function formatDuration(duration) {
-  // const durationInMinutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
-  // const durationHours = Math.floor(durationInMinutes / 60);
-  // const durationMinutes = durationInMinutes % 60;
   const durationInTicks = BigInt(duration);
   const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
 
@@ -41,8 +39,14 @@ function formatDuration(duration) {
 const AttendanceReport = () => {
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
+  const [loading1, setLoading1] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
   const [attendance, setAttendance] = useState([]);
+  const [staff, setStaff] = useState([]);
+  const [sta, setSta] = useState(0);
+  const dateFrom = useRef(null);
+  const dateTo = useRef(null);
+  const [editModal, setEditModal] = useState(false);
 
 
 
@@ -96,14 +100,24 @@ const AttendanceReport = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <div className="d-flex gap-1">
-          <Link
+        <div className="d-flex gap-1" style={{ overflow: "hidden" }}>
+          <button
             className='btn'
             title='Edit'
-            to={`/app/profile/edit-admin/${row.administratorId}`}
+            onClick={() => setEditModal(true)}
           >
-            <SlSettings />
-          </Link>
+            <FaRegEdit />
+          </button>
+          <button
+            className='btn'
+            title='Details'
+            onClick={() => {
+              // handle action here, e.g. open a modal or navigate to a new page
+              handleDelete(row.administratorId)
+            }}
+          >
+            <FaRegFileAlt />
+          </button>
           <button
             className='btn'
             title='Delete'
@@ -135,6 +149,14 @@ const AttendanceReport = () => {
     } catch (error) {
       console.log(error);
       setLoading(false)
+    }
+    try {
+      const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false)
     }
@@ -316,32 +338,56 @@ const AttendanceReport = () => {
               </div>
             </div>
 
-            {/* <div className="row filter-row">
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin ID</label>
-                                    <input type="text" className="form-control floating" />
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Name</label>
-                                    <input type="text" className="form-control floating" />
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Email</label>
-                                    <input type="text" className="form-control " />
-                                </div>
-                            </div>
+            <div className="row align-items-center shadow-sm p-3">
 
-                            <div className="col-sm-6 col-md-3">
-                                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
-                            </div>
-                        </div> */}
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label className="col-form-label">Staff Name</label>
+                  <div>
+                    <select className="form-select" onChange={e => setSta(e.target.value)}>
+                      <option defaultValue value={""}>--Select a staff--</option>
+                      {
+                        staff.map((data, index) =>
+                          <option value={data.fullName} key={index}>{data.fullName}</option>)
+                      }
+                    </select></div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label className="col-form-label">Start Date</label>
+                  <div>
+                    <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label className="col-form-label">End Date</label>
+                  <div>
+                    <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-auto mt-3">
+                <div className="form-group">
+                  <button
+                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                    disabled={loading1 ? true : false}
+                  >
 
 
+                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div> : "Load"}
+                  </button>
+
+                </div>
+              </div>
+
+
+            </div>
 
 
 
@@ -425,7 +471,95 @@ const AttendanceReport = () => {
             </div>
 
 
+            {/*Edit Modal */}
+            <Modal show={editModal} onHide={() => setEditModal(false)} centered size='lg'>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit Attendance</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div>
+                  <div className="row">
 
+                    <form
+                    // onSubmit={SendReport}
+                    >
+
+                      <div className="row">
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <label htmlFor="">Clock In</label>
+                            <input type="text" className="form-control"
+                              // value={moment(attendance.clockIn).format("LLL")}
+                              readOnly />
+                          </div>
+                        </div>
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <label htmlFor="">Clock Out</label>
+                            <input type="text" className="form-control"
+                              // value={moment(attendance.clockOut).format("LLL")}
+                              readOnly />
+                          </div>
+                        </div>
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <label htmlFor="">Starting Kilometre (km)</label>
+                            <input type="text"
+                              // value={startKm}
+                              // onChange={e => setStartKm(e.target.value)}
+                              className="form-control" />
+                          </div>
+                        </div>
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <label htmlFor="">Ending Kilometre (km)</label>
+                            <input type="text"
+                              // value={endKm}
+                              // onChange={e => setEndKm(e.target.value)}
+                              className="form-control" />
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div className="form-group">
+                        {/* <DefaultEditor value={html} onChange={onChange} /> */}
+                        <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
+                        <textarea rows={3} className="form-control summernote"
+                          name="report"
+                        // value={report} onChange={e => setReport(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="">Image URL </label>
+                        <input className="form-control" type="file"
+                          accept=".png,.jpg,.jpeg"
+                          maxSize={1024 * 1024 * 2}
+                        // onChange={handleFileChange}
+                        />
+                      </div>
+                      <div className="form-group text-center mb-0">
+                        <div className="text-center d-flex gap-2">
+                          <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                            disabled={loading1 ? true : false}
+                            type='submit'
+                          >
+
+                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div> : "Save"}</button>
+
+
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                </div>
+              </Modal.Body>
+
+            </Modal>
 
 
 

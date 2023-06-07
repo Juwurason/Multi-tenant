@@ -346,7 +346,7 @@ const ShiftScheduling = () => {
             </div>
           </div>
 
-          <div className="row align-items-center py-2">
+          <div className="row align-items-center py-2 shadow-sm">
             {/* <span className='fw-bold' draggable>Filter Shift Roaster By User</span>
             <br />
             <br /> */}
@@ -432,7 +432,7 @@ const ShiftScheduling = () => {
           </div>
 
 
-          <div className='row  shadow-sm'>
+          <div className='row'>
 
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>

@@ -24,63 +24,81 @@ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 const SupportType = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
-    const [getHoli, setGetHoli] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [editpro, setEditPro] = useState({})
     const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
+    const [supportType, setSupportType] = useState([]);
 
     const columns = [
-        {
-            name: '#',
-            cell: (row, index) => index + 1
-        },
+        // {
+        //     name: '#',
+        //     cell: (row, index) => index + 1
+        // },
 
         {
-            name: 'Name',
-            selector: row => row.name,
+            name: 'Item Number',
+            selector: row => row.itemNumber,
             sortable: true,
         },
         {
-            name: 'Date',
-            selector: row => row.date,
+            name: 'Item Name',
+            selector: row => row.supportType,
             sortable: true,
+            cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.itemName}`}
+            >{row.itemName}</span>
         },
         {
-            name: 'Date Created',
-            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
+            name: 'Unit',
+            selector: row => row.unit,
             sortable: true
         },
         {
-            name: 'Date Modified',
-            selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
+            name: 'National',
+            selector: row => row.national,
             sortable: true
         },
-
         {
-            name: "Actions",
-            cell: (row) => (
-                <div className="d-flex gap-1">
-                    <button
-                        className="btn"
-                        title='edit'
-                        onClick={() => handleEdit(row.holidayId)}
-                    >
-                        <SlSettings />
-                    </button>
-                    <button
-                        className='btn'
-                        title='Delete'
-                        onClick={() => handleDelete(row)}
-                    >
-                        <GoTrashcan />
-                    </button>
-
-                </div>
-            ),
+            name: 'Remote',
+            selector: row => row.remote,
+            sortable: true
         },
+        {
+            name: 'Very Remote',
+            selector: row => row.veryRemote,
+            sortable: true
+        },
+        // {
+        //     name: 'Date Modified',
+        //     selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
+        //     sortable: true
+        // },
+
+        // {
+        //     name: "Actions",
+        //     cell: (row) => (
+        //         <div className="d-flex gap-1">
+        //             <button
+        //                 className="btn"
+        //                 title='edit'
+        //                 onClick={() => handleEdit(row.holidayId)}
+        //             >
+        //                 <SlSettings />
+        //             </button>
+        //             <button
+        //                 className='btn'
+        //                 title='Delete'
+        //                 onClick={() => handleDelete(row)}
+        //             >
+        //                 <GoTrashcan />
+        //             </button>
+
+        //         </div>
+        //     ),
+        // },
 
     ];
 
@@ -129,34 +147,22 @@ const SupportType = () => {
 
 
 
-    const FetchClient = async () => {
+    const FetchData = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
-            // console.log(data);
-            //   setGetHoli(data);
+            const { data } = await get(`/Invoice/get_all_support_type`, { cacheTimeout: 300000 });
+            setSupportType(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
-            setLoading(false)
-        } finally {
             setLoading(false)
         }
-
-        try {
-            const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setClients(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
+        finally {
             setLoading(false)
         }
     };
     useEffect(() => {
-        FetchClient()
+        FetchData()
     }, []);
 
     const handleActivityClick = () => {
@@ -181,7 +187,7 @@ const SupportType = () => {
         sheet.addRow(headers);
 
         // Add data
-        getHoli.forEach((dataRow) => {
+        supportType.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -197,7 +203,7 @@ const SupportType = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'getHoli.xlsx';
+            link.download = 'supportType.xlsx';
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -208,12 +214,12 @@ const SupportType = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(getHoli);
+        const csvData = Papa.unparse(supportType);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "getHoli.csv");
+        link.setAttribute("download", "supportType.csv");
         link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
@@ -227,9 +233,9 @@ const SupportType = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("getHoli Table", marginLeft, 40);
+        doc.text("supportType Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = getHoli.map((dataRow) =>
+        const dataValues = supportType.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -244,13 +250,38 @@ const SupportType = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("getHoli.pdf");
+        doc.save("supportType.pdf");
     };
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                {data.name}
+            <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+                <span>
+                    <span className='fw-bold'>Item Name: </span>
+                    <span> {data.itemName}</span>
+                </span>
+
+                <span>
+                    <span className='fw-bold'>Date Created: </span>
+                    <span>
+                        {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
+                    </span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Date Modified: </span>
+                    <span>
+                        {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
+                    </span>
+                </span>
+                <div>
+                    <span className='fw-bold'>Actions: </span>
+                    <button className="btn text-primary" style={{ fontSize: "12px" }}>
+                        Edit
+                    </button> |
+                    <button className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                        Delete
+                    </button>
+                </div>
 
             </div>
         );
@@ -261,8 +292,8 @@ const SupportType = () => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = getHoli.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = supportType.filter((item) =>
+        item.itemName.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -384,8 +415,8 @@ const SupportType = () => {
                         </div>
                         <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
-                                data={getHoli}
-                                filename={"getHoli.csv"}
+                                data={supportType}
+                                filename={"supportType.csv"}
 
                             >
                                 <button
@@ -412,7 +443,7 @@ const SupportType = () => {
                             >
                                 <FaFileExcel />
                             </button>
-                            <CopyToClipboard text={JSON.stringify(getHoli)}>
+                            <CopyToClipboard text={JSON.stringify(supportType)}>
                                 <button
 
                                     className='btn text-warning'
@@ -449,7 +480,7 @@ const SupportType = () => {
                     />
 
                     {/* Modal */}
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal show={showModal} onHide={() => setShowModal(false)} centered size='lg'>
                         <Modal.Header closeButton>
                             <Modal.Title> Add Support Type </Modal.Title>
                         </Modal.Header>
@@ -457,42 +488,42 @@ const SupportType = () => {
                             <div>
                                 <div className="row">
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Item Number</label>
                                         <div>
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Item Name</label>
                                         <div>
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Unit</label>
                                         <div>
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">National</label>
                                         <div>
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Remote</label>
                                         <div>
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Very Remote</label>
                                         <div>
                                             <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
