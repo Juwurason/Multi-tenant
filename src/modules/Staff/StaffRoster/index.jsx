@@ -117,6 +117,7 @@ const StaffRoster = () => {
     setReasonModal(true)
     setStaffCancel(e)
   };
+  
   const daysOfWeek = [
     currentDate.subtract(3, 'day'),
     currentDate.subtract(2, 'day'),
@@ -189,41 +190,52 @@ const StaffRoster = () => {
           </div>
 
 
-          <div className='row filter-row '>
+          <div className='row  shadow-sm'>
 
 
-            <div className="col-md-8 col-lg-12 ">
+            <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer' onClick={handlePrevClick} />
-                  <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer' onClick={handleNextClick} />
+                  <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
+                  <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                     <option defaultValue hidden>Week</option>
 
-                    <option value=''>Month</option>
+                    {/* <option value=''>Month</option> */}
                     <option value=''>Week</option>
-                    <option value=''>Day</option>
+                    {/* <option value=''>Day</option> */}
 
                   </select>
                 </span>
               </div>
+
               <div className='row g-0'>
 
                 {daysOfWeek.map((day, index) => (
                   <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
-                    <div className='border p-2'>
+                    <div className='border  d-flex justify-content-center py-2 bg-light'>
+                      <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
                       <span
-                        className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
-                        style={{ fontSize: '12px' }}>
-                        {day.format('dddd, MMMM D')}
+                                className={`fw-bold fs-4`
 
-                      </span>
+                                }
+                              >
+                                {day.format('D')}
+                              </span>
+
+                              <span style={{ fontSize: '10px' }} className='mb-2'>
+                                {day.locale('en').format('ddd')}
+                              </span>
+                      </div>
                     </div>
 
-                    <div className="col-sm-12 text-center border p-2" style={{ height: "50vh", overflow: "auto", overflowX: "hidden", cursor: 'pointer' }}>
+                    <div 
+                     className="col-sm-12 text-center border p-2"
+                     style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
+                     >
                       {loading &&
 
                         <div className="spinner-grow text-secondary" role="status">
@@ -241,8 +253,15 @@ const StaffRoster = () => {
                           activitiesByDay[index].length > 0 ? (
                             activitiesByDay[index].map((activity, activityIndex) => (
                               <div key={activityIndex}
-                                className='text-white rounded-2 d-flex flex-column gap-1 align-items-start p-2 mt-2'
-                                style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                              className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                              style={{
+                                fontSize: '10px',
+                                overflow: 'hidden',
+                                backgroundColor:
+                                  dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                    ? '#1C75BC'
+                                    : '#5fa8e8',
+                              }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>

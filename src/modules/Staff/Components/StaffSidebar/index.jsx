@@ -1,15 +1,16 @@
-/**
- * App Header
- */
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-import "./style.css"
+import { MdDashboard } from 'react-icons/md';
 
 const StaffSidebar = (props) => {
     const MenuMore = () => {
         document.getElementById("more-menu-hidden").classList.toggle("hidden");
+    }
+
+    const onMenuClik = () => {
+        props.onMenuClick()
     }
 
     const [isSideMenu, setSideMenu] = useState("");
@@ -33,83 +34,99 @@ const StaffSidebar = (props) => {
     }
 
 
+
+
     let pathname = props.location.pathname
     return (
-        <div id="sidebar" className="sidebar" >
+        <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9" }}>
             <Scrollbars
                 autoHide
-                autoHideTimeout={1000}
-                autoHideDuration={200}
+                // autoHideTimeout={1000}
+                // autoHideDuration={200}
                 autoHeight
                 autoHeightMin={0}
                 autoHeightMax="95vh"
                 thumbMinSize={30}
                 universal={false}
                 hideTracksWhenNotNeeded={true}
+
+
             >
                 <div className="sidebar-inner slimscroll">
                     <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
 
+
+                        { /*Vertical Sidebar starts here*/}
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
                                 <span>Main</span>
                             </li>
-                            <li className="submenu">
-                                <Link to="/staff/staff" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> </Link>
+                            <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
+
+                                <Link to="/staff/staff"  >
+                                    <i className="la la-dashboard" />
+                                    <span> Dashboard</span></Link>
+
                             </li>
 
                             <li className="menu-title">
                                 <span>Account Management</span>
                             </li>
-
-                            <li className={pathname.includes('staffprofile') ? "active" : ""}>
+                            <li className={pathname.includes('staffprofile') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staffprofile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
 
-                            <li className={pathname.includes('staffchangepassword') ? "active" : ""}>
+                            <li className={pathname.includes('staffchangepassword') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staffchangepassword"><i className="la la-lock" /> <span>Change Password</span></Link>
-                                {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
                             </li>
-                            <li className={pathname.includes('staff-form') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+                            <li className={pathname.includes('staff-form') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staff-form"><i className="la la-book" /> <span>My Availabilities</span></Link>
                             </li>
-                            <li className={pathname.includes('staff-attendance') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+
+                            <li className={pathname.includes('staff-attendance') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>My Attendances</span></Link>
                             </li>
-                            <li className={pathname.includes('staff-progressNote') ? "active" : pathname.includes('ticket-view') ? "active" : ""}>
+
+                            <li className={pathname.includes('staff-progressNote') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staff-progressNote"><i className="la la-clipboard" /> <span>My Progress Note</span></Link>
                             </li>
+                        
                             <li className="menu-title">
                                 <span>Staff-Client Management</span>
                             </li>
-
-                            <li className={pathname.includes('staff-roster') ? "active" : ""}>
+                   
+                            <li className={pathname.includes('staff-roster') || pathname.includes('staff-roster') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staff-roster"><i className="la la-calendar" /> <span>My Shift Roster</span></Link>
                             </li>
-                            <li className={pathname.includes('staff-document') ? "active" : ""}>
+
+                            <li className={pathname.includes('staff-document') || pathname.includes('staff-document') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
 
                             <li className="menu-title">
                                 <span>Communication</span>
                             </li>
-                            
+
+                            <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/staff/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
+                            </li>
+
                             <li className="submenu">
-                                <a href="javascript:void(0)" className={isSideMenu == "ticket" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "ticket" ? "" : "ticket")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "ticket" ?
+                                <a href="javascript:void(0)" className={isSideMenu == "support" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "support" ? "" : "support")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "support" ?
                                     <ul>
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                        <li><Link onClick={() => onMenuClik()} className={pathname.includes('view-ticket') ? "active" : pathname.includes('view-ticket') ?
+                                            "active" : pathname.includes('view-ticket') ? "active" : ""}
                                             to="/staff/view-ticket">View Tickets</Link>
                                         </li>
 
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                        <li><Link onClick={() => onMenuClik()} className={pathname.includes('raise-ticket') ? "active" : pathname.includes('raise-ticket') ?
+                                            "active" : pathname.includes('raise-ticket') ? "active" : ""}
                                             to="/staff/raise-ticket">Raise a Ticket</Link>
                                         </li>
 
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                        <li><Link onClick={() => onMenuClik()} className={pathname.includes('knowledge') ? "active" : pathname.includes('knowledge') ?
+                                            "active" : pathname.includes('knowledge') ? "active" : ""}
                                             to="/staff/knowledge">Knowledge Base</Link>
                                         </li>
 
@@ -118,6 +135,8 @@ const StaffSidebar = (props) => {
                                 }
                             </li>
 
+                            <br />
+                            <br />
                         </ul>
                     </div>
                 </div>
@@ -125,14 +144,11 @@ const StaffSidebar = (props) => {
 
             </Scrollbars>
 
-        </div>
 
+        </div>
 
     );
 
 }
 
-
-
 export default withRouter(StaffSidebar);
-
