@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -18,6 +18,7 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import dayjs from 'dayjs';
 const AllEmployees = () => {
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
@@ -64,11 +65,11 @@ const AllEmployees = () => {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">
-          <Link to={`/app/profile/edit-profile/${row.staffId}`}
+          <Link to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`}
             className="btn"
             title='edit'
           >
-            <SlSettings />
+            <FaRegEdit />
           </Link>
           <button
             className='btn'
@@ -109,12 +110,12 @@ const AllEmployees = () => {
 
   const handleDelete = async (e) => {
     Swal.fire({
-      html: `<h3>Are you sure? you want to delete this staff</h3>`,
+      html: `<h3>This will remove all info for this staff</h3>`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#00AEEF',
       cancelButtonColor: '#777',
-      confirmButtonText: 'Confirm Delete',
+      confirmButtonText: 'Confirm',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -275,13 +276,15 @@ const AllEmployees = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4 d-flex gap-3 align-items-center">
-        <span>{data.fullName}</span>
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+        <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+        <div><span className='fw-bold'>Email: </span> {data.email}</div>
+        <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
-          <button onClick={() => handleActivate(data.staffId)} className="btn text-primary" style={{ fontSize: "12px" }}>
+          <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
             Activate Staff
           </button> |
-          <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger" style={{ fontSize: "12px" }}>
+          <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
             Deactivate Staff
           </button>
         </div>
@@ -296,7 +299,8 @@ const AllEmployees = () => {
   };
 
   const filteredData = staff.filter((item) =>
-    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.email.toLowerCase().includes(searchText.toLowerCase())
   );
   const customStyles = {
 

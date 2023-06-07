@@ -19,15 +19,15 @@ const LocationMapModal = ({ latitude, longitude }) => {
         <div>
             <small
                 onClick={openModal}
-                className="pointer p-1 bg-success text-white rounded d-flex justify-content-center align-items-center"
+                className="pointer p-1 bg-info text-white rounded d-flex justify-content-center align-items-center"
                 style={{ fontSize: "10px" }}
             >
-                Show Location on map
+                Show on Google map
             </small>
 
             <Modal show={showModal} onHide={closeModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title style={{ fontSize: "10px" }}>Location of time clocked in</Modal.Title>
+                    <Modal.Title style={{ fontSize: "10px" }}><small>Location of time clocked in</small></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="d-flex justify-content-center align-items-center">

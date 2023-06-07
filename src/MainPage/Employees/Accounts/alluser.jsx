@@ -7,7 +7,7 @@ import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaSearch, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import { useCompanyContext } from '../../../context';
@@ -82,7 +82,7 @@ const AllUser = () => {
                         title='Edit'
                         to={`/app/account/edituser/${row.id}`}
                     >
-                        <SlSettings />
+                        <FaRegEdit />
                     </Link>
                     <button
                         className='btn'

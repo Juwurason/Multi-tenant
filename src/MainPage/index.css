@@ -241,3 +241,14 @@ body::-webkit-scrollbar-thumb {
     border-radius: 5px;
     color: #fff !important;
 }
+
+.lonng-cell {
+    width: 300px !important;
+    /* Adjust the width as per your requirement */
+    white-space: nowrap;
+    /* Prevent text wrapping within the cell */
+    overflow: hidden;
+    /* Hide any overflowing content */
+    text-overflow: ellipsis;
+    /* Show ellipsis (...) for truncated content */
+}

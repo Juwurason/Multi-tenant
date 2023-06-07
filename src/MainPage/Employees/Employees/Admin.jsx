@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
@@ -69,9 +69,9 @@ const AllAdmin = () => {
                     <Link
                         className='btn'
                         title='Edit'
-                        to={`/app/profile/edit-admin/${row.administratorId}`}
+                        to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`}
                     >
-                        <SlSettings />
+                        <FaRegEdit />
                     </Link>
                     <button
                         className='btn'
@@ -237,9 +237,9 @@ const AllAdmin = () => {
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                <div className='fw-bold'><span>Full NAME</span> {data.fullName}</div>
-                <div>{data.email}</div>
+            <div className="p-2 d-flex flex-column gap-1" style={{ fontSize: "12px" }}>
+                <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+                <div><span className='fw-bold'>Email: </span> {data.email}</div>
             </div>
         );
     };
@@ -250,7 +250,8 @@ const AllAdmin = () => {
     };
 
     const filteredData = admin.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+        item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchText.toLowerCase())
     );
 
     return (

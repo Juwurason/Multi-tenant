@@ -402,12 +402,28 @@ const MessageInbox = () => {
                                     role="tabpanel"
                                     aria-labelledby="v-pills-inbox-tab"
                                 >
-
+                                    <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                        <span className='d-flex gap-4 align-items-center'>
+                                            <input type="checkbox" className="custom-control-input" id="cst1" />
+                                            <GoTrashcan />
+                                        </span>
+                                        <span>
+                                            <MdOutlineRefresh className='fs-5' />
+                                        </span>
+                                    </div>
+                                    <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                        <span className='ml-4 d-flex gap-2 align-items-center text-primary fw-bold border-bottom-danger'>
+                                            <MdMoveToInbox /> Primary
+                                        </span>
+                                        <span>
+                                            {inbox?.length} Message(s)
+                                        </span>
+                                    </div>
 
                                     {
                                         inbox <= 0 ?
                                             <>
-                                                nothing
+                                                No Message Yet
                                             </>
                                             :
                                             <>
@@ -422,34 +438,12 @@ const MessageInbox = () => {
                                                     <ul className="list-group">
 
                                                         <div className="table-responsive">
-                                                            <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
-                                                                <span className='d-flex gap-4 align-items-center'>
-                                                                    <input type="checkbox" className="custom-control-input" id="cst1" />
-                                                                    <GoTrashcan />
-                                                                </span>
-                                                                <span>
-                                                                    <MdOutlineRefresh className='fs-5' />
-                                                                </span>
-                                                            </div>
-                                                            <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
-                                                                <span className='ml-4 d-flex gap-2 align-items-center text-primary fw-bold border-bottom-danger'>
-                                                                    <MdMoveToInbox /> Primary
-                                                                </span>
-                                                                <span>
-                                                                    {inbox?.length} Message(s)
-                                                                </span>
-                                                            </div>
+
                                                             <table
 
                                                                 style={{ cursor: 'pointer' }}
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
-                                                                {/* <thead>
-                                                        <th></th>
-                                                        <th>Sent To</th>
-                                                        <th>Title</th>
-                                                        <th>Time</th>
-                                                        <th className='text-end'></th>
-                                                    </thead> */}
+
                                                                 <tbody style={{ overflow: 'scroll', height: "20vh" }}>
                                                                     {inbox?.map((email) => (
                                                                         <tr key={email.id}
@@ -510,6 +504,23 @@ const MessageInbox = () => {
                                     role="tabpanel"
                                     aria-labelledby="v-pills-sent-tab"
                                 >
+                                    <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                        <span className='d-flex gap-4 align-items-center'>
+                                            <input type="checkbox" className="custom-control-input" id="cst1" />
+                                            <GoTrashcan />
+                                        </span>
+                                        <span>
+                                            <MdOutlineRefresh className='fs-5' />
+                                        </span>
+                                    </div>
+                                    <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                        <span className='ml-4 d-flex gap-2 align-items-center text-warning fw-bold border-bottom-danger'>
+                                            <MdMoveToInbox /> Sent
+                                        </span>
+                                        <span>
+                                            {sentEmail?.length} Message(s)
+                                        </span>
+                                    </div>
                                     {selectedEmail ? (
                                         <div>
                                             <h4>{selectedEmail.subject}</h4>
@@ -520,23 +531,7 @@ const MessageInbox = () => {
                                         <ul className="list-group">
 
                                             <div className="table-responsive">
-                                                <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
-                                                    <span className='d-flex gap-4 align-items-center'>
-                                                        <input type="checkbox" className="custom-control-input" id="cst1" />
-                                                        <GoTrashcan />
-                                                    </span>
-                                                    <span>
-                                                        <MdOutlineRefresh className='fs-5' />
-                                                    </span>
-                                                </div>
-                                                <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
-                                                    <span className='ml-4 d-flex gap-2 align-items-center text-warning fw-bold border-bottom-danger'>
-                                                        <MdMoveToInbox /> Sent
-                                                    </span>
-                                                    <span>
-                                                        {sentEmail?.length} Message(s)
-                                                    </span>
-                                                </div>
+
                                                 <table
 
                                                     style={{ cursor: 'pointer' }}
@@ -591,8 +586,41 @@ const MessageInbox = () => {
                                     role="tabpanel"
                                     aria-labelledby="v-pills-drafts-tab"
                                 >
-                                    <h3>Drafts</h3>
-                                    <p>Display draft emails here.</p>
+                                    <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                        <span className='d-flex gap-4 align-items-center'>
+                                            <input type="checkbox" className="custom-control-input" id="cst1" />
+                                            <GoTrashcan />
+                                        </span>
+                                        <span>
+                                            <MdOutlineRefresh className='fs-5' />
+                                        </span>
+                                    </div>
+                                    <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                        <span className='ml-4 d-flex gap-2 align-items-center text-secondary fw-bold border-bottom-danger'>
+                                            <MdMoveToInbox /> Drafts
+                                        </span>
+                                        <span>
+                                            0 Message(s)
+                                        </span>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 </div>
                                 <div
                                     className={`tab-pane fade ${activeTab === 'spam' ? 'show active' : ''}`}
