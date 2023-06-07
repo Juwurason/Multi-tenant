@@ -63,9 +63,7 @@ const StaffProgressNote = () => {
             sortable: true
         }
 
-
-
-    ];
+   ];
 
 
     // const id = JSON.parse(localStorage.getItem('user'))
@@ -125,7 +123,7 @@ const StaffProgressNote = () => {
             try {
                 const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
                 setStaffPro(data.progressNote);
-                console.log(data.progressNote);
+                // console.log(data.progressNote);
                 // console.log(staffPro.profile);
                 setLoading(false);
             } catch (error) {

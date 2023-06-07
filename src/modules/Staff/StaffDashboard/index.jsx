@@ -101,10 +101,6 @@ const StaffDashboard = () => {
     setMenu(!menu)
   };
 
-
-
-
-
   useEffect(() => {
     FetchStaff()
   }, []);
@@ -271,7 +267,7 @@ const StaffDashboard = () => {
                             <br />
 
                             {getActivityStatus(activitiesToday[0]) === 'Upcoming' ? (
-                              <span className='fw-bold text-warning pointer'>Request Cancellation</span>
+                              <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatus(activitiesToday[0]) === 'Clock-In' ? (
                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
                                 <BiStopwatch /> Clock In

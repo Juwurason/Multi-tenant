@@ -555,7 +555,7 @@ const EditAvail = async (e) => {
         </div> */}
         <Modal show={showModal2} onHide={() => setShowModal2(false)} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Upload Documents</Modal.Title>
+            <Modal.Title>Upload Document</Modal.Title>
           </Modal.Header>
           <Modal.Body>
               <form className="row">
