@@ -435,7 +435,7 @@ const MessageInbox = () => {
                                                         <p>{ReactHtmlParser(selectedEmail.content)}</p>
                                                     </div>
                                                 ) : (
-                                                    <ul className="list-group">
+                                                    <ul className="list-group" style={{ height: "62vh", overflowY: 'auto' }}>
 
                                                         <div className="table-responsive">
 
@@ -445,8 +445,8 @@ const MessageInbox = () => {
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody style={{ overflow: 'scroll', height: "20vh" }}>
-                                                                    {inbox?.map((email) => (
-                                                                        <tr key={email.id}
+                                                                    {inbox?.map((email, index) => (
+                                                                        <tr key={index}
 
 
                                                                         >
@@ -469,7 +469,7 @@ const MessageInbox = () => {
                                                                             </td>
                                                                             {/* Attachment */}
                                                                             {/* Time */}
-                                                                            <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).startOf('hour').fromNow()}</td>
+                                                                            <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
                                                                             <td className="text-end" style={{ width: "20px" }}
                                                                                 onClick={() => handleDelete(email.messageId)}>
                                                                                 <GoTrashcan className='pointer' /></td>
@@ -521,65 +521,77 @@ const MessageInbox = () => {
                                             {sentEmail?.length} Message(s)
                                         </span>
                                     </div>
-                                    {selectedEmail ? (
-                                        <div>
-                                            <h4>{selectedEmail.subject}</h4>
-                                            <p>From: {selectedEmail.emailFrom}</p>
-                                            <p>{ReactHtmlParser(selectedEmail.content)}</p>
-                                        </div>
-                                    ) : (
-                                        <ul className="list-group">
-
-                                            <div className="table-responsive">
-
-                                                <table
-
-                                                    style={{ cursor: 'pointer' }}
-                                                    className="table email-table no-wrap table-hover v-middle mb-0 ">
-                                                    {/* <thead>
-                                                        <th></th>
-                                                        <th>Sent To</th>
-                                                        <th>Title</th>
-                                                        <th>Time</th>
-                                                        <th className='text-end'></th>
-                                                    </thead> */}
-                                                    <tbody style={{ overflow: 'scroll', height: "20vh" }}>
-                                                        {sentEmail?.map((email) => (
-                                                            <tr key={email.id}
 
 
-                                                            >
-                                                                {/* label */}
-                                                                <td className="" style={{ width: "20px" }}>
-                                                                    <input type="checkbox" className="custom-control-input" id="cst1" />
-                                                                </td>
-                                                                {/* star */}
-                                                                {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
-                                                                <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                    <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
-                                                                </td>
-                                                                {/* Message */}
-                                                                <td>
-                                                                    <a className="link" href="javascript: void(0)" >
-                                                                        <span className="text-dark fw-bold text-truncate"
-                                                                            onClick={() => handleEmailClick(email)}
-                                                                        >{email.subject}</span>
-                                                                    </a>
-                                                                </td>
-                                                                {/* Attachment */}
-                                                                {/* Time */}
-                                                                <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
-                                                                <td className="text-end" style={{ width: "20px" }}
-                                                                    onClick={() => handleDelete(email.messageId)}>
-                                                                    <GoTrashcan className='pointer' /></td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </ul>
-                                    )}
+                                    {
+                                        sentEmail <= 0 ?
+                                            <>
+                                                No Message Yet
+                                            </>
+                                            :
+                                            <>
+
+                                                {selectedEmail ? (
+                                                    <div>
+                                                        <h4>{selectedEmail.subject}</h4>
+                                                        <p>From: {selectedEmail.emailFrom}</p>
+                                                        <p>{ReactHtmlParser(selectedEmail.content)}</p>
+                                                    </div>
+                                                ) : (
+                                                    <ul className="list-group" style={{ height: "62vh", overflowY: 'auto' }}>
+
+                                                        <div className="table-responsive">
+
+                                                            <table
+
+                                                                style={{ cursor: 'pointer' }}
+                                                                className="table email-table no-wrap table-hover v-middle mb-0 ">
+
+                                                                <tbody>
+                                                                    {sentEmail?.map((email, index) => (
+                                                                        <tr key={index}
+
+
+                                                                        >
+                                                                            {/* label */}
+                                                                            <td className="" style={{ width: "20px" }}>
+                                                                                <input type="checkbox" className="custom-control-input" id="cst1" />
+                                                                            </td>
+                                                                            {/* star */}
+                                                                            {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
+                                                                            <td style={{ width: "100px", fontSize: "12px" }}>
+                                                                                <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
+                                                                            </td>
+                                                                            {/* Message */}
+                                                                            <td>
+                                                                                <a className="link" href="javascript: void(0)" >
+                                                                                    <span className="text-dark fw-bold text-truncate"
+                                                                                        onClick={() => handleEmailClick(email)}
+                                                                                    >{email.subject}</span>
+                                                                                </a>
+                                                                            </td>
+                                                                            {/* Attachment */}
+                                                                            {/* Time */}
+                                                                            <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
+                                                                            <td className="text-end" style={{ width: "20px" }}
+                                                                                onClick={() => handleDelete(email.messageId)}>
+                                                                                <GoTrashcan className='pointer' /></td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </ul>
+                                                )}
+
+                                            </>
+                                    }
+
                                 </div>
+
+
+
+
                                 <div
                                     className={`tab-pane fade ${activeTab === 'drafts' ? 'show active' : ''}`}
                                     id="v-pills-drafts"
