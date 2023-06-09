@@ -62,7 +62,7 @@ const Editor = ({ placeholder, onChange, value }) => {
                 formats={formats}
                 bounds=".app"
                 placeholder={placeholder}
-                style={{ height: "30vh" }}
+                style={{ height: "25vh" }}
             />
             {/* <div className="themeSwitcher">
                 <label>Theme </label>

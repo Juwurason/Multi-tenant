@@ -21,6 +21,7 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
 import { Modal } from 'react-bootstrap';
+import dayjs from 'dayjs';
 
 function formatDuration(duration) {
   const durationInTicks = BigInt(duration);
@@ -40,13 +41,15 @@ const AttendanceReport = () => {
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
   const [attendance, setAttendance] = useState([]);
   const [staff, setStaff] = useState([]);
-  const [sta, setSta] = useState(0);
+  const [sta, setSta] = useState('');
   const dateFrom = useRef(null);
   const dateTo = useRef(null);
   const [editModal, setEditModal] = useState(false);
+  const [periodic, setPeriodic] = useState([]);
 
 
 
@@ -58,36 +61,29 @@ const AttendanceReport = () => {
     },
     {
       name: 'Clock-In',
-      selector: row => row.clockIn,
+      selector: row => moment(row.clockIn).format('LLL'),
       sortable: true,
       expandable: true,
-      cell: (row) => (
-        <span style={{ overflow: "hidden" }}> {!row.clockIn ? "Not Modified" : moment(row.clockIn).format('LLL')}</span>
-      ),
+
     },
     {
       name: 'Duration',
-      selector: row => row.clockIn,
+      selector: row => formatDuration(row.duration),
       sortable: true,
       expandable: true,
-      cell: (row) => (
-        <span style={{ overflow: "hidden" }}> {formatDuration(row.duration)}</span>
-      ),
+
     },
 
 
     {
       name: 'Clock-Out',
-      selector: row => row.clockIn,
+      selector: row => moment(row.clockOut).format('LLL'),
       sortable: true,
       expandable: true,
-      cell: (row) => (
-        <span style={{ overflow: "hidden" }}> {!row.clockOut ? "Not Modified" : moment(row.clockOut).format('LLL')}</span>
-      ),
+
     },
     {
       name: 'Location',
-      selector: row => row.clockIn,
       sortable: true,
       expandable: true,
       cell: (row) => (
@@ -113,7 +109,7 @@ const AttendanceReport = () => {
             title='Details'
             onClick={() => {
               // handle action here, e.g. open a modal or navigate to a new page
-              handleDelete(row.administratorId)
+              // handleDelete(row.administratorId)
             }}
           >
             <FaRegFileAlt />
@@ -123,7 +119,7 @@ const AttendanceReport = () => {
             title='Delete'
             onClick={() => {
               // handle action here, e.g. open a modal or navigate to a new page
-              handleDelete(row.administratorId)
+              // handleDelete(row.administratorId)
             }}
           >
             <GoTrashcan />
@@ -141,9 +137,7 @@ const AttendanceReport = () => {
   const FetchAttendance = async () => {
     try {
       setLoading(true)
-      // const { data } = await get(`Attendances/get_staff_attendances?staffId=2${id.companyId}`, { cacheTimeout: 300000 });
       const { data } = await get(`Attendances/get_all_attendances_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      console.log(data);
       setAttendance(data);
       setLoading(false)
     } catch (error) {
@@ -151,9 +145,8 @@ const AttendanceReport = () => {
       setLoading(false)
     }
     try {
-      const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const staff = staffResponse.data;
-      setStaff(staff);
+      const { data } = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      setStaff(data);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -165,6 +158,58 @@ const AttendanceReport = () => {
 
     FetchAttendance()
   }, []);
+
+  const FetchPeriodic = async (e) => {
+    e.preventDefault();
+    setLoading1(true)
+    try {
+      const { data } = await get(`/Attendances/get_periodic_attendances_by_company?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      console.log(data);
+      setAttendance(data);
+      setPeriodic(data);
+      setLoading1(false)
+    } catch (error) {
+      console.log(error);
+      setLoading1(false)
+    } finally {
+      setLoading1(false)
+    }
+  }
+  const GetTimeshift = async (e) => {
+    e.preventDefault();
+    setLoading2(true)
+    try {
+      const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
+      console.log(data);
+      if (data.status === "Success") {
+        toast.success(data.message);
+      }
+      setLoading2(false)
+    } catch (error) {
+      console.log(error);
+      setLoading2(false)
+    } finally {
+      setLoading2(false)
+    }
+  }
+  const GetAllTimeshift = async (e) => {
+    e.preventDefault();
+
+    setLoading2(true)
+    try {
+      const { data } = await get(`/Attendances/generate_all_staff_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
+      console.log(data);
+      if (data.status === "Success") {
+        toast.success(data.message);
+      }
+      setLoading2(false)
+    } catch (error) {
+      console.log(error);
+      setLoading2(false)
+    } finally {
+      setLoading2(false)
+    }
+  }
 
 
   const [menu, setMenu] = useState(false);
@@ -205,19 +250,6 @@ const AttendanceReport = () => {
   //   })
   // }
 
-
-  const toggleMobileMenu = () => {
-    setMenu(!menu)
-  }
-
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
 
   const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
@@ -296,12 +328,33 @@ const AttendanceReport = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        <div className='fw-bold'><span>Full NAME</span> {data.fullName}</div>
-        <div>{data.email}</div>
+      <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+        <span>
+          <span className='fw-bold'>Latitude: </span>
+          <span> {data.inLatitude}</span>
+        </span>
+        <span>
+          <span className='fw-bold'>Longitude: </span>
+          <span> {data.inLongitude}</span>
+        </span>
+        <span>
+          <span className='fw-bold'>Date Created: </span>
+          <span>
+            {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
+          </span>
+        </span>
+        <span>
+          <span className='fw-bold'>Date Modified: </span>
+          <span>
+            {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
+          </span>
+        </span>
+
+
       </div>
     );
   };
+
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (event) => {
@@ -316,8 +369,7 @@ const AttendanceReport = () => {
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-        <Header onMenuClick={(value) => toggleMobileMenu()} />
-        <Sidebar />
+
         <div className="page-wrapper">
           <Helmet>
             <title>Attendance Reports</title>
@@ -338,17 +390,17 @@ const AttendanceReport = () => {
               </div>
             </div>
 
-            <div className="row align-items-center shadow-sm p-3">
+            <form className="row align-items-center shadow-sm p-3" onSubmit={FetchPeriodic}>
 
               <div className="col-md-4">
                 <div className="form-group">
                   <label className="col-form-label">Staff Name</label>
                   <div>
                     <select className="form-select" onChange={e => setSta(e.target.value)}>
-                      <option defaultValue value={""}>--Select a staff--</option>
+                      <option defaultValue value={""}>All Staff</option>
                       {
                         staff.map((data, index) =>
-                          <option value={data.fullName} key={index}>{data.fullName}</option>)
+                          <option value={data.staffId} key={index}>{data.fullName}</option>)
                       }
                     </select></div>
                 </div>
@@ -357,7 +409,7 @@ const AttendanceReport = () => {
                 <div className="form-group">
                   <label className="col-form-label">Start Date</label>
                   <div>
-                    <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
+                    <input type="datetime-local" ref={dateFrom} className=' form-control' name="" id="" required />
                   </div>
                 </div>
               </div>
@@ -365,7 +417,7 @@ const AttendanceReport = () => {
                 <div className="form-group">
                   <label className="col-form-label">End Date</label>
                   <div>
-                    <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                    <input type="datetime-local" ref={dateTo} className=' form-control' name="" id="" required />
                   </div>
                 </div>
               </div>
@@ -373,6 +425,7 @@ const AttendanceReport = () => {
               <div className="col-auto mt-3">
                 <div className="form-group">
                   <button
+                    type='submit'
                     className="btn btn-info add-btn text-white rounded-2 m-r-5"
                     disabled={loading1 ? true : false}
                   >
@@ -385,9 +438,49 @@ const AttendanceReport = () => {
 
                 </div>
               </div>
+              {
+                sta === "" || periodic.length <= 0 ? "" :
+                  <div className="col-auto mt-3">
+                    <div className="form-group">
+                      <button
+                        type='button'
+                        onClick={GetTimeshift}
+                        className="btn btn-primary add-btn text-white rounded-2 m-r-5"
+                        disabled={loading2 ? true : false}
+                      >
 
 
-            </div>
+                        {loading2 ? <div className="spinner-grow text-light" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div> : "Generate Timesheet"}
+                      </button>
+
+                    </div>
+                  </div>
+              }
+              {
+                sta !== "" || periodic.length <= 0 ? "" :
+                  <div className="col-auto mt-3">
+                    <div className="form-group">
+                      <button style={{ fontSize: "12px" }}
+                        type='button'
+                        onClick={GetAllTimeshift}
+                        className="btn btn-warning add-btn text-white rounded-2 m-r-5"
+                        disabled={loading2 ? true : false}
+                      >
+
+
+                        {loading2 ? <div className="spinner-grow text-light" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div> : "Generate Timesheet for all staff"}
+                      </button>
+
+                    </div>
+                  </div>
+              }
+
+
+            </form>
 
 
 

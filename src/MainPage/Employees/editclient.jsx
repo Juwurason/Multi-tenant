@@ -8,14 +8,6 @@ import useHttp from '../../hooks/useHttp';
 
 const EditClient = () => {
 
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const styles = {
         main: {
