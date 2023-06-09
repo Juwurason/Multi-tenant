@@ -456,7 +456,7 @@ const Document = () => {
                         {/* Search Filter */}
 
 
-                        <div className="row">
+                        <div className="row shadow-sm py-2">
                             <div className="col-sm-4">
                                 <div className="form-group">
                                     <label className="col-form-label">Staff Name</label>
@@ -526,10 +526,12 @@ const Document = () => {
                                 </div>
 
                             </div>
-                            <div className="col-sm-4 text-left">
-                                <button className="btn btn-primary rounded-2">Load</button>
+                            <div className="col-auto text-left">
+                                <div className="form-group">
+                                    <button className="btn btn-info add-btn text-white rounded-2 m-r-5">Load</button>
 
 
+                                </div>
                             </div>
 
                         </div>
@@ -594,10 +596,10 @@ const Document = () => {
                                         </button>
                                     </CopyToClipboard>
                                 </div>
-                                <div className='col-md-4'>
+                                {/* <div className='col-md-4'>
                                     <Link to={''} className="btn add-btn btn-info text-white rounded-2">
                                         Add New Document</Link>
-                                </div>
+                                </div> */}
                             </div>
                             <DataTable data={filteredData} columns={columns}
                                 pagination

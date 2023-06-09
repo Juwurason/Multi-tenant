@@ -242,11 +242,7 @@ const MessageInbox = () => {
 
     }
 
-    const inboxEmails = [
-        { id: 1, sender: 'John Doe', subject: 'Hello', body: 'This is the email body of the first email.', time: "22-05-2023" },
-        { id: 2, sender: 'Jane Smith', subject: 'Meeting Reminder', body: 'This is the email body of the second email.', time: "22-05-2023" },
-        { id: 3, sender: 'Bob Johnson', subject: 'Important Update', body: 'This is the email body of the third email.', time: "22-05-2023" },
-    ];
+
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -544,7 +540,7 @@ const MessageInbox = () => {
 
                                                             <table
 
-                                                                style={{ cursor: 'pointer' }}
+
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody>
@@ -563,7 +559,7 @@ const MessageInbox = () => {
                                                                                 <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
                                                                             </td>
                                                                             {/* Message */}
-                                                                            <td>
+                                                                            <td style={{ cursor: 'pointer' }}>
                                                                                 <a className="link" href="javascript: void(0)" >
                                                                                     <span className="text-dark fw-bold text-truncate"
                                                                                         onClick={() => handleEmailClick(email)}

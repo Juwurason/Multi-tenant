@@ -8,7 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegFileAlt, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoEye, GoSearch, GoTrashcan } from 'react-icons/go';
@@ -16,42 +16,42 @@ import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
-import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
+
 
 
 const ViewTicket = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
-    const [getHoli, setGetHoli] = useState([]);
+    const [ticket, setTicket] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
-    const [loading1, setLoading1] = useState(false);
-    const [editpro, setEditPro] = useState({})
-    const [clients, setClients] = useState([]);
+
     const { get, post } = useHttp();
 
     const columns = [
-        {
-            name: '#',
-            cell: (row, index) => index + 1
-        },
+
 
         {
             name: 'Subject',
-            selector: row => row.name,
+            selector: row => row.subject,
             sortable: true,
+            cell: (row) => <Link
+                to={`/app/support/ticket-details/${row.ticketId}`}
+                className="fw-bold text-dark" style={{ overflow: "hidden" }}
+            > {row.subject}</Link>
+
         },
         {
             name: 'User',
-            selector: row => row.date,
+            selector: row => row.user,
             sortable: true,
         },
         {
             name: 'Status',
-            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
-            sortable: true
+            selector: row => row.isOpen,
+            sortable: true,
+            cell: (row) => <span className="long-cell" style={{ overflow: "hidden" }}
+            ><span className={`${row.isOpen === true ? "bg-info" : "bg-danger"} p-2 rounded-2 text-white`}>{row.isOpen === true ? "open" : "closed"}</span> </span>
         },
 
 
@@ -60,12 +60,21 @@ const ViewTicket = () => {
             cell: (row) => (
                 <div className="d-flex gap-1">
 
+                    <Link
+                        to={`/app/support/ticket-details/${row.ticketId}`}
+                        className='btn'
+                        title='Details'
+
+                    >
+                        <FaRegFileAlt />
+                    </Link>
                     <button
+                        onClick={() => handleDelete(row.ticketId)}
                         className='btn'
                         title='Delete'
-                        onClick={() => handleView(row)}
+
                     >
-                        <GoEye />
+                        <GoTrashcan />
                     </button>
 
                 </div>
@@ -76,10 +85,6 @@ const ViewTicket = () => {
 
 
 
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
-    };
 
 
 
@@ -87,9 +92,8 @@ const ViewTicket = () => {
     const FetchTicket = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`Tickets/get_all_tickets?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            //   setGetHoli(data);
+            const { data } = await get(`/Tickets/get_all_tickets?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            setTicket(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -103,9 +107,7 @@ const ViewTicket = () => {
         FetchTicket()
     }, []);
 
-    const handleActivityClick = () => {
-        setShowModal(true);
-    };
+
 
     useEffect(() => {
         if ($('.select').length > 0) {
@@ -125,7 +127,7 @@ const ViewTicket = () => {
         sheet.addRow(headers);
 
         // Add data
-        getHoli.forEach((dataRow) => {
+        ticket.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -141,7 +143,7 @@ const ViewTicket = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'getHoli.xlsx';
+            link.download = 'ticket.xlsx';
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -152,12 +154,12 @@ const ViewTicket = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(getHoli);
+        const csvData = Papa.unparse(ticket);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "getHoli.csv");
+        link.setAttribute("download", "ticket.csv");
         link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
@@ -171,9 +173,9 @@ const ViewTicket = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("getHoli Table", marginLeft, 40);
+        doc.text("ticket Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = getHoli.map((dataRow) =>
+        const dataValues = ticket.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -188,26 +190,26 @@ const ViewTicket = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("getHoli.pdf");
+        doc.save("ticket.pdf");
     };
 
-    const ButtonRow = ({ data }) => {
-        return (
-            <div className="p-4">
-                {data.name}
 
-            </div>
-        );
-    };
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = getHoli.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = ticket.filter((item) =>
+        item.subject.toLowerCase().includes(searchText.toLowerCase())
     );
+
+
+
+
+
+
+
     const customStyles = {
 
         headCells: {
@@ -224,24 +226,25 @@ const ViewTicket = () => {
         },
     };
 
+
     const handleDelete = async (e) => {
         Swal.fire({
-            html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
+            html: `<h3>Delete this Ticket</h3>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#00AEEF',
             cancelButtonColor: '#777',
-            confirmButtonText: 'Confirm Delete',
+            confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
-                        // { userId: id.userId }
+                    const { data } = await post(`/Tickets/delete/${e}`,
+
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchClient();
+                        FetchTicket();
                     } else {
                         toast.error(data.message);
                     }
@@ -260,39 +263,9 @@ const ViewTicket = () => {
 
     }
 
-    const [holidayName, setHolidayName] = useState('')
-    const [holidayDate, setHolidayDate] = useState('')
 
 
-    const addHoliday = async () => {
 
-        if (holidayName === '' || holidayDate.length === 0) {
-            return toast.error("Input Fields cannot be empty")
-        }
-
-        setLoading1(true)
-        const info = {
-            name: holidayName,
-            date: holidayDate
-        }
-        try {
-            const { data } = await post(`/SetUp/add_holiday`, info)
-            // console.log(data);
-            toast.success(data.message)
-            setShowModal(false)
-            FetchClient()
-            setLoading1(false)
-            setHolidayName('')
-            setHolidayDate('')
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
-            setLoading1(false)
-        }
-    }
 
     return (
         <div className="page-wrapper">
@@ -328,8 +301,8 @@ const ViewTicket = () => {
                         </div>
                         <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
-                                data={getHoli}
-                                filename={"getHoli.csv"}
+                                data={ticket}
+                                filename={"ticket.csv"}
 
                             >
                                 <button
@@ -356,7 +329,7 @@ const ViewTicket = () => {
                             >
                                 <FaFileExcel />
                             </button>
-                            <CopyToClipboard text={JSON.stringify(getHoli)}>
+                            <CopyToClipboard text={JSON.stringify(ticket)}>
                                 <button
 
                                     className='btn text-warning'
@@ -385,8 +358,6 @@ const ViewTicket = () => {
                                 <span className="sr-only">Loading...</span>
                             </div>
                         </div>}
-                        expandableRows
-                        expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
                         responsive

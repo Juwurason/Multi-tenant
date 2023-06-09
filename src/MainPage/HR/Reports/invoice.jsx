@@ -8,6 +8,21 @@ import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
 import CopyToClipboard from "react-copy-to-clipboard";
 import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
+import moment from "moment";
+import jsPDF from "jspdf";
+
+
+function formatDuration(duration) {
+    const durationInTicks = BigInt(duration);
+    const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
+
+    const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+    const hours = Math.floor(durationInMinutes / 60);
+    // const minutes = durationInMinutes % 60;
+
+    return `${hours} Hrs`;
+}
+
 const Invoice = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const [clients, setClients] = useState([]);
@@ -44,7 +59,7 @@ const Invoice = () => {
         // },
         {
             name: 'Actual Hours',
-            selector: row => row.duration,
+            selector: row => formatDuration(row.duration),
             sortable: true
         },
         {
@@ -91,6 +106,10 @@ const Invoice = () => {
     }, []);
 
     const FetchInvoice = async (e) => {
+        e.preventDefault();
+        if (type.trim() === "" || profileId === 0) {
+            return toast.error("Select a client and support type")
+        }
         e.preventDefault();
         setLoading1(true);
         try {
@@ -164,7 +183,8 @@ const Invoice = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("User Table", marginLeft, 40);
+        doc.text(`Invoice for ${name?.profile?.fullName} from ${moment(dateFrom).format("LLL")} to ${moment(dateTo).format("LLL")}`,
+            marginLeft, 40);
         const headers = columns.map((column) => column.name);
         const dataValues = invoice.map((dataRow) =>
             columns.map((column) => {
@@ -238,8 +258,8 @@ const Invoice = () => {
                         <div className="card">
 
                             <div className="card-body">
-                                <form onSubmit={FetchInvoice}>
-                                    <div className="row">
+                                <form onSubmit={FetchInvoice} >
+                                    <div className="row align-items-center py-2">
                                         <div className="col-sm-4">
                                             <div className="form-group">
                                                 <label className="col-form-label">Select Client</label>
@@ -287,26 +307,28 @@ const Invoice = () => {
 
 
 
+                                        <div className="col-auto mt-3">
+                                            <div className="form-group">
+                                                <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+
+                                                >
+                                                    {
+                                                        loading1 ?
+                                                            <div className="spinner-grow text-white" role="status">
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div>
+
+                                                            :
+
+
+                                                            "Load invoice"
+                                                    }
+
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div className="submit-section">
-                                        <button className="btn btn-info rounded submit-btn text-white" type='submit'
-
-                                        >
-                                            {
-                                                loading1 ?
-                                                    <div className="spinner-grow text-white" role="status">
-                                                        <span className="sr-only">Loading...</span>
-                                                    </div>
-
-                                                    :
-
-
-                                                    "Submit"
-                                            }
-
-                                        </button>
-                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -317,14 +339,16 @@ const Invoice = () => {
 
 
                 {
-                    invoice <= 0 ? "" :
-                        <div className="text-center"> <h4>Invoice for {name?.profile?.fullName} </h4></div>
+                    invoice.length <= 0 ? "" :
+                        <div className="text-center"> <h5>Invoice for {name?.profile?.fullName} from
+                            <span> {moment(dateFrom).format("LLL")} </span> to <span> {moment(dateTo).format("LLL")} </span>
+                        </h5></div>
 
                 }
 
 
                 {
-                    invoice <= 0 ?
+                    invoice.length <= 0 ?
                         "" :
 
                         <div className='mt-4 border'>

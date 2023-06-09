@@ -85,7 +85,10 @@ const Sidebar = (props) => {
                 <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
               <li className="submenu">
-                <a href="javascript:void(0)" className={isSideMenu == "management" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "management" ? "" : "management")}><i className="la la-cog" /> <span>Account Management</span> <span className="menu-arrow" /></a>
+                <a href="#" className={isSideMenu == "management" ? "subdrop" : ""} onClick={(e) => {
+                  e.preventDefault();
+                  toggleSidebar(isSideMenu == "management" ? "" : "management")
+                }}><i className="la la-cog" /> <span>Account Management</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "management" ?
                   <ul>
                     <li><Link className={pathname.includes('alluser') ? "active" : pathname.includes('alluser')}
@@ -101,7 +104,10 @@ const Sidebar = (props) => {
                 <span>Staff-Client Management</span>
               </li>
               <li className="submenu">
-                <a href="javascript:void(0)" className={isSideMenu == "setup" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "setup" ? "" : "setup")}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
+                <a href="#" className={isSideMenu == "setup" ? "subdrop" : ""} onClick={(e) => {
+                  e.preventDefault();
+                  toggleSidebar(isSideMenu == "setup" ? "" : "setup")
+                }}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "setup" ?
                   <ul>
                     <li><Link className={pathname.includes('public-holiday') ? "active" : pathname.includes('public-holiday')}
@@ -148,7 +154,10 @@ const Sidebar = (props) => {
                 <Link to="/app/message/inbox" onClick={() => onMenuClik()}><i className="la la-comment" /> <span>Messages</span></Link>
               </li>
               <li className="submenu">
-                <a href="javascript:void(0)" className={isSideMenu == "support" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "support" ? "" : "support")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
+                  e.preventDefault();
+                  toggleSidebar(isSideMenu == "support" ? "" : "support")
+                }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "support" ?
                   <ul>
                     <li><Link className={pathname.includes('view-tickets') ? "active" : pathname.includes('view-tickets')}
