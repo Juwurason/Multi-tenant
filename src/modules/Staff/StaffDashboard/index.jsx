@@ -33,11 +33,6 @@ const StaffDashboard = () => {
   dayjs.tz.setDefault('Australia/Sydney');
   const userObj = JSON.parse(localStorage.getItem('user'));
   const [roster, setRoster] = useState([]);
-  const [activitiesYesterday, setActivitiesYesterday] = useState([]);
-  const [activitiesToday, setActivitiesToday] = useState([]);
-  const [activitiesTomorrow, setActivitiesTomorrow] = useState([]);
-  const [upcomingActivities, setUpcomingActivities] = useState([]);
-  const [clients, setClients] = useState([]);
   const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
   const { get } = useHttp();
@@ -64,19 +59,6 @@ const StaffDashboard = () => {
       const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const activities = data.shiftRoster;
       setRoster(activities);
-      // console.log(data.shiftRoster);
-      // const now = dayjs().tz('Australia/Sydney');
-      // const yesterday = now.subtract(1, 'day').startOf('day');
-      // const today = now.startOf('day').format('YYYY-MM-DD');
-      // const tomorrow = now.add(1, 'day').startOf('day');
-      // const nonow = dayjs().tz('Australia/Sydney').format('YYYY-MM-DD')
-      // const upcomingActivities = activities.filter(activity => dayjs(activity.dateFrom).isAfter(nonow, 'day'));
-      // const sortedUpcomingActivities = upcomingActivities.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom))).slice(0, 5);
-      // setActivitiesYesterday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(yesterday, today, null, '[)')));
-      // setActivitiesToday(activities.filter(activity => dayjs(activity.dateFrom).isBetween(today, tomorrow, null, '[)')));
-      // setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow.add(1, 'day'), null, '[)')));
-      // setActivitiesTomorrow(activities.filter(activity => dayjs(activity.dateFrom).isBetween(tomorrow, tomorrow, null, '[]')));
-      // setUpcomingActivities(sortedUpcomingActivities);
       setLoading(false);
     } catch (error) {
       console.log(error);

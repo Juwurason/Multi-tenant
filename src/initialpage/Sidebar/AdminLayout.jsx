@@ -41,7 +41,7 @@ const AdminLayout = (props) => {
                         <Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
                     )}
                 </div>
-                <AdminSidebar />
+                <AdminSidebar onMenuClick={(value) => toggleMobileMenu()} />
 
             </div>
         </>

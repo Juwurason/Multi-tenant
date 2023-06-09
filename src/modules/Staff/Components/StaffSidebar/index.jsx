@@ -84,11 +84,11 @@ const StaffSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('staff-attendance') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>My Attendances</span></Link>
+                                <Link to="/staff/staff-attendance"><i className="la la-calendar-check-o" /> <span>My Attendances</span></Link>
                             </li>
 
                             <li className={pathname.includes('staff-progressNote') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-progressNote"><i className="la la-clipboard" /> <span>My Progress Note</span></Link>
+                                <Link to="/staff/staff-progressNote"><i className="la la-folder-open" /> <span>My Progress Note</span></Link>
                             </li>
                         
                             <li className="menu-title">

@@ -8,17 +8,15 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const PublicHoliday = () => {
@@ -67,7 +65,7 @@ const PublicHoliday = () => {
                         title='edit'
                         onClick={() => handleEdit(row.holidayId)}
                     >
-                        <SlSettings />
+                        <FaRegEdit />
                     </button>
                     <button
                         className='btn'

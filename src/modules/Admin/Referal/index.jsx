@@ -263,8 +263,8 @@ const Referrals = () => {
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
-                <AdminSidebar />
+                {/* <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
+                <AdminSidebar /> */}
                 <div className="page-wrapper">
                     <Helmet>
                         <title>Referrals</title>

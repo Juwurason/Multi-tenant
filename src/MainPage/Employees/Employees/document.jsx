@@ -57,7 +57,7 @@ const Document = () => {
                 <div className='d-flex flex-column gap-1 p-2'>
                     <span> {row.documentName}</span>
 
-                    <span className='d-flex' style={{ overflow: 'hidden' }}>
+                    <span className='d-flex'>
                         <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
                             title='View'
                             onClick={() => handleView(row.documentUrl)}
@@ -250,28 +250,60 @@ const Document = () => {
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-                <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
-                <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
-                <div>
-                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
-                        Edit
-                    </button> |
-                    <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
-                        Delete
-                    </button> |
-                    <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
-                        Accept
-                    </button>
-                    |
-                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-                        Reject
-                    </button>
-                </div>
+            <div className="p-4">
+                <table className='table'>
+
+                    <thead>
+                        <tr>
+                            <th>Date Created</th>
+                            <th>Date Modified</th>
+                            <th>Actions </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{moment(data.dateCreated).format('lll')}</td>
+                            <td>{moment(data.dateModified).format('lll')}</td>
+                            <td>
+                                <div className="d-flex gap-1">
+
+                                    <span
+                                        className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Edit'
+                                    >
+                                        Edit
+                                    </span>
+                                    <span
+                                        className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Delete'
+                                        onClick={() => handleDelete(data.documentId)}
+                                    >
+                                        Delete
+                                    </span>
+                                    <span
+                                        className='bg-success text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Accept'
+                                        onClick={() => handleAccept(data.documentId)}
+                                    >
+                                        Accept
+                                    </span>
+                                    <span
+                                        className='bg-danger text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
+                                        title='Reject'
+                                        onClick={() => handleRejectModal(data.documentId)}
+                                    >
+                                        Reject
+                                    </span>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
 
             </div>
-
-
         );
     };
     const [searchText, setSearchText] = useState("");

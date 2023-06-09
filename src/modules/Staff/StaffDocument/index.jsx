@@ -67,22 +67,23 @@ const StaffDocument = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <div className='d-flex flex-column gap-1 p-2 overflow-hidden'>
-          <span title={row.documentName}> {row.documentName}</span>
-          <span className='d-flex'>
-            <span className='bg-primary text-white pointer px-2 py-1 rounded-2'
-              title='View'
-              onClick={() => handleView(row.documentUrl)}
-            >
+          <div className='d-flex flex-column gap-1 p-2 overflow-hidden'>
+              <span> {row.documentName}</span>
 
-              <FaEye />
-            </span>
+              <span className='d-flex'>
+                  <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
+                      title='View'
+                      onClick={() => handleView(row.documentUrl)}
+                  >
 
-            <a ref={downloadLinkRef} style={{ display: 'none' }} />
-          </span>
-        </div>
+                      <FaEye />
+                  </span>
+
+                  <a ref={downloadLinkRef} style={{ display: 'none' }} />
+              </span>
+          </div>
       ),
-    },
+  },
     {
       name: 'Expiration Date',
       selector: row => row.expirationDate,
@@ -91,8 +92,12 @@ const StaffDocument = () => {
     {
       name: 'Status',
       selector: row => row.status,
-      sortable: true
-    }
+      sortable: true,
+      expandable: true,
+      cell: (row) => (
+          <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+      ),
+  },
 
   ];
 
@@ -353,46 +358,22 @@ const EditAvail = async (e) => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        <table className='table'>
-
-          <thead>
-            <tr>
-              <th>Date Created</th>
-              <th>Actions </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{moment(data.dateCreated).format('lll')}</td>
-              <td>
-                <div className="d-flex gap-1">
-
-                  <span
-                    className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                    title='Edit'
-                    onClick={() => handleEdit(data.documentId)}
-                  >
-                    Edit
-                  </span>
-                  <span
-                    className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                    title='Delete'
-                    onClick={() => handleDelete(data.documentId)}
-                  >
-                    Delete
-                  </span>
-
-                </div>
-              </td>
-            </tr>
-          </tbody>
-
-        </table>
-
-
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+      <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+      <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
+      <div>
+          <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.documentId)}>
+              Edit
+          </button> |
+          <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+              Delete
+          </button>
       </div>
+  
+  </div>
     );
+
+   
   };
 
   const [searchText, setSearchText] = useState("");

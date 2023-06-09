@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
@@ -16,6 +16,7 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import dayjs from 'dayjs';
 import AdminHeader from '../Components/AdminHeader';
 import AdminSidebar from '../Components/AdminSidebar';
 const AllStaff = () => {
@@ -59,7 +60,8 @@ const AllStaff = () => {
       name: 'Phone Number',
       selector: row => row.phoneNumber,
       sortable: true
-    }, {
+    }, 
+    {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1">
@@ -67,7 +69,7 @@ const AllStaff = () => {
             className="btn"
             title='edit'
           >
-            <SlSettings />
+            <FaRegEdit />
           </Link>
           <button
             className='btn'
@@ -149,7 +151,6 @@ const AllStaff = () => {
 
       )
       console.log(response);
-
 
     } catch (error) {
       console.log(error);
@@ -270,18 +271,20 @@ const AllStaff = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4 d-flex gap-3 align-items-center">
-        <span>{data.fullName}</span>
-        <div>
-          <button onClick={() => handleActivate(data.staffId)} className="btn text-primary" style={{ fontSize: "12px" }}>
-            Activate Staff
-          </button> |
-          <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger" style={{ fontSize: "12px" }}>
-            Deactivate Staff
-          </button>
-        </div>
-
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+      <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+      <div><span className='fw-bold'>Email: </span> {data.email}</div>
+      <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
+      <div>
+        <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+          Activate Staff
+        </button> |
+        <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+          Deactivate Staff
+        </button>
       </div>
+
+    </div>
     );
   };
   const [searchText, setSearchText] = useState("");
@@ -313,8 +316,8 @@ const AllStaff = () => {
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-        <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
-        <AdminSidebar />
+        {/* <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
+        <AdminSidebar /> */}
         <div className="page-wrapper">
           <Helmet>
             <title>Staff</title>
