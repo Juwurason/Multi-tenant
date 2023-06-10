@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -50,6 +50,7 @@ const AttendanceReport = () => {
   const dateTo = useRef(null);
   const [editModal, setEditModal] = useState(false);
   const [periodic, setPeriodic] = useState([]);
+  const history = useHistory();
 
 
 
@@ -164,7 +165,6 @@ const AttendanceReport = () => {
     setLoading1(true)
     try {
       const { data } = await get(`/Attendances/get_periodic_attendances_by_company?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      console.log(data);
       setAttendance(data);
       setPeriodic(data);
       setLoading1(false)
@@ -177,20 +177,22 @@ const AttendanceReport = () => {
   }
   const GetTimeshift = async (e) => {
     e.preventDefault();
-    setLoading2(true)
-    try {
-      const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
-      console.log(data);
-      if (data.status === "Success") {
-        toast.success(data.message);
-      }
-      setLoading2(false)
-    } catch (error) {
-      console.log(error);
-      setLoading2(false)
-    } finally {
-      setLoading2(false)
-    }
+    history.push(`/app/reports/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`)
+    // setLoading2(true)
+
+    // try {
+    //   const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
+    //   console.log(data);
+    //   if (data.status === "Success") {
+    //     toast.success(data.message);
+    //   }
+    //   setLoading2(false)
+    // } catch (error) {
+    //   console.log(error);
+    //   setLoading2(false)
+    // } finally {
+    //   setLoading2(false)
+    // }
   }
   const GetAllTimeshift = async (e) => {
     e.preventDefault();
@@ -198,7 +200,6 @@ const AttendanceReport = () => {
     setLoading2(true)
     try {
       const { data } = await get(`/Attendances/generate_all_staff_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
-      console.log(data);
       if (data.status === "Success") {
         toast.success(data.message);
       }

@@ -218,7 +218,7 @@ const CompanySetup = () => {
                                         </div>
                                         <div className="form-group">
                                             <span>Already have an account ? </span>
-                                            <a href="/login" className="text-info"> Sign in here</a>
+                                            <a href="/" className="text-info"> Sign in here</a>
 
                                         </div>
                                     </form>

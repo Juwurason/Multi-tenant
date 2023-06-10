@@ -42,6 +42,7 @@ const SupportType = () => {
             name: 'Item Number',
             selector: row => row.itemNumber,
             sortable: true,
+
         },
         {
             name: 'Item Name',
@@ -49,8 +50,10 @@ const SupportType = () => {
             sortable: true,
             cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
                 data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.itemName}`}
-            >{row.itemName}</span>
+            >{row.itemName}</span>,
+
         },
+
         {
             name: 'Unit',
             selector: row => row.unit,
