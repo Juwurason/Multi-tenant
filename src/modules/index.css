@@ -174,3 +174,12 @@ body::-webkit-scrollbar-thumb {
     /* position: absolute; */
     width: 150px;
 }
+
+.signature-line {
+    border-top: 2px solid #000;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    margin-top: 10px;
+    width: 300px;
+}

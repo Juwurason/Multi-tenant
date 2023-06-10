@@ -35,7 +35,14 @@ function formatDuration(duration) {
 
     return "0 Hrs 0 min"; // Return an empty string if duration is not available
 }
-
+const todayDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+const today = new Date();
+const formattedTodayDate = todayDate(today);
 
 const Timesheet = () => {
     const id = JSON.parse(localStorage.getItem('user'));
@@ -43,22 +50,32 @@ const Timesheet = () => {
     const { post, get } = useHttp();
     const [timesheet, setTimesheet] = useState([]);
     const [total, setTotal] = useState({});
-    useEffect(() => {
-        const GetTimeshift = async (e) => {
-            try {
-                const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom}&toDate=${dateTo}`, { cacheTimeout: 300000 });
-                console.log(data);
-                setTimesheet(data?.timesheet?.attendanceSplits);
-                setTotal(data?.timesheet)
-                if (data.status === "Success") {
-                    toast.success(data.message);
-                }
-            } catch (error) {
-                console.log(error);
+
+    const GetTimeshift = async (e) => {
+        try {
+            const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom}&toDate=${dateTo}`, { cacheTimeout: 300000 });
+            setTimesheet(data?.timesheet?.attendanceSplits);
+            setTotal(data?.timesheet)
+            if (data.status === "Success") {
+                toast.success(data.message);
             }
+        } catch (error) {
+            console.log(error);
         }
-        GetTimeshift()
-    }, [])
+    }
+
+    useEffect(() => {
+        GetTimeshift();
+    }, []);
+
+    const handlePrint = () => {
+        setTimeout(() => {
+            window.print();
+
+        }, 2000);
+    };
+
+
 
     return (
         <div className="page-wrapper">
@@ -66,7 +83,12 @@ const Timesheet = () => {
                 <title>Time Sheet Page</title>
                 <meta name="description" content="" />
             </Helmet>
-            <div className="content container-fluid">
+            <div className="d-flex justify-content-end pt-3 px-4">
+                <button
+                    onClick={handlePrint}
+                    className="btn btn-primary shadow add-btn rounded">Print Attendance</button>
+            </div>
+            <div className="content container-fluid" id="print-content">
                 <div className="w-100">
                     <div className="mx-auto d-flex justify-content-center text-center">
                         <img src={logo} alt="" />
@@ -118,7 +140,7 @@ const Timesheet = () => {
                     </table>
 
                 </div>
-                <div className="d-flex flex-column gap-1">
+                <div className="d-flex flex-column gap-1 mb-4">
                     <span><span className="fw-bold">Total Duration for Normal Shift : </span>
                         <span> {formatDuration(total.normalDuration)}</span>
                     </span>
@@ -143,6 +165,27 @@ const Timesheet = () => {
                 </div>
 
 
+                <div className="d-flex justify-content-evenly mt-5">
+                    <div className="d-flex flex-column align-items-center gap-1">
+                        <span className="fw-bold text-uppercase">{total.staffName}</span>
+                        <small className="fw-bold">NAME OF STAFF</small>
+                    </div>
+                    <div className="d-flex flex-column align-items-center gap-1">
+                        <span>{formattedTodayDate}</span>
+                        <small className="fw-bold">Date</small>
+                    </div>
+                </div>
+                <hr />
+                <div className="d-flex justify-content-evenly mt-5">
+                    <div className="d-flex flex-column align-items-center gap-1 signature-line">
+                        <div className="border"></div>
+                        <small className="fw-bold"> Approved By</small>
+                    </div>
+                    <div className="d-flex flex-column align-items-center gap-1 signature-line">
+                        <small className="fw-bold">Payroll Officer and Date</small>
+                    </div>
+                </div>
+                <hr />
 
             </div>
         </div>

@@ -24,16 +24,18 @@ import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
 
 function formatDuration(duration) {
-  const durationInTicks = BigInt(duration);
-  const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
+  if (duration) {
+    const durationInMilliseconds = duration / 10000; // Convert ticks to milliseconds
 
-  const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
-  const hours = Math.floor(durationInMinutes / 60);
-  const minutes = durationInMinutes % 60;
+    const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+    const hours = Math.floor(durationInMinutes / 60);
+    const minutes = durationInMinutes % 60;
 
-  return `${hours} Hrs ${minutes} min`;
+    return `${hours} Hrs ${minutes} min`;
+  }
+
+  return "0 Hrs 0 min"; // Return an empty string if duration is not available
 }
-
 
 
 
@@ -42,6 +44,7 @@ const AttendanceReport = () => {
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
   const [attendance, setAttendance] = useState([]);
   const [staff, setStaff] = useState([]);
@@ -175,25 +178,38 @@ const AttendanceReport = () => {
       setLoading1(false)
     }
   }
+
   const GetTimeshift = async (e) => {
     e.preventDefault();
-    history.push(`/app/reports/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`)
-    // setLoading2(true)
 
-    // try {
-    //   const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
-    //   console.log(data);
-    //   if (data.status === "Success") {
-    //     toast.success(data.message);
-    //   }
-    //   setLoading2(false)
-    // } catch (error) {
-    //   console.log(error);
-    //   setLoading2(false)
-    // } finally {
-    //   setLoading2(false)
-    // }
+    setLoading2(true);
+    setTimeout(() => {
+      const url = `/app/reports/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
+      window.open(url, '_blank');
+      setLoading2(false);
+    }, 2000);
   }
+
+  // const GetTimeshift = async (e) => {
+  //   e.preventDefault();
+
+  //   history.push(`/app/reports/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`)
+  //   // setLoading2(true)
+
+  //   // try {
+  //   //   const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
+  //   //   console.log(data);
+  //   //   if (data.status === "Success") {
+  //   //     toast.success(data.message);
+  //   //   }
+  //   //   setLoading2(false)
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   //   setLoading2(false)
+  //   // } finally {
+  //   //   setLoading2(false)
+  //   // }
+  // }
   const GetAllTimeshift = async (e) => {
     e.preventDefault();
 
@@ -449,11 +465,16 @@ const AttendanceReport = () => {
                         className="btn btn-primary add-btn text-white rounded-2 m-r-5"
                         disabled={loading2 ? true : false}
                       >
+                        {loading2 ? (
+                          <>
+                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                            Please wait...
+                          </>
+                        ) : (
+                          "Generate Timesheet"
+                        )}
 
 
-                        {loading2 ? <div className="spinner-grow text-light" role="status">
-                          <span className="sr-only">Loading...</span>
-                        </div> : "Generate Timesheet"}
                       </button>
 
                     </div>
