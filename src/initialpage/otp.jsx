@@ -64,7 +64,7 @@ const OTPscreen = () => {
         setLoading(true)
         const res = await publicHttp.post('/Account/post_otp', postData)
         toast.success(res.data.message)
-        navigate.push('/login')
+        navigate.push('/')
         localStorage.removeItem("email")
         setLoading(false)
 

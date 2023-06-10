@@ -26,7 +26,7 @@ const ClientHeader = (props) => {
     const handleLogout = () => {
         localStorage.removeItem('user')
         localStorage.removeItem('clientProfile')
-        navigate.push("/login")
+        navigate.push("/")
     }
 
     let pathname = location.pathname

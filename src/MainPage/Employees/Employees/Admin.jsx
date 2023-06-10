@@ -28,10 +28,10 @@ const AllAdmin = () => {
     const [admin, setAdmin] = useState([]);
 
     const columns = [
-        {
-            name: '#',
-            cell: (row, index) => index + 1
-        },
+        // {
+        //     name: '#',
+        //     cell: (row, index) => index + 1
+        // },
         {
             name: 'Staff ID',
             selector: row => row.maxStaffId,
