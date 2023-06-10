@@ -3,7 +3,6 @@ import { Redirect, Route, Switch, useLocation, useHistory } from 'react-router-d
 import LoginPage from './loginpage';
 import ForgotPassword from './forgotpassword';
 import OTP from './otp';
-import LockScreen from './lockscreen';
 import DefaultLayout from './Sidebar/DefaultLayout';
 import Tasklayout from './Sidebar/tasklayout';
 import chatlayout from './Sidebar/chatlayout';
@@ -57,7 +56,6 @@ const App = () => {
             <Route path="/register" component={CompanySetup} />
             <Route path="/admin/:companyId" component={AdminRegistration} />
             <Route path="/otp" component={OTP} />
-            <Route path="/lockscreen" component={LockScreen} />
             <Route path="/app" component={DefaultLayout} />
             <Route path="/staff" component={StaffLayout} />
             <Route path="/administrator" component={AdminLayout} />

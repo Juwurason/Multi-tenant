@@ -214,7 +214,7 @@ const ticketDetails = () => {
 
                                         <div className="col-sm-12">
                                             <div className="form-group">
-                                                <label className="col-form-label">Reply</label>
+                                                <h3 className="col-form-label">Reply</h3>
 
                                                 <Editor
                                                     placeholder="Write something..."

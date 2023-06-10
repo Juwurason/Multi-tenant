@@ -9,14 +9,11 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEdit, FaEye, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import moment from 'moment';
 
@@ -44,7 +41,8 @@ const ProgressReport = () => {
         {
             name: 'Staff',
             selector: row => row.staff,
-            sortable: true
+            sortable: true,
+
         },
         {
             name: 'Client',
