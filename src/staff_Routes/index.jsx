@@ -16,6 +16,7 @@ import ViewTicket from '../modules/Staff/Support/viewTicket';
 import RaiseTicket from '../modules/Staff/Support/raiseTicket';
 import KnowledgeBase from '../modules/Staff/Support/knowledgeBase';
 import MessageInbox from '../modules/Staff/Message';
+import TicketDetails from '../modules/Staff/Support/ticketDetails';
 
 export default [
 
@@ -77,6 +78,11 @@ export default [
   {
       path: 'raise-ticket',
       component: RaiseTicket
+  },
+
+  {
+      path: 'ticket-details',
+      component: TicketDetails
   },
 
   {

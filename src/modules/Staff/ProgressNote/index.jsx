@@ -235,15 +235,17 @@ const ProgressNote = () => {
                         </div>
                         <div className="form-group text-center mb-0">
                           <div className="text-center d-flex gap-2">
+                           
+                            <button
+                              className="btn add-btn rounded-2 m-r-5 btn-outline-primary ml-4" onClick={CreateProgress}>
+                              Submit
+                            </button>
+
                             <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
                               disabled={loading1 ? true : false}
                               onClick={SaveProgress}>{loading1 ? <div className="spinner-grow text-light" role="status">
                                 <span className="sr-only">Loading...</span>
                               </div> : "Save"}</button>
-                            <button
-                              className="btn add-btn text-white rounded-2 m-r-5 btn-primary ml-4" onClick={CreateProgress}>
-                              Submit
-                            </button>
                           </div>
                         </div>
                       </form>

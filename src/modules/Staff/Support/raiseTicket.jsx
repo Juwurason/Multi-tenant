@@ -8,10 +8,11 @@ import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import Editor from './editor';
 
-
 const RaiseTicket = () => {
 
-    const { userProfile, loading, setLoading } = useCompanyContext();
+    const { loading, setLoading } = useCompanyContext();
+    const id = JSON.parse(localStorage.getItem('user'));
+
     const [subject, setSubject] = useState('');
     const [image, setImage] = useState(null);
     const privateHttp = useHttp();
@@ -33,12 +34,12 @@ const RaiseTicket = () => {
         formData.append("Subject", subject);
         formData.append("Description", editorValue);
         formData.append("ImageFIle", image);
-        formData.append("CompanyId", 30);
+        formData.append("CompanyId", id.companyId);
 
 
         try {
             setLoading1(true)
-            const { data } = await privateHttp.post(`/Tickets/raise_ticket?userId=${userProfile.userId}`,
+            const { data } = await privateHttp.post(`/Tickets/raise_ticket?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
@@ -60,7 +61,27 @@ const RaiseTicket = () => {
                 <title>Raise A Ticket</title>
                 <meta name="description" content="" />
             </Helmet>
+
+
+            {/* Page Header */}
+
+
+
+
+
             <div className="content container-fluid">
+                <div className="page-header">
+                    <div className="row align-items-center">
+                        <div className="col">
+                            <h3 className="page-title">Raise Ticket</h3>
+                            <ul className="breadcrumb">
+                                <li className="breadcrumb-item"><Link to="/staff/staff">Dashboard</Link></li>
+                                <li className="breadcrumb-item active">Raise Ticket</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
@@ -101,7 +122,7 @@ const RaiseTicket = () => {
                                                 <div>
                                                     <input className="form-control" type="file"
                                                         accept=".png,.jpg,.jpeg"
-                                                        maxSize={1024 * 1024 * 2}
+                                                        maxsize={1024 * 1024 * 2}
                                                         onChange={e => setImage(e.target.files[0])} />
                                                 </div>
                                             </div>

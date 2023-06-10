@@ -417,12 +417,11 @@ const KnowledgeBase = () => {
                                 <span className="sr-only">Loading...</span>
                             </div>
                         </div>}
-                        responsive
                         expandableRows
                         expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
-
+                        responsive
 
                     />
 

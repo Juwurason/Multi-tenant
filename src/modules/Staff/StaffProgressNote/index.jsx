@@ -34,7 +34,7 @@ const StaffProgressNote = () => {
     const [expire, setExpire] = useState("")
     const [document, setDocument] = useState("")
     const [staffPro, setStaffPro] = useState([]);
-    const id = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
 
     const columns = [
         {
@@ -66,7 +66,7 @@ const StaffProgressNote = () => {
    ];
 
 
-    // const id = JSON.parse(localStorage.getItem('user'))
+    
     const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
     const handleFileChange = (e) => {
@@ -116,23 +116,22 @@ const StaffProgressNote = () => {
 
     const privateHttp = useHttp()
 
-
-    useEffect(() => {
-        setLoading(true)
-        const getStaffProgressNote = async () => {
-            try {
-                const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
-                setStaffPro(data.progressNote);
-                // console.log(data.progressNote);
-                // console.log(staffPro.profile);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-            finally {
-                setLoading(false)
-            }
+    const getStaffProgressNote = async () => {
+        try {
+            const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
+            setStaffPro(data.progressNote);
+            // console.log(data.progressNote);
+            // console.log(staffPro.profile);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
         }
+        finally {
+            setLoading(false)
+        }
+    }
+    
+    useEffect(() => {
         getStaffProgressNote()
     }, [])
 
@@ -162,15 +161,24 @@ const StaffProgressNote = () => {
         });
         doc.save("Admin.pdf");
     };
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+      const today = new Date();
+      const formattedDate = formatDate(today);
 
     const [showModal, setShowModal] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [loading1, setLoading1] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState({});
 
     const handleActivityClick = async (e) => {
         try {
             const { data } = await privateHttp.get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
             setSelectedActivity(data);
-            // console.log(data.progress);
+            // console.log(data);
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -178,14 +186,63 @@ const StaffProgressNote = () => {
         setShowModal(true);
     };
 
+    const SaveProgress = async (e) => {
+        e.preventDefault()
+        setLoading1(true)
+        const info = {
+          progressNoteId: selectedActivity.progressNoteId,
+          report: selectedActivity.report,
+          progress: selectedActivity.progress,
+          position: "0",
+          followUp: selectedActivity.followUp,
+          date: formattedDate,
+          staff: selectedActivity.staff,
+          startKm: selectedActivity.startKm,
+          profileId: selectedActivity.profileId,
+          companyID: selectedActivity.companyId,
+        }
+        try {
+          const {data} = await privateHttp.post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${selectedActivity.progressNoteId}`, info);
+        //   console.log(data);
+          toast.success(data.message)
+          setShowModal(false);
+          setLoading1(false)
+          getStaffProgressNote()
+        } catch (error) {
+          console.log(error);
+        }
+        finally {
+          setLoading1(false)
+        }
+      }
+
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                <button className='btn btn-primary' onClick={() => handleActivityClick(data.progressNoteId)}>view</button>
+            
+            <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+            <div ><span className='fw-bold'>FollowUp: </span>{data.followUp}</div>
+            <div><span className='fw-bold'>Progress: </span>{data.progress}</div>
+            <div><span className='fw-bold'>Report: </span>{data.report}</div>
+            <div>
+                <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleActivityClick(data.progressNoteId)}>
+                    Edit
+                </button>
             </div>
+        
+        </div>
         );
     };
 
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setSelectedActivity({
+            ...selectedActivity,
+            [name]: newValue
+        });
+    }
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
@@ -292,21 +349,42 @@ const StaffProgressNote = () => {
 
                         />
 
-                        <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                             <Modal.Header closeButton>
-                                <Modal.Title>Progress Notes Details</Modal.Title>
+                                <Modal.Title>Edit Progress Notes Details</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                {selectedActivity && (
-                                    <>
-                                        <p><b>FollowUp:</b> {selectedActivity.followUp}</p>
-                                        <p><b>Progress:</b> {selectedActivity.progress}</p>
-                                        <p><b>Report:</b> {selectedActivity.report}</p>
-                                    </>
-                                )}
+                                <div>
+                                <div className="row">
+                                
+                                        <div className="form-group">
+                                            <label className="col-form-label">FollowUp:</label>
+                                            <div>
+                                                <input type="text" className='form-control' name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
+                                            </div>
+                                        </div>
+                                    
+                                    <div className="form-group">
+                                        <label className="col-form-label">Progress:</label>
+                                        <div><input className="form-control" type="text" name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} /></div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="col-form-label">Report:</label>
+                                        <div><input className="form-control" type="text" name="report" value={selectedActivity.report || ''} onChange={handleInputChange} /></div>
+                                    </div>
+
+                                </div>
+                            </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                                <button 
+                                disabled={loading1 ? true : false}
+                                className="btn add-btn btn-primary" onClick={SaveProgress}>
+                                {loading1 ? <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div> : "Save"}
+                                    </button>
                             </Modal.Footer>
                         </Modal>
 

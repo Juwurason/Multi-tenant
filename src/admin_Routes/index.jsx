@@ -29,6 +29,7 @@ import StaffProfile from '../modules/Admin/StaffProfile.jsx';
 import KnowledgeBase from '../modules/Admin/Support/knowledgeBase';
 import RaiseTicket from '../modules/Admin/Support/raiseTicket';
 import ViewTicket from '../modules/Admin/Support/viewTicket';
+import TicketDetails from '../modules/Admin/Support/ticketDetails';
 import SupportType from '../modules/Admin/SupportType';
 
 
@@ -149,6 +150,10 @@ export default [
     {
         path: 'raiseTicket',
         component: RaiseTicket
+    },
+    {
+        path: 'ticketDetails/:uid',
+        component: TicketDetails
     },
     {
         path: 'knowledge',
