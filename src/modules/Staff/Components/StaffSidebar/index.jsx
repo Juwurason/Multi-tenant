@@ -84,11 +84,11 @@ const StaffSidebar = (props) => {
                             </li>
 
                             <li className={pathname.includes('staff-attendance') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-attendance"><i className="la la-columns" /> <span>My Attendances</span></Link>
+                                <Link to="/staff/staff-attendance"><i className="la la-calendar-check-o" /> <span>My Attendances</span></Link>
                             </li>
 
                             <li className={pathname.includes('staff-progressNote') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-progressNote"><i className="la la-clipboard" /> <span>My Progress Note</span></Link>
+                                <Link to="/staff/staff-progressNote"><i className="la la-folder-open" /> <span>My Progress Note</span></Link>
                             </li>
                         
                             <li className="menu-title">
@@ -110,9 +110,12 @@ const StaffSidebar = (props) => {
                             <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/staff/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
                             </li>
-
+                       
                             <li className="submenu">
-                                <a href="javascript:void(0)" className={isSideMenu == "support" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "support" ? "" : "support")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                                <a href="#" className={isSideMenu == "support" ? "subdrop" : ""}  onClick={(e) => {
+                                    e.preventDefault()
+                                    toggleSidebar(isSideMenu == "support" ? "" : "support")
+                                }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
                                 {isSideMenu == "support" ?
                                     <ul>
                                         <li><Link onClick={() => onMenuClik()} className={pathname.includes('view-ticket') ? "active" : pathname.includes('view-ticket') ?

@@ -210,7 +210,7 @@ const StaffForm = () => {
 
   const handleDelete = async (e) => {
     Swal.fire({
-      html: `<h3>Are you sure? you want to delete this Document</h3>`,
+      html: `<h3>Are you sure? you want to delete this Availability</h3>`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#1C75BC',
@@ -309,46 +309,21 @@ const StaffForm = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        <table className='table'>
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+    <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+    <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
+    <div>
+        <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.staffAvailibilityId)}>
+            Edit
+        </button> |
+        <button onClick={() => handleDelete(data.staffAvailibilityId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+            Delete
+        </button>
+    </div>
 
-          <thead>
-            <tr>
-              <th>Date Created</th>
-              <th>Actions </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{moment(data.dateCreated).format('lll')}</td>
-              <td>
-                <div className="d-flex gap-1">
-
-                  <span
-                    className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                    title='Edit'
-                    onClick={() => handleEdit(data.staffAvailibilityId)}
-                  >
-                    Edit
-                  </span>
-                  <span
-                    className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                    title='Delete'
-                    onClick={() => handleDelete(data.staffAvailibilityId)}
-                  >
-                    Delete
-                  </span>
-
-                </div>
-              </td>
-            </tr>
-          </tbody>
-
-        </table>
-
-
-      </div>
+</div>
     );
+
   };
 
   const [searchText, setSearchText] = useState("");

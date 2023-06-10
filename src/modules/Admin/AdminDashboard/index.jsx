@@ -8,6 +8,7 @@ import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import { MdOutlineEventNote, MdOutlineFolderOpen, MdOutlinePeople, MdOutlineQueryBuilder } from 'react-icons/md';
+import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
 import { GoNote } from 'react-icons/go';
 import { GiNotebook } from 'react-icons/gi';
 import { AiOutlineFolder } from 'react-icons/ai';
@@ -22,7 +23,9 @@ const AdminDashboard = () => {
     const userObj = JSON.parse(localStorage.getItem('user'));
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
+    const [attendance, setAttendance] = useState([]);
     const [rosters, setRosters] = useState([]);
+    const [recentUsers, setRecentUsers] = useState([]);
     const [progressNote, setProgressNote] = useState([]);
     const { loading, setLoading } = useCompanyContext();
     const [document, setDocument] = useState([]);
@@ -47,28 +50,54 @@ const AdminDashboard = () => {
     async function FetchStaff() {
         setLoading(true)
         try {
-            const {data} = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            const { data } = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
             setClients(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
 
         try {
-            const {data} = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            const clientResponse = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            const client = clientResponse.data;
+            const recentUsers = client.slice(-5);
+            setRecentUsers(recentUsers);
+            setClients(client);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+
+        try {
+            const { data } = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
             setStaff(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
 
         try {
-            const {data} = await get(`ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            const { data } = await get(`ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
             setRosters(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
+
+        try {
+            setLoading(true)
+            const { data } = await get(`Attendances/get_all_attendances_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setAttendance(data);
+            setLoading(false)
+          } catch (error) {
+            console.log(error);
+            setLoading(false)
+          }
 
         try {
             const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
@@ -123,8 +152,8 @@ const AdminDashboard = () => {
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <AdminHeader />
-                <AdminSidebar />
+                {/* <AdminHeader />
+                <AdminSidebar /> */}
                 <div className="page-wrapper">
                     <Helmet>
                         <title>Dashboard - Promax Admin Dashboard</title>
@@ -144,7 +173,7 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                         {/* /Page Header */}
-                        <div className="row g-1">
+                        <div className="row g-1 gap-5">
                             <div className='col-md-7'>
                                 <div className="row">
                                     <h4>Overview</h4>
@@ -157,7 +186,7 @@ const AdminDashboard = () => {
                                         sty={'danger'}
                                     />
                                     <DashboardCard title={"Total Tickets"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
-                                        link={`/administrator/viewTicket`}
+                                        link={`/administrator/viewTickets`}
                                         sty={'warning'}
                                     />
                                     <DashboardCard title={"Total Documents"} content={document.length} icon={<AiOutlineFolder className='fs-4' />}
@@ -171,7 +200,7 @@ const AdminDashboard = () => {
                                     <DashboardCard title={"Total Shift Roster"} content={rosters.length} icon={<MdOutlineQueryBuilder className='fs-4' />}
                                         link={`/administrator/shiftRoster`} sty={'success'}
                                     />
-                                    <DashboardCard title={"Total Attendances"} content={0} icon={<GiNotebook className='fs-4' />}
+                                    <DashboardCard title={"Total Attendances"} content={attendance.length} icon={<GiNotebook className='fs-4' />}
                                         link={`/administrator/attendanceReport`} sty={'info'}
                                     />
                                     {/* <DashboardCard title={"Total Shift Roster For May"} content={0} icon={<MdOutlineSummarize className='fs-4' />}
@@ -185,52 +214,81 @@ const AdminDashboard = () => {
                             </div>
 
 
-                            <div className='col-md-5 p-2'>
-
+                            <div className='col-md-4 p-2 d-flex  flex-column gap-2 justify-content-start'>
                                 <div className='p-3 shadow-sm'>
-
-                                    <div className='d-flex justify-content-center flex-column p-2 gap-2'>
-
-                                        <div className='border p-2'>
-                                            <div>
-                                                <div className={`card shadow-none border border-primary`}>
-                                                    <div className="card-content shadow-none">
-                                                        <div className="card-body shadow-none">
-                                                            <div className="media d-flex justify-content-between">
-                                                                <div className="media-body text-left">
-                                                                    <span>Attendance</span>
-
-                                                                    {/* {
-                            loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                              <div className="spinner-grow text-light" role="status">
-                                <span className="sr-only">Loading...</span>
-                              </div>
-                            </div>
-                            )
-
-                              : */}
-                                                                    <div>
-                                                                        <h4>3/26/2023</h4>
-                                                                        <h4>6:12:00 PM</h4>
-                                                                    </div>
-
-                                                                    <small style={{ fontSize: "12px" }}>Last Clock in</small>
-                                                                </div>
-                                                                <div className="align-self-center pt-3">
-                                                                    <div>
-                                                                        <h4>3/26/2023</h4>
-                                                                        <h4>6:12:00 PM</h4>
-                                                                    </div>
-                                                                    <small style={{ fontSize: "12px" }}>Last Clock out</small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    <h5>Recently Onboarded Clients</h5>
+                                    {
+                                        loading && <div className='text-center fs-1'>
+                                            <div className="spinner-grow text-secondary" role="status">
+                                                <span className="sr-only">Loading...</span>
                                             </div>
                                         </div>
+                                    }
 
+                                    {
+                                        !loading && recentUsers.length >= 1 && recentUsers.map((data, index) =>
 
+                                            <Link to={`/administrator/clientProfile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
+                                                <div className="col-2">
+                                                    <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                                                        <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-10 d-flex flex-column justify-content-start text-dark">
+                                                    <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
+                                                    <span style={{ fontSize: "10px", }}>{data.address}</span>
+                                                    <span style={{ fontSize: "7px", }}>{data.email}</span>
+                                                </div>
+
+                                            </Link>
+                                        )
+                                    }
+                                    {
+                                        !loading && recentUsers.length <= 0 && <div className='text-center text-danger fs-6'>
+                                            <p>Not Available</p>
+                                        </div>
+                                    }
+
+                                    <div className='d-flex justify-content-end mt-2'>
+                                        <Link to={'/administrator/allClient'}
+                                            className='text-primary pointer' style={{ fontSize: "12px", }}>
+                                            See all <FaLongArrowAltRight className='fs-3' />
+                                        </Link>
+                                    </div>
+
+                                </div>
+                                <div className={`card border border-info`}>
+                                    <div className="card-content">
+                                        <div className="card-body">
+                                            <div className="media d-flex justify-content-between">
+                                                <div className="media-body text-left">
+                                                    <span>Documents</span>
+
+                                                    {
+                                                        loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
+                                                            <div className="spinner-grow text-light" role="status">
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                        )
+
+                                                            :
+                                                            <h3 className='text-info'>{document.length}</h3>
+                                                    }
+
+                                                    {/* <Link style={{ fontSize: "12px" }}
+
+                                                        to={`/app/employee/document`} className='pointer text-dark text-end'>View all</Link> */}
+                                                </div>
+                                                <div className="align-self-center">
+                                                    <MdOutlineFolderOpen className='fs-4' />
+                                                </div>
+                                            </div>
+                                            {/* <div className='d-flex justify-content-end'>
+                        <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span>
+                      </div> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

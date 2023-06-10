@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -18,44 +18,75 @@ import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
+import { MultiSelect } from 'react-multi-select-component';
+const options = [
+    { label: "Sunday", value: "Sunday" },
+    { label: "Monday", value: "Monday" },
+    { label: "Tuesday", value: "Tuesday" },
+    { label: "Wednesday", value: "Wednesday" },
+    { label: "Thursday", value: "Thursday" },
+    { label: "Friday", value: "Friday" },
+    { label: "Saturday", value: "Saturday" },
+
+
+
+];
 
 
 const ScheduleSupport = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
-    const [getHoli, setGetHoli] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
-    const [editpro, setEditPro] = useState({})
     const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
+    const [supportType, setSupportType] = useState([]);
+    const [selectedSupportType, setSelectedSupportType] = useState(0);
+    const [price, setPrice] = useState(''); // Price value based on the selected support type
+    const [supportNumber, setSupportNumber] = useState(''); // Support Number value based on the selected support type
+    const [supportName, setSupportName] = useState(''); // Support Name value based on the selected support type
+    const quantity = useRef(null);
+    const [selected, setSelected] = useState([]);
+    const [profileId, setProfileId] = useState(0);
+    const [supportSchedule, setSupportSchedule] = useState([]);
+
+    const handleSelected = (selectedOptions) => {
+        setSelected(selectedOptions);
+    }
+
+    const selectedValues = selected.map(option => option.label).join(', ');
+
 
     const columns = [
-        {
-            name: '#',
-            cell: (row, index) => index + 1
-        },
+        // {
+        //     name: '#',
+        //     cell: (row, index) => index + 1
+        // },
 
         {
-            name: 'Name',
-            selector: row => row.name,
+            name: 'Participant',
+            selector: row => row.profile?.fullName,
             sortable: true,
         },
         {
-            name: 'Date',
-            selector: row => row.date,
+            name: 'Support Type',
+            selector: row => row.supportType,
             sortable: true,
+            cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "help" }}
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.supportType}`}
+            >{row.supportType}</span>
         },
         {
-            name: 'Date Created',
-            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
-            sortable: true
+            name: 'Quantity of Service',
+            selector: row => row.quantity,
+            sortable: true,
+            cell: (row) => <span className="long-cell" style={{ overflow: "hidden" }}
+
+            >{row.quantity} hours per day</span>
         },
         {
-            name: 'Date Modified',
-            selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
+            name: 'Cost of service per hour ($)',
+            selector: row => row.cost,
             sortable: true
         },
 
@@ -63,13 +94,13 @@ const ScheduleSupport = () => {
             name: "Actions",
             cell: (row) => (
                 <div className="d-flex gap-1">
-                    <button
+                    {/* <button
                         className="btn"
                         title='edit'
                         onClick={() => handleEdit(row.holidayId)}
                     >
                         <SlSettings />
-                    </button>
+                    </button> */}
                     <button
                         className='btn'
                         title='Delete'
@@ -84,68 +115,44 @@ const ScheduleSupport = () => {
 
     ];
 
-    const [days, setDays] = useState({
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false
-    });
+    // const [days, setDays] = useState({
+    //     sunday: false,
+    //     monday: false,
+    //     tuesday: false,
+    //     wednesday: false,
+    //     thursday: false,
+    //     friday: false,
+    //     saturday: false
+    // });
 
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
-    };
-
-    const handleEdit = async (e) => {
-        // console.log(e);
-        setEditModal(true);
-        try {
-            setLoading(true)
-            const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setEditPro(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-    };
-
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditPro({
-            ...editpro,
-            [name]: newValue
-        });
-    }
+    // const handleCheckboxChange = (event) => {
+    //     const { name, checked } = event.target;
+    //     setDays((prevDays) => ({ ...prevDays, [name]: checked }));
+    // };
 
 
 
-    const FetchClient = async () => {
+    const FetchData = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
-            // console.log(data);
-            //   setGetHoli(data);
+            const { data } = await get(`/Invoice/get_all_support_type`, { cacheTimeout: 300000 });
+            setSupportType(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
             setLoading(false)
-        } finally {
+        }
+        try {
+            const { data } = await get(`/Invoice/get_all_support_schedules?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            setSupportSchedule(data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
             setLoading(false)
         }
 
         try {
             const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
             setClients(data);
             setLoading(false)
         } catch (error) {
@@ -156,21 +163,34 @@ const ScheduleSupport = () => {
         }
     };
     useEffect(() => {
-        FetchClient()
+        FetchData()
     }, []);
+
+
+    // 
+
+    const handleSupportTypeChange = (event) => {
+        const selectedType = event.target.value;
+        setSelectedSupportType(selectedType);
+        const type = supportType.find((type) => type.ndiA_DPAId === Number(selectedType));
+        if (type) {
+            setSupportName(type.itemName);
+            setPrice(type.remote);
+            setSupportNumber(type.itemNumber);
+        } else {
+            setSupportName('');
+            setPrice('');
+            setSupportNumber('');
+        }
+    };
+
+
+
 
     const handleActivityClick = () => {
         setShowModal(true);
     };
 
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -181,7 +201,7 @@ const ScheduleSupport = () => {
         sheet.addRow(headers);
 
         // Add data
-        getHoli.forEach((dataRow) => {
+        supportType.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -197,7 +217,7 @@ const ScheduleSupport = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'getHoli.xlsx';
+            link.download = 'supportType.xlsx';
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -208,12 +228,12 @@ const ScheduleSupport = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(getHoli);
+        const csvData = Papa.unparse(supportType);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "getHoli.csv");
+        link.setAttribute("download", "supportType.csv");
         link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
@@ -227,9 +247,9 @@ const ScheduleSupport = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("getHoli Table", marginLeft, 40);
+        doc.text("supportType Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = getHoli.map((dataRow) =>
+        const dataValues = supportType.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -244,25 +264,46 @@ const ScheduleSupport = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("getHoli.pdf");
+        doc.save("supportType.pdf");
     };
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                {data.name}
+            <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+                <span>
+                    <span className='fw-bold'>Support Type: </span>
+                    <span> {data.supportType}</span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Frequency of Support: </span>
+                    <span> {data.frequency}</span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Item Number: </span>
+                    <span> {data.itemNumber}</span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Date Created: </span>
+                    <span>
+                        {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
+                    </span>
+                </span>
 
             </div>
         );
     };
+
+
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = getHoli.filter((item) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = supportSchedule.filter(
+        (item) =>
+            item.profile?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+            item.supportType.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -282,22 +323,22 @@ const ScheduleSupport = () => {
 
     const handleDelete = async (e) => {
         Swal.fire({
-            html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
+            html: `<h3>Delete this schedule of support</h3>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#00AEEF',
             cancelButtonColor: '#777',
-            confirmButtonText: 'Confirm Delete',
+            confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
+                    const { data } = await post(`/Invoice/delete_schedule/${e.scheduleId}`,
                         // { userId: id.userId }
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchClient();
+                        FetchData();
                     } else {
                         toast.error(data.message);
                     }
@@ -316,44 +357,52 @@ const ScheduleSupport = () => {
 
     }
 
-    const [holidayName, setHolidayName] = useState('')
-    const [holidayDate, setHolidayDate] = useState('')
 
-
-    const addHoliday = async () => {
-
-        if (holidayName === '' || holidayDate.length === 0) {
-            return toast.error("Input Fields cannot be empty")
+    const handleSubmit = async () => {
+        if (quantity === "" || selectedValues === "") {
+            return toast.error("Incomplete Request")
         }
-
-        setLoading1(true)
         const info = {
-            name: holidayName,
-            date: holidayDate
+            profileId,
+            "supportType": supportName,
+            "quantity": quantity.current.value,
+            "cost": price,
+            "frequency": selectedValues,
+            "itemNumber": supportNumber,
+            "companyID": id.companyId
         }
         try {
-            const { data } = await post(`/SetUp/add_holiday`, info)
-            // console.log(data);
-            toast.success(data.message)
-            setShowModal(false)
-            FetchClient()
+            setLoading1(true)
+            const { data } = await post(`Invoice/add_schedule_of_support`, info);
+
+            if (data.status === "Success") {
+                toast.success(data.message);
+                setSupportName('');
+                setPrice('');
+                setSupportNumber('');
+                quantity.current.value = "";
+                setProfileId(0);
+                setSelected([]);
+                setShowModal(false)
+                FetchData()
+            } else {
+                toast.error(data.message);
+            }
+            console.log(data);
             setLoading1(false)
-            setHolidayName('')
-            setHolidayDate('')
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
+            setLoading1(false)
+        } finally {
             setLoading1(false)
         }
-    }
+    };
+
 
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Schedule Supports</title>
+                <title>Support Schedule </title>
                 <meta name="description" content="Schedule Supports" />
             </Helmet>
             {/* Page Content */}
@@ -362,10 +411,10 @@ const ScheduleSupport = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Schedule Supports</h3>
+                            <h3 className="page-title">Support Schedule </h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Schedule Supports</li>
+                                <li className="breadcrumb-item active">Support Schedule</li>
                             </ul>
                         </div>
                     </div>
@@ -384,8 +433,8 @@ const ScheduleSupport = () => {
                         </div>
                         <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
-                                data={getHoli}
-                                filename={"getHoli.csv"}
+                                data={supportType}
+                                filename={"supportType.csv"}
 
                             >
                                 <button
@@ -412,7 +461,7 @@ const ScheduleSupport = () => {
                             >
                                 <FaFileExcel />
                             </button>
-                            <CopyToClipboard text={JSON.stringify(getHoli)}>
+                            <CopyToClipboard text={JSON.stringify(supportType)}>
                                 <button
 
                                     className='btn text-warning'
@@ -426,7 +475,7 @@ const ScheduleSupport = () => {
                         <div className='col-md-4'>
                             {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
                 Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add to Schedule Support</button>
+                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add to Support Schedule</button>
                         </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
@@ -449,56 +498,79 @@ const ScheduleSupport = () => {
                     />
 
                     {/* Modal */}
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal show={showModal} onHide={() => setShowModal(false)} centered size='lg'>
                         <Modal.Header closeButton>
-                            <Modal.Title>Crate A Schedule</Modal.Title>
+                            <Modal.Title>Create A Schedule</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <div>
+                            <form>
                                 <div className="row">
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Participant</label>
                                         <div>
                                             <select className="form-select"
-                                            // onChange={e => setSta(e.target.value)}
+                                                onChange={e => setProfileId(e.target.value)}
                                             >
                                                 <option defaultValue hidden>Select Client / Participant</option>
                                                 {
                                                     clients.map((data, index) =>
-                                                        <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                                        <option value={data.profileId} key={index}>{data.fullName}</option>)
                                                 }
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Support Type</label>
                                         <div>
-                                            <select name="" id="" className='form-select'>
-                                                <option defaultValue hidden>Select Support Type</option>
-                                                {/* <option value="male">male</option> */}
+                                            <select
+                                                name="supportType"
+                                                id="supportType"
+                                                className='form-select'
+                                                value={selectedSupportType}
+                                                onChange={handleSupportTypeChange}
+                                                required
+                                            >
+                                                <option value="" hidden>Select Support Type</option>
+                                                {supportType.map((type) => (
+                                                    <option key={type.ndiA_DPAId} value={type.ndiA_DPAId}>
+                                                        {type.itemName}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Quantity of Service</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="number" className='form-control'
+                                                ref={quantity}
+                                                required />
+
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Cost of Service per hour ($)</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} readOnly />
+                                            <input type="text" className='form-control' value={price}
+
+                                                readOnly />
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Frequency of Support</label>
-                                        <div>
+
+                                        <MultiSelect
+                                            options={options}
+                                            value={selected}
+                                            onChange={handleSelected}
+                                            labelledBy="Select Days"
+                                        />
+                                        {/* <div>
                                             <label>
                                                 <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
                                                 &nbsp;
@@ -537,25 +609,28 @@ const ScheduleSupport = () => {
                                             </label> &nbsp; &nbsp;
 
 
-                                        </div>
+                                        </div> */}
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className="form-group col-md-6">
                                         <label className="col-form-label">Item Number</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} readOnly />
+                                            <input type="text" className='form-control'
+
+                                                value={supportNumber} readOnly />
                                         </div>
                                     </div>
 
 
                                 </div>
-                            </div>
+                            </form>
 
 
                         </Modal.Body>
                         <Modal.Footer>
                             <button
                                 disabled={loading1 ? true : false}
+                                onClick={handleSubmit}
                                 className="btn btn-primary add-btn rounded-2 text-white" >
                                 {loading1 ? <div className="spinner-grow text-light" role="status">
                                     <span className="sr-only">Loading...</span>
@@ -565,7 +640,7 @@ const ScheduleSupport = () => {
                     </Modal>
 
                     {/*Edit Modal */}
-                    <Modal show={editModal} onHide={() => setEditModal(false)} centered>
+                    {/* <Modal show={editModal} onHide={() => setEditModal(false)} centered>
                         <Modal.Header closeButton>
                             <Modal.Title>View Holiday</Modal.Title>
                         </Modal.Header>
@@ -589,10 +664,9 @@ const ScheduleSupport = () => {
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
-                            {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}
                             <button className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
                         </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
 
                 </div>
 

@@ -9,6 +9,8 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEdit, FaEye, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
+import Sidebar from '../../../initialpage/Sidebar/sidebar';;
+import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
@@ -17,8 +19,6 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import moment from 'moment';
-import AdminHeader from '../Components/AdminHeader';
-import AdminSidebar from '../Components/AdminSidebar';
 
 const ProgressReport = () => {
     const { get } = useHttp();
@@ -33,7 +33,7 @@ const ProgressReport = () => {
     const columns = [
         {
             name: '',
-            selector: row => row,
+            selector: row => "",
             sortable: true,
             cell: (row) => (
                 <Link to={`/administrator/progressReportDetails/${row.progressNoteId}`} className='d-flex justify-content-center w-100 text-info pointer'>
@@ -47,7 +47,7 @@ const ProgressReport = () => {
             sortable: true
         },
         {
-            name: 'Clients',
+            name: 'Client',
             selector: row => row.profile.fullName,
             sortable: true
         },
@@ -90,7 +90,6 @@ const ProgressReport = () => {
         try {
             setLoading(true)
             const { data } = await get(`ProgressNotes/get_all_progressnote_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
             setProgress(data);
             setLoading(false)
         } catch (error) {
@@ -287,173 +286,160 @@ const ProgressReport = () => {
         item.staff.toLowerCase().includes(searchText.toLowerCase())
     );
 
-
-
-
-
     return (
         <>
-            <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <AdminHeader />
-                <AdminSidebar />
-                <div className="page-wrapper">
-                    <Helmet>
-                        <title>Progress Report</title>
-                        <meta name="description" content="Progress Report" />
-                    </Helmet>
+            <div className="page-wrapper">
+                <Helmet>
+                    <title>Progress Reports</title>
+                    <meta name="description" content="Login page" />
+                </Helmet>
 
-                    <div className="content container-fluid">
+                <div className="content container-fluid">
 
-                        <div className="page-header">
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <h3 className="page-title">Progress Report</h3>
-                                    <ul className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
-                                        <li className="breadcrumb-item active">Progress Report</li>
-                                    </ul>
-                                </div>
+                    <div className="page-header">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <h3 className="page-title">Progress Reports</h3>
+                                <ul className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item active">Progress Reports</li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="row align-items-center">
-                            <span className='fw-bold'>Filter Progress Report </span>
-                            <br />
-                            <br />
-                            <br />
-                            <div className="col-md-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Staff Name</label>
-                                    <div>
-                                        <select className="form-select" onChange={e => setSta(e.target.value)}>
-                                            <option defaultValue value={""}>--Select a staff--</option>
-                                            {
-                                                staff.map((data, index) =>
-                                                    <option value={data.fullName} key={index}>{data.fullName}</option>)
-                                            }
-                                        </select></div>
-                                </div>
+                    <div className="row align-items-center shadow-sm p-2">
+                        <div className="col-md-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Staff Name</label>
+                                <div>
+                                    <select className="form-select" onChange={e => setSta(e.target.value)}>
+                                        <option defaultValue value={""}>--Select a staff--</option>
+                                        {
+                                            staff.map((data, index) =>
+                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                        }
+                                    </select></div>
                             </div>
-                            <div className="col-md-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Client Name</label>
-                                    <div>
-                                        <select className="form-select" onChange={e => setCli(e.target.value)}>
-                                            <option defaultValue value={""}>--Select a Client--</option>
-                                            {
-                                                clients.map((data, index) =>
-                                                    <option value={data.profileId} key={index}>{data.fullName}</option>)
-                                            }
-                                        </select></div>
-                                </div>
-                            </div>
-                            <div className="col-auto mt-3">
-                                <div className="form-group">
-                                    <button
-                                        onClick={FilterReport}
-                                        className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                                        disabled={loading1 ? true : false}
-                                    >
-
-
-                                        {loading1 ? <div className="spinner-grow text-light" role="status">
-                                            <span className="sr-only">Loading...</span>
-                                        </div> : "Load"}
-                                    </button>
-
-                                </div>
-                            </div>
-                            <div className="col-auto mt-3">
-                                <div className="form-group">
-                                    <button
-                                        onClick={FetchProgress}
-                                        className="btn btn-secondary add-btn rounded-2 m-r-5">All Progress Report</button>
-
-                                </div>
-                            </div>
-
-
                         </div>
-
-
-
-                        <div className='mt-4 border'>
-                            <div className="row px-2 py-3">
-
-                                <div className="col-md-3">
-                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                        <input type="text" placeholder="Search Progress Reports" className='border-0 outline-none' onChange={handleSearch} />
-                                        <GoSearch />
-                                    </div>
-                                </div>
-                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                    <CSVLink
-                                        data={progress}
-                                        filename={"data.csv"}
-
-                                    >
-                                        <button
-
-                                            className='btn text-info'
-                                            title="Export as CSV"
-                                        >
-                                            <FaFileCsv />
-                                        </button>
-
-                                    </CSVLink>
-                                    <button
-                                        className='btn text-danger'
-                                        onClick={handlePDFDownload}
-                                        title="Export as PDF"
-                                    >
-                                        <FaFilePdf />
-                                    </button>
-                                    <button
-                                        className='btn text-primary'
-
-                                        onClick={handleExcelDownload}
-                                        title="Export as Excel"
-                                    >
-                                        <FaFileExcel />
-                                    </button>
-                                    <CopyToClipboard text={JSON.stringify(progress)}>
-                                        <button
-
-                                            className='btn text-warning'
-                                            title="Copy Table"
-                                            onClick={() => toast("Table Copied")}
-                                        >
-                                            <FaCopy />
-                                        </button>
-                                    </CopyToClipboard>
-                                </div>
-
+                        <div className="col-md-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Client Name</label>
+                                <div>
+                                    <select className="form-select" onChange={e => setCli(e.target.value)}>
+                                        <option defaultValue value={""}>--Select a Client--</option>
+                                        {
+                                            clients.map((data, index) =>
+                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
+                                        }
+                                    </select></div>
                             </div>
-                            <DataTable data={filteredData} columns={columns}
-                                pagination
-                                highlightOnHover
-                                searchable
-                                searchTerm={searchText}
-                                progressPending={loading}
-                                progressComponent={<div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
+                        </div>
+                        <div className="col-auto mt-3">
+                            <div className="form-group">
+                                <button
+                                    onClick={FilterReport}
+                                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                    disabled={loading1 ? true : false}
+                                >
+
+
+                                    {loading1 ? <div className="spinner-grow text-light" role="status">
                                         <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>}
+                                    </div> : "Load"}
+                                </button>
 
-                                paginationTotalRows={filteredData.length}
-                                responsive
+                            </div>
+                        </div>
+                        {/* <div className="col-auto mt-3">
+                            <div className="form-group">
+                                <button
+                                    onClick={FetchProgress}
+                                    className="btn btn-secondary add-btn rounded-2 m-r-5">All Progress Report</button>
+
+                            </div>
+                        </div> */}
+
+
+                    </div>
 
 
 
-                            />
+
+
+                    <div className='mt-4 border'>
+                        <div className="row px-2 py-3">
+
+                            <div className="col-md-3">
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search Progress Reports" className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
+                                </div>
+                            </div>
+                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                <CSVLink
+                                    data={progress}
+                                    filename={"data.csv"}
+
+                                >
+                                    <button
+
+                                        className='btn text-info'
+                                        title="Export as CSV"
+                                    >
+                                        <FaFileCsv />
+                                    </button>
+
+                                </CSVLink>
+                                <button
+                                    className='btn text-danger'
+                                    onClick={handlePDFDownload}
+                                    title="Export as PDF"
+                                >
+                                    <FaFilePdf />
+                                </button>
+                                <button
+                                    className='btn text-primary'
+
+                                    onClick={handleExcelDownload}
+                                    title="Export as Excel"
+                                >
+                                    <FaFileExcel />
+                                </button>
+                                <CopyToClipboard text={JSON.stringify(progress)}>
+                                    <button
+
+                                        className='btn text-warning'
+                                        title="Copy Table"
+                                        onClick={() => toast("Table Copied")}
+                                    >
+                                        <FaCopy />
+                                    </button>
+                                </CopyToClipboard>
+                            </div>
 
                         </div>
+                        <DataTable data={filteredData} columns={columns}
+                            pagination
+                            highlightOnHover
+                            searchable
+                            searchTerm={searchText}
+                            progressPending={loading}
+                            progressComponent={<div className='text-center fs-1'>
+                                <div className="spinner-grow text-secondary" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div>
+                            </div>}
+                            responsive
+                            paginationTotalRows={filteredData.length}
+
+                        />
 
                     </div>
 
                 </div>
+
             </div>
 
             <Offcanvas />

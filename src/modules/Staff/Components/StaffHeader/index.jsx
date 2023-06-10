@@ -2,7 +2,7 @@
  * App Header
  */
 import React, { useState, useEffect } from 'react'
-import { FaAngleDown } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -86,7 +86,7 @@ const StaffHeader = (props) => {
                 {/* /Search */}
                 {/* Flag */}
                 <li className="nav-item dropdown has-arrow flag-nav">
-                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button">
+                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
                         <span className='fw-bold'>
                             {timeString}
 
@@ -97,7 +97,7 @@ const StaffHeader = (props) => {
                 {/* /Flag */}
                 {/* Notifications */}
                 <li className="nav-item dropdown">
-                    <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <i className="fa fa-bell-o" />
                         {/* <span className="badge badge-pill">3</span> */}
                     </a>
@@ -115,13 +115,26 @@ const StaffHeader = (props) => {
 
                 {/* /Message Notifications */}
                 <li className="nav-item dropdown has-arrow main-drop">
-                    <a href="javascript:void(0)" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <a
+                        className="nav-link dropdown-toggle"
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setDropdownOpen(!isDropdownOpen);
+                        }}
+                        data-bs-toggle="dropdown"
+                    >
                         <span className="user-img me-1">
-
                             <img src={man} alt="" width={50} height={50} className='rounded-circle' />
-
                             <span className="status online" /></span>
-                        <span><FaAngleDown /></span>
+                        <span>
+                            {
+                                isDropdownOpen ?
+                                    <FaAngleUp />
+                                    :
+                                    <FaAngleDown />
+                            }
+                        </span>
                     </a>
                     <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
                         <div className='bg-primary p-2'>

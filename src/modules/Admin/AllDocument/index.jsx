@@ -19,14 +19,20 @@ import { GoSearch } from 'react-icons/go';
 import Swal from 'sweetalert2';
 
 import moment from 'moment';
+import { Modal } from 'react-bootstrap';
 
-const AllDocumnet = () => {
+const AllDocument = () => {
+    //Declaring Variables
     const id = JSON.parse(localStorage.getItem('user'));
     const { loading, setLoading } = useCompanyContext();
     const [document, setDocument] = useState([]);
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
     const privateHttp = useHttp();
+    const [rejectModal, setRejectModal] = useState(false);
+    const [reason, setReason] = useState("");
+    const [deadline, setDeadline] = useState("");
+    const [selectedDocument, setSelectedDocument] = useState(0);
     const columns = [
         // {
         //   name: '#',
@@ -51,7 +57,7 @@ const AllDocumnet = () => {
                 <div className='d-flex flex-column gap-1 p-2'>
                     <span> {row.documentName}</span>
 
-                    <span className='d-flex'>
+                    <span className='d-flex' style={{ overflow: 'hidden' }}>
                         <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
                             title='View'
                             onClick={() => handleView(row.documentUrl)}
@@ -94,15 +100,15 @@ const AllDocumnet = () => {
     const FetchDocument = async () => {
         setLoading(true);
         try {
-            const documentResponse = await privateHttp.get(`Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const documentResponse = await privateHttp.get(`/Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const document = documentResponse.data;
-            // console.log(document);
+            console.log(document);
             setDocument(document);
         } catch (error) {
             console.log(error);
         }
         try {
-            const staffResponse = await privateHttp.get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const staffResponse = await privateHttp.get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const staff = staffResponse.data;
             setStaff(staff);
             setLoading(false)
@@ -152,7 +158,11 @@ const AllDocumnet = () => {
     }
 
 
+    const handleRejectModal = (e) => {
+        setRejectModal(true)
+        setSelectedDocument(e);
 
+    }
 
 
     useEffect(() => {
@@ -240,55 +250,28 @@ const AllDocumnet = () => {
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                <table className='table'>
-
-                    <thead>
-                        <tr>
-                            <th>User created</th>
-                            <th>Date Created</th>
-                            <th>Date Modified</th>
-                            <th>Actions </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{data.createdBy}</td>
-                            <td>{moment(data.dateCreated).format('lll')}</td>
-                            <td>{moment(data.dateModified).format('lll')}</td>
-                            <td>
-                                <div className="d-flex gap-1">
-
-                                    <span
-                                        className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                                        title='Edit'
-                                    >
-                                        Edit
-                                    </span>
-                                    <span
-                                        className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                                        title='Delete'
-                                        onClick={() => handleDelete(data.documentId)}
-                                    >
-                                        Delete
-                                    </span>
-                                    <span
-                                        className='bg-danger text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                                        title='Reject'
-                                    // onClick={() => handleDelete(row.documentId)}
-                                    >
-                                        Reject
-                                    </span>
-
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-
+            <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+                <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+                <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
+                <div>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                        Edit
+                    </button> |
+                    <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                        Delete
+                    </button> |
+                    <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                        Accept
+                    </button>
+                    |
+                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                        Reject
+                    </button>
+                </div>
 
             </div>
+
+
         );
     };
     const [searchText, setSearchText] = useState("");
@@ -301,8 +284,8 @@ const AllDocumnet = () => {
             html: `<h3>Are you sure? you want to delete this Document</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: 'rgb(29 78 216)',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#1C75BC',
+            cancelButtonColor: '#C8102E',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
         }).then(async (result) => {
@@ -332,6 +315,65 @@ const AllDocumnet = () => {
 
 
     }
+    const handleAccept = async (e) => {
+        Swal.fire({
+            html: `<h3>Accept This Document</h3>`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#1C75BC',
+            cancelButtonColor: '#C8102E',
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await privateHttp.post(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchDocument()
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
+            }
+        })
+
+
+    }
+    const handleReject = async () => {
+        if (reason.trim() === "" || deadline === "") {
+            toast.error("provide valid reason and deadline")
+        }
+        try {
+            const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
+            )
+            if (data.status === 'Success') {
+                toast.success(data.message);
+                FetchDocument()
+            } else {
+                toast.error(data.message);
+            }
+
+
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+
+
+        }
+    }
 
     const filteredData = document.filter((item) =>
         item.documentName.toLowerCase().includes(searchText.toLowerCase())
@@ -355,8 +397,8 @@ const AllDocumnet = () => {
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <Header onMenuClick={(value) => toggleMobileMenu()} />
-                <Sidebar />
+                {/* <Header onMenuClick={(value) => toggleMobileMenu()} />
+                <Sidebar /> */}
                 <div className="page-wrapper">
                     <Helmet>
                         <title>Document</title>
@@ -370,7 +412,7 @@ const AllDocumnet = () => {
                                 <div className="col">
                                     <h3 className="page-title">Document</h3>
                                     <ul className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to="/administrator/administrator">Dashboard</Link></li>
+                                        <li className="breadcrumb-item"><Link to="/administrator/administrator/adminDashboard">Dashboard</Link></li>
                                         <li className="breadcrumb-item active">Documents</li>
                                     </ul>
                                 </div>
@@ -382,7 +424,7 @@ const AllDocumnet = () => {
                         {/* Search Filter */}
 
 
-                        <div className="row">
+                        <div className="row shadow-sm py-2">
                             <div className="col-sm-4">
                                 <div className="form-group">
                                     <label className="col-form-label">Staff Name</label>
@@ -452,10 +494,12 @@ const AllDocumnet = () => {
                                 </div>
 
                             </div>
-                            <div className="col-sm-4 text-left">
-                                <button className="btn btn-primary rounded-2">Load</button>
+                            <div className="col-auto text-left">
+                                <div className="form-group">
+                                    <button className="btn btn-info add-btn text-white rounded-2 m-r-5">Load</button>
 
 
+                                </div>
                             </div>
 
                         </div>
@@ -520,10 +564,10 @@ const AllDocumnet = () => {
                                         </button>
                                     </CopyToClipboard>
                                 </div>
-                                <div className='col-md-4'>
-                                    <Link to={''} className="btn add-btn rounded-2">
+                                {/* <div className='col-md-4'>
+                                    <Link to={''} className="btn add-btn btn-info text-white rounded-2">
                                         Add New Document</Link>
-                                </div>
+                                </div> */}
                             </div>
                             <DataTable data={filteredData} columns={columns}
                                 pagination
@@ -540,7 +584,7 @@ const AllDocumnet = () => {
                                 expandableRowsComponent={ButtonRow}
                                 paginationTotalRows={filteredData.length}
                                 customStyles={customStyles}
-
+                                responsive
 
                             />
 
@@ -549,6 +593,30 @@ const AllDocumnet = () => {
 
 
                     </div>
+                    <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Reject Modal</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div>
+                                <label htmlFor="">Please provide reasons for rejecting document</label>
+                                <br />
+                                <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
+                                    onChange={e => setReason(e.target.value)} />
+                            </div>
+                            <br />
+                            <div>
+                                <label htmlFor="">Set a new deadline</label>
+                                <br />
+                                <input type="date" className='form-control'
+                                    onChange={e => setDeadline(e.target.value)}
+                                />
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <button onClick={handleReject} className="btn btn-danger">Reject Document</button>
+                        </Modal.Footer>
+                    </Modal>
 
                 </div>
             </div>
@@ -557,4 +625,4 @@ const AllDocumnet = () => {
     );
 }
 
-export default AllDocumnet;
+export default AllDocument;

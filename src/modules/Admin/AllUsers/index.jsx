@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaSearch, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaDharmachakra, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import { useCompanyContext } from '../../../context';
@@ -76,7 +76,7 @@ const AllUsers = () => {
                         title='Edit'
                         to={`/administrator/editUsers/${row.id}`}
                     >
-                        <SlSettings />
+                        <FaRegEdit />
                     </Link>
                     <button
                         className='btn'
@@ -263,8 +263,8 @@ const AllUsers = () => {
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
-                <AdminSidebar />
+                {/* <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
+                <AdminSidebar /> */}
                 <div className="page-wrapper">
                     <Helmet>
                         <title>All User</title>

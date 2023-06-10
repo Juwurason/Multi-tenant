@@ -8,7 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -16,6 +16,7 @@ import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
+import dayjs from 'dayjs';
 
 
 const AllClients = () => {
@@ -56,16 +57,15 @@ const AllClients = () => {
       selector: row => row.phoneNumber,
       sortable: true
     },
-
     {
       name: "Actions",
       cell: (row) => (
-        <div className="d-flex gap-1">
-          <Link to={`/administrator/clientProfile/${row.profileId}/${row.firstName}`}
+        <span className="d-flex gap-1">
+          <Link to={`/administrator/clientProfile/${row.profileId}`}
             className="btn"
             title='edit'
           >
-            <SlSettings />
+            <FaRegEdit />
           </Link>
           <button
             className='btn'
@@ -75,7 +75,7 @@ const AllClients = () => {
             <GoTrashcan />
           </button>
 
-        </div>
+        </span>
       ),
     },
 
@@ -186,10 +186,44 @@ const AllClients = () => {
     doc.save("clients.pdf");
   };
 
+  const handleActivate = async (e) => {
+    try {
+      const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+      )
+      console.log(response);
+  } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+  }
+  }
+
+  const handleDeactivate = async (e) => {
+    try {
+      const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+      )
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+    }
+  }
+
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        {data.fullName}
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+        <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+        <div><span className='fw-bold'>Email: </span> {data.email}</div>
+        <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
+        <div>
+          <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+            Activate Client
+          </button> |
+          <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+            Deactivate Client
+          </button>
+        </div>
 
       </div>
     );
