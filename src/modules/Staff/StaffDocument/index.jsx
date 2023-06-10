@@ -558,7 +558,7 @@ const EditAvail = async (e) => {
                 </div>
                 <div className='col-md-12'>
                   <div className="form-group">
-                    <label>Upload Document</label>
+                    <label>Upload Document</label> <br />
                     <input
                     type="file"
                       className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
@@ -612,7 +612,7 @@ const EditAvail = async (e) => {
                 </div>
                 <div className='col-md-12'>
                   <div className="form-group">
-                    <label>Upload Document</label>
+                    <label>Upload Document</label> <br />
                     <input
                     type="file"
                       className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
