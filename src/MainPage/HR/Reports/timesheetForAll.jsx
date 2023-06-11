@@ -7,6 +7,7 @@ import useHttp from "../../../hooks/useHttp";
 import dayjs from "dayjs";
 import moment from "moment";
 import DataTable from "react-data-table-component";
+import jsPDF from "jspdf";
 
 const formatDate = (dateString) => {
     const date = dayjs(dateString);
@@ -31,10 +32,10 @@ function formatDuration(duration) {
         const hours = Math.floor(durationInMinutes / 60);
         const minutes = durationInMinutes % 60;
 
-        return `${hours} Hrs ${minutes} min`;
+        return `${hours} Hrs`;
     }
 
-    return "0 Hrs 0 min"; // Return an empty string if duration is not available
+    return "0 Hrs"; // Return an empty string if duration is not available
 }
 const todayDate = (date) => {
     const year = date.getFullYear();
@@ -59,47 +60,47 @@ const TimesheetForAll = () => {
         },
         {
             name: 'Normal Shift Duration',
-            selector: row => ""
+            selector: row => formatDuration(row.normalDuration)
 
         },
         {
             name: 'Evening Shift Duration',
-            selector: row => ""
+            selector: row => formatDuration(row.eveningDuration)
 
         },
         {
             name: 'Saturday Shift Duration',
-            selector: row => ""
+            selector: row => formatDuration(row.satDuration)
 
         },
         {
             name: 'Sunday Shift Duration',
-            selector: row => ""
+            selector: row => formatDuration(row.sunDuration)
 
         },
         {
             name: 'Exceptional Shift Duration',
-            selector: row => ""
+            selector: row => formatDuration(row.exceptionalDuration)
 
         },
         {
             name: 'Public Holiday',
-            selector: row => ""
+            selector: row => formatDuration(row.phDuration)
 
         },
         {
             name: 'Night Shift',
-            selector: row => ""
+            selector: row => row.nightShift
 
         },
         {
             name: 'Total Km',
-            selector: row => ""
+            selector: row => row.totalKm
 
         },
         {
             name: 'Total Duration',
-            selector: row => ""
+            selector: row => formatDuration(row.totalDuration)
 
         },
 
@@ -128,7 +129,33 @@ const TimesheetForAll = () => {
         }, 2000);
     };
 
+    const handlePDFDownload = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+        doc.setFontSize(13);
+        doc.text(`Staff Attendance Sheet from ${moment(total.fromDate).format('LLL')} to ${moment(total.toDate).format('LLL')}`,
+            marginLeft, 40);
+        const headers = columns.map((column) => column.name);
+        const dataValues = timesheet.map((dataRow) =>
+            columns.map((column) => {
+                if (typeof column.selector === "function") {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            })
+        );
 
+        doc.autoTable({
+            startY: 50,
+            head: [headers],
+            body: dataValues,
+            margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+        });
+        doc.save("Timesheet.pdf");
+    };
 
     return (
         <div className="page-wrapper">
@@ -138,7 +165,7 @@ const TimesheetForAll = () => {
             </Helmet>
             <div className="d-flex justify-content-end pt-3 px-4">
                 <button
-                    onClick={handlePrint}
+                    onClick={handlePDFDownload}
                     className="btn btn-primary shadow add-btn rounded">Print Attendance</button>
             </div>
             <div className="content container-fluid" id="print-content">

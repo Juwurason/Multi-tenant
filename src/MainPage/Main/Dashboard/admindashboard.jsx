@@ -49,6 +49,7 @@ const AdminDashboard = () => {
   const [schedule, setSchedule] = useState([]);
   const [attendance, setAttendance] = useState([]);
   const [progress, setProgress] = useState([]);
+  const [ticket, setTicket] = useState([]);
   const { get } = useHttp();
 
   let isMounted = true;
@@ -119,6 +120,14 @@ const AdminDashboard = () => {
       const progressResponse = await get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
       const progress = progressResponse.data;
       setProgress(progress);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      const ticketResponse = await get(`/Tickets/get_all_tickets?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const ticket = ticketResponse.data;
+      setTicket(ticket);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -206,8 +215,9 @@ const AdminDashboard = () => {
                     linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
                   /> */}
                   <DashboardCard title={"Tickets"} sty={'danger'}
-                    content={0} icon={<MdOutlinePages className='fs-4' />}
-                    link={''}
+                    content={ticket.length} icon={<MdOutlinePages className='fs-4' />}
+                    link={'/app/support/view-tickets'}
+                    loading={loading}
                   />
                   {/* <DashboardCard title={"Document"}
                     sty={'danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}

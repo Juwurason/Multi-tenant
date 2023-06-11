@@ -595,7 +595,7 @@ const Document = () => {
                     </div>
                     <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Reject Modal</Modal.Title>
+                            <Modal.Title>Reject Document</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <div>
