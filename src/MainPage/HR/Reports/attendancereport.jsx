@@ -118,16 +118,15 @@ const AttendanceReport = () => {
           >
             <FaRegFileAlt />
           </button>
-          <button
+          {/* <button
             className='btn'
             title='Delete'
             onClick={() => {
-              // handle action here, e.g. open a modal or navigate to a new page
-              // handleDelete(row.administratorId)
+             
             }}
           >
             <GoTrashcan />
-          </button>
+          </button> */}
 
         </div>
       ),
@@ -212,20 +211,17 @@ const AttendanceReport = () => {
   // }
   const GetAllTimeshift = async (e) => {
     e.preventDefault();
+    // //:dateFrom/:dateTo
+
+    setLoading2(true);
+    setTimeout(() => {
+      const url = `/app/reports/Allstaff-timesheet/${dateFrom.current.value}/${dateTo.current.value}`;
+      window.open(url, '_blank');
+      setLoading2(false);
+    }, 2000);
 
     setLoading2(true)
-    try {
-      const { data } = await get(`/Attendances/generate_all_staff_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
-      if (data.status === "Success") {
-        toast.success(data.message);
-      }
-      setLoading2(false)
-    } catch (error) {
-      console.log(error);
-      setLoading2(false)
-    } finally {
-      setLoading2(false)
-    }
+
   }
 
 
@@ -490,11 +486,16 @@ const AttendanceReport = () => {
                         className="btn btn-warning add-btn text-white rounded-2 m-r-5"
                         disabled={loading2 ? true : false}
                       >
+                        {loading2 ? (
+                          <>
+                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                            Please wait...
+                          </>
+                        ) : (
+                          "Generate Timesheet for all staff"
+                        )}
 
 
-                        {loading2 ? <div className="spinner-grow text-light" role="status">
-                          <span className="sr-only">Loading...</span>
-                        </div> : "Generate Timesheet for all staff"}
                       </button>
 
                     </div>
@@ -650,7 +651,7 @@ const AttendanceReport = () => {
                         <label htmlFor="">Image URL </label>
                         <input className="form-control" type="file"
                           accept=".png,.jpg,.jpeg"
-                          maxSize={1024 * 1024 * 2}
+                          maxsize={1024 * 1024 * 2}
                         // onChange={handleFileChange}
                         />
                       </div>

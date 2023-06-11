@@ -24,6 +24,8 @@ const OnlineStatus = () => {
             pauseOnHover: false,
             draggable: true,
         });
+        // Reload the window when the user is back online
+        window.location.reload();
     };
 
     const handleOffline = () => {

@@ -56,6 +56,7 @@ const Timesheet = () => {
             const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom}&toDate=${dateTo}`, { cacheTimeout: 300000 });
             setTimesheet(data?.timesheet?.attendanceSplits);
             setTotal(data?.timesheet)
+            console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message);
             }
@@ -80,7 +81,7 @@ const Timesheet = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Time Sheet Page</title>
+                <title>{`${total.staffName} Attendance Sheet from ${moment(total.fromDate).format('LLL')} to ${moment(total.toDate).format('LLL')}`}</title>
                 <meta name="description" content="" />
             </Helmet>
             <div className="d-flex justify-content-end pt-3 px-4">
@@ -118,11 +119,23 @@ const Timesheet = () => {
                                         <td>{formatDate(data.clockIn).formattedDay}</td>
                                         <td>{formatDate(data.clockIn).formattedTime}</td>
                                         <td>{formatDate(data.clockOut).formattedTime}</td>
-                                        <td>{formatDuration(data.normalDuration)}</td>
+                                        <td>{formatDuration(data.duration)}</td>
                                         <td>{data.totalKm}</td>
                                         <td>{data.shiftRoster?.profile?.fullName}</td>
-                                        <td>{data.shift}</td>
+                                        <td>
+
+                                            <small
+
+                                                className={`p-1 ${data.shift === 'M' ? 'bg-success' : data.shift === 'E' ? 'bg-info' : data.shift === 'N' ? 'bg-secondary' : 'bg-transparent'}
+                                                text-white rounded d-flex justify-content-center align-items-center`}
+                                                style={{ fontSize: "10px" }}
+                                            >
+                                                {data.shift === 'M' ? 'Morning' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Night' : ""}
+                                            </small>
+
+                                        </td>
                                     </tr>
+
                                 )
                             }
                             <tr>
