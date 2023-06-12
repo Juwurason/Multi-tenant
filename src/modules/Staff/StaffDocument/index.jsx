@@ -31,6 +31,7 @@ const StaffDocument = () => {
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [documentName, setDocumentName] = useState("")
+  const [otherDocumentName, setOtherDocumentName] = useState("")
   const [expire, setExpire] = useState("")
   const [document, setDocument] = useState("")
   const [staffDocument, setStaffDocument] = useState([]);
@@ -67,23 +68,23 @@ const StaffDocument = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-          <div className='d-flex flex-column gap-1 p-2 overflow-hidden'>
-              <span> {row.documentName}</span>
+        <div className='d-flex flex-column gap-1 p-2 overflow-hidden'>
+          <span title={row.documentName}> {row.documentName} </span>
 
-              <span className='d-flex'>
-                  <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
-                      title='View'
-                      onClick={() => handleView(row.documentUrl)}
-                  >
+          <span className='d-flex'>
+            <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
+              title='View'
+              onClick={() => handleView(row.documentUrl)}
+            >
 
-                      <FaEye />
-                  </span>
+              <FaEye />
+            </span>
 
-                  <a ref={downloadLinkRef} style={{ display: 'none' }} />
-              </span>
-          </div>
+            <a ref={downloadLinkRef} style={{ display: 'none' }} />
+          </span>
+        </div>
       ),
-  },
+    },
     {
       name: 'Expiration Date',
       selector: row => row.expirationDate,
@@ -95,9 +96,9 @@ const StaffDocument = () => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-          <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+        <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
       ),
-  },
+    },
 
   ];
 
@@ -105,16 +106,6 @@ const StaffDocument = () => {
   // const id = JSON.parse(localStorage.getItem('user'))
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    const allowedExtensions = /(\.pdf|\.doc)$/i;
-
-    if (allowedExtensions.exec(selectedFile.name)) {
-      setDocument(selectedFile);
-    } else {
-      alert('Please select a PDF or DOC file');
-    }
-  };
 
   const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
@@ -149,13 +140,13 @@ const StaffDocument = () => {
     });
   };
 
-  
+
 
   const getStaffDocument = async () => {
     try {
-      const {data} = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+      const { data } = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
       setStaffDocument(data.staffDocuments)
-    
+
       setLoading(false)
       // console.log(data.staffDocuments);
 
@@ -166,12 +157,12 @@ const StaffDocument = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     setLoading(true)
     getStaffDocument()
   }, [])
-  
+
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -182,7 +173,12 @@ const StaffDocument = () => {
     const formData = new FormData()
     formData.append("CompanyId", id.companyId);
     formData.append("DocumentFile", document);
-    formData.append("DocumentName", documentName);
+    // formData.append("DocumentName", documentName);
+    if (documentName === "Other") {
+      formData.append("DocumentName", otherDocumentName);
+    } else {
+      formData.append("DocumentName", documentName);
+    }
     formData.append("ExpirationDate", expire);
     formData.append("User", id.fullName);
     formData.append("UserRole", id.role);
@@ -190,25 +186,25 @@ const StaffDocument = () => {
     formData.append("UserId", getStaffProfile.staffId);
 
     try {
-      setLoading(true)
+      setLoading2(true)
       const { data } = await privateHttp.post(`/Staffs/document_upload?userId=${id.userId}`,
         formData
 
       )
       // console.log(data);
       toast.success(data.message)
-      setLoading(false)
+      setLoading2(false)
       setShowModal2(false)
       getStaffDocument()
 
     } catch (error) {
       console.log(error);
       toast.error(error.message)
-      setLoading(false);
+      setLoading2(false);
 
     }
     finally {
-      setLoading(false)
+      setLoading2(false)
     }
   }
 
@@ -272,7 +268,7 @@ const StaffDocument = () => {
     })
   }
 
-  const showModa = () =>{
+  const showModa = () => {
     setShowModal2(true)
   }
 
@@ -282,7 +278,7 @@ const StaffDocument = () => {
   const [documenti, setDocumenti] = useState("")
   const [idSave, setIdSave] = useState('')
 
-  const handleEdit = async(e) => {
+  const handleEdit = async (e) => {
     setShowModal(true);
     setIdSave(e)
     // setLoading2(true)
@@ -294,7 +290,7 @@ const StaffDocument = () => {
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message);
-          toast.error(error.response.data.title);
+      toast.error(error.response.data.title);
     }
   };
 
@@ -304,38 +300,38 @@ const StaffDocument = () => {
     const value = target.value;
     const newValue = value === "" ? "" : value;
     setEditAvail({
-        ...editAvail,
-        [name]: newValue
+      ...editAvail,
+      [name]: newValue
     });
-}
-
-const handleFileChan = (e) => {
-  const selectedFile = e.target.files[0];
-  const allowedExtensions = /(\.pdf|\.doc)$/i;
-
-  if (allowedExtensions.exec(selectedFile.name)) {
-    setDocumenti(selectedFile);
-  } else {
-    alert('Please select a PDF or DOC file');
   }
-};
 
-const EditAvail = async (e) => {
+  const handleFileChan = (e) => {
+    const selectedFile = e.target.files[0];
+    const allowedExtensions = /(\.pdf|\.doc)$/i;
+
+    if (allowedExtensions.exec(selectedFile.name)) {
+      setDocumenti(selectedFile);
+    } else {
+      alert('Please select a PDF or DOC file');
+    }
+  };
+
+  const EditAvail = async (e) => {
     e.preventDefault()
     if (editAvail.documentName === "" || documenti === "") {
       return toast.error("Input Fields cannot be empty")
     }
-  
-  const formData = new FormData()
-  formData.append("CompanyId", id.companyId);
-  formData.append("DocumentId", idSave);
-  formData.append("DocumentName", editAvail.documentName);
-  formData.append("ExpirationDate", editAvail.expirationDate);
-  formData.append("User", id.fullName);
-  formData.append("UserId", staffPro.staffId);
-  formData.append("UserRole", id.role);
-  formData.append("Status", "Pending");
-  formData.append("DocumentFile", documenti);
+
+    const formData = new FormData()
+    formData.append("CompanyId", id.companyId);
+    formData.append("DocumentId", idSave);
+    formData.append("DocumentName", editAvail.documentName);
+    formData.append("ExpirationDate", editAvail.expirationDate);
+    formData.append("User", id.fullName);
+    formData.append("UserId", staffPro.staffId);
+    formData.append("UserRole", id.role);
+    formData.append("Status", "Pending");
+    formData.append("DocumentFile", documenti);
     try {
       setLoading2(true)
       const { data } = await privateHttp.post(`/Documents/edit/${idSave}?userId=${id.userId}`, formData);
@@ -359,21 +355,21 @@ const EditAvail = async (e) => {
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-      <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
-      <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
-      <div>
+        <div><span className='fw-bold'>Document Name: </span>{data.documentName} </div>
+        <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+        <div>
           <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.documentId)}>
-              Edit
+            Edit
           </button> |
           <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
-              Delete
+            Delete
           </button>
+        </div>
+
       </div>
-  
-  </div>
     );
 
-   
+
   };
 
   const [searchText, setSearchText] = useState("");
@@ -409,13 +405,13 @@ const EditAvail = async (e) => {
               <div className="col-auto float-end ml-auto">
                 {/* <a href="" className="btn add-btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_policy"> */}
                 <button
-                className="btn add-btn btn-primary"
-                onClick={showModa}
+                  className="btn add-btn btn-primary"
+                  onClick={showModa}
                 >
-                <i className="fa fa-plus" /> Add New Document
+                  <i className="fa fa-plus" /> Add New Document
                 </button>
-                  
-                  {/* </a> */}
+
+                {/* </a> */}
               </div>
             </div>
           </div>
@@ -498,76 +494,62 @@ const EditAvail = async (e) => {
         </div>
         {/* /Page Content */}
         {/* Add Policy Modal */}
-        {/* <div id="add_policy" className="modal custom-modal fade" role="dialog">
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Upload Documents</h5>
-                <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label>Document Name <span className="text-danger">*</span></label>
-                    <input className="form-control" type="text" onChange={e => setDocumentName(e.target.value)} />
-                  </div>
-                  <div className="form-group">
-                    <label>Expiration Date <span className="text-danger">*</span></label>
-                    <input className="form-control" type="date" onChange={e => setExpire(e.target.value)} />
-                  </div>
 
-                  <div className="form-group">
-                    <label>Upload Document <span className="text-danger">*</span></label>
-                    <div className="custom-file">
-                      <input type="file" className="custom-file-input" accept=".pdf,.doc" id="policy_upload" onChange={handleFileChange} />
-                    </div>
-                  </div>
-                  <div className="submit-section">
-                    <button className="btn btn-primary submit-btn"  disabled={loading ? true : false} >
-                      {loading ? <div className="spinner-grow text-light" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div> : "Add"}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div> */}
         <Modal show={showModal2} onHide={() => setShowModal2(false)} centered>
           <Modal.Header closeButton>
             <Modal.Title>Upload Document</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <form className="row">
-                <div className='col-md-12'>
-                  <div className="form-group">
-                    <label>Document Name</label>
-                    <input className="form-control" type="text" onChange={e => setDocumentName(e.target.value)} />
-                    
-                  </div>
+            <form className="row">
+              <div className='col-md-12'>
+                <div className="form-group">
+                  <label>Document Name</label>
+                  <select className='form-select' onChange={(e) => setDocumentName(e.target.value)} required>
+                    <option defaultValue hidden>Select Document Name</option>
+                    <option value={"Current first aid certificate"}>Current first aid certificate</option>
+                    <option value={"Current Police check"}>Current Police check</option>
+                    <option value={"NDIS orientation module certificate"}>NDIS orientation module certificate</option>
+                    <option value={"Working with vulnerable Peoples card"}>Working with vulnerable Peoples card</option>
+                    <option value={"Australian Driver's license"}>Australian Driver's license</option>
+                    <option value={"Comprehensive Car Insurance Certificate"}>Comprehensive Car Insurance Certificate</option>
+                    <option value={"Relevant academic certificate"}>Relevant academic certificate</option>
+                    <option value={"Other"}>Other</option>
+                  </select>
+                  {documentName === "Other" && (
+                    <div className="mt-2">
+                      <label>Other Document Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter the document name"
+                        onChange={(e) => setOtherDocumentName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
-                <div className='col-md-12'>
-                  <div className="form-group">
-                    <label>Expiration Date</label>
-                    <input className="form-control" type="date" onChange={e => setExpire(e.target.value)}
-                    />
-                  </div>
+
+              </div>
+              <div className='col-md-12'>
+                <div className="form-group">
+                  <label>Expiration Date</label>
+                  <input className="form-control" type="date" onChange={e => setExpire(e.target.value)}
+                  />
                 </div>
-                <div className='col-md-12'>
-                  <div className="form-group">
-                    <label>Upload Document</label> <br />
-                    <input
+              </div>
+              <div className='col-md-12'>
+                <div className="form-group">
+                  <label>Upload Document</label> <br />
+                  <input
                     type="file"
-                      className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
-                      onChange={handleFileChange}
-                      required
-                    />
-                  </div>
+                    className="custom-file-input"
+                    accept=".pdf, .doc, .txt, .jpg, .jpeg, .png"
+                    id="policy_upload"
+                    required
+                  />
                 </div>
-              </form>
+              </div>
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <button
@@ -595,33 +577,33 @@ const EditAvail = async (e) => {
             <Modal.Title>Edit Document</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <form className="row">
-                <div className='col-md-6'>
-                  <div className="form-group">
-                    <label>Document Name</label>
-                    <input className="form-control" type="text" name='documentName' value={editAvail.documentName || ''} onChange={handleInputChange} />
-                    
-                  </div>
+            <form className="row">
+              <div className='col-md-6'>
+                <div className="form-group">
+                  <label>Document Name</label>
+                  <input className="form-control" type="text" name='documentName' value={editAvail.documentName || ''} onChange={handleInputChange} />
+
                 </div>
-                <div className='col-md-6'>
-                  <div className="form-group">
-                    <label>Expiration Date</label>
-                    <input className="form-control" type="date" name='expirationDate' value={editAvail.expirationDate || ''} onChange={handleInputChange}
-                    />
-                  </div>
+              </div>
+              <div className='col-md-6'>
+                <div className="form-group">
+                  <label>Expiration Date</label>
+                  <input className="form-control" type="date" name='expirationDate' value={editAvail.expirationDate || ''} onChange={handleInputChange}
+                  />
                 </div>
-                <div className='col-md-12'>
-                  <div className="form-group">
-                    <label>Upload Document</label> <br />
-                    <input
+              </div>
+              <div className='col-md-12'>
+                <div className="form-group">
+                  <label>Upload Document</label> <br />
+                  <input
                     type="file"
-                      className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
-                       onChange={handleFileChan}
-                      required
-                    />
-                  </div>
+                    className="custom-file-input" accept=".pdf,.doc" id="policy_upload"
+                    onChange={handleFileChan}
+                    required
+                  />
                 </div>
-              </form>
+              </div>
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <button

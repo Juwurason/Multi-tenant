@@ -168,12 +168,12 @@ const ticketDetails = () => {
                     <div className="card-body">
                         <h5 className="card-title"><span className='fw-bold'>Title: </span> {ticketDetails.subject}</h5>
                         <p className="card-text"><span className='fw-bold'>Description: </span> {ReactHtmlParser(ticketDetails.description)}</p>
-                        <button onClick={handleEscalate} className="btn btn-warning text-white">
+                        {/* <button onClick={handleEscalate} className="btn btn-warning text-white">
 
                             {loading2 ? <div className="spinner-grow text-light" role="status">
                                 <span className="sr-only">Loading...</span>
                             </div> : "Escalate Ticket"}
-                        </button>
+                        </button> */}
                     </div>
 
                     <h5 className="card-footer">Raised by {ticketDetails.user} on {moment(ticketDetails.dateCreated).format("LLL")} </h5>

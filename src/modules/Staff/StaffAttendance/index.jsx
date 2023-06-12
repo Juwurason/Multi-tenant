@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import dayjs from 'dayjs';
+import moment from 'moment';
 
 const StaffAttendance = () => {
   useEffect(() => {
@@ -175,10 +176,21 @@ const StaffAttendance = () => {
 
   const ButtonRow = ({ data }) => {
     return (
-      <div className="p-4">
-        {data.staff.fullName}
-
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+      <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
+      <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+      <div>
+        <Link to={`/staff/attendance-report/${data.attendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
+        >
+          Add Report
+        </Link> |
+        <Link to={`/staff/attendance-details/${data.attendanceId}`}
+         className="btn text-secondary fw-bold" style={{ fontSize: "12px" }}>
+          Details
+        </Link>
       </div>
+
+    </div>
     );
   };
 

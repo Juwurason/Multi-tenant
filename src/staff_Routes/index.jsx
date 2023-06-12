@@ -7,6 +7,8 @@ import StaffEditProfile from '../modules/Staff/StaffEditProfile';
 import StaffChangePassword from '../modules/Staff/StaffForgettingPassword';
 import StaffDocument from '../modules/Staff/StaffDocument';
 import StaffAttendance from '../modules/Staff/StaffAttendance';
+import StaffAttendanceReport from '../modules/Staff/StaffAttendanceReport';
+import StaffAttendanceDetails from '../modules/Staff/StaffAttendanceDetails';
 import StaffTable from '../modules/Staff/StaffTable';
 import ProgressNote from '../modules/Staff/ProgressNote'
 import EditProgressNote from '../modules/Staff/EditProgressNote';
@@ -81,7 +83,7 @@ export default [
   },
 
   {
-      path: 'ticket-details',
+      path: 'ticket-details/:uid',
       component: TicketDetails
   },
 
@@ -98,6 +100,16 @@ export default [
    {
       path: 'messageInbox',
       component: MessageInbox
+   },
+
+   {
+      path: 'attendance-report/:uid',
+      component: StaffAttendanceReport
+   },
+
+   {
+      path: 'attendance-details/:uid',
+      component: StaffAttendanceDetails
    },
 
 ]
