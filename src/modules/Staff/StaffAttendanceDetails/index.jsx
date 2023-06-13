@@ -192,32 +192,48 @@ const AttendanceDetails = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
-                                    <div>
+                                    <div className="border-bottom">
+                                        <Link to="/staff/staff-attendance" className="edit-icon bg-danger text-white" >
+                                            <i className="la la-times-circle" />
+                                        </Link>
                                         <h3>Attendance Details</h3>
-                                    </div>
-                                    
-                                    <div><span>ClockIn </span></div>
-                                    {/* 5/24/2023 6:34:00 PM
-                                    ClockOut
-                                    5/24/2023 6:38:43 PM
-                                    Duration
-                                    2837870000
-                                    Staff
-                                    Adedamola Adepoju Ayobamidele
-                                    Kilometre
-                                    30Km
-                                    Report
-                                    Testing attendance
-                                    ImageURL
+                                    </div> <br />
 
-                                    Date Created
-                                    5/24/2023 6:37:49 PM
-                                    User Created
-                                    ayobamideleadepoju@gmail.com
-                                    Date Modified
-                                    5/25/2023 2:56:51 AM
-                                    User Modified
-                                    info@maxicareplus.com.au */}
+                                    <ul className="personal-info">
+                                        <li>
+                                            <div className="title">ClockIn</div>
+                                            <div className="text"></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">ClockOut</div>
+                                            <div className="text"></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">Duration</div>
+                                            <div className="text"></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">Staff</div>
+                                            <div className="text"></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">Kilometre</div>
+                                            <div className="text"></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">Report</div>
+                                            <div className="text"><a className='text-primary' href={`tel:$ber}`}></a></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">ImageUrl</div>
+                                            <div className="text"></div>
+                                        </li>
+                                        <li>
+                                            <div className="title">Date Created</div>
+                                            <div className="text"></div>
+                                        </li>
+
+                                    </ul>
                                 </div>
                             </div>
                         </div>

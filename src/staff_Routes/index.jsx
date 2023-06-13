@@ -13,6 +13,8 @@ import StaffTable from '../modules/Staff/StaffTable';
 import ProgressNote from '../modules/Staff/ProgressNote'
 import EditProgressNote from '../modules/Staff/EditProgressNote';
 import StaffProgressNote from '../modules/Staff/StaffProgressNote';
+import StaffDailyReport from '../modules/Staff/StaffDailyReport';
+import StaffNewReport from '../modules/Staff/StaffNewReport';
 import AddReport from '../modules/Staff/AddReport';
 import ViewTicket from '../modules/Staff/Support/viewTicket';
 import RaiseTicket from '../modules/Staff/Support/raiseTicket';
@@ -110,6 +112,16 @@ export default [
    {
       path: 'attendance-details/:uid',
       component: StaffAttendanceDetails
+   },
+
+   {
+      path: 'staff-daily-report',
+      component: StaffDailyReport
+   },
+
+   {
+      path: 'staff-new-report',
+      component: StaffNewReport
    },
 
 ]
