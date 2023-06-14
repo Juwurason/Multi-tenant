@@ -44,6 +44,9 @@ const App = () => {
         // Redirect to the previous location
         history.goBack();
     };
+    if (location.pathname === '/') {
+        history.push('/login')
+    }
 
     if (!user && location.pathname !== '/login') {
         return <Redirect to="/login" />;
@@ -65,7 +68,7 @@ const App = () => {
             <Route path="/ui-components" component={uicomponents} />
             <Route path="/error-500" component={Error500} />
             <Route path="/logout" render={handleLogout} />
-            <Route component={Error404} /> {/* Catch-all route */}
+            {/* <Route component={Error404} /> Catch-all route */}
         </Switch>
     );
 };

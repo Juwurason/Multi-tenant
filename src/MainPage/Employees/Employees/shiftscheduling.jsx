@@ -318,6 +318,30 @@ const ShiftScheduling = () => {
       }
     }
   }
+  const SendTimesheet = async () => {
+    if (sta === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
+      return Swal.fire(
+        "Select a staff and time range",
+        "",
+        "error"
+      )
+
+    } else {
+      setLoading3(true)
+
+      try {
+        const { data } = await get(`
+        /ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}
+`, { cacheTimeout: 300000 });
+        setSchedule(data);
+        setLoading3(false);
+        setPeriodicModal(false);
+      } catch (error) {
+        console.log(error);
+        setLoading3(false)
+      }
+    }
+  }
 
 
 
@@ -408,15 +432,12 @@ const ShiftScheduling = () => {
 
               </div>
             </div>
-            {/* <div className="col-auto mt-3">
-              <div className="form-group">
-                <button onClick={FetchSchedule} className="btn btn-secondary add-btn rounded-2 m-r-5">All Shifts</button>
 
-              </div>
-            </div> */}
             <div className="col-auto mt-3">
               <div className="form-group">
-                <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
+                <button className="btn btn-primary add-btn rounded-2 m-r-5"
+                  onClick={SendTimesheet}
+                >Send Roaster Notification</button>
 
               </div>
             </div>

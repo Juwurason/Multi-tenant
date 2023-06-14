@@ -89,7 +89,10 @@ const Document = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+                <span className={`${row.status === 'Pending' ? "bg-warning" : row.status === 'Accepted' ? "bg-success text-white" :
+                    row.status === 'Rejected' ? "bg-danger text-white" : "bg-transparent"
+                    } px-2 py-1 rounded-pill fw-bold`}
+                    style={{ fontSize: "10px" }}>{row.status}</span>
             ),
         },
 
@@ -102,7 +105,6 @@ const Document = () => {
         try {
             const documentResponse = await privateHttp.get(`/Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const document = documentResponse.data;
-            console.log(document);
             setDocument(document);
         } catch (error) {
             console.log(error);
@@ -135,13 +137,6 @@ const Document = () => {
     const [menu, setMenu] = useState(false)
     const downloadLinkRef = useRef(null);
 
-
-
-
-
-
-
-
     const handleView = (documentUrl) => {
         window.open(documentUrl, '_blank');
     };
@@ -173,6 +168,7 @@ const Document = () => {
             });
         }
     });
+
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet('Sheet1');
@@ -327,7 +323,7 @@ const Document = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.post(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    const { data } = await privateHttp.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);

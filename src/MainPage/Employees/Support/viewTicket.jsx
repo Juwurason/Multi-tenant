@@ -51,7 +51,7 @@ const ViewTicket = () => {
             selector: row => row.isOpen,
             sortable: true,
             cell: (row) => <span className="long-cell" style={{ overflow: "hidden" }}
-            ><span className={`${row.isOpen === true ? "bg-info" : "bg-danger"} p-2 rounded-2 text-white`}>{row.isOpen === true ? "open" : "closed"}</span> </span>
+            ><span className={`${row.isOpen === true ? "bg-warning" : "bg-success text-white"} px-2 py-1 rounded-pill  fw-bold`}>{row.isOpen === true ? "open" : "closed"}</span> </span>
         },
 
 
