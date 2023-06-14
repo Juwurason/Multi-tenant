@@ -545,7 +545,7 @@ const StaffDocument = () => {
                     className="custom-file-input"
                     accept=".pdf, .doc, .txt, .jpg, .jpeg, .png"
                     id="policy_upload"
-                    required
+                    onChange={e => setDocument(e.target.value)}
                   />
                 </div>
               </div>

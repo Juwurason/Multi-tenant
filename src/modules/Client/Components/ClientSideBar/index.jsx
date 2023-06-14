@@ -1,14 +1,16 @@
-/**
- * App Header
- */
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { MdDashboard } from 'react-icons/md';
 
 const ClientSidebar = (props) => {
     const MenuMore = () => {
         document.getElementById("more-menu-hidden").classList.toggle("hidden");
+    }
+
+    const onMenuClik = () => {
+        props.onMenuClick()
     }
 
     const [isSideMenu, setSideMenu] = useState("");
@@ -18,7 +20,7 @@ const ClientSidebar = (props) => {
 
 
     const toggleSidebar = (value) => {
-        console.log(value);
+        // console.log(value);
         setSideMenu(value);
         setSideMenuNew(value);
 
@@ -36,106 +38,105 @@ const ClientSidebar = (props) => {
 
     let pathname = props.location.pathname
     return (
-        <div id="sidebar" className="sidebar" >
+        <div id="sidebar" className="sidebar" style={{ backgroundColor: "#1C75B9" }}>
             <Scrollbars
                 autoHide
-                autoHideTimeout={1000}
-                autoHideDuration={200}
+                // autoHideTimeout={1000}
+                // autoHideDuration={200}
                 autoHeight
                 autoHeightMin={0}
                 autoHeightMax="95vh"
                 thumbMinSize={30}
                 universal={false}
                 hideTracksWhenNotNeeded={true}
-            // horizontal="false"
+
 
             >
                 <div className="sidebar-inner slimscroll">
                     <div id="sidebar-menu" className="sidebar-menu" style={{ backgroundColor: "#1C75B9", height: '100vh' }}>
 
+
+                        { /*Vertical Sidebar starts here*/}
                         <ul className="sidebar-vertical" id='veritical-sidebar'>
                             <li className="menu-title">
                                 <span>Main</span>
                             </li>
-                            <li className="submenu">
-                                <a href="/client/client" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "dashboard" ? "" : "dashboard")}>
+                            <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
+
+                                <Link to="/client/client"  >
                                     <i className="la la-dashboard" />
-                                    <span> Dashboard</span> </a>
+                                    <span> Dashboard</span></Link>
 
                             </li>
 
                             <li className="menu-title">
-                                <span>Profile Management</span>
+                                <span>Account Management</span>
+                            </li>
+                            <li className={pathname.includes('client-profile') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
                             </li>
 
-                            <li className={pathname.includes('clients') ? "active" : ""}>
-                                <Link to="/client/client-profile"><i className="la la-user" /> <span>My Profile</span></Link>
-                            </li>
-
-                            <li className={pathname.includes('leads') ? "active" : ""}>
+                            <li className={pathname.includes('change-password') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
-                                {/* <li><Link to="/forgotpassword"> Forgot Password </Link></li> */}
+                            </li>
+                            {/* <li className={pathname.includes('staff-form') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-schedule"><i className="la la-book" /> <span>My Availabilities</span></Link>
+                            </li> */}
+                             <li className="menu-title">
+                                 <span>Client Management</span>
+                             </li>
+
+                            {/* <li className={pathname.includes('staff-attendance') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/staff/staff-attendance"><i className="la la-calendar-check-o" /> <span>My Attendances</span></Link>
                             </li>
 
+                            <li className={pathname.includes('staff-progressNote') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/staff/staff-progressNote"><i className="la la-folder-open" /> <span>My Progress Note</span></Link>
+                            </li>
+                        
                             <li className="menu-title">
-                                <span>Client Management</span>
-                            </li>
-
-                            <li className={pathname.includes('policies') ? "active" : ""}>
+                                <span>Staff-Client Management</span>
+                            </li> */}
+                   
+                            <li className={pathname.includes('client-roster') || pathname.includes('client-roster') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/client-roster"><i className="la la-calendar" /> <span>Shift Roster</span></Link>
                             </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
+
+                            <li className={pathname.includes('client-document') || pathname.includes('client-document') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/client-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
-                            {/* <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Representative</span></Link>
+
+                            {/* <li className={pathname.includes('staff-daily-report') || pathname.includes('staff-daily-report') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/staff/staff-daily-report"><i className="la la-newspaper-o" /> <span>Staff Daily Report</span></Link>
                             </li> */}
-                            {/* <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Disability Support Needs</span></Link>
-                            </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Aids & Equipments</span></Link>
-                            </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Day Living & Night Support</span></Link>
-                            </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Health Support Needs</span></Link>
-                            </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Behaviour Support Needs</span></Link>
-                            </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Community Support Needs</span></Link>
-                            </li>
-                            <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to=""><i className="la la-file-pdf-o" /> <span>Privacy Statement</span></Link>
-                            </li> */}
-                            {/* <li className={pathname.includes('policies') ? "active" : ""}>
-                                <Link to="/staff/staff-table"><i className="la la-file-pdf-o" /> <span>Tab</span></Link>
-                            </li> */}
+
                             <li className="menu-title">
                                 <span>Communication</span>
                             </li>
-                            <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
+
+                            <li className={pathname.includes('client-message') || pathname.includes('client-message') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/client-message"><i className="la la-comment" /> <span>Messages</span></Link>
                             </li>
+                       
                             <li className="submenu">
-                                <a href="javascript:void(0)" className={isSideMenu == "sales" ? "subdrop" : ""} onClick={() => toggleSidebar(isSideMenu == "sales" ? "" : "sales")}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
-                                {isSideMenu == "sales" ?
+                                <a href="#" className={isSideMenu == "support" ? "subdrop" : ""}  onClick={(e) => {
+                                    e.preventDefault()
+                                    toggleSidebar(isSideMenu == "support" ? "" : "support")
+                                }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                                {isSideMenu == "support" ?
                                     <ul>
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                        <li><Link onClick={() => onMenuClik()} className={pathname.includes('client-view_ticket') ? "active" : pathname.includes('client-view_ticket') ?
+                                            "active" : pathname.includes('client-view_ticket') ? "active" : ""}
                                             to="/client/client-view_ticket">View Tickets</Link>
                                         </li>
 
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                        <li><Link onClick={() => onMenuClik()} className={pathname.includes('client-raise_ticket') ? "active" : pathname.includes('client-raise_ticket') ?
+                                            "active" : pathname.includes('client-raise_ticket') ? "active" : ""}
                                             to="/client/client-raise_ticket">Raise a Ticket</Link>
                                         </li>
 
-                                        <li><Link className={pathname.includes('t_dashboard') ? "active" : pathname.includes('projects-list') ?
-                                            "active" : pathname.includes('cts-view') ? "active" : ""}
+                                        <li><Link onClick={() => onMenuClik()} className={pathname.includes('client-knowledge_base') ? "active" : pathname.includes('client-knowledge_base') ?
+                                            "active" : pathname.includes('client-knowledge_base') ? "active" : ""}
                                             to="/client/client-knowledge_base">Knowledge Base</Link>
                                         </li>
 
@@ -144,17 +145,17 @@ const ClientSidebar = (props) => {
                                 }
                             </li>
 
+                            <br />
+                            <br />
                         </ul>
                     </div>
                 </div>
 
 
             </Scrollbars>
-            <div className="two-col-bar" id="two-col-bar">
-                {/* <di */}
-            </div>
-        </div>
 
+
+        </div>
 
     );
 

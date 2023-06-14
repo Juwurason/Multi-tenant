@@ -41,7 +41,7 @@ const ClientLayout = (props) => {
                         <Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
                     )}
                 </div>
-                <ClientSideBar />
+                <ClientSideBar onMenuClick={(value) => toggleMobileMenu()} />
 
             </div>
         </>

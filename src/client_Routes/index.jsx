@@ -6,6 +6,7 @@ import ClientProfile from '../modules/Client/ClientProfile';
 import ClientEditProfile from '../modules/Client/ClientEditProfile';
 import ClientDocument from '../modules/Client/ClientDocument';
 import ClientRoster from '../modules/Client/ClientRoster';
+import ClientSchedule from '../modules/Client/ClientSchedule';
 import ClientMessage from '../modules/Client/ClientSupport/Message/messageInbox';
 import ClientViewTicket from '../modules/Client/ClientSupport/Support/viewTicket';
 import ClientRaiseTicket from '../modules/Client/ClientSupport/Support/raiseTicket';
@@ -52,6 +53,11 @@ export default [
     {
         path: 'client-knowledge_base',
         component: ClientKnowledgeBase
+    },
+
+    {
+        path: 'client-schedule',
+        component: ClientSchedule
     },
 
 ]
