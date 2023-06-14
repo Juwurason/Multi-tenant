@@ -103,6 +103,10 @@ const StaffSidebar = (props) => {
                                 <Link to="/staff/staff-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
 
+                            <li className={pathname.includes('staff-daily-report') || pathname.includes('staff-daily-report') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/staff/staff-daily-report"><i className="la la-newspaper-o" /> <span>Staff Daily Report</span></Link>
+                            </li>
+
                             <li className="menu-title">
                                 <span>Communication</span>
                             </li>

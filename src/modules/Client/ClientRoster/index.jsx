@@ -6,7 +6,7 @@ import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avata
 import Offcanvas from '../../../Entryfile/offcanvance';
 import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
-import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaSearch, FaSlidersH } from 'react-icons/fa';
+import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaRegEdit, FaSearch, FaSlidersH } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
@@ -164,6 +164,7 @@ const ClientRoster = () => {
         setAppointModal(true)
         setCli(e)
     }
+
     const addAppointment = async () => {
         if (appoint === "") {
             return toast.error("Input Fields cannot be empty")
@@ -174,7 +175,7 @@ const ClientRoster = () => {
             // console.log(data);
             toast.success(data.message);
             setLoading(false);
-            setAppointModal(false)
+            setAppointModal(false);
 
         } catch (error) {
             console.log(error);
@@ -190,7 +191,7 @@ const ClientRoster = () => {
             <div className="page-wrapper">
                 <Helmet>
                     <title>Shift Roster</title>
-                    <meta name="description" content="Login page" />
+                    <meta name="description" content="Shift Roster" />
                 </Helmet>
                 {/* Page Content */}
                 <div className="content container-fluid">
@@ -221,17 +222,17 @@ const ClientRoster = () => {
                         <div className="col-md-8 col-lg-12">
                             <div className=' py-3 d-flex justify-content-between align-items-center'>
                                 <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                                    <FaAngleLeft className='pointer' onClick={handlePrevClick} />
-                                    <span className='fw-bold text-primary'> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                                    <FaAngleRight className='pointer' onClick={handleNextClick} />
+                                    <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
+                                    <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                                    <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
                                 </span>
                                 <span>
                                     <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                                         <option defaultValue hidden>Week</option>
 
-                                        <option value=''>Month</option>
+                                        {/* <option value=''>Month</option> */}
                                         <option value=''>Week</option>
-                                        <option value=''>Day</option>
+                                        {/* <option value=''>Day</option> */}
 
                                     </select>
                                 </span>
@@ -240,18 +241,24 @@ const ClientRoster = () => {
 
                                 {daysOfWeek.map((day, index) => (
                                     <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
-                                        <div className='border p-2'>
+                                        <div className='border  d-flex justify-content-center py-2 bg-light'>
+                                            <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
                                             <span
-                                                className={`calendar-date text-muted text-truncate overflow-hidden ${day.isSame(currentDate, 'day') ? 'current-date' : ''}`}
-                                                style={{ fontSize: '12px' }}>
-                                                {day.format('dddd, MMMM D')}
+                                                className={`fw-bold fs-4`}
+                                               >
+                                                {/* {day.format('dddd, MMMM D')} */}
+                                                {day.format('D')}
 
                                             </span>
+                                            <span style={{ fontSize: '10px' }} className='mb-2'>
+                                {day.locale('en').format('ddd')}
+                              </span>
+                                            </div>
                                         </div>
 
 
 
-                                        <div className="col-sm-12 text-center border p-2" style={{ height: "50vh", overflow: "auto", overflowX: "hidden", cursor: 'pointer' }}>
+                                        <div className="col-sm-12 text-center border p-2" style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}>
 
                                             {loading &&
 
@@ -286,7 +293,7 @@ const ClientRoster = () => {
                                                             onClick={() => editActivity(activity.shiftRosterId)}
                                                             title="Edit"
                                                         >
-                                                            <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                                            <FaRegEdit className='fs-6 text-dark' />
 
                                                         </small>
 

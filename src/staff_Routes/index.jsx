@@ -7,10 +7,14 @@ import StaffEditProfile from '../modules/Staff/StaffEditProfile';
 import StaffChangePassword from '../modules/Staff/StaffForgettingPassword';
 import StaffDocument from '../modules/Staff/StaffDocument';
 import StaffAttendance from '../modules/Staff/StaffAttendance';
+import StaffAttendanceReport from '../modules/Staff/StaffAttendanceReport';
+import StaffAttendanceDetails from '../modules/Staff/StaffAttendanceDetails';
 import StaffTable from '../modules/Staff/StaffTable';
 import ProgressNote from '../modules/Staff/ProgressNote'
 import EditProgressNote from '../modules/Staff/EditProgressNote';
 import StaffProgressNote from '../modules/Staff/StaffProgressNote';
+import StaffDailyReport from '../modules/Staff/StaffDailyReport';
+import StaffNewReport from '../modules/Staff/StaffNewReport';
 import AddReport from '../modules/Staff/AddReport';
 import ViewTicket from '../modules/Staff/Support/viewTicket';
 import RaiseTicket from '../modules/Staff/Support/raiseTicket';
@@ -81,7 +85,7 @@ export default [
   },
 
   {
-      path: 'ticket-details',
+      path: 'ticket-details/:uid',
       component: TicketDetails
   },
 
@@ -98,6 +102,26 @@ export default [
    {
       path: 'messageInbox',
       component: MessageInbox
+   },
+
+   {
+      path: 'attendance-report/:uid',
+      component: StaffAttendanceReport
+   },
+
+   {
+      path: 'attendance-details/:uid',
+      component: StaffAttendanceDetails
+   },
+
+   {
+      path: 'staff-daily-report',
+      component: StaffDailyReport
+   },
+
+   {
+      path: 'staff-new-report',
+      component: StaffNewReport
    },
 
 ]
