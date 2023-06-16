@@ -393,8 +393,6 @@ const PublicHoliday = () => {
                             </CopyToClipboard>
                         </div>
                         <div className='col-md-4'>
-                            {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
-                Add New Holiday</Link> */}
                             <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add New Holiday</button>
                         </div>
                     </div>

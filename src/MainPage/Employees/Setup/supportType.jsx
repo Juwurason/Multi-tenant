@@ -12,13 +12,11 @@ import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const SupportType = () => {
@@ -33,10 +31,6 @@ const SupportType = () => {
     const [supportType, setSupportType] = useState([]);
 
     const columns = [
-        // {
-        //     name: '#',
-        //     cell: (row, index) => index + 1
-        // },
 
         {
             name: 'Item Number',
@@ -74,34 +68,7 @@ const SupportType = () => {
             selector: row => row.veryRemote,
             sortable: true
         },
-        // {
-        //     name: 'Date Modified',
-        //     selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
-        //     sortable: true
-        // },
 
-        // {
-        //     name: "Actions",
-        //     cell: (row) => (
-        //         <div className="d-flex gap-1">
-        //             <button
-        //                 className="btn"
-        //                 title='edit'
-        //                 onClick={() => handleEdit(row.holidayId)}
-        //             >
-        //                 <SlSettings />
-        //             </button>
-        //             <button
-        //                 className='btn'
-        //                 title='Delete'
-        //                 onClick={() => handleDelete(row)}
-        //             >
-        //                 <GoTrashcan />
-        //             </button>
-
-        //         </div>
-        //     ),
-        // },
 
     ];
 
@@ -114,39 +81,6 @@ const SupportType = () => {
         friday: false,
         saturday: false
     });
-
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
-    };
-
-    const handleEdit = async (e) => {
-        // console.log(e);
-        setEditModal(true);
-        try {
-            setLoading(true)
-            const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setEditPro(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-    };
-
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditPro({
-            ...editpro,
-            [name]: newValue
-        });
-    }
 
 
 
@@ -551,34 +485,7 @@ const SupportType = () => {
                     </Modal>
 
                     {/*Edit Modal */}
-                    <Modal show={editModal} onHide={() => setEditModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>View Holiday</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
-                                    <div className="">
-                                        <div className="form-group">
-                                            <label className="col-form-label">Name of Holiday</label>
-                                            <div>
-                                                <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="col-form-label">Date</label>
-                                        <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
-                                    </div>
 
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}
-                            <button className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
-                        </Modal.Footer>
-                    </Modal>
 
                 </div>
 
