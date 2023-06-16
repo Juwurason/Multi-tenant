@@ -42,8 +42,8 @@ const OTPscreen = () => {
     // const checkID = localStorage.getItem("companyId")
     const checkEmail = localStorage.getItem("email")
 
-    if (checkEmail === "") {
-      navigate.push("/register")
+    if (!checkEmail) {
+      navigate.push("/")
     }
 
   })
