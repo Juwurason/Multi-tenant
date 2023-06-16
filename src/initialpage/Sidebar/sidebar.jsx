@@ -20,7 +20,6 @@ const Sidebar = (props) => {
 
 
   const toggleSidebar = (value) => {
-    console.log(value);
     setSideMenu(value);
     setSideMenuNew(value);
 

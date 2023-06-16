@@ -23,6 +23,7 @@ const Header = (props) => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     navigate.push('/');
+    navigate.goBack();
   };
 
   const [currentTime, setCurrentTime] = useState(new Date());

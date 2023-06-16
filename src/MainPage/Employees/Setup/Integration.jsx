@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import useHttp from "../../../hooks/useHttp";
@@ -10,6 +10,7 @@ import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
 import moment from "moment";
 import jsPDF from "jspdf";
+import { Modal } from "react-bootstrap";
 
 
 function formatDuration(duration) {
@@ -28,6 +29,7 @@ const Integration = () => {
     const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [profileId, setProfileId] = useState(0);
     const { post, get } = useHttp();
     const [dateFrom, setDateFrom] = useState('');
@@ -35,6 +37,13 @@ const Integration = () => {
     const [type, setType] = useState('');
     const [invoice, setInvoice] = useState([]);
     const [name, setName] = useState({});
+    const thirdParty = useRef(null);
+    const secretID = useRef(null);
+    const clientID = useRef(null);
+    const scope = useRef(null);
+    const responseUrl = useRef(null);
+
+
 
     const columns = [
 
@@ -46,17 +55,6 @@ const Integration = () => {
                 data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.description} (${row.itemNumber})`}
             >{row.description} ({row.itemNumber})</span>
         },
-
-
-        // {
-        //     name: 'Date',
-        //     selector: row => row.date,
-        //     sortable: true,
-        //     expandable: true,
-        //     cell: (row) => (
-        //         <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
-        //     ),
-        // },
         {
             name: 'Actual Hours',
             selector: row => formatDuration(row.duration),
@@ -105,28 +103,38 @@ const Integration = () => {
         FetchData()
     }, []);
 
-    const FetchInvoice = async (e) => {
-        e.preventDefault();
-        if (type.trim() === "" || profileId === 0) {
-            return toast.error("Select a client and support type")
+    const HandleSubmit = async () => {
+        if (thirdParty.current.value === "" || secretID.current.value === "" || clientID.current.value === ""
+            || scope.current.value === "" || responseUrl.current.value === ""
+        ) {
+            toast.error("Complete Form")
         }
-        e.preventDefault();
-        setLoading1(true);
+        setLoading1(true)
+
+        const info = {
+            thirdParty: thirdParty.current.value,
+            secretID: secretID.current.value,
+            clientID: clientID.current.value,
+            scope: scope.current.value,
+            responseUrl: responseUrl.current.value,
+            companyId: id.companyId,
+
+        }
         try {
-            const { data } = await get(`/Integration/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${type}`, { cacheTimeout: 300000 });
-            if (data.status === "Success") {
-                toast.success(data.message);
-                setInvoice(data?.invoiceItems?.agreed_Actual);
-                setName(data?.invoiceItems);
-            }
-            setLoading1(false)
+            const { data } = await post(`/Integrations/add_integration`, info)
+            console.log(data);
+            toast.success(data.message)
+            setShowModal(false)
+
         } catch (error) {
             console.log(error);
-        } finally {
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+        }
+        finally {
             setLoading1(false)
         }
     }
-
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -253,182 +261,156 @@ const Integration = () => {
                 {/* /Page Content start */}
 
 
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card">
 
-                            <div className="card-body">
-                                <form onSubmit={FetchInvoice} >
-                                    <div className="row align-items-center py-2">
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <label className="col-form-label">Select Client</label>
-                                                <div>
-                                                    <select className="form-select" onChange={e => setProfileId(e.target.value)} required>
-                                                        <option defaultValue hidden>--Select a Client--</option>
-
-                                                        {
-                                                            clients.map((data, index) =>
-                                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <label className="col-form-label">Date From</label>
-                                                <input className="form-control" type="datetime-local"
-                                                    onChange={e => setDateFrom(e.target.value)} required
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <label className="col-form-label">Date To</label>
-                                                <input className="form-control" type="datetime-local"
-                                                    onChange={e => setDateTo(e.target.value)} required
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <label className="col-form-label">Support Type</label>
-                                                <div>
-                                                    <select className="form-select" onChange={e => setType(e.target.value)} required>
-                                                        <option defaultValue hidden>--Select Type--</option>
-                                                        <option value="Yes">Based on Schedule of Support</option>
-                                                        <option value="No">Not Based on Schedule of Support</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                <div className='mt-4 border'>
 
 
 
-                                        <div className="col-auto mt-3">
-                                            <div className="form-group">
-                                                <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+                    <div className="row px-2 py-3">
 
-                                                >
-                                                    {
-                                                        loading1 ?
-                                                            <div className="spinner-grow text-white" role="status">
-                                                                <span className="sr-only">Loading...</span>
-                                                            </div>
-
-                                                            :
-
-
-                                                            "Load invoice"
-                                                    }
-
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
+                        <div className="col-md-3">
+                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                <input type="text" placeholder="Search invoice" className='border-0 outline-none' onChange={handleSearch} />
+                                <GoSearch />
                             </div>
                         </div>
+                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                            <CSVLink
+                                data={invoice}
+                                filename={"data.csv"}
+
+                            >
+                                <button
+
+                                    className='btn text-info'
+                                    title="Export as CSV"
+                                >
+                                    <FaFileCsv />
+                                </button>
+
+                            </CSVLink>
+                            <button
+                                className='btn text-danger'
+                                onClick={handlePDFDownload}
+                                title="Export as PDF"
+                            >
+                                <FaFilePdf />
+                            </button>
+                            <button
+                                className='btn text-primary'
+
+                                onClick={handleExcelDownload}
+                                title="Export as Excel"
+                            >
+                                <FaFileExcel />
+                            </button>
+                            <CopyToClipboard text={JSON.stringify(invoice)}>
+                                <button
+
+                                    className='btn text-warning'
+                                    title="Copy Table"
+                                    onClick={() => toast("Table Copied")}
+                                >
+                                    <FaCopy />
+                                </button>
+                            </CopyToClipboard>
+                        </div>
+                        <div className='col-md-4'>
+
+                            <button onClick={() => setShowModal(true)} className="btn btn-info add-btn rounded-2 text-white">Add New Integration</button>
+                        </div>
                     </div>
+                    <DataTable data={filteredData} columns={columns}
+                        pagination
+                        highlightOnHover
+                        searchable
+                        searchTerm={searchText}
+                        invoicePending={loading}
+                        invoiceComponent={<div className='text-center fs-1'>
+                            <div className="spinner-grow text-secondary" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+                        responsive
+                        paginationTotalRows={filteredData.length}
+                        expandableRows
+                        expandableRowsComponent={ButtonRow}
+
+
+                    />
 
                 </div>
 
 
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered size='lg'>
+                    <Modal.Header closeButton>
+                        <Modal.Title> Add Integration </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form onSubmit={HandleSubmit}>
+                            <div className="row">
 
-                {
-                    invoice.length <= 0 ? "" :
-                        <div className="text-center"> <h5>Invoice for {name?.profile?.fullName} from
-                            <span> {moment(dateFrom).format("LLL")} </span> to <span> {moment(dateTo).format("LLL")} </span>
-                        </h5></div>
-
-                }
-
-
-                {
-                    invoice.length <= 0 ?
-                        "" :
-
-                        <div className='mt-4 border'>
-
-
-
-                            <div className="row px-2 py-3">
-
-                                <div className="col-md-3">
-                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                        <input type="text" placeholder="Search invoice" className='border-0 outline-none' onChange={handleSearch} />
-                                        <GoSearch />
+                                <div className="form-group col-md-12">
+                                    <label className="col-form-label">Third Party</label>
+                                    <div>
+                                        <select name="" id="" className="form-select" ref={thirdParty}>
+                                            <option defaultValue>--Select--</option>
+                                            <option value="">Xero</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                    <CSVLink
-                                        data={invoice}
-                                        filename={"data.csv"}
 
-                                    >
-                                        <button
 
-                                            className='btn text-info'
-                                            title="Export as CSV"
-                                        >
-                                            <FaFileCsv />
-                                        </button>
 
-                                    </CSVLink>
-                                    <button
-                                        className='btn text-danger'
-                                        onClick={handlePDFDownload}
-                                        title="Export as PDF"
-                                    >
-                                        <FaFilePdf />
-                                    </button>
-                                    <button
-                                        className='btn text-primary'
 
-                                        onClick={handleExcelDownload}
-                                        title="Export as Excel"
-                                    >
-                                        <FaFileExcel />
-                                    </button>
-                                    <CopyToClipboard text={JSON.stringify(invoice)}>
-                                        <button
-
-                                            className='btn text-warning'
-                                            title="Copy Table"
-                                            onClick={() => toast("Table Copied")}
-                                        >
-                                            <FaCopy />
-                                        </button>
-                                    </CopyToClipboard>
+                                <div className="form-group col-md-12">
+                                    <label className="col-form-label"> SecretID</label>
+                                    <div>
+                                        <input type="text" className='form-control' ref={secretID} />
+                                    </div>
                                 </div>
+
+                                <div className="form-group col-md-12">
+                                    <label className="col-form-label">ClientID</label>
+                                    <div>
+                                        <input type="text" className='form-control' ref={clientID} />
+                                    </div>
+                                </div>
+
+                                <div className="form-group col-md-12">
+                                    <label className="col-form-label">Scope</label>
+                                    <div>
+                                        <small className="text-danger">scopes should be seperated by space</small>
+                                        <input type="text" className='form-control' ref={scope} />
+                                    </div>
+                                </div>
+
+                                <div className="form-group col-md-12">
+                                    <label className="col-form-label">ResponseUrl</label>
+
+                                    <div>
+                                        <small className="text-success">Copy and paste the below Response Url to your Xero App</small>
+                                        <input type="text" className='form-control' ref={responseUrl} />
+                                    </div>
+                                </div>
+
 
                             </div>
-                            <DataTable data={filteredData} columns={columns}
-                                pagination
-                                highlightOnHover
-                                searchable
-                                searchTerm={searchText}
-                                invoicePending={loading}
-                                invoiceComponent={<div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>}
-                                responsive
-                                paginationTotalRows={filteredData.length}
-                                expandableRows
-                                expandableRowsComponent={ButtonRow}
+                            <div className="d-flex justify-content-center">
+                                <button
+                                    // disabled={loading1 ? true : false}
+                                    className="btn btn-primary add-btn rounded-2 text-white" >
+                                    Add
+                                </button>
+                            </div>
+                        </form>
 
 
-                            />
+                    </Modal.Body>
+                    <Modal.Footer>
 
-                        </div>
-                }
-
-
+                    </Modal.Footer>
+                </Modal>
 
 
 

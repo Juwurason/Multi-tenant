@@ -377,7 +377,7 @@ const Clients = ({ clients, loading, FetchData }) => {
               </CopyToClipboard>
             </div>
             <div className='col-md-4'>
-              <Link to="/app/employees/addclients" className="btn btn-info text-white add-btn rounded-2">
+              <Link to="/app/employee/addclients" className="btn btn-info text-white add-btn rounded-2">
                 Create New clients</Link>
             </div>
           </div>
