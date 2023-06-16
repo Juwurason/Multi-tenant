@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 
 
-const StaffRoster = () => {
+const StaffRoster = ({staff, loading}) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
@@ -27,8 +27,8 @@ const StaffRoster = () => {
 
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const { get } = useHttp();
-  const { loading, setLoading } = useCompanyContext();
-  const [staff, setStaff] = useState([]);
+  // const { loading, setLoading } = useCompanyContext();
+  // const [staff, setStaff] = useState([]);
   const [staffCancel, setStaffCancel] = useState('');
   const [reason, setReason] = useState('');
 
@@ -36,26 +36,26 @@ const StaffRoster = () => {
   const AustraliaTimezone = 'Australia/Sydney';
   const navigate = useHistory()
 
-  const FetchSchedule = async () => {
-    setLoading(true)
-    try {
-      const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-      const staff = staffResponse.data;
-      // console.log(staff.shiftRoster);
-      setStaff(staff.shiftRoster);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    finally {
-      setLoading(false)
-    }
+  // const FetchSchedule = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+  //     const staff = staffResponse.data;
+  //     // console.log(staff.shiftRoster);
+  //     setStaff(staff.shiftRoster);
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   finally {
+  //     setLoading(false)
+  //   }
 
 
-  };
-  useEffect(() => {
-    FetchSchedule()
-  }, []);
+  // };
+  // useEffect(() => {
+  //   FetchSchedule()
+  // }, []);
 
   const user = JSON.parse(localStorage.getItem('user'));
   const privateHttp = useHttp()

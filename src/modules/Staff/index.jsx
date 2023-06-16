@@ -1,6 +1,6 @@
 
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom';
 import EditProgressNote from './EditProgressNote';
 import ProgressNote from './ProgressNote';
@@ -24,15 +24,48 @@ import StaffNewReport from './StaffNewReport';
 import StaffProfile from './StaffProfile';
 import StaffAttendance from './StaffAttendance';
 import AddReport from './AddReport';
+import useHttp from '../../hooks/useHttp';
 
 
 
 
 
-const StaffRoute = ({ match }) => (
-    <Switch>
+const StaffRoute = ({ match }) => {
+
+   const { get } = useHttp();
+    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
+    const [staff, setStaff] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const FetchData = async () => {
+        setLoading(true)
+        try {
+          const {data} = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+          setStaff(data.shiftRoster);
+          setLoading(false)
+        } catch (error) {
+          console.log(error);
+        }
+   
+
+        finally {
+          setLoading(false)
+        }
+    
+    
+      };
+      useEffect(() => {
+        FetchData()
+      }, []);
+
+
+
+   return(
+      <Switch>
        <Redirect exact from={`${match.url}/`} to={`${match.url}/dashboard`} />
-       <Route path={`${match.url}/dashboard`} render={() => <StaffDashboard />} />
+       <Route 
+       path={`${match.url}/dashboard`} 
+       render={() => <StaffDashboard roster={staff} loading={loading} />} />
        <Route path={`${match.url}/document`} render={() => <StaffDocument />} />
        <Route path={`${match.url}/progressNote`} render={() => <StaffProgressNote />} />
        <Route path={`${match.url}/progressNote/:uid`} render={() => <ProgressNote />} />
@@ -42,7 +75,8 @@ const StaffRoute = ({ match }) => (
        <Route path={`${match.url}/edit-profile`} render={() => <StaffEditProfile />} />
        <Route path={`${match.url}/changepassword`} render={() => <StaffChangePassword />} />
        <Route path={`${match.url}/attendance`} render={() => <StaffAttendance />} />
-       <Route path={`${match.url}/roster`} render={() => <StaffRoster />} />
+       <Route path={`${match.url}/roster`} 
+       render={() => <StaffRoster staff={staff} loading={loading} />} />
        <Route path={`${match.url}/report/:uid`} render={() => <AddReport />} />
        <Route path={`${match.url}/view-ticket`} render={() => <ViewTicket />} />
        <Route path={`${match.url}/raise-ticket`} render={() => <RaiseTicket />} />
@@ -56,6 +90,7 @@ const StaffRoute = ({ match }) => (
        <Route path={`${match.url}/new-report`} render={() => <StaffNewReport />} />
       
     </Switch>
- );
+   )
+};
  
  export default StaffRoute;
