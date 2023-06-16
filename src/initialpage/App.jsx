@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Redirect, Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import LoginPage from './loginpage';
 import ForgotPassword from './forgotpassword';
-import OTP from './otp';
 import DefaultLayout from './Sidebar/DefaultLayout';
 import Tasklayout from './Sidebar/tasklayout';
 import chatlayout from './Sidebar/chatlayout';
@@ -16,6 +15,7 @@ import ClientLayout from './Sidebar/ClientLayout';
 import AdminLayout from './Sidebar/AdminLayout';
 import Timesheet from '../MainPage/HR/Reports/timesheet';
 import TimesheetForAll from '../MainPage/HR/Reports/timesheetForAll';
+import OTPscreen from './otp';
 
 const App = () => {
     const location = useLocation();
@@ -50,9 +50,9 @@ const App = () => {
         history.push('/login')
     }
 
-    if (!user && location.pathname !== '/login') {
-        return <Redirect to="/login" />;
-    }
+    // if (!user && location.pathname !== '/login') {
+    //     return <Redirect to="/login" />;
+    // }
 
     return (
         <Switch>
@@ -60,7 +60,7 @@ const App = () => {
             <Route path="/forgotpassword" component={ForgotPassword} />
             <Route path="/register" component={CompanySetup} />
             <Route path="/admin/:companyId" component={AdminRegistration} />
-            <Route path="/otp" component={OTP} />
+            <Route path="/otp" component={OTPscreen} />
             <Route path="/app" component={DefaultLayout} />
             <Route path="/staff" component={StaffLayout} />
             <Route path="/administrator" component={AdminLayout} />

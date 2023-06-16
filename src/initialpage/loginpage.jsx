@@ -12,8 +12,8 @@ import {
 
 
 const Loginpage = () => {
-  const [email, setEmail] = useState('teecreations8@gmail.com');
-  const [password, setPassword] = useState('1234567');
+  const [email, setEmail] = useState('johnkayode2021@gmail.com');
+  const [password, setPassword] = useState('Maxicareplus_01');
   const [pwdVisible, setPwdVisible] = useState(false);
   let errorsObj = { email: '', password: '' };
   const [errorss, setErrorss] = useState(errorsObj);
@@ -74,19 +74,19 @@ const Loginpage = () => {
 
 
     } catch (error) {
-
+      console.log(error);
       toast.error(error.message);
       if (error.response?.data?.message === 'User Not Found') {
         toast.error('User not found')
       }
       else if (error.response?.data?.message === 'Email Not Confirmed') {
         toast.error(error.response?.data?.message)
-        localStorage.setItem('email', email)
+        localStorage.setItem('email', email);
         navigate.push('/otp')
       }
-      else if (error.response?.data?.message === "Email Not Confirmed. An OTP has been sent to your mail to confirm your email") {
+      else if (error.response.data.message === "Email Not Confirmed. An OTP has been sent to your mail to confirm your email") {
         toast.error(error.response?.data?.message)
-        localStorage.setItem('email', email)
+        localStorage.setItem('email', email);
         navigate.push('/otp')
       }
       else if (error.response?.data?.message === 'Invalid Login Attempt') {

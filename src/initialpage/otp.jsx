@@ -1,7 +1,6 @@
 
 import React, { Component, useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
-import { Applogo } from '../Entryfile/imagepath.jsx'
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegTrashAlt } from 'react-icons/fa';
