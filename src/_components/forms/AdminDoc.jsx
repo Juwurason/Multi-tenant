@@ -73,7 +73,10 @@ const AdminDoc = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+                <span className={`${row.status === 'Pending' ? "bg-warning" : row.status === 'Accepted' ? "bg-success text-white" :
+                    row.status === 'Rejected' ? "bg-danger text-white" : "bg-transparent"
+                    } px-2 py-1 rounded-pill fw-bold`}
+                    style={{ fontSize: "10px" }}>{row.status}</span>
             ),
         },
 
@@ -254,6 +257,7 @@ const AdminDoc = () => {
 
     const ButtonRow = ({ data }) => {
         return (
+
             <div className="p-4">
                 <table className='table'>
 

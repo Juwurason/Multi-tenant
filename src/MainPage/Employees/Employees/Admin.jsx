@@ -21,17 +21,15 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 
-const AllAdmin = () => {
-    const { get } = useHttp();
-    const { loading, setLoading } = useCompanyContext();
+const AllAdmin = ({ admin, FetchData, loading }) => {
+
+
     const id = JSON.parse(localStorage.getItem('user'));
-    const [admin, setAdmin] = useState([]);
+    const privateHttp = useHttp();
+
 
     const columns = [
-        // {
-        //     name: '#',
-        //     cell: (row, index) => index + 1
-        // },
+
         {
             name: 'Staff ID',
             selector: row => row.maxStaffId,
@@ -93,25 +91,6 @@ const AllAdmin = () => {
     ];
 
 
-    const FetchStaff = async () => {
-        try {
-            setLoading(true)
-            const { data } = await get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setAdmin(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-    };
-    useEffect(() => {
-
-        FetchStaff()
-    }, []);
-
-
     const [menu, setMenu] = useState(false);
 
     const handleDelete = async (e) => {
@@ -130,7 +109,7 @@ const AllAdmin = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchStaff()
+                        FetchData()
                     } else {
                         toast.error(data.message);
                     }

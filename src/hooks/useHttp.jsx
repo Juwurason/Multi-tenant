@@ -42,7 +42,7 @@ const useHttp = () => {
                 if (err instanceof AxiosError) {
                     if (err.response.status === 401) {
                         localStorage.removeItem("user"); // remove expired token from local storage
-                        navigate.push("/"); // redirect to login page
+                        navigate.push("/login"); // redirect to login page
                     } else {
                         return Promise.reject(err);
                     }

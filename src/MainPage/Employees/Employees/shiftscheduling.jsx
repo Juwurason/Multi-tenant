@@ -21,7 +21,7 @@ import { useHistory } from 'react-router-dom';
 
 
 
-const ShiftScheduling = () => {
+const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
@@ -30,13 +30,9 @@ const ShiftScheduling = () => {
   //Declaring Variables
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
-  const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false);
-  const [loading3, setLoading3] = useState(false)
-  const [staff, setStaff] = useState([]);
-  const [clients, setClients] = useState([]);
-  const [schedule, setSchedule] = useState([]);
+  const [loading3, setLoading3] = useState(false);
   const history = useHistory();
   const [cli, setCli] = useState('');
   const [sta, setSta] = useState('');
@@ -52,41 +48,6 @@ const ShiftScheduling = () => {
 
 
   //Fetching From the endpoints
-  const FetchSchedule = async () => {
-    setLoading(true)
-    //All shift Roasters
-    try {
-      const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const schedule = scheduleResponse.data;
-      setSchedule(schedule);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    // All staff
-    try {
-      const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const staff = staffResponse.data;
-      setStaff(staff);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    //All Client
-    try {
-      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const client = clientResponse.data;
-      setClients(client);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    FetchSchedule()
-  }, []);
 
   // Filtering Schedule either by user or Client
   const FilterSchedule = async () => {
@@ -318,6 +279,30 @@ const ShiftScheduling = () => {
       }
     }
   }
+  const SendTimesheet = async () => {
+    if (sta === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
+      return Swal.fire(
+        "Select a staff and time range",
+        "",
+        "error"
+      )
+
+    } else {
+      setLoading3(true)
+
+      try {
+        const { data } = await get(`
+        /ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}
+`, { cacheTimeout: 300000 });
+        setSchedule(data);
+        setLoading3(false);
+        setPeriodicModal(false);
+      } catch (error) {
+        console.log(error);
+        setLoading3(false)
+      }
+    }
+  }
 
 
 
@@ -408,15 +393,12 @@ const ShiftScheduling = () => {
 
               </div>
             </div>
-            {/* <div className="col-auto mt-3">
-              <div className="form-group">
-                <button onClick={FetchSchedule} className="btn btn-secondary add-btn rounded-2 m-r-5">All Shifts</button>
 
-              </div>
-            </div> */}
             <div className="col-auto mt-3">
               <div className="form-group">
-                <button className="btn btn-primary add-btn rounded-2 m-r-5">Send Roaster Notification</button>
+                <button className="btn btn-primary add-btn rounded-2 m-r-5"
+                  onClick={SendTimesheet}
+                >Send Roaster Notification</button>
 
               </div>
             </div>

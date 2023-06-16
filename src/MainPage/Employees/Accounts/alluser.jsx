@@ -2,14 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import Header from '../../../initialpage/Sidebar/header'
-import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
 import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import { useCompanyContext } from '../../../context';
 import EditUser from '../../../_components/modelbox/EditUser';
 import DataTable from "react-data-table-component";
@@ -43,9 +40,11 @@ const AllUser = () => {
             name: '',
             cell: (row) => (
                 <span className='w-100 d-flex justify-content-center'>
-                    <small className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center'>
+                    <Link to={`/app/account/editrole/${row.id}`} className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center pointer'
+                        title='Manage Roles and Priviledges'
+                    >
                         <FaDharmachakra className='text-white' />
-                    </small>
+                    </Link>
 
                 </span>
             ),
@@ -56,7 +55,7 @@ const AllUser = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <Link href={`https://example.com/${row.id}`} className="fw-bold text-dark">
+                <Link href={`/app/account/editrole/${row.id}`} className="fw-bold text-dark">
                     {row.fullName}
                 </Link>
             ),
@@ -246,31 +245,9 @@ const AllUser = () => {
 
 
 
-
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    }
-
-
-
-
-
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
-
-
     return (
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
-
-                <Header onMenuClick={(value) => toggleMobileMenu()} />
-                <Sidebar />
                 <div className="page-wrapper">
                     <Helmet>
                         <title>All User</title>

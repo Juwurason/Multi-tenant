@@ -19,11 +19,10 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
-const AllEmployees = () => {
+const AllEmployees = ({ staff, FetchData, loading }) => {
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
-  const [staff, setStaff] = useState([]);
-  const { loading, setLoading } = useCompanyContext();
+  // const [staff, setStaff] = useState([]);
 
   const columns = [
     // {
@@ -88,23 +87,23 @@ const AllEmployees = () => {
 
   ];
 
-  const FetchStaff = async () => {
-    try {
-      setLoading(true);
-      const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const staff = staffResponse.data;
-      setStaff(staff);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
+  // const FetchStaff = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+  //     const staff = staffResponse.data;
+  //     setStaff(staff);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // useEffect(() => {
 
-    FetchStaff()
-  }, []);
+  //   FetchStaff()
+  // }, []);
 
   const [menu, setMenu] = useState(false);
 
@@ -125,7 +124,7 @@ const AllEmployees = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchStaff()
+            FetchData()
           } else {
             toast.error(data.message);
           }

@@ -127,7 +127,6 @@ const EditAdmin = () => {
             const { data } = await privateHttp.post(`/Administrators/edit/${uid}?userId=${id.userId}`,
                 formData
             )
-            console.log(data);
             if (data.status === 'Success') {
                 toast.success(data.message);
                 history.push('/app/employee/allemployees')

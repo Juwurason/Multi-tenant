@@ -106,7 +106,7 @@ const ProgressReportDetails = () => {
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">
                                         {
-                                            isEditing ? `Editing Progress Note for for ${details.staff}` : `Progress Note Details for ${details.staff}`
+                                            isEditing ? `Editing Progress Note for ${details.staff}` : `Progress Note Details for ${details.staff}`
                                         }
 
                                     </h4>

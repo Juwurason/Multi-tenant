@@ -210,10 +210,7 @@ const AdminDashboard = () => {
                     linkTitle={"View Progress Notes"} link={`/app/reports/progress-reports`} sty={'warning'}
                     loading={loading}
                   />
-                  {/* <DashboardCard title={"Clients"} sty={'warning'}
-                    content={clients.length} icon={<MdOutlineGroup className='fs-4' />}
-                    linkTitle={"View Clients"} loading={loading} link={`/app/employees/clients`}
-                  /> */}
+
                   <DashboardCard title={"Tickets"} sty={'danger'}
                     content={ticket.length} icon={<MdOutlinePages className='fs-4' />}
                     link={'/app/support/view-tickets'}
@@ -246,7 +243,7 @@ const AdminDashboard = () => {
                     <div className='d-flex justify-content-end'>
                       <Link style={{ fontSize: "12px" }}
 
-                        to={`/app/employees/clients`} className='pointer text-dark'>View all</Link>
+                        to={`/app/employee/clients`} className='pointer text-dark'>View all</Link>
                     </div>
                     <div className='p-2 bg-1 rounded-2'>
                       <div className='d-flex flex-column justify-content-start'>
@@ -328,7 +325,7 @@ const AdminDashboard = () => {
                   }
 
                   <div className='d-flex justify-content-end mt-2'>
-                    <Link to={'/app/employees/clients'}
+                    <Link to={'/app/employee/clients'}
                       className='text-primary pointer' style={{ fontSize: "12px", }}>
                       See all <FaLongArrowAltRight className='fs-3' />
                     </Link>

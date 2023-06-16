@@ -79,7 +79,10 @@ const ClientDoc = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+                <span className={`${row.status === 'Pending' ? "bg-warning" : row.status === 'Accepted' ? "bg-success text-white" :
+                    row.status === 'Rejected' ? "bg-danger text-white" : "bg-transparent"
+                    } px-2 py-1 rounded-pill fw-bold`}
+                    style={{ fontSize: "10px" }}>{row.status}</span>
             ),
         },
 
@@ -106,7 +109,7 @@ const ClientDoc = () => {
     useEffect(() => {
 
         FetchClient()
-    }, [])
+    }, []);
 
 
     const [documentName, setDocumentName] = useState("");
@@ -251,53 +254,24 @@ const ClientDoc = () => {
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                <table className='table'>
-
-                    <thead>
-                        <tr>
-                            <th>User created</th>
-                            <th>Date Created</th>
-                            <th>Date Modified</th>
-                            <th>Actions </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{data.createdBy}</td>
-                            <td>{moment(data.dateCreated).format('lll')}</td>
-                            <td>{moment(data.dateModified).format('lll')}</td>
-                            <td>
-                                <div className="d-flex gap-1">
-
-                                    <span
-                                        className='bg-info pointer text-white px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                                        title='Edit'
-                                    >
-                                        Edit
-                                    </span>
-                                    <span
-                                        className='bg-warning pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                                        title='Delete'
-                                        onClick={() => handleDelete(data.documentId)}
-                                    >
-                                        Delete
-                                    </span>
-                                    <span
-                                        className='bg-danger text-white pointer px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}
-                                        title='Reject'
-                                    // onClick={() => handleDelete(row.documentId)}
-                                    >
-                                        Reject
-                                    </span>
-
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-
+            <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+                <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+                <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
+                <div>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                        Edit
+                    </button> |
+                    <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                        Delete
+                    </button> |
+                    <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                        Accept
+                    </button>
+                    |
+                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                        Reject
+                    </button>
+                </div>
 
             </div>
         );
@@ -307,6 +281,101 @@ const ClientDoc = () => {
     const handleSearch = (event) => {
         setSearchText(event.target.value);
     };
+    const handleDelete = async (e) => {
+        Swal.fire({
+            html: `<h3>Are you sure? you want to delete this Document</h3>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C75BC',
+            cancelButtonColor: '#C8102E',
+            confirmButtonText: 'Confirm Delete',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await privateHttp.post(`/Documents/delete/${e}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchDocument()
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
+            }
+        })
+
+
+    }
+    const handleAccept = async (e) => {
+        Swal.fire({
+            html: `<h3>Accept This Document</h3>`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#1C75BC',
+            cancelButtonColor: '#C8102E',
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await privateHttp.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        FetchDocument()
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+
+                }
+
+
+            }
+        })
+
+
+    }
+    const handleReject = async () => {
+        if (reason.trim() === "" || deadline === "") {
+            toast.error("provide valid reason and deadline")
+        }
+        try {
+            const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
+            )
+            if (data.status === 'Success') {
+                toast.success(data.message);
+                FetchDocument()
+            } else {
+                toast.error(data.message);
+            }
+
+
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+
+
+        }
+    }
     const filteredData = documentOne.filter((item) =>
         item.documentName.toLowerCase().includes(searchText.toLowerCase())
     );

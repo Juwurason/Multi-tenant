@@ -7,7 +7,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import EmployeeProfile from "./employeeprofile"
 import ClientProfile from "./clientprofile"
 import ClientDoc from '../../../_components/forms/ClientsDoc';
-import EditClient from '../../Employees/editclient';
+import EditClient from '../../Employees/Employees/editclient';
 import StaffDoc from '../../../_components/forms/StaffDoc';
 import AdminProfile from './adminProfile';
 import EditAdmin from '../../Employees/Employees/editAdmin';

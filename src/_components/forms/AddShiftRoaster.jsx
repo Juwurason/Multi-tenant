@@ -28,12 +28,12 @@ const options = [
     { label: "Domestics Social Support", value: "Domestics Social Support" },
 
 ];
-const AddShiftRoaster = () => {
+const AddShiftRoaster = ({ staff }) => {
     const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
     const { loading, setLoading } = useCompanyContext()
-    const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
+    const [selectedClient, setSelectedClient] = useState([]);
     const navigate = useHistory();
     const [selected, setSelected] = useState([]);
     const [staffId, setStaffId] = useState(0);
@@ -54,24 +54,17 @@ const AddShiftRoaster = () => {
     const [stopDate, setStopDate] = useState("");
     const FetchSchedule = async () => {
 
-        try {
-            const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            setStaff(staff);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
 
         try {
             const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const client = clientResponse.data;
-            setClients(client);
-            setLoading(false)
+            const formattedOptions = client.map((item) => ({
+                label: item.fullName,
+                value: item.fullName,
+            }));
+            setClients(formattedOptions);
         } catch (error) {
             console.log(error);
-        } finally {
-            setLoading(false)
         }
 
     };
@@ -81,6 +74,11 @@ const AddShiftRoaster = () => {
 
     const [repeat, setRepeat] = useState(false);
     const [numOfDays, setNumOfDays] = useState(1);
+
+    const handleSelectionChange = (selected) => {
+        setSelectedClient(selected);
+    };
+    const selectClients = selectedClient.map(option => option.label).join(', ');
 
     const handleRepeatChange = (e) => {
         setRepeat(e.target.checked);
@@ -113,14 +111,14 @@ const AddShiftRoaster = () => {
         }
         try {
             setLoading(true)
-            const { data } = await post(`/ShiftRosters/add_shift?userId=${id.userId}`,
+            const { data } = await post(`/ShiftRosters/add_multipleclient_shifts?userId=${id.userId}`,
                 {
                     companyId: id.companyId,
                     staffId: Number(staffId),
                     dateFrom,
                     dateTo,
                     activities: selectedValues,
-                    profileId: Number(profileId),
+                    clientList: selectClients,
                     isNightShift,
                     isExceptionalShift,
                     repeat,
@@ -185,22 +183,13 @@ const AddShiftRoaster = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Client Name</label>
-                                                {/* <MultiSelect
-                                                    options={options}
-                                                    value={selected}
-                                                    onChange={handleSelected}
-                                                    labelledBy="Select Task"
-                                                /> */}
-                                                <div>
-                                                    <select className="form-select" onChange={e => setProfileId(e.target.value)}>
-                                                        <option defaultValue hidden>--Select a Client--</option>
+                                                <MultiSelect
+                                                    options={clients}
+                                                    value={selectedClient}
+                                                    onChange={handleSelectionChange}
+                                                    labelledBy="Select Clients"
+                                                />
 
-                                                        {
-                                                            clients.map((data, index) =>
-                                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
-                                                        }
-                                                    </select>
-                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">

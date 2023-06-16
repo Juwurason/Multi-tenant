@@ -31,10 +31,10 @@ const PublicHoliday = () => {
     const { get, post } = useHttp();
 
     const columns = [
-        {
-            name: '#',
-            cell: (row, index) => index + 1
-        },
+        // {
+        //     name: '#',
+        //     cell: (row, index) => index + 1
+        // },
 
         {
             name: 'Name',
