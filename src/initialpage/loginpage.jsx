@@ -57,7 +57,7 @@ const Loginpage = () => {
       }
 
       if (data.userProfile?.role === "Staff") {
-        navigate.push('/staff/staff')
+        navigate.push('/staff/main/dashboard')
         localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }
@@ -106,7 +106,7 @@ const Loginpage = () => {
       navigate.push('/app/main/dashboard');
     }
     if (user && user.token && user.role === "Staff") {
-      navigate.push('/staff/staff');
+      navigate.push('/staff/main/dashboard');
     }
     if (user && user.token && user.role === "Client") {
       navigate.push('/client/client');
