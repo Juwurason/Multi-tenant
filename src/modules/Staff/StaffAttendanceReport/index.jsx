@@ -180,8 +180,8 @@ const AttendanceReport = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Add A Report</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item active"><Link to="/staff/staff-attendance">Attendance</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item active"><Link to="/staff/main/attendance">Attendance</Link></li>
                   <li className="breadcrumb-item active">Add A Report</li>
                 </ul>
               </div>

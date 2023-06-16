@@ -61,7 +61,7 @@ const ViewTicket = () => {
                 <div className="d-flex gap-1">
 
                     <Link
-                        to={`/staff/ticket-details/${row.ticketId}`}
+                        to={`/staff/main/ticket-details/${row.ticketId}`}
                         className='btn'
                         title='Details'
 
@@ -282,7 +282,7 @@ const ViewTicket = () => {
                         <div className="col">
                             <h3 className="page-title">View Ticket</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/staff">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">View Ticket</li>
                             </ul>
                         </div>
@@ -343,7 +343,7 @@ const ViewTicket = () => {
                         </div>
                         <div className='col-md-4'>
 
-                            <Link to={'/staff/raise-ticket'} className="btn btn-info add-btn rounded-2 text-white">
+                            <Link to={'/staff/main/raise-ticket'} className="btn btn-info add-btn rounded-2 text-white">
                                 Contact Service Provider
                             </Link>
                         </div>

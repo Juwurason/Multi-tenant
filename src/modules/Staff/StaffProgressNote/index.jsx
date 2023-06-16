@@ -269,7 +269,7 @@ const StaffProgressNote = () => {
                             <div className="col">
                                 <h3 className="page-title">Progress Note Report</h3>
                                 <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Progress Note Report</li>
                                 </ul>
                             </div>

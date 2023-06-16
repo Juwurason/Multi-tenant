@@ -188,7 +188,7 @@ const StaffProfile = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Staff Profile </title>
-          <meta name="description" content="Reactify Blank Page" />
+          <meta name="description" content="Staff Profile" />
         </Helmet>
         {/* Page Content */}
         <div className="content container-fluid">
@@ -198,8 +198,8 @@ const StaffProfile = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Staff</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Staff</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
               </div>
@@ -225,7 +225,7 @@ const StaffProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link to={`/staff/staff-document`} className="py-1 px-2 rounded text-white bg-danger">Staff Doc</Link>
+                              <Link to={`/staff/main/staff-document`} className="py-1 px-2 rounded text-white bg-danger">Staff Doc</Link>
                             </div>
                           </div>
                         </div>

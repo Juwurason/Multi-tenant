@@ -36,7 +36,7 @@ const StaffDailyReport = () => {
             selector: row => row.subject,
             sortable: true,
             cell: (row) => <Link
-                to={`/app/support/ticket-details/${row.ticketId}`}
+                to={`/staff/main/ticket-details/${row.ticketId}`}
                 className="fw-bold text-dark" style={{ overflow: "hidden" }}
             > {row.subject}</Link>
 
@@ -61,7 +61,7 @@ const StaffDailyReport = () => {
                 <div className="d-flex gap-1">
 
                     <Link
-                        to={`/staff/ticket-details/${row.ticketId}`}
+                        to={`/staff/main/ticket-details/${row.ticketId}`}
                         className='btn'
                         title='Details'
 
@@ -282,7 +282,7 @@ const StaffDailyReport = () => {
                         <div className="col">
                             <h3 className="page-title">Staff Report</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/staff">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Staff Report</li>
                             </ul>
                         </div>
@@ -343,7 +343,7 @@ const StaffDailyReport = () => {
                         </div>
                         <div className='col-md-4'>
 
-                            <Link to={'/staff/staff-new-report'} className="btn btn-info add-btn rounded-2 text-white">
+                            <Link to={'/staff/main/new-report'} className="btn btn-info add-btn rounded-2 text-white">
                                 Add New Report
                             </Link>
                         </div>

@@ -146,7 +146,7 @@ const EditProgressNote = () => {
               'success'
             )
             setLoading2(false)
-            navigate.push(`/staff/staff-report/${uid}`)
+            navigate.push(`/staff/main/report/${uid}`)
           }
         } catch (error) {
           console.log(error);
@@ -179,7 +179,7 @@ const EditProgressNote = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Progress Note</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Edit Progress Note</li>
                 </ul>
               </div>

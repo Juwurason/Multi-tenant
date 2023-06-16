@@ -139,7 +139,7 @@ const ProgressNote = () => {
               'success'
             )
 
-            navigate.push(`/staff/staff-report/${uid}`)
+            navigate.push(`/staff/main/report/${uid}`)
           }
         } catch (error) {
           console.log(error);
@@ -169,7 +169,7 @@ const ProgressNote = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Progress Note</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Progress Note</li>
                 </ul>
               </div>

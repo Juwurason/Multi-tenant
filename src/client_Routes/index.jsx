@@ -11,6 +11,10 @@ import ClientMessage from '../modules/Client/ClientSupport/Message/messageInbox'
 import ClientViewTicket from '../modules/Client/ClientSupport/Support/viewTicket';
 import ClientRaiseTicket from '../modules/Client/ClientSupport/Support/raiseTicket';
 import ClientKnowledgeBase from '../modules/Client/ClientSupport/Support/knowledgeBase';
+import ClientRep from '../modules/Client/ClientRep';
+import ClientDisability from '../modules/Client/ClientDisability';
+import ClientAidEquip from '../modules/Client/ClientAidEquip';
+import ClientDailyLiving from '../modules/Client/ClientDailyLiving';
 
 export default [
 
@@ -37,6 +41,22 @@ export default [
     {
         path: 'client-roster',
         component: ClientRoster
+    },
+    {
+        path: 'client-rep',
+        component: ClientRep
+    },
+    {
+        path: 'client-disability',
+        component: ClientDisability
+    },
+    {
+        path: 'client-aid-equip',
+        component: ClientAidEquip
+    },
+    {
+        path: 'client-daily-living',
+        component: ClientDailyLiving
     },
     {
         path: 'client-message',

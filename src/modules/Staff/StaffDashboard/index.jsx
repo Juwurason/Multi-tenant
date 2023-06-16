@@ -25,59 +25,59 @@ import StaffHeader from '../Components/StaffHeader/index.jsx';
 
 dayjs.extend(isBetween);
 
-const StaffDashboard = () => {
+const StaffDashboard = ({roster, loading}) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
   // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
   const userObj = JSON.parse(localStorage.getItem('user'));
-  const [roster, setRoster] = useState([]);
-  const { loading, setLoading } = useCompanyContext();
-  const [document, setDocument] = useState([]);
+  // const [roster, setRoster] = useState([]);
+  // const { loading, setLoading } = useCompanyContext();
+  // const [document, setDocument] = useState([]);
   const { get } = useHttp();
 
-  let isMounted = true;
+  // let isMounted = true;
 
 
 
-  useEffect(() => {
-    if (isMounted) {
-      FetchStaff();
-    }
+  // useEffect(() => {
+  //   if (isMounted) {
+  //     FetchStaff();
+  //   }
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
 
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
 
-  async function FetchStaff() {
-    setLoading(true)
-    try {
-      const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-      const activities = data.shiftRoster;
-      setRoster(activities);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+  // async function FetchStaff() {
+  //   setLoading(true)
+  //   try {
+  //     const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+  //     const activities = data.shiftRoster;
+  //     setRoster(activities);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
 
 
-    try {
-      const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      setDocument(data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  //   try {
+  //     const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+  //     setDocument(data)
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log(error);
+  //     setLoading(false);
+  //   }
 
-    finally {
-      setLoading(false)
-    }
-  }
+  //   finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
@@ -100,9 +100,9 @@ const StaffDashboard = () => {
     setMenu(!menu)
   };
 
-  useEffect(() => {
-    FetchStaff()
-  }, []);
+  // useEffect(() => {
+  //   FetchStaff()
+  // }, []);
 
   useEffect(() => {
     let firstload = localStorage.getItem("firstload")
@@ -127,9 +127,9 @@ const StaffDashboard = () => {
           (position) => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            localStorage.setItem("latit", latitude)
-            localStorage.setItem("log", longitude)
-            navigate.push(`/staff/staff-progress/${activitiesByDay[1][0]?.shiftRosterId}`);
+            localStorage.setItem("latit", latitude);
+            localStorage.setItem("log", longitude);
+            navigate.push(`/staff/main/progress/${activitiesByDay[1][0]?.shiftRosterId}`);
           },
           (error) => {
             toast.error('Error getting location:', error.message);

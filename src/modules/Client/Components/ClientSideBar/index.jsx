@@ -79,36 +79,34 @@ const ClientSidebar = (props) => {
                             <li className={pathname.includes('change-password') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
                             </li>
-                            {/* <li className={pathname.includes('staff-form') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/client/client-schedule"><i className="la la-book" /> <span>My Availabilities</span></Link>
-                            </li> */}
+        
                              <li className="menu-title">
                                  <span>Client Management</span>
                              </li>
-
-                            {/* <li className={pathname.includes('staff-attendance') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-attendance"><i className="la la-calendar-check-o" /> <span>My Attendances</span></Link>
-                            </li>
-
-                            <li className={pathname.includes('staff-progressNote') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-progressNote"><i className="la la-folder-open" /> <span>My Progress Note</span></Link>
-                            </li>
-                        
-                            <li className="menu-title">
-                                <span>Staff-Client Management</span>
-                            </li> */}
                    
                             <li className={pathname.includes('client-roster') || pathname.includes('client-roster') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/client-roster"><i className="la la-calendar" /> <span>Shift Roster</span></Link>
                             </li>
 
+                            <li className={pathname.includes('client-rep') || pathname.includes('client-rep') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-rep"><i className="la la-rub" /> <span>Representatives</span></Link>
+                            </li>
+
+                            <li className={pathname.includes('client-disability') || pathname.includes('client-disability') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-disability"><i className="la la-wheelchair" /> <span>Disability Support Needs</span></Link>
+                            </li>
+
+                            <li className={pathname.includes('client-aid-equip') || pathname.includes('client-aid-equip') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-aid-equip"><i className="la la-eraser" /> <span>Aids & Equipments</span></Link>
+                            </li>
+
+                            <li className={pathname.includes('client-daily-living') || pathname.includes('client-daily-living') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-daily-living"><i className="la la-sun-o" /> <span>Daily Living & Night Support</span></Link>
+                            </li>
+
                             <li className={pathname.includes('client-document') || pathname.includes('client-document') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/client-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>
-
-                            {/* <li className={pathname.includes('staff-daily-report') || pathname.includes('staff-daily-report') ? "active" : ""} onClick={() => onMenuClik()}>
-                                <Link to="/staff/staff-daily-report"><i className="la la-newspaper-o" /> <span>Staff Daily Report</span></Link>
-                            </li> */}
 
                             <li className="menu-title">
                                 <span>Communication</span>

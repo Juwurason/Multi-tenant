@@ -180,11 +180,11 @@ const StaffAttendance = () => {
       <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
       <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
       <div>
-        <Link to={`/staff/attendance-report/${data.attendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
+        <Link to={`/staff/main/attendance-report/${data.attendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
         >
           Add Report
         </Link> |
-        <Link to={`/staff/attendance-details/${data.attendanceId}`}
+        <Link to={`/staff/main/attendance-details/${data.attendanceId}`}
          className="btn text-secondary fw-bold" style={{ fontSize: "12px" }}>
           Details
         </Link>
@@ -220,7 +220,7 @@ const StaffAttendance = () => {
               <div className="col">
                 <h3 className="page-title">Attendance</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Attendance</li>
                 </ul>
               </div>
