@@ -129,7 +129,7 @@ const StaffDashboard = () => {
             const longitude = position.coords.longitude;
             localStorage.setItem("latit", latitude)
             localStorage.setItem("log", longitude)
-            navigate.push(`/staff/staff-progress/${activitiesByDay[1][0]?.shiftRosterId}`);
+            navigate.push(`/staff/main/progress/${activitiesByDay[1][0]?.shiftRosterId}`);
           },
           (error) => {
             toast.error('Error getting location:', error.message);

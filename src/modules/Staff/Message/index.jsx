@@ -257,7 +257,7 @@ const MessageInbox = () => {
                         <div className="col">
                             <h3 className="page-title">Messages</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/staff">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Messages</li>
                             </ul>
                         </div>

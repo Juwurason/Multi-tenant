@@ -21,107 +21,104 @@ import RaiseTicket from '../modules/Staff/Support/raiseTicket';
 import KnowledgeBase from '../modules/Staff/Support/knowledgeBase';
 import MessageInbox from '../modules/Staff/Message';
 import TicketDetails from '../modules/Staff/Support/ticketDetails';
+import StaffRoute from '../modules/Staff';
 
 export default [
 
    {
-      path: 'staff',
-      component: StaffDashboard
+      path: 'main',
+      component: StaffRoute
    },
-   {
-      path: 'staff-document',
-      component: StaffDocument
-   },
-   {
-      path: 'staff-progress/:uid',
-      component: ProgressNote
-   },
-   {
-      path: 'staff-progressNote',
-      component: StaffProgressNote
-   },
-   {
-      path: 'staff-edit-progress/:uid/:pro',
-      component: EditProgressNote
-   },
-   {
-      path: 'staff-table',
-      component: StaffTable
-   },
-   {
-      path: 'staff-edit-profile',
-      component: StaffEditProfile
-   },
-   {
-      path: 'staffchangepassword',
-      component: StaffChangePassword
-   },
-   {
-      path: 'staff-attendance',
-      component: StaffAttendance
-   },
-   {
-      path: 'staff-roster',
-      component: StaffRoster
-   },
-   {
-      path: 'staff-report/:uid',
-      component: AddReport
-   },
+//    {
+//       path: 'staff-progress/:uid',
+//       component: ProgressNote
+//    },
+//    {
+//       path: 'staff-progressNote',
+//       component: StaffProgressNote
+//    },
+//    {
+//       path: 'staff-edit-progress/:uid/:pro',
+//       component: EditProgressNote
+//    },
+//    {
+//       path: 'staff-table',
+//       component: StaffTable
+//    },
+//    {
+//       path: 'staff-edit-profile',
+//       component: StaffEditProfile
+//    },
+//    {
+//       path: 'staffchangepassword',
+//       component: StaffChangePassword
+//    },
+//    {
+//       path: 'staff-attendance',
+//       component: StaffAttendance
+//    },
+//    {
+//       path: 'staff-roster',
+//       component: StaffRoster
+//    },
+//    {
+//       path: 'staff-report/:uid',
+//       component: AddReport
+//    },
 
-   {
-      path: 'staffprofile',
-      component: StaffProfile
-   },
+//    {
+//       path: 'staffprofile',
+//       component: StaffProfile
+//    },
 
-   {
-      path: 'view-ticket',
-      component: ViewTicket
-  },
+//    {
+//       path: 'view-ticket',
+//       component: ViewTicket
+//   },
 
-  {
-      path: 'raise-ticket',
-      component: RaiseTicket
-  },
+//   {
+//       path: 'raise-ticket',
+//       component: RaiseTicket
+//   },
 
-  {
-      path: 'ticket-details/:uid',
-      component: TicketDetails
-  },
+//   {
+//       path: 'ticket-details/:uid',
+//       component: TicketDetails
+//   },
 
-  {
-      path: 'knowledge',
-      component: KnowledgeBase
-  },
+//   {
+//       path: 'knowledge',
+//       component: KnowledgeBase
+//   },
 
-   {
-      path: 'staff-form',
-      component: StaffForm
-   },
+//    {
+//       path: 'staff-form',
+//       component: StaffForm
+//    },
 
-   {
-      path: 'messageInbox',
-      component: MessageInbox
-   },
+//    {
+//       path: 'messageInbox',
+//       component: MessageInbox
+//    },
 
-   {
-      path: 'attendance-report/:uid',
-      component: StaffAttendanceReport
-   },
+//    {
+//       path: 'attendance-report/:uid',
+//       component: StaffAttendanceReport
+//    },
 
-   {
-      path: 'attendance-details/:uid',
-      component: StaffAttendanceDetails
-   },
+//    {
+//       path: 'attendance-details/:uid',
+//       component: StaffAttendanceDetails
+//    },
 
-   {
-      path: 'staff-daily-report',
-      component: StaffDailyReport
-   },
+//    {
+//       path: 'staff-daily-report',
+//       component: StaffDailyReport
+//    },
 
-   {
-      path: 'staff-new-report',
-      component: StaffNewReport
-   },
+//    {
+//       path: 'staff-new-report',
+//       component: StaffNewReport
+//    },
 
 ]

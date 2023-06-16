@@ -51,7 +51,7 @@ const StaffHeader = (props) => {
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
-                <Link to="/staff/staff/staffDashboard" className="logo">
+                <Link to="/staff/main/dashboard" className="logo">
                     <img src={headerlogo} width={40} height={40} alt="" />
                 </Link>
             </div>
@@ -106,7 +106,7 @@ const StaffHeader = (props) => {
                 {/* /Notifications */}
                 {/* Message Notifications */}
                 <li className="nav-item dropdown">
-                    <Link to={'/staff/messageInbox'} >
+                    <Link to={'/staff/main/messageInbox'} >
                         <i className="fa fa-comment-o" />
                         {/* <span className="badge badge-pill">8</span> */}
                     </Link>
@@ -155,8 +155,8 @@ const StaffHeader = (props) => {
 
                             </div>
                         </div>
-                        <Link className="dropdown-item" to={"/staff/staffchangepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                        <Link className="dropdown-item" to={"/staff/staffprofile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                        <Link className="dropdown-item" to={"/staff/main/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                        <Link className="dropdown-item" to={"/staff/main/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
@@ -179,8 +179,8 @@ const StaffHeader = (props) => {
                     <i className="fa fa-ellipsis-v" /></a>
                 <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-                    <Link className="dropdown-item" to={"/staff/staffprofile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                    <Link className="dropdown-item" to={"/staff/staffchangepassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <Link className="dropdown-item" to={"/staff/main/profile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                    <Link className="dropdown-item" to={"/staff/main/changepassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>

@@ -181,7 +181,7 @@ const StaffRoster = () => {
               <div className="col">
                 <h3 className="page-title">Shift Roaster</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/staff/staffDashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Shift Roaster</li>
                 </ul>
               </div>
@@ -283,7 +283,7 @@ const StaffRoster = () => {
                                             const longitude = position.coords.longitude;
                                             localStorage.setItem("latit", latitude)
                                             localStorage.setItem("log", longitude)
-                                            navigate.push(`/staff/staff-progress/${activity.shiftRosterId}`);
+                                            navigate.push(`/staff/main/progress/${activity.shiftRosterId}`);
                                           },
                                           (error) => {
                                             toast.error('Error getting location:', error.message);

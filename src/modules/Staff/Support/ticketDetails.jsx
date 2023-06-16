@@ -155,8 +155,8 @@ const ticketDetails = () => {
                         <div className="col">
                             <h3 className="page-title">Ticket Trail</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/staff">Dashboard</Link></li>
-                                <li className="breadcrumb-item"><Link to="/staff/view-ticket">Ticket</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/main/view-ticket">Ticket</Link></li>
                                 <li className="breadcrumb-item active">Ticket Trail</li>
                             </ul>
                         </div>
