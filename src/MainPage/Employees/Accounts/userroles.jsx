@@ -342,7 +342,7 @@ const UserRoles = () => {
 
                                 </div>
                                 <hr />
-                                <h5>User in this this Role</h5>
+                                <h5>User in this Role</h5>
                             </div>
 
 

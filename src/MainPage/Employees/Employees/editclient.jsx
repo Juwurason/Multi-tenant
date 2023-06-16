@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams } from 'react-router-dom';
 import { FaCamera } from 'react-icons/fa'
-import man from "../../assets/img/man.png";
+import man from "../../../assets/img/man.png";
 import { toast } from "react-toastify";
-import useHttp from '../../hooks/useHttp';
+import useHttp from '../../../hooks/useHttp';
 
 const EditClient = () => {
 
@@ -401,7 +401,7 @@ const EditClient = () => {
                                 {step === 3 && renderStep3()}
                                 {step === 4 && renderStep4()}
                                 <div className="mt-3 text-center">
-                                    <Link to="/app/employees/clients" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
+                                    <Link to="/app/employee/clients" style={{ marginLeft: '10px' }}><button className="btn btn-outline-danger"> Cancel </button></Link>
                                     {step > 1 && <button className="btn btn-primary mr-2"
                                         style={{ marginLeft: '10px' }}
                                         onClick={handlePrev}>Previous</button>}

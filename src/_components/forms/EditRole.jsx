@@ -10,28 +10,24 @@ import { useParams } from 'react-router-dom';
 const EditRole = () => {
     const { uid } = useParams();
     const { userProfile } = useCompanyContext();
-    const [loading, setLoading] = useState(false)
-    const [firstName, setFirstName] = useState('');
-    const [surName, setSurName] = useState('');
-    const [middleName, setMiddleName] = useState('');
-    const [address, setAddress] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [offerLetter, setOfferLetter] = useState(null);
+    const [roles, setRoles] = useState([]);
+    const [claims, setClaims] = useState([]);
+
     const privateHttp = useHttp();
     const navigate = useHistory();
 
     const FetchRole = async () => {
         try {
             const { data } = await privateHttp.get(`/Account/get_user_roles?userId=${uid}`, { cacheTimeout: 300000 })
-            console.log(data);
+
+            setRoles(data.userRoles);
 
         } catch (error) {
             console.log(error);
         }
         try {
             const { data } = await privateHttp.get(`/Account/get_user_claims?userId=${uid}`, { cacheTimeout: 300000 })
-            console.log(data);
+            setClaims(data.userClaims.claims);
 
         } catch (error) {
             console.log(error);
@@ -43,6 +39,8 @@ const EditRole = () => {
         FetchRole()
     }, []);
 
+    const selectedRoles = roles.filter(role => role.isSelected);
+    const selectedClaims = claims.filter(claims => claims.isSelected);
 
     return (
         <div className="page-wrapper">
@@ -79,24 +77,34 @@ const EditRole = () => {
                                 <div className="row">
                                     <div className="col-sm-3">
                                         <div className="form-group p-2 border">
-                                            <label className="fw-bold fs-5">User Roles</label>
+                                            <label className="col-form-label fw-bold fs-5">User Roles</label>
+                                            <ol>
+                                                {selectedRoles.map((role) => (
+                                                    <li key={role.roleId}>{role.roleName}</li>
+                                                ))}
+                                            </ol>
                                         </div>
-                                        <div className="form-group p-2 border">
+                                        <div className="form-group p-2">
                                             <Link
                                                 to={`/app/account/role-list/${uid}`}
-                                                className="btn btn-primary btn-sm">Manage Roles</Link>
+                                                className="bg-primary p-2 rounded text-white">Manage Roles</Link>
 
                                         </div>
                                     </div>
                                     <div className="col-sm-9 ">
                                         <div className="form-group p-2 border">
-                                            <label className="fw-bold fs-5">User Priviledges</label>
+                                            <label className="fw-bold fs-5 col-form-label">User Priviledges</label>
+                                            <ol className='row'>
+                                                {selectedClaims.map((claim, index) => (
+                                                    <li key={index} className='col-md-3 px-3'>{claim.claimType}</li>
+                                                ))}
+                                            </ol>
                                         </div>
-                                        <div className="form-group p-2 border">
+                                        <div className="form-group p-2">
 
                                             <Link
                                                 to={`/app/account/priviledges-list/${uid}`}
-                                                className="btn btn-primary btn-sm">Manage Priviledges</Link>
+                                                className="bg-primary p-2 rounded text-white">Manage Priviledges</Link>
                                         </div>
                                     </div>
                                 </div>

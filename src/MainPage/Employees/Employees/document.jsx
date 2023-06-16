@@ -9,8 +9,6 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaEye } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
@@ -21,13 +19,9 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 
-const Document = () => {
+const Document = ({ staff, document, clients, loading, FetchData }) => {
     //Declaring Variables
     const id = JSON.parse(localStorage.getItem('user'));
-    const { loading, setLoading } = useCompanyContext();
-    const [document, setDocument] = useState([]);
-    const [staff, setStaff] = useState([]);
-    const [clients, setClients] = useState([]);
     const privateHttp = useHttp();
     const [rejectModal, setRejectModal] = useState(false);
     const [reason, setReason] = useState("");
@@ -100,39 +94,6 @@ const Document = () => {
 
 
 
-    const FetchDocument = async () => {
-        setLoading(true);
-        try {
-            const documentResponse = await privateHttp.get(`/Documents/get_all_documents?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const document = documentResponse.data;
-            setDocument(document);
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const staffResponse = await privateHttp.get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            setStaff(staff);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-
-        try {
-            const clientResponse = await privateHttp.get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            setClients(client);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-
-    };
-    useEffect(() => {
-        FetchDocument()
-    }, []);
 
     const [menu, setMenu] = useState(false)
     const downloadLinkRef = useRef(null);
@@ -160,14 +121,7 @@ const Document = () => {
     }
 
 
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
+
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -291,7 +245,7 @@ const Document = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchDocument()
+                        FetchData()
                     } else {
                         toast.error(data.message);
                     }
@@ -327,7 +281,7 @@ const Document = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchDocument()
+                        FetchData()
                     } else {
                         toast.error(data.message);
                     }
@@ -356,7 +310,7 @@ const Document = () => {
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
-                FetchDocument()
+                FetchData()
             } else {
                 toast.error(data.message);
             }
@@ -393,8 +347,7 @@ const Document = () => {
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <Header onMenuClick={(value) => toggleMobileMenu()} />
-                <Sidebar />
+
                 <div className="page-wrapper">
                     <Helmet>
                         <title>Document</title>

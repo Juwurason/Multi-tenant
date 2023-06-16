@@ -12,16 +12,12 @@ import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-ico
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
-import { useCompanyContext } from '../../context';
-import useHttp from '../../hooks/useHttp';
+import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
 
-const Clients = () => {
-  const { loading, setLoading } = useCompanyContext()
+const Clients = ({ clients, loading, FetchData }) => {
   const id = JSON.parse(localStorage.getItem('user'));
-  const [clients, setClients] = useState([]);
   const { get, post } = useHttp();
 
   const columns = [
@@ -83,34 +79,6 @@ const Clients = () => {
 
   ];
 
-  const FetchClient = async () => {
-    try {
-      setLoading(true)
-      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const client = clientResponse.data;
-      console.log(client);
-      setClients(client);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false)
-    } finally {
-      setLoading(false)
-    }
-  };
-  useEffect(() => {
-    FetchClient()
-  }, []);
-
-
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
 
   const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
@@ -289,7 +257,7 @@ const Clients = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchClient();
+            FetchData();
           } else {
             toast.error(data.message);
           }

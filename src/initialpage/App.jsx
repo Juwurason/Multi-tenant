@@ -14,6 +14,8 @@ import AdminRegistration from './AdminRegistration';
 import StaffLayout from './Sidebar/StaffLayout';
 import ClientLayout from './Sidebar/ClientLayout';
 import AdminLayout from './Sidebar/AdminLayout';
+import Timesheet from '../MainPage/HR/Reports/timesheet';
+import TimesheetForAll from '../MainPage/HR/Reports/timesheetForAll';
 
 const App = () => {
     const location = useLocation();
@@ -67,6 +69,8 @@ const App = () => {
             <Route path="/conversation" component={chatlayout} />
             <Route path="/ui-components" component={uicomponents} />
             <Route path="/error-500" component={Error500} />
+            <Route path={`/staff-timesheet/:sta/:dateFrom/:dateTo`} component={Timesheet} />
+            <Route path={`/Allstaff-timesheet/:dateFrom/:dateTo`} component={TimesheetForAll} />
             <Route path="/logout" render={handleLogout} />
             {/* <Route component={Error404} /> Catch-all route */}
         </Switch>

@@ -19,7 +19,6 @@ import Account from '../MainPage/Employees/Accounts'
 import Setup from '../MainPage/Employees/Setup'
 import Support from '../MainPage/Employees/Support'
 //Employees
-import Employees from '../MainPage/Employees';
 import Projects from '../MainPage/Employees/Projects';
 import Employee from '../MainPage/Employees/Employees';
 import ProjectList from '../MainPage/Employees/Projects/projectlist'
@@ -44,10 +43,7 @@ export default [
       path: 'account',
       component: Account,
    },
-   {
-      path: 'employees',
-      component: Employees
-   },
+
    {
       path: 'projects',
       component: Projects

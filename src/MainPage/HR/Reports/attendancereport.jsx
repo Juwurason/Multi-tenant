@@ -183,39 +183,20 @@ const AttendanceReport = () => {
 
     setLoading2(true);
     setTimeout(() => {
-      const url = `/app/reports/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
+      const url = `/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
       window.open(url, '_blank');
       setLoading2(false);
     }, 2000);
   }
 
-  // const GetTimeshift = async (e) => {
-  //   e.preventDefault();
 
-  //   history.push(`/app/reports/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`)
-  //   // setLoading2(true)
-
-  //   // try {
-  //   //   const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
-  //   //   console.log(data);
-  //   //   if (data.status === "Success") {
-  //   //     toast.success(data.message);
-  //   //   }
-  //   //   setLoading2(false)
-  //   // } catch (error) {
-  //   //   console.log(error);
-  //   //   setLoading2(false)
-  //   // } finally {
-  //   //   setLoading2(false)
-  //   // }
-  // }
   const GetAllTimeshift = async (e) => {
     e.preventDefault();
     // //:dateFrom/:dateTo
 
     setLoading2(true);
     setTimeout(() => {
-      const url = `/app/reports/Allstaff-timesheet/${dateFrom.current.value}/${dateTo.current.value}`;
+      const url = `/Allstaff-timesheet/${dateFrom.current.value}/${dateTo.current.value}`;
       window.open(url, '_blank');
       setLoading2(false);
     }, 2000);
@@ -228,40 +209,7 @@ const AttendanceReport = () => {
   const [menu, setMenu] = useState(false);
 
 
-  // const handleDelete = async (e) => {
-  //   Swal.fire({
-  //     html: `<h3>Are you sure? you want to delete this user</h3></br><p>You won't be able to revert this!</p>`,
-  //     icon: 'question',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#00AEEF',
-  //     cancelButtonColor: '#777',
-  //     confirmButtonText: 'Confirm Delete',
-  //     showLoaderOnConfirm: true,
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         const { data } = await privateHttp.post(`/Administrators/delete/${e}?userId=${id.userId}`,
-  //         )
-  //         if (data.status === 'Success') {
-  //           toast.success(data.message);
-  //           FetchStaff()
-  //         } else {
-  //           toast.error(data.message);
-  //         }
 
-
-  //       } catch (error) {
-  //         console.log(error);
-  //         toast.error(error.response.data.message)
-  //         toast.error(error.response.data.title)
-
-
-  //       }
-
-
-  //     }
-  //   })
-  // }
 
 
   const handleExcelDownload = () => {

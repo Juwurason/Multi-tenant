@@ -82,7 +82,7 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
               </li>
               <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/app/employees/clients"><i className="la la-users" /> <span>Clients</span></Link>
+                <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li>
               <li className="submenu">
                 <a href="#" className={isSideMenu == "management" ? "subdrop" : ""} onClick={(e) => {
@@ -121,6 +121,9 @@ const Sidebar = (props) => {
 
                     <li><Link className={pathname.includes('support-type') ? "active" : pathname.includes('support-type')}
                       to="/app/setup/support-type" onClick={() => onMenuClik()}>Support Type</Link>
+                    </li>
+                    <li><Link className={pathname.includes('integrations') ? "active" : pathname.includes('integrations')}
+                      to="/app/setup/integrations" onClick={() => onMenuClik()}>Third Party Integration</Link>
                     </li>
 
                   </ul>
