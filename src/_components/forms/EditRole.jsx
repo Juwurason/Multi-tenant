@@ -27,7 +27,8 @@ const EditRole = () => {
         }
         try {
             const { data } = await privateHttp.get(`/Account/get_user_claims?userId=${uid}`, { cacheTimeout: 300000 })
-            setClaims(data.userClaims.claims);
+            const selectedClaims = data.userClaims.claims.filter(claims => claims.isSelected);
+            setClaims(selectedClaims);
 
         } catch (error) {
             console.log(error);
@@ -40,7 +41,7 @@ const EditRole = () => {
     }, []);
 
     const selectedRoles = roles.filter(role => role.isSelected);
-    const selectedClaims = claims.filter(claims => claims.isSelected);
+
 
     return (
         <div className="page-wrapper">
@@ -79,7 +80,7 @@ const EditRole = () => {
                                         <div className="form-group p-2 border">
                                             <label className="col-form-label fw-bold fs-5">User Roles</label>
                                             <ol>
-                                                {selectedRoles.map((role) => (
+                                                {roles.map((role) => (
                                                     <li key={role.roleId}>{role.roleName}</li>
                                                 ))}
                                             </ol>
@@ -95,7 +96,7 @@ const EditRole = () => {
                                         <div className="form-group p-2 border">
                                             <label className="fw-bold fs-5 col-form-label">User Priviledges</label>
                                             <ol className='row'>
-                                                {selectedClaims.map((claim, index) => (
+                                                {claims.map((claim, index) => (
                                                     <li key={index} className='col-md-3 px-3'>{claim.claimType}</li>
                                                 ))}
                                             </ol>

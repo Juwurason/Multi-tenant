@@ -371,6 +371,7 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                 </div>
               </div>
             </div>
+
             <div className="col-md-4">
               <div className="form-group">
                 <label className="col-form-label">End Date</label>
@@ -379,6 +380,7 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                 </div>
               </div>
             </div>
+
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button onClick={FilterSchedule} className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -442,8 +444,6 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                 <div className='row g-0'>
                   {daysOfWeek.map((day, index) => (
 
-
-
                     <Droppable droppableId={day.format('YYYY-MM-DD')}
                     >
                       {(provided) => (
@@ -483,19 +483,17 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                             )}
 
 
-                            {activitiesByDay[index].map((activity, activityIndex) => (
-                              <Draggable key={activityIndex} draggableId={activity.shiftRosterId.toString()} index={activityIndex}>
+                            {activitiesByDay[index].map((activity, index) => (
+                              <Draggable key={index} draggableId={activity.shiftRosterId.toString()} index={index}>
                                 {(provided) => (
                                   <div
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
-
-
                                     {/* Render the temporary task if it matches the current draggable item */}
 
-                                    <div key={activityIndex}
+                                    <div
                                       className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
                                       style={{
                                         fontSize: '10px',
