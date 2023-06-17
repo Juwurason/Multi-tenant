@@ -64,8 +64,9 @@ const AttendanceReport = () => {
       sortable: true
     },
     {
+
       name: 'Clock-In',
-      selector: row => moment(row.clockIn).format('LLL'),
+      selector: row => dayjs(row.clockIn).format('hh:mm A'),
       sortable: true,
       expandable: true,
 
@@ -81,7 +82,7 @@ const AttendanceReport = () => {
 
     {
       name: 'Clock-Out',
-      selector: row => moment(row.clockOut).format('LLL'),
+      selector: row => dayjs(row.clockOut).format('hh:mm A'),
       sortable: true,
       expandable: true,
 
