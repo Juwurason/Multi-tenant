@@ -18,7 +18,7 @@ import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
-const StaffProgressNote = () => {
+const StaffProgressNote = ({staffPro, FetchData}) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -33,7 +33,7 @@ const StaffProgressNote = () => {
     const [documentName, setDocumentName] = useState("")
     const [expire, setExpire] = useState("")
     const [document, setDocument] = useState("")
-    const [staffPro, setStaffPro] = useState([]);
+    // const [staffPro, setStaffPro] = useState([]);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const columns = [
@@ -116,24 +116,23 @@ const StaffProgressNote = () => {
 
     const privateHttp = useHttp()
 
-    const getStaffProgressNote = async () => {
-        try {
-            const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
-            setStaffPro(data.progressNote);
-            // console.log(data.progressNote);
-            // console.log(staffPro.profile);
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-        }
-        finally {
-            setLoading(false)
-        }
-    }
+    // const getStaffProgressNote = async () => {
+    //     try {
+    //         const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
+    //         setStaffPro(data.progressNote);
+            
+    //         setLoading(false);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     finally {
+    //         setLoading(false)
+    //     }
+    // }
     
-    useEffect(() => {
-        getStaffProgressNote()
-    }, [])
+    // useEffect(() => {
+    //     getStaffProgressNote()
+    // }, [])
 
     const handlePDFDownload = () => {
         const unit = "pt";
@@ -181,7 +180,8 @@ const StaffProgressNote = () => {
             // console.log(data);
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
         setShowModal(true);
     };
@@ -206,10 +206,11 @@ const StaffProgressNote = () => {
         //   console.log(data);
           toast.success(data.message)
           setShowModal(false);
-          setLoading1(false)
-          getStaffProgressNote()
+          setLoading1(false);
+          FetchData()
         } catch (error) {
-          console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
         finally {
           setLoading1(false)

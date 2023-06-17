@@ -18,7 +18,7 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
 
-const StaffDocument = () => {
+const StaffDocument = ({staffDocument, FetchData}) => {
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -34,7 +34,7 @@ const StaffDocument = () => {
   const [otherDocumentName, setOtherDocumentName] = useState("")
   const [expire, setExpire] = useState("")
   const [document, setDocument] = useState("")
-  const [staffDocument, setStaffDocument] = useState([]);
+  // const [staffDocument, setStaffDocument] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
   const staffPro = JSON.parse(localStorage.getItem('staffProfile'));
   const [showModal2, setShowModal2] = useState(false);
@@ -142,26 +142,25 @@ const StaffDocument = () => {
 
 
 
-  const getStaffDocument = async () => {
-    try {
-      const { data } = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-      setStaffDocument(data.staffDocuments)
+  // const getStaffDocument = async () => {
+  //   try {
+  //     const { data } = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+  //     setStaffDocument(data.staffDocuments)
 
-      setLoading(false)
-      // console.log(data.staffDocuments);
+  //     setLoading(false)
 
-    } catch (error) {
-      console.log(error);
-    }
-    finally {
-      setLoading(false)
-    }
-  }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   finally {
+  //     setLoading(false)
+  //   }
+  // }
 
-  useEffect(() => {
-    setLoading(true)
-    getStaffDocument()
-  }, [])
+  // useEffect(() => {
+  //   setLoading(true)
+  //   getStaffDocument()
+  // }, [])
 
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
@@ -195,11 +194,11 @@ const StaffDocument = () => {
       toast.success(data.message)
       setLoading2(false)
       setShowModal2(false)
-      getStaffDocument()
+      FetchData()
 
     } catch (error) {
-      console.log(error);
-      toast.error(error.message)
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
       setLoading2(false);
 
     }
@@ -252,7 +251,7 @@ const StaffDocument = () => {
           // console.log(data);
           if (data.status === 'Success') {
             toast.success(data.message);
-            getStaffDocument()
+            FetchData()
           } else {
             toast.error(data.message);
           }
@@ -341,7 +340,7 @@ const StaffDocument = () => {
       }
       setLoading2(false)
       setShowModal(false)
-      getStaffDocument()
+      FetchData()
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message)

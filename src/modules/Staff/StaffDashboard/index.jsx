@@ -25,59 +25,46 @@ import StaffHeader from '../Components/StaffHeader/index.jsx';
 
 dayjs.extend(isBetween);
 
-const StaffDashboard = () => {
+const StaffDashboard = ({roster, loading}) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
   // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
   const userObj = JSON.parse(localStorage.getItem('user'));
-  const [roster, setRoster] = useState([]);
-  const { loading, setLoading } = useCompanyContext();
+  // const [roster, setRoster] = useState([]);
+  // const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
   const { get } = useHttp();
 
-  let isMounted = true;
+  // let isMounted = true;
 
 
 
-  useEffect(() => {
-    if (isMounted) {
-      FetchStaff();
-    }
+  // useEffect(() => {
+  //   if (isMounted) {
+  //     FetchStaff();
+  //   }
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
 
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
 
-  async function FetchStaff() {
-    setLoading(true)
-    try {
-      const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-      const activities = data.shiftRoster;
-      setRoster(activities);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+  // async function FetchStaff() {
+  //   setLoading(true)
+  //   try {
+  //     const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+  //     const activities = data.shiftRoster;
+  //     setRoster(activities);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
 
-
-    try {
-      const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      setDocument(data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-
-    finally {
-      setLoading(false)
-    }
-  }
+  // }
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
@@ -332,7 +319,7 @@ const StaffDashboard = () => {
               <div className='col-md-4 p-2 d-flex flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h3>Upcoming Shift</h3>
-                  {activitiesByDay[3].length > 0 ? (
+                  {/* {activitiesByDay[3].length > 0 ? (
                     activitiesByDay[3][0]?.map(activity => (
                       <span className="mt-2" key={activity.id}>
                         <div className="d-flex justify-content-between text-dark">
@@ -340,17 +327,15 @@ const StaffDashboard = () => {
                             <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
                             <span className='text-dark fs-7 fw-bold'>{activity.profile.fullName}</span>
                           </div>
-                          {/* <div>
-                            <span className='bg-secondary px-2 py-1 text-white pointer rounded-2'>view</span>
-                          </div> */}
+                         
                         </div>
                       </span>
                     ))
                   ) : (
                     <span>No upcoming shifts</span>
-                  )}
+                  )} */}
                   <div className='d-flex justify-content-end mt-2'>
-                    <Link to="/staff/staff-roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
+                    <Link to="/staff/main/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
                       See all <FaLongArrowAltRight className='fs-3' />
                     </Link>
                   </div>
