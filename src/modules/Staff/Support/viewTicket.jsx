@@ -20,10 +20,10 @@ import dayjs from 'dayjs';
 
 
 
-const ViewTicket = () => {
+const ViewTicket = ({ticket, FetchData}) => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
-    const [ticket, setTicket] = useState([]);
+    // const [ticket, setTicket] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
     const { get, post } = useHttp();
@@ -89,24 +89,24 @@ const ViewTicket = () => {
 
 
 
-    const FetchTicket = async () => {
-        setLoading(true)
-        try {
-            const { data } = await get(`/Tickets/get_user_tickets?userId=${id.userId}`, { cacheTimeout: 300000 });
-            console.log(data)
-            setTicket(data);
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
+    // const FetchTicket = async () => {
+    //     setLoading(true)
+    //     try {
+    //         const { data } = await get(`/Tickets/get_user_tickets?userId=${id.userId}`, { cacheTimeout: 300000 });
+    //         console.log(data)
+    //         setTicket(data);
+    //         setLoading(false);
+    //     } catch (error) {
+    //         console.log(error);
+    //         setLoading(false)
+    //     } finally {
+    //         setLoading(false)
+    //     }
 
-    };
-    useEffect(() => {
-        FetchTicket()
-    }, []);
+    // };
+    // useEffect(() => {
+    //     FetchTicket()
+    // }, []);
 
 
 
@@ -245,7 +245,7 @@ const ViewTicket = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchTicket();
+                        FetchData();
                     } else {
                         toast.error(data.message);
                     }

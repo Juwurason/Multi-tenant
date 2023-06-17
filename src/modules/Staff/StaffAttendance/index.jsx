@@ -17,7 +17,7 @@ import { SlSettings } from 'react-icons/sl'
 import dayjs from 'dayjs';
 import moment from 'moment';
 
-const StaffAttendance = () => {
+const StaffAttendance = ({staffAtten}) => {
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -32,7 +32,7 @@ const StaffAttendance = () => {
   const [documentName, setDocumentName] = useState("")
   const [expire, setExpire] = useState("")
   const [document, setDocument] = useState("")
-  const [staffAtten, setStaffAttendance] = useState([]);
+  // const [staffAtten, setStaffAttendance] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
 
 
@@ -132,20 +132,19 @@ const StaffAttendance = () => {
   const privateHttp = useHttp()
 
 
-  useEffect(() => {
-    setLoading(true)
-    const getStaffAttendance = async () => {
-      try {
-        const { data } = await privateHttp.get(`/Attendances/get_staff_attendances?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-        setStaffAttendance(data)
-        // console.log(data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getStaffAttendance()
-  }, [])
+  // useEffect(() => {
+  //   setLoading(true)
+  //   const getStaffAttendance = async () => {
+  //     try {
+  //       const { data } = await privateHttp.get(`/Attendances/get_staff_attendances?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+  //       setStaffAttendance(data)
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getStaffAttendance()
+  // }, [])
 
   const handlePDFDownload = () => {
     const unit = "pt";

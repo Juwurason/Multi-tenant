@@ -10,9 +10,10 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
-const StaffProfile = () => {
+
+const StaffProfile = ({staffOne, FetchData}) => {
   const { uid } = useParams()
-  const [staffOne, setStaffOne] = useState({});
+  // const [staffOne, setStaffOne] = useState({});
   const [profile, setProfile] = useState({})
   const [editedProfile, setEditedProfile] = useState({});
   const [loading, setLoading] = useState(false);
@@ -25,20 +26,20 @@ const StaffProfile = () => {
 
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
   const privateHttp = useHttp()
-  const FetchStaff = async () => {
-    try {
-      const {data} = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-      setStaffOne(data)
 
+  // const FetchStaff = async () => {
+  //   try {
+  //     const {data} = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
+  //     setStaffOne(data)
 
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+  // useEffect(() => {
+  //   FetchStaff()
+  // }, []);
 
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  useEffect(() => {
-    FetchStaff()
-  }, []);
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -67,7 +68,8 @@ const StaffProfile = () => {
       setProfile(response.data);
       setEditedProfile(response.data)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
 
 
     }
@@ -163,7 +165,7 @@ const StaffProfile = () => {
         setKinModal(false);
         setBankModal(false);
         setSocialModal(false);
-        FetchStaff();
+        FetchData();
       } else {
         toast.error(data.message);
       }
@@ -171,7 +173,7 @@ const StaffProfile = () => {
       setLoading(false)
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading(false);

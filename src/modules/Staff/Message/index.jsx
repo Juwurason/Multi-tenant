@@ -16,14 +16,14 @@ import moment from 'moment';
 import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
 
-const MessageInbox = () => {
+const MessageInbox = ({options, sentEmail, inbox, FetchData}) => {
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
     const [activeTab, setActiveTab] = useState('inbox');
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [editorValue, setEditorValue] = useState('');
     const subject = useRef(null);
-    const [options, setOptions] = useState([]);
+    // const [options, setOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [lgShow, setLgShow] = useState(false);
     const [sendAsSMS, setSendAsSMS] = useState(false);
@@ -33,9 +33,8 @@ const MessageInbox = () => {
     const [toAllStaffs, setToAllStaffs] = useState(false);
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [inbox, setInbox] = useState([]);
-    const [sentEmail, setSentEmail] = useState([]);
-
+    // const [inbox, setInbox] = useState([]);
+    // const [sentEmail, setSentEmail] = useState([]);
     const handleSendAsSMSChange = (event) => {
         setSendAsSMS(event.target.checked);
     };
@@ -95,35 +94,35 @@ const MessageInbox = () => {
     const toggleBcc = () => {
         setShowBcc(!showBcc);
     };
-    const FetchClient = async () => {
-        try {
-            const { data } = await privateHttp.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const formattedOptions = data.map((item) => ({
-                label: item.email,
-                value: item.email,
-            }));
-            setOptions(formattedOptions);
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
-            setSentEmail(data.message);
-            // console.log(data);
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const { data } = await privateHttp.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
-            setInbox(data.message);
-            // console.log(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        FetchClient()
-    }, []);
+    // const FetchClient = async () => {
+    //     try {
+    //         const { data } = await privateHttp.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+    //         const formattedOptions = data.map((item) => ({
+    //             label: item.email,
+    //             value: item.email,
+    //         }));
+    //         setOptions(formattedOptions);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     try {
+    //         const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
+    //         setSentEmail(data.message);
+    //         // console.log(data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     try {
+    //         const { data } = await privateHttp.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
+    //         setInbox(data.message);
+    //         // console.log(data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    // useEffect(() => {
+    //     FetchClient()
+    // }, []);
 
     const handleSelectionChange = (selected) => {
         setSelectedOptions(selected);
@@ -152,7 +151,7 @@ const MessageInbox = () => {
                     payload
                 )
                 toast.success(data.message)
-                FetchClient();
+                FetchData();
                 setLoading(false)
 
             } catch (error) {
@@ -188,7 +187,7 @@ const MessageInbox = () => {
                 setEditorValue("");
                 subject.current.value = ''
                 setSelectedOptions([]);
-                FetchClient();
+                FetchData();
                 setLgShow(false);
 
 
@@ -222,14 +221,14 @@ const MessageInbox = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchClient();
+                        FetchData();
                     } else {
                         toast.error(data.message);
                     }
 
 
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
                     toast.error(error.response.data.message)
                     toast.error(error.response.data.title)
 
@@ -551,9 +550,12 @@ const MessageInbox = () => {
                                                                             </td>
                                                                             {/* Message */}
                                                                             <td style={{ cursor: 'pointer' }}>
-                                                                                <a className="link" href="javascript: void(0)" >
+                                                                                <a className="link" href="#" >
                                                                                     <span className="text-dark fw-bold text-truncate"
-                                                                                        onClick={() => handleEmailClick(email)}
+                                                                                        onClick={(e) => {
+                                                                                            e.preventDefault()
+                                                                                            handleEmailClick(email)
+                                                                                        }}
                                                                                     >{email.subject}</span>
                                                                                 </a>
                                                                             </td>

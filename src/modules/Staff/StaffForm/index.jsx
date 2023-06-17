@@ -22,7 +22,7 @@ import { Modal } from 'react-bootstrap';
 import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
-const StaffForm = () => {
+const StaffForm = ({staffAvail, FetchData}) => {
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -32,7 +32,7 @@ const StaffForm = () => {
     }
   });
 
-  const [staffAvail, setStaffAvail] = useState([]);
+  // const [staffAvail, setStaffAvail] = useState([]);
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -82,7 +82,7 @@ const StaffForm = () => {
         toast.success(data.message)
       }
       setLoading1(false)
-      FetchSchedule()
+      FetchData()
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message)
@@ -94,27 +94,18 @@ const StaffForm = () => {
   }
 
 
-  const FetchSchedule = async () => {
-    // setLoading2(true)
-    try {
-      const { data } = await get(`StaffAvailibilities/get_staff_availabilities?staffId=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-      // console.log(data);
-      setStaffAvail(data)
-      // setLoading2(false);
-    } catch (error) {
-      // console.log(error);
-      toast.error(error.response.data.message)
-          toast.error(error.response.data.title)
-    }
-    // finally {
-    //   setLoading2(false)
-    // }
-
-
-  };
-  useEffect(() => {
-    FetchSchedule()
-  }, []);
+  // const FetchSchedule = async () => {
+  //   try {
+  //     const { data } = await get(`StaffAvailibilities/get_staff_availabilities?staffId=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+  //     setStaffAvail(data)
+  //   } catch (error) {
+  //     toast.error(error.response.data.message)
+  //     toast.error(error.response.data.title)
+  //   }
+  // };
+  // useEffect(() => {
+  //   FetchSchedule()
+  // }, []);
 
 
   const columns = [
@@ -224,7 +215,7 @@ const StaffForm = () => {
           // console.log(data);
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchSchedule()
+            FetchData()
           } else {
             toast.error(data.message);
           }
@@ -296,7 +287,7 @@ const StaffForm = () => {
       }
       setLoading2(false)
       setShowModal(false)
-      FetchSchedule()
+      FetchData()
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message)
