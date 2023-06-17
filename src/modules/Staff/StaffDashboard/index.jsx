@@ -25,59 +25,59 @@ import StaffHeader from '../Components/StaffHeader/index.jsx';
 
 dayjs.extend(isBetween);
 
-const StaffDashboard = ({roster, loading}) => {
+const StaffDashboard = () => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
   // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
   const userObj = JSON.parse(localStorage.getItem('user'));
-  // const [roster, setRoster] = useState([]);
-  // const { loading, setLoading } = useCompanyContext();
-  // const [document, setDocument] = useState([]);
+  const [roster, setRoster] = useState([]);
+  const { loading, setLoading } = useCompanyContext();
+  const [document, setDocument] = useState([]);
   const { get } = useHttp();
 
-  // let isMounted = true;
+  let isMounted = true;
 
 
 
-  // useEffect(() => {
-  //   if (isMounted) {
-  //     FetchStaff();
-  //   }
+  useEffect(() => {
+    if (isMounted) {
+      FetchStaff();
+    }
 
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, []);
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
 
-  // async function FetchStaff() {
-  //   setLoading(true)
-  //   try {
-  //     const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-  //     const activities = data.shiftRoster;
-  //     setRoster(activities);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
+  async function FetchStaff() {
+    setLoading(true)
+    try {
+      const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+      const activities = data.shiftRoster;
+      setRoster(activities);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
 
 
-  //   try {
-  //     const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-  //     setDocument(data)
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error);
-  //     setLoading(false);
-  //   }
+    try {
+      const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      setDocument(data)
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
 
-  //   finally {
-  //     setLoading(false)
-  //   }
-  // }
+    finally {
+      setLoading(false)
+    }
+  }
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
@@ -87,12 +87,12 @@ const StaffDashboard = ({roster, loading}) => {
     currentDate.add(1, 'day'),
     currentDate.add(2, 'day')
   ];
-  
+
   const activitiesByDay = daysOfWeek.map((day) =>
-   roster.filter((activity) =>
+    roster.filter((activity) =>
       dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
     )
-    
+
   );
 
   const [menu, setMenu] = useState(false);
@@ -138,7 +138,7 @@ const StaffDashboard = ({roster, loading}) => {
       } else {
         toast.error('Geolocation is not supported');
       }
-    
+
     }, 2000); // Set an appropriate delay to simulate the loading time
 
     // Optionally, you can clear the loading state after the specified time
@@ -179,7 +179,7 @@ const StaffDashboard = ({roster, loading}) => {
     }
   }
 
- 
+
   return (
     <>
       <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
@@ -268,15 +268,15 @@ const StaffDashboard = ({roster, loading}) => {
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatus(activitiesByDay) === 'Clock-In' ? (
                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                                {isLoading ? 
+                                {isLoading ?
                                   <div>
                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                  </div> Please wait....
+                                      <span class="visually-hidden">Loading...</span>
+                                    </div> Please wait....
                                   </div>
                                   : <span> <BiStopwatch /> Clock In</span>
                                 }
-                              </span> 
+                              </span>
                             ) : (
                               <small
                                 className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
@@ -290,7 +290,7 @@ const StaffDashboard = ({roster, loading}) => {
                           </>
                         ) : (
                           <span>No Shift Today</span>
-                          
+
                         )}
                       </div>
 
@@ -308,7 +308,7 @@ const StaffDashboard = ({roster, loading}) => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{ dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                          <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesByDay[2][0]?.status}</span>
                         </div>
                       </div>
@@ -357,7 +357,7 @@ const StaffDashboard = ({roster, loading}) => {
                 </div>
               </div>
 
-              
+
 
             </div>
 
