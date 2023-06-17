@@ -31,7 +31,7 @@ const options = [
 const AddShiftRoaster = ({ staff }) => {
     const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
-    const { loading, setLoading } = useCompanyContext()
+    const [ loading, setLoading ] = useState(false)
     const [clients, setClients] = useState([]);
     const [selectedClient, setSelectedClient] = useState([]);
     const navigate = useHistory();
@@ -39,7 +39,6 @@ const AddShiftRoaster = ({ staff }) => {
     const [staffId, setStaffId] = useState(0);
     const [dateFrom, setDatefrom] = useState("");
     const [dateTo, setDateTo] = useState("");
-    const [profileId, setProfileId] = useState(0);
     const [isNightShift, setIsNightShift] = useState(false);
     const [isExceptionalShift, setIsExceptionalShift] = useState(false);
     const [days, setDays] = useState({
@@ -105,7 +104,7 @@ const AddShiftRoaster = ({ staff }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (staffId === 0 || profileId === 0
+        if (staffId === 0 && selected.length<=0
         ) {
             return toast.error("Invalid Request")
         }

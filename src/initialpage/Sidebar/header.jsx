@@ -139,8 +139,8 @@ const Header = (props) => {
                 &nbsp;
                 &nbsp;
                 <div className="col-8 d-flex flex-column justify-content-start text-white">
-                  <span className='fw-bold'>{userObj.fullName}</span>
-                  <span style={{ fontSize: "7px", }}>{userObj.email}</span>
+                  <span className='fw-bold'>{userObj?.fullName}</span>
+                  <span style={{ fontSize: "7px", }}>{userObj?.email}</span>
                 </div>
               </div>
             </div>

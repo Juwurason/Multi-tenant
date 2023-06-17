@@ -21,7 +21,7 @@ import { useHistory } from 'react-router-dom';
 
 
 
-const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => {
+const ShiftScheduling = ( ) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
@@ -30,6 +30,10 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
   //Declaring Variables
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
+  const [staff, setStaff] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [schedule, setSchedule] = useState([]);
+const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
@@ -48,6 +52,43 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
 
 
   //Fetching From the endpoints
+  
+  //Fetching From the endpoints
+  const FetchSchedule = async () => {
+    setLoading(true)
+    //All shift Roasters
+    try {
+      const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const schedule = scheduleResponse.data;
+      setSchedule(schedule);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    // All staff
+    try {
+      const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const staff = staffResponse.data;
+      setStaff(staff);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+    //All Client
+    try {
+      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const client = clientResponse.data;
+      setClients(client);
+      setLoading(false)
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    FetchSchedule()
+  }, []);
 
   // Filtering Schedule either by user or Client
   const FilterSchedule = async () => {
@@ -191,7 +232,7 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchSchedule()
+            FetchData()
           } else {
             toast.error(data.message);
           }
@@ -438,19 +479,15 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                   </select>
                 </span>
               </div>
-              <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+           
 
 
                 <div className='row g-0'>
                   {daysOfWeek.map((day, index) => (
 
-                    <Droppable droppableId={day.format('YYYY-MM-DD')}
-                    >
-                      {(provided) => (
+                    
                         <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          index={index}
+                         
 
                         >
                           <div className='border  d-flex justify-content-center py-2 bg-light'>
@@ -484,17 +521,11 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
 
 
                             {activitiesByDay[index].map((activity, index) => (
-                              <Draggable key={index} draggableId={activity.shiftRosterId.toString()} index={index}>
-                                {(provided) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    {/* Render the temporary task if it matches the current draggable item */}
-
+                                
+                                
                                     <div
                                       className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                                      key={index}
                                       style={{
                                         fontSize: '10px',
                                         overflow: 'hidden',
@@ -510,9 +541,9 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                                         <span className='fw-bold' >
                                           {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                         </span>
-                                        <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff.fullName}</span></span>
-                                        <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
-                                        <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
+                                        <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
+                                        <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile?.fullName}</span></span>
+                                        <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity?.activities}</span></span>
                                       </div>
 
                                       {
@@ -588,26 +619,27 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
 
                                     </div>
 
-                                  </div>
-                                )}
+                                  
+                                
 
 
-                              </Draggable>
                             ))}
                             {!loading && activitiesByDay[index].length <= 0 && (
                               <div>
                                 <span>No Activity</span>
                               </div>
                             )}
-                            {provided.placeholder} {/* Include the placeholder element */}
+                          
                           </div>
                         </div>
-                      )}
-                    </Droppable>
+                      
+
+
+
+
                   ))}
                 </div>
 
-              </DragDropContext>
 
             </div>
           </div>
@@ -629,9 +661,9 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                 <>
                   <p><b>Date:</b> {moment(selectedActivity.dateFrom).format('LLL')} - {moment(selectedActivity.dateTo).format('LLL')}</p>
                   <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
-                  <p><b>Staff:</b> {selectedActivity.staff.fullName}</p>
-                  <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
-                  <p><b>Activities:</b> {selectedActivity.activities}</p>
+                  <p><b>Staff:</b> {selectedActivity.staff?.fullName}</p>
+                  <p><b>Client:</b> {selectedActivity.profile?.fullName}</p>
+                  <p><b>Activities:</b> {selectedActivity?.activities}</p>
                 </>
               )}
             </Modal.Body>
@@ -657,7 +689,7 @@ const ShiftScheduling = ({ staff, clients, schedule, setSchedule, loading }) => 
                 <>
                   <div>
                     <span className='fw-bold fs-5'>
-                      Mark Attendance for {selectedActivity.staff.fullName}
+                      Mark Attendance for {selectedActivity.staff?.fullName}
 
                     </span>
                   </div>
