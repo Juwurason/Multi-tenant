@@ -1,13 +1,7 @@
-/**
- * Signin Firebase
- */
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, withRouter } from 'react-router-dom';
 import man from "../../../assets/img/user.jpg"
-import Header from '../../../initialpage/Sidebar/header'
-import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
 import { useCompanyContext } from '../../../context/index.jsx';
@@ -16,28 +10,7 @@ import useHttp from '../../../hooks/useHttp.jsx';
 import ClientChart from '../../../_components/chart/ClientChart.jsx';
 import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineGroup, MdOutlinePages, MdOutlinePersonOutline, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
 import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
-import {
-  BarChart, Bar, Cell, ResponsiveContainer,
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-} from 'recharts';
 
-
-const barchartdata = [
-  { y: '2006', "Total Income": 100, 'Total Outcome': 90 },
-  { y: '2007', "Total Income": 75, 'Total Outcome': 65 },
-  { y: '2008', "Total Income": 50, 'Total Outcome': 40 },
-  { y: '2009', "Total Income": 75, 'Total Outcome': 65 },
-  { y: '2010', "Total Income": 50, 'Total Outcome': 40 },
-  { y: '2011', "Total Income": 75, 'Total Outcome': 65 },
-  { y: '2012', "Total Income": 100, 'Total Outcome': 90 }
-];
-const linechartdata = [
-
-  { y: 'Week 1', "Total Sales": 75, 'Total Revenue': 65, 'Total Outcome': 0 },
-  { y: 'Week 2', "Total Sales": 50, 'Total Revenue': 40, 'Total Outcome': 30 },
-  { y: 'Week 3', "Total Sales": 75, 'Total Revenue': 65, 'Total Outcome': 45 },
-  { y: 'Week 4', "Total Sales": 100, 'Total Revenue': 50, 'Total Outcome': 75 }
-];
 const AdminDashboard = () => {
   const userObj = JSON.parse(localStorage.getItem('user'));
   const [admin, setAdmin] = useState([]);
@@ -56,7 +29,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (isMounted) {
-      FetchStaff();
+      fetchData();
     }
 
     return () => {
@@ -64,80 +37,56 @@ const AdminDashboard = () => {
     };
   }, []);
 
-  async function FetchStaff() {
-    setLoading(true)
-    try {
-      const { data } = await get(`Administrators?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      setAdmin(data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      const { data } = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      setStaff(data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
+  async function fetchData() {
+    setLoading(true);
 
     try {
-      const clientResponse = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      const client = clientResponse.data;
-      const recentUsers = client.slice(-5);
+      const adminPromise = get(`Administrators?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const staffPromise = get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const clientPromise = get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const documentPromise = get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const schedulePromise = get(`/ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const attendancePromise = get(`/Attendances/get_all_attendances_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const progressPromise = get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+      const ticketPromise = get(`/Tickets/get_all_tickets?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
+
+      const [
+        adminResponse,
+        staffResponse,
+        clientResponse,
+        documentResponse,
+        scheduleResponse,
+        attendanceResponse,
+        progressResponse,
+        ticketResponse
+      ] = await Promise.all([
+        adminPromise,
+        staffPromise,
+        clientPromise,
+        documentPromise,
+        schedulePromise,
+        attendancePromise,
+        progressPromise,
+        ticketPromise
+      ]);
+
+      setAdmin(adminResponse.data);
+      setStaff(staffResponse.data);
+      setClients(clientResponse.data);
+      setDocument(documentResponse.data);
+      setSchedule(scheduleResponse.data);
+      setAttendance(attendanceResponse.data);
+      setProgress(progressResponse.data);
+      setTicket(ticketResponse.data);
+      const recentUsers = clientResponse.data.slice(-5);
       setRecentUsers(recentUsers);
-      setClients(client);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
 
-    try {
-      const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      setDocument(data)
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
-    try {
-      const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      const schedule = scheduleResponse.data;
-      setSchedule(schedule);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      const attendanceResponse = await get(`/Attendances/get_all_attendances_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      const attendance = attendanceResponse.data;
-      setAttendance(attendance);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      const progressResponse = await get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      const progress = progressResponse.data;
-      setProgress(progress);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      const ticketResponse = await get(`/Tickets/get_all_tickets?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      const ticket = ticketResponse.data;
-      setTicket(ticket);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-
-    finally {
-      setLoading(false)
-    }
   }
-
 
 
 
@@ -148,19 +97,7 @@ const AdminDashboard = () => {
     setMenu(!menu)
   };
 
-  useEffect(() => {
-    FetchStaff()
-  }, []);
 
-  // useEffect(() => {
-  //   let firstload = localStorage.getItem("firstload")
-  //   if (firstload === "false") {
-  //     setTimeout(function () {
-  //       window.location.reload(1)
-  //       localStorage.removeItem("firstload")
-  //     }, 1000)
-  //   }
-  // });
 
 
 
@@ -216,10 +153,7 @@ const AdminDashboard = () => {
                     link={'/app/support/view-tickets'}
                     loading={loading}
                   />
-                  {/* <DashboardCard title={"Document"}
-                    sty={'danger'} content={document.length} icon={<FaFolderOpen className='fs-4 text-danger' />}
-                    linkTitle={"View Documents"} loading={loading} link={`/app/employee/document`}
-                  /> */}
+
                   <DashboardCard title={"Attendances"} content={attendance.length} icon={<MdOutlineQueryBuilder className='fs-4' />}
                     link={`/app/reports/attendance-reports`} sty={'warning'} loading={loading}
                   />
@@ -374,84 +308,7 @@ const AdminDashboard = () => {
             <div className="row">
               <div className="col-md-12">
                 <div className="row">
-                  {/* <div className="col-md-6 text-center">
-                    <div className="card">
-                      <div className="card-body">
-                        <h3 className="card-title">Total</h3>
 
-                        <ResponsiveContainer width='100%' height={300}>
-                          <BarChart
-
-                            data={barchartdata}
-                            margin={{
-                              top: 5, right: 5, left: 5, bottom: 5,
-                            }}
-                          >
-                            <CartesianGrid />
-                            <XAxis dataKey="y" />
-                            <YAxis />
-
-                            <Legend />
-                            <Bar dataKey="Total Income" fill="#4256D0" />
-                            <Bar dataKey="Total Outcome" fill="#18225C" />
-                          </BarChart>
-                        </ResponsiveContainer>
-
-                      </div>
-                    </div>
-                  </div> */}
-                  {/* <div className="col-md-7 p-2">
-                    <div className="card">
-                      <div className="card-body">
-                        <div className='d-flex justify-content-between'>
-                          <h3 className="card-title">Clients Per</h3>
-                          <div>
-
-                          </div>
-                        </div>
-                        <ResponsiveContainer width='100%' height={300}>
-                          <LineChart data={linechartdata}
-                            margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
-                            <CartesianGrid />
-                            <XAxis dataKey="y" />
-                            <YAxis />
-
-                            <Legend />
-                            <Line type="monotone" dataKey="Total Sales" stroke="#00A31A" fill="#000" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
-                            <Line type="monotone" dataKey="Total Revenue" stroke="#C8102E" fill="#fff" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
-                            <Line type="monotone" dataKey="Total Outcome" stroke="#000" fill="#fff" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 7 }} />
-                          </LineChart>
-                        </ResponsiveContainer>
-
-                        <div className='d-flex justify-content-between'>
-                          <span>20% increase, compared to Last week</span>
-                          <div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-
-                  {/* <div className="col-md-5 p-2">
-                    <div className='p-3 shadow-sm'>
-                      <h4>Staff log</h4>
-                      <div className='d-flex mt-2 justify-content-between'>
-                        <span>John A. clocked in</span>
-                        <span>8:00AM</span>
-                      </div>
-                      <div className='d-flex mt-2 justify-content-between'>
-                        <span>Mary C. clocked in</span>
-                        <span>8:00AM</span>
-                      </div>
-                      <div className='d-flex mt-2 justify-content-between'>
-                        <span>Nelly C. clocked out</span>
-                        <span>8:00PM</span>
-                      </div>
-                    </div>
-
-
-                  </div> */}
 
 
                 </div>
