@@ -1,7 +1,4 @@
-/**
- * Crm Routes
- */
-/* eslint-disable */
+
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import AttendanceReport from './attendancereport';
@@ -9,7 +6,7 @@ import ProgressReport from './progressreport';
 import ProgressReportDetails from '../../../_components/reports/ProgressReportDetails';
 import Invoice from './invoice';
 
-import TimesheetForAll from './timesheetForAll';
+
 
 const ReportsRoute = ({ match }) => (
    <Switch>
