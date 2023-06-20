@@ -18,8 +18,36 @@ import Swal from 'sweetalert2';
 
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDocument } from '../../../store/slices/DocumentSlice';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchClient } from '../../../store/slices/ClientSlice';
 
-const Document = ({ staff, document, clients, loading, FetchData }) => {
+const Document = () => {
+    const dispatch = useDispatch();
+
+    // Fetch staff data and update the state
+    useEffect(() => {
+        dispatch(fetchDocument());
+        dispatch(fetchStaff());
+        dispatch(fetchClient());
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.document.isLoading);
+    const document = useSelector((state) => state.document.data);
+    const staff = useSelector((state) => state.staff.data);
+    const clients = useSelector((state) => state.client.data);
+
+    useEffect(() => {
+        // Check if staff data already exists in the store
+        if (!document.length) {
+            // Fetch staff data only if it's not available in the store
+            dispatch(fetchDocument());
+        }
+    }, [dispatch, document]);
+
+
     //Declaring Variables
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
@@ -48,12 +76,16 @@ const Document = ({ staff, document, clients, loading, FetchData }) => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <div className='d-flex flex-column gap-1 p-2'>
-                    <span> {row.documentName}</span>
+                <div className='d-flex flex-column gap-1 p-2' style={{ overflow: 'hidden' }}>
+                    <span
 
-                    <span className='d-flex' style={{ overflow: 'hidden' }}>
+                        data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.documentName}`}
+                    > {row.documentName}</span>
+
+                    <span className='d-flex'>
                         <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
                             title='View'
+
                             onClick={() => handleView(row.documentUrl)}
                         >
 
@@ -95,7 +127,7 @@ const Document = ({ staff, document, clients, loading, FetchData }) => {
 
 
 
-    const [menu, setMenu] = useState(false)
+
     const downloadLinkRef = useRef(null);
 
     const handleView = (documentUrl) => {
@@ -108,10 +140,6 @@ const Document = ({ staff, document, clients, loading, FetchData }) => {
         downloadLinkRef.current.click();
     };
 
-
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    }
 
 
     const handleRejectModal = (e) => {
@@ -326,7 +354,9 @@ const Document = ({ staff, document, clients, loading, FetchData }) => {
     }
 
     const filteredData = document.filter((item) =>
-        item.documentName.toLowerCase().includes(searchText.toLowerCase())
+        item?.documentUrl.toLowerCase().includes(searchText.toLowerCase()) ||
+        item?.user.toLowerCase().includes(searchText.toLowerCase()) ||
+        item?.documentName.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -345,230 +375,224 @@ const Document = ({ staff, document, clients, loading, FetchData }) => {
     };
     return (
         <>
-            <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
 
-                <div className="page-wrapper">
-                    <Helmet>
-                        <title>Document</title>
-                        <meta name="description" content="Document Upload" />
-                    </Helmet>
-                    {/* Page Content */}
-                    <div className="content container-fluid">
-                        {/* Page Header */}
-                        <div className="page-header">
-                            <div className="row align-items-center">
-                                <div className="col">
-                                    <h3 className="page-title">Document</h3>
-                                    <ul className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                        <li className="breadcrumb-item active">Documents</li>
-                                    </ul>
-                                </div>
 
+            <div className="page-wrapper">
+                <Helmet>
+                    <title>Document</title>
+                    <meta name="description" content="Document Upload" />
+                </Helmet>
+                {/* Page Content */}
+                <div className="content container-fluid">
+                    {/* Page Header */}
+                    <div className="page-header">
+                        <div className="row align-items-center">
+                            <div className="col">
+                                <h3 className="page-title">Document</h3>
+                                <ul className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item active">Documents</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    {/* /Page Header */}
+
+                    {/* Search Filter */}
+
+
+                    <div className="row shadow-sm py-2">
+                        <div className="col-sm-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Staff Name</label>
+                                <div>
+                                    <select className="form-select">
+                                        <option defaultValue hidden>--Select a staff--</option>
+                                        {
+                                            staff.map((data, index) =>
+                                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                        }
+                                    </select></div>
                             </div>
                         </div>
-                        {/* /Page Header */}
-
-                        {/* Search Filter */}
-
-
-                        <div className="row shadow-sm py-2">
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Staff Name</label>
-                                    <div>
-                                        <select className="form-select">
-                                            <option defaultValue hidden>--Select a staff--</option>
-                                            {
-                                                staff.map((data, index) =>
-                                                    <option value={data.staffId} key={index}>{data.fullName}</option>)
-                                            }
-                                        </select></div>
-                                </div>
-                            </div>
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Client Name</label>
-                                    <div>
-                                        <select className="form-select">
-                                            <option defaultValue hidden>--Select a Client--</option>
-                                            {
-                                                clients.map((data, index) =>
-                                                    <option value={data.staffId} key={index}>{data.fullName}</option>)
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Date From</label>
-                                    <div><input className="form-control datetimepicker" type="datetime-local" /></div>
-                                </div>
-                            </div>
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Date To</label>
-                                    <div><input className="form-control datetimepicker" type="datetime-local" /></div>
-                                </div>
-                            </div>
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">Status</label>
-                                    <div>
-                                        <select className="form-select">
-                                            <option defaultValue hidden>--Select a Status...</option>
-                                            <option value="">Accepted</option>
-                                            <option value="">Rejected</option>
-                                            <option value="">Pending</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="col-sm-4">
-                                <div className="form-group">
-                                    <label className="col-form-label">User Role</label>
-                                    <div>
-                                        <select className="form-select">
-                                            <option defaultValue hidden>--Select Role--</option>
-                                            <option value="">Staff</option>
-                                            <option value="">Client</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="col-auto text-left">
-                                <div className="form-group">
-                                    <button className="btn btn-info add-btn text-white rounded-2 m-r-5">Load</button>
-
-
+                        <div className="col-sm-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Client Name</label>
+                                <div>
+                                    <select className="form-select">
+                                        <option defaultValue hidden>--Select a Client--</option>
+                                        {
+                                            clients.map((data, index) =>
+                                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                        }
+                                    </select>
                                 </div>
                             </div>
 
                         </div>
+                        <div className="col-sm-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Date From</label>
+                                <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                            </div>
+                        </div>
+                        <div className="col-sm-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Date To</label>
+                                <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                            </div>
+                        </div>
+                        <div className="col-sm-4">
+                            <div className="form-group">
+                                <label className="col-form-label">Status</label>
+                                <div>
+                                    <select className="form-select">
+                                        <option defaultValue hidden>--Select a Status...</option>
+                                        <option value="">Accepted</option>
+                                        <option value="">Rejected</option>
+                                        <option value="">Pending</option>
 
-                        {/* <div className="submit-section">
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="col-sm-4">
+                            <div className="form-group">
+                                <label className="col-form-label">User Role</label>
+                                <div>
+                                    <select className="form-select">
+                                        <option defaultValue hidden>--Select Role--</option>
+                                        <option value="">Staff</option>
+                                        <option value="">Client</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="col-auto text-left">
+                            <div className="form-group">
+                                <button className="btn btn-info add-btn text-white rounded-2 m-r-5">Load</button>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* <div className="submit-section">
                         </div> */}
 
 
-                        {/* /Search Filter */}
+                    {/* /Search Filter */}
 
 
 
 
 
-                        <div className='mt-4 border'>
-                            <div className="row px-2 py-3">
+                    <div className='mt-4 border'>
+                        <div className="row px-2 py-3">
 
-                                <div className="col-md-3">
-                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                        <input type="text" placeholder="Search Documents" className='border-0 outline-none' onChange={handleSearch} />
-                                        <GoSearch />
-                                    </div>
+                            <div className="col-md-3">
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search Documents" className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
                                 </div>
-                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                    <CSVLink
-                                        data={document}
-                                        filename={"document.csv"}
+                            </div>
+                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                <CSVLink
+                                    data={document}
+                                    filename={"document.csv"}
 
-                                    >
-                                        <button
-
-                                            className='btn text-info'
-                                            title="Export as CSV"
-                                        >
-                                            <FaFileCsv />
-                                        </button>
-
-                                    </CSVLink>
+                                >
                                     <button
-                                        className='btn text-danger'
-                                        onClick={handlePDFDownload}
-                                        title="Export as PDF"
+
+                                        className='btn text-info'
+                                        title="Export as CSV"
                                     >
-                                        <FaFilePdf />
+                                        <FaFileCsv />
                                     </button>
+
+                                </CSVLink>
+                                <button
+                                    className='btn text-danger'
+                                    onClick={handlePDFDownload}
+                                    title="Export as PDF"
+                                >
+                                    <FaFilePdf />
+                                </button>
+                                <button
+                                    className='btn text-primary'
+
+                                    onClick={handleExcelDownload}
+                                    title="Export as Excel"
+                                >
+                                    <FaFileExcel />
+                                </button>
+                                <CopyToClipboard text={JSON.stringify(document)}>
                                     <button
-                                        className='btn text-primary'
 
-                                        onClick={handleExcelDownload}
-                                        title="Export as Excel"
+                                        className='btn text-warning'
+                                        title="Copy Table"
+                                        onClick={() => toast("Table Copied")}
                                     >
-                                        <FaFileExcel />
+                                        <FaCopy />
                                     </button>
-                                    <CopyToClipboard text={JSON.stringify(document)}>
-                                        <button
-
-                                            className='btn text-warning'
-                                            title="Copy Table"
-                                            onClick={() => toast("Table Copied")}
-                                        >
-                                            <FaCopy />
-                                        </button>
-                                    </CopyToClipboard>
-                                </div>
-                                {/* <div className='col-md-4'>
+                                </CopyToClipboard>
+                            </div>
+                            {/* <div className='col-md-4'>
                                     <Link to={''} className="btn add-btn btn-info text-white rounded-2">
                                         Add New Document</Link>
                                 </div> */}
-                            </div>
-                            <DataTable data={filteredData} columns={columns}
-                                pagination
-                                highlightOnHover
-                                searchable
-                                searchTerm={searchText}
-                                progressPending={loading}
-                                progressComponent={<div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>}
-                                expandableRows
-                                expandableRowsComponent={ButtonRow}
-                                paginationTotalRows={filteredData.length}
-                                customStyles={customStyles}
-                                responsive
-
-                            />
-
                         </div>
+                        <DataTable data={filteredData} columns={columns}
+                            pagination
+                            highlightOnHover
+                            searchable
+                            searchTerm={searchText}
+                            expandableRows
+                            expandableRowsComponent={ButtonRow}
+                            paginationTotalRows={filteredData.length}
+                            customStyles={customStyles}
+                            responsive
 
-
+                        />
 
                     </div>
-                    <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Reject Document</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <label htmlFor="">Please provide reasons for rejecting document</label>
-                                <br />
-                                <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
-                                    onChange={e => setReason(e.target.value)} />
-                            </div>
-                            <br />
-                            <div>
-                                <label htmlFor="">Set a new deadline</label>
-                                <br />
-                                <input type="date" className='form-control'
-                                    onChange={e => setDeadline(e.target.value)}
-                                />
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button onClick={handleReject} className="btn btn-danger">Reject Document</button>
-                        </Modal.Footer>
-                    </Modal>
+
+
 
                 </div>
+                <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Reject Document</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>
+                            <label htmlFor="">Please provide reasons for rejecting document</label>
+                            <br />
+                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
+                                onChange={e => setReason(e.target.value)} />
+                        </div>
+                        <br />
+                        <div>
+                            <label htmlFor="">Set a new deadline</label>
+                            <br />
+                            <input type="date" className='form-control'
+                                onChange={e => setDeadline(e.target.value)}
+                            />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button onClick={handleReject} className="btn btn-danger">Reject Document</button>
+                    </Modal.Footer>
+                </Modal>
+
             </div>
+
             <Offcanvas />
         </>
     );

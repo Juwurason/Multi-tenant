@@ -6,13 +6,7 @@ import Apps from '../MainPage/Main/Apps';
 import UIinterface from '../MainPage/UIinterface';
 //Pages
 import ProfilePage from '../MainPage/Pages/Profile';
-import Subscription from '../MainPage/Pages/Subscription';
-import Pages from '../MainPage/Pages/Pages';
 //Performance
-import Performance from '../MainPage/Performance';
-import Goals from '../MainPage/Performance/Goals';
-import Performances from '../MainPage/Performance/Performance';
-import Training from '../MainPage/Performance/Training';
 //HR
 import Reports from '../MainPage/HR/Reports';
 import Account from '../MainPage/Employees/Accounts'
@@ -57,35 +51,13 @@ export default [
       component: ProfilePage
    },
 
-   {
-      path: 'subscription',
-      component: Subscription
-   },
-   {
-      path: 'pages',
-      component: Pages
-   },
 
-   {
-      path: 'performance',
-      component: Performance
-   },
-   {
-      path: 'goals',
-      component: Goals
-   },
    {
       path: 'support',
       component: Support
    },
-   {
-      path: 'performances',
-      component: Performances
-   },
-   {
-      path: 'training',
-      component: Training
-   },
+
+
 
    {
       path: 'reports',

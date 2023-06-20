@@ -15,8 +15,29 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import Swal from 'sweetalert2';
 import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchClient } from '../../../store/slices/ClientSlice';
 
-const Clients = ({ clients, loading, FetchData }) => {
+const Clients = () => {
+  const dispatch = useDispatch();
+
+  // Fetch staff data and update the state
+  useEffect(() => {
+    dispatch(fetchClient());
+  }, [dispatch]);
+
+  // Access the entire state
+  const loading = useSelector((state) => state.client.isLoading);
+  const clients = useSelector((state) => state.client.data);
+
+  useEffect(() => {
+    // Check if staff data already exists in the store
+    if (!clients.length) {
+      // Fetch staff data only if it's not available in the store
+      dispatch(fetchClient());
+    }
+  }, [dispatch, clients]);
+
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
 
@@ -386,12 +407,12 @@ const Clients = ({ clients, loading, FetchData }) => {
             highlightOnHover
             searchable
             searchTerm={searchText}
-            progressPending={loading}
-            progressComponent={<div className='text-center fs-1'>
-              <div className="spinner-grow text-secondary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>}
+            // progressPending={loading}
+            // progressComponent={<div className='text-center fs-1'>
+            //   <div className="spinner-grow text-secondary" role="status">
+            //     <span className="sr-only">Loading...</span>
+            //   </div>
+            // </div>}
             expandableRows
             responsive
             expandableRowsComponent={ButtonRow}

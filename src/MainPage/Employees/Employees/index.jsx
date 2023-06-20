@@ -29,16 +29,7 @@ const EmployeesRoute = ({ match }) => {
 
    const FetchData = async () => {
       setLoading(true)
-      try {
-         const { data } = await get(`Administrators?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-         setAdmin(data);
-         setLoading(false)
-      } catch (error) {
-         console.log(error);
-         setLoading(false)
-      } finally {
-         setLoading(false)
-      }
+
       try {
          const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
          const staff = staffResponse.data;
@@ -87,20 +78,18 @@ const EmployeesRoute = ({ match }) => {
       <Switch>
          <Redirect exact from={`${match.url}/`} to={`${match.url}/allemployees`} />
          <Route
-            path={`${match.url}/alladmin`}
-            render={() => <AllAdmin admin={admin} FetchData={FetchData} loading={loading} />}
-         />
+            path={`${match.url}/alladmin`} component={AllAdmin} />
          <Route
             path={`${match.url}/allstaff`}
-            render={() => <AllEmployees staff={staff} FetchData={FetchData} loading={loading} />}
+            component={AllEmployees}
          />
          <Route
             path={`${match.url}/clients`}
-            render={() => <Clients clients={clients} FetchData={FetchData} loading={loading} />}
+            component={Clients}
          />
          <Route
             path={`${match.url}/document`}
-            render={() => <Document clients={clients} FetchData={FetchData} loading={loading} document={document} staff={staff} />}
+            component={Document}
          />
 
          <Route path={`${match.url}/addclients`} component={AddClients} />

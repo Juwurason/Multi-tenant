@@ -14,21 +14,38 @@ import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
-import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
-const AllEmployees = ({ staff, FetchData, loading }) => {
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { useDispatch, useSelector } from 'react-redux';
+const AllEmployees = () => {
+  const dispatch = useDispatch();
+
+  // Fetch staff data and update the state
+  useEffect(() => {
+    dispatch(fetchStaff());
+  }, [dispatch]);
+
+  // Access the entire state
+  const loading = useSelector((state) => state.staff.isLoading);
+  const staff = useSelector((state) => state.staff.data);
+
+  useEffect(() => {
+    // Check if staff data already exists in the store
+    if (!staff.length) {
+      // Fetch staff data only if it's not available in the store
+      dispatch(fetchStaff());
+    }
+  }, [dispatch, staff]);
+
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
   // const [staff, setStaff] = useState([]);
 
   const columns = [
-    // {
-    //   name: '#',
-    //   cell: (row, index) => index + 1
-    // },
+
     {
       name: 'Staff ID',
       selector: row => row.maxStaffId,
@@ -87,25 +104,9 @@ const AllEmployees = ({ staff, FetchData, loading }) => {
 
   ];
 
-  // const FetchStaff = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-  //     const staff = staffResponse.data;
-  //     setStaff(staff);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // useEffect(() => {
 
-  //   FetchStaff()
-  // }, []);
 
-  const [menu, setMenu] = useState(false);
+
 
   const handleDelete = async (e) => {
     Swal.fire({
@@ -185,18 +186,7 @@ const AllEmployees = ({ staff, FetchData, loading }) => {
   }
 
 
-  const toggleMobileMenu = () => {
-    setMenu(!menu)
-  }
 
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
 
   const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
@@ -319,38 +309,35 @@ const AllEmployees = ({ staff, FetchData, loading }) => {
 
   return (
     <>
-      <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-        <Header onMenuClick={(value) => toggleMobileMenu()} />
-        <Sidebar />
-        <div className="page-wrapper">
-          <Helmet>
-            <title>Staff</title>
-            <meta name="description" content="Login page" />
-          </Helmet>
-          {/* Page Content */}
-          <div className="content container-fluid">
+      <div className="page-wrapper">
+        <Helmet>
+          <title>Staff</title>
+          <meta name="description" content="Login page" />
+        </Helmet>
+        {/* Page Content */}
+        <div className="content container-fluid">
 
-            <div className="page-header">
-              <div className="row align-items-center">
-                <div className="col">
-                  <h3 className="page-title">Staffs</h3>
-                  <ul className="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                    <li className="breadcrumb-item active">Staffs</li>
-                  </ul>
-                </div>
-                <div className="col-auto float-end ml-auto">
+          <div className="page-header">
+            <div className="row align-items-center">
+              <div className="col">
+                <h3 className="page-title">Staffs</h3>
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item active">Staffs</li>
+                </ul>
+              </div>
+              <div className="col-auto float-end ml-auto">
 
-                </div>
               </div>
             </div>
+          </div>
 
 
 
 
 
-            {/* <div className="row filter-row">
+          {/* <div className="row filter-row">
               <div className="col-sm-6 col-md-3">
                 <div className="form-group form-focus">
                   <label className="focus-label">Staff ID</label>
@@ -377,156 +364,86 @@ const AllEmployees = ({ staff, FetchData, loading }) => {
 
 
 
-            {/* Search Filter */}
+          {/* Search Filter */}
 
 
-            <div className='mt-4 border'>
-              <div className="row px-2 py-3">
+          <div className='mt-4 border'>
+            <div className="row px-2 py-3">
 
-                <div className="col-md-3">
-                  <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                    <input type="text" placeholder="Search staffs" className='border-0 outline-none' onChange={handleSearch} />
-                    <GoSearch />
-                  </div>
-                </div>
-                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                  <CSVLink
-                    data={staff}
-                    filename={"staff.csv"}
-
-                  >
-                    <button
-
-                      className='btn text-info'
-                      title="Export as CSV"
-                    >
-                      <FaFileCsv />
-                    </button>
-
-                  </CSVLink>
-                  <button
-                    className='btn text-danger'
-                    onClick={handlePDFDownload}
-                    title="Export as PDF"
-                  >
-                    <FaFilePdf />
-                  </button>
-                  <button
-                    className='btn text-primary'
-
-                    onClick={handleExcelDownload}
-                    title="Export as Excel"
-                  >
-                    <FaFileExcel />
-                  </button>
-                  <CopyToClipboard text={JSON.stringify(staff)}>
-                    <button
-
-                      className='btn text-warning'
-                      title="Copy Table"
-                      onClick={() => toast("Table Copied")}
-                    >
-                      <FaCopy />
-                    </button>
-                  </CopyToClipboard>
-                </div>
-                <div className='col-md-4'>
-                  <Link to={'/app/employee/addstaff'} className="btn btn-info text-white add-btn rounded-2">
-                    Create New staff</Link>
+              <div className="col-md-3">
+                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                  <input type="text" placeholder="Search staffs" className='border-0 outline-none' onChange={handleSearch} />
+                  <GoSearch />
                 </div>
               </div>
-              <DataTable data={filteredData} columns={columns}
-                pagination
-                highlightOnHover
-                searchable
-                searchTerm={searchText}
-                progressPending={loading}
-                progressComponent={<div className='text-center fs-1'>
-                  <div className="spinner-grow text-secondary" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>}
-                expandableRows
-                expandableRowsComponent={ButtonRow}
-                paginationTotalRows={filteredData.length}
-                customStyles={customStyles}
-                responsive
+              <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                <CSVLink
+                  data={staff}
+                  filename={"staff.csv"}
 
+                >
+                  <button
 
-              />
+                    className='btn text-info'
+                    title="Export as CSV"
+                  >
+                    <FaFileCsv />
+                  </button>
 
+                </CSVLink>
+                <button
+                  className='btn text-danger'
+                  onClick={handlePDFDownload}
+                  title="Export as PDF"
+                >
+                  <FaFilePdf />
+                </button>
+                <button
+                  className='btn text-primary'
+
+                  onClick={handleExcelDownload}
+                  title="Export as Excel"
+                >
+                  <FaFileExcel />
+                </button>
+                <CopyToClipboard text={JSON.stringify(staff)}>
+                  <button
+
+                    className='btn text-warning'
+                    title="Copy Table"
+                    onClick={() => toast("Table Copied")}
+                  >
+                    <FaCopy />
+                  </button>
+                </CopyToClipboard>
+              </div>
+              <div className='col-md-4'>
+                <Link to={'/app/employee/addstaff'} className="btn btn-info text-white add-btn rounded-2">
+                  Create New staff</Link>
+              </div>
             </div>
+            <DataTable data={filteredData} columns={columns}
+              pagination
+              highlightOnHover
+              searchable
+              searchTerm={searchText}
+              expandableRows
+              expandableRowsComponent={ButtonRow}
+              paginationTotalRows={filteredData.length}
+              customStyles={customStyles}
+              responsive
 
 
+            />
 
-
-
-
-            {/* <div className="row staff-grid-row">
-              {
-                loading && <div className='text-center fs-1'>
-                  <div className="spinner-grow text-secondary" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
-              }
-
-              {
-                staff.map((data, index) =>
-                  <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
-                    <div className="profile-widget">
-                      <div className="profile-img">
-                        <Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`} className="avatar"><img src={Avatar_02} alt="" /></Link>
-                      </div>
-                      <div className="dropdown profile-action">
-                        <a href="javascript:void(0)" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><FaEllipsisV /></a>
-                        <div className="dropdown-menu dropdown-menu-right">
-                          <Link to={`/app/profile/edit-profile/${data.staffId}`} className="dropdown-item">
-                            <i className="fa fa-pencil m-r-5" /> Edit</Link>
-                          <a className="dropdown-item" href="javascript:void(0)" onClick={() => handleDelete(data.staffId)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
-
-
-
-
-                        </div>
-                      </div>
-                      <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={`/app/profile/employee-profile/${data.staffId}/${data.firstName}`}>{data.firstName} {data.surName}</Link></h4>
-                    </div>
-
-
-
-
-                  </div>
-                )
-              }
-
-              {
-                !loading && staff.length <= 0 && <div className='text-center text-danger fs-6'>
-                  <p>No data found</p>
-                </div>
-              }
-
-
-
-
-
-
-
-            </div> */}
           </div>
-          {/* /Page Content */}
-          {/* Add Employee Modal */}
-          {/* <Addemployee /> */}
-          {/* /Add Employee Modal */}
-          {/* Edit Employee Modal */}
-          {/* <Editemployee /> */}
-          {/* /Edit Employee Modal */}
-          {/* Delete Employee Modal */}
 
-          {/* /Delete Employee Modal */}
         </div>
+        {/* /Page Content */}
+
       </div>
-      <Offcanvas />
+
+      {/* <Offcanvas /> */}
     </>
 
   );
