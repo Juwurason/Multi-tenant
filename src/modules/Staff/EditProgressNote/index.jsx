@@ -102,7 +102,8 @@ const EditProgressNote = () => {
       toast.success(savePro.message)
       setLoading1(false)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+       toast.error(error.response.data.title)
     }
     finally {
       setLoading1(false)

@@ -8,162 +8,55 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import Swal from 'sweetalert2';
+import moment from 'moment';
+
+function formatDuration(duration) {
+    if (duration) {
+        const durationInMilliseconds = duration / 10000; // Convert ticks to milliseconds
+
+        const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+        const hours = Math.floor(durationInMinutes / 60);
+        const minutes = durationInMinutes % 60;
+
+        return `${hours} Hrs ${minutes} min`;
+    }
+
+    return "0 Hrs 0 min"; // Return an empty string if duration is not available
+}
 
 const AttendanceDetails = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, pro } = useParams()
-
     const [details, setDetails] = useState('')
-    const [staff, setStaff] = useState('')
-    const [kilometer, setKilometer] = useState('')
-    const [editpro, setEditPro] = useState({})
-    const [companyId, setCompanyId] = useState('')
+    const [staffName, setStaffName] = useState('')
     const { get, post } = useHttp();
     const { loading, setLoading } = useCompanyContext();
-    const [loading1, setLoading1] = useState(false);
-    const [loading2, setLoading2] = useState(false);
-    const navigate = useHistory()
-
 
     const FetchSchedule = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/Attendances/edit/${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
-            setCompanyId(staff.companyID)
-            setStaff(staff.staff.fullName);
-            setDetails(staff.profile);
+            const { data } = await get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setStaffName(data.staff.fullName);
+            setDetails(data);
             setLoading(false);
         } catch (error) {
             console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
         finally {
             setLoading(false)
         }
 
-        // try {
-        //   const editProgress = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
-        //   const editpro = editProgress;
-        //   setEditPro(editpro.data);
-        //   setLoading(false)
-        // } catch (error) {
-        //   console.log(error);
-        // }
-        // finally {
-        //   setLoading(false)
-        // }
 
     };
     useEffect(() => {
         FetchSchedule()
     }, []);
 
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditPro({
-            ...editpro,
-            [name]: newValue
-        });
-    }
-    const formatDate = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-    const today = new Date();
-    const formattedDate = formatDate(today);
 
 
-    // Pass `formattedDate` to your endpoint or perform any other actions here
-
-    //   const SaveProgress = async (e) => {
-    //     e.preventDefault()
-    //     setLoading1(true)
-    //     const info = {
-    //       progressNoteId: pro,
-    //       report: editpro.report,
-    //       progress: editpro.progress,
-    //       position: "0",
-    //       followUp: editpro.followUp,
-    //       date: formattedDate,
-    //       staff: staff,
-    //       startKm: editpro.startKm,
-    //       profileId: details.profileId,
-    //       companyID: companyId,
-    //     }
-    //     try {
-    //       const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);
-    //       const savePro = saveProgress.data;
-    //       toast.success(savePro.message)
-    //       setLoading1(false)
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //     finally {
-    //       setLoading1(false)
-    //     }
-    //   }
-
-
-
-    //   const CreateProgress = async (e) => {
-    //     e.preventDefault()
-    //     const info = {
-    //       progressNoteId: Number(pro),
-    //       report: editpro.report,
-    //       progress: editpro.progress,
-    //       position: "",
-    //       followUp: editpro.followUp,
-    //       staff: staff,
-    //       startKm: editpro.startKm,
-    //       profileId: details.profileId,
-    //       companyID: companyId,
-    //       date: ""
-    //     }
-    //     Swal.fire({
-    //       html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
-    //       <h5>Do you wish to proceed ?<h5/>
-    //       `,
-    //       icon: 'warning',
-    //       showCancelButton: true,
-    //       confirmButtonColor: '#1C75BC',
-    //       cancelButtonColor: '#777',
-    //       confirmButtonText: 'Proceed',
-    //       showLoaderOnConfirm: true,
-    //     }).then(async (result) => {
-
-    //       if (result.isConfirmed) {
-    //         setLoading2(false)
-    //         try {
-    //           const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
-    //           if (data.status === "Success") {
-    //             Swal.fire(
-    //               '',
-    //               `${data.message}`,
-    //               'success'
-    //             )
-    //             setLoading2(false)
-    //             navigate.push(`/staff/staff-report/${uid}`)
-    //           }
-    //         } catch (error) {
-    //           console.log(error);
-    //           toast.error(error.response.data.message);
-    //           setLoading2(false)
-    //         }
-    //         finally {
-    //           setLoading2(false)
-    //         }
-
-
-    //       }
-    //     })
-
-
-    //   }
 
     return (
         <>
@@ -202,35 +95,35 @@ const AttendanceDetails = () => {
                                     <ul className="personal-info">
                                         <li>
                                             <div className="title">ClockIn</div>
-                                            <div className="text"></div>
+                                            <div className="text">{moment(details.clockIn).format('lll')}</div>
                                         </li>
                                         <li>
                                             <div className="title">ClockOut</div>
-                                            <div className="text"></div>
+                                            <div className="text">{moment(details.clockOut).format('lll')}</div>
                                         </li>
                                         <li>
                                             <div className="title">Duration</div>
-                                            <div className="text"></div>
+                                            <div className="text">{formatDuration(details.duration)}</div>
                                         </li>
                                         <li>
                                             <div className="title">Staff</div>
-                                            <div className="text"></div>
+                                            <div className="text">{staffName}</div>
                                         </li>
                                         <li>
                                             <div className="title">Kilometre</div>
-                                            <div className="text"></div>
+                                            <div className="text">{details.startKm}Km</div>
                                         </li>
                                         <li>
                                             <div className="title">Report</div>
-                                            <div className="text"><a className='text-primary' href={`tel:$ber}`}></a></div>
+                                            <div className="text">{details.report}</div>
                                         </li>
                                         <li>
                                             <div className="title">ImageUrl</div>
-                                            <div className="text"></div>
+                                            <div className="text"><img src={details.imageFIle} alt="" width={"100%"} /></div>
                                         </li>
                                         <li>
                                             <div className="title">Date Created</div>
-                                            <div className="text"></div>
+                                            <div className="text">{moment(details.dateCreated).format('lll')}</div>
                                         </li>
 
                                     </ul>

@@ -202,7 +202,7 @@ const StaffProgressNote = ({staffPro, FetchData}) => {
           companyID: selectedActivity.companyId,
         }
         try {
-          const {data} = await privateHttp.post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${selectedActivity.progressNoteId}`, info);
+          const {data} = await privateHttp.post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}`, info);
         //   console.log(data);
           toast.success(data.message)
           setShowModal(false);
