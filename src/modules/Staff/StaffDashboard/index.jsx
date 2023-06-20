@@ -11,68 +11,26 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
-import { useCompanyContext } from '../../../context/index.jsx';
-import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
-import useHttp from '../../../hooks/useHttp.jsx';
-import { MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineSummarize, MdOutlineQueryBuilder, MdOutlineSwitchAccount, MdHourglassTop, MdHourglassBottom, MdPerson, MdPersonOutline } from 'react-icons/md';
-import man from "../../../assets/img/user.jpg"
-import StaffSidebar from '../Components/StaffSidebar';
+import { MdHourglassTop, MdHourglassBottom, MdPersonOutline } from 'react-icons/md';
 import { BsClockHistory } from 'react-icons/bs';
 import { BiStopwatch } from 'react-icons/bi';
+import { CiStickyNote } from 'react-icons/ci';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { Modal } from 'react-bootstrap';
-import StaffHeader from '../Components/StaffHeader/index.jsx';
 
 dayjs.extend(isBetween);
 
 const StaffDashboard = ({roster, loading}) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
-
-  // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
-  const userObj = JSON.parse(localStorage.getItem('user'));
-  // const [roster, setRoster] = useState([]);
-  // const { loading, setLoading } = useCompanyContext();
-  const [document, setDocument] = useState([]);
-  const { get } = useHttp();
-
-  // let isMounted = true;
-
-
-
-  // useEffect(() => {
-  //   if (isMounted) {
-  //     FetchStaff();
-  //   }
-
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, []);
-
-  const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
-
-  // async function FetchStaff() {
-  //   setLoading(true)
-  //   try {
-  //     const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-  //     const activities = data.shiftRoster;
-  //     setRoster(activities);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-
-  // }
-
+  
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
   const daysOfWeek = [
     currentDate.subtract(1, 'day'),
     currentDate,
-    currentDate.add(1, 'day'),
-    currentDate.add(2, 'day')
+    currentDate.add(1, 'day')
   ];
 
   const activitiesByDay = daysOfWeek.map((day) =>
@@ -81,15 +39,11 @@ const StaffDashboard = ({roster, loading}) => {
     )
 
   );
-
+ 
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
     setMenu(!menu)
   };
-
-  // useEffect(() => {
-  //   FetchStaff()
-  // }, []);
 
   useEffect(() => {
     let firstload = localStorage.getItem("firstload")
@@ -127,13 +81,18 @@ const StaffDashboard = ({roster, loading}) => {
       }
 
     }, 2000); // Set an appropriate delay to simulate the loading time
-
+    
     // Optionally, you can clear the loading state after the specified time
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
   };
-
+  
+  const rosterId = JSON.parse(localStorage.getItem('rosterId'))
+  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
+  const HandleFill = () =>{
+    navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
+  }
   const [showModal, setShowModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
@@ -142,7 +101,7 @@ const StaffDashboard = ({roster, loading}) => {
     setShowModal(true);
   };
 
-
+//  4681
   function getActivityStatus(activitiesByDay) {
     if (!activitiesByDay) {
       return 'No Shift Today';
@@ -158,14 +117,16 @@ const StaffDashboard = ({roster, loading}) => {
     else if (activityDateTo < nowInAustraliaTime) {
       return activitiesByDay[1][0].attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true) {
+    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true && activitiesByDay[1][0].isEnded === false ) {
+      return 'You are already Clocked in'
+    }
+    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true && activitiesByDay[1][0].isEnded === true) {
       return 'Present';
     }
     else {
       return 'Clock-In';
     }
   }
-
 
   return (
     <>
@@ -265,14 +226,33 @@ const StaffDashboard = ({roster, loading}) => {
                                 }
                               </span>
                             ) : (
+                              <div className='d-flex gap-2 flex-wrap justify-content-center'>
                               <small
                                 className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
                                   getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
+                                  getActivityStatus(activitiesByDay) === 'You are already Clocked in' ? 'bg-primary text-white' :
                                     getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
                                   }`}
                               >
                                 {getActivityStatus(activitiesByDay)}
                               </small>
+
+                              {getActivityStatus(activitiesByDay) === 'You are already Clocked in' && (
+                                      <button
+                                        className='btn btn-secondary text-white p-2 rounded'
+                                        onClick={HandleFill}
+                                      >
+                                        {isLoading ?
+                                  <div>
+                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                      <span class="visually-hidden">Loading...</span>
+                                    </div> Please wait....
+                                  </div>
+                                  : <span> <CiStickyNote /> Fill progress note</span>
+                                }
+                                      </button>
+                                    )}
+                              </div>
                             )}
                           </>
                         ) : (
@@ -319,21 +299,21 @@ const StaffDashboard = ({roster, loading}) => {
               <div className='col-md-4 p-2 d-flex flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
                   <h3>Upcoming Shift</h3>
-                  {/* {activitiesByDay[3].length > 0 ? (
-                    activitiesByDay[3][0]?.map(activity => (
-                      <span className="mt-2" key={activity.id}>
+                  {activitiesByDay[2].length > 0 ? (
+                    // activitiesByDay[3][0]?.map(activity => (
+                      <span className="mt-2">
                         <div className="d-flex justify-content-between text-dark">
                           <div className='d-flex flex-column justify-content-start'>
-                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
-                            <span className='text-dark fs-7 fw-bold'>{activity.profile.fullName}</span>
+                            <span style={{ fontSize: "10px" }}>{dayjs(activitiesByDay[2][0].dateFrom).format('dddd MMMM D, YYYY')}</span>
+                            <span className='text-dark fs-7 fw-bold'>{activitiesByDay[2][0].profile.fullName}</span>
                           </div>
                          
                         </div>
                       </span>
-                    ))
+                    // ))
                   ) : (
                     <span>No upcoming shifts</span>
-                  )} */}
+                  )}
                   <div className='d-flex justify-content-end mt-2'>
                     <Link to="/staff/main/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
                       See all <FaLongArrowAltRight className='fs-3' />
@@ -356,7 +336,7 @@ const StaffDashboard = ({roster, loading}) => {
                   <>
                     <p><b>Date:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</p>
                     <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
-                    <p><b>Description:</b> {selectedActivity.activities}</p>
+                    <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
                   </>
                 )}
               </Modal.Body>

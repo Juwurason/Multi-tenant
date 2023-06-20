@@ -18,7 +18,7 @@ const ProgressNote = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useHistory()
   const { uid, name } = useParams()
-
+  
   const [details, setDetails] = useState('')
   const [staff, setStaff] = useState('')
   const [report, setReport] = useState('')
@@ -42,7 +42,8 @@ const ProgressNote = () => {
       setDetails(staff.profile);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
@@ -50,6 +51,7 @@ const ProgressNote = () => {
 
     try {
       const { data } = await get(`/Attendances/clock_in?userId=${user.userId}&shiftId=${uid}&lat=${lat}&lng=${log}`, { cacheTimeout: 300000 });
+      console.log(data)
       if (data.status === "Success") {
         Swal.fire(
           'You have successfully clocked in',
@@ -59,7 +61,8 @@ const ProgressNote = () => {
       }
       setLoading(false)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
@@ -86,15 +89,20 @@ const ProgressNote = () => {
       companyID: companyId
     }
     try {
-
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
       if (data.status === 'Success') {
-        navigate.push(`/staff/staff-edit-progress/${uid}/${data.progressNote.progressNoteId}`)
+        if (data.progressNote.progressNoteId === 0) {
+              navigate.push(`staff/main/create-progress/${uid}`)
+        }
+        localStorage.setItem("rosterId", uid);
+        localStorage.setItem("progressNoteId", data.progressNote.progressNoteId);
+        navigate.push(`/staff/main/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }
       setLoading1(false)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading1(false)

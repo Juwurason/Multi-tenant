@@ -18,17 +18,8 @@ import { toast } from 'react-toastify';
 const StaffRoster = ({ staff, loading }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
-
-  // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
-  // const currentLate = dayjs().tz();
-  // console.log(currentLate.format('YYYY-MM-DD HH:mm:ss'));
-
-
-  const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
-  const { get } = useHttp();
-  // const { loading, setLoading } = useCompanyContext();
-  // const [staff, setStaff] = useState([]);
+  
   const [staffCancel, setStaffCancel] = useState('');
   const [reason, setReason] = useState('');
 
@@ -36,26 +27,6 @@ const StaffRoster = ({ staff, loading }) => {
   const AustraliaTimezone = 'Australia/Sydney';
   const navigate = useHistory()
 
-  // const FetchSchedule = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-  //     const staff = staffResponse.data;
-  //     // console.log(staff.shiftRoster);
-  //     setStaff(staff.shiftRoster);
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   finally {
-  //     setLoading(false)
-  //   }
-
-
-  // };
-  // useEffect(() => {
-  //   FetchSchedule()
-  // }, []);
 
   const user = JSON.parse(localStorage.getItem('user'));
   const privateHttp = useHttp()
@@ -84,28 +55,8 @@ const StaffRoster = ({ staff, loading }) => {
     }
   };
 
-
-
-
-
-
-  // useEffect(() => {
-  //   if ($('.select').length > 0) {
-  //     $('.select').select2({
-  //       minimumResultsForSearch: -1,
-  //       width: '100%'
-  //     });
-  //   }
-  // });
-
-  // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
-
-  // const Move = () => {
-  //   console.log(33);
-  // navigate.push("/staff/staff-progress")
-  // };
   const handleNextClick = () => {
     setCurrentDate(currentDate.add(6, 'day'));
   };
@@ -135,8 +86,7 @@ const StaffRoster = ({ staff, loading }) => {
       dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
     )
   );
-
-
+  // console.log(staff)
   function getActivityStatus(activity) {
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
     const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
@@ -148,16 +98,24 @@ const StaffRoster = ({ staff, loading }) => {
     else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === false ) {
+      return 'You are already Clocked in'
+    }
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === true) {
       return 'Present'
     }
     else {
+      // console.log();
       return 'Clock-In';
     }
   }
 
-
-
+  // http://localhost:3001/staff/main/edit-progress/4680/5052
+  const rosterId = JSON.parse(localStorage.getItem('rosterId'))
+  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
+  const HandleFill = () =>{
+    navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
+  }
   const [showModal, setShowModal] = useState(false);
   const [reasonModal, setReasonModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
@@ -306,10 +264,11 @@ const StaffRoster = ({ staff, loading }) => {
                                     </small>
                                   </div>
                                 ) : (
-                                  <div className='d-flex gap-2'>
+                                  <div className='d-flex gap-2 flex-wrap'>
                                     <small
-                                      className={`p-1 rounded ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
+                                      className={`p-1 rounded text-truncate ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
                                         getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
+                                        getActivityStatus(activity) === 'You are already Clocked in' ? 'bg-primary' :
                                           getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
                                         }`}
                                     >
@@ -322,6 +281,15 @@ const StaffRoster = ({ staff, loading }) => {
                                         onClick={() => HandleSubmit(activity.shiftRosterId)}
                                       >
                                         Cancel shift
+                                      </small>
+                                    )}
+
+                                    {getActivityStatus(activity) === 'You are already Clocked in' && (
+                                      <small
+                                        className='bg-secondary p-1 rounded'
+                                        onClick={HandleFill}
+                                      >
+                                        Fill Progress Note
                                       </small>
                                     )}
                                   </div>
@@ -351,6 +319,7 @@ const StaffRoster = ({ staff, loading }) => {
                             <>
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
+                              <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}

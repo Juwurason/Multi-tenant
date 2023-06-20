@@ -8,16 +8,13 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import Swal from 'sweetalert2';
+import moment from 'moment';
 
 const AttendanceReport = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const { uid, pro } = useParams()
-
-  const [details, setDetails] = useState('')
-  const [staff, setStaff] = useState('')
-  const [kilometer, setKilometer] = useState('')
+  const [document, setDocument] = useState('')
   const [editpro, setEditPro] = useState({})
-  const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false);
@@ -28,30 +25,18 @@ const AttendanceReport = () => {
   const FetchSchedule = async () => {
     setLoading(true)
     try {
-      const {data} = await get(`/Attendances/edit/${uid}`, { cacheTimeout: 300000 });
-      console.log(data);
-      setCompanyId(staff.companyID)
-      setStaff(staff.staff.fullName);
-      setDetails(staff.profile);
+      const {data} = await get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setEditPro(data)
+      
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
     }
-
-    // try {
-    //   const editProgress = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
-    //   const editpro = editProgress;
-    //   setEditPro(editpro.data);
-    //   setLoading(false)
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // finally {
-    //   setLoading(false)
-    // }
 
   };
   useEffect(() => {
@@ -80,90 +65,38 @@ const AttendanceReport = () => {
 
   // Pass `formattedDate` to your endpoint or perform any other actions here
 
-//   const SaveProgress = async (e) => {
-//     e.preventDefault()
-//     setLoading1(true)
-//     const info = {
-//       progressNoteId: pro,
-//       report: editpro.report,
-//       progress: editpro.progress,
-//       position: "0",
-//       followUp: editpro.followUp,
-//       date: formattedDate,
-//       staff: staff,
-//       startKm: editpro.startKm,
-//       profileId: details.profileId,
-//       companyID: companyId,
-//     }
-//     try {
-//       const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);
-//       const savePro = saveProgress.data;
-//       toast.success(savePro.message)
-//       setLoading1(false)
-//     } catch (error) {
-//       console.log(error);
-//     }
-//     finally {
-//       setLoading1(false)
-//     }
-//   }
-
-
-
-//   const CreateProgress = async (e) => {
-//     e.preventDefault()
-//     const info = {
-//       progressNoteId: Number(pro),
-//       report: editpro.report,
-//       progress: editpro.progress,
-//       position: "",
-//       followUp: editpro.followUp,
-//       staff: staff,
-//       startKm: editpro.startKm,
-//       profileId: details.profileId,
-//       companyID: companyId,
-//       date: ""
-//     }
-//     Swal.fire({
-//       html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
-//       <h5>Do you wish to proceed ?<h5/>
-//       `,
-//       icon: 'warning',
-//       showCancelButton: true,
-//       confirmButtonColor: '#1C75BC',
-//       cancelButtonColor: '#777',
-//       confirmButtonText: 'Proceed',
-//       showLoaderOnConfirm: true,
-//     }).then(async (result) => {
-
-//       if (result.isConfirmed) {
-//         setLoading2(false)
-//         try {
-//           const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
-//           if (data.status === "Success") {
-//             Swal.fire(
-//               '',
-//               `${data.message}`,
-//               'success'
-//             )
-//             setLoading2(false)
-//             navigate.push(`/staff/staff-report/${uid}`)
-//           }
-//         } catch (error) {
-//           console.log(error);
-//           toast.error(error.response.data.message);
-//           setLoading2(false)
-//         }
-//         finally {
-//           setLoading2(false)
-//         }
-
-
-//       }
-//     })
-
-
-//   }
+  const SaveProgress = async (e) => {
+    e.preventDefault()
+    setLoading1(true)
+    const info = {   
+         attendanceId: uid,
+        report: editpro.report,
+        clockIn: editpro.clockIn,
+        clockOut: editpro.clockOut,
+        duration: editpro.duration,
+        inLongitude: editpro.inLongitude,
+        inLatitude: editpro.inLatitude,
+        startKm: editpro.startKm,
+        endKm: editpro.endKm,
+        staffId: editpro.staffId,
+        imageURL: editpro.imageURL,
+        companyID: user.companyId
+    }
+    try {
+      const saveProgress = await post(`/Attendances/edit/${uid}?userId=${user.userId}`, info);
+      const savePro = saveProgress.data;
+      toast.success(savePro.message)
+      setLoading1(false)
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading1(false)
+    }
+    finally {
+      setLoading1(false)
+    }
+  }
 
   return (
     <>
@@ -200,19 +133,19 @@ const AttendanceReport = () => {
                       <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="">ClockIn</label>
-                          <input type="text" placeholder="ClockIn" className="form-control" value={details.fullName} readOnly />
+                          <input type="text" placeholder="ClockIn" className="form-control" value={moment(editpro.clockIn).format('lll')} readOnly />
                         </div>
                       </div>
                       <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="">ClockOut</label>
-                          <input type="text" placeholder="ClockOut" className="form-control" value={staff} readOnly />
+                          <input type="text" placeholder="ClockOut" className="form-control" value={moment(editpro.clockOut).format('lll')} readOnly />
                         </div>
                       </div>
                       <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="">Starting KiloMetre (Km)</label>
-                          <input type="text" placeholder="0" className="form-control" />
+                          <input type="text" placeholder="" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} className="form-control" />
                         </div>
                       </div>
                     </div>
@@ -221,18 +154,18 @@ const AttendanceReport = () => {
                     <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="">Ending KiloMetre (Km) </label>
-                          <input type="text" placeholder="0" className="form-control" />
+                          <input type="text" placeholder="" name="endKm" value={editpro.endKm || ''} onChange={handleInputChange} className="form-control" />
                         </div>
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '12px' }}>This could be reasons why you were late or information you which your admin to be aware of</span></label>
-                      <textarea rows={3} className="form-control summernote" placeholder="" name="progress" value={editpro.progress || ''} onChange={handleInputChange} />
+                      <textarea rows={3} className="form-control summernote" placeholder="" name="report" value={editpro.report || ''} onChange={handleInputChange} />
                     </div>
                     <div className="form-group">
                       <div className="col-md-4">
                       <label htmlFor="">ImageURL </label>
-                      <input type="file" className="form-control" />
+                      <input type="file" className="form-control" accept=".pdf, .doc, .txt, .jpg, .jpeg, .png" onChange={e => setDocument(e.target.value)} />
                       </div>
                     </div>
                     <div className="form-group text-center mb-0">
@@ -240,7 +173,9 @@ const AttendanceReport = () => {
                        
                       <button
                           disabled={loading1 ? true : false}
-                          className="btn btn-info add-btn text-white rounded-2 m-r-5" accept=".pdf, .doc, .txt, .jpg, .jpeg, .png">{loading1 ? <div className="spinner-grow text-light" role="status">
+                          className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                          onClick={SaveProgress}
+                          >{loading1 ? <div className="spinner-grow text-light" role="status">
                             <span className="sr-only">Loading...</span>
                           </div> : "Save"}</button>
                         <div>
