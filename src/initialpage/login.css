@@ -4,6 +4,7 @@
     background-repeat: no-repeat;
     background-color: #fffffff2;
     background-blend-mode: lighten;
+    background-size: cover;
 }
 
 .cover2-bg {
@@ -13,6 +14,7 @@
     background-repeat: no-repeat;
     background-color: #fffffff2;
     background-blend-mode: lighten;
+    background-size: cover;
 }
 
 .login-form {

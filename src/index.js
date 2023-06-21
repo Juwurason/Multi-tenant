@@ -17,13 +17,17 @@ import { createRoot } from 'react-dom/client';
 import { CompanyProvider } from "./context";
 import OnlineStatus from "./hooks/onlineStatus";
 import dayjs from "dayjs";
+import { Provider } from "react-redux";
+import store from "./store/store";
 dayjs.locale('en-au');
 const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
-    <CompanyProvider>
-        <OnlineStatus />
-        <ToastContainer position="top-right" />
-        <Main />
-    </CompanyProvider>
+    <Provider store={store}>
+        <CompanyProvider>
+            <OnlineStatus />
+            <ToastContainer position="top-right" />
+            <Main />
+        </CompanyProvider>
+    </Provider>
 );

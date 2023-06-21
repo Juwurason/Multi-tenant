@@ -18,22 +18,46 @@ import timezone from 'dayjs/plugin/timezone';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { set } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { fetchRoaster } from '../../../store/slices/shiftRoasterSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchClient } from '../../../store/slices/ClientSlice';
 
 
 
-const ShiftScheduling = ( ) => {
+const ShiftScheduling = () => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
   // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
   //Declaring Variables
+  const dispatch = useDispatch();
+
+  // Fetch staff data and update the state
+  useEffect(() => {
+    dispatch(fetchRoaster());
+    dispatch(fetchStaff());
+    dispatch(fetchClient());
+  }, [dispatch]);
+
+  // Access the entire state
+  const loading = useSelector((state) => state.document.isLoading);
+  const schedule = useSelector((state) => state.roaster.data);
+  const staff = useSelector((state) => state.staff.data);
+  const clients = useSelector((state) => state.client.data);
+
+  useEffect(() => {
+    // Check if staff data already exists in the store
+    if (!schedule.length) {
+      // Fetch staff data only if it's not available in the store
+      dispatch(fetchRoaster());
+    }
+  }, [dispatch, schedule]);
+
+
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
-  const [staff, setStaff] = useState([]);
-  const [clients, setClients] = useState([]);
-  const [schedule, setSchedule] = useState([]);
-const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
@@ -52,43 +76,8 @@ const [loading, setLoading] = useState(false);
 
 
   //Fetching From the endpoints
-  
-  //Fetching From the endpoints
-  const FetchSchedule = async () => {
-    setLoading(true)
-    //All shift Roasters
-    try {
-      const scheduleResponse = await get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const schedule = scheduleResponse.data;
-      setSchedule(schedule);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    // All staff
-    try {
-      const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const staff = staffResponse.data;
-      setStaff(staff);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-    //All Client
-    try {
-      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const client = clientResponse.data;
-      setClients(client);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    FetchSchedule()
-  }, []);
+
+
 
   // Filtering Schedule either by user or Client
   const FilterSchedule = async () => {
@@ -445,7 +434,7 @@ const [loading, setLoading] = useState(false);
 
               </div>
             </div>
-            <div className="col-auto mt-3">
+            {/* <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
                   onClick={() => GetPeriodic()}
@@ -453,7 +442,7 @@ const [loading, setLoading] = useState(false);
                 >Get Periodic Shift Roaster</button>
 
               </div>
-            </div>
+            </div> */}
 
 
           </div>
@@ -479,166 +468,162 @@ const [loading, setLoading] = useState(false);
                   </select>
                 </span>
               </div>
-           
 
 
-                <div className='row g-0'>
-                  {daysOfWeek.map((day, index) => (
 
-                    
-                        <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}
-                         
+              <div className='row g-0'>
+                {daysOfWeek.map((day, index) => (
 
+
+                  <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}
+
+
+                  >
+                    <div className='border  d-flex justify-content-center py-2 bg-light'>
+                      <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
+                        <span
+                          className={`fw-bold fs-4`
+
+                          }
                         >
-                          <div className='border  d-flex justify-content-center py-2 bg-light'>
-                            <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
-                              <span
-                                className={`fw-bold fs-4`
+                          {day.format('D')}
+                        </span>
 
-                                }
-                              >
-                                {day.format('D')}
-                              </span>
+                        <span style={{ fontSize: '10px' }} className='mb-2'>
+                          {day.locale('en').format('ddd')}
+                        </span>
 
-                              <span style={{ fontSize: '10px' }} className='mb-2'>
-                                {day.locale('en').format('ddd')}
-                              </span>
+                      </div>
+                    </div>
 
-                            </div>
+                    <div
+                      className="col-sm-12 text-center border p-2"
+                      style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
+
+                    >
+
+
+
+
+                      {activitiesByDay[index].map((activity, index) => (
+
+
+                        <div
+                          className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                          key={index}
+                          style={{
+                            fontSize: '10px',
+                            overflow: 'hidden',
+                            backgroundColor:
+                              dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                ? '#1C75BC'
+                                : '#5fa8e8',
+                          }}
+                        >
+                          <div
+                            onClick={() => handleActivityClick(activity)}
+                            className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
+                            <span className='fw-bold' >
+                              {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
+                            </span>
+                            <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
+                            <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile?.fullName}</span></span>
+                            <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity?.activities}</span></span>
                           </div>
 
-                          <div
-                            className="col-sm-12 text-center border p-2"
-                            style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
-
-                          >
-
-                            {loading && (
-                              <div className="spinner-grow text-secondary" role="status">
-                                <span className="sr-only">Loading...</span>
-                              </div>
-                            )}
-
-
-                            {activitiesByDay[index].map((activity, index) => (
-                                
-                                
-                                    <div
-                                      className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                                      key={index}
-                                      style={{
-                                        fontSize: '10px',
-                                        overflow: 'hidden',
-                                        backgroundColor:
-                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                            ? '#1C75BC'
-                                            : '#5fa8e8',
-                                      }}
-                                    >
-                                      <div
-                                        onClick={() => handleActivityClick(activity)}
-                                        className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
-                                        <span className='fw-bold' >
-                                          {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
-                                        </span>
-                                        <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
-                                        <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile?.fullName}</span></span>
-                                        <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity?.activities}</span></span>
-                                      </div>
-
-                                      {
-                                        getActivityStatus(activity) === 'Active' ?
-                                          (
-                                            <div className='d-flex gap-2'>
-                                              <small
-                                                className={`text-truncate d-flex 
+                          {
+                            getActivityStatus(activity) === 'Active' ?
+                              (
+                                <div className='d-flex gap-2'>
+                                  <small
+                                    className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
 
-                                                onClick={() => handleDelete(activity?.shiftRosterId)}
-                                                title="Delete"
-                                              >
-                                                <GoTrashcan className='fs-6' />
-                                              </small>
-                                              <Link
-                                                to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                                                className={`text-truncate d-flex 
+                                    onClick={() => handleDelete(activity?.shiftRosterId)}
+                                    title="Delete"
+                                  >
+                                    <GoTrashcan className='fs-6' />
+                                  </small>
+                                  <Link
+                                    to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                                    className={`text-truncate d-flex 
                               align-items-center
                               justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                                title="Edit"
+                                    title="Edit"
 
-                                              >
-                                                <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                              </Link>
-                                              <small
-                                                className={`text-truncate d-flex 
+                                  >
+                                    <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                  </Link>
+                                  <small
+                                    className={`text-truncate d-flex 
                                align-items-center
                                justify-content-center px-2 py-1 rounded bg-warning pointer`}
 
-                                                onClick={() => markAttendance(activity)}
-                                                title="Mark attendance for staff"
-                                              >
-                                                <MdDoneOutline className='fs-6' />
-                                              </small>
-                                            </div>
-                                          )
-                                          :
-                                          (
-                                            <div className='d-flex gap-2' >
-                                              <small
-                                                className={`text-truncate d-flex 
+                                    onClick={() => markAttendance(activity)}
+                                    title="Mark attendance for staff"
+                                  >
+                                    <MdDoneOutline className='fs-6' />
+                                  </small>
+                                </div>
+                              )
+                              :
+                              (
+                                <div className='d-flex gap-2' >
+                                  <small
+                                    className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
 
-                                                onClick={() => handleDelete(activity?.shiftRosterId)}
-                                                title="Delete"
-                                              >
-                                                <GoTrashcan className='fs-6' />
-                                              </small>
+                                    onClick={() => handleDelete(activity?.shiftRosterId)}
+                                    title="Delete"
+                                  >
+                                    <GoTrashcan className='fs-6' />
+                                  </small>
 
-                                              {
-                                                getActivityStatus(activity) === 'Upcoming' && (
-                                                  <Link
-                                                    to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                                                    className={`text-truncate d-flex 
+                                  {
+                                    getActivityStatus(activity) === 'Upcoming' && (
+                                      <Link
+                                        to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                                        className={`text-truncate d-flex 
                               align-items-center
                               justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                                    title="Edit"
+                                        title="Edit"
 
-                                                  >
-                                                    <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                                  </Link>
+                                      >
+                                        <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                      </Link>
 
-                                                )
-                                              }
-                                            </div>
+                                    )
+                                  }
+                                </div>
 
-                                          )
-                                      }
-
-
-                                    </div>
-
-                                  
-                                
+                              )
+                          }
 
 
-                            ))}
-                            {!loading && activitiesByDay[index].length <= 0 && (
-                              <div>
-                                <span>No Activity</span>
-                              </div>
-                            )}
-                          
-                          </div>
                         </div>
-                      
 
 
 
 
-                  ))}
-                </div>
+
+                      ))}
+                      {!loading && activitiesByDay[index].length <= 0 && (
+                        <div>
+                          <span>No Activity</span>
+                        </div>
+                      )}
+
+                    </div>
+                  </div>
+
+
+
+
+
+                ))}
+              </div>
 
 
             </div>

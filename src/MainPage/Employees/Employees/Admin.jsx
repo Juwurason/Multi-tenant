@@ -20,8 +20,30 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
+import { useSelector } from 'react-redux';
+import { fetchAdmin } from '../../../store/slices/AdminSlice';
+import { useDispatch } from 'react-redux';
 
-const AllAdmin = ({ admin, FetchData, loading }) => {
+const AllAdmin = () => {
+    const dispatch = useDispatch();
+
+    // Fetch admin data and update the state
+    useEffect(() => {
+        dispatch(fetchAdmin());
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.admin.isLoading);
+    const admin = useSelector((state) => state.admin.data);
+
+    useEffect(() => {
+        // Check if admin data already exists in the store
+        if (!admin.length) {
+            // Fetch admin data only if it's not available in the store
+            dispatch(fetchAdmin());
+        }
+    }, [dispatch, admin]);
+
 
 
     const id = JSON.parse(localStorage.getItem('user'));
@@ -129,18 +151,6 @@ const AllAdmin = ({ admin, FetchData, loading }) => {
     }
 
 
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    }
-
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -357,12 +367,8 @@ const AllAdmin = ({ admin, FetchData, loading }) => {
                                 highlightOnHover
                                 searchable
                                 searchTerm={searchText}
-                                progressPending={loading}
-                                progressComponent={<div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>}
+
+
                                 expandableRows
                                 responsive
                                 expandableRowsComponent={ButtonRow}
