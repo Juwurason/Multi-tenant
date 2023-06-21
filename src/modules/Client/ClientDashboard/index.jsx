@@ -177,27 +177,6 @@
     }
 };
  
-  //  function getActivityStatus(activitiesByDay) {
-  //    if (!activitiesByDay) {
-  //      return 'No Shift Today';
-  //    }
-  //    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-  //    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss')
-  //    const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
- 
-  //    if (activityDateFrom > nowInAustraliaTime) {
-  //      return 'Upcoming';
-  //    }
-  //    else if (activityDateTo < nowInAustraliaTime) {
-  //      return activitiesByDay[1][0].attendance === true ? 'Present' : 'Absent';
-  //    }
-  //    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true) {
-  //      return 'Present';
-  //    }
-  //    else {
-  //      return 'Clock-In';
-  //    }
-  //  }
  
   
    return (
@@ -283,42 +262,7 @@
                              <span>No Shift Today</span>
                           )}
                           </div>
-                       {/* <div className='px-5 py-4'>
-                         {activitiesByDay[1][0] ? (
-                           <>
-                             <span>{activitiesByDay[1][0]?.activities}</span>
-                             <br />
-                             <br />
- 
-                             {getActivityStatus(activitiesByDay) === 'Upcoming' ? (
-                               <span className='fw-bold text-warning pointer'>Upcoming</span>
-                             ) : getActivityStatus(activitiesByDay) === 'Clock-In' ? (
-                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                                 {isLoading ? 
-                                   <div>
-                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                     <span class="visually-hidden">Loading...</span>
-                                   </div> Please wait....
-                                   </div>
-                                   : <span> <BiStopwatch /> Clock In</span>
-                                 }
-                               </span> 
-                             ) : (
-                               <small
-                                 className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
-                                   getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
-                                     getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
-                                   }`}
-                               >
-                                 {getActivityStatus(activitiesByDay)}
-                               </small>
-                             )}
-                           </>
-                         ) : (
-                           <span>No Shift Today</span>
-                           
-                         )}
-                       </div> */}
+                     
  
                      </div>
  
@@ -367,9 +311,9 @@
                <Modal.Body>
                  {selectedActivity && (
                    <>
-                     <p><b>Date:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</p>
-                     <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
-                     <p><b>Description:</b> {selectedActivity.activities}</p>
+                     <p><b>Date:</b> {dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</p>
+                     <p><b>Time:</b> {activitiesByDay[2]?.length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
+                     <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
                    </>
                  )}
                </Modal.Body>

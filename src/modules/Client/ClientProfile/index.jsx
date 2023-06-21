@@ -30,9 +30,6 @@ const ClientProfile = () => {
     try {
       const { data } = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`, { cacheTimeout: 300000 })
       setStaffOne(data)
-
-
-
     } catch (error) {
       console.log(error);
     }
@@ -138,7 +135,7 @@ const ClientProfile = () => {
     formData.append("ndisPlan", editedProfile.ndisPlan);
     formData.append("requireInterpreter", editedProfile.requireInterpreter);
     formData.append("suburb", editedProfile.kinSuburb);
-    formData.append("nextOfKin", editedProfile.kinName);
+    formData.append("nextOfKin", editedProfile.nextOfKin);
     formData.append("kinAddress", editedProfile.kinAddress);
     formData.append("kinCity", editedProfile.kinCity);
     formData.append("kinCountry", editedProfile.kinCountry);
@@ -155,6 +152,7 @@ const ClientProfile = () => {
       const { data } = await privateHttp.post(`/Profiles/edit/${getClientProfile.profileId}?userId=${id.userId}`,
         formData
       )
+      // console.log(data)
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -501,7 +499,7 @@ const ClientProfile = () => {
                             <div className="row">
                               <div className="form-group col-md-4">
                                 <label>Emergency Contact FullName</label>
-                                <input type="text" className="form-control" name='kinName' value={editedProfile.kinName || ''} onChange={handleInputChange} />
+                                <input type="text" className="form-control" name='nextOfKin' value={editedProfile.nextOfKin || ''} onChange={handleInputChange} />
                               </div>
 
                               <div className="form-group col-md-4">
@@ -566,7 +564,7 @@ const ClientProfile = () => {
                       <ul className="personal-info">
                         <li>
                           <div className="title">Name</div>
-                          <div className="text">{staffOne.kinName === "null" ? "---" : staffOne.kinName}</div>
+                          <div className="text">{staffOne.nextOfKin === "null" ? "---" : staffOne.nextOfKin}</div>
                         </li>
                         <li>
                           <div className="title">Relationship</div>

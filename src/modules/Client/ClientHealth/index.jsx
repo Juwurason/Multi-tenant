@@ -11,15 +11,40 @@
  import { CopyToClipboard } from "react-copy-to-clipboard";
  import jsPDF from "jspdf";
  import "jspdf-autotable";
- import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
+ import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+ import Offcanvas from '../../../Entryfile/offcanvance';
  import { toast } from 'react-toastify';
  import { GoSearch, GoTrashcan } from 'react-icons/go';
  import dayjs from 'dayjs';
  import moment from 'moment';
  import Swal from 'sweetalert2';
  import { Modal } from 'react-bootstrap';
-
- const ClientDailyLiving = () => {
+ import { async } from '@babel/runtime/helpers/regeneratorRuntime';
+ import { MultiSelect } from 'react-multi-select-component';
+ const options = [
+     { label: "Medication Supervision", value: "Medication Supervision" },
+     { label: "Medication administering", value: "Medication administering" },
+     { label: "Personal Support", value: "Personal Support" },
+     { label: "Domestic Cleaning", value: "Domestic Cleaning" },
+     { label: "Transport", value: "Transport" },
+     { label: "Dog training", value: "Dog training" },
+     { label: "Install phone", value: "Install phone" },
+     { label: "Welfare check", value: "Welfare check" },
+     { label: "Support Groceries shopping", value: "Support Groceries shopping" },
+     { label: "Pick up", value: "Pick up" },
+     { label: "Baby sitting", value: "Baby sitting" },
+     { label: "Taking to solicitors appointment", value: "Taking to solicitors appointment" },
+     { label: "Meal Preparation", value: "Meal Preparation" },
+     { label: "Shopping", value: "Shopping" },
+     { label: "Groceries Transport", value: "Groceries Transport" },
+     { label: "Domestics Social Support", value: "Domestics Social Support" },
+ 
+ 
+ 
+ ];
+ 
+ 
+ const ClientHealth = () => {
      useEffect(() => {
          if ($('.select').length > 0) {
              $('.select').select2({
@@ -31,35 +56,71 @@
  
      const [selected, setSelected] = useState([]);
      const [staffAvail, setStaffAvail] = useState([]);
+     const [staffAva, setStaffAva] = useState("");
      const { loading, setLoading } = useCompanyContext();
      const [loading1, setLoading1] = useState(false);
      const [loading2, setLoading2] = useState(false);
      const [selectedDay, setSelectedDay] = useState("");
-     const [selectedDetails, setSelectedDetails] = useState("");
-     const [selectedForm, setSelectedForm] = useState("");
-     const [selectedSupport, setSelectedSupport] = useState("");
      const { get, post } = useHttp();
+     const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
+     const [selectedTimeTo, setSelectedTimeTo] = useState("");
+     const [selectedTime, setSelectedTime] = useState("");
+     const id = JSON.parse(localStorage.getItem('user'))
      const [showModal, setShowModal] = useState(false);
      const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
+     const handleSelected = (selectedOptions) => {
+         setSelected(selectedOptions);
+     }
+     const selectedValues = selected.map(option => option.label).join(', ');
+     
+ 
+     const convertTo12HourFormat = (time24h) => {
+         let [hours, minutes] = time24h.split(':');
+         let suffix = 'AM';
+ 
+         if (hours >= 12) {
+             suffix = 'PM';
+             hours = hours - 12;
+         }
+ 
+         if (hours === 0) {
+             hours = 12;
+         }
+ 
+         return `${hours}:${minutes} ${suffix}`;
+     };
  
  
      const PostAvail = async (e) => {
-         if (selectedDay === "" || selectedForm === "") {
+         if (selectedDay === "" || selectedTimeFrom === "" || selectedTimeTo === "") {
              return toast.error("Input Fields cannot be empty")
          }
          e.preventDefault()
          setLoading1(true)
+        //  {
+        //     "profileId": 0,
+        //     "healthIssues": "string",
+        //     "supportDetails": "string",
+        //     "requireMedication": true,
+        //     "support": "string",
+        //     "healthPlan": "string",
+        //     "documentation": "string",
+        //     "documentationFile": "string"
+        // }
          const info = {
              profileId: clientProfile.profileId,
-             activities: selectedDay,
-             support: selectedSupport,
-             supportLevel: selectedDetails,
-             details: selectedForm,
+             healthIssues: selectedDay,
+             supportDetails: staffAva,
+             requireMedication: selectedTimeFrom,
+             support: selectedTime,
+             healthPlan: selectedTimeTo,
+            //  documentation: "",
+            //  documentationFile: "",
             //  companyID: id.companyId
          }
          try {
  
-             const { data } = await post(`/DailyLivings`, info);
+             const { data } = await post(`/HealthSupports/get_all?clientId=${id.userId}`, info);
             //  console.log(data)
              if (data.status === 'Success') {
                  toast.success(data.message) 
@@ -67,7 +128,7 @@
              setLoading1(false)
              FetchSchedule()
          } catch (error) {
-             // console.log(error);
+            //  console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
@@ -80,15 +141,19 @@
      const FetchSchedule = async () => {
          // setLoading2(true)
          try {
-             const { data } = await get(`/DailyLivings/get_all?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
-            //  console.log(data);
-             setStaffAvail(data)
+             const { data } = await get(`ClientSchedules/get_client_schedule?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
+             // console.log(data);
+            //  setStaffAvail(data)
              // setLoading2(false);
          } catch (error) {
              // console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
+         // finally {
+         //   setLoading2(false)
+         // }
+ 
  
      };
      useEffect(() => {
@@ -97,25 +162,30 @@
  
  
      const columns = [
+         // {
+         //   name: 'User',
+         //   selector: row => row.user,
+         //   sortable: true
+         // },
          {
-             name: 'Activities',
-             selector: row => row.activities,
+             name: 'Days',
+             selector: row => row.days,
              sortable: true,
              expandable: true,
          },
          {
-             name: 'Support',
-             selector: row => row.support,
+             name: 'From Time of Day',
+             selector: row => convertTo12HourFormat(row.fromTimeOfDay),
              sortable: true,
          },
          {
-             name: 'Level of Support',
-             selector: row => row.supportLevel,
+             name: 'To Time of Day',
+             selector: row => convertTo12HourFormat(row.toTimeOfDay),
              sortable: true
          },
          {
-             name: 'Details',
-             selector: row => row.details,
+             name: 'Activities',
+             selector: row => row.activities,
              sortable: true
          },
          {
@@ -189,7 +259,7 @@
  
      const handleDelete = async (e) => {
          Swal.fire({
-             html: `<h3>Are you sure? you want to delete this</h3>`,
+             html: `<h3>Are you sure? you want to delete this Schedule</h3>`,
              icon: 'question',
              showCancelButton: true,
              confirmButtonColor: '#1C75BC',
@@ -199,7 +269,7 @@
          }).then(async (result) => {
              if (result.isConfirmed) {
                  try {
-                     const { data } = await post(`/DailyLivings/delete/${e}`)
+                     const { data } = await post(`/ClientSchedules/delete/${e}`)
                      // console.log(data);
                      if (data.status === 'Success') {
                          toast.success(data.message);
@@ -210,7 +280,7 @@
  
  
                  } catch (error) {
-                     console.log(error);
+                     // console.log(error);
                      toast.error(error.response.data.message)
                      toast.error(error.response.data.title)
  
@@ -234,10 +304,10 @@
          // setLoading2(true)
          try {
  
-             const { data } = await get(`/DailyLivings/${e}`, { cacheTimeout: 300000 });
-            //  console.log(data);
-            //  setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
-            //  console.log();
+             const { data } = await get(`/ClientSchedules/get_schedule/${e}`, { cacheTimeout: 300000 });
+             // console.log(data);
+             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
+             console.log();
              setEditAvail(data);
          } catch (error) {
              // console.log(error);
@@ -266,18 +336,18 @@
          e.preventDefault()
          setLoading2(true)
          const info = {
-             dailyLivingId: idSave,
+             clientScheduleId: idSave,
              profileId: clientProfile.profileId,
-             activities: editAvail.activities,
-             support: editAvail.support,
-             supportLevel: editAvail.supportLevel,
-             details: editAvail.details,
-            //  companyID: id.companyId
+             days: editAvail.days,
+             fromTimeOfDay: editAvail.fromTimeOfDay,
+             toTimeOfDay: editAvail.toTimeOfDay,
+             activities: selectedValue,
+             companyID: id.companyId
          }
          try {
  
-             const { data } = await post(`/DailyLivings/edit/${idSave}`, info);
-            //  console.log(data);
+             const { data } = await post(`/ClientSchedules/edit/${idSave}?userId=${id.userId}`, info);
+             // console.log(data);
              if (data.status === 'Success') {
                  toast.success(data.message)
              }
@@ -293,19 +363,17 @@
              setLoading2(false)
          }
      }
-  
+ 
      const ButtonRow = ({ data }) => {
          return (
              <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                  <div><span className='fw-bold'>Activities: </span> {data.activities}</div>
-                 <div><span className='fw-bold'>Support: </span> {data.support}</div>
-                 <div><span className='fw-bold'>Level of Support: </span> {data.supportLevel}</div>
                  <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                  <div>
-                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.dailyLivingId)}>
+                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.clientScheduleId)}>
                          Edit
                      </button> |
-                     <button onClick={() => handleDelete(data.dailyLivingId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                     <button onClick={() => handleDelete(data.clientScheduleId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                          Delete
                      </button>
                  </div>
@@ -322,13 +390,13 @@
      };
  
      const filteredData = staffAvail.filter((item) =>
-         item.activities.toLowerCase().includes(searchText.toLowerCase())
+         item.days.toLowerCase().includes(searchText.toLowerCase())
      );
      return (
          <div className="page-wrapper">
              <Helmet>
-                 <title> Daily Living & Night Support</title>
-                 <meta name="description" content="Daily Living & Night Support" />
+                 <title> Client Health Support Needs</title>
+                 <meta name="description" content="Client Health Support Needs" />
              </Helmet>
              <div className="content container-fluid">
                  {/* Page Header */}
@@ -337,7 +405,8 @@
                          <div className="col">
                              <ul className="breadcrumb">
                                  <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
-                                 <li className="breadcrumb-item active">Daily Living & Night Support</li>
+                                 <li className="breadcrumb-item active">Health Support Needs</li>
+                                 <li className="breadcrumb-item active">Check if Yes and Uncheck if No</li>
                              </ul>
                          </div>
                      </div>
@@ -347,59 +416,64 @@
                      <div className="col-md-12">
                          <div className="card">
                              <div className="card-header">
-                                 <h4 style={{fontSize: "15px"}} className="card-title mb-0"> Add one or more Daily Activities</h4>
+                                 <h4 className="card-title mb-0">Health Support Needs</h4>
                              </div>
                              <div className="card-body">
                                  <form className="row">
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Activities</label>
-                                             <input className="form-control" type="text" onChange={(e) => setSelectedDay(e.target.value)} required />
+                                             <label>Describe any ongoing health issues you have, including mental health issues.</label>
+                                             <textarea className="form-control" onChange={(e) => setSelectedDay(e.target.value)} rows="2" cols="20" />
                                          </div>
                                      </div>
  
                                      <div className="col-md-6">
                                          <div className="form-group">
-                                             <label>Support</label>
-                                             <select className='form-select' onChange={(e) => setSelectedSupport(e.target.value)}>
-                                                <option defaultValue hidden >Select Issues</option>
-                                                <option value={"No help required"}>No help required</option>
-                                                <option value={"Aids used"}>Aids used</option>
-                                                <option value={"Prompting required"}>Prompting required</option>
-                                                <option value={"Some support required"}>Some support required</option>
-                                                <option value={"Full physical support required"}>Full physical support required</option>
-                                                
-                                            </select>
+                                             <label>Is additional support  for these issues? If so, please provide detail</label>
+                                             <textarea className="form-control" rows="2" cols="20" onChange={(e) => setStaffAva(e.target.value)} />
                                          </div>
                                      </div>
  
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>How often do you require supervision or support throughout the day?</label>
-                                             <select className='form-select' onChange={(e) => setSelectedDetails(e.target.value)}>
-                                                <option defaultValue hidden >Select Issues</option>
-                                                <option value={"None of the time"}>None of the time</option>
-                                                <option value={"All the time"}>All the time</option>
-                                                <option value={"Prompting required"}>Prompting required</option>
-                                                <option value={"During active times"}>During active times</option>                                                
-                                            </select>
+                                             <label>Medication Required?</label>
+                                             <select className='form-select' onChange={(e) => setSelectedTimeFrom(e.target.value)}>
+                                         <option value={"false"}>Select...</option>
+                                         <option value={"true"}>Yes</option>
+                                         <option value={"false"}>No</option>
+                                     </select>
                                          </div>
                                      </div>
 
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Details</label>
-                                             <textarea className="form-control" onChange={(e) => setSelectedForm(e.target.value)} rows="2" cols="20" />
+                                             <label>How Often do you require medication?</label>
+                                             <select className='form-select' onChange={(e) => setSelectedTimeTo(e.target.value)}>
+                                         <option defaultValue hidden>Please Select</option>
+                                         <option value={"Prompt Required"}>Prompt Required</option>
+                                         <option value={"Assitance Required"}>Assitance Required</option>
+                                         <option value={"Administration Required"}>Administrati Required</option>
+                                     </select>
+                                         </div>
+                                     </div>
+
+                                     <div className="col-md-6">
+                                         <div className="form-group">
+                                             <label>Provide details of your medication and treatment plan</label>
+                                             <textarea className="form-control" rows="2" cols="20" onChange={(e) => setSelectedTime(e.target.value)} />
                                          </div>
                                      </div>
  
-                                     <div className="text-start">
-                                         <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
+                                     
+                                 </form>
+                                 <div className="text-start">
+                                         <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} 
+                                        //  onClick={PostAvail}
+                                         >
                                              {loading1 ? <div className="spinner-grow text-light" role="status">
                                                  <span className="sr-only">Loading...</span>
-                                             </div> : "Submit"}</button>
+                                             </div> : "Save"}</button>
                                      </div>
-                                 </form>
                              </div>
                          </div>
                      </div>
@@ -477,57 +551,63 @@
  
  
                  </div>
-
                  <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                      <Modal.Header closeButton>
-                         <Modal.Title>Edit Daily Living & Night Support</Modal.Title>
+                         <Modal.Title>Edit Schedule</Modal.Title>
                      </Modal.Header>
                      <Modal.Body>
-                         <div className="card-body">
-                                 <form className="row">
-                                     <div className='col-md-6'>
+                         <form className="row">
+                             <div className='col-md-12'>
+                                 <div className="form-group">
+                                     <label>Days</label>
+                                     <select
+                                         className='form-select'
+                                         name="days" value={editAvail.days || ''} onChange={handleInputChange}
+                                         
+                                     >
+                                         <option defaultValue hidden>Select Days</option>
+                                         <option value={"Monday"}>Monday</option>
+                                         <option value={"Tuesday"}>Tuesday</option>
+                                         <option value={"Wednessday"}>Wednessday</option>
+                                         <option value={"Thursday"}>Thursday</option>
+                                         <option value={"Friday"}>Friday</option>
+                                         <option value={"Saturday"}>Saturday</option>
+                                         <option value={"Sunday"}>Sunday</option>
+                                     </select>
+                                 </div>
+                             </div>
+                             <div className="col-md-12">
                                          <div className="form-group">
                                              <label>Activities</label>
-                                             <input className="form-control" type="text" name="activities" value={editAvail.activities || ''} onChange={handleInputChange} />
+                                             <MultiSelect
+                                                 options={options}
+                                                 value={selectedActivities}
+                                                 onChange={handleActivityChange}
+                                                 labelledBy={'Select Activities'}
+                                             />
                                          </div>
                                      </div>
- 
-                                     <div className="col-md-6">
-                                         <div className="form-group">
-                                             <label>Support</label>
-                                             <select className='form-select' name="support" value={editAvail.support || ''} onChange={handleInputChange}>
-                                                <option defaultValue hidden >Select Issues</option>
-                                                <option value={"No help required"}>No help required</option>
-                                                <option value={"Aids used"}>Aids used</option>
-                                                <option value={"Prompting required"}>Prompting required</option>
-                                                <option value={"Some support required"}>Some support required</option>
-                                                <option value={"Full physical support required"}>Full physical support required</option>
-                                                
-                                            </select>
-                                         </div>
-                                     </div>
- 
-                                     <div className='col-md-6'>
-                                         <div className="form-group">
-                                             <label>How often do you require supervision or support throughout the day?</label>
-                                             <select className='form-select' name="supportLevel" value={editAvail.supportLevel || ''} onChange={handleInputChange}>
-                                                <option defaultValue hidden >Select Issues</option>
-                                                <option value={"None of the time"}>None of the time</option>
-                                                <option value={"All the time"}>All the time</option>
-                                                <option value={"Prompting required"}>Prompting required</option>
-                                                <option value={"During active times"}>During active times</option>                                                
-                                            </select>
-                                         </div>
-                                     </div>
-
-                                     <div className='col-md-6'>
-                                         <div className="form-group">
-                                             <label>Details</label>
-                                             <textarea className="form-control" name="details" value={editAvail.details || ''} onChange={handleInputChange} rows="2" cols="20" />
-                                         </div>
-                                     </div>
-                                 </form>
+                             <div className='col-md-6'>
+                                 <div className="form-group">
+                                     <label>From Time of Day</label>
+                                     <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
+                                     />
+                                 </div>
                              </div>
+                             <div className='col-md-6'>
+                                 <div className="form-group">
+                                     <label>To Time of Day</label>
+                                     <input
+                                         className="form-control"
+                                         type="time"
+                                         name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
+                                         
+                                     />
+                                 </div>
+                             </div>
+                             
+ 
+                         </form>
                      </Modal.Body>
                      <Modal.Footer>
                          <button
@@ -541,7 +621,7 @@
                                      <span className="sr-only">Loading...</span>
                                  </div>
                              ) : (
-                                 "Submit"
+                                 "Add"
                              )}
                          </button>
                      </Modal.Footer>
@@ -553,4 +633,4 @@
          </div>
      );
  }
- export default ClientDailyLiving;
+ export default ClientHealth;
