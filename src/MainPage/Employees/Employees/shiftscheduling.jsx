@@ -347,7 +347,7 @@ const ShiftScheduling = () => {
     <>
       <div className="page-wrapper">
         <Helmet>
-          <title>Shift Roaster</title>
+          <title>Shift Roster</title>
           <meta name="description" content="Shift Roaster" />
         </Helmet>
 
@@ -357,15 +357,15 @@ const ShiftScheduling = () => {
 
             <div className="row">
               <div className="col">
-                <h3 className="page-title">Shift Roaster</h3>
+                <h3 className="page-title">Shift Roster</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="/app/employee/allemployees">Employees</Link></li>
-                  <li className="breadcrumb-item active">Shift Roaster</li>
+                  <li className="breadcrumb-item active">Shift Roster</li>
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto p-4">
-                <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roaster</Link>
+                <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
               </div>
             </div>
           </div>

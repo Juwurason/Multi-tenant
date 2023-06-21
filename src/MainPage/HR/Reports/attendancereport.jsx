@@ -21,7 +21,11 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
 import { Modal } from 'react-bootstrap';
-import dayjs from 'dayjs';
+import dayjs, { utc } from 'dayjs';
+import { fetchAttendance, filterAttendance } from '../../../store/slices/AttendanceSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchClient } from '../../../store/slices/ClientSlice';
 
 function formatDuration(duration) {
   if (duration) {
@@ -40,14 +44,35 @@ function formatDuration(duration) {
 
 
 const AttendanceReport = () => {
+
+  //Declaring Variables
+  const dispatch = useDispatch();
+
+  // Fetch staff data and update the state
+  useEffect(() => {
+    dispatch(fetchAttendance());
+    dispatch(fetchStaff());
+    dispatch(fetchClient());
+  }, [dispatch]);
+
+  // Access the entire state
+  const loading = useSelector((state) => state.attendance.isLoading);
+  const attendance = useSelector((state) => state.attendance.data);
+  const staff = useSelector((state) => state.staff.data);
+
+  useEffect(() => {
+    // Check if staff data already exists in the store
+    if (!attendance.length) {
+      // Fetch staff data only if it's not available in the store
+      dispatch(fetchAttendance());
+    }
+  }, [dispatch, attendance]);
+
   const { get } = useHttp();
-  const { loading, setLoading } = useCompanyContext();
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
-  const [attendance, setAttendance] = useState([]);
-  const [staff, setStaff] = useState([]);
   const [sta, setSta] = useState('');
   const dateFrom = useRef(null);
   const dateTo = useRef(null);
@@ -66,7 +91,7 @@ const AttendanceReport = () => {
     {
 
       name: 'Clock-In',
-      selector: row => dayjs(row.clockIn).format('hh:mm A'),
+      selector: row => dayjs(row.clockIn).format('DD/MM/YYYY HH:mm'),
       sortable: true,
       expandable: true,
 
@@ -82,7 +107,7 @@ const AttendanceReport = () => {
 
     {
       name: 'Clock-Out',
-      selector: row => dayjs(row.clockOut).format('hh:mm A'),
+      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY HH:mm'),
       sortable: true,
       expandable: true,
 
@@ -138,44 +163,16 @@ const AttendanceReport = () => {
   ];
 
 
-  const FetchAttendance = async () => {
-    try {
-      setLoading(true)
-      const { data } = await get(`Attendances/get_all_attendances_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      setAttendance(data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false)
-    }
-    try {
-      const { data } = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      setStaff(data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false)
-    }
-  };
-  useEffect(() => {
 
-    FetchAttendance()
-  }, []);
-
-  const FetchPeriodic = async (e) => {
+  const FilterAttendance = (e) => {
     e.preventDefault();
-    setLoading1(true)
-    try {
-      const { data } = await get(`/Attendances/get_periodic_attendances_by_company?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      setAttendance(data);
-      setPeriodic(data);
-      setLoading1(false)
-    } catch (error) {
-      console.log(error);
-      setLoading1(false)
-    } finally {
-      setLoading1(false)
+    setLoading1(true);
+
+    dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
+    setPeriodic(attendance);
+
+    if (!loading) {
+      setLoading1(false);
     }
   }
 
@@ -193,7 +190,7 @@ const AttendanceReport = () => {
 
   const GetAllTimeshift = async (e) => {
     e.preventDefault();
-    // //:dateFrom/:dateTo
+
 
     setLoading2(true);
     setTimeout(() => {
@@ -352,7 +349,7 @@ const AttendanceReport = () => {
               </div>
             </div>
 
-            <form className="row align-items-center shadow-sm p-3" onSubmit={FetchPeriodic}>
+            <form className="row align-items-center shadow-sm py-3" onSubmit={FilterAttendance}>
 
               <div className="col-md-4">
                 <div className="form-group">
@@ -400,8 +397,9 @@ const AttendanceReport = () => {
 
                 </div>
               </div>
+
               {
-                sta === "" || periodic.length <= 0 ? "" :
+                sta === "" || periodic.length <= 0 || loading ? "" :
                   <div className="col-auto mt-3">
                     <div className="form-group">
                       <button
@@ -426,7 +424,7 @@ const AttendanceReport = () => {
                   </div>
               }
               {
-                sta !== "" || periodic.length <= 0 ? "" :
+                sta !== "" || periodic.length <= 0 || loading ? "" :
                   <div className="col-auto mt-3">
                     <div className="form-group">
                       <button style={{ fontSize: "12px" }}

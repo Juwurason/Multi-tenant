@@ -6,6 +6,15 @@ export const fetchClient = createAsyncThunk('Client/fetchClient', async () => {
     const filteredData = response.filter((client) => client.isActive);
     return filteredData;
 });
+export const formatClient = createAsyncThunk('Client/formatClient', async () => {
+    const response = await api.fetchClientData();
+    const filteredData = response.filter((client) => client.isActive);
+    const formattedData = filteredData.map((item) => ({
+        label: item.fullName,
+        value: item.fullName,
+    }));
+    return formattedData;
+});
 
 const ClientSlice = createSlice({
     name: 'Client',
@@ -28,6 +37,18 @@ const ClientSlice = createSlice({
                 state.data = action.payload;
             })
             .addCase(fetchClient.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            })
+            .addCase(formatClient.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(formatClient.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(formatClient.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             });

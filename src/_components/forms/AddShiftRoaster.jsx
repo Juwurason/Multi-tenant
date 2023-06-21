@@ -10,7 +10,7 @@ import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStaff } from '../../store/slices/StaffSlice';
-import { fetchClient } from '../../store/slices/ClientSlice';
+import { fetchClient, formatClient } from '../../store/slices/ClientSlice';
 
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
@@ -37,7 +37,7 @@ const AddShiftRoaster = () => {
     // Fetch staff data and update the state
     useEffect(() => {
         dispatch(fetchStaff());
-        dispatch(fetchClient());
+        dispatch(formatClient());
     }, [dispatch]);
 
     // Access the entire state
@@ -73,25 +73,25 @@ const AddShiftRoaster = () => {
         saturday: false
     });
     const [stopDate, setStopDate] = useState("");
-    const FetchSchedule = async () => {
+    // const FetchSchedule = async () => {
+    //     const formattedOptions = clients.map((item) => ({
+    //         label: item.fullName,
+    //         value: item.fullName,
+    //     }));
 
+    //     try {
+    //         const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+    //         const client = clientResponse.data;
 
-        try {
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            const formattedOptions = client.map((item) => ({
-                label: item.fullName,
-                value: item.fullName,
-            }));
-            setClients(formattedOptions);
-        } catch (error) {
-            console.log(error);
-        }
+    //         setClients(formattedOptions);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
 
-    };
-    useEffect(() => {
-        FetchSchedule()
-    }, []);
+    // };
+    // useEffect(() => {
+    //     FetchSchedule()
+    // }, []);
 
     const [repeat, setRepeat] = useState(false);
     const [numOfDays, setNumOfDays] = useState(1);
@@ -173,7 +173,7 @@ const AddShiftRoaster = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Add Shift Roaster</title>
+                <title>Add Shift Roster</title>
                 <meta name="description" content="" />
             </Helmet>
             <div className="content container-fluid">
@@ -182,7 +182,7 @@ const AddShiftRoaster = () => {
                         <div className="card">
 
                             <div className="card-header d-flex justify-content-between align-items-center">
-                                <h4 className="card-title mb-0">Add To Shift Roaster</h4>
+                                <h4 className="card-title mb-0">Add To Shift Roster</h4>
                                 <Link to={'/app/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">

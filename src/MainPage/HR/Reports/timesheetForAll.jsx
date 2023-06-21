@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
         padding: "1%",
     },
     page: {
+        flexDirection: "row",
         padding: 20,
     },
     logo: {
@@ -150,13 +151,13 @@ const TimesheetPDF = ({ total, timesheet }) => {
                                     <Text style={styles.tableCell}>{formatDuration(data.exceptionalDuration)}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{data.phDuration}</Text>
+                                    <Text style={styles.tableCell}>{formatDuration(data.phDuration)}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
                                     <Text style={styles.tableCell}>{data.nightShift}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{data.totalKm}</Text>
+                                    <Text style={styles.tableCell}>{(data.totalKm).toFixed(3)}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
                                     <Text style={styles.tableCell}>{formatDuration(data.totalDuration)}</Text>

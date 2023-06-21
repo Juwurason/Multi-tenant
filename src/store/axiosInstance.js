@@ -11,4 +11,17 @@ axiosInstance.interceptors.request.use((config) => {
     return config;
 });
 
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Handle 401 error here, such as logging out the user
+            // For example:
+            localStorage.removeItem('user'); // Clear user data from local storage
+            window.location.reload(); // Reload the application or redirect to the login page
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default axiosInstance;

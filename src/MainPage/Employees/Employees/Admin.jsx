@@ -131,7 +131,7 @@ const AllAdmin = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchData()
+                        dispatch(fetchAdmin());
                     } else {
                         toast.error(data.message);
                     }
@@ -278,30 +278,78 @@ const AllAdmin = () => {
                             </div>
                         </div>
 
-                        {/* <div className="row filter-row">
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin ID</label>
-                                    <input type="text" className="form-control floating" />
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Name</label>
-                                    <input type="text" className="form-control floating" />
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Email</label>
-                                    <input type="text" className="form-control " />
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="card">
+
+                                    <div className="card-body">
+                                        <form  >
+                                            <div className="row align-items-center py-2">
+                                                <div className="col-sm-4">
+                                                    <div className="form-group">
+                                                        <label className="col-form-label">Select Admin</label>
+                                                        <div>
+                                                            <select className="form-select" >
+                                                                <option defaultValue hidden>--Select Admin--</option>
+
+                                                                {
+                                                                    admin.map((data, index) =>
+                                                                        <option value={data.administratorId} key={index}>{data.fullName}</option>)
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-sm-4">
+                                                    <div className="form-group">
+                                                        <label className="col-form-label">Registration Date From</label>
+                                                        <input className="form-control" type="datetime-local"
+
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-sm-4">
+                                                    <div className="form-group">
+                                                        <label className="col-form-label">Registration Date To</label>
+                                                        <input className="form-control" type="datetime-local"
+
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-sm-4">
+                                                    <div className="form-group">
+                                                        <label className="col-form-label">Select Status</label>
+                                                        <div>
+                                                            <select className="form-select">
+                                                                <option defaultValue hidden>--Select Status--</option>
+                                                                <option value="0">InActive</option>
+                                                                <option value="1">Active</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div className="col-auto mt-3">
+                                                    <div className="form-group">
+                                                        <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+
+                                                        >
+                                                            Load
+
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="col-sm-6 col-md-3">
-                                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
-                            </div>
-                        </div> */}
+                        </div>
 
 
 

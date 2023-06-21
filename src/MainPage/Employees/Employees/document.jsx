@@ -12,7 +12,6 @@ import ExcelJS from 'exceljs';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
-import { useCompanyContext } from '../../../context';
 import { GoSearch } from 'react-icons/go';
 import Swal from 'sweetalert2';
 
@@ -55,6 +54,7 @@ const Document = () => {
     const [reason, setReason] = useState("");
     const [deadline, setDeadline] = useState("");
     const [selectedDocument, setSelectedDocument] = useState(0);
+    const [loading1, setLoading1] = useState(false);
     const columns = [
         // {
         //   name: '#',
@@ -280,9 +280,8 @@ const Document = () => {
 
 
                 } catch (error) {
+                    toast.error("Ooooops😔 Error Occurred ")
                     console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
 
 
                 }
@@ -316,6 +315,7 @@ const Document = () => {
 
 
                 } catch (error) {
+                    toast.error("Ooooops😔 Error Occurred ")
                     console.log(error);
 
 
@@ -329,26 +329,32 @@ const Document = () => {
 
     }
     const handleReject = async () => {
-        if (reason.trim() === "" || deadline === "") {
-            toast.error("provide valid reason and deadline")
+
+        if (reason.trim() === "") {
+            toast.error("provide valid reason")
         }
+        setLoading1(false);
         try {
             const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
                 FetchData()
+                setLoading1(false);
                 setRejectModal(true)
             } else {
+
                 toast.error(data.message);
                 setRejectModal(true)
+                setLoading1(false);
             }
 
 
         } catch (error) {
+            setLoading1(false);
+            toast.error("Ooooops😔 Error Occurred ")
             console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
+
 
 
         }
@@ -588,7 +594,12 @@ const Document = () => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <button onClick={handleReject} className="btn btn-danger">Reject Document</button>
+                        <button onClick={handleReject} className="btn btn-danger">
+
+                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div> : "Reject Document"}
+                        </button>
                     </Modal.Footer>
                 </Modal>
 

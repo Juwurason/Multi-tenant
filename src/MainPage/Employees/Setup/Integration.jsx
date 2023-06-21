@@ -40,8 +40,8 @@ const Integration = () => {
     const thirdParty = useRef(null);
     const secretID = useRef(null);
     const clientID = useRef(null);
-    const scope = useRef(null);
-    const responseUrl = useRef(null);
+    const scope = useRef("accounting.transactions accounting.settings accounting.contacts payroll.employees payroll.timesheets payroll.settings");
+    const responseUrl = useRef("http://test.maxicareplus.com/Report/Auth");
 
 
 
