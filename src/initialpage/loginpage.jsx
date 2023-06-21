@@ -75,7 +75,7 @@ const Loginpage = () => {
 
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error("Login Failed");
       if (error.response?.data?.message === 'User Not Found') {
         toast.error('User not found')
       }

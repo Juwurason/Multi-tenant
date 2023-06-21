@@ -39,7 +39,7 @@ const StaffDoc = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <div className='d-flex flex-column gap-1 p-2'>
+                <div className='d-flex flex-column gap-1 p-2' style={{ overflow: "hidden" }}>
                     <span> {row.documentName}</span>
                     <span className='d-flex'>
                         <span className='bg-primary text-white pointer px-2 py-1 rounded-2'
@@ -106,6 +106,7 @@ const StaffDoc = () => {
             setDocumentOne(data.staffDocuments)
 
         } catch (error) {
+            toast.error("An Error Occurred")
             console.log(error);
         }
         finally {

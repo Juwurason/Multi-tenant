@@ -111,7 +111,6 @@ const ShiftScheduling = () => {
 
   }
 
-
   //Calendar Logic Starts here
   // Get the current date
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
@@ -508,7 +507,7 @@ const ShiftScheduling = () => {
                     </div>
 
                     <div
-                      className="col-sm-12 text-center border p-2"
+                      className="col-sm-12 text-center border p-2 roster"
                       style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
 
                     >
@@ -538,7 +537,7 @@ const ShiftScheduling = () => {
                               {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                             </span>
                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
-                            <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile?.fullName}</span></span>
+                            <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
                             <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity?.activities}</span></span>
                           </div>
 
@@ -648,7 +647,7 @@ const ShiftScheduling = () => {
 
 
 
-          <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal show={showModal} onHide={() => setShowModal(false)} centered>
             <Modal.Header closeButton>
               <Modal.Title>Shift Details</Modal.Title>
             </Modal.Header>
@@ -658,7 +657,7 @@ const ShiftScheduling = () => {
                   <p><b>Date:</b> {moment(selectedActivity.dateFrom).format('LLL')} - {moment(selectedActivity.dateTo).format('LLL')}</p>
                   <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                   <p><b>Staff:</b> {selectedActivity.staff?.fullName}</p>
-                  <p><b>Client:</b> {selectedActivity.profile?.fullName}</p>
+                  <p><b>Client(s):</b> {selectedActivity.clients}</p>
                   <p><b>Activities:</b> {selectedActivity?.activities}</p>
                 </>
               )}
