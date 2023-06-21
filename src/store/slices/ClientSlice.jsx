@@ -3,7 +3,8 @@ import api from '../api';
 
 export const fetchClient = createAsyncThunk('Client/fetchClient', async () => {
     const response = await api.fetchClientData();
-    return response;
+    const filteredData = response.filter((client) => client.isActive);
+    return filteredData;
 });
 
 const ClientSlice = createSlice({

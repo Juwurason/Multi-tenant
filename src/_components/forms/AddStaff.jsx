@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 const AddStaff = () => {
-    const { userProfile } = useCompanyContext();
+    const id = JSON.parse(localStorage.getItem('user'));
     const [loading, setLoading] = useState(false)
     const [firstName, setFirstName] = useState('');
     const [surName, setSurName] = useState('');
@@ -22,16 +22,16 @@ const AddStaff = () => {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
+        if (firstName.trim() === "" || surName.trim() === "" || phoneNumber.trim() === "" ||
             email.trim() === ""
         ) {
-            return toast.error("All Fields must be filled")
+            return toast.error("Marked Fields must be filled")
         }
 
 
         const formData = new FormData()
         // Add input field values to formData
-        formData.append("CompanyId", 30);
+        formData.append("CompanyId", id.companyId);
         formData.append("FirstName", firstName);
         formData.append("SurName", surName);
         formData.append("MiddleName", middleName);
@@ -43,7 +43,7 @@ const AddStaff = () => {
 
         try {
             setLoading(true)
-            const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
+            const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
@@ -51,7 +51,7 @@ const AddStaff = () => {
             setLoading(false)
 
         } catch (error) {
-            toast.error(error.response?.data?.message)
+            toast.error("Error creating Staff")
 
             setLoading(false)
 
@@ -110,7 +110,7 @@ const AddStaff = () => {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <label className="col-form-label">Address <span className="text-danger">*</span></label>
+                                                <label className="col-form-label">Address </label>
                                                 <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                                             </div>
                                         </div>

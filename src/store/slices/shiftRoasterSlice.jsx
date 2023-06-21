@@ -5,6 +5,13 @@ export const fetchRoaster = createAsyncThunk('Roaster/fetchRoaster', async () =>
     const response = await api.fetchShiftRoaster();
     return response;
 });
+export const filterRoaster = createAsyncThunk(
+    'Roaster/filterRoaster',
+    async ({ cli, sta }) => {
+        const response = await api.getShiftsByUser(cli, sta);
+        return response.shiftRoster;
+    }
+);
 
 const RoasterSlice = createSlice({
     name: 'Roaster',
@@ -29,7 +36,21 @@ const RoasterSlice = createSlice({
             .addCase(fetchRoaster.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
+            })
+            .addCase(filterRoaster.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(filterRoaster.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(filterRoaster.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
             });
+
+
     },
 });
 

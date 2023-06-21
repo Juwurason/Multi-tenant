@@ -311,14 +311,13 @@ const Document = () => {
                         toast.success(data.message);
                         FetchData()
                     } else {
-                        toast.error(data.message);
+                        toast.error("Error Accepting Document");
                     }
 
 
                 } catch (error) {
                     console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
+
 
 
                 }
@@ -339,8 +338,10 @@ const Document = () => {
             if (data.status === 'Success') {
                 toast.success(data.message);
                 FetchData()
+                setRejectModal(true)
             } else {
                 toast.error(data.message);
+                setRejectModal(true)
             }
 
 

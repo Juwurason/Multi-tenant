@@ -81,8 +81,8 @@ const AdminDoc = () => {
         },
 
     ];
-    const { loading, setLoading } = useCompanyContext();
-    const { uid } = useParams()
+    const [loading, setLoading] = useState(false);
+    const { uid } = useParams();
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
     const navigate = useHistory();

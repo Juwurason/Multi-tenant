@@ -42,7 +42,7 @@ const AllEmployees = () => {
 
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
-  // const [staff, setStaff] = useState([]);
+
 
   const columns = [
 
@@ -125,7 +125,7 @@ const AllEmployees = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchData()
+            dispatch(fetchStaff())
           } else {
             toast.error(data.message);
           }

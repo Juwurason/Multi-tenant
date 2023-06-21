@@ -30,7 +30,7 @@ const AttendanceDetails = () => {
     const [details, setDetails] = useState('')
     const [staffName, setStaffName] = useState('')
     const { get, post } = useHttp();
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
 
     const FetchSchedule = async () => {
         setLoading(true)

@@ -14,7 +14,7 @@ const AddReport = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, } = useParams();
     const [attendance, setAttendance] = useState({});
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const navigate = useHistory();
     const privateHttp = useHttp();

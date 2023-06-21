@@ -17,7 +17,7 @@ import { GoSearch } from 'react-icons/go';
 import moment from 'moment';
 import { MdCancel } from "react-icons/md";
 const ClientDoc = () => {
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const { uid } = useParams()
     const [clientOne, setClientOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);

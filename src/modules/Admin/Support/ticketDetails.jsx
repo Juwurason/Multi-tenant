@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 const ticketDetails = () => {
 
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
     const { uid } = useParams();
     const history = useHistory()

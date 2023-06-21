@@ -81,7 +81,7 @@ const StaffDoc = () => {
         },
 
     ];
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const { loading1, setLoading1 } = useState(false);
     2
     const { uid } = useParams()

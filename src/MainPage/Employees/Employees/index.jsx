@@ -101,13 +101,11 @@ const EmployeesRoute = ({ match }) => {
          <Route path={`${match.url}/timesheet`} component={Timesheet} />
          <Route
             path={`${match.url}/shift-scheduling`}
-            render={() => <ShiftScheduling staff={staff} clients={clients} FetchData={FetchData}
-               loading={loading} schedule={schedule} setSchedule={setSchedule} />}
+            component={ShiftScheduling}
          />
          <Route
             path={`${match.url}/add-shift`}
-            render={() => <AddShiftRoaster staff={staff} clients={clients}
-            />}
+            component={AddShiftRoaster}
          />
 
          <Route path={`${match.url}/edit-shift/:uid`} component={EditShiftRoaster} />

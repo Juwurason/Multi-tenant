@@ -56,7 +56,7 @@ const ClientSchedule = () => {
 
     const [selected, setSelected] = useState([]);
     const [staffAvail, setStaffAvail] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [loading2, setLoading2] = useState(false);
     const [selectedDay, setSelectedDay] = useState("");
@@ -71,7 +71,7 @@ const ClientSchedule = () => {
         setSelected(selectedOptions);
     }
     const selectedValues = selected.map(option => option.label).join(', ');
-    
+
 
     const convertTo12HourFormat = (time24h) => {
         let [hours, minutes] = time24h.split(':');
@@ -109,7 +109,7 @@ const ClientSchedule = () => {
             const { data } = await post(`/ClientSchedules/add_client_schedule?userId=${id.userId}`, info);
             console.log(data)
             if (data.status === 'Success') {
-                toast.success(data.message) 
+                toast.success(data.message)
             }
             setLoading1(false)
             FetchSchedule()
@@ -316,7 +316,7 @@ const ClientSchedule = () => {
     const handleActivityChange = (selected) => {
         setSelectedActivities(selected);
     };
-   
+
     const EditAvail = async (e) => {
 
         e.preventDefault()
@@ -557,16 +557,16 @@ const ClientSchedule = () => {
                                 </div>
                             </div>
                             <div className="col-md-12">
-                                        <div className="form-group">
-                                            <label>Activities</label>
-                                            <MultiSelect
-                                                options={options}
-                                                value={selectedActivities}
-                                                onChange={handleActivityChange}
-                                                labelledBy={'Select Activities'}
-                                            />
-                                        </div>
-                                    </div>
+                                <div className="form-group">
+                                    <label>Activities</label>
+                                    <MultiSelect
+                                        options={options}
+                                        value={selectedActivities}
+                                        onChange={handleActivityChange}
+                                        labelledBy={'Select Activities'}
+                                    />
+                                </div>
+                            </div>
                             <div className='col-md-6'>
                                 <div className="form-group">
                                     <label>From Time of Day</label>
@@ -585,7 +585,7 @@ const ClientSchedule = () => {
                                     />
                                 </div>
                             </div>
-                            
+
 
                         </form>
                     </Modal.Body>

@@ -8,6 +8,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStaff } from '../../store/slices/StaffSlice';
+import { fetchClient } from '../../store/slices/ClientSlice';
 
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
@@ -28,11 +31,30 @@ const options = [
     { label: "Domestics Social Support", value: "Domestics Social Support" },
 
 ];
-const AddShiftRoaster = ({ staff }) => {
+const AddShiftRoaster = () => {
+    const dispatch = useDispatch();
+
+    // Fetch staff data and update the state
+    useEffect(() => {
+        dispatch(fetchStaff());
+        dispatch(fetchClient());
+    }, [dispatch]);
+
+    // Access the entire state
+    const staff = useSelector((state) => state.staff.data);
+    const clients = useSelector((state) => state.client.data);
+
+    useEffect(() => {
+        // Check if staff data already exists in the store
+        if (!staff.length) {
+            // Fetch staff data only if it's not available in the store
+            dispatch(fetchStaff());
+        }
+    }, [dispatch, staff]);
+
     const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
-    const [ loading, setLoading ] = useState(false)
-    const [clients, setClients] = useState([]);
+    const [loading, setLoading] = useState(false)
     const [selectedClient, setSelectedClient] = useState([]);
     const navigate = useHistory();
     const [selected, setSelected] = useState([]);
@@ -104,10 +126,11 @@ const AddShiftRoaster = ({ staff }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (staffId === 0 && selected.length<=0
+        if (staffId === 0 && selected.length <= 0
         ) {
-            return toast.error("Invalid Request")
+            return toast.error("Select Either a staff or client")
         }
+
         try {
             setLoading(true)
             const { data } = await post(`/ShiftRosters/add_multipleclient_shifts?userId=${id.userId}`,

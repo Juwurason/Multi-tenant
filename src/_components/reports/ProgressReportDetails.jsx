@@ -9,7 +9,7 @@ import { MdCancel } from "react-icons/md";
 import './report.css';
 
 const ProgressReportDetails = () => {
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const { uid } = useParams();
     const [details, setDetails] = useState({});

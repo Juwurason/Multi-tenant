@@ -41,11 +41,9 @@ const Clients = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
 
+
   const columns = [
-    // {
-    //   name: '#',
-    //   cell: (row, index) => index + 1
-    // },
+
 
     {
       name: 'Full Name',
@@ -278,7 +276,7 @@ const Clients = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchData();
+            dispatch(fetchClient());
           } else {
             toast.error(data.message);
           }

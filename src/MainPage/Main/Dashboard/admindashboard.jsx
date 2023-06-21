@@ -53,7 +53,6 @@ const AdminDashboard = () => {
 
   }, [clients])
 
-  console.log(recentUsers);
 
 
 

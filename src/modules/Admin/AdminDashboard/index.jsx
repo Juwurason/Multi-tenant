@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     const [rosters, setRosters] = useState([]);
     const [recentUsers, setRecentUsers] = useState([]);
     const [progressNote, setProgressNote] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [document, setDocument] = useState([]);
     const { get } = useHttp();
 
@@ -94,10 +94,10 @@ const AdminDashboard = () => {
             // console.log(data);
             setAttendance(data);
             setLoading(false)
-          } catch (error) {
+        } catch (error) {
             console.log(error);
             setLoading(false)
-          }
+        }
 
         try {
             const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });

@@ -46,13 +46,24 @@ const fetchShiftRoaster = async () => {
         throw error;
     }
 };
+const getShiftsByUser = async (client, staff) => {
+    try {
+        const response = await axiosInstance.get(`/ShiftRosters/get_shifts_by_user?client=${client}&staff=${staff}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching shift Roaster:', error);
+        throw error;
+    }
+};
+
 
 const api = {
     fetchAdminData,
     fetchStaffData,
     fetchClientData,
     fetchDocumentData,
-    fetchShiftRoaster
+    fetchShiftRoaster,
+    getShiftsByUser
     // Add other API endpoints and corresponding methods as needed
 };
 

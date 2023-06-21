@@ -78,7 +78,7 @@ const StaffDocum = () => {
         },
 
     ];
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const { uid } = useParams()
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);

@@ -24,7 +24,7 @@ const AllUser = () => {
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
     const [users, setUsers] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
 
 
@@ -240,7 +240,9 @@ const AllUser = () => {
     };
 
     const filteredData = users.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+        item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.role.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchText.toLowerCase())
     );
 
 
