@@ -21,29 +21,7 @@
  import { Modal } from 'react-bootstrap';
  import { async } from '@babel/runtime/helpers/regeneratorRuntime';
  import { MultiSelect } from 'react-multi-select-component';
- const options = [
-     { label: "Medication Supervision", value: "Medication Supervision" },
-     { label: "Medication administering", value: "Medication administering" },
-     { label: "Personal Support", value: "Personal Support" },
-     { label: "Domestic Cleaning", value: "Domestic Cleaning" },
-     { label: "Transport", value: "Transport" },
-     { label: "Dog training", value: "Dog training" },
-     { label: "Install phone", value: "Install phone" },
-     { label: "Welfare check", value: "Welfare check" },
-     { label: "Support Groceries shopping", value: "Support Groceries shopping" },
-     { label: "Pick up", value: "Pick up" },
-     { label: "Baby sitting", value: "Baby sitting" },
-     { label: "Taking to solicitors appointment", value: "Taking to solicitors appointment" },
-     { label: "Meal Preparation", value: "Meal Preparation" },
-     { label: "Shopping", value: "Shopping" },
-     { label: "Groceries Transport", value: "Groceries Transport" },
-     { label: "Domestics Social Support", value: "Domestics Social Support" },
- 
- 
- 
- ];
- 
- 
+
  const ClientDailyLiving = () => {
      useEffect(() => {
          if ($('.select').length > 0) {
@@ -60,6 +38,9 @@
      const [loading1, setLoading1] = useState(false);
      const [loading2, setLoading2] = useState(false);
      const [selectedDay, setSelectedDay] = useState("");
+     const [selectedDetails, setSelectedDetails] = useState("");
+     const [selectedForm, setSelectedForm] = useState("");
+     const [selectedSupport, setSelectedSupport] = useState("");
      const { get, post } = useHttp();
      const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
      const [selectedTimeTo, setSelectedTimeTo] = useState("");
@@ -91,23 +72,23 @@
  
  
      const PostAvail = async (e) => {
-         if (selectedDay === "" || selectedTimeFrom === "" || selectedTimeTo === "" || selectedValues === "") {
+         if (selectedDay === "" || selectedForm === "") {
              return toast.error("Input Fields cannot be empty")
          }
          e.preventDefault()
          setLoading1(true)
          const info = {
              profileId: clientProfile.profileId,
-             days: selectedDay,
-             fromTimeOfDay: selectedTimeFrom,
-             toTimeOfDay: selectedTimeTo,
-             activities: selectedValues,
-             companyID: id.companyId
+             activities: selectedDay,
+             support: selectedSupport,
+             supportLevel: selectedDetails,
+             details: selectedForm,
+            //  companyID: id.companyId
          }
          try {
  
-             const { data } = await post(`/ClientSchedules/add_client_schedule?userId=${id.userId}`, info);
-             console.log(data)
+             const { data } = await post(`/DailyLivings`, info);
+            //  console.log(data)
              if (data.status === 'Success') {
                  toast.success(data.message) 
              }
@@ -127,9 +108,9 @@
      const FetchSchedule = async () => {
          // setLoading2(true)
          try {
-             const { data } = await get(`ClientSchedules/get_client_schedule?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
-             // console.log(data);
-            //  setStaffAvail(data)
+             const { data } = await get(`/DailyLivings/get_all?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
+            //  console.log(data);
+             setStaffAvail(data)
              // setLoading2(false);
          } catch (error) {
              // console.log(error);
@@ -148,30 +129,25 @@
  
  
      const columns = [
-         // {
-         //   name: 'User',
-         //   selector: row => row.user,
-         //   sortable: true
-         // },
          {
-             name: 'Days',
-             selector: row => row.days,
+             name: 'Activities',
+             selector: row => row.activities,
              sortable: true,
              expandable: true,
          },
          {
-             name: 'From Time of Day',
-             selector: row => convertTo12HourFormat(row.fromTimeOfDay),
+             name: 'Support',
+             selector: row => row.support,
              sortable: true,
          },
          {
-             name: 'To Time of Day',
-             selector: row => convertTo12HourFormat(row.toTimeOfDay),
+             name: 'Level of Support',
+             selector: row => row.supportLevel,
              sortable: true
          },
          {
-             name: 'Activities',
-             selector: row => row.activities,
+             name: 'Details',
+             selector: row => row.details,
              sortable: true
          },
          {
@@ -245,7 +221,7 @@
  
      const handleDelete = async (e) => {
          Swal.fire({
-             html: `<h3>Are you sure? you want to delete this Schedule</h3>`,
+             html: `<h3>Are you sure? you want to delete this</h3>`,
              icon: 'question',
              showCancelButton: true,
              confirmButtonColor: '#1C75BC',
@@ -255,7 +231,7 @@
          }).then(async (result) => {
              if (result.isConfirmed) {
                  try {
-                     const { data } = await post(`/ClientSchedules/delete/${e}`)
+                     const { data } = await post(`/DailyLivings/delete/${e}`)
                      // console.log(data);
                      if (data.status === 'Success') {
                          toast.success(data.message);
@@ -266,7 +242,7 @@
  
  
                  } catch (error) {
-                     // console.log(error);
+                     console.log(error);
                      toast.error(error.response.data.message)
                      toast.error(error.response.data.title)
  
@@ -290,10 +266,10 @@
          // setLoading2(true)
          try {
  
-             const { data } = await get(`/ClientSchedules/get_schedule/${e}`, { cacheTimeout: 300000 });
-             // console.log(data);
-             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
-             console.log();
+             const { data } = await get(`/DailyLivings/${e}`, { cacheTimeout: 300000 });
+            //  console.log(data);
+            //  setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
+            //  console.log();
              setEditAvail(data);
          } catch (error) {
              // console.log(error);
@@ -322,18 +298,18 @@
          e.preventDefault()
          setLoading2(true)
          const info = {
-             clientScheduleId: idSave,
+             dailyLivingId: idSave,
              profileId: clientProfile.profileId,
-             days: editAvail.days,
-             fromTimeOfDay: editAvail.fromTimeOfDay,
-             toTimeOfDay: editAvail.toTimeOfDay,
-             activities: selectedValue,
-             companyID: id.companyId
+             activities: editAvail.activities,
+             support: editAvail.support,
+             supportLevel: editAvail.supportLevel,
+             details: editAvail.details,
+            //  companyID: id.companyId
          }
          try {
  
-             const { data } = await post(`/ClientSchedules/edit/${idSave}?userId=${id.userId}`, info);
-             // console.log(data);
+             const { data } = await post(`/DailyLivings/edit/${idSave}`, info);
+            //  console.log(data);
              if (data.status === 'Success') {
                  toast.success(data.message)
              }
@@ -354,12 +330,14 @@
          return (
              <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                  <div><span className='fw-bold'>Activities: </span> {data.activities}</div>
+                 <div><span className='fw-bold'>Support: </span> {data.support}</div>
+                 <div><span className='fw-bold'>Level of Support: </span> {data.supportLevel}</div>
                  <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                  <div>
-                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.clientScheduleId)}>
+                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.dailyLivingId)}>
                          Edit
                      </button> |
-                     <button onClick={() => handleDelete(data.clientScheduleId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                     <button onClick={() => handleDelete(data.dailyLivingId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                          Delete
                      </button>
                  </div>
@@ -376,7 +354,7 @@
      };
  
      const filteredData = staffAvail.filter((item) =>
-         item.days.toLowerCase().includes(searchText.toLowerCase())
+         item.activities.toLowerCase().includes(searchText.toLowerCase())
      );
      return (
          <div className="page-wrapper">
@@ -415,7 +393,7 @@
                                      <div className="col-md-6">
                                          <div className="form-group">
                                              <label>Support</label>
-                                             <select className='form-select'>
+                                             <select className='form-select' onChange={(e) => setSelectedSupport(e.target.value)}>
                                                 <option defaultValue hidden >Select Issues</option>
                                                 <option value={"No help required"}>No help required</option>
                                                 <option value={"Aids used"}>Aids used</option>
@@ -430,7 +408,7 @@
                                      <div className='col-md-6'>
                                          <div className="form-group">
                                              <label>How often do you require supervision or support throughout the day?</label>
-                                             <select className='form-select'>
+                                             <select className='form-select' onChange={(e) => setSelectedDetails(e.target.value)}>
                                                 <option defaultValue hidden >Select Issues</option>
                                                 <option value={"None of the time"}>None of the time</option>
                                                 <option value={"All the time"}>All the time</option>
@@ -443,12 +421,12 @@
                                      <div className='col-md-6'>
                                          <div className="form-group">
                                              <label>Details</label>
-                                             <textarea className="form-control"  rows="2" cols="20" />
+                                             <textarea className="form-control" onChange={(e) => setSelectedForm(e.target.value)} rows="2" cols="20" />
                                          </div>
                                      </div>
  
                                      <div className="text-start">
-                                         <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} >
+                                         <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
                                              {loading1 ? <div className="spinner-grow text-light" role="status">
                                                  <span className="sr-only">Loading...</span>
                                              </div> : "Submit"}</button>
@@ -531,63 +509,57 @@
  
  
                  </div>
+
                  <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                      <Modal.Header closeButton>
-                         <Modal.Title>Edit Schedule</Modal.Title>
+                         <Modal.Title>Edit Daily Living & Night Support</Modal.Title>
                      </Modal.Header>
                      <Modal.Body>
-                         <form className="row">
-                             <div className='col-md-12'>
-                                 <div className="form-group">
-                                     <label>Days</label>
-                                     <select
-                                         className='form-select'
-                                         name="days" value={editAvail.days || ''} onChange={handleInputChange}
-                                         required
-                                     >
-                                         <option defaultValue hidden>Select Days</option>
-                                         <option value={"Monday"}>Monday</option>
-                                         <option value={"Tuesday"}>Tuesday</option>
-                                         <option value={"Wednessday"}>Wednessday</option>
-                                         <option value={"Thursday"}>Thursday</option>
-                                         <option value={"Friday"}>Friday</option>
-                                         <option value={"Saturday"}>Saturday</option>
-                                         <option value={"Sunday"}>Sunday</option>
-                                     </select>
-                                 </div>
-                             </div>
-                             <div className="col-md-12">
+                         <div className="card-body">
+                                 <form className="row">
+                                     <div className='col-md-6'>
                                          <div className="form-group">
                                              <label>Activities</label>
-                                             <MultiSelect
-                                                 options={options}
-                                                 value={selectedActivities}
-                                                 onChange={handleActivityChange}
-                                                 labelledBy={'Select Activities'}
-                                             />
+                                             <input className="form-control" type="text" name="activities" value={editAvail.activities || ''} onChange={handleInputChange} />
                                          </div>
                                      </div>
-                             <div className='col-md-6'>
-                                 <div className="form-group">
-                                     <label>From Time of Day</label>
-                                     <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
-                                     />
-                                 </div>
-                             </div>
-                             <div className='col-md-6'>
-                                 <div className="form-group">
-                                     <label>To Time of Day</label>
-                                     <input
-                                         className="form-control"
-                                         type="time"
-                                         name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
-                                         required
-                                     />
-                                 </div>
-                             </div>
-                             
  
-                         </form>
+                                     <div className="col-md-6">
+                                         <div className="form-group">
+                                             <label>Support</label>
+                                             <select className='form-select' name="support" value={editAvail.support || ''} onChange={handleInputChange}>
+                                                <option defaultValue hidden >Select Issues</option>
+                                                <option value={"No help required"}>No help required</option>
+                                                <option value={"Aids used"}>Aids used</option>
+                                                <option value={"Prompting required"}>Prompting required</option>
+                                                <option value={"Some support required"}>Some support required</option>
+                                                <option value={"Full physical support required"}>Full physical support required</option>
+                                                
+                                            </select>
+                                         </div>
+                                     </div>
+ 
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>How often do you require supervision or support throughout the day?</label>
+                                             <select className='form-select' name="supportLevel" value={editAvail.supportLevel || ''} onChange={handleInputChange}>
+                                                <option defaultValue hidden >Select Issues</option>
+                                                <option value={"None of the time"}>None of the time</option>
+                                                <option value={"All the time"}>All the time</option>
+                                                <option value={"Prompting required"}>Prompting required</option>
+                                                <option value={"During active times"}>During active times</option>                                                
+                                            </select>
+                                         </div>
+                                     </div>
+
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>Details</label>
+                                             <textarea className="form-control" name="details" value={editAvail.details || ''} onChange={handleInputChange} rows="2" cols="20" />
+                                         </div>
+                                     </div>
+                                 </form>
+                             </div>
                      </Modal.Body>
                      <Modal.Footer>
                          <button
@@ -601,7 +573,7 @@
                                      <span className="sr-only">Loading...</span>
                                  </div>
                              ) : (
-                                 "Add"
+                                 "Submit"
                              )}
                          </button>
                      </Modal.Footer>

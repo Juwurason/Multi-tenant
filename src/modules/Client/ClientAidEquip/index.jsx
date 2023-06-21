@@ -50,7 +50,6 @@ const ClientAidEquip = () => {
     const [selectedTimeTo, setSelectedTimeTo] = useState("");
     const id = JSON.parse(localStorage.getItem('user'));
     const [showModal, setShowModal] = useState(false);
-    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
 
     //  const handleSelected = (selectedOptions) => {
@@ -60,22 +59,13 @@ const ClientAidEquip = () => {
 
     const handleSelected = (selectedOptions) => {
         const updatedInfo = {
-            equipmentAssistance: false,
-            requireStaffTraining: false,
+          equipmentAssistance: selectedOptions.some(option => option.value === 'Equipment Require Assistance'),
+          requireStaffTraining: selectedOptions.some(option => option.value === 'Equipment Require Staff Training'),
         };
-
-        selectedOptions.forEach((option) => {
-            if (option.value === "Equipment Require Assistance") {
-                updatedInfo.equipmentAssistance = true;
-            }
-            if (option.value === "Equipment Require Staff Training") {
-                updatedInfo.requireStaffTraining = true;
-            }
-        });
-
+      
         setInfo(updatedInfo);
         setSelected(selectedOptions);
-    };
+      };
 
 
     const convertTo12HourFormat = (time24h) => {
@@ -284,7 +274,7 @@ const ClientAidEquip = () => {
     }
 
     const [editAvail, setEditAvail] = useState({});
-    const [idSave, setIdSave] = useState('')
+    const [idSave, setIdSave] = useState('');
     const [selectedActivities, setSelectedActivities] = useState([]);
     const selectedValue = selectedActivities.map(option => option.label).join(', ');
     const handleEdit = async (e) => {
@@ -309,8 +299,8 @@ const ClientAidEquip = () => {
             setEditAvail(data);
         } catch (error) {
             // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
+            toast.error(error.response.data.message);
+            toast.error(error.response.data.title);
         }
     };
 
@@ -330,25 +320,15 @@ const ClientAidEquip = () => {
     };
 
     const EditAvail = async (e) => {
-
         e.preventDefault()
         setLoading2(true)
-        // {
-        //     "aidsId": 0,
-        //     "profileId": 0,
-        //     "equipmentUsed": "string",
-        //     "equipmentAssistance": true,
-        //     "requireStaffTraining": true
-        // }
         const info = {
             aidsId: idSave,
             profileId: clientProfile.profileId,
-            equipmentUsed: editAvail.days,
-            equipmentAssistance: editAvail.fromTimeOfDay,
-            requireStaffTraining: editAvail.toTimeOfDay,
-            activities: selectedValue,
-            companyID: id.companyId
-        }
+            equipmentUsed: editAvail.equipmentUsed,
+            equipmentAssistance: selectedActivities.find(option => option.value === 'Equipment Require Assistance') !== undefined,
+            requireStaffTraining: selectedActivities.find(option => option.value === 'Equipment Require Staff Training') !== undefined,
+          };
         try {
 
             const { data } = await post(`/Aids/edit/${idSave}`, info);
@@ -360,7 +340,7 @@ const ClientAidEquip = () => {
             setShowModal(false)
             FetchSchedule()
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
         }
@@ -563,7 +543,7 @@ const ClientAidEquip = () => {
                             type="submit"
                             className="btn btn-primary add-btn px-2"
                             disabled={loading2 ? true : false}
-                            // onClick={EditAvail}
+                            onClick={EditAvail}
                         >
                             {loading2 ? (
                                 <div className="spinner-grow text-light" role="status">

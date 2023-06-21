@@ -227,7 +227,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link to={`/staff/main/staff-document`} className="py-1 px-2 rounded text-white bg-danger">Staff Doc</Link>
+                              <Link to={`/staff/main/document`} className="py-1 px-2 rounded text-white bg-danger">Staff Doc</Link>
                             </div>
                           </div>
                         </div>

@@ -87,7 +87,7 @@ const StaffDashboard = ({roster, loading}) => {
       setIsLoading(false);
     }, 3000);
   };
-  
+
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = () =>{
@@ -334,8 +334,9 @@ const StaffDashboard = ({roster, loading}) => {
               <Modal.Body>
                 {selectedActivity && (
                   <>
-                    <p><b>Date:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</p>
+                    <p><b>Date:</b> <span style={{ fontSize: '15px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span></p>
                     <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
+                    <p><b>Client:</b> {activitiesByDay[2][0].profile.fullName}</p>
                     <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
                   </>
                 )}
