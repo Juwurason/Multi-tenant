@@ -7,8 +7,7 @@ import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 const AddAdministrator = () => {
-
-    const { userProfile, loading, setLoading } = useCompanyContext();
+    const id = JSON.parse(localStorage.getItem('user'));
     const [firstName, setFirstName] = useState('');
     const [surName, setSurName] = useState('');
     const [middleName, setMiddleName] = useState('');
@@ -23,16 +22,16 @@ const AddAdministrator = () => {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
+        if (firstName.trim() === "" || surName.trim() === "" || phoneNumber.trim() === "" ||
             email.trim() === ""
         ) {
-            return toast.error("All Fields must be filled")
+            return toast.error("Marked Fields must be filled")
         }
 
 
         const formData = new FormData()
         // Add input field values to formData
-        formData.append("CompanyId", 30);
+        formData.append("CompanyId", id.companyId);
         formData.append("FirstName", firstName);
         formData.append("SurName", surName);
         formData.append("MiddleName", middleName);
@@ -44,15 +43,15 @@ const AddAdministrator = () => {
 
         try {
             setLoading1(true)
-            const { data } = await privateHttp.post(`/Administrators/add_administrator?userId=${userProfile.userId}`,
+            const { data } = await privateHttp.post(`/Administrators/add_administrator?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
             navigate.push('/app/employee/alladmin')
-            setLoading(false)
+            setLoading1(false)
 
         } catch (error) {
-            toast.error(error.response?.data?.message)
+            toast.error("Error Creating Admin")
 
             setLoading1(false)
 
@@ -111,7 +110,7 @@ const AddAdministrator = () => {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <label className="col-form-label">Address <span className="text-danger">*</span></label>
+                                                <label className="col-form-label">Address</label>
                                                 <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
                                             </div>
                                         </div>

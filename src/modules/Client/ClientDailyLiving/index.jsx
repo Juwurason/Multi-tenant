@@ -368,7 +368,7 @@
                                                 <option value={"Prompting required"}>Prompting required</option>
                                                 <option value={"Some support required"}>Some support required</option>
                                                 <option value={"Full physical support required"}>Full physical support required</option>
-                                                
+
                                             </select>
                                          </div>
                                      </div>
@@ -381,10 +381,10 @@
                                                 <option value={"None of the time"}>None of the time</option>
                                                 <option value={"All the time"}>All the time</option>
                                                 <option value={"Prompting required"}>Prompting required</option>
-                                                <option value={"During active times"}>During active times</option>                                                
+                                                <option value={"During active times"}>During active times</option>
                                             </select>
-                                         </div>
-                                     </div>
+                                        </div>
+                                    </div>
 
                                      <div className='col-md-6'>
                                          <div className="form-group">

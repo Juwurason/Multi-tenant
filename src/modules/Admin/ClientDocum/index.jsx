@@ -18,7 +18,7 @@ import { useCompanyContext } from "../../../context";
 import useHttp from "../../../hooks/useHttp";
 
 const ClientDocum = () => {
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const { uid } = useParams()
     const [clientOne, setClientOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);

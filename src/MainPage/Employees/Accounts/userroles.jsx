@@ -28,7 +28,7 @@ const UserRoles = () => {
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
     const [roles, setRoles] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
     const [showModal, setShowModal] = useState(false);
     const [editModal, setEditModal] = useState(false);

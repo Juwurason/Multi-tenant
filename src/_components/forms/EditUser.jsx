@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 const EditAccount = () => {
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [userOne, setUserOne] = useState({});

@@ -113,7 +113,7 @@ const AllAdmin = () => {
     ];
 
 
-    const [menu, setMenu] = useState(false);
+
 
     const handleDelete = async (e) => {
         Swal.fire({
@@ -131,7 +131,7 @@ const AllAdmin = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchData()
+                        dispatch(fetchAdmin());
                     } else {
                         toast.error(data.message);
                     }
@@ -248,142 +248,180 @@ const AllAdmin = () => {
 
     return (
         <>
-            <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <Header onMenuClick={(value) => toggleMobileMenu()} />
-                <Sidebar />
-                <div className="page-wrapper">
-                    <Helmet>
-                        <title>Admin</title>
-                        <meta name="description" content="Login page" />
-                    </Helmet>
+            <div className="page-wrapper">
+                <Helmet>
+                    <title>Admin</title>
+                    <meta name="description" content="Login page" />
+                </Helmet>
 
-                    <div className="content container-fluid">
+                <div className="content container-fluid">
 
-                        <div className="page-header">
-                            <div className="row align-items-center">
-                                <div className="col">
-                                    <h3 className="page-title">Administrators</h3>
-                                    <ul className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                        <li className="breadcrumb-item active">Administrators</li>
-                                    </ul>
+                    <div className="page-header">
+                        <div className="row align-items-center">
+                            <div className="col">
+                                <h3 className="page-title">Administrators</h3>
+                                <ul className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item active">Administrators</li>
+                                </ul>
+                            </div>
+                            <div className="col-auto float-end ml-auto">
+
+                                <div className="view-icons">
+                                    <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                                 </div>
-                                <div className="col-auto float-end ml-auto">
+                            </div>
+                        </div>
+                    </div>
 
-                                    <div className="view-icons">
-                                        <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="card">
+
+                                <div className="card-body">
+                                    <form  >
+                                        <div className="row align-items-center py-2">
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Select Admin</label>
+                                                    <div>
+                                                        <select className="form-select" >
+                                                            <option defaultValue hidden>--Select Admin--</option>
+
+                                                            {
+                                                                admin.map((data, index) =>
+                                                                    <option value={data.administratorId} key={index}>{data.fullName}</option>)
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Registration Date From</label>
+                                                    <input className="form-control" type="datetime-local"
+
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Registration Date To</label>
+                                                    <input className="form-control" type="datetime-local"
+
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Select Status</label>
+                                                    <div>
+                                                        <select className="form-select">
+                                                            <option defaultValue hidden>--Select Status--</option>
+                                                            <option value="0">InActive</option>
+                                                            <option value="1">Active</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div className="col-auto mt-3">
+                                                <div className="form-group">
+                                                    <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+
+                                                    >
+                                                        Load
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
 
-                        {/* <div className="row filter-row">
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin ID</label>
-                                    <input type="text" className="form-control floating" />
+                    </div>
+
+
+
+
+
+                    <div className='mt-4 border'>
+                        <div className="row px-2 py-3">
+
+                            <div className="col-md-3">
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search Admins" className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Name</label>
-                                    <input type="text" className="form-control floating" />
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-md-3">
-                                <div className="form-group form-focus">
-                                    <label className="focus-label">Admin Email</label>
-                                    <input type="text" className="form-control " />
-                                </div>
-                            </div>
+                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                <CSVLink
+                                    data={admin}
+                                    filename={"data.csv"}
 
-                            <div className="col-sm-6 col-md-3">
-                                <a href="#" className="btn btn-primary btn-block w-100"> Search </a>
-                            </div>
-                        </div> */}
-
-
-
-
-
-                        <div className='mt-4 border'>
-                            <div className="row px-2 py-3">
-
-                                <div className="col-md-3">
-                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                        <input type="text" placeholder="Search Admins" className='border-0 outline-none' onChange={handleSearch} />
-                                        <GoSearch />
-                                    </div>
-                                </div>
-                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                    <CSVLink
-                                        data={admin}
-                                        filename={"data.csv"}
-
-                                    >
-                                        <button
-
-                                            className='btn text-info'
-                                            title="Export as CSV"
-                                        >
-                                            <FaFileCsv />
-                                        </button>
-
-                                    </CSVLink>
+                                >
                                     <button
-                                        className='btn text-danger'
-                                        onClick={handlePDFDownload}
-                                        title="Export as PDF"
+
+                                        className='btn text-info'
+                                        title="Export as CSV"
                                     >
-                                        <FaFilePdf />
+                                        <FaFileCsv />
                                     </button>
+
+                                </CSVLink>
+                                <button
+                                    className='btn text-danger'
+                                    onClick={handlePDFDownload}
+                                    title="Export as PDF"
+                                >
+                                    <FaFilePdf />
+                                </button>
+                                <button
+                                    className='btn text-primary'
+
+                                    onClick={handleExcelDownload}
+                                    title="Export as Excel"
+                                >
+                                    <FaFileExcel />
+                                </button>
+                                <CopyToClipboard text={JSON.stringify(admin)}>
                                     <button
-                                        className='btn text-primary'
 
-                                        onClick={handleExcelDownload}
-                                        title="Export as Excel"
+                                        className='btn text-warning'
+                                        title="Copy Table"
+                                        onClick={() => toast("Table Copied")}
                                     >
-                                        <FaFileExcel />
+                                        <FaCopy />
                                     </button>
-                                    <CopyToClipboard text={JSON.stringify(admin)}>
-                                        <button
-
-                                            className='btn text-warning'
-                                            title="Copy Table"
-                                            onClick={() => toast("Table Copied")}
-                                        >
-                                            <FaCopy />
-                                        </button>
-                                    </CopyToClipboard>
-                                </div>
-                                <div className='col-md-4'>
-                                    <Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
-                                        Create New Admin</Link>
-                                </div>
+                                </CopyToClipboard>
                             </div>
-                            <DataTable data={filteredData} columns={columns}
-                                pagination
-                                highlightOnHover
-                                searchable
-                                searchTerm={searchText}
-
-
-                                expandableRows
-                                responsive
-                                expandableRowsComponent={ButtonRow}
-                                paginationTotalRows={filteredData.length}
-
-
-
-                            />
-
-
-
-
-
-
+                            <div className='col-md-4'>
+                                <Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
+                                    Create New Admin</Link>
+                            </div>
                         </div>
+                        <DataTable data={filteredData} columns={columns}
+                            pagination
+                            highlightOnHover
+                            searchable
+                            searchTerm={searchText}
+
+
+                            expandableRows
+                            responsive
+                            expandableRowsComponent={ButtonRow}
+                            paginationTotalRows={filteredData.length}
+
+
+
+                        />
 
 
 
@@ -392,7 +430,13 @@ const AllAdmin = () => {
 
                     </div>
 
+
+
+
+
+
                 </div>
+
             </div>
 
             <Offcanvas />

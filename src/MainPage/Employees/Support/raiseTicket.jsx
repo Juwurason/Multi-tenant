@@ -10,7 +10,7 @@ import Editor from '../../HR/Message/editor';
 
 const RaiseTicket = () => {
 
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
 
     const [subject, setSubject] = useState('');

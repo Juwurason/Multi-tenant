@@ -18,7 +18,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { set } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { fetchRoaster } from '../../../store/slices/shiftRoasterSlice';
+import { fetchRoaster, filterRoaster } from '../../../store/slices/shiftRoasterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
@@ -42,7 +42,7 @@ const ShiftScheduling = () => {
   }, [dispatch]);
 
   // Access the entire state
-  const loading = useSelector((state) => state.document.isLoading);
+  const loading = useSelector((state) => state.roaster.isLoading);
   const schedule = useSelector((state) => state.roaster.data);
   const staff = useSelector((state) => state.staff.data);
   const clients = useSelector((state) => state.client.data);
@@ -54,6 +54,7 @@ const ShiftScheduling = () => {
       dispatch(fetchRoaster());
     }
   }, [dispatch, schedule]);
+
 
 
   const id = JSON.parse(localStorage.getItem('user'));
@@ -80,7 +81,19 @@ const ShiftScheduling = () => {
 
 
   // Filtering Schedule either by user or Client
-  const FilterSchedule = async () => {
+
+  // const handleFilter = (client, staff) => {
+  //   dispatch(filterRoaster({ client, staff }))
+  //     .then(() => {
+  //       toast.success('Filter applied successfully');
+  //     })
+  //     .catch((error) => {
+  //       toast.error('Failed to apply filter');
+  //     });
+  // };
+
+
+  const FilterSchedule = () => {
 
     if (sta === '' && cli === '') {
       return Swal.fire(
@@ -90,18 +103,11 @@ const ShiftScheduling = () => {
       )
 
     } else {
-      setLoading1(true)
+      dispatch(filterRoaster({ cli, sta }));
 
-      try {
-        const shiftResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${cli}&staff=${sta}`, { cacheTimeout: 300000 });
-        const shift = shiftResponse.data?.shiftRoster;
-        setSchedule(shift);
-        setLoading1(false)
-      } catch (error) {
-        console.log(error);
-        setLoading1(false)
-      }
+
     }
+
 
   }
 
@@ -304,7 +310,7 @@ const ShiftScheduling = () => {
         setLoading3(false);
         setPeriodicModal(false);
       } catch (error) {
-        console.log(error);
+        toast.error("Ooops!😔 Error Occurred")
         setLoading3(false)
       }
     }
@@ -321,13 +327,13 @@ const ShiftScheduling = () => {
       setLoading3(true)
 
       try {
-        const { data } = await get(`
-        /ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}
-`, { cacheTimeout: 300000 });
-        setSchedule(data);
+        const { data } = await get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}`, { cacheTimeout: 300000 });
+        toast.success(data.message)
         setLoading3(false);
         setPeriodicModal(false);
+
       } catch (error) {
+        toast.error("Ooops!😔 Error Occurred")
         console.log(error);
         setLoading3(false)
       }
@@ -340,7 +346,7 @@ const ShiftScheduling = () => {
     <>
       <div className="page-wrapper">
         <Helmet>
-          <title>Shift Roaster</title>
+          <title>Shift Roster</title>
           <meta name="description" content="Shift Roaster" />
         </Helmet>
 
@@ -350,15 +356,15 @@ const ShiftScheduling = () => {
 
             <div className="row">
               <div className="col">
-                <h3 className="page-title">Shift Roaster</h3>
+                <h3 className="page-title">Shift Roster</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="/app/employee/allemployees">Employees</Link></li>
-                  <li className="breadcrumb-item active">Shift Roaster</li>
+                  <li className="breadcrumb-item active">Shift Roster</li>
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto p-4">
-                <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roaster</Link>
+                <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
               </div>
             </div>
           </div>
@@ -414,11 +420,11 @@ const ShiftScheduling = () => {
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button onClick={FilterSchedule} className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                  disabled={loading1 ? true : false}
+                  disabled={loading ? true : false}
                 >
 
 
-                  {loading1 ? <div className="spinner-grow text-light" role="status">
+                  {loading ? <div className="spinner-grow text-light" role="status">
                     <span className="sr-only">Loading...</span>
                   </div> : "Load"}
                 </button>
@@ -430,7 +436,11 @@ const ShiftScheduling = () => {
               <div className="form-group">
                 <button className="btn btn-primary add-btn rounded-2 m-r-5"
                   onClick={SendTimesheet}
-                >Send Roaster Notification</button>
+                >
+                  {loading3 ? <div className="spinner-grow text-light" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div> : "Send Roaster Notification"}
+                </button>
 
               </div>
             </div>
@@ -497,7 +507,7 @@ const ShiftScheduling = () => {
                     </div>
 
                     <div
-                      className="col-sm-12 text-center border p-2"
+                      className="col-sm-12 text-center border p-2 roster"
                       style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
 
                     >
@@ -527,7 +537,7 @@ const ShiftScheduling = () => {
                               {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                             </span>
                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
-                            <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile?.fullName}</span></span>
+                            <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
                             <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity?.activities}</span></span>
                           </div>
 
@@ -637,7 +647,7 @@ const ShiftScheduling = () => {
 
 
 
-          <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal show={showModal} onHide={() => setShowModal(false)} centered>
             <Modal.Header closeButton>
               <Modal.Title>Shift Details</Modal.Title>
             </Modal.Header>
@@ -647,7 +657,7 @@ const ShiftScheduling = () => {
                   <p><b>Date:</b> {moment(selectedActivity.dateFrom).format('LLL')} - {moment(selectedActivity.dateTo).format('LLL')}</p>
                   <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                   <p><b>Staff:</b> {selectedActivity.staff?.fullName}</p>
-                  <p><b>Client:</b> {selectedActivity.profile?.fullName}</p>
+                  <p><b>Client(s):</b> {selectedActivity.clients}</p>
                   <p><b>Activities:</b> {selectedActivity?.activities}</p>
                 </>
               )}

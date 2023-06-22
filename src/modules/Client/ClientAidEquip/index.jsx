@@ -40,7 +40,7 @@ const ClientAidEquip = () => {
 
     const [selected, setSelected] = useState([]);
     const [staffAvail, setStaffAvail] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [loading2, setLoading2] = useState(false);
     const [info, setInfo] = useState("");

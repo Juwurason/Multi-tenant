@@ -3,6 +3,27 @@
 } */
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@300;400;500;700;900&display=swap');
 
+.roster {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.roster::-webkit-scrollbar {
+    width: 8px;
+    /* Adjust the width as desired */
+}
+
+.roster::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    /* Customize the scrollbar thumb color */
+    border-radius: 4px;
+}
+
+.roster::-webkit-scrollbar-track {
+    background-color: #fff;
+    /* Customize the scrollbar track color */
+}
+
 .note-popover .popover-content,
 .note-editor .note-toolbar {
     background: #f5f5f5 !important;

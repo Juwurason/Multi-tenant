@@ -8,7 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -36,6 +36,23 @@ const PublicHoliday = () => {
         //     cell: (row, index) => index + 1
         // },
 
+        {
+            name: "",
+            cell: (row) => (
+
+                <span className='text-center'>
+                    <button
+                        className="btn"
+                        title='Adjust Attendance'
+
+                    >
+                        <SlSettings />
+                    </button>
+                </span>
+
+
+            ),
+        },
         {
             name: 'Name',
             selector: row => row.name,
@@ -66,7 +83,7 @@ const PublicHoliday = () => {
                         title='edit'
                         onClick={() => handleEdit(row.holidayId)}
                     >
-                        <SlSettings />
+                        <FaRegEdit />
                     </button>
                     <button
                         className='btn'

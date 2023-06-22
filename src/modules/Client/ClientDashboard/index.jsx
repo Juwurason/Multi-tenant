@@ -245,7 +245,7 @@ const ClientDashboard = () => {
                         </div>
                       </div>
 
-                      <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
+                      <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[1][0]?.staff?.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>

@@ -9,7 +9,7 @@ import { useCompanyContext } from "../../../context";
 const ProgressReportDetails = () => {
 
 
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const { uid } = useParams()
     const [details, setDetails] = useState({});
 

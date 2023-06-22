@@ -27,7 +27,7 @@ const Referrals = () => {
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
     const [users, setUsers] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
 
     const columns = [

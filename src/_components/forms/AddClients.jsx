@@ -8,7 +8,7 @@ import http from '../../api/http'
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 const AddClients = () => {
-    const { userProfile } = useCompanyContext();
+    const id = JSON.parse(localStorage.getItem('user'));
     const [loading, setLoading] = useState(false)
     const [firstName, setFirstName] = useState('');
     const [surName, setSurName] = useState('');
@@ -25,16 +25,16 @@ const AddClients = () => {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
+        if (firstName.trim() === "" || surName.trim() === "" || address.trim() === "" ||
             email.trim() === "" || agreementEndDate.trim() === "" || agreementStartDate.trim() === "" || NDISNo.trim() === ""
         ) {
-            return toast.error("All Fields must be filled")
+            return toast.error("Marked Fields must be filled")
         }
 
 
         const formData = new FormData()
         // Add input field values to formData
-        formData.append("CompanyId", 30);
+        formData.append("CompanyId", id.companyId);
         formData.append("FirstName", firstName);
         formData.append("SurName", surName);
         formData.append("MiddleName", middleName);
@@ -49,7 +49,7 @@ const AddClients = () => {
 
         try {
             setLoading(true)
-            const { data } = await privateHttp.post(`/Profiles/add_client?userId=${userProfile.userId}`,
+            const { data } = await privateHttp.post(`/Profiles/add_client?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message);
@@ -65,7 +65,7 @@ const AddClients = () => {
             setAgreementEndDate('');
             setNDISNo('');
         } catch (error) {
-            toast.error(error.response?.data?.message)
+            toast.error("Error Creating Client")
             console.log(error);
             setLoading(false)
 

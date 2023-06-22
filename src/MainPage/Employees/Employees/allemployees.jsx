@@ -42,7 +42,7 @@ const AllEmployees = () => {
 
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
-  // const [staff, setStaff] = useState([]);
+
 
   const columns = [
 
@@ -125,7 +125,7 @@ const AllEmployees = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchData()
+            dispatch(fetchStaff())
           } else {
             toast.error(data.message);
           }
@@ -337,30 +337,78 @@ const AllEmployees = () => {
 
 
 
-          {/* <div className="row filter-row">
-              <div className="col-sm-6 col-md-3">
-                <div className="form-group form-focus">
-                  <label className="focus-label">Staff ID</label>
-                  <input type="text" className="form-control floating" />
-                </div>
-              </div>
-              <div className="col-sm-6 col-md-3">
-                <div className="form-group form-focus">
-                  <label className="focus-label">Staff Name</label>
-                  <input type="text" className="form-control floating" />
-                </div>
-              </div>
-              <div className="col-sm-6 col-md-3">
-                <div className="form-group form-focus">
-                  <label className="focus-label">Staff Email</label>
-                  <input type="text" className="form-control " />
-                </div>
-              </div>
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card">
 
-              <div className="col-sm-6 col-md-3">
-                <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
+                <div className="card-body">
+                  <form  >
+                    <div className="row align-items-center py-2">
+                      <div className="col-sm-4">
+                        <div className="form-group">
+                          <label className="col-form-label">Select Staff</label>
+                          <div>
+                            <select className="form-select" >
+                              <option defaultValue hidden>--Select Staff--</option>
+
+                              {
+                                staff.map((data, index) =>
+                                  <option value={data.staffId} key={index}>{data.fullName}</option>)
+                              }
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-sm-4">
+                        <div className="form-group">
+                          <label className="col-form-label">Registration Date From</label>
+                          <input className="form-control" type="datetime-local"
+
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-4">
+                        <div className="form-group">
+                          <label className="col-form-label">Registration Date To</label>
+                          <input className="form-control" type="datetime-local"
+
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-4">
+                        <div className="form-group">
+                          <label className="col-form-label">Select Status</label>
+                          <div>
+                            <select className="form-select">
+                              <option defaultValue hidden>--Select Status--</option>
+                              <option value="0">InActive</option>
+                              <option value="1">Active</option>
+
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                      <div className="col-auto mt-3">
+                        <div className="form-group">
+                          <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+
+                          >
+                            Load
+
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
               </div>
-            </div> */}
+            </div>
+
+          </div>
 
 
 

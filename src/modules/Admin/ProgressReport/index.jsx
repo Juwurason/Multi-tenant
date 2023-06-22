@@ -22,7 +22,7 @@ import moment from 'moment';
 
 const ProgressReport = () => {
     const { get } = useHttp();
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
     const [progress, setProgress] = useState([]);
     const [staff, setStaff] = useState([]);

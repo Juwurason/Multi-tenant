@@ -17,14 +17,34 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import ExcelJS from 'exceljs';
 import Swal from 'sweetalert2';
+import { fetchUser } from '../../../store/slices/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
 const AllUser = () => {
+
+    const dispatch = useDispatch();
+
+    // Fetch user data and update the state
+    useEffect(() => {
+        dispatch(fetchUser());
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.user.isLoading);
+    const users = useSelector((state) => state.user.data);
+
+    useEffect(() => {
+        // Check if user data already exists in the store
+        if (!users.length) {
+            // Fetch user data only if it's not available in the store
+            dispatch(fetchUser());
+        }
+    }, [dispatch, users]);
+
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
-    const [users, setUsers] = useState([]);
-    const { loading, setLoading } = useCompanyContext();
     const id = JSON.parse(localStorage.getItem('user'));
 
 
@@ -100,27 +120,6 @@ const AllUser = () => {
 
     ];
 
-    const FetchStaff = async () => {
-        try {
-            setLoading(true);
-            const UserResponse = await get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const users = UserResponse.data;
-            setUsers(users);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-
-        } finally {
-            setLoading(false)
-
-        }
-    };
-    useEffect(() => {
-
-        FetchStaff()
-    }, []);
-
     const handleDelete = async (e) => {
 
         Swal.fire({
@@ -138,16 +137,16 @@ const AllUser = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchStaff()
+                        dispatch(fetchUser());
                     } else {
                         toast.error(data.message);
                     }
 
 
                 } catch (error) {
+                    toast.error("Ooops😔 Error Occurred")
                     console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
+
 
 
                 }
@@ -240,7 +239,9 @@ const AllUser = () => {
     };
 
     const filteredData = users.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+        item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.role.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchText.toLowerCase())
     );
 
 
@@ -334,12 +335,7 @@ const AllUser = () => {
                                 searchable
                                 responsive
                                 searchTerm={searchText}
-                                progressPending={loading}
-                                progressComponent={<div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>}
+
                             />
                         </div>
 

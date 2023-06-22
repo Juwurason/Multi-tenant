@@ -45,7 +45,7 @@ const ClientRoster = () => {
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
     const userProfile = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [clients, setClients] = useState([]);
     const [cli, setCli] = useState("");
     const [activities, setActivities] = useState([]);
@@ -248,16 +248,16 @@ const ClientRoster = () => {
                                     <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
                                         <div className='border  d-flex justify-content-center py-2 bg-light'>
                                             <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
-                                            <span
-                                                className={`fw-bold fs-4`}
-                                               >
-                                                {/* {day.format('dddd, MMMM D')} */}
-                                                {day.format('D')}
+                                                <span
+                                                    className={`fw-bold fs-4`}
+                                                >
+                                                    {/* {day.format('dddd, MMMM D')} */}
+                                                    {day.format('D')}
 
-                                            </span>
-                                            <span style={{ fontSize: '10px' }} className='mb-2'>
-                                {day.locale('en').format('ddd')}
-                              </span>
+                                                </span>
+                                                <span style={{ fontSize: '10px' }} className='mb-2'>
+                                                    {day.locale('en').format('ddd')}
+                                                </span>
                                             </div>
                                         </div>
 

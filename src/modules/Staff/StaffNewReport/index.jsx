@@ -15,7 +15,7 @@ const StaffNewReport = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, } = useParams();
     const [attendance, setAttendance] = useState({});
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const navigate = useHistory();
     const privateHttp = useHttp();
@@ -120,14 +120,14 @@ const StaffNewReport = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* /Page Header */}
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
-                                <div style={{fontSize:'12px'}}><p>Note: This report attendance is different from your shift rostering attendance. Fill in this report if you had other activities 
-                        within the day that are different from your shift rostering activities</p></div> <br />
+                                    <div style={{ fontSize: '12px' }}><p>Note: This report attendance is different from your shift rostering attendance. Fill in this report if you had other activities
+                                        within the day that are different from your shift rostering activities</p></div> <br />
 
                                     <form onSubmit={SendReport}>
                                         <div className='col-md-4'>
@@ -138,22 +138,22 @@ const StaffNewReport = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock In</label>
                                                     <input className="form-control datetimepicker" type="datetime-local"
-                                                        />
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock Out</label>
                                                     <input className="form-control datetimepicker" type="datetime-local"
-                                                         />
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
                                                     <input type="text"
-                                                        
-                                                        
+
+
                                                         className="form-control" />
                                                 </div>
                                             </div>
@@ -161,7 +161,7 @@ const StaffNewReport = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
                                                     <input type="text"
-                                                        
+
                                                         className="form-control" />
                                                 </div>
                                             </div>
@@ -170,13 +170,13 @@ const StaffNewReport = () => {
 
                                         <div className="form-group">
                                             <label>Day Report</label>
-                                        <Editor
-                                                    placeholder="Write something..."
-                                                    // onChange={handleEditorChange}
-                                                    // value={editorValue}
-                                                ></Editor>
-                                                <br />
-                                                <br />
+                                            <Editor
+                                                placeholder="Write something..."
+                                            // onChange={handleEditorChange}
+                                            // value={editorValue}
+                                            ></Editor>
+                                            <br />
+                                            <br />
                                             {/* <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
                                             <textarea rows={3} className="form-control summernote"
                                                 name="report"  /> */}

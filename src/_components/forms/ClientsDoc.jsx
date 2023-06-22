@@ -17,7 +17,7 @@ import { GoSearch } from 'react-icons/go';
 import moment from 'moment';
 import { MdCancel } from "react-icons/md";
 const ClientDoc = () => {
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const { uid } = useParams()
     const [clientOne, setClientOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
@@ -45,7 +45,7 @@ const ClientDoc = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <div className='d-flex flex-column gap-1 p-2'>
+                <div className='d-flex flex-column gap-1 p-2' style={{ overflow: "hidden" }}>
                     <span> {row.documentName}</span>
                     <span className='d-flex'>
                         <span className='bg-primary text-white pointer px-2 py-1 rounded-2'

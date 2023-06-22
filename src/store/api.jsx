@@ -1,6 +1,16 @@
 import axiosInstance from "./axiosInstance";
 
 const id = JSON.parse(localStorage.getItem('user'));
+
+const fetchUserData = async () => {
+    try {
+        const response = await axiosInstance.get(`/Account/get_all_users?companyId=${id.companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching User Data:', error);
+        throw error;
+    }
+};
 const fetchAdminData = async () => {
     try {
         const response = await axiosInstance.get(`/Administrators?companyId=${id.companyId}`);
@@ -46,13 +56,46 @@ const fetchShiftRoaster = async () => {
         throw error;
     }
 };
+const fetchAttendance = async () => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/get_all_attendances_by_company?companyId=${id.companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Attendance:', error);
+        throw error;
+    }
+};
+const filterAttendance = async (fromDate, toDate, staff, company) => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/get_periodic_attendances_by_company?fromDate=${fromDate}&toDate=${toDate}&staffId=${staff}&companyId=${company}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error filtering Attendance:', error);
+        throw error;
+    }
+};
+
+const getShiftsByUser = async (client, staff) => {
+    try {
+        const response = await axiosInstance.get(`/ShiftRosters/get_shifts_by_user?client=${client}&staff=${staff}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching shift Roaster:', error);
+        throw error;
+    }
+};
+
 
 const api = {
     fetchAdminData,
     fetchStaffData,
     fetchClientData,
     fetchDocumentData,
-    fetchShiftRoaster
+    fetchShiftRoaster,
+    fetchAttendance,
+    getShiftsByUser,
+    fetchUserData,
+    filterAttendance
     // Add other API endpoints and corresponding methods as needed
 };
 

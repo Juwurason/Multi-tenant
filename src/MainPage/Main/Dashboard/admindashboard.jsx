@@ -53,7 +53,6 @@ const AdminDashboard = () => {
 
   }, [clients])
 
-  console.log(recentUsers);
 
 
 
@@ -132,7 +131,7 @@ const AdminDashboard = () => {
                 />
 
 
-                <DashboardCard title={"Shift Roaster"} content={shiftRosterCount} icon={<MdOutlineEventNote className='fs-4' />}
+                <DashboardCard title={"Shift Roster"} content={shiftRosterCount} icon={<MdOutlineEventNote className='fs-4' />}
                   link={`/app/employee/shift-scheduling`}
                   sty={'danger'}
 

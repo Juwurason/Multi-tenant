@@ -1,14 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchStaff = createAsyncThunk('Staff/fetchStaff', async () => {
-    const response = await api.fetchStaffData();
-    const filteredData = response.filter((staff) => staff.isActive);
-    return filteredData;
+export const fetchUser = createAsyncThunk('User/fetchUser', async () => {
+    const response = await api.fetchUserData();
+    return response;
 });
 
-const StaffSlice = createSlice({
-    name: 'Staff',
+const UserSlice = createSlice({
+    name: 'User',
     initialState: {
         data: [],
         isLoading: false,
@@ -19,20 +18,20 @@ const StaffSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchStaff.pending, (state) => {
+            .addCase(fetchUser.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(fetchStaff.fulfilled, (state, action) => {
+            .addCase(fetchUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
             })
-            .addCase(fetchStaff.rejected, (state, action) => {
+            .addCase(fetchUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             });
     },
 });
 
-export const { } = StaffSlice.actions;
-export default StaffSlice.reducer;
+export const { } = UserSlice.actions;
+export default UserSlice.reducer;

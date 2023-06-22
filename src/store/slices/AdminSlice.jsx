@@ -3,7 +3,8 @@ import api from '../api';
 
 export const fetchAdmin = createAsyncThunk('Admin/fetchAdmin', async () => {
     const response = await api.fetchAdminData();
-    return response;
+    const filteredData = response.filter((admin) => admin.isActive);
+    return filteredData;
 });
 
 const AdminSlice = createSlice({

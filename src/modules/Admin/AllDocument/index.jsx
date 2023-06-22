@@ -24,7 +24,7 @@ import { Modal } from 'react-bootstrap';
 const AllDocument = () => {
     //Declaring Variables
     const id = JSON.parse(localStorage.getItem('user'));
-    const { loading, setLoading } = useCompanyContext();
+    const [loading, setLoading] = useState(false);
     const [document, setDocument] = useState([]);
     const [staff, setStaff] = useState([]);
     const [clients, setClients] = useState([]);
