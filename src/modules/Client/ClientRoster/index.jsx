@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { FaAngleLeft, FaAngleRight, FaRegEdit} from 'react-icons/fa';
+import { ImCancelCircle} from 'react-icons/im';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
@@ -277,7 +278,15 @@ const ClientRoster = () => {
                                                 <div key={activityIndex}
 
                                                     className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                                                    style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                                                    // style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                                                    style={{
+                                                        fontSize: '10px',
+                                                        overflow: 'hidden',
+                                                        backgroundColor:
+                                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                                            ? '#1C75BC'
+                                                            : '#5fa8e8',
+                                                      }}
                                                 >
                                                     <div
                                                         onClick={() => handleActivityClick(activity)}
@@ -318,7 +327,7 @@ const ClientRoster = () => {
                                                             onClick={() => cancelShift()}
                                                             
                                                         >
-                                                            <GoTrashcan className='fs-6' />
+                                                            <ImCancelCircle className='fs-6 text-white' />
                                                         </button>
 
                                                         <button
@@ -333,7 +342,7 @@ const ClientRoster = () => {
                                                             onClick={() => addAppoint(activity.shiftRosterId)}
                                                           
                                                         >
-                                                            <MdLibraryAdd className='fs-6' />
+                                                            <MdLibraryAdd className='fs-6 text-white' />
                                                         </button>
 
                                                     </div>
