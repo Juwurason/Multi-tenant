@@ -461,11 +461,23 @@ const ShiftScheduling = () => {
           <div className='row'>
 
             <div className="col-md-6 col-lg-12 ">
-              <div className=' py-3 d-flex justify-content-between align-items-center'>
-                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
-                  <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
+              <div className='mt-4 p-3 d-flex justify-content-between align-items-center'>
+                <span className='' >
+                  <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
+                    <FaAngleLeft className='pointer fs-4 text-white' />
+
+                  </button>
+                  <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <button onClick={handleNextClick} className='btn btn-primary btn-sm shadow' >
+                    <FaAngleRight className='pointer fs-4 text-white' />
+
+                  </button>
+                </span>
+
+                <span>
+                  <h1 className='text-muted fw-bold'>
+                    {startDate.format('YYYY')}
+                  </h1>
                 </span>
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
@@ -533,9 +545,15 @@ const ShiftScheduling = () => {
                           <div
                             onClick={() => handleActivityClick(activity)}
                             className='d-flex flex-column align-items-start' style={{ fontSize: '10px' }}>
-                            <span className='fw-bold' >
-                              {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
-                            </span>
+                            <div className='d-flex gap-5 align-items-center'>
+                              <span className='fw-bold' >
+                                {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
+                              </span>
+
+
+
+                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance ? "bg-success" : "bg-danger"}rounded-circle`}></span>
+                            </div>
                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
                             <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
                             <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity?.activities}</span></span>
