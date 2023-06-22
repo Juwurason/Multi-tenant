@@ -15,6 +15,8 @@ import ClientRep from '../modules/Client/ClientRep';
 import ClientDisability from '../modules/Client/ClientDisability';
 import ClientAidEquip from '../modules/Client/ClientAidEquip';
 import ClientDailyLiving from '../modules/Client/ClientDailyLiving';
+import ClientHealth from '../modules/Client/ClientHealth';
+import ClientBehaviuor from '../modules/Client/ClientBehaviuor';
 
 export default [
 
@@ -57,6 +59,14 @@ export default [
     {
         path: 'client-daily-living',
         component: ClientDailyLiving
+    },
+    {
+        path: 'client-health',
+        component: ClientHealth
+    },
+    {
+        path: 'client-behaviuor',
+        component: ClientBehaviuor
     },
     {
         path: 'client-message',

@@ -44,7 +44,7 @@
  ];
  
  
- const ClientRep = () => {
+ const ClientBehaviuor = () => {
      useEffect(() => {
          if ($('.select').length > 0) {
              $('.select').select2({
@@ -67,7 +67,6 @@
      const [selectedTimeTo, setSelectedTimeTo] = useState("");
      const id = JSON.parse(localStorage.getItem('user'))
      const [showModal, setShowModal] = useState(false);
-     const staffProfile = JSON.parse(localStorage.getItem('staffProfile'))
      const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
      const handleSelected = (selectedOptions) => {
          setSelected(selectedOptions);
@@ -98,25 +97,29 @@
          }
          e.preventDefault()
          setLoading1(true)
+      
          const info = {
              profileId: clientProfile.profileId,
-             personel: selectedPosition,
-             fullName: selectedDay,
-             phone: selectedPhone,
-             email: selectedTimeFrom,
+             question1:  selectedDay,
+             question2: selectedTimeFrom,
+             question3: selectedTimeTo,
+             behaviourPlan: selectedPhone,
+            //  behaviourPlanFile: selectedPosition,
+             riskAssessment: selectedPosition,
+            //  riskAssessmentFile: ""
             //  companyID: id.companyId
          }
          try {
  
-             const { data } = await post(`/Assistances`, info);
-            //  console.log(data)
+             const { data } = await post(`/BehaviourSupports`, info);
+             console.log(data)
              if (data.status === 'Success') {
                  toast.success(data.message) 
              }
              setLoading1(false)
              FetchSchedule()
          } catch (error) {
-            //  console.log(error);
+             console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
@@ -129,9 +132,9 @@
      const FetchSchedule = async () => {
          // setLoading2(true)
          try {
-             const { data } = await get(`/Assistances/get_all?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
-            //  console.log(data);
-             setStaffAvail(data)
+             const { data } = await get(`/BehaviourSupports/get_all?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
+             console.log(data);
+            //  setStaffAvail(data)
              // setLoading2(false);
          } catch (error) {
              // console.log(error);
@@ -379,8 +382,8 @@
      return (
          <div className="page-wrapper">
              <Helmet>
-                 <title> Repesentative Details</title>
-                 <meta name="description" content="Repesentative Details" />
+                 <title> Behaviour Support Needs</title>
+                 <meta name="description" content="Behaviour Support Needs" />
              </Helmet>
              <div className="content container-fluid">
                  {/* Page Header */}
@@ -389,7 +392,7 @@
                          <div className="col">
                              <ul className="breadcrumb">
                                  <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
-                                 <li className="breadcrumb-item active">Repesentative Details</li>
+                                 <li className="breadcrumb-item active">Behaviour Support Needs</li>
                              </ul>
                          </div>
                      </div>
@@ -399,65 +402,58 @@
                      <div className="col-md-12">
                          <div className="card">
                              <div className="card-header">
-                                 <h4 style={{fontSize: "15px"}} className="card-title mb-0">Add one or more Representatives</h4>
+                                 <h4 style={{fontSize: "15px"}} className="card-title mb-0">Behaviour Support Needs</h4>
                              </div>
                              <div className="card-body">
                                  <form className="row">
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>FullName</label>
-                                             <input className="form-control" type="text" onChange={(e) => setSelectedDay(e.target.value)} />
+                                             <label>Describe how you would react if someone you lived with did something you found disruptive or upsetting?</label>
+                                             <textarea className="form-control"  rows="2" onChange={(e) => setSelectedDay(e.target.value)} cols="20" />
                                          </div>
                                      </div>
- 
+
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>Do you have any behaviours of concern that require specific support? If so, please provide detail</label>
+                                             <textarea className="form-control"  rows="2" onChange={(e) => setSelectedTimeFrom(e.target.value)} cols="20" />
+                                         </div>
+                                     </div>
+
                                      <div className="col-md-6">
                                          <div className="form-group">
-                                             <label>Relationship</label>
-                                             <input className="form-control" type="text" />
-                                         </div>
-                                     </div>
- 
-                                     <div className='col-md-6'>
-                                         <div className="form-group">
-                                             <label>Email</label>
-                                             <input className="form-control" type="email" onChange={(e) => setSelectedTimeFrom(e.target.value)} />
+                                             <label>Do you do anything that others might find disruptive?</label>
+                                             <textarea className="form-control"  rows="2" onChange={(e) => setSelectedTimeTo(e.target.value)} cols="20" />
                                          </div>
                                      </div>
 
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Mobile Phone</label>
-                                             <input className="form-control" type="number" onChange={(e) => setSelectedPhone(e.target.value)} />
+                                             <label>Behaviour Plan</label>
+                                             <textarea className="form-control"  rows="2" onChange={(e) => setSelectedPhone(e.target.value)} cols="20" />
                                          </div>
                                      </div>
 
-                                     <div className='col-md-6'>
+                                     {/* <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Home Phone</label>
-                                             <input className="form-control" type="number"  />
+                                             <label>Behaviour Plan File</label>
+                                             <textarea className="form-control" onChange={(e) => setSelectedPosition(e.target.value)} rows="2" cols="20" />
                                          </div>
-                                     </div>
+                                     </div> */}
 
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Position</label>
-                                             <input className="form-control" type="text" onChange={(e) => setSelectedPosition(e.target.value)} />
+                                             <label>Risk Assessment</label>
+                                             <textarea className="form-control" onChange={(e) => setSelectedPosition(e.target.value)} rows="2" cols="20" />
                                          </div>
                                      </div>
 
-                                     <div className='col-md-6'>
+                                     {/* <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Organization</label>
-                                             <input className="form-control" type="text"  />
-                                         </div>
-                                     </div>
-
-                                     <div className='col-md-6'>
-                                         <div className="form-group">
-                                             <label>Address</label>
+                                             <label>Risk Assessment File</label>
                                              <textarea className="form-control"  rows="2" cols="20" />
                                          </div>
-                                     </div>
+                                     </div> */}
  
                                      <div className="text-start">
                                          <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
@@ -627,4 +623,4 @@
          </div>
      );
  }
- export default ClientRep;
+ export default ClientBehaviuor;

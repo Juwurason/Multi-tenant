@@ -11,8 +11,7 @@ import { useCompanyContext } from '../../../context/index.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import { MdHourglassTop, MdHourglassBottom, MdPersonOutline } from 'react-icons/md';
 import { BsClockHistory } from 'react-icons/bs';
-import { BiStopwatch } from 'react-icons/bi';
-import { FaLongArrowAltRight } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import { Modal } from 'react-bootstrap';
 
 
@@ -26,7 +25,7 @@ const ClientDashboard = () => {
   dayjs.tz.setDefault('Australia/Sydney');
   const userObj = JSON.parse(localStorage.getItem('user'));
   const [roster, setRoster] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useCompanyContext();
   const [document, setDocument] = useState([]);
   const { get, post } = useHttp();
 
@@ -177,27 +176,6 @@ const ClientDashboard = () => {
     }
   };
 
-  //  function getActivityStatus(activitiesByDay) {
-  //    if (!activitiesByDay) {
-  //      return 'No Shift Today';
-  //    }
-  //    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-  //    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss')
-  //    const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
-
-  //    if (activityDateFrom > nowInAustraliaTime) {
-  //      return 'Upcoming';
-  //    }
-  //    else if (activityDateTo < nowInAustraliaTime) {
-  //      return activitiesByDay[1][0].attendance === true ? 'Present' : 'Absent';
-  //    }
-  //    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true) {
-  //      return 'Present';
-  //    }
-  //    else {
-  //      return 'Clock-In';
-  //    }
-  //  }
 
 
   return (
@@ -208,7 +186,7 @@ const ClientDashboard = () => {
          <StaffSidebar /> */}
         <div className="page-wrapper">
           <Helmet>
-            <title>Dashboard - Promax Staff Dashboard</title>
+            <title>Dashboard - Promax Client Dashboard</title>
             <meta name="description" content="Dashboard" />
           </Helmet>
           {/* Page Content */}
@@ -244,7 +222,7 @@ const ClientDashboard = () => {
                       </div>
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[0][0]?.profile.firstName}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[0][0]?.staff?.firstName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[0].length > 0 ? dayjs(activitiesByDay[0][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[0].length > 0 ? dayjs(activitiesByDay[0][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
@@ -267,9 +245,9 @@ const ClientDashboard = () => {
                         </div>
                       </div>
 
-                      <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
+                      <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[1][0]?.profile.fullName}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[1][0]?.staff?.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
@@ -279,46 +257,21 @@ const ClientDashboard = () => {
 
                       <div className='px-5 py-4'>
                         <span>{activitiesByDay[1][0]?.activities}</span> <br /> <br />
-                        {activitiesByDay[1].length > 0 ? <button className='btn btn-primary' onClick={() => addAppoint(activitiesByDay[1][0]?.shiftRosterId)}>Add Appointment</button> : (
+                        {activitiesByDay[1].length > 0 ? (
+                          <button
+                            className='btn btn-primary'
+                            onClick={() => addAppoint(activitiesByDay[1][0]?.shiftRosterId)}
+                            disabled={ 
+                              (dayjs(activitiesByDay[1][0]?.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                              <
+                              dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
+                          >
+                            Add Appointment
+                          </button> 
+                        ) : (
                           <span>No Shift Today</span>
                         )}
                       </div>
-                      {/* <div className='px-5 py-4'>
-                         {activitiesByDay[1][0] ? (
-                           <>
-                             <span>{activitiesByDay[1][0]?.activities}</span>
-                             <br />
-                             <br />
- 
-                             {getActivityStatus(activitiesByDay) === 'Upcoming' ? (
-                               <span className='fw-bold text-warning pointer'>Upcoming</span>
-                             ) : getActivityStatus(activitiesByDay) === 'Clock-In' ? (
-                               <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                                 {isLoading ? 
-                                   <div>
-                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                     <span class="visually-hidden">Loading...</span>
-                                   </div> Please wait....
-                                   </div>
-                                   : <span> <BiStopwatch /> Clock In</span>
-                                 }
-                               </span> 
-                             ) : (
-                               <small
-                                 className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
-                                   getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
-                                     getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
-                                   }`}
-                               >
-                                 {getActivityStatus(activitiesByDay)}
-                               </small>
-                             )}
-                           </>
-                         ) : (
-                           <span>No Shift Today</span>
-                           
-                         )}
-                       </div> */}
 
                     </div>
 
@@ -340,7 +293,7 @@ const ClientDashboard = () => {
                       </div>
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.profile.firstName}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[2][0]?.staff?.firstName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
@@ -367,9 +320,10 @@ const ClientDashboard = () => {
               <Modal.Body>
                 {selectedActivity && (
                   <>
-                    <p><b>Date:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</p>
-                    <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
-                    <p><b>Description:</b> {selectedActivity.activities}</p>
+                    <p><b>Date:</b> {dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</p>
+                    <p><b>Time:</b> {activitiesByDay[2]?.length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
+                    <p><b>Staff:</b> {activitiesByDay[2][0]?.staff?.fullName}</p>
+                    <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
                   </>
                 )}
               </Modal.Body>
@@ -378,7 +332,7 @@ const ClientDashboard = () => {
               </Modal.Footer>
             </Modal>
 
-            <Modal show={appointModal} onHide={() => setAppointModal(false)}>
+            <Modal show={appointModal} onHide={() => setAppointModal(false)} centered>
               <Modal.Header closeButton>
                 <Modal.Title>Add Appointment</Modal.Title>
               </Modal.Header>

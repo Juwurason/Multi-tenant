@@ -179,8 +179,8 @@ const StaffHeader = (props) => {
                     <i className="fa fa-ellipsis-v" /></a>
                 <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-                    <Link className="dropdown-item" to={"/staff/main/profile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                    <Link className="dropdown-item" to={"/staff/main/changepassword"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <Link className="dropdown-item" to={"/staff/main/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                    <Link className="dropdown-item" to={"/staff/main/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>

@@ -2,21 +2,22 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath"
 import Offcanvas from '../../../Entryfile/offcanvance';
-import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
-import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaRegEdit, FaSearch, FaSlidersH } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
+import { FaAngleLeft, FaAngleRight, FaRegEdit} from 'react-icons/fa';
+import { ImCancelCircle} from 'react-icons/im';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
 import { GoTrashcan } from 'react-icons/go';
-import { MdOutlineEditCalendar, MdLibraryAdd } from 'react-icons/md';
+import { MdLibraryAdd } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
 import { toast } from 'react-toastify';
-
-
+import isBetween from 'dayjs/plugin/isBetween';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.locale('en-au');
+dayjs.extend(isBetween);
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
     { label: "Medication administering", value: "Medication administering" },
@@ -38,6 +39,10 @@ const options = [
 ];
 
 const ClientRoster = () => {
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    dayjs.tz.setDefault('Australia/Sydney');
+   
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
     const userProfile = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
@@ -84,7 +89,7 @@ const ClientRoster = () => {
     });
 
     // Get the current date
-    const [currentDate, setCurrentDate] = useState(dayjs());
+    const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
     const handleNextClick = () => {
         setCurrentDate(currentDate.add(6, 'day'));
@@ -112,8 +117,9 @@ const ClientRoster = () => {
     ];
     const startDate = currentDate.subtract(3, 'day');
     const endDate = currentDate.add(2, 'day');
+
     const activitiesByDay = daysOfWeek.map((day) =>
-        clients.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+        clients.filter((activity) => dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD'))
     );
 
 
@@ -272,7 +278,15 @@ const ClientRoster = () => {
                                                 <div key={activityIndex}
 
                                                     className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                                                    style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                                                    // style={{ fontSize: '10px', backgroundColor: "#4256D0" }}
+                                                    style={{
+                                                        fontSize: '10px',
+                                                        overflow: 'hidden',
+                                                        backgroundColor:
+                                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                                            ? '#1C75BC'
+                                                            : '#5fa8e8',
+                                                      }}
                                                 >
                                                     <div
                                                         onClick={() => handleActivityClick(activity)}
@@ -285,42 +299,54 @@ const ClientRoster = () => {
                                                         <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                                     </div>
                                                     <div className='d-flex gap-2'>
-                                                        <small
+                                                        <button
 
                                                             className={`text-truncate d-flex 
                                                             align-items-center
-                                                            justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                            justify-content-center px-2 py-1 rounded border-0 bg-light pointer`}
+                                                            disabled={ 
+                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                                <
+                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             onClick={() => editActivity(activity.shiftRosterId)}
                                                             title="Edit"
                                                         >
                                                             <FaRegEdit className='fs-6 text-dark' />
 
-                                                        </small>
+                                                        </button>
 
-                                                        <small
+                                                        <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
-                                                            justify-content-center px-2 py-1 rounded bg-danger pointer`}
+                                                            justify-content-center px-2 py-1 rounded border-0 bg-danger pointer`}
+                                                            disabled={ 
+                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                                <
+                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             title="Cancel"
                                                             onClick={() => cancelShift()}
-
+                                                            
                                                         >
-                                                            <GoTrashcan className='fs-6' />
-                                                        </small>
+                                                            <ImCancelCircle className='fs-6 text-white' />
+                                                        </button>
 
-                                                        <small
+                                                        <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
-                                                            justify-content-center px-2 py-1 rounded bg-success pointer`}
+                                                            justify-content-center px-2 py-1 rounded border-0 bg-success pointer`}
                                                             title="Add Appointment"
+                                                            disabled={ 
+                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                                <
+                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             onClick={() => addAppoint(activity.shiftRosterId)}
-
+                                                          
                                                         >
-                                                            <MdLibraryAdd className='fs-6' />
-                                                        </small>
+                                                            <MdLibraryAdd className='fs-6 text-white' />
+                                                        </button>
 
                                                     </div>
-                                                </div>
+                                                                 </div>
                                             ))}
                                             {!loading && activitiesByDay[index] <= 0 &&
 

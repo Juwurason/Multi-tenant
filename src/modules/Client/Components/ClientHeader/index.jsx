@@ -104,7 +104,7 @@
                  {/* /Notifications */}
                  {/* Message Notifications */}
                  <li className="nav-item dropdown">
-                     <Link to={'/staff/messageInbox'} >
+                     <Link to={'/client/client-message'} >
                          <i className="fa fa-comment-o" />
                          {/* <span className="badge badge-pill">8</span> */}
                      </Link>
@@ -177,8 +177,8 @@
                      <i className="fa fa-ellipsis-v" /></a>
                  <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
  
-                     <Link className="dropdown-item" to={"/client/client-profile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                     <Link className="dropdown-item" to={"/client/change-password"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                     <Link className="dropdown-item" to={"/client/client-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                     <Link className="dropdown-item" to={"/client/change-profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
                      <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
  
                  </div>

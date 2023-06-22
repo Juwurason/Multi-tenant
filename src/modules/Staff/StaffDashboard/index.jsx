@@ -17,6 +17,7 @@ import { BiStopwatch } from 'react-icons/bi';
 import { CiStickyNote } from 'react-icons/ci';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { Modal } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 dayjs.extend(isBetween);
 
@@ -87,7 +88,7 @@ const StaffDashboard = ({roster, loading}) => {
       setIsLoading(false);
     }, 3000);
   };
-  
+
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = () =>{
@@ -101,14 +102,13 @@ const StaffDashboard = ({roster, loading}) => {
     setShowModal(true);
   };
 
-//  4681
   function getActivityStatus(activitiesByDay) {
     if (!activitiesByDay) {
       return 'No Shift Today';
     }
     // dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss')
+    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss');
     const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
 
     if (activityDateFrom > nowInAustraliaTime) {
@@ -334,8 +334,9 @@ const StaffDashboard = ({roster, loading}) => {
               <Modal.Body>
                 {selectedActivity && (
                   <>
-                    <p><b>Date:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</p>
+                    <p><b>Date:</b> <span style={{ fontSize: '15px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span></p>
                     <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
+                    <p><b>Client:</b> {activitiesByDay[2][0].profile.fullName}</p>
                     <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
                   </>
                 )}
