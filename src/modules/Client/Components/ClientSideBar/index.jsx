@@ -108,6 +108,10 @@ const ClientSidebar = (props) => {
                                 <Link to="/client/client-health"><i className="la la-yelp" /> <span>Health Support Needs</span></Link>
                             </li>
 
+                            <li className={pathname.includes('client-behaviuor') || pathname.includes('client-behaviuor') ? "active" : ""} onClick={() => onMenuClik()}>
+                                <Link to="/client/client-behaviuor"><i className="la la-bell-o" /> <span>Behaviour Support Needs</span></Link>
+                            </li>
+
                             <li className={pathname.includes('client-document') || pathname.includes('client-document') ? "active" : ""} onClick={() => onMenuClik()}>
                                 <Link to="/client/client-document"><i className="la la-book" /> <span>Documents</span></Link>
                             </li>

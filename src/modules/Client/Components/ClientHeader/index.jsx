@@ -104,7 +104,7 @@
                  {/* /Notifications */}
                  {/* Message Notifications */}
                  <li className="nav-item dropdown">
-                     <Link to={'/staff/messageInbox'} >
+                     <Link to={'/client/client-message'} >
                          <i className="fa fa-comment-o" />
                          {/* <span className="badge badge-pill">8</span> */}
                      </Link>

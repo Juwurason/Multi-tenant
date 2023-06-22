@@ -2,21 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath"
 import Offcanvas from '../../../Entryfile/offcanvance';
-import Addschedule from "../../../_components/modelbox/Addschedule"
 import useHttp from '../../../hooks/useHttp';
-import { FaAngleLeft, FaAngleRight, FaArrowCircleLeft, FaArrowCircleRight, FaArrowLeft, FaArrowRight, FaFilter, FaPlus, FaRegEdit, FaSearch, FaSlidersH } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropleft } from 'react-icons/io';
+import { FaAngleLeft, FaAngleRight, FaRegEdit} from 'react-icons/fa';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
 import { GoTrashcan } from 'react-icons/go';
-import { MdOutlineEditCalendar, MdLibraryAdd } from 'react-icons/md';
+import { MdLibraryAdd } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
 import { toast } from 'react-toastify';
-
-
+import isBetween from 'dayjs/plugin/isBetween';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.locale('en-au');
+dayjs.extend(isBetween);
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
     { label: "Medication administering", value: "Medication administering" },
@@ -38,6 +38,10 @@ const options = [
 ];
 
 const ClientRoster = () => {
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    dayjs.tz.setDefault('Australia/Sydney');
+   
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
     const userProfile = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
@@ -165,6 +169,25 @@ const ClientRoster = () => {
         setCli(e)
     }
 
+    function getActivityStatus(activity) {
+        const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+        const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+        const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
+    
+        if (activityDateFrom > nowInAustraliaTime) {
+          return 'Upcoming';
+        }
+        else if (activityDateTo < nowInAustraliaTime) {
+          return activity.attendance === true ? 'Present' : 'Absent';
+        }
+        else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
+          return 'Present'
+        }
+        else {
+          return 'Active';
+        }
+      }
+
     const addAppointment = async () => {
         if (appoint === "") {
             return toast.error("Input Fields cannot be empty")
@@ -285,41 +308,122 @@ const ClientRoster = () => {
                                                         <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                                     </div>
                                                     <div className='d-flex gap-2'>
-                                                        <small
+                                                        <button
 
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                            disabled={ 
+                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                                <
+                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             onClick={() => editActivity(activity.shiftRosterId)}
                                                             title="Edit"
                                                         >
                                                             <FaRegEdit className='fs-6 text-dark' />
 
-                                                        </small>
+                                                        </button>
 
-                                                        <small
+                                                        <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
+                                                            disabled={ 
+                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                                <
+                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             title="Cancel"
                                                             onClick={() => cancelShift()}
-
+                                                            
                                                         >
                                                             <GoTrashcan className='fs-6' />
-                                                        </small>
+                                                        </button>
 
-                                                        <small
+                                                        <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded bg-success pointer`}
                                                             title="Add Appointment"
+                                                            disabled={ 
+                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                                <
+                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             onClick={() => addAppoint(activity.shiftRosterId)}
-
+                                                          
                                                         >
                                                             <MdLibraryAdd className='fs-6' />
-                                                        </small>
+                                                        </button>
 
                                                     </div>
+                                                    {/* {getActivityStatus(activity) === 'Active' ?
+                              (
+                                <div className='d-flex gap-2'>
+                                  <small
+                                    className={`text-truncate d-flex 
+                             align-items-center
+                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
+
+                             onClick={() => cancelShift()}
+                                    title="Cancel"
+                                  >
+                                    <GoTrashcan className='fs-6' />
+                                  </small>
+                                  <small
+                                    onClick={() => editActivity(activity.shiftRosterId)}
+                                    className={`text-truncate d-flex 
+                              align-items-center
+                              justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                    title="Edit"
+                                  >
+                                  
+                                    <FaRegEdit className='fs-6 text-dark' />
+                                  </small>
+                                  <small
+                                    className={`text-truncate d-flex 
+                                    align-items-center
+                                    justify-content-center px-2 py-1 rounded bg-success pointer`}
+
+                               onClick={() => addAppoint(activity.shiftRosterId)}
+                               title="Add Appointment"
+                                  >
+                                   <MdLibraryAdd className='fs-6' />
+                                  </small>
+                                </div>
+                              )
+                              :
+                              (
+                                <div className='d-flex gap-2' >
+                                  <small
+                                    className={`text-truncate d-flex 
+                             align-items-center
+                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
+
+                             onClick={() => cancelShift()}
+                             title="Cancel"
+                                  >
+                                    <GoTrashcan className='fs-6' />
+                                  </small>
+
+                                  {
+                                    getActivityStatus(activity) === 'Upcoming' && (
+                                      <small
+                                      onClick={() => editActivity(activity.shiftRosterId)}
+                                        className={`text-truncate d-flex 
+                              align-items-center
+                              justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                        title="Edit"
+
+                                      >
+                                      
+                                        <FaRegEdit className='fs-6 text-dark' />
+                                      </small>
+
+                                    )
+                                  }
+                                </div>
+
+                              )
+                          } */}
                                                 </div>
                                             ))}
                                             {!loading && activitiesByDay[index] <= 0 &&

@@ -17,6 +17,7 @@ import { BiStopwatch } from 'react-icons/bi';
 import { CiStickyNote } from 'react-icons/ci';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { Modal } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 dayjs.extend(isBetween);
 
@@ -101,14 +102,13 @@ const StaffDashboard = ({roster, loading}) => {
     setShowModal(true);
   };
 
-//  4681
   function getActivityStatus(activitiesByDay) {
     if (!activitiesByDay) {
       return 'No Shift Today';
     }
     // dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss')
+    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss');
     const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
 
     if (activityDateFrom > nowInAustraliaTime) {
