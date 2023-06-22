@@ -88,7 +88,7 @@ const ClientRoster = () => {
     });
 
     // Get the current date
-    const [currentDate, setCurrentDate] = useState(dayjs());
+    const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
     const handleNextClick = () => {
         setCurrentDate(currentDate.add(6, 'day'));
@@ -116,8 +116,9 @@ const ClientRoster = () => {
     ];
     const startDate = currentDate.subtract(3, 'day');
     const endDate = currentDate.add(2, 'day');
+
     const activitiesByDay = daysOfWeek.map((day) =>
-        clients.filter((activity) => dayjs(activity.dateFrom).isSame(day, 'day'))
+        clients.filter((activity) => dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD'))
     );
 
 
@@ -168,25 +169,6 @@ const ClientRoster = () => {
         setAppointModal(true)
         setCli(e)
     }
-
-    function getActivityStatus(activity) {
-        const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-        const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
-        const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
-    
-        if (activityDateFrom > nowInAustraliaTime) {
-          return 'Upcoming';
-        }
-        else if (activityDateTo < nowInAustraliaTime) {
-          return activity.attendance === true ? 'Present' : 'Absent';
-        }
-        else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
-          return 'Present'
-        }
-        else {
-          return 'Active';
-        }
-      }
 
     const addAppointment = async () => {
         if (appoint === "") {
@@ -312,7 +294,7 @@ const ClientRoster = () => {
 
                                                             className={`text-truncate d-flex 
                                                             align-items-center
-                                                            justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                            justify-content-center px-2 py-1 rounded border-0 bg-light pointer`}
                                                             disabled={ 
                                                                 (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
                                                                 <
@@ -327,7 +309,7 @@ const ClientRoster = () => {
                                                         <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
-                                                            justify-content-center px-2 py-1 rounded bg-danger pointer`}
+                                                            justify-content-center px-2 py-1 rounded border-0 bg-danger pointer`}
                                                             disabled={ 
                                                                 (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
                                                                 <
@@ -342,7 +324,7 @@ const ClientRoster = () => {
                                                         <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
-                                                            justify-content-center px-2 py-1 rounded bg-success pointer`}
+                                                            justify-content-center px-2 py-1 rounded border-0 bg-success pointer`}
                                                             title="Add Appointment"
                                                             disabled={ 
                                                                 (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
@@ -355,76 +337,7 @@ const ClientRoster = () => {
                                                         </button>
 
                                                     </div>
-                                                    {/* {getActivityStatus(activity) === 'Active' ?
-                              (
-                                <div className='d-flex gap-2'>
-                                  <small
-                                    className={`text-truncate d-flex 
-                             align-items-center
-                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
-
-                             onClick={() => cancelShift()}
-                                    title="Cancel"
-                                  >
-                                    <GoTrashcan className='fs-6' />
-                                  </small>
-                                  <small
-                                    onClick={() => editActivity(activity.shiftRosterId)}
-                                    className={`text-truncate d-flex 
-                              align-items-center
-                              justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                    title="Edit"
-                                  >
-                                  
-                                    <FaRegEdit className='fs-6 text-dark' />
-                                  </small>
-                                  <small
-                                    className={`text-truncate d-flex 
-                                    align-items-center
-                                    justify-content-center px-2 py-1 rounded bg-success pointer`}
-
-                               onClick={() => addAppoint(activity.shiftRosterId)}
-                               title="Add Appointment"
-                                  >
-                                   <MdLibraryAdd className='fs-6' />
-                                  </small>
-                                </div>
-                              )
-                              :
-                              (
-                                <div className='d-flex gap-2' >
-                                  <small
-                                    className={`text-truncate d-flex 
-                             align-items-center
-                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
-
-                             onClick={() => cancelShift()}
-                             title="Cancel"
-                                  >
-                                    <GoTrashcan className='fs-6' />
-                                  </small>
-
-                                  {
-                                    getActivityStatus(activity) === 'Upcoming' && (
-                                      <small
-                                      onClick={() => editActivity(activity.shiftRosterId)}
-                                        className={`text-truncate d-flex 
-                              align-items-center
-                              justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                        title="Edit"
-
-                                      >
-                                      
-                                        <FaRegEdit className='fs-6 text-dark' />
-                                      </small>
-
-                                    )
-                                  }
-                                </div>
-
-                              )
-                          } */}
-                                                </div>
+                                                                 </div>
                                             ))}
                                             {!loading && activitiesByDay[index] <= 0 &&
 
