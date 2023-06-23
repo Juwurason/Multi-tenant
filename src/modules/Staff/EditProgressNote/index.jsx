@@ -103,7 +103,7 @@ const EditProgressNote = () => {
       setLoading1(false)
     } catch (error) {
       toast.error(error.response.data.message)
-       toast.error(error.response.data.title)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading1(false)
@@ -130,7 +130,7 @@ const EditProgressNote = () => {
       `,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#1C75BC',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Proceed',
       showLoaderOnConfirm: true,
@@ -232,18 +232,18 @@ const EditProgressNote = () => {
                     </div>
                     <div className="form-group text-center mb-0">
                       <div className="text-center d-flex gap-2">
-                       
-                          <button
-                            disabled={loading2 ? true : false}
-                            className="btn btn-outline-primary add-btn rounded-2 m-r-5 ml-4" onClick={CreateProgress}>{loading2 ? <div className="spinner-grow text-light" role="status">
-                              <span className="sr-only">Loading...</span>
-                            </div> : "Submit"}</button>
-                        <div>
+
                         <button
-                          disabled={loading1 ? true : false}
-                          className="btn btn-info add-btn text-white rounded-2 m-r-5" onClick={SaveProgress}>{loading1 ? <div className="spinner-grow text-light" role="status">
+                          disabled={loading2 ? true : false}
+                          className="btn btn-outline-primary add-btn rounded-2 m-r-5 ml-4" onClick={CreateProgress}>{loading2 ? <div className="spinner-grow text-light" role="status">
                             <span className="sr-only">Loading...</span>
-                          </div> : "Save"}</button>
+                          </div> : "Submit"}</button>
+                        <div>
+                          <button
+                            disabled={loading1 ? true : false}
+                            className="btn btn-info add-btn text-white rounded-2 m-r-5" onClick={SaveProgress}>{loading1 ? <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div> : "Save"}</button>
                         </div>
                       </div>
                     </div>

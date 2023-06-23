@@ -113,7 +113,7 @@ const AllEmployees = () => {
       html: `<h3>This will remove all info for this staff</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#00AEEF',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm',
       showLoaderOnConfirm: true,

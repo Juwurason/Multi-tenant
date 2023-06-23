@@ -316,7 +316,7 @@ const SupportType = () => {
             html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,

@@ -4,8 +4,8 @@ import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
-import { FaAngleLeft, FaAngleRight, FaRegEdit} from 'react-icons/fa';
-import { ImCancelCircle} from 'react-icons/im';
+import { FaAngleLeft, FaAngleRight, FaRegEdit } from 'react-icons/fa';
+import { ImCancelCircle } from 'react-icons/im';
 import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
@@ -42,7 +42,7 @@ const ClientRoster = () => {
     dayjs.extend(utc);
     dayjs.extend(timezone);
     dayjs.tz.setDefault('Australia/Sydney');
-   
+
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
     const userProfile = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
@@ -283,10 +283,10 @@ const ClientRoster = () => {
                                                         fontSize: '10px',
                                                         overflow: 'hidden',
                                                         backgroundColor:
-                                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                                            ? '#1C75BC'
-                                                            : '#5fa8e8',
-                                                      }}
+                                                            dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                                                ? '#405189'
+                                                                : '#5fa8e8',
+                                                    }}
                                                 >
                                                     <div
                                                         onClick={() => handleActivityClick(activity)}
@@ -304,7 +304,7 @@ const ClientRoster = () => {
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-light pointer`}
-                                                            disabled={ 
+                                                            disabled={
                                                                 (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
                                                                 <
                                                                 dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
@@ -319,13 +319,13 @@ const ClientRoster = () => {
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-danger pointer`}
-                                                            disabled={ 
+                                                            disabled={
                                                                 (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
                                                                 <
                                                                 dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             title="Cancel"
                                                             onClick={() => cancelShift()}
-                                                            
+
                                                         >
                                                             <ImCancelCircle className='fs-6 text-white' />
                                                         </button>
@@ -335,18 +335,18 @@ const ClientRoster = () => {
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-success pointer`}
                                                             title="Add Appointment"
-                                                            disabled={ 
+                                                            disabled={
                                                                 (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
                                                                 <
                                                                 dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             onClick={() => addAppoint(activity.shiftRosterId)}
-                                                          
+
                                                         >
                                                             <MdLibraryAdd className='fs-6 text-white' />
                                                         </button>
 
                                                     </div>
-                                                                 </div>
+                                                </div>
                                             ))}
                                             {!loading && activitiesByDay[index] <= 0 &&
 

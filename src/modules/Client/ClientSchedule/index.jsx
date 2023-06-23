@@ -248,7 +248,7 @@ const ClientSchedule = () => {
             html: `<h3>Are you sure? you want to delete this Schedule</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#1C75BC',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#C8102E',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,

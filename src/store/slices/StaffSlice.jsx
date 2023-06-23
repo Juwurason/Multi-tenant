@@ -3,8 +3,8 @@ import api from '../api';
 
 export const fetchStaff = createAsyncThunk('Staff/fetchStaff', async () => {
     const response = await api.fetchStaffData();
-    const filteredData = response.filter((staff) => staff.isActive);
-    return filteredData;
+    // const filteredData = response.filter((staff) => staff.isActive);
+    return response;
 });
 
 const StaffSlice = createSlice({

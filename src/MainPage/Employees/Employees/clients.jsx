@@ -264,7 +264,7 @@ const Clients = () => {
       html: `<h3>Delete ${e.firstName} ${e.surName}</h3>`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#00AEEF',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm',
       showLoaderOnConfirm: true,

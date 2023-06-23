@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AllEmployees from './allemployees';
@@ -13,9 +13,9 @@ import AddStaff from '../../../_components/forms/AddStaff';
 import AddAdministrator from '../../../_components/forms/AddAdmin';
 import AddShiftRoaster from '../../../_components/forms/AddShiftRoaster';
 import EditShiftRoaster from '../../../_components/forms/EditShiftRoaster';
-import useHttp from '../../../hooks/useHttp';
 import Clients from './clients';
 import AddClients from '../../../_components/forms/AddClients';
+import AddUser from '../../../_components/forms/AddUser';
 
 const EmployeesRoute = ({ match }) => (
 
@@ -41,6 +41,7 @@ const EmployeesRoute = ({ match }) => (
 
       <Route path={`${match.url}/addadmin`} component={AddAdministrator} />
       <Route path={`${match.url}/addstaff`} component={AddStaff} />
+      <Route path={`${match.url}/adduser`} component={AddUser} />
       <Route path={`${match.url}/refferals`} component={Refferal} />
       <Route path={`${match.url}/departments`} component={Department} />
       <Route path={`${match.url}/timesheet`} component={Timesheet} />

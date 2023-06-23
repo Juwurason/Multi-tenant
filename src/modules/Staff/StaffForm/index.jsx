@@ -22,7 +22,7 @@ import { Modal } from 'react-bootstrap';
 import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
-const StaffForm = ({staffAvail, FetchData}) => {
+const StaffForm = ({ staffAvail, FetchData }) => {
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -47,19 +47,19 @@ const StaffForm = ({staffAvail, FetchData}) => {
   const convertTo12HourFormat = (time24h) => {
     let [hours, minutes] = time24h.split(':');
     let suffix = 'AM';
-  
+
     if (hours >= 12) {
       suffix = 'PM';
       hours = hours - 12;
     }
-  
+
     if (hours === 0) {
       hours = 12;
     }
-  
+
     return `${hours}:${minutes} ${suffix}`;
   };
-  
+
 
 
   const PostAvail = async (e) => {
@@ -86,7 +86,7 @@ const StaffForm = ({staffAvail, FetchData}) => {
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message)
-          toast.error(error.response.data.title)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading1(false)
@@ -204,7 +204,7 @@ const StaffForm = ({staffAvail, FetchData}) => {
       html: `<h3>Are you sure? you want to delete this Availability</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#1C75BC',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#C8102E',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -239,7 +239,7 @@ const StaffForm = ({staffAvail, FetchData}) => {
   const [editAvail, setEditAvail] = useState({});
   const [idSave, setIdSave] = useState('')
 
-  const handleEdit = async(e) => {
+  const handleEdit = async (e) => {
     setShowModal(true);
     setIdSave(e)
     // setLoading2(true)
@@ -251,7 +251,7 @@ const StaffForm = ({staffAvail, FetchData}) => {
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message)
-          toast.error(error.response.data.title)
+      toast.error(error.response.data.title)
     }
   };
 
@@ -261,13 +261,13 @@ const StaffForm = ({staffAvail, FetchData}) => {
     const value = target.value;
     const newValue = value === "" ? "" : value;
     setEditAvail({
-        ...editAvail,
-        [name]: newValue
+      ...editAvail,
+      [name]: newValue
     });
-}
+  }
 
   const EditAvail = async (e) => {
-   
+
     e.preventDefault()
     setLoading2(true)
     const info = {
@@ -291,7 +291,7 @@ const StaffForm = ({staffAvail, FetchData}) => {
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message)
-          toast.error(error.response.data.title)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading2(false)
@@ -301,18 +301,18 @@ const StaffForm = ({staffAvail, FetchData}) => {
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-    <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
-    <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
-    <div>
-        <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.staffAvailibilityId)}>
+        <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+        <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
+        <div>
+          <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.staffAvailibilityId)}>
             Edit
-        </button> |
-        <button onClick={() => handleDelete(data.staffAvailibilityId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+          </button> |
+          <button onClick={() => handleDelete(data.staffAvailibilityId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
             Delete
-        </button>
-    </div>
+          </button>
+        </div>
 
-</div>
+      </div>
     );
 
   };
@@ -470,45 +470,45 @@ const StaffForm = ({staffAvail, FetchData}) => {
             <Modal.Title>Edit Staff Availability</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <form className="row">
-                <div className='col-md-6'>
-                  <div className="form-group">
-                    <label>Days</label>
-                    <select
-                      className='form-select'
-                      name="days" value={editAvail.days || ''} onChange={handleInputChange}
-                      required
-                    >
-                      <option defaultValue hidden>Select Days</option>
-                      <option value={"Monday"}>Monday</option>
-                      <option value={"Tuesday"}>Tuesday</option>
-                      <option value={"Wednessday"}>Wednessday</option>
-                      <option value={"Thursday"}>Thursday</option>
-                      <option value={"Friday"}>Friday</option>
-                      <option value={"Saturday"}>Saturday</option>
-                      <option value={"Sunday"}>Sunday</option>
-                    </select>
-                  </div>
+            <form className="row">
+              <div className='col-md-6'>
+                <div className="form-group">
+                  <label>Days</label>
+                  <select
+                    className='form-select'
+                    name="days" value={editAvail.days || ''} onChange={handleInputChange}
+                    required
+                  >
+                    <option defaultValue hidden>Select Days</option>
+                    <option value={"Monday"}>Monday</option>
+                    <option value={"Tuesday"}>Tuesday</option>
+                    <option value={"Wednessday"}>Wednessday</option>
+                    <option value={"Thursday"}>Thursday</option>
+                    <option value={"Friday"}>Friday</option>
+                    <option value={"Saturday"}>Saturday</option>
+                    <option value={"Sunday"}>Sunday</option>
+                  </select>
                 </div>
-                <div className='col-md-6'>
-                  <div className="form-group">
-                    <label>From Time of Day</label>
-                    <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
-                    />
-                  </div>
+              </div>
+              <div className='col-md-6'>
+                <div className="form-group">
+                  <label>From Time of Day</label>
+                  <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
+                  />
                 </div>
-                <div className='col-md-6'>
-                  <div className="form-group">
-                    <label>To Time of Day</label>
-                    <input
-                      className="form-control"
-                      type="time"
-                      name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+              </div>
+              <div className='col-md-6'>
+                <div className="form-group">
+                  <label>To Time of Day</label>
+                  <input
+                    className="form-control"
+                    type="time"
+                    name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
+                    required
+                  />
                 </div>
-              </form>
+              </div>
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <button

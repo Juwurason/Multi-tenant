@@ -92,7 +92,7 @@ const ticketDetails = () => {
             html: `<h3> You're about closing this ticket by ${ticketDetails.user}</h3>`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,

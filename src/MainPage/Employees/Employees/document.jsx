@@ -55,6 +55,13 @@ const Document = () => {
     const [deadline, setDeadline] = useState("");
     const [selectedDocument, setSelectedDocument] = useState(0);
     const [loading1, setLoading1] = useState(false);
+    const sta = useRef("");
+    const cli = useRef("");
+    const dateFrom = useRef("");
+    const dateTo = useRef("");
+    const status = useRef("");
+    const role = useRef("");
+
     const columns = [
         // {
         //   name: '#',
@@ -262,7 +269,7 @@ const Document = () => {
             html: `<h3>Are you sure? you want to delete this Document</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#1C75BC',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#C8102E',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
@@ -273,7 +280,7 @@ const Document = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchData()
+                        dispatch(fetchDocument());
                     } else {
                         toast.error(data.message);
                     }
@@ -297,7 +304,7 @@ const Document = () => {
             html: `<h3>Accept This Document</h3>`,
             icon: 'info',
             showCancelButton: true,
-            confirmButtonColor: '#1C75BC',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#C8102E',
             confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,
@@ -308,7 +315,7 @@ const Document = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchData()
+                        dispatch(fetchDocument());
                     } else {
                         toast.error("Error Accepting Document");
                     }
@@ -339,7 +346,7 @@ const Document = () => {
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
-                FetchData()
+                dispatch(fetchDocument());
                 setLoading1(false);
                 setRejectModal(true)
             } else {
@@ -359,11 +366,41 @@ const Document = () => {
 
         }
     }
+    const handleFilter = async (e) => {
+
+
+        e.preventDefault();
+        try {
+            const { data } = await privateHttp.post(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`,
+            )
+            if (data.status === 'Success') {
+                toast.success(data.message);
+                dispatch(fetchDocument());
+                // setLoading1(false);
+                // setRejectModal(true)
+            } else {
+
+                toast.error(data.message);
+                setRejectModal(true)
+                setLoading1(false);
+            }
+
+
+        } catch (error) {
+            // setLoading1(false);
+            toast.error("Ooooops😔 Error Occurred ")
+            console.log(error);
+
+
+
+        }
+    }
+
+
 
     const filteredData = document.filter((item) =>
-        item?.documentUrl.toLowerCase().includes(searchText.toLowerCase()) ||
-        item?.user.toLowerCase().includes(searchText.toLowerCase()) ||
-        item?.documentName.toLowerCase().includes(searchText.toLowerCase())
+        item?.user.toLowerCase().includes(searchText.toLowerCase())
+        || item?.documentName.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -410,29 +447,30 @@ const Document = () => {
                     {/* Search Filter */}
 
 
-                    <div className="row shadow-sm py-2">
+                    <form className="row shadow-sm py-2" onSubmit={handleFilter}>
                         <div className="col-sm-4">
                             <div className="form-group">
                                 <label className="col-form-label">Staff Name</label>
                                 <div>
-                                    <select className="form-select">
-                                        <option defaultValue hidden>--Select a staff--</option>
+                                    <select className="form-select" ref={sta}>
+                                        <option defaultValue hidden value={""} >--Select a staff--</option>
                                         {
                                             staff.map((data, index) =>
                                                 <option value={data.staffId} key={index}>{data.fullName}</option>)
                                         }
-                                    </select></div>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div className="col-sm-4">
                             <div className="form-group">
                                 <label className="col-form-label">Client Name</label>
                                 <div>
-                                    <select className="form-select">
-                                        <option defaultValue hidden>--Select a Client--</option>
+                                    <select className="form-select" ref={cli}>
+                                        <option defaultValue hidden value={""}>--Select a Client--</option>
                                         {
                                             clients.map((data, index) =>
-                                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
                                         }
                                     </select>
                                 </div>
@@ -442,24 +480,24 @@ const Document = () => {
                         <div className="col-sm-4">
                             <div className="form-group">
                                 <label className="col-form-label">Date From</label>
-                                <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
                             </div>
                         </div>
                         <div className="col-sm-4">
                             <div className="form-group">
                                 <label className="col-form-label">Date To</label>
-                                <div><input className="form-control datetimepicker" type="datetime-local" /></div>
+                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
                             </div>
                         </div>
                         <div className="col-sm-4">
-                            <div className="form-group">
+                            <div className="form-group" >
                                 <label className="col-form-label">Status</label>
                                 <div>
-                                    <select className="form-select">
-                                        <option defaultValue hidden>--Select a Status...</option>
-                                        <option value="">Accepted</option>
-                                        <option value="">Rejected</option>
-                                        <option value="">Pending</option>
+                                    <select className="form-select" ref={status} required>
+                                        <option defaultValue hidden value={""}>--Select a Status...</option>
+                                        <option value="Accepted">Accepted</option>
+                                        <option value="Rejected">Rejected</option>
+                                        <option value="Pending">Pending</option>
 
                                     </select>
                                 </div>
@@ -470,10 +508,11 @@ const Document = () => {
                             <div className="form-group">
                                 <label className="col-form-label">User Role</label>
                                 <div>
-                                    <select className="form-select">
-                                        <option defaultValue hidden>--Select Role--</option>
-                                        <option value="">Staff</option>
-                                        <option value="">Client</option>
+                                    <select className="form-select" ref={role} required>
+                                        <option defaultValue hidden value={""}>--Select Role--</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Staff">Staff</option>
+                                        <option value="Client">Client</option>
 
                                     </select>
                                 </div>
@@ -482,13 +521,17 @@ const Document = () => {
                         </div>
                         <div className="col-auto text-left">
                             <div className="form-group">
-                                <button className="btn btn-info add-btn text-white rounded-2 m-r-5">Load</button>
+                                <button
+                                    type='submit'
+                                    className="btn btn-info add-btn text-white rounded-2 m-r-5">
+                                    Load
+                                </button>
 
 
                             </div>
                         </div>
 
-                    </div>
+                    </form>
 
                     {/* <div className="submit-section">
                         </div> */}

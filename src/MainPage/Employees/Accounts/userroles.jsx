@@ -103,7 +103,7 @@ const UserRoles = () => {
             html: `<h3>Are you sure? you want to delete this Role</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,

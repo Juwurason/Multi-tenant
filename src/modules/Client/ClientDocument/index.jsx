@@ -235,7 +235,7 @@ const ClientDocument = () => {
       html: `<h3>Are you sure? you want to delete this Document</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#1C75BC',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#C8102E',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -315,19 +315,19 @@ const ClientDocument = () => {
     if (editAvail.documentName === "" || documenti === "") {
       return toast.error("Input Fields cannot be empty")
     }
-    
+
 
     const formData = new FormData()
     formData.append("CompanyId", id.companyId);
     formData.append("DocumentId", idSave);
     formData.append("DocumentName", editAvail.documentName);
     formData.append("User", id.fullName);
-    formData.append("UserId", clientProfile.profileId); 
+    formData.append("UserId", clientProfile.profileId);
     formData.append("UserRole", id.role);
     formData.append("ExpirationDate", editAvail.expirationDate);
     formData.append("Status", "Pending");
     formData.append("DocumentFile", documenti);
-    
+
     try {
       setLoading2(true)
       const { data } = await privateHttp.post(`/Documents/edit/${idSave}?userId=${id.userId}`, formData);
@@ -501,13 +501,13 @@ const ClientDocument = () => {
                 <div className="form-group">
                   <label>Document Name</label>
 
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter the document name"
-                        onChange={(e) => setDocumentName(e.target.value)}
-                      />
-                  
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter the document name"
+                    onChange={(e) => setDocumentName(e.target.value)}
+                  />
+
                 </div>
 
               </div>
@@ -578,7 +578,7 @@ const ClientDocument = () => {
                   <label>Upload Document</label> <br />
                   <input
                     type="file"
-                    className="custom-file-input"  accept=".pdf, .doc, .txt, .jpg, .jpeg, .png" id="policy_upload"
+                    className="custom-file-input" accept=".pdf, .doc, .txt, .jpg, .jpeg, .png" id="policy_upload"
                     onChange={handleFileChan}
                   />
                 </div>

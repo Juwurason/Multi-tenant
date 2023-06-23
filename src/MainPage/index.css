@@ -237,7 +237,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .jlPZUL {
-    color: #1C75BC;
+    color: #405189;
 }
 
 
@@ -257,7 +257,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .current-date {
-    background-color: #1C75BC;
+    background-color: #405189;
     padding: 5px;
     border-radius: 5px;
     color: #fff !important;
@@ -327,25 +327,25 @@ body::-webkit-scrollbar-thumb {
 
 .ldio-myosbd5c33i div:nth-child(1) {
     transform: translate(30px, 0);
-    background: #00aeef;
+    background: #405189;
     animation-delay: -1.3636363636363635s;
 }
 
 .ldio-myosbd5c33i div:nth-child(2) {
     transform: translate(70px, 0);
-    background: #028ee1;
+    background: #405189;
     animation-delay: -0.9090909090909092s;
 }
 
 .ldio-myosbd5c33i div:nth-child(3) {
     transform: translate(110px, 0);
-    background: #00aeef;
+    background: #405189;
     animation-delay: -0.4545454545454546s;
 }
 
 .ldio-myosbd5c33i div:nth-child(4) {
     transform: translate(150px, 0);
-    background: #1c75bc;
+    background: #405189;
     animation-delay: -2.272727272727273s;
 }
 

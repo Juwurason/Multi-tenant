@@ -59,13 +59,13 @@ const ClientAidEquip = () => {
 
     const handleSelected = (selectedOptions) => {
         const updatedInfo = {
-          equipmentAssistance: selectedOptions.some(option => option.value === 'Equipment Require Assistance'),
-          requireStaffTraining: selectedOptions.some(option => option.value === 'Equipment Require Staff Training'),
+            equipmentAssistance: selectedOptions.some(option => option.value === 'Equipment Require Assistance'),
+            requireStaffTraining: selectedOptions.some(option => option.value === 'Equipment Require Staff Training'),
         };
-      
+
         setInfo(updatedInfo);
         setSelected(selectedOptions);
-      };
+    };
 
 
     const convertTo12HourFormat = (time24h) => {
@@ -241,7 +241,7 @@ const ClientAidEquip = () => {
             html: `<h3>Are you sure? you want to delete this </h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#1C75BC',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#C8102E',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
@@ -328,7 +328,7 @@ const ClientAidEquip = () => {
             equipmentUsed: editAvail.equipmentUsed,
             equipmentAssistance: selectedActivities.find(option => option.value === 'Equipment Require Assistance') !== undefined,
             requireStaffTraining: selectedActivities.find(option => option.value === 'Equipment Require Staff Training') !== undefined,
-          };
+        };
         try {
 
             const { data } = await post(`/Aids/edit/${idSave}`, info);

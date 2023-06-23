@@ -233,7 +233,7 @@ const StaffDailyReport = () => {
             html: `<h3>Delete this Ticket</h3>`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,

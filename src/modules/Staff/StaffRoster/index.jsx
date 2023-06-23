@@ -19,7 +19,7 @@ const StaffRoster = ({ staff, loading }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
-  
+
   const [staffCancel, setStaffCancel] = useState('');
   const [reason, setReason] = useState('');
 
@@ -98,7 +98,7 @@ const StaffRoster = ({ staff, loading }) => {
     else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === false ) {
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === false) {
       return 'You are already Clocked in'
     }
     else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === true) {
@@ -113,7 +113,7 @@ const StaffRoster = ({ staff, loading }) => {
   // http://localhost:3001/staff/main/edit-progress/4680/5052
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
-  const HandleFill = () =>{
+  const HandleFill = () => {
     navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
   }
   const [showModal, setShowModal] = useState(false);
@@ -218,7 +218,7 @@ const StaffRoster = ({ staff, loading }) => {
                                   overflow: 'hidden',
                                   backgroundColor:
                                     dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                      ? '#1C75BC'
+                                      ? '#405189'
                                       : '#5fa8e8',
                                 }}
                               >
@@ -268,8 +268,8 @@ const StaffRoster = ({ staff, loading }) => {
                                     <small
                                       className={`p-1 rounded text-truncate ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
                                         getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
-                                        getActivityStatus(activity) === 'You are already Clocked in' ? 'bg-primary' :
-                                          getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
+                                          getActivityStatus(activity) === 'You are already Clocked in' ? 'bg-primary' :
+                                            getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
                                         }`}
                                     >
                                       {getActivityStatus(activity)}

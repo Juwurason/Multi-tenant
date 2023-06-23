@@ -175,7 +175,7 @@ const AttendanceReport = () => {
   //     html: `<h3>Are you sure? you want to delete this user</h3></br><p>You won't be able to revert this!</p>`,
   //     icon: 'question',
   //     showCancelButton: true,
-  //     confirmButtonColor: '#00AEEF',
+  //     confirmButtonColor: '#405189',
   //     cancelButtonColor: '#777',
   //     confirmButtonText: 'Confirm Delete',
   //     showLoaderOnConfirm: true,

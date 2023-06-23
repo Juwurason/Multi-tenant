@@ -326,7 +326,7 @@ const ScheduleSupport = () => {
             html: `<h3>Delete this schedule of support</h3>`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,

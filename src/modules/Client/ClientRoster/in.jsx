@@ -42,7 +42,7 @@ const ClientRoster = () => {
       const staffResponse = await get(`/ShiftRosters/get_shifts_by_user?client=&staff=${staffProfile.staffId}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       // console.log(staff.shiftRoster);
-    //   setStaff(staff.shiftRoster);
+      //   setStaff(staff.shiftRoster);
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -117,7 +117,7 @@ const ClientRoster = () => {
     setReasonModal(true)
     setStaffCancel(e)
   };
-  
+
   const daysOfWeek = [
     currentDate.subtract(3, 'day'),
     currentDate.subtract(2, 'day'),
@@ -218,24 +218,24 @@ const ClientRoster = () => {
                   <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}>
                     <div className='border  d-flex justify-content-center py-2 bg-light'>
                       <div className={`d-flex flex-column align-items-center gap-0  ${currentDate.format('YYYY-MM-DD HH:mm:ss') === day.format('YYYY-MM-DD HH:mm:ss') ? 'rounded-3 bg-primary px-3 text-white ' : ''}`}>
-                      <span
-                                className={`fw-bold fs-4`
+                        <span
+                          className={`fw-bold fs-4`
 
-                                }
-                              >
-                                {day.format('D')}
-                              </span>
+                          }
+                        >
+                          {day.format('D')}
+                        </span>
 
-                              <span style={{ fontSize: '10px' }} className='mb-2'>
-                                {day.locale('en').format('ddd')}
-                              </span>
+                        <span style={{ fontSize: '10px' }} className='mb-2'>
+                          {day.locale('en').format('ddd')}
+                        </span>
                       </div>
                     </div>
 
-                    <div 
-                     className="col-sm-12 text-center border p-2"
-                     style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
-                     >
+                    <div
+                      className="col-sm-12 text-center border p-2"
+                      style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
+                    >
                       {loading &&
 
                         <div className="spinner-grow text-secondary" role="status">
@@ -253,15 +253,15 @@ const ClientRoster = () => {
                           activitiesByDay[index].length > 0 ? (
                             activitiesByDay[index].map((activity, activityIndex) => (
                               <div key={activityIndex}
-                              className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
-                              style={{
-                                fontSize: '10px',
-                                overflow: 'hidden',
-                                backgroundColor:
-                                  dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                    ? '#1C75BC'
-                                    : '#5fa8e8',
-                              }}
+                                className='text-white gap-1 pointer rounded-2 d-flex flex-column align-items-start p-2 mt-2'
+                                style={{
+                                  fontSize: '10px',
+                                  overflow: 'hidden',
+                                  backgroundColor:
+                                    dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
+                                      ? '#405189'
+                                      : '#5fa8e8',
+                                }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
                                   <div className='d-flex flex-column gap-1 justify-content-start align-items-start'>

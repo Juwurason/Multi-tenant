@@ -20,7 +20,7 @@ import dayjs from 'dayjs';
 
 
 
-const ViewTicket = ({ticket, FetchData}) => {
+const ViewTicket = ({ ticket, FetchData }) => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
     // const [ticket, setTicket] = useState([]);
@@ -233,7 +233,7 @@ const ViewTicket = ({ticket, FetchData}) => {
             html: `<h3>Delete this Ticket</h3>`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm',
             showLoaderOnConfirm: true,

@@ -191,11 +191,11 @@ const AllClients = () => {
       const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
       )
       console.log(response);
-  } catch (error) {
+    } catch (error) {
       console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
-  }
+    }
   }
 
   const handleDeactivate = async (e) => {
@@ -258,7 +258,7 @@ const AllClients = () => {
       html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3>`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#00AEEF',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,

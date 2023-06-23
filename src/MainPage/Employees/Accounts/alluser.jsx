@@ -126,7 +126,7 @@ const AllUser = () => {
             html: `<h3>Are you sure? you want to delete this user</h3>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#00AEEF',
+            confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
@@ -324,7 +324,8 @@ const AllUser = () => {
                                     </CopyToClipboard>
                                 </div>
                                 <div className='col-md-4'>
-                                    <button className='btn add-btn btn-info text-white rounded-2'>Add New User</button>
+                                    <Link to={'/app/employee/adduser'} className="btn btn-info add-btn text-white rounded-2">
+                                        Create New User</Link>
                                 </div>
                             </div>
 

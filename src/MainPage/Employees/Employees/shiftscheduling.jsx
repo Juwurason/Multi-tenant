@@ -76,22 +76,6 @@ const ShiftScheduling = () => {
   const dateTo = useRef(null);
 
 
-  //Fetching From the endpoints
-
-
-
-  // Filtering Schedule either by user or Client
-
-  // const handleFilter = (client, staff) => {
-  //   dispatch(filterRoaster({ client, staff }))
-  //     .then(() => {
-  //       toast.success('Filter applied successfully');
-  //     })
-  //     .catch((error) => {
-  //       toast.error('Failed to apply filter');
-  //     });
-  // };
-
 
   const FilterSchedule = () => {
 
@@ -179,14 +163,7 @@ const ShiftScheduling = () => {
     const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
     const activityDateTo = dayjs(activity.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
-    //   if (activityDateFrom.isAfter(nowInAustraliaTime, 'hour')) {
-    //     return 'Upcoming';
-    //   } else if (activityDateTo.isBefore(nowInAustraliaTime)) {
-    //     return activity.attendance === true ? 'Present' : 'Absent';
-    //   } else {
-    //     return 'Active';
-    //   }
-    // }
+
 
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
@@ -216,7 +193,7 @@ const ShiftScheduling = () => {
       html: `<h3>Are you sure? you want to delete this shift</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#00AEEF',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -461,7 +438,7 @@ const ShiftScheduling = () => {
           <div className='row'>
 
             <div className="col-md-6 col-lg-12 ">
-              <div className='mt-4 p-3 d-flex justify-content-between align-items-center'>
+              <div className='mt-4 p-3 d-flex justify-content-between flex-wrap align-items-center'>
                 <span className='' >
                   <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
                     <FaAngleLeft className='pointer fs-4 text-white' />
@@ -538,8 +515,8 @@ const ShiftScheduling = () => {
                             overflow: 'hidden',
                             backgroundColor:
                               dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                ? '#1C75BC'
-                                : '#5fa8e8',
+                                ? '#405189'
+                                : '#5374A5',
                           }}
                         >
                           <div
@@ -552,7 +529,7 @@ const ShiftScheduling = () => {
 
 
 
-                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance ? "bg-success" : "bg-danger"}rounded-circle`}></span>
+                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance === true ? "bg-success" : "bg-danger"} rounded-circle`}></span>
                             </div>
                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
                             <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
@@ -598,6 +575,7 @@ const ShiftScheduling = () => {
                               :
                               (
                                 <div className='d-flex gap-2' >
+
                                   <small
                                     className={`text-truncate d-flex 
                              align-items-center
@@ -621,6 +599,21 @@ const ShiftScheduling = () => {
                                       >
                                         <MdOutlineEditCalendar className='fs-6 text-dark' />
                                       </Link>
+
+                                    )
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Absent' && (
+                                      <small
+                                        className={`text-truncate d-flex 
+                                 align-items-center
+                                 justify-content-center px-2 py-1 rounded bg-warning pointer`}
+
+                                        onClick={() => markAttendance(activity)}
+                                        title="Mark attendance for staff"
+                                      >
+                                        <MdDoneOutline className='fs-6' />
+                                      </small>
 
                                     )
                                   }

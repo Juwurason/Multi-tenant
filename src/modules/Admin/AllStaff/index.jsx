@@ -60,7 +60,7 @@ const AllStaff = () => {
       name: 'Phone Number',
       selector: row => row.phoneNumber,
       sortable: true
-    }, 
+    },
     {
       name: "Actions",
       cell: (row) => (
@@ -113,7 +113,7 @@ const AllStaff = () => {
       html: `<h3>Are you sure? you want to delete this staff</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#00AEEF',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -272,19 +272,19 @@ const AllStaff = () => {
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-      <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
-      <div><span className='fw-bold'>Email: </span> {data.email}</div>
-      <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
-      <div>
-        <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-          Activate Staff
-        </button> |
-        <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
-          Deactivate Staff
-        </button>
-      </div>
+        <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+        <div><span className='fw-bold'>Email: </span> {data.email}</div>
+        <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
+        <div>
+          <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+            Activate Staff
+          </button> |
+          <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+            Deactivate Staff
+          </button>
+        </div>
 
-    </div>
+      </div>
     );
   };
   const [searchText, setSearchText] = useState("");

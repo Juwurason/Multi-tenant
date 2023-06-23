@@ -18,7 +18,7 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
 
-const StaffDocument = ({staffDocument, FetchData}) => {
+const StaffDocument = ({ staffDocument, FetchData }) => {
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -240,7 +240,7 @@ const StaffDocument = ({staffDocument, FetchData}) => {
       html: `<h3>Are you sure? you want to delete this Document</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#1C75BC',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#C8102E',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,

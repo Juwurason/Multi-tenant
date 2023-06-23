@@ -219,7 +219,7 @@ const ShiftRoster = () => {
       html: `<h3>Are you sure? you want to delete this shift</h3>`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#00AEEF',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Confirm Delete',
       showLoaderOnConfirm: true,
@@ -520,7 +520,7 @@ const ShiftRoster = () => {
                                         overflow: 'hidden',
                                         backgroundColor:
                                           dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                            ? '#1C75BC'
+                                            ? '#405189'
                                             : '#5fa8e8',
                                       }}
                                     >

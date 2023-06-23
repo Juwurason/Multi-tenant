@@ -18,7 +18,7 @@ const ProgressNote = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useHistory()
   const { uid, name } = useParams()
-  
+
   const [details, setDetails] = useState('')
   const [staff, setStaff] = useState('')
   const [report, setReport] = useState('')
@@ -92,7 +92,7 @@ const ProgressNote = () => {
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
       if (data.status === 'Success') {
         if (data.progressNote.progressNoteId === 0) {
-              navigate.push(`staff/main/create-progress/${uid}`)
+          navigate.push(`staff/main/create-progress/${uid}`)
         }
         localStorage.setItem("rosterId", uid);
         localStorage.setItem("progressNoteId", data.progressNote.progressNoteId);
@@ -130,7 +130,7 @@ const ProgressNote = () => {
       `,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#1C75BC',
+      confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Proceed',
       showLoaderOnConfirm: true,
@@ -243,7 +243,7 @@ const ProgressNote = () => {
                         </div>
                         <div className="form-group text-center mb-0">
                           <div className="text-center d-flex gap-2">
-                           
+
                             <button
                               className="btn add-btn rounded-2 m-r-5 btn-outline-primary ml-4" onClick={CreateProgress}>
                               Submit
