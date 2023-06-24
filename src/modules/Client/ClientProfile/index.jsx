@@ -31,7 +31,8 @@ const ClientProfile = () => {
       const { data } = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`, { cacheTimeout: 300000 })
       setStaffOne(data)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
   }
   useEffect(() => {
@@ -65,7 +66,8 @@ const ClientProfile = () => {
       setProfile(response.data);
       setEditedProfile(response.data)
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
 
 
     }
@@ -168,7 +170,7 @@ const ClientProfile = () => {
       setLoading(false)
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading(false);
@@ -221,11 +223,11 @@ const ClientProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#1C75B9"}} to={`/client/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
+                              <Link style={{ backgroundColor: "#405189"}} to={`/client/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
                             </div>
 
                             <div>
-                            <Link style={{ backgroundColor: "#1C75B9"}} to={`/client/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
+                            <Link style={{ backgroundColor: "#405189"}} to={`/client/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
                             </div>
                           </div>
                         </div>

@@ -67,7 +67,8 @@ const ClientRoster = () => {
             setLoading(false);
 
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
         finally {
             setLoading(false)
@@ -144,9 +145,12 @@ const ClientRoster = () => {
 
             setLoading(false)
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
     }
+
+
 
     const submitActivity = async () => {
 
@@ -159,32 +163,57 @@ const ClientRoster = () => {
             setLgShow(false)
 
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
         finally {
             setLoading(false);
         }
     };
 
-    const addAppoint = (e) => {
+    const [editedProfile, setEditedProfile] = useState({});
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditedProfile({
+            ...editedProfile,
+            [name]: newValue
+        });
+    }
+
+    const addAppoint = async (e) => {
         setAppointModal(true)
         setCli(e)
+        try {
+            const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setEditedProfile(data);
+            setLoading(false)
+        } catch (error) {
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+            setLoading(false)
+        }
     }
 
     const addAppointment = async () => {
-        if (appoint === "") {
+        if (editedProfile === "") {
             return toast.error("Input Fields cannot be empty")
         }
         try {
             setLoading(true)
-            const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${appoint}`);
+            const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
             // console.log(data);
             toast.success(data.message);
             setLoading(false);
             setAppointModal(false);
 
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
         finally {
             setLoading(false);
@@ -227,10 +256,21 @@ const ClientRoster = () => {
 
                         <div className="col-md-8 col-lg-12">
                             <div className=' py-3 d-flex justify-content-between align-items-center'>
-                                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                                    <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
-                                    <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                                    <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
+                                <span className=''>
+                                    <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
+                                        <FaAngleLeft className='pointer fs-4 text-white' />
+                                    </button>
+                                    <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                                    <button onClick={handleNextClick} className='btn btn-primary btn-sm shadow'>
+                                        <FaAngleRight className='pointer fs-4 text-white' />
+                                    </button>
+
+                                </span>
+
+                                <span>
+                                    <h1 className='text-muted fw-bold'>
+                                        {startDate.format('YYYY')}
+                                    </h1>
                                 </span>
                                 <span>
                                     <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
@@ -356,7 +396,7 @@ const ClientRoster = () => {
                                             }
 
                                             {/* Modal */}
-                                            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                                            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                                                 <Modal.Header closeButton>
                                                     <Modal.Title>Activity Details</Modal.Title>
                                                 </Modal.Header>
@@ -382,7 +422,7 @@ const ClientRoster = () => {
                                                 backdrop="static"
                                                 keyboard={false}
                                                 aria-labelledby="example-modal-sizes-title-lg"
-                                            >
+                                                centered>
                                                 <Modal.Header closeButton>
                                                     <Modal.Title id="example-modal-sizes-title-lg">
                                                         Edit Activities
@@ -412,7 +452,7 @@ const ClientRoster = () => {
 
 
 
-                                            <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
+                                            <Modal show={reasonModal} onHide={() => setReasonModal(false)} centered>
                                                 <Modal.Header closeButton>
                                                     <Modal.Title>Request to Cancel Shift</Modal.Title>
                                                 </Modal.Header>
@@ -429,14 +469,17 @@ const ClientRoster = () => {
                                                 </Modal.Footer>
                                             </Modal>
 
-                                            <Modal show={appointModal} onHide={() => setAppointModal(false)}>
+                                            <Modal show={appointModal} onHide={() => setAppointModal(false)} centered>
                                                 <Modal.Header closeButton>
                                                     <Modal.Title>Add Appointment</Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body>
                                                     <div>
                                                         <label htmlFor="">Please Provide Appointment Details</label>
-                                                        <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setAppoint(e.target.value)} />
+                                                        <textarea rows={3} className="form-control summernote" placeholder="Add Appointment..." defaultValue={""}
+                                                            // onChange={e => setAppoint(e.target.value)}
+                                                            name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
+                                                        />
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>

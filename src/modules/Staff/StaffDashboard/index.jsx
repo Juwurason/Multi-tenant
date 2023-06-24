@@ -336,8 +336,8 @@ const StaffDashboard = ({roster, loading}) => {
                   <>
                     <p><b>Date:</b> <span style={{ fontSize: '15px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span></p>
                     <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
-                    <p><b>Client:</b> {activitiesByDay[2][0].profile.fullName}</p>
-                    <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
+                    <p><b>Client:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0].profile?.fullName : " -- "}</p>
+                    <p><b>Description:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0]?.activities: "--"}</p>
                   </>
                 )}
               </Modal.Body>

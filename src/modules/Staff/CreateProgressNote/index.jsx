@@ -11,7 +11,6 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import Swal from 'sweetalert2';
-
 const CreateProgressNote = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useHistory()
