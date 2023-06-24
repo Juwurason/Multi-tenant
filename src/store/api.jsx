@@ -84,6 +84,15 @@ const getShiftsByUser = async (client, staff) => {
         throw error;
     }
 };
+const getChartData = async (value) => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/staff_duration_chart?period=${value}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching chart Data:', error);
+        throw error;
+    }
+};
 
 
 const api = {
@@ -95,7 +104,8 @@ const api = {
     fetchAttendance,
     getShiftsByUser,
     fetchUserData,
-    filterAttendance
+    filterAttendance,
+    getChartData
     // Add other API endpoints and corresponding methods as needed
 };
 

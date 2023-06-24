@@ -8,6 +8,7 @@ import DocumentSlice from '../slices/DocumentSlice';
 import shiftRoasterSlice from '../slices/shiftRoasterSlice';
 import UserSlice from '../slices/UserSlice';
 import AttendanceSlice from '../slices/AttendanceSlice';
+import ChartSlice from '../slices/chartData';
 
 const rootReducer = combineReducers({
     dashboard: DashboardSlice,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     document: DocumentSlice,
     roaster: shiftRoasterSlice,
     user: UserSlice,
-    attendance: AttendanceSlice
+    attendance: AttendanceSlice,
+    chart: ChartSlice
 
 });
 
