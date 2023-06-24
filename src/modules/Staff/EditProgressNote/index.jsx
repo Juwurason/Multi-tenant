@@ -36,7 +36,8 @@ const EditProgressNote = () => {
       setDetails(staff.profile);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+     toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
@@ -48,7 +49,8 @@ const EditProgressNote = () => {
       setEditPro(editpro.data);
       setLoading(false)
     } catch (error) {
-      console.log(error);
+     toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
@@ -150,7 +152,8 @@ const EditProgressNote = () => {
             navigate.push(`/staff/main/report/${uid}`)
           }
         } catch (error) {
-          console.log(error);
+         toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
           toast.error(error.response.data.message);
           setLoading2(false)
         }

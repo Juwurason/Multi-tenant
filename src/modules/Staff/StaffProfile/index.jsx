@@ -27,19 +27,6 @@ const StaffProfile = ({staffOne, FetchData}) => {
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
   const privateHttp = useHttp()
 
-  // const FetchStaff = async () => {
-  //   try {
-  //     const {data} = await privateHttp.get(`/Staffs/${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-  //     setStaffOne(data)
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // useEffect(() => {
-  //   FetchStaff()
-  // }, []);
-
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -224,7 +211,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
                             <div className="staff-id">Staff ID : {staffOne.maxStaffId}</div>
-                            <div className="small doj text-muted">{staffOne.aboutMe}</div>
+                            <div className="small">About Me : {staffOne.aboutMe === "null" ? "" : staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link style={{ backgroundColor: "#405189"}} to={`/staff/main/document`} className="py-1 px-2 rounded text-white">Staff Doc</Link>
@@ -340,7 +327,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
 
                 <div className="form-group col-md-12">
                   <label>About Me</label><br />
-                  <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
+                  <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe  || ''} onChange={handleInputChange}></textarea>
                 </div>
 
 

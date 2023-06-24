@@ -150,7 +150,7 @@ const ClientRoster = () => {
         }
     }
 
-    
+
 
     const submitActivity = async () => {
 
@@ -179,18 +179,18 @@ const ClientRoster = () => {
         const value = target.value;
         const newValue = value === "" ? "" : value;
         setEditedProfile({
-          ...editedProfile,
-          [name]: newValue
+            ...editedProfile,
+            [name]: newValue
         });
-      }
+    }
 
     const addAppoint = async (e) => {
         setAppointModal(true)
         setCli(e)
         try {
             const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
-            // console.log(data.appointment);
-           setEditedProfile(data);
+            // console.log(data);
+            setEditedProfile(data);
             setLoading(false)
         } catch (error) {
             toast.error(error.response.data.message)
@@ -205,7 +205,7 @@ const ClientRoster = () => {
         }
         try {
             setLoading(true)
-            const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${editedProfile}`);
+            const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
             // console.log(data);
             toast.success(data.message);
             setLoading(false);
@@ -256,10 +256,21 @@ const ClientRoster = () => {
 
                         <div className="col-md-8 col-lg-12">
                             <div className=' py-3 d-flex justify-content-between align-items-center'>
-                                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                                    <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
-                                    <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                                    <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
+                                <span className=''>
+                                    <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
+                                        <FaAngleLeft className='pointer fs-4 text-white' />
+                                    </button>
+                                    <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                                    <button onClick={handleNextClick} className='btn btn-primary btn-sm shadow'>
+                                        <FaAngleRight className='pointer fs-4 text-white' />
+                                    </button>
+
+                                </span>
+
+                                <span>
+                                    <h1 className='text-muted fw-bold'>
+                                        {startDate.format('YYYY')}
+                                    </h1>
                                 </span>
                                 <span>
                                     <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
@@ -465,10 +476,10 @@ const ClientRoster = () => {
                                                 <Modal.Body>
                                                     <div>
                                                         <label htmlFor="">Please Provide Appointment Details</label>
-                                                        <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} 
-                                                        // onChange={e => setAppoint(e.target.value)}
-                                                       name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
-                                                         />
+                                                        <textarea rows={3} className="form-control summernote" placeholder="Add Appointment..." defaultValue={""}
+                                                            // onChange={e => setAppoint(e.target.value)}
+                                                            name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
+                                                        />
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>

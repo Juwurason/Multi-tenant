@@ -154,11 +154,23 @@ const StaffRoster = ({ staff, loading }) => {
 
             <div className="col-md-6 col-lg-12 ">
               <div className=' py-3 d-flex justify-content-between align-items-center'>
-                <span className='shadow-sm p-3' style={{ backgroundColor: '#F4F4F4' }} >
-                  <FaAngleLeft className='pointer fs-4 text-primary' onClick={handlePrevClick} />
-                  <span className='fw-bold text-muted' style={{ fontSize: '12px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
-                  <FaAngleRight className='pointer fs-4 text-primary' onClick={handleNextClick} />
+                <span className=''>
+                  <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
+                    <FaAngleLeft className='pointer fs-4 text-white' />
+                  </button>
+                  <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMMM D')} - {endDate.format('MMMM D')}</span>
+                  <button onClick={handleNextClick} className='btn btn-primary btn-sm shadow'>
+                    <FaAngleRight className='pointer fs-4 text-white' />
+                  </button>
+
                 </span>
+
+                <span>
+                  <h1 className='text-muted fw-bold'>
+                    {startDate.format('YYYY')}
+                  </h1>
+                </span>
+
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                     <option defaultValue hidden>Week</option>
@@ -252,7 +264,7 @@ const StaffRoster = ({ staff, loading }) => {
                                         toast.error('Geolocation is not supported');
                                       }
                                     }}
-                                      className="bg-info p-1 rounded"
+                                      className="bg-success p-1 rounded"
                                     >
                                       Clock-In
                                     </small>

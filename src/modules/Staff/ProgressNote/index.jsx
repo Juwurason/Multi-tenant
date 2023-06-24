@@ -51,7 +51,7 @@ const ProgressNote = () => {
 
     try {
       const { data } = await get(`/Attendances/clock_in?userId=${user.userId}&shiftId=${uid}&lat=${lat}&lng=${log}`, { cacheTimeout: 300000 });
-      console.log(data)
+      // console.log(data)
       if (data.status === "Success") {
         Swal.fire(
           'You have successfully clocked in',
@@ -150,8 +150,9 @@ const ProgressNote = () => {
             navigate.push(`/staff/main/report/${uid}`)
           }
         } catch (error) {
-          console.log(error);
-          toast.error(error.response.data.message);
+          // console.log(error);
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
 
         }
 
