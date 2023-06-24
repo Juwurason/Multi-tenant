@@ -227,7 +227,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#1C75B9"}} to={`/staff/main/document`} className="py-1 px-2 rounded text-white">Staff Doc</Link>
+                              <Link style={{ backgroundColor: "#405189"}} to={`/staff/main/document`} className="py-1 px-2 rounded text-white">Staff Doc</Link>
                             </div>
                           </div>
                         </div>
@@ -783,23 +783,23 @@ const StaffProfile = ({staffOne, FetchData}) => {
                       <ul className="personal-info">
                         <li>
                           <div className="title"><FaInstagram /> Instagram</div>
-                          <div className="text">{staffOne.instagram === "null" || "" ? "---" : staffOne.instagram}</div>
+                          <div className="text">{staffOne.instagram === "null" || "undefined" || "" ? "---" : staffOne.instagram}</div>
                         </li>
                         <li>
                           <div className="title"><FaFacebook /> Facebook</div>
-                          <div className="text">{staffOne.facebook === "null" || "" ? "---" : staffOne.facebook}</div>
+                          <div className="text">{staffOne.facebook === "null" || "undefined" || "" ? "---" : staffOne.facebook}</div>
                         </li>
                         <li>
                           <div className="title"><FaTwitter /> Twitter</div>
-                          <div className="text">{staffOne.twitter === "null" || "" ? "---" : staffOne.twitter}</div>
+                          <div className="text">{staffOne.twitter === "null" || "undefined" || "" ? "---" : staffOne.twitter}</div>
                         </li>
                         <li>
                           <div className="title"><FaLinkedin /> Linked-In</div>
-                          <div className="text">{staffOne.linkedIn === "null" || "" ? "---" : staffOne.linkedIn}</div>
+                          <div className="text">{staffOne.linkedIn === "null" || "undefined" || "" ? "---" : staffOne.linkedIn}</div>
                         </li>
                         <li>
                           <div className="title"><FaYoutube /> Youtube</div>
-                          <div className="text">{staffOne.youtube === "null" || "" ? "---" : staffOne.youtube}</div>
+                          <div className="text">{staffOne.youtube === "null" || "undefined" || "" ? "---" : staffOne.youtube}</div>
                         </li>
 
                       </ul>
