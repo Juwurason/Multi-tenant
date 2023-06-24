@@ -100,7 +100,7 @@ const ClientRaiseTicket = () => {
                                                 <div>
                                                     <input className="form-control" type="file"
                                                         accept=".png,.jpg,.jpeg"
-                                                        maxSize={1024 * 1024 * 2}
+                                                        maxsize={1024 * 1024 * 2}
                                                         onChange={e => setImage(e.target.files[0])} />
                                                 </div>
                                             </div>

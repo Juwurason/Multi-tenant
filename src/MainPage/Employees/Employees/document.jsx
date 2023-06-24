@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDocument } from '../../../store/slices/DocumentSlice';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
+import { fetchAdmin } from '../../../store/slices/AdminSlice';
 
 const Document = () => {
     const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const Document = () => {
         dispatch(fetchDocument());
         dispatch(fetchStaff());
         dispatch(fetchClient());
+        dispatch(fetchAdmin());
     }, [dispatch]);
 
     // Access the entire state
@@ -37,6 +39,7 @@ const Document = () => {
     const document = useSelector((state) => state.document.data);
     const staff = useSelector((state) => state.staff.data);
     const clients = useSelector((state) => state.client.data);
+    const admin = useSelector((state) => state.admin.data);
 
     useEffect(() => {
         // Check if staff data already exists in the store
@@ -366,24 +369,14 @@ const Document = () => {
 
         }
     }
+
+
     const handleFilter = async (e) => {
-
-
         e.preventDefault();
         try {
-            const { data } = await privateHttp.post(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`,
-            )
-            if (data.status === 'Success') {
-                toast.success(data.message);
-                dispatch(fetchDocument());
-                // setLoading1(false);
-                // setRejectModal(true)
-            } else {
-
-                toast.error(data.message);
-                setRejectModal(true)
-                setLoading1(false);
-            }
+            // const { data } = await privateHttp.get(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${""}&status=${status.current.value}&role=${role.current.value}`)
+            const { response } = await privateHttp.get(`/Documents/filter_documents?companyId=1&fromDate=2023-01-01T11:26&toDate=2023-06-24T11:26&staff=Adedamola%20Adepoju%20Ayobamidele&admin=&status=Accepted&role=Staff`)
+            console.log(response[0]);
 
 
         } catch (error) {
@@ -453,10 +446,10 @@ const Document = () => {
                                 <label className="col-form-label">Staff Name</label>
                                 <div>
                                     <select className="form-select" ref={sta}>
-                                        <option defaultValue hidden value={""} >--Select a staff--</option>
+                                        <option defaultValue hidden value={""} >--Select Staff--</option>
                                         {
                                             staff.map((data, index) =>
-                                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
                                         }
                                     </select>
                                 </div>
@@ -464,13 +457,13 @@ const Document = () => {
                         </div>
                         <div className="col-sm-4">
                             <div className="form-group">
-                                <label className="col-form-label">Client Name</label>
+                                <label className="col-form-label">Admin Name</label>
                                 <div>
                                     <select className="form-select" ref={cli}>
-                                        <option defaultValue hidden value={""}>--Select a Client--</option>
+                                        <option defaultValue hidden value={""}>--Select Admin--</option>
                                         {
-                                            clients.map((data, index) =>
-                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
+                                            admin.map((data, index) =>
+                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
                                         }
                                     </select>
                                 </div>

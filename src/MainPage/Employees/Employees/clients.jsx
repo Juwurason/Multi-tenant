@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -40,7 +40,7 @@ const Clients = () => {
 
   const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
-
+  const status = useRef(false)
 
   const columns = [
 
@@ -243,6 +243,29 @@ const Clients = () => {
     item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
     item.email.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const HandleFilter = async (e) => {
+    e.preventDefault()
+    try {
+      const { data } = await get(`/Profiles/get_active_clients?companyId=${id.companyId}&IsActive=${status.current.value}`,
+      )
+      console.log(data);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+
+
   const customStyles = {
 
     headCells: {
@@ -320,7 +343,7 @@ const Clients = () => {
             <div className="card">
 
               <div className="card-body">
-                <form  >
+                <form>
                   <div className="row align-items-center py-2">
                     <div className="col-sm-4">
                       <div className="form-group">
@@ -357,10 +380,10 @@ const Clients = () => {
                       <div className="form-group">
                         <label className="col-form-label">Select Status</label>
                         <div>
-                          <select className="form-select">
+                          <select className="form-select" ref={status}>
                             <option defaultValue hidden>--Select Status--</option>
-                            <option value="0">InActive</option>
-                            <option value="1">Active</option>
+                            <option value={false}>InActive</option>
+                            <option value={true}>Active</option>
 
                           </select>
                         </div>
@@ -371,8 +394,8 @@ const Clients = () => {
 
                     <div className="col-auto mt-3">
                       <div className="form-group">
-                        <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
-
+                        <button className="btn btn-info rounded-2 add-btn text-white" type='button'
+                          onClick={HandleFilter}
                         >
                           Load
 

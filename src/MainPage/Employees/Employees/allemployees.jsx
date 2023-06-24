@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -42,6 +42,7 @@ const AllEmployees = () => {
 
   const { post, get } = useHttp();
   const id = JSON.parse(localStorage.getItem('user'));
+  const status = useRef(false);
 
 
   const columns = [
@@ -165,9 +166,30 @@ const AllEmployees = () => {
 
 
   }
+
   const handleDeactivate = async (e) => {
     try {
       const response = await get(`Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+  const HandleFilter = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await get(`/Staffs/get_active_staffs?companyId=${id.companyId}&IsActive=${status.current.value}`,
       )
       console.log(response);
 
@@ -342,7 +364,7 @@ const AllEmployees = () => {
               <div className="card">
 
                 <div className="card-body">
-                  <form  >
+                  <form onSubmit={HandleFilter}>
                     <div className="row align-items-center py-2">
                       <div className="col-sm-4">
                         <div className="form-group">
@@ -379,10 +401,10 @@ const AllEmployees = () => {
                         <div className="form-group">
                           <label className="col-form-label">Select Status</label>
                           <div>
-                            <select className="form-select">
+                            <select className="form-select" ref={status}>
                               <option defaultValue hidden>--Select Status--</option>
-                              <option value="0">InActive</option>
-                              <option value="1">Active</option>
+                              <option value={false}>InActive</option>
+                              <option value={true}>Active</option>
 
                             </select>
                           </div>

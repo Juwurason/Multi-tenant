@@ -535,7 +535,7 @@ const AttendanceReport = () => {
                         <label htmlFor="">Image URL </label>
                         <input className="form-control" type="file"
                           accept=".png,.jpg,.jpeg"
-                          maxSize={1024 * 1024 * 2}
+                          maxsize={1024 * 1024 * 2}
                         // onChange={handleFileChange}
                         />
                       </div>

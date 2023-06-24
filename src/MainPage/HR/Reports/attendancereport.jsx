@@ -71,7 +71,6 @@ const AttendanceReport = () => {
   const { get } = useHttp();
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
-  const [loading3, setLoading3] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
   const [sta, setSta] = useState('');
   const dateFrom = useRef(null);
@@ -127,32 +126,25 @@ const AttendanceReport = () => {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex gap-1" style={{ overflow: "hidden" }}>
-          <button
+          <Link
             className='btn'
             title='Edit'
-            onClick={() => setEditModal(true)}
+            to={`/app/reports/edit-attendance/${row.attendanceId}`}
+          // onClick={() => setEditModal(true)}
+
           >
             <FaRegEdit />
-          </button>
-          <button
+          </Link>
+          <Link
             className='btn'
             title='Details'
-            onClick={() => {
-              // handle action here, e.g. open a modal or navigate to a new page
-              // handleDelete(row.administratorId)
-            }}
+            to={`/app/reports/attendance-details/${row.attendanceId}`}
+
+
           >
             <FaRegFileAlt />
-          </button>
-          {/* <button
-            className='btn'
-            title='Delete'
-            onClick={() => {
-             
-            }}
-          >
-            <GoTrashcan />
-          </button> */}
+          </Link>
+
 
         </div>
       ),

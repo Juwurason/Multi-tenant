@@ -3,15 +3,12 @@ import React, { Component, useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import "../../index.css";
-import Offcanvas from '../../../Entryfile/offcanvance';
-import { useCompanyContext } from '../../../context';
+import Offcanvas from '../../Entryfile/offcanvance';
 import moment from 'moment';
-import useHttp from '../../../hooks/useHttp';
 import Swal from 'sweetalert2';
-import Editor from './editor';
+import useHttp from '../../hooks/useHttp';
 
-const StaffNewReport = () => {
+const EditAttendance = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, } = useParams();
     const [attendance, setAttendance] = useState({});
@@ -24,22 +21,18 @@ const StaffNewReport = () => {
 
     const FetchData = async () => {
         setLoading(true);
+
         try {
-            const { data } = await privateHttp.get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
-            const attendId = data.attendId;
+            const attendanceData = await privateHttp.get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
+            setAttendance(attendanceData.data);
+            // Process the attendance data here
+            setReport(attendanceData.data.report || "");
+            setStartKm(attendanceData.data.startKm || 0);
+            setEndKm(attendanceData.data.endKm || 0);
 
-            try {
-                const attendanceData = await privateHttp.get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
-                setAttendance(attendanceData.data);
-                // Process the attendance data here
-            } catch (attendanceError) {
-                console.log(attendanceError);
-            }
-
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
+        } catch (attendanceError) {
+            toast.error("Error Fetching Attendance")
+            console.log(attendanceError);
         }
     };
 
@@ -51,7 +44,7 @@ const StaffNewReport = () => {
     const [startKm, setStartKm] = useState(0);
     const [endKm, setEndKm] = useState(0);
     const [report, setReport] = useState("");
-    const [url, setUrl] = useState(null)
+    const [url, setUrl] = useState(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -65,30 +58,35 @@ const StaffNewReport = () => {
     };
 
     const formData = new FormData();
+    formData.append("attendanceId", attendance.attendanceId);
     formData.append("StartKm", startKm);
     formData.append("EndKm", endKm);
     formData.append("Report", report);
     formData.append("ImageFile", url);
+    formData.append("companyID", user.companyId);
+    formData.append("staffId", attendance.staffId);
 
     const SendReport = async (e) => {
         e.preventDefault()
         setLoading1(true)
 
         try {
-            // const { data } = await privateHttp.post(`/Attendances/add_report/${uid}?userId=${user.userId}&attendanceId=${attendance.attendanceId}`,
-            //     formData);
-            // if (data.status === "Success") {
-            //     Swal.fire(
-            //         '',
-            //         `${data.message}`,
-            //         'success'
-            //     )
-            //     setLoading1(false)
-            //     navigate.push(`/staff/staff-roster`)
-            // }
+            const { data } = await privateHttp.post(`/Attendances/edit/${uid}?userId=${user.userId}`,
+                formData);
+            if (data.status === "Success") {
+                Swal.fire(
+                    '',
+                    `${data.message}`,
+                    'success'
+                )
+                setLoading1(false)
+                navigate.push(`/app/reports/attendance-reports`)
+            }
             setLoading1(false)
         } catch (error) {
-            // console.log(error);
+            toast.error("Error Updating Attendance")
+
+            console.log(error);
             setLoading1(false)
 
         }
@@ -103,8 +101,8 @@ const StaffNewReport = () => {
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Add A Report</title>
-                    <meta name="description" content="Add A Report" />
+                    <title>Edit Attendance</title>
+                    <meta name="description" content="Edit Attendance" />
                 </Helmet>
                 {/* Page Content */}
                 <div className="content container-fluid">
@@ -112,23 +110,20 @@ const StaffNewReport = () => {
                     <div className="page-header">
                         <div className="row">
                             <div className="col-sm-12">
-                                <h3 className="page-title">Add A Report</h3>
+                                <h3 className="page-title">Edit Attendance</h3>
                                 <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Add A Report</li>
+                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/app/reports/attendance-reports">Attendance</Link></li>
+                                    <li className="breadcrumb-item active">Edit Attendance</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-
                     {/* /Page Header */}
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
-                                    <div style={{ fontSize: '12px' }}><p>Note: This report attendance is different from your shift rostering attendance. Fill in this report if you had other activities
-                                        within the day that are different from your shift rostering activities</p></div> <br />
-
                                     <form onSubmit={SendReport}>
                                         <div className='col-md-4'>
 
@@ -137,49 +132,54 @@ const StaffNewReport = () => {
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock In</label>
-                                                    <input className="form-control datetimepicker" type="datetime-local"
-                                                    />
+                                                    <input type="text" className="form-control"
+                                                        value={moment(attendance.clockIn).format("LLL")} readOnly />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock Out</label>
-                                                    <input className="form-control datetimepicker" type="datetime-local"
-                                                    />
+                                                    <input type="text" className="form-control"
+                                                        value={moment(attendance.clockOut).format("LLL")}
+                                                        readOnly />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
-                                                    <input type="text"
-
-
-                                                        className="form-control" />
+                                                    <input
+                                                        type="text"
+                                                        value={startKm}
+                                                        onChange={(e) => setStartKm(e.target.value)}
+                                                        className="form-control"
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
-                                                    <input type="text"
+                                                    <input
+                                                        type="text"
+                                                        value={endKm}
+                                                        onChange={(e) => setEndKm(e.target.value)}
+                                                        className="form-control"
+                                                    />
 
-                                                        className="form-control" />
                                                 </div>
                                             </div>
                                         </div>
 
 
                                         <div className="form-group">
-                                            <label>Day Report</label>
-                                            <Editor
-                                                placeholder="Write something..."
-                                            // onChange={handleEditorChange}
-                                            // value={editorValue}
-                                            ></Editor>
-                                            <br />
-                                            <br />
-                                            {/* <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
-                                            <textarea rows={3} className="form-control summernote"
-                                                name="report"  /> */}
+                                            {/* <DefaultEditor value={html} onChange={onChange} /> */}
+                                            <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
+                                            <textarea
+                                                rows={3}
+                                                className="form-control summernote"
+                                                name="report"
+                                                value={report}
+                                                onChange={(e) => setReport(e.target.value)}
+                                            />
                                         </div>
 
                                         <div className="form-group">
@@ -220,4 +220,4 @@ const StaffNewReport = () => {
 }
 
 
-export default StaffNewReport;
+export default EditAttendance;

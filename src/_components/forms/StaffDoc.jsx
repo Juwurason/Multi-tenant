@@ -427,7 +427,7 @@ const StaffDoc = () => {
                                                     <label className="col-form-label">Select Document <span className="text-danger">*</span></label>
                                                     <input className="form-control" type="file"
                                                         accept=".pdf,.doc,.docx"
-                                                        maxSize={1024 * 1024 * 2}
+                                                        maxsize={1024 * 1024 * 2}
                                                         onChange={handleFileChange}
                                                     />
                                                 </div>

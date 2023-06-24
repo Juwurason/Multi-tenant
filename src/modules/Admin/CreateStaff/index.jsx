@@ -120,7 +120,7 @@ const CreateStaff = () => {
                                                 <label className="col-form-label">Offer Letter <span className="text-danger">*</span></label>
                                                 <div><input className="form-control" type="file"
                                                     accept=".pdf,.doc,.docx"
-                                                    maxSize={1024 * 1024 * 2}
+                                                    maxsize={1024 * 1024 * 2}
                                                     onChange={e => setOfferLetter(e.target.files[0])} /></div>
                                             </div>
                                         </div>
