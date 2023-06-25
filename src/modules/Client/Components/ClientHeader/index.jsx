@@ -177,8 +177,8 @@
                      <i className="fa fa-ellipsis-v" /></a>
                  <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
  
-                     <Link className="dropdown-item" to={"/client/client-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                     <Link className="dropdown-item" to={"/client/change-profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                     <Link className="dropdown-item" to={"/client/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                     <Link className="dropdown-item" to={"/client/client-profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
                      <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
  
                  </div>

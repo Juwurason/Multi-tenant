@@ -32,13 +32,53 @@ const StaffRoster = ({ staff, loading }) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const privateHttp = useHttp()
 
+  
+
+  const [currentDate, setCurrentDate] = useState(dayjs().tz());
+
+  const handleNextClick = () => {
+    setCurrentDate(currentDate.add(6, 'day'));
+  };
+
+  const handlePrevClick = () => {
+    setCurrentDate(currentDate.subtract(6, 'day'));
+  };
+
+  const [editedProfile, setEditedProfile] = useState({});
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditedProfile({
+            ...editedProfile,
+            [name]: newValue
+        });
+    }
+
+  const HandleSubmit = async (e) => {
+    setReasonModal(true)
+    setStaffCancel(e)
+    try {
+      const { data } = await privateHttp.get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setEditedProfile(data);
+      // setLoading(false)
+  } catch (error) {
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
+      // setLoading(false)
+  }
+  };
+
   const CancelShift = async () => {
     // setLoading(true)
-    if (reason === "") {
+    if (editedProfile.reason === "") {
       return toast.error("Input Fields cannot be empty")
     }
     try {
-      const response = await privateHttp.get(`ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${reason}&shiftid=${staffCancel}`)
+      const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
       // setStaffCancel(cancel);
       // console.log(response);
       // setLoading(false);
@@ -52,21 +92,6 @@ const StaffRoster = ({ staff, loading }) => {
       // setLoading(false)
       setReasonModal(false)
     }
-  };
-
-  const [currentDate, setCurrentDate] = useState(dayjs().tz());
-
-  const handleNextClick = () => {
-    setCurrentDate(currentDate.add(6, 'day'));
-  };
-
-  const handlePrevClick = () => {
-    setCurrentDate(currentDate.subtract(6, 'day'));
-  };
-
-  const HandleSubmit = (e) => {
-    setReasonModal(true)
-    setStaffCancel(e)
   };
 
   const daysOfWeek = [
@@ -331,6 +356,7 @@ const StaffRoster = ({ staff, loading }) => {
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
+                              <p><b>Status:</b> {selectedActivity.status}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}
@@ -340,14 +366,14 @@ const StaffRoster = ({ staff, loading }) => {
                         </Modal.Footer>
                       </Modal>
 
-                      <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
+                      <Modal show={reasonModal} onHide={() => setReasonModal(false)} centered>
                         <Modal.Header closeButton>
                           <Modal.Title>Request to Cancel Shift</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <div>
                             <label htmlFor="">Please provide reasons for cancelling shift</label>
-                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setReason(e.target.value)} />
+                            <textarea rows={3} className="form-control summernote" placeholder="" name='reason' value={editedProfile.reason || ""} onChange={handleInputChange} />
                           </div>
                         </Modal.Body>
                         <Modal.Footer>
