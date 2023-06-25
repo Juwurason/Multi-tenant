@@ -18,7 +18,14 @@ import ClientDailyLiving from '../modules/Client/ClientDailyLiving';
 import ClientHealth from '../modules/Client/ClientHealth';
 import ClientBehaviuor from '../modules/Client/ClientBehaviuor';
 
+import ClientRoute from '../modules/Client';
+
 export default [
+
+    // {
+    //     path: 'main',
+    //     component: ClientRoute
+    //  },
 
     {
         path: 'client',

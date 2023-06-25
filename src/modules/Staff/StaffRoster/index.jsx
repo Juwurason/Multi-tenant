@@ -19,9 +19,9 @@ const StaffRoster = ({ staff, loading }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
-
   const [staffCancel, setStaffCancel] = useState('');
   const [reason, setReason] = useState('');
+  // const [loading, setLoading] = useState(false);
 
 
   const AustraliaTimezone = 'Australia/Sydney';
@@ -30,30 +30,8 @@ const StaffRoster = ({ staff, loading }) => {
 
   const user = JSON.parse(localStorage.getItem('user'));
   const privateHttp = useHttp()
-  const CancelShift = async () => {
-    setLoading(true)
-    if (reason === "") {
-      return toast.error("Input Fields cannot be empty")
-    }
-    const info = {
-      userId: user.userId,
-      reason: reason
-    }
-    try {
-      const cancelShif = await privateHttp.post(`/ShiftRosters/shift_cancellation/${staffCancel}?userId=${user.userId}&reason=${reason}`);
-      const cancel = cancelShif.data;
-      // console.log(cancel);
-      setStaffCancel(cancel);
-      setLoading(false)
-    } catch (error) {
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
-    }
-    finally {
-      setLoading(false)
-      setReasonModal(false)
-    }
-  };
+
+  
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
@@ -65,9 +43,54 @@ const StaffRoster = ({ staff, loading }) => {
     setCurrentDate(currentDate.subtract(6, 'day'));
   };
 
-  const HandleSubmit = (e) => {
+  const [editedProfile, setEditedProfile] = useState({});
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditedProfile({
+            ...editedProfile,
+            [name]: newValue
+        });
+    }
+
+  const HandleSubmit = async (e) => {
     setReasonModal(true)
     setStaffCancel(e)
+    try {
+      const { data } = await privateHttp.get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setEditedProfile(data);
+      // setLoading(false)
+  } catch (error) {
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
+      // setLoading(false)
+  }
+  };
+
+  const CancelShift = async () => {
+    // setLoading(true)
+    if (editedProfile.reason === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+    try {
+      const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
+      // setStaffCancel(cancel);
+      // console.log(response);
+      // setLoading(false);
+      setReasonModal(false)
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+    }
+    finally {
+      // setLoading(false)
+      setReasonModal(false)
+    }
   };
 
   const daysOfWeek = [
@@ -110,7 +133,7 @@ const StaffRoster = ({ staff, loading }) => {
     }
   }
 
-  // http://localhost:3001/staff/main/edit-progress/4680/5052
+ 
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = () => {
@@ -121,6 +144,7 @@ const StaffRoster = ({ staff, loading }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
+    console.log(activity)
     setSelectedActivity(activity);
     setShowModal(true);
   };
@@ -239,7 +263,7 @@ const StaffRoster = ({ staff, loading }) => {
                                     <span className='fw-bold text-trucate'>
                                       {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                     </span>
-                                    <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.profile.fullName}</span></span>
+                                    <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.clients}</span></span>
                                     <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
                                   </div>
                                 </div>
@@ -331,7 +355,8 @@ const StaffRoster = ({ staff, loading }) => {
                             <>
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
-                              <p><b>Client:</b> {selectedActivity.profile.fullName}</p>
+                              <p><b>Client:</b> {selectedActivity.clients}</p>
+                              <p><b>Status:</b> {selectedActivity.status}</p>
                               <p><b>Description:</b> {selectedActivity.activities}</p>
                             </>
                           )}
@@ -341,14 +366,14 @@ const StaffRoster = ({ staff, loading }) => {
                         </Modal.Footer>
                       </Modal>
 
-                      <Modal show={reasonModal} onHide={() => setReasonModal(false)}>
+                      <Modal show={reasonModal} onHide={() => setReasonModal(false)} centered>
                         <Modal.Header closeButton>
                           <Modal.Title>Request to Cancel Shift</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <div>
                             <label htmlFor="">Please provide reasons for cancelling shift</label>
-                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setReason(e.target.value)} />
+                            <textarea rows={3} className="form-control summernote" placeholder="" name='reason' value={editedProfile.reason || ""} onChange={handleInputChange} />
                           </div>
                         </Modal.Body>
                         <Modal.Footer>

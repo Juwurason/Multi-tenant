@@ -144,6 +144,7 @@ const ClientProfile = () => {
     formData.append("kinEmail", editedProfile.kinEmail);
     formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
     formData.append("kinPostcode", editedProfile.kinPostCode);
+    formData.append("isActive", true);
     formData.append("kinState", editedProfile.kinState);
     formData.append("relationship", editedProfile.relationship);
     formData.append("imageFile", editedProfile.image);

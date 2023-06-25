@@ -96,7 +96,9 @@ const StaffDocument = ({ staffDocument, FetchData }) => {
       sortable: true,
       expandable: true,
       cell: (row) => (
-        <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
+        <span className={`px-2 py-1 rounded-pill fw-bold ${row.status === 'Accepted' ? 'bg-success' : 'bg-warning'}`} style={{ fontSize: "10px" }}>
+          {row.status}
+        </span>
       ),
     },
 

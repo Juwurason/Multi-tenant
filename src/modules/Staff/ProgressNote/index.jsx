@@ -24,6 +24,7 @@ const ProgressNote = () => {
   const [report, setReport] = useState('')
   const [progress, setProgress] = useState('')
   const [follow, setFollow] = useState('')
+  const [clientNames, setClientName] = useState('')
   const [kilometer, setKilometer] = useState(0)
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
@@ -39,6 +40,9 @@ const ProgressNote = () => {
       const staff = staffResponse.data;
       setCompanyId(staff.companyID)
       setStaff(staff.staff.fullName);
+      // console.log(staff);
+      setClientName(staff.clients)
+      
       setDetails(staff.profile);
       setLoading(false);
     } catch (error) {
@@ -211,7 +215,7 @@ const ProgressNote = () => {
                           <div className="col-md-4">
                             <div className="form-group">
                               <label htmlFor="">Client</label>
-                              <input type="text" placeholder="Client" className="form-control" value={details.fullName} readOnly />
+                              <input type="text" placeholder="Client" className="form-control" value={clientNames} readOnly />
                             </div>
                           </div>
                           <div className="col-md-4">

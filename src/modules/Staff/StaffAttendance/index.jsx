@@ -2,22 +2,26 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import useHttp from '../../../hooks/useHttp';
 import { useCompanyContext } from '../../../context';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
-import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
+import { GoSearch } from 'react-icons/go';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import moment from 'moment';
 
 const StaffAttendance = ({staffAtten}) => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.tz.setDefault('Australia/Sydney');
+ 
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -26,13 +30,8 @@ const StaffAttendance = ({staffAtten}) => {
       });
     }
   });
-
-  const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
-  const [documentName, setDocumentName] = useState("")
-  const [expire, setExpire] = useState("")
   const [document, setDocument] = useState("")
-  // const [staffAtten, setStaffAttendance] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
 
 
@@ -49,7 +48,7 @@ const StaffAttendance = ({staffAtten}) => {
     },
     {
       name: 'Start Time',
-      selector: row => dayjs(row.clockIn).format("h:mm A"),
+      selector: row => dayjs(row.clockIn).tz().format('h:mm A'),
       sortable: true,
     },
     {
@@ -80,20 +79,6 @@ const StaffAttendance = ({staffAtten}) => {
     }
   ];
 
-
-  // const id = JSON.parse(localStorage.getItem('user'))
-  const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    const allowedExtensions = /(\.pdf|\.doc)$/i;
-
-    if (allowedExtensions.exec(selectedFile.name)) {
-      setDocument(selectedFile);
-    } else {
-      alert('Please select a PDF or DOC file');
-    }
-  };
 
   const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
@@ -128,23 +113,6 @@ const StaffAttendance = ({staffAtten}) => {
     });
   };
 
-
-  const privateHttp = useHttp()
-
-
-  // useEffect(() => {
-  //   setLoading(true)
-  //   const getStaffAttendance = async () => {
-  //     try {
-  //       const { data } = await privateHttp.get(`/Attendances/get_staff_attendances?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-  //       setStaffAttendance(data)
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   getStaffAttendance()
-  // }, [])
 
   const handlePDFDownload = () => {
     const unit = "pt";
@@ -223,9 +191,7 @@ const StaffAttendance = ({staffAtten}) => {
                   <li className="breadcrumb-item active">Attendance</li>
                 </ul>
               </div>
-              {/* <div className="col-auto float-end ml-auto">
-                <a href="" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_policy"><i className="fa fa-plus" /> Add New Document</a>
-              </div> */}
+       
             </div>
           </div>
 

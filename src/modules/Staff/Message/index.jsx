@@ -664,7 +664,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                     <Modal.Body>
                         <div className="form-group">
                             <div className="fw-bold">
-                                <label>
+                                {/* <label>
                                     <input
                                         type="checkbox"
                                         name="toAllAdmins"
@@ -695,7 +695,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     />
                                     &nbsp;
                                     To All Clients
-                                </label> &nbsp; &nbsp;
+                                </label> &nbsp; &nbsp; */}
                                 <label>
                                     <input
                                         type="checkbox"
