@@ -211,8 +211,10 @@ const AdminProfile = () => {
                                 <div className="col-md-12">
                                     <div className="profile-view">
                                         <div className="profile-img-wrap">
-                                            <div className="profile-img">
-                                                <a className='text-primary' href="#"><img alt="" src={Avatar_02} /></a>
+                                            <div className="profile-img border rounded rounded-circle">
+                                                <a className='text-primary' href="#">
+                                                    <img alt="" src={staffOne.imageUrl || man} width={"100%"} className='rounded-circle' />
+                                                </a>
                                             </div>
                                         </div>
                                         <div className="profile-basic">
@@ -224,7 +226,8 @@ const AdminProfile = () => {
                                                         <div className="small doj text-muted">{staffOne.aboutMe}</div>
                                                         <div className="staff-msg d-flex gap-2">
                                                             {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                                                            <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`} className="py-1 px-2 rounded text-white bg-danger">Admin Doc</Link>
+                                                            <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`} className="py-1 px-2 rounded text-white bg-danger">Admin Document</Link>
+
                                                         </div>
                                                     </div>
                                                 </div>

@@ -145,7 +145,7 @@ const Header = (props) => {
               </div>
             </div>
             <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-            <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineSettings /> &nbsp; Settings</Link>
+            <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineSettings /> &nbsp; Company Profile</Link>
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
           </div>
         </li>
@@ -166,7 +166,7 @@ const Header = (props) => {
         </a>
         <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
           <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-          <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineSettings /> &nbsp; Settings</Link>
+          <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineSettings /> &nbsp; Company Profile</Link>
           <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
         </div>
       </div>

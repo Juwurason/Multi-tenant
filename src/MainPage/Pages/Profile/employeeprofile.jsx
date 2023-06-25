@@ -181,6 +181,44 @@ const EmployeeProfile = () => {
       setLoading(false)
     }
   }
+  const handleActivate = async (e) => {
+    try {
+      const response = await get(`Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
+
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+
+  const handleDeactivate = async (e) => {
+    try {
+      const response = await get(`Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+  }
 
 
   return (
@@ -212,8 +250,10 @@ const EmployeeProfile = () => {
                 <div className="col-md-12">
                   <div className="profile-view">
                     <div className="profile-img-wrap">
-                      <div className="profile-img">
-                        <a className='text-primary' href="#"><img alt="" src={Avatar_02} /></a>
+                      <div className="profile-img border rounded rounded-circle">
+                        <a className='text-primary' href="#">
+                          <img alt="" src={staffOne.imageUrl || man} width={"100%"} className='rounded-circle' />
+                        </a>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -225,7 +265,18 @@ const EmployeeProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`} className="py-1 px-2 rounded text-white bg-danger">Staff Doc</Link>
+                              <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`} className="btn py-1 px-2 rounded text-white bg-primary">Staff Document</Link>
+                              {
+                                staffOne.isActive ?
+                                  <button onClick={() => handleDeactivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
+                                    Deactivate Staff
+                                  </button>
+                                  :
+                                  <button onClick={() => handleActivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
+                                    Activate Staff
+                                  </button>
+
+                              }
                             </div>
                           </div>
                         </div>
@@ -362,14 +413,6 @@ const EmployeeProfile = () => {
             </Modal.Footer>
 
           </Modal>
-
-
-
-
-
-
-
-
 
           <div className="card tab-box">
             <div className="row user-tabs">
