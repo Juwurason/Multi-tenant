@@ -111,7 +111,7 @@ const AttendanceDetails = () => {
                                         </li>
                                         <li>
                                             <div className="title">Kilometre</div>
-                                            <div className="text">{details.startKm}Km</div>
+                                            <div className="text">{details.endKm - details.startKm} Km</div>
                                         </li>
                                         <li>
                                             <div className="title">Report</div>

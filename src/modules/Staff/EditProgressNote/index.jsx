@@ -23,6 +23,7 @@ const EditProgressNote = () => {
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const navigate = useHistory()
+  const [clientNames, setClientName] = useState('')
 
 
   const FetchSchedule = async () => {
@@ -31,9 +32,10 @@ const EditProgressNote = () => {
       const staffResponse = await get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
       // console.log(staff);
-      setCompanyId(staff.companyID)
       setStaff(staff.staff.fullName);
+      setCompanyId(staff.companyID)
       setDetails(staff.profile);
+      setClientName(staff.clients)
       setLoading(false);
     } catch (error) {
      toast.error(error.response.data.message)
@@ -202,7 +204,7 @@ const EditProgressNote = () => {
                       <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="">Client</label>
-                          <input type="text" placeholder="Client" className="form-control" value={details.fullName} readOnly />
+                          <input type="text" placeholder="Client" className="form-control" value={clientNames} readOnly />
                         </div>
                       </div>
                       <div className="col-md-4">
