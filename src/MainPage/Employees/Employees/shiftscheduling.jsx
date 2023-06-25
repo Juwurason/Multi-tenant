@@ -119,35 +119,7 @@ const ShiftScheduling = () => {
   const endDate = currentDate.add(2, 'day');
   const [selectedShift, setSelectedShift] = useState(null);
   const [dropModal, setDropModal] = useState(false);
-  const [draggedTask, setDraggedTask] = useState(null);
-  const [targetDate, setTargetDate] = useState('');
 
-  const handleDragStart = (initial) => {
-    const { source } = initial;
-    const draggedTask = schedule[source.index];
-    // Store the dragged task temporarily in state
-    setDraggedTask(draggedTask);
-  };
-
-  const handleDragEnd = (result) => {
-
-    // Reset the temporary task stored in state
-    // setDraggedTask(null);
-    history.push('/app/employee/add-shift')
-    // const { source, destination } = result;
-    // setTargetDate(destination.droppableId)
-    // console.log(targetDate);
-    // // Check if the item was dropped outside a valid droppable area
-    // if (!destination) {
-    //   return;
-    // }
-    // const draggedTask = schedule[source.index];
-    // Store the dragged task temporarily in state
-
-    // Call the update endpoint to update the actual data
-    // You can use the updatedItems data to send the necessary updates to the server
-
-  };
 
 
 
@@ -235,8 +207,12 @@ const ShiftScheduling = () => {
     if (report === "" || endKm === 0) {
       return toast.error("EndKm and Report cannot be empty")
     }
-    const info = {
 
+    const info = {
+      clockIn: e.dateFrom,
+      clockInCheck: true,
+      clockOutCheck: true,
+      clockOut: e.dateTo,
       report: report,
       startKm,
       endKm,
@@ -244,7 +220,7 @@ const ShiftScheduling = () => {
       companyID: id.companyId
     }
     setLoading2(true)
-
+    console.log(info);
     try {
       const { data } = await post(`/Attendances/mark_attendance?userId=${id.userId}&shiftId=${e.shiftRosterId}`,
         info);
@@ -259,6 +235,7 @@ const ShiftScheduling = () => {
       }
       setLoading2(false)
     } catch (error) {
+      toast.error("Error Marking Attendance")
       toast.error(error.response?.data?.message);
       setLoading2(false)
 
@@ -317,6 +294,11 @@ const ShiftScheduling = () => {
     }
   }
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
 
 
   return (
@@ -747,7 +729,13 @@ const ShiftScheduling = () => {
 
                     <div className="form-group">
                       <div className="form-check">
-                        <input className="form-check-input" type="checkbox" defaultValue id="flexCheckChecked" defaultChecked />
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="flexCheckChecked"
+                          checked={isChecked}
+                          onChange={handleCheckboxChange}
+                        />
                         <label className="form-check-label" htmlFor="flexCheckChecked">
                           I have done due verification that staff has tried on
                           the mobile and it fails and issue have been reported to technical support...
@@ -765,6 +753,7 @@ const ShiftScheduling = () => {
               <div className='d-flex justify-content-end'>
                 <div className='d-flex gap-2'>
                   <button className="btn add-btn rounded-2 btn-secondary"
+                    disabled={isChecked ? false : true}
                     onClick={() => handleConfirmation(selectedActivity)}
                   >
                     {loading2 ? <div className="spinner-grow text-light" role="status">

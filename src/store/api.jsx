@@ -93,6 +93,15 @@ const getChartData = async (value) => {
         throw error;
     }
 };
+const fetchIntegrationData = async () => {
+    try {
+        const response = await axiosInstance.get(`/Integrations/get_integrations?companyId=${id.companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching third-party Data:', error);
+        throw error;
+    }
+};
 
 
 const api = {
@@ -105,7 +114,8 @@ const api = {
     getShiftsByUser,
     fetchUserData,
     filterAttendance,
-    getChartData
+    getChartData,
+    fetchIntegrationData
     // Add other API endpoints and corresponding methods as needed
 };
 

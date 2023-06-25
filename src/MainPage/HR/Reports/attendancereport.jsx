@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
 import Header from '../../../initialpage/Sidebar/header'
@@ -85,7 +85,10 @@ const AttendanceReport = () => {
     {
       name: 'Staff',
       selector: row => row.staff.fullName,
-      sortable: true
+      sortable: true,
+      cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
+        data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.staff.fullName}`}
+      >{row.staff.fullName}</span>
     },
     {
 
@@ -125,7 +128,7 @@ const AttendanceReport = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <div className="d-flex gap-1" style={{ overflow: "hidden" }}>
+        <div className="d-flex" style={{ overflow: "hidden" }}>
           <Link
             className='btn'
             title='Edit'
@@ -143,6 +146,15 @@ const AttendanceReport = () => {
 
           >
             <FaRegFileAlt />
+          </Link>
+          <Link
+            className='btn'
+            title='Details'
+            to={`/app/reports/attendance-details/${row.attendanceId}`}
+
+
+          >
+            <FaRegClock />
           </Link>
 
 

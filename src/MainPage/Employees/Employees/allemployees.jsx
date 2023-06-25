@@ -183,8 +183,6 @@ const AllEmployees = () => {
     }
 
 
-
-
   }
   const HandleFilter = async (e) => {
     e.preventDefault()
@@ -328,6 +326,7 @@ const AllEmployees = () => {
       },
     },
   };
+
 
   return (
     <>

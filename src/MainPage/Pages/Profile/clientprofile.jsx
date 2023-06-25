@@ -7,7 +7,9 @@ import { Link, useParams } from 'react-router-dom';
 import { Avatar_01, Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_11, Avatar_12, Avatar_13, Avatar_16, Avatar_19 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
+import man from '../../../assets/img/man.png'
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 const ClientProfile = () => {
   const { uid } = useParams()
@@ -26,7 +28,45 @@ const ClientProfile = () => {
       }
     }
     FetchClient()
-  }, [])
+  }, []);
+  const handleActivate = async (e) => {
+    try {
+      const response = await get(`/Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+
+      )
+
+
+    } catch (error) {
+      toast.error("Error Occurred")
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+  const handleDeactivate = async (e) => {
+    try {
+      const response = await get(`/Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+      )
+
+
+    } catch (error) {
+      toast.error("Error Occurred")
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
 
   return (
     <>
@@ -57,9 +97,9 @@ const ClientProfile = () => {
                 <div className="col-md-12">
                   <div className="profile-view">
                     <div className="profile-img-wrap">
-                      <div className="profile-img">
+                      <div className="profile-img rounded-circle border">
                         <a href="">
-                          <img src={Avatar_19} alt="" />
+                          <img src={clientOne.imageUrl || man} alt="" width={"100%"} className='rounded-cirle' />
                         </a>
                       </div>
                     </div>
@@ -72,8 +112,19 @@ const ClientProfile = () => {
                             <small className="text-muted">{clientOne.email}</small>
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                             <div className="staff-msg d-flex gap-2">
-                              <Link to={`/app/profile/edit-client/${clientOne.profileId}`} className="btn btn-primary">Edit Profile</Link>
-                              <Link to={`/app/profile/client-docUpload/${clientOne.profileId}`} className="btn btn-danger">Client's Doc</Link>
+
+                              <Link to={`/app/profile/client-docUpload/${clientOne.profileId}`} className="btn btn-primary btn-sm">Client's Doc</Link>
+                              {
+                                clientOne.isActive ?
+                                  <button onClick={() => handleDeactivate(clientOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-danger">
+                                    Deactivate Staff
+                                  </button>
+                                  :
+                                  <button onClick={() => handleActivate(clientOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-success">
+                                    Activate Staff
+                                  </button>
+
+                              }
                             </div>
                           </div>
                         </div>
@@ -102,6 +153,11 @@ const ClientProfile = () => {
                           </ul>
                         </div>
                       </div>
+                    </div>
+                    <div className="pro-edit">
+                      <Link to={`/app/profile/edit-client/${clientOne.profileId}`} className="edit-icon bg-info text-white">
+                        <i className="fa fa-pencil" />
+                      </Link>
                     </div>
                   </div>
                 </div>

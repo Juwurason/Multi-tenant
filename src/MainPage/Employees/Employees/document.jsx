@@ -248,9 +248,13 @@ const Document = () => {
                     <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> |
-                    <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
-                        Accept
-                    </button>
+
+                    {
+                        data.status !== 'Accepted' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                            Accept
+                        </button> : ""
+                    }
+
                     |
                     <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Reject
