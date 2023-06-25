@@ -50,8 +50,6 @@ const ClientRoster = () => {
     const [clients, setClients] = useState([]);
     const [cli, setCli] = useState("");
     const [activities, setActivities] = useState([]);
-    const [reason, setReason] = useState();
-    const [appoint, setAppoint] = useState("");
     const [selectedActivities, setSelectedActivities] = useState([]);
     const [reasonModal, setReasonModal] = useState(false)
     const [appointModal, setAppointModal] = useState(false)
@@ -61,9 +59,8 @@ const ClientRoster = () => {
 
 
         try {
-            const clientResponse = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            setClients(client.shiftRoster);
+            const {data} = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
+            setClients(data.shiftRoster);
             setLoading(false);
 
         } catch (error) {
@@ -102,9 +99,8 @@ const ClientRoster = () => {
     const handleActivityChange = (selected) => {
         setSelectedActivities(selected);
     };
-    const cancelShift = () => {
-        setReasonModal(true)
-    }
+
+    
 
     const selectedValues = selectedActivities.map(option => option.label).join(', ');
 
@@ -182,6 +178,45 @@ const ClientRoster = () => {
             ...editedProfile,
             [name]: newValue
         });
+    }
+
+    const cancelShift = async (e) => {
+        setReasonModal(true)
+        setCli(e)
+        try {
+            const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setEditedProfile(data);
+            setLoading(false)
+        } catch (error) {
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
+            setLoading(false)
+        }
+    }
+
+    const rejectShift = async () => {
+
+        if (editedProfile === "") {
+            return toast.error("Input Fields cannot be empty")
+        }
+        try {
+            setLoading(true)
+            const response = await get(`/ShiftRosters/client_shift_cancellation?userId=${userProfile.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
+            // console.log(data);
+            // toast.success(data.message);
+            setLoading(false);
+            setReasonModal(false)
+            // setLgShow(false)
+
+        } catch (error) {
+            // console.log(error);
+            toast.error(error.response.data.message);
+            toast.error(error.response.data.title);
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     const addAppoint = async (e) => {
@@ -364,7 +399,7 @@ const ClientRoster = () => {
                                                                 <
                                                                 dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             title="Cancel"
-                                                            onClick={() => cancelShift()}
+                                                            onClick={() => cancelShift(activity.shiftRosterId)}
 
                                                         >
                                                             <ImCancelCircle className='fs-6 text-white' />
@@ -405,6 +440,7 @@ const ClientRoster = () => {
                                                         <>
                                                             <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
                                                             <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                                                            <p><b>Status:</b> {selectedActivity.status}</p>
                                                             <p><b>Description:</b> {selectedActivity.activities}</p>
                                                         </>
                                                     )}
@@ -459,11 +495,12 @@ const ClientRoster = () => {
                                                 <Modal.Body>
                                                     <div>
                                                         <label htmlFor="">Please provide reasons for cancelling shift</label>
-                                                        <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setReason(e.target.value)} />
+                                                        <textarea rows={3} className="form-control summernote" placeholder="Add Reason for Cancel Shift..."
+                                                         name='reason' value={editedProfile.reason || ""} onChange={handleInputChange} />
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>
-                                                    <button className="btn btn-primary">{loading ? <div className="spinner-grow text-light" role="status">
+                                                    <button className="btn btn-primary" onClick={rejectShift}>{loading ? <div className="spinner-grow text-light" role="status">
                                                         <span className="sr-only">Loading...</span>
                                                     </div> : "Submit"}</button>
                                                 </Modal.Footer>
@@ -476,7 +513,7 @@ const ClientRoster = () => {
                                                 <Modal.Body>
                                                     <div>
                                                         <label htmlFor="">Please Provide Appointment Details</label>
-                                                        <textarea rows={3} className="form-control summernote" placeholder="Add Appointment..." defaultValue={""}
+                                                        <textarea rows={3} className="form-control summernote" placeholder="Add Appointment..."
                                                             // onChange={e => setAppoint(e.target.value)}
                                                             name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
                                                         />

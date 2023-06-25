@@ -22,6 +22,7 @@ const StaffRoster = ({ staff, loading }) => {
 
   const [staffCancel, setStaffCancel] = useState('');
   const [reason, setReason] = useState('');
+  // const [loading, setLoading] = useState(false);
 
 
   const AustraliaTimezone = 'Australia/Sydney';
@@ -30,27 +31,25 @@ const StaffRoster = ({ staff, loading }) => {
 
   const user = JSON.parse(localStorage.getItem('user'));
   const privateHttp = useHttp()
+
   const CancelShift = async () => {
-    setLoading(true)
+    // setLoading(true)
     if (reason === "") {
       return toast.error("Input Fields cannot be empty")
     }
-    const info = {
-      userId: user.userId,
-      reason: reason
-    }
     try {
-      const cancelShif = await privateHttp.post(`/ShiftRosters/shift_cancellation/${staffCancel}?userId=${user.userId}&reason=${reason}`);
-      const cancel = cancelShif.data;
-      // console.log(cancel);
-      setStaffCancel(cancel);
-      setLoading(false)
+      const response = await privateHttp.get(`ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${reason}&shiftid=${staffCancel}`)
+      // setStaffCancel(cancel);
+      // console.log(response);
+      // setLoading(false);
+      setReasonModal(false)
     } catch (error) {
+      // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
     }
     finally {
-      setLoading(false)
+      // setLoading(false)
       setReasonModal(false)
     }
   };
@@ -110,7 +109,7 @@ const StaffRoster = ({ staff, loading }) => {
     }
   }
 
-  // http://localhost:3001/staff/main/edit-progress/4680/5052
+ 
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = () => {

@@ -43,7 +43,7 @@ const ClientDashboard = () => {
     };
   }, []);
 
-  const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
+  
   const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
   async function FetchStaff() {
     setLoading(true)
@@ -323,6 +323,7 @@ const ClientDashboard = () => {
                     <p><b>Date:</b> {dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</p>
                     <p><b>Time:</b> {activitiesByDay[2]?.length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
                     <p><b>Staff:</b> {activitiesByDay[2][0]?.staff?.fullName}</p>
+                    <p><b>Status:</b> {activitiesByDay[2][0]?.status}</p>
                     <p><b>Description:</b> {activitiesByDay[2][0]?.activities}</p>
                   </>
                 )}
