@@ -147,8 +147,8 @@ const Loginpage = () => {
                 value={password}
                 type={pwdVisible ? "text" : "password"}
                 name="password"
-                minLength="4"
-                maxLength="15"
+                minLength="6"
+                // maxLength="15"
                 required
                 className="form-control border-0" placeholder="password" />
               <button onClick={() => setPwdVisible(!pwdVisible)} type='button' className="btn">
