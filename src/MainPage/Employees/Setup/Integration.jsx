@@ -130,6 +130,7 @@ const Integration = () => {
         setLoading1(true)
 
         const info = {
+
             thirdParty: thirdParty,
             secretID: secretID.current.value,
             clientID: clientID.current.value,
@@ -159,6 +160,7 @@ const Integration = () => {
         setLoading1(true)
 
         const info = {
+            integrationId: Number(editId),
             thirdParty: editThirdParty,
             secretID: editSecretID,
             clientID: editClientID,

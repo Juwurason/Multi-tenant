@@ -12,8 +12,8 @@ import {
 
 
 const Loginpage = () => {
-  const [email, setEmail] = useState('johnkayode2021@gmail.com');
-  const [password, setPassword] = useState('Maxicareplus_01');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [pwdVisible, setPwdVisible] = useState(false);
   let errorsObj = { email: '', password: '' };
   const [errorss, setErrorss] = useState(errorsObj);

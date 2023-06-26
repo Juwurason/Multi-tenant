@@ -250,7 +250,7 @@ const AddShiftRoaster = () => {
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isExceptionalShift} onChange={handleExceptionChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Exceptional Shift</label>
+                                                <label className="col-form-label">Is Active Night</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
