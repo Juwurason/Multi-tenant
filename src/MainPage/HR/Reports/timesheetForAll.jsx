@@ -8,19 +8,6 @@ import dayjs from "dayjs";
 import moment from "moment";
 import logo from "../../../assets/img/logo.png";
 
-const formatDate = (dateString) => {
-    const date = dayjs(dateString);
-
-    // Format 1: Monday
-    const formattedDay = date.format('dddd');
-    // Format 1: 06/15/2023
-    const formattedDate = date.format('MM/DD/YYYY');
-
-    // Format 2: 08:40 PM
-    const formattedTime = date.format('hh:mm A');
-
-    return { formattedDay, formattedDate, formattedTime };
-};
 
 function formatDuration(duration) {
     if (duration) {

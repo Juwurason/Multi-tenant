@@ -77,23 +77,7 @@ const ShiftScheduling = () => {
 
 
 
-  const FilterSchedule = () => {
 
-    if (sta === '' && cli === '') {
-      return Swal.fire(
-        "Select either a staff or client",
-        "",
-        "error"
-      )
-
-    } else {
-      dispatch(filterRoaster({ cli, sta }));
-
-
-    }
-
-
-  }
 
   //Calendar Logic Starts here
   // Get the current date
@@ -247,28 +231,23 @@ const ShiftScheduling = () => {
 
   }
   //Get periodic shift roaster
+
   const GetPeriodic = async () => {
-    if (sta === '' && cli === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
+    if (sta === '' && cli === '' && dateFrom.current.value === "" || dateTo.current.value === "") {
       return Swal.fire(
-        "Select either a staff or client and time range",
+        "Select filter parameters",
         "",
         "error"
       )
 
     } else {
-      setLoading3(true)
 
-      try {
-        const { data } = await get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&clientId=${cli}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-        setSchedule(data);
-        setLoading3(false);
-        setPeriodicModal(false);
-      } catch (error) {
-        toast.error("Ooops!😔 Error Occurred")
-        setLoading3(false)
-      }
+
+      dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli }));
     }
   }
+
+
   const SendTimesheet = async () => {
     if (sta === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
       return Swal.fire(
@@ -378,7 +357,7 @@ const ShiftScheduling = () => {
 
             <div className="col-auto mt-3">
               <div className="form-group">
-                <button onClick={FilterSchedule} className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                <button onClick={GetPeriodic} className="btn btn-info add-btn text-white rounded-2 m-r-5"
                   disabled={loading ? true : false}
                 >
 

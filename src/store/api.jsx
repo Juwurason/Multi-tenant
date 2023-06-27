@@ -75,21 +75,31 @@ const filterAttendance = async (fromDate, toDate, staff, company) => {
     }
 };
 
-const getShiftsByUser = async (client, staff) => {
+const getShiftsByUser = async (dateFrom, dateTo, staff, client) => {
     try {
-        const response = await axiosInstance.get(`/ShiftRosters/get_shifts_by_user?client=${client}&staff=${staff}`);
+        const response = await axiosInstance.get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom}&toDate=${dateTo}&staffId=${staff}&clientId=${client}&companyId=${id.companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching shift Roaster:', error);
         throw error;
     }
 };
+
 const getChartData = async (value) => {
     try {
         const response = await axiosInstance.get(`/Attendances/staff_duration_chart?period=${value}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching chart Data:', error);
+        throw error;
+    }
+};
+const getSplittedAttendance = async (value) => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/get_split_attendances?attendanceId=${value}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching splitted Attendance:', error);
         throw error;
     }
 };
@@ -102,7 +112,24 @@ const fetchIntegrationData = async () => {
         throw error;
     }
 };
-
+const fetchProgressNotes = async () => {
+    try {
+        const response = await axiosInstance.get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${id.companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Progress Notes', error);
+        throw error;
+    }
+};
+const filterProgressNotes = async (staff, client) => {
+    try {
+        const response = await axiosInstance.get(`/ProgressNotes/get_progressnote_by_user?staffname=${staff}&profileId=${client}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Progress Notes:', error);
+        throw error;
+    }
+};
 
 const api = {
     fetchAdminData,
@@ -111,11 +138,13 @@ const api = {
     fetchDocumentData,
     fetchShiftRoaster,
     fetchAttendance,
-    getShiftsByUser,
     fetchUserData,
     filterAttendance,
     getChartData,
-    fetchIntegrationData
+    fetchIntegrationData,
+    getSplittedAttendance,
+    fetchProgressNotes,
+    filterProgressNotes
     // Add other API endpoints and corresponding methods as needed
 };
 

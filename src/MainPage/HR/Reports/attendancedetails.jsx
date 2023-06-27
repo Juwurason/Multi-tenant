@@ -36,7 +36,6 @@ const AttendanceReportDetails = () => {
         setLoading(true)
         try {
             const { data } = await get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
-            // console.log(data);
             setStaffName(data.staff.fullName);
             setDetails(data);
             setLoading(false);
@@ -110,7 +109,7 @@ const AttendanceReportDetails = () => {
                                         </li>
                                         <li>
                                             <div className="title">Kilometre</div>
-                                            <div className="text">{details.startKm}Km</div>
+                                            <div className="text">{(details.endKm - details.startKm) || 0} Km</div>
                                         </li>
                                         <li>
                                             <div className="title">Report</div>

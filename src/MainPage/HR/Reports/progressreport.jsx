@@ -16,14 +16,32 @@ import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchClient } from '../../../store/slices/ClientSlice';
+import { fetchProgress, filterProgress } from '../../../store/slices/ProgressNoteSlice';
 
 const ProgressReport = () => {
+    //Declaring Variables
+    const dispatch = useDispatch();
+
+    // Fetch staff data and update the state
+    useEffect(() => {
+        dispatch(fetchProgress());
+        dispatch(fetchStaff());
+        dispatch(fetchClient());
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.progress.isLoading);
+    const progress = useSelector((state) => state.progress.data);
+    const staff = useSelector((state) => state.staff.data);
+    const clients = useSelector((state) => state.client.data);
+
+
+
     const { get } = useHttp();
-    const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
-    const [progress, setProgress] = useState([]);
-    const [staff, setStaff] = useState([]);
-    const [clients, setClients] = useState([]);
     const [loading1, setLoading1] = useState(false);
     const [cli, setCli] = useState('');
     const [sta, setSta] = useState('');
@@ -84,47 +102,10 @@ const ProgressReport = () => {
     ];
 
 
-    const FetchProgress = async () => {
-        try {
-            setLoading(true)
-            const { data } = await get(`ProgressNotes/get_all_progressnote_by_company?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setProgress(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        } finally {
-            setLoading(false)
-        }
-        try {
-            const staffResponse = await get(`/Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            setStaff(staff);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-
-        try {
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            setClients(client);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-
-
-
-    };
-    useEffect(() => {
-
-        FetchProgress()
-    }, []);
 
     const FilterReport = async () => {
 
-        if (sta === "") {
+        if (sta === "" && cli === "") {
             return Swal.fire(
                 "Select either a staff or client",
                 "",
@@ -132,71 +113,13 @@ const ProgressReport = () => {
             )
 
         } else {
-            setLoading1(true)
-
-            try {
-                const { data } = await get(`/ProgressNotes/get_progressnote_by_user?staffname=${sta}&profileId=${cli}`, { cacheTimeout: 300000 });
-                setProgress(data.progressNote);
-                setLoading1(false)
-            } catch (error) {
-                console.log(error);
-                setLoading1(false)
-            }
+            dispatch(filterProgress({ sta, cli }))
         }
 
     }
 
 
-    const [menu, setMenu] = useState(false);
 
-    // const handleDelete = async (e) => {
-    //   Swal.fire({
-    //     html: `<h3>Are you sure? you want to delete this user</h3></br><p>You won't be able to revert this!</p>`,
-    //     icon: 'question',
-    //     showCancelButton: true,
-    //     confirmButtonColor: '#405189',
-    //     cancelButtonColor: '#777',
-    //     confirmButtonText: 'Confirm Delete',
-    //     showLoaderOnConfirm: true,
-    //   }).then(async (result) => {
-    //     if (result.isConfirmed) {
-    //       try {
-    //         const { data } = await privateHttp.post(`/Administrators/delete/${e}?userId=${id.userId}`,
-    //         )
-    //         if (data.status === 'Success') {
-    //           toast.success(data.message);
-    //           FetchStaff()
-    //         } else {
-    //           toast.error(data.message);
-    //         }
-
-
-    //       } catch (error) {
-    //         console.log(error);
-    //         toast.error(error.response.data.message)
-    //         toast.error(error.response.data.title)
-
-
-    //       }
-
-
-    //     }
-    //   })
-    // }
-
-
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    }
-
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();

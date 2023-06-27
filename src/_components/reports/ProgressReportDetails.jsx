@@ -11,6 +11,7 @@ import './report.css';
 const ProgressReportDetails = () => {
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const { uid } = useParams();
     const [details, setDetails] = useState({});
     const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +37,12 @@ const ProgressReportDetails = () => {
     }, []);
 
     const handlePrint = () => {
-        window.print();
+        setLoading2(true);
+        setTimeout(() => {
+            const url = `/staff-progress/${uid}`;
+            window.open(url, '_blank');
+            setLoading2(false);
+        }, 2000);
     };
 
     const toggleEditing = () => {
@@ -72,7 +78,7 @@ const ProgressReportDetails = () => {
         }
         try {
             setLoading1(true)
-            const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${id.userId}&noteid=${uid}`, info);
+            const saveProgress = await post(`/ProgressNotes/edit/${uid}?userId=${id.userId}`, info);
             const savePro = saveProgress.data;
 
             toast.success(savePro.message)
@@ -80,6 +86,7 @@ const ProgressReportDetails = () => {
             toggleEditing();
 
         } catch (error) {
+            toast.error("Error Updating Progress Note")
             console.log(error);
             toggleEditing();
 
@@ -106,7 +113,7 @@ const ProgressReportDetails = () => {
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">
                                         {
-                                            isEditing ? `Editing Progress Note for ${details.staff}` : `Progress Note Details for ${details.staff}`
+                                            isEditing ? `Editing Progress Note by ${details.staff}` : `Progress Note Details by ${details.staff}`
                                         }
 
                                     </h4>
@@ -121,8 +128,8 @@ const ProgressReportDetails = () => {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Report</label>
                                                     {isEditing ? (
-                                                        <input
-                                                            type="text"
+                                                        <textarea
+                                                            cols="10" rows="5"
                                                             className="form-control"
                                                             value={editedDetails.report || ""}
                                                             onChange={e =>
@@ -143,8 +150,8 @@ const ProgressReportDetails = () => {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Progress</label>
                                                     {isEditing ? (
-                                                        <input
-                                                            type="text"
+                                                        <textarea
+                                                            cols="10" rows="5"
                                                             className="form-control"
                                                             value={editedDetails.progress || ""}
                                                             onChange={e =>
@@ -165,8 +172,8 @@ const ProgressReportDetails = () => {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Follow Up</label>
                                                     {isEditing ? (
-                                                        <input
-                                                            type="text"
+                                                        <textarea
+                                                            cols="10" rows="5"
                                                             className="form-control"
                                                             value={editedDetails.followUp || ""}
                                                             onChange={e =>
@@ -200,9 +207,28 @@ const ProgressReportDetails = () => {
                                                 <button className="add-btn btn btn-secondary rounded-2 text-white" onClick={handleEdit}>
                                                     Edit
                                                 </button>
-                                                <button className="add-btn btn btn-primary rounded-2 text-white" onClick={handlePrint}>
-                                                    Print
+
+
+
+                                                <button
+                                                    type='button'
+                                                    onClick={handlePrint}
+                                                    className="btn btn-primary add-btn text-white rounded-2 m-r-5"
+                                                    disabled={loading2 ? true : false}
+                                                >
+                                                    {loading2 ? (
+                                                        <>
+                                                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                                            Please wait...
+                                                        </>
+                                                    ) : (
+                                                        "Print"
+                                                    )}
+
+
                                                 </button>
+
+
                                             </>
                                         )}
                                     </div>

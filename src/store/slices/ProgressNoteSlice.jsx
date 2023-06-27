@@ -1,20 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchRoaster = createAsyncThunk('Roaster/fetchRoaster', async () => {
-    const response = await api.fetchShiftRoaster();
+export const fetchProgress = createAsyncThunk('Progress/fetchProgress', async () => {
+    const response = await api.fetchProgressNotes();
     return response;
 });
-export const filterRoaster = createAsyncThunk(
-    'Roaster/filterRoaster',
-    async ({ dateFrom, dateTo, sta, cli }) => {
-        const response = await api.getShiftsByUser(dateFrom, dateTo, sta, cli);
-        return response;
+export const filterProgress = createAsyncThunk(
+    'Progress/filterProgress',
+    async ({ sta, cli }) => {
+        const response = await api.filterProgressNotes(sta, cli);
+        return response.progressNote;
     }
 );
 
-const RoasterSlice = createSlice({
-    name: 'Roaster',
+const ProgressSlice = createSlice({
+    name: 'Progress',
     initialState: {
         data: [],
         isLoading: false,
@@ -25,27 +25,27 @@ const RoasterSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchRoaster.pending, (state) => {
+            .addCase(fetchProgress.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(fetchRoaster.fulfilled, (state, action) => {
+            .addCase(fetchProgress.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
             })
-            .addCase(fetchRoaster.rejected, (state, action) => {
+            .addCase(fetchProgress.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             })
-            .addCase(filterRoaster.pending, (state) => {
+            .addCase(filterProgress.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(filterRoaster.fulfilled, (state, action) => {
+            .addCase(filterProgress.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
             })
-            .addCase(filterRoaster.rejected, (state, action) => {
+            .addCase(filterProgress.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             });
@@ -54,5 +54,5 @@ const RoasterSlice = createSlice({
     },
 });
 
-export const { } = RoasterSlice.actions;
-export default RoasterSlice.reducer;
+export const { } = ProgressSlice.actions;
+export default ProgressSlice.reducer;

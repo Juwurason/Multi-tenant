@@ -26,6 +26,7 @@ import { fetchAttendance, filterAttendance } from '../../../store/slices/Attenda
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
+import { fetchSplittedAttendance } from '../../../store/slices/splittedAttendance';
 
 function formatDuration(duration) {
   if (duration) {
@@ -59,6 +60,7 @@ const AttendanceReport = () => {
   const loading = useSelector((state) => state.attendance.isLoading);
   const attendance = useSelector((state) => state.attendance.data);
   const staff = useSelector((state) => state.staff.data);
+  const splittedAttendance = useSelector((state) => state.splittedAttendance.data)
 
   useEffect(() => {
     // Check if staff data already exists in the store
@@ -76,6 +78,7 @@ const AttendanceReport = () => {
   const dateFrom = useRef(null);
   const dateTo = useRef(null);
   const [editModal, setEditModal] = useState(false);
+  const [splittedModal, setSplittedModal] = useState(false);
   const [periodic, setPeriodic] = useState([]);
   const history = useHistory();
 
@@ -83,12 +86,32 @@ const AttendanceReport = () => {
 
   const columns = [
     {
+      name: '',
+      selector: "",
+      sortable: true,
+      expandable: true,
+      cell: (row) => <div className='d-flex justify-content-center align-items-center'>
+        <button
+          className='btn'
+          title='Details'
+          to={`/app/reports/attendance-details/${row.attendanceId}`}
+
+
+        >
+          <FaRegClock />
+        </button>
+      </div>
+    },
+    {
       name: 'Staff',
       selector: row => row.staff.fullName,
       sortable: true,
-      cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
+      cell: (row) => <span className="long-cell fw-bold" style={{ overflow: "hidden", cursor: "pointer" }}
         data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.staff.fullName}`}
+        onClick={() => handleSplitted(row.attendanceId
+        )}
       >{row.staff.fullName}</span>
+
     },
     {
 
@@ -147,15 +170,7 @@ const AttendanceReport = () => {
           >
             <FaRegFileAlt />
           </Link>
-          <Link
-            className='btn'
-            title='Details'
-            to={`/app/reports/attendance-details/${row.attendanceId}`}
 
-
-          >
-            <FaRegClock />
-          </Link>
 
 
         </div>
@@ -203,7 +218,6 @@ const AttendanceReport = () => {
       setLoading2(false);
     }, 2000);
 
-    setLoading2(true)
 
   }
 
@@ -293,6 +307,10 @@ const AttendanceReport = () => {
     return (
       <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
         <span>
+          <span className='fw-bold'>Staff: </span>
+          <span> {data.staff.fullName}</span>
+        </span>
+        <span>
           <span className='fw-bold'>Latitude: </span>
           <span> {data.inLatitude}</span>
         </span>
@@ -327,6 +345,13 @@ const AttendanceReport = () => {
   const filteredData = attendance.filter((item) =>
     item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
+  const handleSplitted = (e) => {
+    console.log(e);
+    dispatch(fetchSplittedAttendance({ value: e }));
+    console.log(splittedAttendance);
+
+    setSplittedModal(true);
+  }
 
   return (
     <>
@@ -624,6 +649,50 @@ const AttendanceReport = () => {
                   </div>
 
                 </div>
+              </Modal.Body>
+
+            </Modal>
+
+            <Modal show={splittedModal} onHide={() => setSplittedModal(false)} size='lg'>
+              <Modal.Header closeButton>
+                <Modal.Title>Splitted Attendance</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Clock In</th>
+                      <th>Duration</th>
+                      <th>Clock Out</th>
+                      <th>Km</th>
+                      <th>Shift</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+
+
+                    {
+                      splittedAttendance.map((data, index) =>
+                        <tr key={index}>
+                          <td>  {dayjs(data.clockIn).format('DD/MM/YYYY HH:mm')}</td>
+                          <td>{formatDuration(data.duration)}</td>
+                          <td>{dayjs(data.clockOut).format('DD/MM/YYYY HH:mm')}</td>
+                          <td>{data.totalKm}</td>
+                          <td><small style={{ fontSize: "12px" }} className={`px-2 py-1 rounded text-white
+                          bg-${data.shift === 'M' ? 'primary' : data.shift === 'E' ? 'secondary' : data.shift === 'N' ? 'dark' : 'transparent'}
+                          `}
+
+                          >
+                            {data.shift === 'M' ? 'Morning' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Night' : data.shift}
+                          </small></td>
+                        </tr>
+
+                      )
+                    }
+                  </tbody>
+                </table>
               </Modal.Body>
 
             </Modal>
