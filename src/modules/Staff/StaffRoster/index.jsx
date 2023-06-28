@@ -12,6 +12,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { Modal } from 'react-bootstrap';
 import { useHistory } from "react-router-dom"
 import { toast } from 'react-toastify';
+import { BiStopwatch } from 'react-icons/bi';
 
 
 
@@ -20,7 +21,7 @@ const StaffRoster = ({ staff, loading }) => {
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
   const [staffCancel, setStaffCancel] = useState('');
-  const [reason, setReason] = useState('');
+ 
   // const [loading, setLoading] = useState(false);
 
 
@@ -144,7 +145,6 @@ const StaffRoster = ({ staff, loading }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
-    console.log(activity)
     setSelectedActivity(activity);
     setShowModal(true);
   };
@@ -226,9 +226,9 @@ const StaffRoster = ({ staff, loading }) => {
                         </span>
                       </div>
                     </div>
-
+                    
                     <div
-                      className="col-sm-12 text-center border p-2"
+                      className="col-sm-12 text-center border roster p-2"
                       style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
                     >
                       {loading &&
@@ -254,8 +254,8 @@ const StaffRoster = ({ staff, loading }) => {
                                   overflow: 'hidden',
                                   backgroundColor:
                                     dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                      ? '#405189'
-                                      : '#5fa8e8',
+                                    ? '#405189'
+                                    : '#5374A5',
                                 }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
@@ -290,14 +290,14 @@ const StaffRoster = ({ staff, loading }) => {
                                     }}
                                       className="bg-success p-1 rounded"
                                     >
-                                      Clock-In
+                                     <BiStopwatch /> Clock-In
                                     </small>
-                                    <small
+                                    {/* <small
                                       className='bg-secondary p-1 rounded'
                                       onClick={() => HandleSubmit(activity.shiftRosterId)}
                                     >
                                       Cancel shift
-                                    </small>
+                                    </small> */}
                                   </div>
                                 ) : (
                                   <div className='d-flex gap-2 flex-wrap'>

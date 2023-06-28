@@ -70,27 +70,30 @@
              {/* Header Menu */}
              <ul className="nav user-menu">
                  {/* Search */}
+
+                 <li className="nav-item">
+                     <a className="nav-link dropdown-toggle">
+                         <span className='fw-bold' style={{fontSize: "16px"}}>
+                             {timeString}
+ 
+                         </span>
+                     </a>
+ 
+                 </li>
+
+                 
+                 {/* /Search */}
+                 {/* Flag */}
                  <li className="nav-item">
                      <div className="top-nav-search">
                          <a href="" className="responsive-search">
                              <i className="fa fa-search" />
                          </a>
                          <form>
-                             <input className="form-control" type="text" placeholder="Search here" style={{ backgroundColor: "white" }} />
-                             <button className="btn" type="submit"><i className="fa fa-search" /></button>
+                             {/* <input className="form-control" type="text" placeholder="Search here" style={{ backgroundColor: "white" }} />
+                             <button className="btn" type="submit"><i className="fa fa-search" /></button> */}
                          </form>
                      </div>
-                 </li>
-                 {/* /Search */}
-                 {/* Flag */}
-                 <li className="nav-item dropdown has-arrow flag-nav">
-                     <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                         <span className='fw-bold'>
-                             {timeString}
- 
-                         </span>
-                     </a>
- 
                  </li>
                  {/* /Flag */}
                  {/* Notifications */}
