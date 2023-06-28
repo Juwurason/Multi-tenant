@@ -37,6 +37,13 @@ const PriviledgesList = () => {
 
         FetchClaims()
     }, []);
+    const handleCheckboxChange = (index) => {
+        const updatedClaims = [...claims];
+        updatedClaims[index].isSelected = !updatedClaims[index].isSelected;
+        setClaims(updatedClaims);
+    };
+
+
 
 
     return (
@@ -60,14 +67,18 @@ const PriviledgesList = () => {
                                         <div className="form-group">
                                             <label className="col-form-label fw-bold">User Claims for</label>
                                             <div className='p-2 row'>
-                                                {
-                                                    claims.map((claim, index) =>
-                                                        <span key={index} className='col-md-4'><input type="checkbox" name="" id="" /> &nbsp;
-                                                            <span className='fw-bold'>
-                                                                {claim.claimType}
-                                                            </span></span>
-                                                    )
-                                                }
+                                                {claims.map((claim, index) => (
+                                                    <span key={index} className='col-md-4'>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={claim.isSelected}
+                                                            onChange={() => handleCheckboxChange(index)}
+                                                        /> &nbsp;
+                                                        <span className='fw-bold'>
+                                                            {claim.claimType}
+                                                        </span>
+                                                    </span>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>

@@ -188,8 +188,8 @@ const ShiftScheduling = () => {
   }
 
   const handleConfirmation = async (e) => {
-    if (report === "" || endKm === 0) {
-      return toast.error("EndKm and Report cannot be empty")
+    if (endKm === 0) {
+      return toast.error("EndKm and Cannot be 0")
     }
 
     const info = {
@@ -242,13 +242,12 @@ const ShiftScheduling = () => {
 
     } else {
 
-
       dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli }));
     }
   }
 
-
-  const SendTimesheet = async () => {
+  // /api/ShiftRosters/reassign_staff?shiftId=&staffId=&userId=
+  const SendRosterNotice = async () => {
     if (sta === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
       return Swal.fire(
         "Select a staff and time range",
@@ -260,7 +259,7 @@ const ShiftScheduling = () => {
       setLoading3(true)
 
       try {
-        const { data } = await get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}`, { cacheTimeout: 300000 });
+        const { data } = await get(`/ShiftRosters/send_notification?userId=${id.userId}&staffId=${sta}&clientId=${cli}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}`, { cacheTimeout: 300000 });
         toast.success(data.message)
         setLoading3(false);
         setPeriodicModal(false);
@@ -317,6 +316,7 @@ const ShiftScheduling = () => {
                 <div>
                   <select className="form-select" onChange={e => setSta(e.target.value)}>
                     <option defaultValue hidden>--Select a staff--</option>
+                    <option value="">All Staff</option>
                     {
                       staff.map((data, index) =>
                         <option value={data.staffId} key={index}>{data.fullName}</option>)
@@ -330,6 +330,7 @@ const ShiftScheduling = () => {
                 <div>
                   <select className="form-select" onChange={e => setCli(e.target.value)}>
                     <option defaultValue hidden>--Select a Client--</option>
+                    <option value="">All Clients</option>
                     {
                       clients.map((data, index) =>
                         <option value={data.profileId} key={index}>{data.fullName}</option>)
@@ -373,7 +374,7 @@ const ShiftScheduling = () => {
             <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-primary add-btn rounded-2 m-r-5"
-                  onClick={SendTimesheet}
+                  onClick={SendRosterNotice}
                 >
                   {loading3 ? <div className="spinner-grow text-light" role="status">
                     <span className="sr-only">Loading...</span>

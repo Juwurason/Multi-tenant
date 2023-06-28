@@ -144,7 +144,8 @@ const api = {
     fetchIntegrationData,
     getSplittedAttendance,
     fetchProgressNotes,
-    filterProgressNotes
+    filterProgressNotes,
+    getShiftsByUser
     // Add other API endpoints and corresponding methods as needed
 };
 
