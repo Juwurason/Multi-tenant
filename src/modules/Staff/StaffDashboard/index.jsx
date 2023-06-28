@@ -40,6 +40,37 @@ const StaffDashboard = ({roster, loading}) => {
     )
 
   );
+
+  const sorted = () => {
+    const australiaTimezone = 'Australia/Sydney';
+    const currentAustraliaTime = dayjs().tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
+  
+    const sortedActivities = activitiesByDay
+      .flat()
+      .sort((a, b) => {
+        const aStartTime = dayjs(a.dateFrom).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
+        const bStartTime = dayjs(b.dateFrom).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
+        const aTimeDiff = Math.abs(dayjs(aStartTime).diff(currentAustraliaTime));
+        const bTimeDiff = Math.abs(dayjs(bStartTime).diff(currentAustraliaTime));
+        return aTimeDiff - bTimeDiff;
+      });
+  
+    let nearestActivity = sortedActivities.find((activity) => {
+      const activityEndTime = dayjs(activity.dateTo).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
+      return dayjs(activityEndTime)<(currentAustraliaTime);
+    });
+  
+    // If the nearest activity is over, pick another shift
+    if (!nearestActivity) {
+      nearestActivity = sortedActivities[1];
+    }
+  
+    console.log('Nearest Activity:', nearestActivity);
+  };
+  
+  
+  
+  
  
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
@@ -98,7 +129,6 @@ const StaffDashboard = ({roster, loading}) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activitiesByDay) => {
-    console.log(activitiesByDay);
     setSelectedActivity(activitiesByDay);
     setShowModal(true);
   };
@@ -107,7 +137,7 @@ const StaffDashboard = ({roster, loading}) => {
     if (!activitiesByDay) {
       return 'No Shift Today';
     }
-    // dayjs(activity.dateFrom).format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
+   
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
     const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss');
     const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
@@ -128,6 +158,56 @@ const StaffDashboard = ({roster, loading}) => {
       return 'Clock-In';
     }
   }
+
+  // function getActivityStatus(activitiesByDay) {
+  //   if (!activitiesByDay) {
+  //     return 'No Shift Today';
+  //   }
+   
+  //   const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+  
+  //   let nearestActivity = null;
+  //   let comparisonResult = 0;
+  
+  //   // Sort activities by start time (dateFrom) in ascending order
+  //   activitiesByDay[1].sort((a, b) => {
+  //     const dateFromA = dayjs(a.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+  //     const dateFromB = dayjs(b.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+  //     comparisonResult = dateFromA.localeCompare(dateFromB);
+  //   });
+  
+  //   // Find the activity whose start time is nearest to the current time in Australia
+  //   for (const activity of activitiesByDay[1]) {
+  //     const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+  
+  //     if (activityDateFrom > nowInAustraliaTime) {
+  //       nearestActivity = activity;
+  //       break;
+  //     }
+  //   }
+  
+  //   // console.log('Nearest Activity:', nearestActivity);
+    
+  //   if (nearestActivity) {
+  //     // Handle the nearest activity
+  //     const activityDateTo = dayjs(nearestActivity.dateTo).format('YYYY-MM-DD HH:mm:ss');
+  //     if (activityDateTo < nowInAustraliaTime) {
+  //       return nearestActivity.attendance === true ? 'Present' : 'Absent';
+  //     } else if (nearestActivity.attendance === true && nearestActivity.isEnded === false) {
+  //       return 'You are already Clocked in';
+  //     } else if (nearestActivity.attendance === true && nearestActivity.isEnded === true) {
+  //       return 'Present';
+  //     } else {
+  //       return 'Clock-In';
+  //     }
+  //   } 
+    
+  // }
+  
+
+  
+  
+  
 
   return (
     <>
@@ -161,7 +241,7 @@ const StaffDashboard = ({roster, loading}) => {
                 <div className='row'>
 
                   <div className='col-sm-3'>
-                    <div className='p-2'>
+                    <div className='p-2' onClick={sorted}>
                       <label className='d-flex justify-content-center fw-bold text-muted'>Yesterday</label>
                     </div>
                     <div className="card text-center">
@@ -286,7 +366,7 @@ const StaffDashboard = ({roster, loading}) => {
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
-                      <div className="card-footer text-body-danger bg-danger text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
+                      <div style={{backgroundColor: "#5374A5"}} className="card-footer text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
                         View Details
 
                       </div>

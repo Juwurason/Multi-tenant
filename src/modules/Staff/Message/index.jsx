@@ -673,9 +673,9 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     />
                                     &nbsp;
                                     To All Admins
-                                </label>
-                                &nbsp; &nbsp;
-                                <label>
+                                </label> */}
+                                {/* &nbsp; &nbsp; */}
+                                {/* <label>
                                     <input
                                         type="checkbox"
                                         name="toAllStaffs"
@@ -684,9 +684,9 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     />
                                     &nbsp;
                                     To All Staffs
-                                </label>
-                                &nbsp; &nbsp;
-                                <label>
+                                </label> */}
+                                {/* &nbsp; &nbsp; */}
+                                {/* <label>
                                     <input
                                         type="checkbox"
                                         name="toAllClients"

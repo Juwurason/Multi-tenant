@@ -339,7 +339,8 @@ const ClientRoster = () => {
 
 
 
-                                        <div className="col-sm-12 text-center border p-2" style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}>
+                                        <div className="col-sm-12 text-center roster border p-2" 
+                                        style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}>
 
                                             {loading &&
 
@@ -359,8 +360,8 @@ const ClientRoster = () => {
                                                         overflow: 'hidden',
                                                         backgroundColor:
                                                             dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                                                ? '#405189'
-                                                                : '#5fa8e8',
+                                                            ? '#405189'
+                                                            : '#5374A5',
                                                     }}
                                                 >
                                                     <div
