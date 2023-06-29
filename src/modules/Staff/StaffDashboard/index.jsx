@@ -57,7 +57,7 @@ const StaffDashboard = ({roster, loading}) => {
   
     let nearestActivity = sortedActivities.find((activity) => {
       const activityEndTime = dayjs(activity.dateTo).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
-      return dayjs(activityEndTime)<(currentAustraliaTime);
+      return dayjs(activityEndTime)>(currentAustraliaTime);
     });
   
     // If the nearest activity is over, pick another shift

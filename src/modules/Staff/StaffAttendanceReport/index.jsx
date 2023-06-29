@@ -83,18 +83,19 @@ const AttendanceReport = () => {
         companyID: user.companyId
     }
     try {
-      const saveProgress = await post(`/Attendances/edit/${uid}?userId=${user.userId}`, info);
-      const savePro = saveProgress.data;
-      toast.success(savePro.message)
-      setLoading1(false)
+      const {data} = await post(`/Attendances/edit/${uid}?userId=${user.userId}`, info);
+      // console.log(data)
+      toast.success(data.message);
+      setLoading1(false);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      toast.error("Error Updating Attendance Report")
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
-      setLoading1(false)
+      setLoading1(false);
     }
     finally {
-      setLoading1(false)
+      setLoading1(false);
     }
   }
 

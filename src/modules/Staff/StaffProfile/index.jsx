@@ -139,7 +139,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
     formData.append("twitter", editedProfile.tweet);
     formData.append("linkedIn", editedProfile.linkd);
     formData.append("instagram", editedProfile.insta);
-    formData.append("isActive", true);
+    formData.append("isActive", profile.isActive);
     formData.append("facebook", editedProfile.fbook);
     try {
       setLoading(true)
@@ -455,22 +455,12 @@ const StaffProfile = ({staffOne, FetchData}) => {
                           <div className="title">Post Code</div>
                           <div className="text">{staffOne.postcode}</div>
                         </li>
-                        <li>
-                          <div className="title">Passport No.</div>
-                          <div className="text"></div>
-                        </li>
-                        <li>
-                          <div className="title">Passport Exp Date.</div>
-                          <div className="text"></div>
-                        </li>
+                        
                         <li>
                           <div className="title">Tel</div>
                           <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                         </li>
-                        <li>
-                          <div className="title">Religion</div>
-                          <div className="text"></div>
-                        </li>
+                        
                         <li>
                           <div className="title">Marital status</div>
                           <div className="text"></div>
