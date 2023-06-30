@@ -11,7 +11,7 @@ import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { GoTrashcan } from 'react-icons/go';
-import { MdDoneOutline, MdOutlineEditCalendar } from 'react-icons/md';
+import { MdDoneOutline, MdOutlineEditCalendar, MdThumbUpOffAlt } from 'react-icons/md';
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -130,6 +130,9 @@ const ShiftScheduling = () => {
     else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
       return 'Present'
     }
+    else if (activity.status === "Pending") {
+      return 'Pending'
+    }
     else {
       return 'Active';
     }
@@ -147,7 +150,7 @@ const ShiftScheduling = () => {
   const handleDelete = async (e) => {
     Swal.fire({
       html: `<h3>Are you sure? you want to delete this shift</h3>`,
-      icon: 'question',
+      icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
@@ -160,14 +163,52 @@ const ShiftScheduling = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchData()
+            dispatch(fetchRoaster());
           } else {
             toast.error(data.message);
           }
 
 
         } catch (error) {
-          console.log(error);
+          toast.error("Error Deleting Shift");
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+
+
+        }
+
+
+      }
+    })
+
+
+  }
+
+  const handleCancelShift = async (e) => {
+    Swal.fire({
+      html: `<h3>Approving Shift Cancellation</h3>`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#405189',
+      cancelButtonColor: '#777',
+      confirmButtonText: 'Proceed',
+      showLoaderOnConfirm: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await get(`/ShiftRosters/cancel_shift/${e.shiftRosterId}?userId=${id.userId}`,
+          )
+          console.log(data);
+          if (data.status === 'Success') {
+            toast.success(data.message);
+            dispatch(fetchRoaster());
+          } else {
+            toast.error(data.message);
+          }
+
+
+        } catch (error) {
+          toast.error("Error Cancelling Shift");
           toast.error(error.response.data.message)
           toast.error(error.response.data.title)
 
@@ -203,8 +244,7 @@ const ShiftScheduling = () => {
       staffId: e.staff.staffId,
       companyID: id.companyId
     }
-    setLoading2(true)
-    console.log(info);
+    setLoading2(true);
     try {
       const { data } = await post(`/Attendances/mark_attendance?userId=${id.userId}&shiftId=${e.shiftRosterId}`,
         info);
@@ -476,9 +516,7 @@ const ShiftScheduling = () => {
                             fontSize: '10px',
                             overflow: 'hidden',
                             backgroundColor:
-                              dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                ? '#405189'
-                                : '#5374A5',
+                              activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
                           }}
                         >
                           <div
@@ -578,6 +616,24 @@ const ShiftScheduling = () => {
                                       </small>
 
                                     )
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Pending' && "Absent" && (
+
+                                      <small
+                                        className={`text-truncate d-flex 
+                                     align-items-center
+                                     justify-content-center px-2 py-1 rounded bg-secondary pointer`}
+
+                                        onClick={() => handleCancelShift(activity)}
+                                        title="Approve Cancelling Shift"
+                                      >
+                                        <MdThumbUpOffAlt className='fs-6' />
+                                      </small>
+
+                                    )
+
+
                                   }
                                 </div>
 

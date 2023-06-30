@@ -73,16 +73,6 @@ const Sidebar = (props) => {
               <li className="menu-title">
                 <span>User Management</span>
               </li>
-              <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
-              </li>
-
-              <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
-              </li>
-              <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
-              </li>
               <li className="submenu">
                 <a href="#" className={isSideMenu == "management" ? "subdrop" : ""} onClick={(e) => {
                   e.preventDefault();
@@ -100,8 +90,19 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li>
+              <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
+              </li>
+
+              <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
+              </li>
+              <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
+              </li>
+
               <li className="menu-title">
-                <span>Staff-Client Management</span>
+                <span>Rostering Management</span>
               </li>
               <li className="submenu">
                 <a href="#" className={isSideMenu == "setup" ? "subdrop" : ""} onClick={(e) => {
