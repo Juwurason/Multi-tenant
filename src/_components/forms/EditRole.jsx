@@ -12,11 +12,19 @@ const EditRole = () => {
     const { userProfile } = useCompanyContext();
     const [roles, setRoles] = useState([]);
     const [claims, setClaims] = useState([]);
+    const [userName, setUserName] = useState({});
 
     const privateHttp = useHttp();
     const navigate = useHistory();
 
     const FetchRole = async () => {
+        try {
+            const { data } = await privateHttp.get(`/Account/get_a_user?userId=${uid}`, { cacheTimeout: 300000 })
+            setUserName(data)
+
+        } catch (error) {
+            console.log(error);
+        }
         try {
             const { data } = await privateHttp.get(`/Account/get_user_roles?userId=${uid}`, { cacheTimeout: 300000 })
 
@@ -63,13 +71,13 @@ const EditRole = () => {
                                     <div className="col-sm-6">
                                         <div className="form-group">
                                             <label className="col-form-label fw-bold">User Name</label>
-                                            <input className="form-control" type="text" />
+                                            <input className="form-control" type="text" value={userName.firstName} readOnly />
                                         </div>
                                     </div>
                                     <div className="col-sm-6">
                                         <div className="form-group">
                                             <label className="col-form-label fw-bold">Email</label>
-                                            <input className="form-control" type="text" />
+                                            <input className="form-control" type="text" value={userName.email} readOnly />
                                         </div>
                                     </div>
                                 </div>
@@ -97,7 +105,7 @@ const EditRole = () => {
                                             <label className="fw-bold fs-5 col-form-label">User Priviledges</label>
                                             <ol className='row'>
                                                 {claims.map((claim, index) => (
-                                                    <li key={index} className='col-md-3 px-3'>{claim.claimType}</li>
+                                                    <li key={index} className='col-md-3 px-3'><span className='fw-bold fs-4'>-</span> {claim.claimType}</li>
                                                 ))}
                                             </ol>
                                         </div>
