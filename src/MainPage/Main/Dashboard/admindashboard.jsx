@@ -14,6 +14,7 @@ import { fetchAdmin } from '../../../store/slices/AdminSlice';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchDocument } from '../../../store/slices/DocumentSlice';
+import { fetchTicket } from '../../../store/slices/TicketSlice';
 
 const AdminDashboard = () => {
   const userObj = JSON.parse(localStorage.getItem('user'));
@@ -53,7 +54,8 @@ const AdminDashboard = () => {
     dispatch(fetchStaff());
     dispatch(fetchClient());
     dispatch(fetchDocument());
-  }, [dispatch, userObj.companyId]);
+    dispatch(fetchTicket());
+  }, [dispatch, userObj.companyId, clients, admin, ticket]);
   useEffect(() => {
     setRecentUsers(clients.slice(-5))
 
@@ -93,7 +95,7 @@ const AdminDashboard = () => {
           {/* /Page Header */}
           <div className="row g-1">
             <div className='col-md-7'>
-              <h4>Overview</h4>
+              <h4 className='fw-bold'>Overview</h4>
               <div className="row">
                 <DashboardCard title={"Admin"} sty={'info'}
                   content={admin.length} icon={<MdOutlinePersonOutline className='fs-4' />}
@@ -206,104 +208,103 @@ const AdminDashboard = () => {
 
 
 
-            <div className='col-md-4 p-2 d-flex  flex-column gap-2 justify-content-start'>
-              <div className='p-3 shadow-sm'>
-                <small className='fw-bold'>Recently Onboarded Clients</small>
-                {
-                  isLoading && <div className='text-center fs-1'>
-                    <div className="spinner-grow text-secondary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                }
 
 
-                {
-                  !isLoading && clients.length >= 1 && recentUsers && recentUsers.length > 0 ? (
-                    recentUsers.map((data, index) => (
-                      <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
-                        <div className="col-2">
-                          <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                            <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
-                          </div>
+
+
+          </div>
+          <div className="row g-1">
+            <div className='col-md-7'>
+              <div className="row">
+                <div className='col-md-6  d-flex  flex-column gap-2 justify-content-start'>
+                  <div className='p-3 shadow-sm'>
+                    <small className='fw-bold'>Recently Onboarded Clients</small>
+                    {
+                      isLoading && <div className='text-center fs-1'>
+                        <div className="spinner-grow text-secondary" role="status">
+                          <span className="sr-only">Loading...</span>
                         </div>
-
-                        <div className="col-10 d-flex flex-column justify-content-start text-dark">
-                          <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
-                          <span style={{ fontSize: "10px", }}>{data.address}</span>
-                          <span style={{ fontSize: "7px", }}>{data.email}</span>
-                        </div>
-
-                      </Link>
-                    ))
-                  ) : !isLoading && clients.length <= 0 ? (
-                    <div className="text-center text-danger fs-6">
-                      <p>Not Available</p>
-                    </div>
-                  ) : null
-                }
+                      </div>
+                    }
 
 
-
-
-                <div className='d-flex justify-content-end mt-2'>
-                  <Link to={'/app/employee/clients'}
-                    className='text-primary pointer' style={{ fontSize: "12px", }}>
-                    See all <FaLongArrowAltRight className='fs-3' />
-                  </Link>
-                </div>
-
-              </div>
-
-              <div className={`card border border-info`}>
-                <div className="card-content">
-                  <div className="card-body">
-                    <div className="media d-flex justify-content-between">
-                      <div className="media-body text-left">
-                        <span>Documents</span>
-
-                        {
-                          isLoading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                            <div className="spinner-grow text-light" role="status">
-                              <span className="sr-only">Loading...</span>
+                    {
+                      !isLoading && clients.length >= 1 && recentUsers && recentUsers.length > 0 ? (
+                        recentUsers.map((data, index) => (
+                          <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
+                            <div className="col-2">
+                              <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                                <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                              </div>
                             </div>
-                          </div>
-                          )
 
-                            :
-                            <h3 className='text-info'>{document.length}</h3>
-                        }
+                            <div className="col-10 d-flex flex-column justify-content-start text-dark">
+                              <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
+                              <span style={{ fontSize: "10px", }}>{data.address}</span>
+                              <span style={{ fontSize: "7px", }}>{data.email}</span>
+                            </div>
 
-                        <Link style={{ fontSize: "12px" }}
+                          </Link>
+                        ))
+                      ) : !isLoading && clients.length <= 0 ? (
+                        <div className="text-center text-danger fs-6">
+                          <p>Not Available</p>
+                        </div>
+                      ) : null
+                    }
 
-                          to={`/app/employee/document`} className='pointer text-dark text-end'>View all</Link>
-                      </div>
-                      <div className="align-self-center">
-                        <MdOutlineFolderOpen className='fs-4' />
-                      </div>
+
+
+
+                    <div className='d-flex justify-content-end mt-2'>
+                      <Link to={'/app/employee/clients'}
+                        className='text-primary pointer' style={{ fontSize: "12px", }}>
+                        See all <FaLongArrowAltRight className='fs-3' />
+                      </Link>
                     </div>
-                    {/* <div className='d-flex justify-content-end'>
+
+                  </div>
+
+
+                </div>
+                <div className="col-md-6">
+                  <div className={`card border border-info`}>
+                    <div className="card-content">
+                      <div className="card-body">
+                        <div className="media d-flex justify-content-between">
+                          <div className="media-body text-left">
+                            <span>Documents</span>
+
+                            {
+                              isLoading ? (<div className=" d-flex py-2 justify-content-start fs-6">
+                                <div className="spinner-grow text-light" role="status">
+                                  <span className="sr-only">Loading...</span>
+                                </div>
+                              </div>
+                              )
+
+                                :
+                                <h3 className='text-info'>{document.length}</h3>
+                            }
+
+                            <Link style={{ fontSize: "12px" }}
+
+                              to={`/app/employee/document`} className='pointer text-dark text-end'>View all</Link>
+                          </div>
+                          <div className="align-self-center">
+                            <MdOutlineFolderOpen className='fs-4' />
+                          </div>
+                        </div>
+                        {/* <div className='d-flex justify-content-end'>
                         <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span>
                       </div> */}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-
-
-
           </div>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="row">
-
-
-
-              </div>
-            </div>
-          </div>
-
 
 
         </div>

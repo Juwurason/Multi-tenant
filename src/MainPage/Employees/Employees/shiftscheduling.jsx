@@ -248,9 +248,9 @@ const ShiftScheduling = () => {
 
   // /api/ShiftRosters/reassign_staff?shiftId=&staffId=&userId=
   const SendRosterNotice = async () => {
-    if (sta === '' || dateFrom.current.value === "" || dateTo.current.value === "") {
+    if (dateFrom.current.value === "" || dateTo.current.value === "") {
       return Swal.fire(
-        "Select a staff and time range",
+        "Select time range",
         "",
         "error"
       )
@@ -735,6 +735,8 @@ const ShiftScheduling = () => {
                   <button className="btn add-btn rounded-2 btn-secondary"
                     disabled={isChecked ? false : true}
                     onClick={() => handleConfirmation(selectedActivity)}
+                    style={{ cursor: isChecked ? 'pointer' : 'not-allowed' }}
+                    title={isChecked ? "Proceed" : "Confirm verification by checking the checkbox"}
                   >
                     {loading2 ? <div className="spinner-grow text-light" role="status">
                       <span className="sr-only">Loading...</span>

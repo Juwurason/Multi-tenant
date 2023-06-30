@@ -90,29 +90,7 @@ const Integration = () => {
                 data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.clientID}`}
             >{row.clientID}</span>,
 
-        },
-        {
-            name: "Actions",
-            cell: (row) => (
-                <div className="d-flex gap-1">
-                    <button
-                        className='btn'
-                        title='Edit'
-                        onClick={() => handleModal2(row.integrationId)}
-                    >
-                        <FaRegEdit />
-                    </button>
-                    <button
-                        className='btn'
-                        title='Delete'
-                        onClick={() => handleDelete(row.integrationId)}
-                    >
-                        <GoTrashcan />
-                    </button>
-
-                </div>
-            ),
-        },
+        }
 
 
 
@@ -346,6 +324,22 @@ const Integration = () => {
                         {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
                     </span>
                 </span>
+                <div>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}
+                        onClick={() => handleModal2(data.integrationId)}>
+                        Edit
+                    </button> |
+                    <button className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                        Test Connection
+                    </button>
+
+
+                    |
+                    <button className="btn text-danger fw-bold" style={{ fontSize: "12px" }}
+                        onClick={() => handleDelete(row.integrationId)}>
+                        Delete
+                    </button>
+                </div>
 
             </div>
         );
