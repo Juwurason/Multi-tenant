@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import { Provider } from "react-redux";
 import store from "./store/store";
 dayjs.locale('en-au');
+import moment from "moment";
 const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(

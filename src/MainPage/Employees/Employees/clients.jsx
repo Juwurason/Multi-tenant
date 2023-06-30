@@ -246,10 +246,11 @@ const Clients = () => {
 
   const HandleFilter = async (e) => {
     e.preventDefault()
+    // Profiles/get_active_clients?companyId=1&IsActive=false
     try {
-      const { data } = await get(`/Profiles/get_active_clients?companyId=${id.companyId}&IsActive=${status.current.value}`,
+      const response = await get(`/Profiles/get_active_clients?companyId=${id.companyId}&IsActive=${status.current.value}`,
       )
-      console.log(data);
+      console.log(response);
 
 
     } catch (error) {

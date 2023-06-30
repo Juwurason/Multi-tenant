@@ -17,14 +17,23 @@ import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTicket } from '../../../store/slices/TicketSlice';
 
 
 
 const ViewTicket = () => {
-    const { loading, setLoading } = useCompanyContext()
-    const id = JSON.parse(localStorage.getItem('user'));
-    const [ticket, setTicket] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+    const dispatch = useDispatch();
+
+    // Fetch user data and update the state
+    useEffect(() => {
+        dispatch(fetchTicket());
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.ticket.isLoading);
+    const ticket = useSelector((state) => state.ticket.data);
+
 
     const { get, post } = useHttp();
 
@@ -84,39 +93,6 @@ const ViewTicket = () => {
     ];
 
 
-
-
-
-
-
-    const FetchTicket = async () => {
-        setLoading(true)
-        try {
-            const { data } = await get(`/Tickets/get_all_tickets?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setTicket(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-
-    };
-    useEffect(() => {
-        FetchTicket()
-    }, []);
-
-
-
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -244,7 +220,7 @@ const ViewTicket = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchTicket();
+                        dispatch(fetchTicket());
                     } else {
                         toast.error(data.message);
                     }
