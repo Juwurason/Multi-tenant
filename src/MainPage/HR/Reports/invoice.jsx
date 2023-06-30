@@ -10,6 +10,7 @@ import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
 import moment from "moment";
 import jsPDF from "jspdf";
+import dayjs from "dayjs";
 
 
 function formatDuration(duration) {
@@ -57,6 +58,11 @@ const Invoice = () => {
         //         <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
         //     ),
         // },
+        {
+            name: 'Day/Date',
+            selector: row => row.date ? dayjs(row.date).format('ddd, MMM D, YYYY') : row.day,
+            sortable: true
+        },
         {
             name: 'Actual Hours',
             selector: row => formatDuration(row.duration),
@@ -115,8 +121,9 @@ const Invoice = () => {
         try {
             const { data } = await get(`/Invoice/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${type}`, { cacheTimeout: 300000 });
             if (data.status === "Success") {
+                console.log(data);
                 toast.success(data.message);
-                setInvoice(data?.invoiceItems?.agreed_Actual);
+                setInvoice(data?.invoiceItems?.grouped_Agreed_Actual);
                 setName(data?.invoiceItems);
             }
             setLoading1(false)

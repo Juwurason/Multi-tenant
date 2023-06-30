@@ -121,6 +121,15 @@ const fetchProgressNotes = async () => {
         throw error;
     }
 };
+const fetchTicket = async () => {
+    try {
+        const response = await axiosInstance.get(`/Tickets/get_all_tickets?companyId=${id.companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Tickets', error);
+        throw error;
+    }
+};
 const filterProgressNotes = async (staff, client) => {
     try {
         const response = await axiosInstance.get(`/ProgressNotes/get_progressnote_by_user?staffname=${staff}&profileId=${client}`);
@@ -145,7 +154,8 @@ const api = {
     getSplittedAttendance,
     fetchProgressNotes,
     filterProgressNotes,
-    getShiftsByUser
+    getShiftsByUser,
+    fetchTicket,
     // Add other API endpoints and corresponding methods as needed
 };
 

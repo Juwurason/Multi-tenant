@@ -25,7 +25,7 @@ const DashboardCard = ({ title, content, sty, icon, linkTitle, link, loading, bo
 
                                 <Link style={{ fontSize: "12px" }}
 
-                                    to={link} className='pointer text-dark'>View all</Link>
+                                    to={link} className='pointer text-dark'>{linkTitle ? linkTitle : "View All"}</Link>
                             </div>
                             <div className="align-self-center">
                                 {icon}

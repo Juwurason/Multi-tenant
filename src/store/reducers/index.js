@@ -12,6 +12,7 @@ import ChartSlice from '../slices/chartData';
 import IntegrationSlice from '../slices/IntegrationSlice';
 import splittedAttendance from '../slices/splittedAttendance';
 import ProgressNoteSlice from '../slices/ProgressNoteSlice';
+import TicketSlice from '../slices/TicketSlice';
 
 const rootReducer = combineReducers({
     dashboard: DashboardSlice,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     chart: ChartSlice,
     integration: IntegrationSlice,
     splittedAttendance: splittedAttendance,
-    progress: ProgressNoteSlice
+    progress: ProgressNoteSlice,
+    ticket: TicketSlice
 
 });
 
