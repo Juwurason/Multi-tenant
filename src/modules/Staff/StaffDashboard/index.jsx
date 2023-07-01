@@ -31,7 +31,7 @@ const StaffDashboard = ({roster, loading}) => {
   const daysOfWeek = [
     currentDate.subtract(1, 'day'),
     currentDate,
-    currentDate.add(1, 'day')
+    currentDate.add(1, 'day'),
   ];
 
   const activitiesByDay = daysOfWeek.map((day) =>
@@ -41,36 +41,62 @@ const StaffDashboard = ({roster, loading}) => {
 
   );
 
-  const sorted = () => {
-    const australiaTimezone = 'Australia/Sydney';
-    const currentAustraliaTime = dayjs().tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
+  const Tomorrow = currentDate.add(1, 'day').startOf('day');
+
+  // Filter the shifts starting from tomorrow's date
+  const filteredShifts = roster.filter(shift => dayjs(shift.dateFrom) >(Tomorrow));
+
+  // Sort the shifts in ascending order based on the start time
+  filteredShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
+
+  // Get the first 5 shifts
+  const shifts = filteredShifts.slice(0, 5);
   
-    const sortedActivities = activitiesByDay
-      .flat()
-      .sort((a, b) => {
-        const aStartTime = dayjs(a.dateFrom).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
-        const bStartTime = dayjs(b.dateFrom).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
-        const aTimeDiff = Math.abs(dayjs(aStartTime).diff(currentAustraliaTime));
-        const bTimeDiff = Math.abs(dayjs(bStartTime).diff(currentAustraliaTime));
-        return aTimeDiff - bTimeDiff;
-      });
+
+  // const sorted = () => {
+    
+  // };
   
-    let nearestActivity = sortedActivities.find((activity) => {
-      const activityEndTime = dayjs(activity.dateTo).tz(australiaTimezone).format('YYYY-MM-DD HH:mm:ss');
-      return dayjs(activityEndTime)<(currentAustraliaTime);
-    });
-  
-    // If the nearest activity is over, pick another shift
-    if (!nearestActivity) {
-      nearestActivity = sortedActivities[1];
+  const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD');
+
+  // Filter the shifts for today
+const todayShifts = roster.filter(actToday => dayjs(actToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
+ 
+// Sort the shifts in ascending order based on the start time
+const sortedShifts = todayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
+
+// Get the last shift after sorting
+const lastShift = sortedShifts[sortedShifts.length - 1];
+
+// Function to get the next shift
+function getNextShift() {
+  const currentTime = dayjs().tz(); // Get the current time in Australia
+
+  while (sortedShifts.length > 0) {
+    const nextShift = sortedShifts.shift(); // Get the first shift
+
+    // Check if the current shift's dateTo is over the current time
+    if (dayjs(nextShift.dateTo)>(currentTime)) {
+      return nextShift; // Return the current shift if dateTo is not over the current time
     }
-  
-    console.log('Nearest Activity:', nearestActivity);
-  };
-  
-  
-  
-  
+  }
+
+  return lastShift; // Return the last shift if no more shifts available
+}
+
+// Call getNextShift() to get the shifts one by one
+let currentShift = getNextShift();
+// console.log(currentShift)
+const nowInAus = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < nowInAus) {
+  currentShift = getNextShift();
+}
+
+// if (currentShift) {
+//   // console.log(currentShift); // Access properties of the current shift if it exists
+// } else {
+//   // console.log('No more shifts available.'); // Handle the case when no shifts are available
+// }
  
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
@@ -102,7 +128,7 @@ const StaffDashboard = ({roster, loading}) => {
             const longitude = position.coords.longitude;
             localStorage.setItem("latit", latitude);
             localStorage.setItem("log", longitude);
-            navigate.push(`/staff/main/progress/${activitiesByDay[1][0]?.shiftRosterId}`);
+            navigate.push(`/staff/main/progress/${currentShift?.shiftRosterId}`);
           },
           (error) => {
             toast.error('Error getting location:', error.message);
@@ -120,8 +146,8 @@ const StaffDashboard = ({roster, loading}) => {
     }, 3000);
   };
 
-  const rosterId = JSON.parse(localStorage.getItem('rosterId'))
-  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
+  const rosterId = JSON.parse(localStorage.getItem('rosterId'));
+  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'));
   const HandleFill = () =>{
     navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
   }
@@ -139,19 +165,19 @@ const StaffDashboard = ({roster, loading}) => {
     }
    
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-    const activityDateFrom = dayjs(activitiesByDay[1][0].dateFrom).format('YYYY-MM-DD HH:mm:ss');
-    const activityDateTo = dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(currentShift.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
     else if (activityDateTo < nowInAustraliaTime) {
-      return activitiesByDay[1][0].attendance === true ? 'Present' : 'Absent';
+      return currentShift.attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true && activitiesByDay[1][0].isEnded === false ) {
-      return 'You are already Clocked in'
+    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false ) {
+      return 'You are already Clocked in';
     }
-    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0].attendance === true && activitiesByDay[1][0].isEnded === true) {
+    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === true) {
       return 'Present';
     }
     else {
@@ -159,55 +185,11 @@ const StaffDashboard = ({roster, loading}) => {
     }
   }
 
-  // function getActivityStatus(activitiesByDay) {
-  //   if (!activitiesByDay) {
-  //     return 'No Shift Today';
-  //   }
-   
-  //   const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-  
-  //   let nearestActivity = null;
-  //   let comparisonResult = 0;
-  
-  //   // Sort activities by start time (dateFrom) in ascending order
-  //   activitiesByDay[1].sort((a, b) => {
-  //     const dateFromA = dayjs(a.dateFrom).format('YYYY-MM-DD HH:mm:ss');
-  //     const dateFromB = dayjs(b.dateFrom).format('YYYY-MM-DD HH:mm:ss');
-  //     comparisonResult = dateFromA.localeCompare(dateFromB);
-  //   });
-  
-  //   // Find the activity whose start time is nearest to the current time in Australia
-  //   for (const activity of activitiesByDay[1]) {
-  //     const activityDateFrom = dayjs(activity.dateFrom).format('YYYY-MM-DD HH:mm:ss');
-  
-  //     if (activityDateFrom > nowInAustraliaTime) {
-  //       nearestActivity = activity;
-  //       break;
-  //     }
-  //   }
-  
-  //   // console.log('Nearest Activity:', nearestActivity);
-    
-  //   if (nearestActivity) {
-  //     // Handle the nearest activity
-  //     const activityDateTo = dayjs(nearestActivity.dateTo).format('YYYY-MM-DD HH:mm:ss');
-  //     if (activityDateTo < nowInAustraliaTime) {
-  //       return nearestActivity.attendance === true ? 'Present' : 'Absent';
-  //     } else if (nearestActivity.attendance === true && nearestActivity.isEnded === false) {
-  //       return 'You are already Clocked in';
-  //     } else if (nearestActivity.attendance === true && nearestActivity.isEnded === true) {
-  //       return 'Present';
-  //     } else {
-  //       return 'Clock-In';
-  //     }
-  //   } 
-    
-  // }
-  
+  const AlltodayShifts = roster.filter(AllActToday => dayjs(AllActToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
+ 
+// Sort the shifts in ascending order based on the start time
+const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
 
-  
-  
-  
 
   return (
     <>
@@ -241,7 +223,7 @@ const StaffDashboard = ({roster, loading}) => {
                 <div className='row'>
 
                   <div className='col-sm-3'>
-                    <div className='p-2' onClick={sorted}>
+                    <div className='p-2'>
                       <label className='d-flex justify-content-center fw-bold text-muted'>Yesterday</label>
                     </div>
                     <div className="card text-center">
@@ -272,24 +254,24 @@ const StaffDashboard = ({roster, loading}) => {
                       <div className="card-header bg-primary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
                           <span style={{ fontSize: '12px' }}> {`${dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}`}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesByDay[1][0]?.status}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{currentShift ? currentShift.status : ""}</span>
                         </div>
                       </div>
 
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[1][0]?.profile.fullName}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{currentShift ? currentShift.clients : "--"}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {currentShift ? dayjs(currentShift?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {currentShift ? dayjs(currentShift?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
                       </div>
 
                       <div className='px-5 py-4'>
-                        {activitiesByDay[1][0] ? (
+                        {currentShift ? (
                           <>
-                            <span>{activitiesByDay[1][0]?.activities}</span>
+                            <span>{currentShift?.activities}</span>
                             <br />
                             <br />
 
@@ -360,9 +342,9 @@ const StaffDashboard = ({roster, loading}) => {
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesByDay[2][0]?.status}</span>
                         </div>
                       </div>
-                      <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
+                      <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.profile.firstName}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.clients}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
@@ -377,27 +359,58 @@ const StaffDashboard = ({roster, loading}) => {
 
               </div>
 
+
               <div className='col-md-4 p-2 d-flex flex-column gap-2 justify-content-start'>
                 <div className='p-3 shadow-sm'>
-                  <h3>Upcoming Shift</h3>
-                  {activitiesByDay[2].length > 0 ? (
-                    // activitiesByDay[3][0]?.map(activity => (
-                      <span className="mt-2">
+                  <h3>Total Today Shifts ({AllsortedShifts.length})</h3>
+                  {AllsortedShifts.length > 0 ? (
+                    AllsortedShifts?.map((activity, i) => (
+                      <span className="mt-2" key={i}>
                         <div className="d-flex justify-content-between text-dark">
                           <div className='d-flex flex-column justify-content-start'>
-                            <span style={{ fontSize: "10px" }}>{dayjs(activitiesByDay[2][0].dateFrom).format('dddd MMMM D, YYYY')}</span>
-                            <span className='text-dark fs-7 fw-bold'>{activitiesByDay[2][0].profile.fullName}</span>
+                            {/* <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span> */}
+                            <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>Start Time: </span><span className='text-truncate'>{dayjs(activity.dateFrom).format('hh:mm A')}</span></span>
+                        <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>End Time: </span><span className='text-truncate'>{dayjs(activity.dateTo).format('hh:mm A')}</span></span>
+                            <span style={{ fontSize: "15px" }} className='text-dark fw-bold'><span>Clients:</span>{activity.clients}</span>
                           </div>
                          
                         </div>
                       </span>
-                    // ))
+                    ))
+                  ) : (
+                    <span>No shifts Today</span>
+                  )}
+                  <div className='d-flex justify-content-end mt-2'>
+                    <Link to="/staff/main/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
+                      See all <FaLongArrowAltRight className='fs-3' />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div className='col-md-4 p-2 d-flex flex-column gap-2 justify-content-start'>
+                <div className='p-3 shadow-sm'>
+                  <h3>Upcoming Shift</h3>
+                  {shifts.length > 0 ? (
+                    shifts?.map((activity, i) => (
+                      <span className="mt-2" key={i}>
+                        <div className="d-flex justify-content-between text-dark">
+                          <div className='d-flex flex-column justify-content-start'>
+                            <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
+                            <span className='text-dark fs-7 fw-bold'>{activity.clients}</span>
+                          </div>
+                         
+                        </div>
+                      </span>
+                    ))
                   ) : (
                     <span>No upcoming shifts</span>
                   )}
                   <div className='d-flex justify-content-end mt-2'>
                     <Link to="/staff/main/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
-                      See all <FaLongArrowAltRight className='fs-3' />
+                      See More <FaLongArrowAltRight className='fs-3' />
                     </Link>
                   </div>
                 </div>

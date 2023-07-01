@@ -142,28 +142,6 @@ const StaffDocument = ({ staffDocument, FetchData }) => {
     });
   };
 
-
-
-  // const getStaffDocument = async () => {
-  //   try {
-  //     const { data } = await privateHttp.get(`/Documents/get_all_staff_documents?staffId=${getStaffProfile.staffId}`, { cacheTimeout: 300000 })
-  //     setStaffDocument(data.staffDocuments)
-
-  //     setLoading(false)
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   finally {
-  //     setLoading(false)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   setLoading(true)
-  //   getStaffDocument()
-  // }, [])
-
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()

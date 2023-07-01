@@ -62,9 +62,10 @@ const ClientProfile = () => {
   }
   const FetchExising = async (e) => {
     try {
-      const response = await privateHttp.get(`/Profiles/${e}`, { cacheTimeout: 300000 })
-      setProfile(response.data);
-      setEditedProfile(response.data)
+      const {data} = await privateHttp.get(`/Profiles/${e}`, { cacheTimeout: 300000 })
+      // console.log(data);
+      setProfile(data);
+      setEditedProfile(data)
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -120,6 +121,7 @@ const ClientProfile = () => {
     formData.append("ProfileId", getClientProfile.profileId);
     formData.append("firstName", profile.firstName);
     formData.append("email", profile.email);
+    formData.append("clientId", profile.clientId);
     formData.append("phoneNumber", profile.phoneNumber);
     formData.append("surName", profile.surName);
     formData.append("middleName", editedProfile.middleName);
@@ -212,7 +214,7 @@ const ClientProfile = () => {
                   <div className="profile-view">
                     <div className="profile-img-wrap">
                       <div className="profile-img">
-                        <a className='text-primary' href="#"><img alt="" src={Avatar_02} /></a>
+                        <a className='text-primary' href="#"><img alt="" src={staffOne.imageUrl === null || staffOne.imageUrl === "null" ? Avatar_02 : staffOne.imageUrl} /></a>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -220,7 +222,7 @@ const ClientProfile = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
-                            <div className="staff-id">Client ID : {staffOne.maxStaffId}</div>
+                            <div className="staff-id">Client ID : {staffOne.clientId === "null" ? "" : staffOne.clientId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
@@ -310,7 +312,7 @@ const ClientProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
-                  <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
+                  <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ""} onChange={handleInputChange} />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
@@ -318,7 +320,7 @@ const ClientProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
-                  <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ''} onChange={handleInputChange} />
+                  <input type="date" name='dateOfBirth' className="form-control" value={editedProfile.dateOfBirth || ""} onChange={handleInputChange} />
                 </div>
 
                 <div className="form-group col-md-4">
@@ -328,6 +330,7 @@ const ClientProfile = () => {
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
                   <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                  <option defaultValue hidden>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
@@ -339,10 +342,10 @@ const ClientProfile = () => {
                 </div>
 
 
-                <div className="form-group col-md-12">
+                {/* <div className="form-group col-md-12">
                   <label>About Me</label><br />
-                  <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
-                </div>
+                  <textarea className='form-control' style={{ width: "100%", height: "auto" }} name="aboutMe" value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
+                </div> */}
 
 
               </div>

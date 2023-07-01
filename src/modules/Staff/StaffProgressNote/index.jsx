@@ -28,7 +28,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
         }
     });
 
-    const { get } = useHttp();
+    const { get, post } = useHttp();
     const [loading, setLoading] = useState(false);
     const [documentName, setDocumentName] = useState("")
     const [expire, setExpire] = useState("")
@@ -113,9 +113,6 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
         });
     };
 
-
-    const privateHttp = useHttp()
-
     // const getStaffProgressNote = async () => {
     //     try {
     //         const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
@@ -175,7 +172,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
 
     const handleActivityClick = async (e) => {
         try {
-            const { data } = await privateHttp.get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
+            const { data } = await get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
             setSelectedActivity(data);
             // console.log(data);
             setLoading(false);
@@ -202,13 +199,14 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
             companyID: selectedActivity.companyId,
         }
         try {
-            const { data } = await privateHttp.post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}`, info);
+            const { data } = await post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}`, info);
             //   console.log(data);
             toast.success(data.message)
             setShowModal(false);
             setLoading1(false);
             FetchData()
         } catch (error) {
+            toast.error("Error Updating Progress Note")
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
         }
@@ -361,18 +359,24 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
                                         <div className="form-group">
                                             <label className="col-form-label">FollowUp:</label>
                                             <div>
-                                                <input type="text" className='form-control' name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
+                                                <textarea rows={2} className="form-control summernote" placeholder=""  name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
                                             </div>
                                         </div>
 
                                         <div className="form-group">
                                             <label className="col-form-label">Progress:</label>
-                                            <div><input className="form-control" type="text" name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} /></div>
+                                            <div>
+                                                <textarea rows={2} className="form-control summernote" placeholder=""  name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} />
+                                                
+                                                </div>
+
                                         </div>
 
                                         <div className="form-group">
                                             <label className="col-form-label">Report:</label>
-                                            <div><input className="form-control" type="text" name="report" value={selectedActivity.report || ''} onChange={handleInputChange} /></div>
+                                            <div>
+                                            <textarea rows={2} className="form-control summernote" placeholder=""  name="report" value={selectedActivity.report || ''} onChange={handleInputChange} />
+                                            </div>
                                         </div>
 
                                     </div>

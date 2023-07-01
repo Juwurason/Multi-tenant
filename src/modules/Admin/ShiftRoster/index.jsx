@@ -530,9 +530,7 @@ const ShiftRoster = () => {
                                         fontSize: '10px',
                                         overflow: 'hidden',
                                         backgroundColor:
-                                          dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                            ? '#405189'
-                                            : '#5fa8e8',
+                                        activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
                                       }}
                                     >
                                       <div
