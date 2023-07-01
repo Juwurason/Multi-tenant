@@ -11,14 +11,17 @@ const PriviledgesList = () => {
     const { uid } = useParams();
     const { userProfile } = useCompanyContext();
     const [loading, setLoading] = useState(false)
+    const [loading1, setLoading1] = useState(false);
     const [claims, setClaims] = useState([]);
+    const [userName, setUserName] = useState({});
     const privateHttp = useHttp();
     const navigate = useHistory();
+    const [updatedClaims, setUpdatedClaims] = useState([]);
 
     const FetchClaims = async () => {
         try {
-            const { data } = await privateHttp.get(`/Account/get_user_roles?userId=${uid}`, { cacheTimeout: 300000 })
-
+            const { data } = await privateHttp.get(`/Account/get_a_user?userId=${uid}`, { cacheTimeout: 300000 })
+            setUserName(data)
 
         } catch (error) {
             console.log(error);
@@ -37,14 +40,49 @@ const PriviledgesList = () => {
 
         FetchClaims()
     }, []);
+
     const handleCheckboxChange = (index) => {
         const updatedClaims = [...claims];
         updatedClaims[index].isSelected = !updatedClaims[index].isSelected;
         setClaims(updatedClaims);
+
+        // Filter the claims to include only selected claims
+        const selectedClaims = updatedClaims.filter((claim) => claim.isSelected);
+        setUpdatedClaims(selectedClaims);
     };
 
 
 
+
+    const HandleUpdate = async () => {
+        try {
+            setLoading1(true)
+            const { data } = await privateHttp.post(`/Account/add_claims_to_user`,
+                {
+                    userId: uid,
+                    claims: updatedClaims
+
+                }
+            )
+            if (data.status === 'Success') {
+
+                toast.success(data.message)
+                FetchClaims()
+                setLoading1(false);
+            }
+            setLoading1(false);
+
+        } catch (error) {
+            toast.error("Add Claim to user failed")
+            toast.error(error.response?.data?.message)
+
+            setLoading1(false)
+
+        } finally {
+            setLoading1(false)
+        }
+
+    }
 
     return (
         <div className="page-wrapper">
@@ -65,7 +103,7 @@ const PriviledgesList = () => {
                                 <div className="row">
                                     <div className="col-sm-12">
                                         <div className="form-group">
-                                            <label className="col-form-label fw-bold">User Claims for</label>
+                                            <label className="col-form-label fw-bold">User Claims for {userName.email}</label>
                                             <div className='p-2 row'>
                                                 {claims.map((claim, index) => (
                                                     <span key={index} className='col-md-4'>
@@ -89,13 +127,19 @@ const PriviledgesList = () => {
 
 
 
-                                        <button className="btn btn-info add-btn text-white rounded-2 m-r-5">
-                                            Update
+                                        <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                            onClick={HandleUpdate}>
+
+                                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div> : "Update"}
+
                                         </button>
-                                        <button
+                                        <Link
+                                            to={`/app/account/editrole/${uid}`}
                                             className="btn add-btn rounded-2 m-r-5 btn-outline-secondary ml-4">
                                             Cancel
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
 

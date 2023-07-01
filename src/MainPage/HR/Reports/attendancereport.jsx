@@ -73,6 +73,7 @@ const AttendanceReport = () => {
   const { get } = useHttp();
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
   const id = JSON.parse(localStorage.getItem('user'));
   const [sta, setSta] = useState('');
   const dateFrom = useRef(null);
@@ -161,6 +162,7 @@ const AttendanceReport = () => {
           >
             <FaRegEdit />
           </Link>
+
           <Link
             className='btn'
             title='Details'
@@ -218,6 +220,24 @@ const AttendanceReport = () => {
       setLoading2(false);
     }, 2000);
 
+
+  }
+  // /ShiftRosters/send_timesheet?userId=&fromDate=&toDate=&staffId=
+  const SendTimesheet = async () => {
+
+    setLoading3(true)
+
+    try {
+      const { data } = await get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}`, { cacheTimeout: 300000 });
+      toast.success(data.message)
+      setLoading3(false);
+
+
+    } catch (error) {
+      toast.error("Ooops!😔 Error Occurred")
+      console.log(error);
+      setLoading3(false)
+    }
 
   }
 
@@ -448,6 +468,23 @@ const AttendanceReport = () => {
 
 
                       </button>
+                      <button
+                        type='button'
+                        onClick={SendTimesheet}
+                        className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
+                        disabled={loading3 ? true : false}
+                      >
+                        {loading3 ? (
+                          <>
+                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                            Please wait...
+                          </>
+                        ) : (
+                          "Send Timesheet to staff"
+                        )}
+
+
+                      </button>
 
                     </div>
                   </div>
@@ -459,7 +496,7 @@ const AttendanceReport = () => {
                       <button style={{ fontSize: "12px" }}
                         type='button'
                         onClick={GetAllTimeshift}
-                        className="btn btn-warning add-btn text-white rounded-2 m-r-5"
+                        className="btn btn-dark add-btn text-white rounded-2 m-r-5"
                         disabled={loading2 ? true : false}
                       >
                         {loading2 ? (

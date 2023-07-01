@@ -81,12 +81,10 @@ const KnowledgeBase = () => {
     };
 
     const handleEdit = async (e) => {
-        // console.log(e);
         setEditModal(true);
         try {
             setLoading(true)
             const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
             setEditPro(data);
             setLoading(false)
         } catch (error) {
