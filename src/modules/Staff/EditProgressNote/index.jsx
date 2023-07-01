@@ -31,7 +31,7 @@ const EditProgressNote = () => {
     try {
       const staffResponse = await get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      // console.log(staff);
+      console.log(staff);
       setStaff(staff.staff.fullName);
       setCompanyId(staff.companyID)
       setDetails(staff.profile);
