@@ -41,7 +41,7 @@ const StaffDashboard = ({roster, loading}) => {
 
   );
 
-  const Tomorrow = dayjs().add(1, 'day').startOf('day');
+  const Tomorrow = currentDate.add(1, 'day').startOf('day');
 
   // Filter the shifts starting from tomorrow's date
   const filteredShifts = roster.filter(shift => dayjs(shift.dateFrom) >(Tomorrow));
@@ -146,8 +146,8 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
     }, 3000);
   };
 
-  const rosterId = JSON.parse(localStorage.getItem('rosterId'))
-  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
+  const rosterId = JSON.parse(localStorage.getItem('rosterId'));
+  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'));
   const HandleFill = () =>{
     navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
   }
@@ -175,7 +175,7 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
       return currentShift.attendance === true ? 'Present' : 'Absent';
     }
     else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false ) {
-      return 'You are already Clocked in'
+      return 'You are already Clocked in';
     }
     else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === true) {
       return 'Present';
@@ -342,9 +342,9 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activitiesByDay[2][0]?.status}</span>
                         </div>
                       </div>
-                      <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
+                      <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.profile.firstName}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.clients}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>

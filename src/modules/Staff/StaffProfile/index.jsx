@@ -51,16 +51,16 @@ const StaffProfile = ({staffOne, FetchData}) => {
   }
   const FetchExising = async (e) => {
     try {
-      const response = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
-      setProfile(response.data);
-      setEditedProfile(response.data)
+      const {data} = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
+    console.log(data)
+      setProfile(data);
+      setEditedProfile(data);
     } catch (error) {
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
-
-
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
     }
   }
+  // http://localhost:3001/staff/main/edit-progress/7918/8260
 
   const handleModal0 = (e) => {
     setInformModal(true)
@@ -111,6 +111,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
     formData.append("email", profile.email);
     formData.append("phoneNumber", profile.phoneNumber);
     formData.append("surName", profile.surName);
+    formData.append("maxStaffId", profile.maxStaffId);
     formData.append("middleName", editedProfile.middleName);
     formData.append("gender", editedProfile.gender);
     formData.append("dateOfBirth", editedProfile.dateOfBirth);
@@ -136,16 +137,17 @@ const StaffProfile = ({staffOne, FetchData}) => {
     formData.append("kinState", editedProfile.kinState);
     formData.append("relationship", editedProfile.relationship);
     formData.append("imageFile", editedProfile.image);
-    formData.append("twitter", editedProfile.tweet);
-    formData.append("linkedIn", editedProfile.linkd);
-    formData.append("instagram", editedProfile.insta);
-    formData.append("isActive", profile.isActive);
-    formData.append("facebook", editedProfile.fbook);
+    formData.append("twitter", editedProfile.twitter);
+    formData.append("linkedIn", editedProfile.linkedIn);
+    formData.append("instagram", editedProfile.instagram);
+    formData.append("isActive", true);
+    formData.append("facebook", editedProfile.facebook);
     try {
       setLoading(true)
       const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
         formData
       )
+      console.log(data)
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -203,7 +205,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                   <div className="profile-view">
                     <div className="profile-img-wrap">
                       <div className="profile-img">
-                        <a className='text-primary' href="#"><img alt="" src={Avatar_02} /></a>
+                        <a className='text-primary' href="#"><img alt="" src={staffOne.imageUrl === null || staffOne.imageUrl === "" ? Avatar_02 : staffOne.imageUrl} /></a>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -315,6 +317,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
                   <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
+                  <option defaultValue hidden>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
@@ -716,22 +719,22 @@ const StaffProfile = ({staffOne, FetchData}) => {
                               <div className="col-md-6">
                                 <div className="form-group">
                                   <label>Instagram</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://WWW......' name='instagram' value={editedProfile.instagram || ''} onChange={handleInputChange} />
                                 </div>
 
                                 <div className="form-group">
                                   <label>Facebook</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://WWW......' name='facebook' value={editedProfile.facebook || ''} onChange={handleInputChange} />
                                 </div>
                               </div>
                               <div className="col-md-6">
                                 <div className="form-group">
                                   <label>Twitter</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://WWW......' name='twitter' value={editedProfile.twitter || ''} onChange={handleInputChange} />
                                 </div>
                                 <div className="form-group">
                                   <label>LinkedIn</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://WWW......' name='linkedIn' value={editedProfile.linkedIn || ''} onChange={handleInputChange} />
                                 </div>
 
                               </div>
@@ -761,23 +764,23 @@ const StaffProfile = ({staffOne, FetchData}) => {
                       <ul className="personal-info">
                         <li>
                           <div className="title"><FaInstagram /> Instagram</div>
-                          <div className="text">{staffOne.instagram === "null" || "undefined" || "" ? "---" : staffOne.instagram}</div>
+                          <div className="text">{staffOne.instagram === "null" || staffOne.instagram === "undefined" || staffOne.instagram === ""  ?  "---" : staffOne.instagram}</div>
                         </li>
                         <li>
                           <div className="title"><FaFacebook /> Facebook</div>
-                          <div className="text">{staffOne.facebook === "null" || "undefined" || "" ? "---" : staffOne.facebook}</div>
+                          <div className="text">{staffOne.facebook === "null" || staffOne.facebook === "undefined" || staffOne.facebook === "" ? "---" : staffOne.facebook}</div>
                         </li>
                         <li>
                           <div className="title"><FaTwitter /> Twitter</div>
-                          <div className="text">{staffOne.twitter === "null" || "undefined" || "" ? "---" : staffOne.twitter}</div>
+                          <div className="text">{staffOne.twitter === "null" || staffOne.twitter === "undefined" || staffOne.twitter === "" ? "---" : staffOne.twitter}</div>
                         </li>
                         <li>
                           <div className="title"><FaLinkedin /> Linked-In</div>
-                          <div className="text">{staffOne.linkedIn === "null" || "undefined" || "" ? "---" : staffOne.linkedIn}</div>
+                          <div className="text">{staffOne.linkedIn === "null" || staffOne.linkedIn === "undefined" || staffOne.linkedIn === "" ? "---" : staffOne.linkedIn}</div>
                         </li>
                         <li>
                           <div className="title"><FaYoutube /> Youtube</div>
-                          <div className="text">{staffOne.youtube === "null" || "undefined" || "" ? "---" : staffOne.youtube}</div>
+                          <div className="text">{staffOne.youtube === null || staffOne.youtube === "undefined" || staffOne.youtube === " " ? "---" : staffOne.youtube}</div>
                         </li>
 
                       </ul>

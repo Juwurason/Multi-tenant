@@ -119,7 +119,7 @@ const AttendanceDetails = () => {
                                         </li>
                                         <li>
                                             <div className="title">ImageUrl</div>
-                                            <div className="text"><img src={details.imageFIle} alt="" width={"100%"} /></div>
+                                            <div className="text" style={{ width: "300px", height: "200px" }}><img src={details.imageFIle} alt="" width={"100%"} /></div>
                                         </li>
                                         <li>
                                             <div className="title">Date Created</div>

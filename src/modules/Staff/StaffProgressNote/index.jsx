@@ -359,18 +359,24 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
                                         <div className="form-group">
                                             <label className="col-form-label">FollowUp:</label>
                                             <div>
-                                                <input type="text" className='form-control' name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
+                                                <textarea rows={2} className="form-control summernote" placeholder=""  name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
                                             </div>
                                         </div>
 
                                         <div className="form-group">
                                             <label className="col-form-label">Progress:</label>
-                                            <div><input className="form-control" type="text" name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} /></div>
+                                            <div>
+                                                <textarea rows={2} className="form-control summernote" placeholder=""  name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} />
+                                                
+                                                </div>
+
                                         </div>
 
                                         <div className="form-group">
                                             <label className="col-form-label">Report:</label>
-                                            <div><input className="form-control" type="text" name="report" value={selectedActivity.report || ''} onChange={handleInputChange} /></div>
+                                            <div>
+                                            <textarea rows={2} className="form-control summernote" placeholder=""  name="report" value={selectedActivity.report || ''} onChange={handleInputChange} />
+                                            </div>
                                         </div>
 
                                     </div>

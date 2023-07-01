@@ -16,7 +16,7 @@ import { BiStopwatch } from 'react-icons/bi';
 
 
 
-const StaffRoster = ({ staff, loading }) => {
+const StaffRoster = ({ staff, loading, FetchData }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
@@ -79,11 +79,13 @@ const StaffRoster = ({ staff, loading }) => {
     }
     try {
       const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
+      FetchData()
       // setStaffCancel(cancel);
       // console.log(response);
       // setLoading(false);
       setReasonModal(false)
     } catch (error) {
+      FetchData()
       // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -253,9 +255,7 @@ const StaffRoster = ({ staff, loading }) => {
                                   fontSize: '10px',
                                   overflow: 'hidden',
                                   backgroundColor:
-                                    dayjs(activity.dateFrom).format('HH:mm') <= '20:00'
-                                    ? '#405189'
-                                    : '#5374A5',
+                                        activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
                                 }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
