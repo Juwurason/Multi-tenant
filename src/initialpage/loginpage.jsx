@@ -9,7 +9,6 @@ import usePublicHttp from '../hooks/usePublicHttp';
 import {
   headerlogo,
 } from '../Entryfile/imagepath'
-import Swal from 'sweetalert2';
 import CryptoJS from 'crypto-js';
 
 
@@ -52,15 +51,7 @@ const Loginpage = () => {
 
     try {
       setLoading(true)
-      Swal.fire({
-        title: 'Verifying Login Credentials',
-        text: 'Please wait...',
-        allowOutsideClick: false,
-        showConfirmButton: false, // Remove the OK button
-        onBeforeOpen: () => {
-          Swal.showLoading();
-        }
-      });
+
       const { data } = await publicHttp.post('/Account/auth_login', info)
       if (data.response.status === "Success") {
         toast.success(data.response.message)
@@ -109,11 +100,9 @@ const Loginpage = () => {
       else if (error.response?.data?.message === 'Invalid Login Attempt') {
         toast.error("Incorrect Password")
       }
-      Swal.close();
     }
     finally {
       setLoading(false)
-      Swal.close();
     }
   }
 
