@@ -280,7 +280,7 @@ const ShiftScheduling = () => {
 
     } else {
 
-      dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli }));
+      dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli, companyId: id.companyId }));
     }
   }
 

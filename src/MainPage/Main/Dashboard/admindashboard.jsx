@@ -8,6 +8,7 @@ import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
 import ClientChart from '../../../_components/chart/ClientChart.jsx';
 import { MdCalendarMonth, MdCalendarToday, MdCalendarViewWeek, MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineGroup, MdOutlinePages, MdOutlinePersonOutline, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
 import { FaLongArrowAltRight } from 'react-icons/fa';
+import { GrTicket } from 'react-icons/gr';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAttendanceCount, fetchShiftRosterCount, fetchProgressNoteCount, fetchShiftAnalysisCount } from '../../../store/slices/CountsSlice';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
@@ -120,7 +121,7 @@ const AdminDashboard = () => {
                 />
 
                 <DashboardCard title={"Tickets"} sty={'danger'}
-                  content={ticket.length} icon={<MdOutlinePages className='fs-4' />}
+                  content={ticket.length} icon={<GrTicket className='fs-4' />}
                   link={'/app/support/view-tickets'}
                   loading={isLoading}
                 />

@@ -56,9 +56,9 @@ const fetchShiftRoaster = async (companyId) => {
         throw error;
     }
 };
-const fetchAttendance = async () => {
+const fetchAttendance = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Attendances/get_all_attendances_by_company?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Attendances/get_all_attendances_by_company?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching Attendance:', error);

@@ -52,7 +52,7 @@ const AttendanceReport = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   // Fetch staff data and update the state
   useEffect(() => {
-    dispatch(fetchAttendance());
+    dispatch(fetchAttendance(id.companyId));
     dispatch(fetchStaff(id.companyId));
     dispatch(fetchClient(id.companyId));
   }, [dispatch]);
@@ -67,7 +67,7 @@ const AttendanceReport = () => {
     // Check if staff data already exists in the store
     if (!attendance.length) {
       // Fetch staff data only if it's not available in the store
-      dispatch(fetchAttendance());
+      dispatch(fetchAttendance(id.companyId));
     }
   }, [dispatch, attendance]);
 
@@ -75,6 +75,7 @@ const AttendanceReport = () => {
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
+  const [loading4, setLoading4] = useState(false);
   const [sta, setSta] = useState('');
   const dateFrom = useRef(null);
   const dateTo = useRef(null);
@@ -94,12 +95,17 @@ const AttendanceReport = () => {
       cell: (row) => <div className='d-flex justify-content-center align-items-center'>
         <button
           className='btn'
-          title='Details'
-          to={`/app/reports/attendance-details/${row.attendanceId}`}
+          title='Adjust Attendance'
+          onClick={() => AdjustAttendance(row.attendanceId)}
 
-
+          disabled={loading4 ? true : false}
         >
-          <FaRegClock />
+          {
+            loading4 ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div> :
+              <FaRegClock />
+          }
         </button>
       </div>
     },
@@ -240,9 +246,28 @@ const AttendanceReport = () => {
     }
 
   }
+  const AdjustAttendance = async (e) => {
+
+    setLoading4(true)
+
+    try {
+      const { data } = await get(`/attendances/adjust_attendances?userId=${id.userId}&attendanceId=${e}`, { cacheTimeout: 300000 });
+      console.log(data);
+      toast.success(data.message);
+      dispatch(fetchAttendance(id.companyId));
+      setLoading4(false);
 
 
-  const [menu, setMenu] = useState(false);
+    } catch (error) {
+      toast.error("Ooops!😔 Error Occurred")
+      console.log(error);
+      setLoading4(false)
+    }
+
+  }
+
+
+
 
 
 
@@ -375,371 +400,371 @@ const AttendanceReport = () => {
 
   return (
     <>
-      <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
 
-        <div className="page-wrapper">
-          <Helmet>
-            <title>Attendance Reports</title>
-            <meta name="description" content="Login page" />
-          </Helmet>
 
-          <div className="content container-fluid">
+      <div className="page-wrapper">
+        <Helmet>
+          <title>Attendance Reports</title>
+          <meta name="description" content="Login page" />
+        </Helmet>
 
-            <div className="page-header">
-              <div className="row">
-                <div className="col-sm-12">
-                  <h3 className="page-title">Attendance Reports</h3>
-                  <ul className="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                    <li className="breadcrumb-item active">Attendance Reports</li>
-                  </ul>
-                </div>
+        <div className="content container-fluid">
+
+          <div className="page-header">
+            <div className="row">
+              <div className="col-sm-12">
+                <h3 className="page-title">Attendance Reports</h3>
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item active">Attendance Reports</li>
+                </ul>
               </div>
             </div>
+          </div>
 
-            <form className="row align-items-center shadow-sm py-3" onSubmit={FilterAttendance}>
+          <form className="row align-items-center shadow-sm py-3" onSubmit={FilterAttendance}>
 
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label className="col-form-label">Staff Name</label>
-                  <div>
-                    <select className="form-select" onChange={e => setSta(e.target.value)}>
-                      <option defaultValue value={""}>All Staff</option>
-                      {
-                        staff.map((data, index) =>
-                          <option value={data.staffId} key={index}>{data.fullName}</option>)
-                      }
-                    </select></div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label className="col-form-label">Start Date</label>
-                  <div>
-                    <input type="datetime-local" ref={dateFrom} className=' form-control' name="" id="" required />
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label className="col-form-label">End Date</label>
-                  <div>
-                    <input type="datetime-local" ref={dateTo} className=' form-control' name="" id="" required />
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-auto mt-3">
-                <div className="form-group">
-                  <button
-                    type='submit'
-                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                    disabled={loading1 ? true : false}
-                  >
-
-
-                    {loading1 ? <div className="spinner-grow text-light" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div> : "Load"}
-                  </button>
-
-                </div>
-              </div>
-
-              {
-                sta === "" || periodic.length <= 0 || loading ? "" :
-                  <div className="col-auto mt-3">
-                    <div className="form-group">
-                      <button
-                        type='button'
-                        onClick={GetTimeshift}
-                        className="btn btn-primary add-btn text-white rounded-2 m-r-5"
-                        disabled={loading2 ? true : false}
-                      >
-                        {loading2 ? (
-                          <>
-                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
-                            Please wait...
-                          </>
-                        ) : (
-                          "Generate Timesheet"
-                        )}
-
-
-                      </button>
-                      <button
-                        type='button'
-                        onClick={SendTimesheet}
-                        className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
-                        disabled={loading3 ? true : false}
-                      >
-                        {loading3 ? (
-                          <>
-                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
-                            Please wait...
-                          </>
-                        ) : (
-                          "Send Timesheet to staff"
-                        )}
-
-
-                      </button>
-
-                    </div>
-                  </div>
-              }
-              {
-                sta !== "" || periodic.length <= 0 || loading ? "" :
-                  <div className="col-auto mt-3">
-                    <div className="form-group">
-                      <button style={{ fontSize: "12px" }}
-                        type='button'
-                        onClick={GetAllTimeshift}
-                        className="btn btn-dark add-btn text-white rounded-2 m-r-5"
-                        disabled={loading2 ? true : false}
-                      >
-                        {loading2 ? (
-                          <>
-                            <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
-                            Please wait...
-                          </>
-                        ) : (
-                          "Generate Timesheet for all staff"
-                        )}
-
-
-                      </button>
-
-                    </div>
-                  </div>
-              }
-
-
-            </form>
-
-
-
-            <div className='mt-4 border'>
-              <div className="row px-2 py-3">
-
-                <div className="col-md-3">
-                  <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                    <input type="text" placeholder="Search Attendance" className='border-0 outline-none' onChange={handleSearch} />
-                    <GoSearch />
-                  </div>
-                </div>
-                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                  <CSVLink
-                    data={attendance}
-                    filename={"data.csv"}
-
-                  >
-                    <button
-
-                      className='btn text-info'
-                      title="Export as CSV"
-                    >
-                      <FaFileCsv />
-                    </button>
-
-                  </CSVLink>
-                  <button
-                    className='btn text-danger'
-                    onClick={handlePDFDownload}
-                    title="Export as PDF"
-                  >
-                    <FaFilePdf />
-                  </button>
-                  <button
-                    className='btn text-primary'
-
-                    onClick={handleExcelDownload}
-                    title="Export as Excel"
-                  >
-                    <FaFileExcel />
-                  </button>
-                  <CopyToClipboard text={JSON.stringify(attendance)}>
-                    <button
-
-                      className='btn text-warning'
-                      title="Copy Table"
-                      onClick={() => toast("Table Copied")}
-                    >
-                      <FaCopy />
-                    </button>
-                  </CopyToClipboard>
-                </div>
-
-              </div>
-              <DataTable data={filteredData} columns={columns}
-                pagination
-                highlightOnHover
-                searchable
-                searchTerm={searchText}
-                progressPending={loading}
-                progressComponent={<div className='text-center fs-1'>
-                  <div className="spinner-grow text-secondary" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>}
-                responsive
-                expandableRows
-                expandableRowsComponent={ButtonRow}
-                paginationTotalRows={filteredData.length}
-
-
-
-              />
-
-
-
-
-
-
-            </div>
-
-
-            {/*Edit Modal */}
-            <Modal show={editModal} onHide={() => setEditModal(false)} centered size='lg'>
-              <Modal.Header closeButton>
-                <Modal.Title>Edit Attendance</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">Staff Name</label>
                 <div>
-                  <div className="row">
-
-                    <form
-                    // onSubmit={SendReport}
-                    >
-
-                      <div className="row">
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <label htmlFor="">Clock In</label>
-                            <input type="text" className="form-control"
-                              // value={moment(attendance.clockIn).format("LLL")}
-                              readOnly />
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <label htmlFor="">Clock Out</label>
-                            <input type="text" className="form-control"
-                              // value={moment(attendance.clockOut).format("LLL")}
-                              readOnly />
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <label htmlFor="">Starting Kilometre (km)</label>
-                            <input type="text"
-                              // value={startKm}
-                              // onChange={e => setStartKm(e.target.value)}
-                              className="form-control" />
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          <div className="form-group">
-                            <label htmlFor="">Ending Kilometre (km)</label>
-                            <input type="text"
-                              // value={endKm}
-                              // onChange={e => setEndKm(e.target.value)}
-                              className="form-control" />
-                          </div>
-                        </div>
-                      </div>
-
-
-                      <div className="form-group">
-                        {/* <DefaultEditor value={html} onChange={onChange} /> */}
-                        <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
-                        <textarea rows={3} className="form-control summernote"
-                          name="report"
-                        // value={report} onChange={e => setReport(e.target.value)}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label htmlFor="">Image URL </label>
-                        <input className="form-control" type="file"
-                          accept=".png,.jpg,.jpeg"
-                          maxsize={1024 * 1024 * 2}
-                        // onChange={handleFileChange}
-                        />
-                      </div>
-                      <div className="form-group text-center mb-0">
-                        <div className="text-center d-flex gap-2">
-                          <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                            disabled={loading1 ? true : false}
-                            type='submit'
-                          >
-
-                            {loading1 ? <div className="spinner-grow text-light" role="status">
-                              <span className="sr-only">Loading...</span>
-                            </div> : "Save"}</button>
-
-
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-
-                </div>
-              </Modal.Body>
-
-            </Modal>
-
-            <Modal show={splittedModal} onHide={() => setSplittedModal(false)} size='lg'>
-              <Modal.Header closeButton>
-                <Modal.Title>Splitted Attendance</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Clock In</th>
-                      <th>Duration</th>
-                      <th>Clock Out</th>
-                      <th>Km</th>
-                      <th>Shift</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-
-
+                  <select className="form-select" onChange={e => setSta(e.target.value)}>
+                    <option defaultValue value={""}>All Staff</option>
                     {
-                      splittedAttendance.map((data, index) =>
-                        <tr key={index}>
-                          <td>  {dayjs(data.clockIn).format('DD/MM/YYYY HH:mm')}</td>
-                          <td>{formatDuration(data.duration)}</td>
-                          <td>{dayjs(data.clockOut).format('DD/MM/YYYY HH:mm')}</td>
-                          <td>{data.totalKm}</td>
-                          <td><small style={{ fontSize: "12px" }} className={`px-2 py-1 rounded text-white
-                          bg-${data.shift === 'M' ? 'primary' : data.shift === 'E' ? 'secondary' : data.shift === 'N' ? 'dark' : 'transparent'}
-                          `}
-
-                          >
-                            {data.shift === 'M' ? 'Morning' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Night' : data.shift}
-                          </small></td>
-                        </tr>
-
-                      )
+                      staff.map((data, index) =>
+                        <option value={data.staffId} key={index}>{data.fullName}</option>)
                     }
-                  </tbody>
-                </table>
-              </Modal.Body>
+                  </select></div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">Start Date</label>
+                <div>
+                  <input type="datetime-local" ref={dateFrom} className=' form-control' name="" id="" required />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="col-form-label">End Date</label>
+                <div>
+                  <input type="datetime-local" ref={dateTo} className=' form-control' name="" id="" required />
+                </div>
+              </div>
+            </div>
 
-            </Modal>
+            <div className="col-auto mt-3">
+              <div className="form-group">
+                <button
+                  type='submit'
+                  className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                  disabled={loading1 ? true : false}
+                >
+
+
+                  {loading1 ? <div className="spinner-grow text-light" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div> : "Load"}
+                </button>
+
+              </div>
+            </div>
+
+            {
+              sta === "" || periodic.length <= 0 || loading ? "" :
+                <div className="col-auto mt-3">
+                  <div className="form-group">
+                    <button
+                      type='button'
+                      onClick={GetTimeshift}
+                      className="btn btn-primary add-btn text-white rounded-2 m-r-5"
+                      disabled={loading2 ? true : false}
+                    >
+                      {loading2 ? (
+                        <>
+                          <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                          Please wait...
+                        </>
+                      ) : (
+                        "Generate Timesheet"
+                      )}
+
+
+                    </button>
+                    <button
+                      type='button'
+                      onClick={SendTimesheet}
+                      className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
+                      disabled={loading3 ? true : false}
+                    >
+                      {loading3 ? (
+                        <>
+                          <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                          Please wait...
+                        </>
+                      ) : (
+                        "Send Timesheet to staff"
+                      )}
+
+
+                    </button>
+
+                  </div>
+                </div>
+            }
+            {
+              sta !== "" || periodic.length <= 0 || loading ? "" :
+                <div className="col-auto mt-3">
+                  <div className="form-group">
+                    <button style={{ fontSize: "12px" }}
+                      type='button'
+                      onClick={GetAllTimeshift}
+                      className="btn btn-dark add-btn text-white rounded-2 m-r-5"
+                      disabled={loading2 ? true : false}
+                    >
+                      {loading2 ? (
+                        <>
+                          <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                          Please wait...
+                        </>
+                      ) : (
+                        "Generate Timesheet for all staff"
+                      )}
+
+
+                    </button>
+
+                  </div>
+                </div>
+            }
+
+
+          </form>
+
+
+
+          <div className='mt-4 border'>
+            <div className="row px-2 py-3">
+
+              <div className="col-md-3">
+                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                  <input type="text" placeholder="Search Attendance" className='border-0 outline-none' onChange={handleSearch} />
+                  <GoSearch />
+                </div>
+              </div>
+              <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                <CSVLink
+                  data={attendance}
+                  filename={"data.csv"}
+
+                >
+                  <button
+
+                    className='btn text-info'
+                    title="Export as CSV"
+                  >
+                    <FaFileCsv />
+                  </button>
+
+                </CSVLink>
+                <button
+                  className='btn text-danger'
+                  onClick={handlePDFDownload}
+                  title="Export as PDF"
+                >
+                  <FaFilePdf />
+                </button>
+                <button
+                  className='btn text-primary'
+
+                  onClick={handleExcelDownload}
+                  title="Export as Excel"
+                >
+                  <FaFileExcel />
+                </button>
+                <CopyToClipboard text={JSON.stringify(attendance)}>
+                  <button
+
+                    className='btn text-warning'
+                    title="Copy Table"
+                    onClick={() => toast("Table Copied")}
+                  >
+                    <FaCopy />
+                  </button>
+                </CopyToClipboard>
+              </div>
+
+            </div>
+            <DataTable data={filteredData} columns={columns}
+              pagination
+              highlightOnHover
+              searchable
+              searchTerm={searchText}
+              progressPending={loading}
+              progressComponent={<div className='text-center fs-1'>
+                <div className="spinner-grow text-secondary" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </div>}
+              responsive
+              expandableRows
+              expandableRowsComponent={ButtonRow}
+              paginationTotalRows={filteredData.length}
+
+
+
+            />
+
+
+
 
 
 
           </div>
 
+
+          {/*Edit Modal */}
+          <Modal show={editModal} onHide={() => setEditModal(false)} centered size='lg'>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Attendance</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <div className="row">
+
+                  <form
+                  // onSubmit={SendReport}
+                  >
+
+                    <div className="row">
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Clock In</label>
+                          <input type="text" className="form-control"
+                            // value={moment(attendance.clockIn).format("LLL")}
+                            readOnly />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Clock Out</label>
+                          <input type="text" className="form-control"
+                            // value={moment(attendance.clockOut).format("LLL")}
+                            readOnly />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Starting Kilometre (km)</label>
+                          <input type="text"
+                            // value={startKm}
+                            // onChange={e => setStartKm(e.target.value)}
+                            className="form-control" />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label htmlFor="">Ending Kilometre (km)</label>
+                          <input type="text"
+                            // value={endKm}
+                            // onChange={e => setEndKm(e.target.value)}
+                            className="form-control" />
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="form-group">
+                      {/* <DefaultEditor value={html} onChange={onChange} /> */}
+                      <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
+                      <textarea rows={3} className="form-control summernote"
+                        name="report"
+                      // value={report} onChange={e => setReport(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="">Image URL </label>
+                      <input className="form-control" type="file"
+                        accept=".png,.jpg,.jpeg"
+                        maxsize={1024 * 1024 * 2}
+                      // onChange={handleFileChange}
+                      />
+                    </div>
+                    <div className="form-group text-center mb-0">
+                      <div className="text-center d-flex gap-2">
+                        <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                          disabled={loading1 ? true : false}
+                          type='submit'
+                        >
+
+                          {loading1 ? <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div> : "Save"}</button>
+
+
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+            </Modal.Body>
+
+          </Modal>
+
+          <Modal show={splittedModal} onHide={() => setSplittedModal(false)} size='lg'>
+            <Modal.Header closeButton>
+              <Modal.Title>Splitted Attendance</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Clock In</th>
+                    <th>Duration</th>
+                    <th>Clock Out</th>
+                    <th>Km</th>
+                    <th>Shift</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+
+
+                  {
+                    splittedAttendance.map((data, index) =>
+                      <tr key={index}>
+                        <td>  {dayjs(data.clockIn).format('DD/MM/YYYY HH:mm')}</td>
+                        <td>{formatDuration(data.duration)}</td>
+                        <td>{dayjs(data.clockOut).format('DD/MM/YYYY HH:mm')}</td>
+                        <td>{data.totalKm}</td>
+                        <td><small style={{ fontSize: "12px" }} className={`px-2 py-1 rounded text-white
+                          bg-${data.shift === 'M' ? 'primary' : data.shift === 'E' ? 'secondary' : data.shift === 'N' ? 'dark' : 'transparent'}
+                          `}
+
+                        >
+                          {data.shift === 'M' ? 'Morning' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Night' : data.shift}
+                        </small></td>
+                      </tr>
+
+                    )
+                  }
+                </tbody>
+              </table>
+            </Modal.Body>
+
+          </Modal>
+
+
+
         </div>
+
       </div>
+
 
       <Offcanvas />
     </>
