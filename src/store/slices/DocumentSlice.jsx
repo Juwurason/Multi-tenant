@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchDocument = createAsyncThunk('Document/fetchDocument', async () => {
-    const response = await api.fetchDocumentData();
+export const fetchDocument = createAsyncThunk('Document/fetchDocument', async (companyId) => {
+    const response = await api.fetchDocumentData(companyId);
     return response;
 });
 

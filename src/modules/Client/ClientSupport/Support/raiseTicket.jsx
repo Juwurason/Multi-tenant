@@ -5,12 +5,12 @@ import { MdCancel } from 'react-icons/md';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Editor from '../Message/editor';
-import { useCompanyContext } from '../../../../context';
 import useHttp from '../../../../hooks/useHttp';
 
 const ClientRaiseTicket = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
 
-    const { userProfile, loading, setLoading } = useCompanyContext();
+
     const [subject, setSubject] = useState('');
     const [image, setImage] = useState(null);
     const privateHttp = useHttp();
@@ -37,11 +37,11 @@ const ClientRaiseTicket = () => {
 
         try {
             setLoading1(true)
-            const { data } = await privateHttp.post(`/Tickets/raise_ticket?userId=${userProfile.userId}`,
+            const { data } = await privateHttp.post(`/Tickets/raise_ticket?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
-            setLoading(false)
+            setLoading1(false)
 
         } catch (error) {
             toast.error(error.response?.data?.message)

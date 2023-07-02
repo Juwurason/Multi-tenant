@@ -9,7 +9,6 @@ import useHttp from '../../hooks/useHttp';
 import { useParams } from 'react-router-dom';
 const EditRole = () => {
     const { uid } = useParams();
-    const { userProfile } = useCompanyContext();
     const [roles, setRoles] = useState([]);
     const [claims, setClaims] = useState([]);
     const [userName, setUserName] = useState({});

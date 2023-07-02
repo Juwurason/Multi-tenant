@@ -25,17 +25,13 @@ const ClientLayout = (props) => {
         }
     }, [localStorage.getItem('user')]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('user')
-        navigate.push('/')
-    }
 
     const { match } = props;
     return (
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                <ClientHeader onMenuClick={(value) => toggleMobileMenu()} onLogout={() => handleLogout()} />
+                <ClientHeader onMenuClick={(value) => toggleMobileMenu()} />
                 <div>
                     {routerService && routerService.map((route, key) =>
                         <Route key={key} path={`${match.url}/${route.path}`} component={route.component} />

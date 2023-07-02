@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import useHttp from '../hooks/useHttp';
+import CryptoJS from 'crypto-js';
 
 export const CompanyContext = createContext();
 
@@ -10,25 +9,40 @@ export const CompanyProvider = ({ children }) => {
     const [loading, setLoading] = useState(false)
     const [companyId, setCompanyId] = useState('');
     const [email, setEmail] = useState('');
-    // if (loading) {
-    //     toast('Fetching Data......')
-    // }
-    const [userProfile, setUserProfile] = useState(
-        {
-            companyId: 0,
-            email: "",
-            firstName: "",
-            fullName: "",
-            lastName: "",
-            phoneNumber: "",
-            role: "",
-            token: "",
-            tokenExpiration: ""
-        }
-    )
-    useEffect(() => {
-        setUserProfile(JSON.parse(localStorage.getItem('user')))
-    }, [])
+
+    const [userProfile, setUserProfile] = useState({});
+    // const decryptedUserProfileString = CryptoJS.AES.decrypt(
+    //     encryptedUserProfile,
+    //     'promax-care001#'
+    //   ).toString(CryptoJS.enc.Utf8);
+
+    //   if (decryptedUserProfileString) {
+    //     const decryptedUserProfile = JSON.parse(decryptedUserProfileString);
+    //     dispatch(loginSuccess({ userProfile: decryptedUserProfile, token }));
+    //   } else {
+    //     // Handle decryption error or empty decrypted string
+    //     dispatch(loginFailure('Failed to decrypt user profile'));
+    //   }
+
+    // useEffect(() => {
+    //     try {
+    //         const encryptedData = localStorage.getItem('userEnc');
+    //         if (encryptedData) {
+    //             const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, 'promax-001#');
+    //             const decryptedObject = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+    //             setUserProfile(decryptedObject)
+    //             // Handle the decrypted object as needed
+    //         } else {
+    //             // Handle the case when the encrypted data is not found
+
+    //             console.log('Error fetching details');
+    //         }
+    //     } catch (error) {
+    //         // Handle decryption errors
+    //         console.error('Decryption error:', error);
+    //     }
+    // }, []);
+
 
     const storeCompanyId = (companyId) => {
         setCompanyId(companyId);

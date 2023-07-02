@@ -6,7 +6,7 @@ import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 
 const Addemployee = () => {
-  const { userProfile } = useCompanyContext();
+  const id = JSON.parse(localStorage.getItem('user'));
   const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState('');
   const [surName, setSurName] = useState('');
@@ -42,7 +42,7 @@ const Addemployee = () => {
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${userProfile.userId}`,
+      const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${id.userId}`,
         formData
       )
       toast.success(data.message)

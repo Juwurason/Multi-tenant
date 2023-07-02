@@ -21,13 +21,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchTicket } from '../../../store/slices/TicketSlice';
 
 
-
 const ViewTicket = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
 
     // Fetch user data and update the state
     useEffect(() => {
-        dispatch(fetchTicket());
+        dispatch(fetchTicket(id.companyId));
     }, [dispatch]);
 
     // Access the entire state
@@ -220,7 +220,7 @@ const ViewTicket = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchTicket());
+                        dispatch(fetchTicket(id.companyId));
                     } else {
                         toast.error(data.message);
                     }

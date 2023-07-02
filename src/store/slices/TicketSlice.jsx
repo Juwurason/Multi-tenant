@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchTicket = createAsyncThunk('Ticket/fetchTicket', async () => {
-    const response = await api.fetchTicket();
+export const fetchTicket = createAsyncThunk('Ticket/fetchTicket', async (companyId) => {
+    const response = await api.fetchTicket(companyId);
     return response;
 });
 

@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchRoaster = createAsyncThunk('Roaster/fetchRoaster', async () => {
-    const response = await api.fetchShiftRoaster();
+export const fetchRoaster = createAsyncThunk('Roaster/fetchRoaster', async (companyId) => {
+    const response = await api.fetchShiftRoaster(companyId);
     return response;
 });
 export const filterRoaster = createAsyncThunk(
     'Roaster/filterRoaster',
-    async ({ dateFrom, dateTo, sta, cli }) => {
-        const response = await api.getShiftsByUser(dateFrom, dateTo, sta, cli);
+    async ({ dateFrom, dateTo, sta, cli, companyId }) => {
+        const response = await api.getShiftsByUser(dateFrom, dateTo, sta, cli, companyId);
         return response;
     }
 );

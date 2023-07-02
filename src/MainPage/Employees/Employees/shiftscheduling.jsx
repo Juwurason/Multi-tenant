@@ -15,8 +15,6 @@ import { MdDoneOutline, MdOutlineEditCalendar, MdThumbUpOffAlt } from 'react-ico
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { set } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { fetchRoaster, filterRoaster } from '../../../store/slices/shiftRoasterSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,12 +31,13 @@ const ShiftScheduling = () => {
   dayjs.tz.setDefault('Australia/Sydney');
   //Declaring Variables
   const dispatch = useDispatch();
+  const id = JSON.parse(localStorage.getItem('user'));
 
   // Fetch staff data and update the state
   useEffect(() => {
-    dispatch(fetchRoaster());
-    dispatch(fetchStaff());
-    dispatch(fetchClient());
+    dispatch(fetchRoaster(id.companyId));
+    dispatch(fetchStaff(id.companyId));
+    dispatch(fetchClient(id.companyId));
   }, [dispatch]);
 
   // Access the entire state
@@ -51,13 +50,12 @@ const ShiftScheduling = () => {
     // Check if staff data already exists in the store
     if (!schedule.length) {
       // Fetch staff data only if it's not available in the store
-      dispatch(fetchRoaster());
+      dispatch(fetchRoaster(id.companyId));
     }
   }, [dispatch, schedule]);
 
 
 
-  const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
   const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false);
@@ -163,7 +161,7 @@ const ShiftScheduling = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            dispatch(fetchRoaster());
+            dispatch(fetchRoaster(id.companyId));
           } else {
             toast.error(data.message);
           }
@@ -201,7 +199,7 @@ const ShiftScheduling = () => {
           console.log(data);
           if (data.status === 'Success') {
             toast.success(data.message);
-            dispatch(fetchRoaster());
+            dispatch(fetchRoaster(id.companyId));
           } else {
             toast.error(data.message);
           }

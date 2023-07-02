@@ -29,7 +29,7 @@ const AdminProfile = () => {
     try {
       const { data } = await privateHttp.get(`/Administrators/${getAdminProfile.administratorId}`, { cacheTimeout: 300000 })
       setStaffOne(data)
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -623,7 +623,7 @@ const AdminProfile = () => {
 
               {/* Bank Info */}
               <div className="row">
-                
+
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">

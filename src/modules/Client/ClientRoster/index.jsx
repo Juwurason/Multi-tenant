@@ -44,7 +44,7 @@ const ClientRoster = () => {
     dayjs.tz.setDefault('Australia/Sydney');
 
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
-    const userProfile = JSON.parse(localStorage.getItem('user'));
+    const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
     const [loading, setLoading] = useState(false);
     const [clients, setClients] = useState([]);
@@ -59,7 +59,7 @@ const ClientRoster = () => {
 
 
         try {
-            const {data} = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
+            const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=${clientProfile.profileId}&staff=`, { cacheTimeout: 300000 });
             setClients(data.shiftRoster);
             setLoading(false);
 
@@ -100,7 +100,7 @@ const ClientRoster = () => {
         setSelectedActivities(selected);
     };
 
-    
+
 
     const selectedValues = selectedActivities.map(option => option.label).join(', ');
 
@@ -152,7 +152,7 @@ const ClientRoster = () => {
 
         try {
             setLoading(true)
-            const { data } = await post(`ShiftRosters/edit_activities?userId=${userProfile.userId}&shiftId=${cli}&activities=${selectedValues}`);
+            const { data } = await post(`ShiftRosters/edit_activities?userId=${id.userId}&shiftId=${cli}&activities=${selectedValues}`);
             // console.log(data);
             toast.success(data.message);
             setLoading(false);
@@ -202,7 +202,7 @@ const ClientRoster = () => {
         }
         try {
             setLoading(true)
-            const response = await get(`/ShiftRosters/client_shift_cancellation?userId=${userProfile.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
+            const response = await get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
             // console.log(data);
             // toast.success(data.message);
             setLoading(false);
@@ -240,7 +240,7 @@ const ClientRoster = () => {
         }
         try {
             setLoading(true)
-            const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
+            const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
             // console.log(data);
             toast.success(data.message);
             setLoading(false);
@@ -339,8 +339,8 @@ const ClientRoster = () => {
 
 
 
-                                        <div className="col-sm-12 text-center roster border p-2" 
-                                        style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}>
+                                        <div className="col-sm-12 text-center roster border p-2"
+                                            style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}>
 
                                             {loading &&
 
@@ -359,7 +359,7 @@ const ClientRoster = () => {
                                                         fontSize: '10px',
                                                         overflow: 'hidden',
                                                         backgroundColor:
-                                                        activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
+                                                            activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
                                                     }}
                                                 >
                                                     <div
@@ -495,7 +495,7 @@ const ClientRoster = () => {
                                                     <div>
                                                         <label htmlFor="">Please provide reasons for cancelling shift</label>
                                                         <textarea rows={3} className="form-control summernote" placeholder="Add Reason for Cancel Shift..."
-                                                         name='reason' value={editedProfile.reason || ""} onChange={handleInputChange} />
+                                                            name='reason' value={editedProfile.reason || ""} onChange={handleInputChange} />
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>

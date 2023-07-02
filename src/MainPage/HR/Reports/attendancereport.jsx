@@ -49,11 +49,12 @@ const AttendanceReport = () => {
   //Declaring Variables
   const dispatch = useDispatch();
 
+  const id = JSON.parse(localStorage.getItem('user'));
   // Fetch staff data and update the state
   useEffect(() => {
     dispatch(fetchAttendance());
-    dispatch(fetchStaff());
-    dispatch(fetchClient());
+    dispatch(fetchStaff(id.companyId));
+    dispatch(fetchClient(id.companyId));
   }, [dispatch]);
 
   // Access the entire state
@@ -74,7 +75,6 @@ const AttendanceReport = () => {
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
-  const id = JSON.parse(localStorage.getItem('user'));
   const [sta, setSta] = useState('');
   const dateFrom = useRef(null);
   const dateTo = useRef(null);

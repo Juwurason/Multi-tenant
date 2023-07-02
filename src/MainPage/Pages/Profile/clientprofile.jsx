@@ -4,7 +4,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams } from 'react-router-dom';
-import { Avatar_01, Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_11, Avatar_12, Avatar_13, Avatar_16, Avatar_19 } from '../../../Entryfile/imagepath'
+import { Avatar_02, } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import man from '../../../assets/img/man.png'
@@ -113,7 +113,7 @@ const ClientProfile = () => {
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                             <div className="staff-msg d-flex gap-2">
 
-                              <Link to={`/app/profile/client-docUpload/${clientOne.profileId}`} className="btn btn-primary btn-sm">Client's Doc</Link>
+                              <Link to={`/app/profile/client-docUpload/${clientOne.profileId}`} className="btn btn-primary py-1 px-2 btn-sm">Client's Doc</Link>
                               {
                                 clientOne.isActive ?
                                   <button onClick={() => handleDeactivate(clientOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-danger">
@@ -168,15 +168,15 @@ const ClientProfile = () => {
             <div className="row user-tabs">
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
                 <ul className="nav nav-tabs nav-tabs-bottom">
-                  <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active">Profile</a></li>
+                  {/* <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active">Profile</a></li> */}
                   {/* <li className="nav-item"><a href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
                   {/* <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li> */}
                 </ul>
               </div>
             </div>
           </div>
-          <div className="tab-content">
-            {/* Profile Info Tab */}
+          {/* <div className="tab-content">
+          
             <div id="emp_profile" className="pro-overview tab-pane fade show active">
               <div className="row">
                 <div className="col-md-6 d-flex">
@@ -262,10 +262,10 @@ const ClientProfile = () => {
 
             </div>
 
-          </div>
+          </div> */}
         </div>
 
-        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        {/* <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div className="modal-content">
               <div className="modal-header text-center">
@@ -389,10 +389,10 @@ const ClientProfile = () => {
               </div>
 
             </div>
-          </div>
+          </div> */}
 
 
-        </div>
+        {/* </div> */}
 
 
 

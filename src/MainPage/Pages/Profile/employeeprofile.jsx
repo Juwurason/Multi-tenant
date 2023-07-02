@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 const EmployeeProfile = () => {
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
-  const [profile, setProfile] = useState({})
   const [editedProfile, setEditedProfile] = useState({});
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState('');
@@ -29,24 +28,20 @@ const EmployeeProfile = () => {
     try {
       const { data } = await privateHttp.get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
       setStaffOne(data)
-
+      setEditedProfile({ ...data });
 
 
     } catch (error) {
       console.log(error);
     }
   }
+
   useEffect(() => {
     FetchStaff()
   }, []);
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        width: '100%',
-        minimumResultsForSearch: -1,
-      });
-    }
-  });
+
+
+
   const styles = {
     main: {
       backgroundColor: 'black',
@@ -61,52 +56,35 @@ const EmployeeProfile = () => {
       display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
     }
   }
-  const FetchExising = async (e) => {
-    try {
-      const response = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
-      setProfile(response.data);
-      setEditedProfile(response.data)
-    } catch (error) {
-      console.log(error);
 
 
-    }
-  }
 
-  const handleModal0 = (e) => {
-    setInformModal(true)
-    FetchExising(e);
+  const handleModal0 = () => {
+    setInformModal(true);
 
   }
-  const handleModal1 = (e) => {
-    setStateModal(true)
-    FetchExising(e);
+  const handleModal1 = () => {
+    setStateModal(true);
 
   }
-  const handleModal2 = (e) => {
-    setKinModal(true)
-    FetchExising(e);
+  const handleModal2 = () => {
+    setKinModal(true);
   }
-  const handleModal3 = (e) => {
-    setBankModal(true)
-    FetchExising(e);
+  const handleModal3 = () => {
+    setBankModal(true);
   }
-  const handleModal4 = (e) => {
+  const handleModal4 = () => {
     setSocialModal(true);
-    FetchExising(e);
   }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedProfile((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
 
-  function handleInputChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    const newValue = value === "" ? "" : value;
-    setEditedProfile({
-      ...editedProfile,
-      [name]: newValue
-    });
-  }
   const handlechange = (e) => {
     setImage(e.target.files[0]);
   }
@@ -116,41 +94,17 @@ const EmployeeProfile = () => {
   const handleSave = async (e) => {
     e.preventDefault()
     const formData = new FormData()
-    formData.append("CompanyId", id.companyId);
-    formData.append("StaffId", uid);
-    formData.append("firstName", profile.firstName);
-    formData.append("email", profile.email);
-    formData.append("phoneNumber", profile.phoneNumber);
-    formData.append("surName", profile.surName);
-    formData.append("middleName", editedProfile.middleName);
-    formData.append("gender", editedProfile.gender);
-    formData.append("dateOfBirth", editedProfile.dateOfBirth);
-    formData.append("aboutMe", editedProfile.aboutMe);
-    formData.append("address", profile.address);
-    formData.append("city", editedProfile.city);
-    formData.append("country", editedProfile.country);
-    formData.append("state", editedProfile.state);
-    formData.append("Postcode", editedProfile.postcode);
-    formData.append("accountName", editedProfile.accountName);
-    formData.append("accountNumber", editedProfile.accountNumber);
-    formData.append("bankName", editedProfile.bankName);
-    formData.append("branch", editedProfile.branch);
-    formData.append("bsb", editedProfile.bsb);
-    formData.append("suburb", editedProfile.kinSuburb);
-    formData.append("NextOfKin", editedProfile.nextOfKin);
-    formData.append("kinAddress", editedProfile.kinAddress);
-    formData.append("kinCity", editedProfile.kinCity);
-    formData.append("kinCountry", editedProfile.kinCountry);
-    formData.append("kinEmail", editedProfile.kinEmail);
-    formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
-    formData.append("kinPostcode", editedProfile.kinPostCode);
-    formData.append("kinState", editedProfile.kinState);
-    formData.append("relationship", editedProfile.relationship);
-    formData.append("imageFile", editedProfile.image);
-    formData.append("twitter", editedProfile.tweet);
-    formData.append("linkedIn", editedProfile.linkd);
-    formData.append("instagram", editedProfile.insta);
-    formData.append("facebook", editedProfile.fbook);
+
+    for (const key in editedProfile) {
+      const value = editedProfile[key];
+      if (value === null) {
+        formData.append(key, ''); // Pass empty string if value is null
+      } else {
+        formData.append(key, value);
+      }
+    }
+
+
     try {
       setLoading(true)
       const { data } = await privateHttp.post(`/Staffs/edit/${uid}?userId=${id.userId}`,
@@ -183,7 +137,7 @@ const EmployeeProfile = () => {
   }
   const handleActivate = async (e) => {
     try {
-      const response = await get(`Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
+      const response = await get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
 
       )
       console.log(response);
@@ -198,13 +152,11 @@ const EmployeeProfile = () => {
     }
 
 
-
-
   }
 
   const handleDeactivate = async (e) => {
     try {
-      const response = await get(`Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      const response = await get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
       )
       console.log(response);
 
@@ -226,7 +178,7 @@ const EmployeeProfile = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Staff Profile </title>
-          <meta name="description" content="Reactify Blank Page" />
+          <meta name="description" content="Staff Profile" />
         </Helmet>
         {/* Page Content */}
         <div className="content container-fluid">
@@ -309,7 +261,7 @@ const EmployeeProfile = () => {
                     </div>
 
                     <div className="pro-edit">
-                      <a className="edit-icon bg-info text-white" onClick={() => handleModal0(staffOne.staffId)}>
+                      <a className="edit-icon bg-info text-white" onClick={handleModal0}>
                         <i className="fa fa-pencil" />
                       </a>
                     </div>
@@ -329,7 +281,7 @@ const EmployeeProfile = () => {
           >
             <Modal.Header closeButton>
               <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                Update profile for {profile.firstName} {profile.lastName}
+                Update profile for {editedProfile.firstName} {editedProfile.lastName}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -350,11 +302,11 @@ const EmployeeProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>SurName</label>
-                  <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={profile.firstName} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
@@ -362,7 +314,7 @@ const EmployeeProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="number" className="form-control" value={editedProfile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -371,7 +323,7 @@ const EmployeeProfile = () => {
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={profile.email} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.email} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
@@ -434,7 +386,7 @@ const EmployeeProfile = () => {
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
                       <div className="pro-edit">
-                        <a className="edit-icon bg-info text-white" onClick={() => handleModal1(staffOne.staffId)}>
+                        <a className="edit-icon bg-info text-white" onClick={handleModal1}>
                           <i className="fa fa-pencil" />
                         </a>
                         <Modal
@@ -446,7 +398,7 @@ const EmployeeProfile = () => {
                         >
                           <Modal.Header closeButton>
                             <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                              Update profile for {profile.firstName} {profile.lastName}
+                              Update profile for {editedProfile.firstName} {editedProfile.lastName}
                             </Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
@@ -544,7 +496,7 @@ const EmployeeProfile = () => {
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
                       <div className="pro-edit">
-                        <a className="edit-icon bg-info text-white" onClick={() => handleModal2(staffOne.staffId)}>
+                        <a className="edit-icon bg-info text-white" onClick={handleModal2}>
                           <i className="fa fa-pencil" />
                         </a>
                         <Modal
@@ -674,7 +626,7 @@ const EmployeeProfile = () => {
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
                       <div className="pro-edit">
-                        <a className="edit-icon bg-info text-white" onClick={() => handleModal3(staffOne.staffId)}>
+                        <a className="edit-icon bg-info text-white" onClick={handleModal3}>
                           <i className="fa fa-pencil" />
                         </a>
                         <Modal
@@ -764,7 +716,7 @@ const EmployeeProfile = () => {
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
                       <div className="pro-edit">
-                        <a className="edit-icon bg-info text-white" onClick={() => handleModal4(staffOne.staffId)}>
+                        <a className="edit-icon bg-info text-white" onClick={handleModal4}>
                           <i className="fa fa-pencil" />
                         </a>
                         <Modal
@@ -784,22 +736,22 @@ const EmployeeProfile = () => {
                               <div className="col-md-6">
                                 <div className="form-group">
                                   <label>Instagram</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://......' name='instagram' value={editedProfile.instagram || ''} onChange={handleInputChange} />
                                 </div>
 
                                 <div className="form-group">
                                   <label>Facebook</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://......' name='facebook' value={editedProfile.facebook || ''} onChange={handleInputChange} />
                                 </div>
                               </div>
                               <div className="col-md-6">
                                 <div className="form-group">
                                   <label>Twitter</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://......' name='twitter' value={editedProfile.twitter || ''} onChange={handleInputChange} />
                                 </div>
                                 <div className="form-group">
                                   <label>LinkedIn</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https://......' name='linkedIn' value={editedProfile.linkedIn || ''} onChange={handleInputChange} />
                                 </div>
 
                               </div>

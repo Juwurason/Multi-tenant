@@ -15,9 +15,11 @@ import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchDocument } from '../../../store/slices/DocumentSlice';
 import { fetchTicket } from '../../../store/slices/TicketSlice';
+import { useCompanyContext } from '../../../context';
 
 const AdminDashboard = () => {
-  const userObj = JSON.parse(localStorage.getItem('user'));
+  const { userProfile } = useCompanyContext();
+  const id = JSON.parse(localStorage.getItem('user'));
   const [recentUsers, setRecentUsers] = useState([]);
 
   const dispatch = useDispatch();
@@ -43,19 +45,18 @@ const AdminDashboard = () => {
   const isLoading = useSelector((state) => state.dashboard.isLoading);
   const error = useSelector((state) => state.dashboard.error);
 
-
   useEffect(() => {
-    dispatch(fetchShiftRosterCount(userObj.companyId));
-    dispatch(fetchAttendanceCount(userObj.companyId));
-    dispatch(fetchAttendanceCount(userObj.companyId));
-    dispatch(fetchProgressNoteCount(userObj.companyId));
-    dispatch(fetchShiftAnalysisCount(userObj.companyId));
-    dispatch(fetchAdmin());
-    dispatch(fetchStaff());
-    dispatch(fetchClient());
-    dispatch(fetchDocument());
-    dispatch(fetchTicket());
-  }, [dispatch, userObj.companyId, clients, admin, ticket]);
+    dispatch(fetchShiftRosterCount(id.companyId));
+    dispatch(fetchAttendanceCount(id.companyId));
+    dispatch(fetchAttendanceCount(id.companyId));
+    dispatch(fetchProgressNoteCount(id.companyId));
+    dispatch(fetchShiftAnalysisCount(id.companyId));
+    dispatch(fetchAdmin(id.companyId));
+    dispatch(fetchStaff(id.companyId));
+    dispatch(fetchClient(id.companyId));
+    dispatch(fetchDocument(id.companyId));
+    dispatch(fetchTicket(id.companyId));
+  }, [dispatch, id.companyId, clients, admin, ticket]);
   useEffect(() => {
     setRecentUsers(clients.slice(-5))
 
@@ -64,7 +65,7 @@ const AdminDashboard = () => {
 
 
 
-
+  // console.log(userProfile);
 
 
 
@@ -85,7 +86,7 @@ const AdminDashboard = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                {/* <h3 className="page-title">Welcome {userObj.firstName}</h3> */}
+                {/* <h3 className="page-title">Welcome {id.firstName}</h3> */}
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item active">Dashboard</li>
                 </ul>

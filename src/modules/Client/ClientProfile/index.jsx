@@ -62,7 +62,7 @@ const ClientProfile = () => {
   }
   const FetchExising = async (e) => {
     try {
-      const {data} = await privateHttp.get(`/Profiles/${e}`, { cacheTimeout: 300000 })
+      const { data } = await privateHttp.get(`/Profiles/${e}`, { cacheTimeout: 300000 })
       // console.log(data);
       setProfile(data);
       setEditedProfile(data)
@@ -226,11 +226,11 @@ const ClientProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189"}} to={`/client/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
                             </div>
 
                             <div>
-                            <Link style={{ backgroundColor: "#405189"}} to={`/client/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
                             </div>
                           </div>
                         </div>
@@ -330,7 +330,7 @@ const ClientProfile = () => {
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
                   <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
-                  <option defaultValue hidden>Select Gender</option>
+                    <option defaultValue hidden>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>

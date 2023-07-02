@@ -32,11 +32,13 @@ const options = [
 
 ];
 const AddShiftRoaster = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
+
     const dispatch = useDispatch();
 
     // Fetch staff data and update the state
     useEffect(() => {
-        dispatch(fetchStaff());
+        dispatch(fetchStaff(id.companyId));
         dispatch(formatClient());
     }, [dispatch]);
 
@@ -48,11 +50,10 @@ const AddShiftRoaster = () => {
         // Check if staff data already exists in the store
         if (!staff.length) {
             // Fetch staff data only if it's not available in the store
-            dispatch(fetchStaff());
+            dispatch(fetchStaff(id.companyId));
         }
     }, [dispatch, staff]);
 
-    const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
     const [loading, setLoading] = useState(false)
     const [selectedClient, setSelectedClient] = useState([]);

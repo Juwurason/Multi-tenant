@@ -22,14 +22,15 @@ import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchProgress, filterProgress } from '../../../store/slices/ProgressNoteSlice';
 
 const ProgressReport = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
     //Declaring Variables
     const dispatch = useDispatch();
 
     // Fetch staff data and update the state
     useEffect(() => {
         dispatch(fetchProgress());
-        dispatch(fetchStaff());
-        dispatch(fetchClient());
+        dispatch(fetchStaff(id.companyId));
+        dispatch(fetchClient(id.companyId));
     }, [dispatch]);
 
     // Access the entire state
@@ -41,7 +42,6 @@ const ProgressReport = () => {
 
 
     const { get } = useHttp();
-    const id = JSON.parse(localStorage.getItem('user'));
     const [loading1, setLoading1] = useState(false);
     const [cli, setCli] = useState('');
     const [sta, setSta] = useState('');

@@ -21,11 +21,13 @@ import dayjs from 'dayjs';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { useDispatch, useSelector } from 'react-redux';
 const AllEmployees = () => {
+  const id = JSON.parse(localStorage.getItem('user'));
+
   const dispatch = useDispatch();
 
   // Fetch staff data and update the state
   useEffect(() => {
-    dispatch(fetchStaff());
+    dispatch(fetchStaff(id.companyId));
   }, [dispatch]);
 
   // Access the entire state
@@ -36,12 +38,11 @@ const AllEmployees = () => {
     // Check if staff data already exists in the store
     if (!staff.length) {
       // Fetch staff data only if it's not available in the store
-      dispatch(fetchStaff());
+      dispatch(fetchStaff(id.companyId));
     }
   }, [dispatch, staff]);
 
   const { post, get } = useHttp();
-  const id = JSON.parse(localStorage.getItem('user'));
   const status = useRef(false);
 
 
@@ -126,7 +127,7 @@ const AllEmployees = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            dispatch(fetchStaff())
+            dispatch(fetchStaff(id.companyId))
           } else {
             toast.error(data.message);
           }
@@ -185,25 +186,20 @@ const AllEmployees = () => {
 
   }
   const HandleFilter = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await get(`/Staffs/get_active_staffs?companyId=${id.companyId}&IsActive=${status.current.value}`,
-      )
-      console.log(response);
+      const response = await get(`/Staffs/get_active_staffs?companyId=${id.companyId}&IsActive=${status.current.value}`);
+      const responseData = await response; // Await the Promise and access the data property
+      console.log(responseData.data); // Access the response data
 
-
+      // Further processing of the staff data...
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
-
-
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
     }
+  };
 
-
-
-
-  }
 
 
 

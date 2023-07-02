@@ -6,10 +6,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import useHttp from '../../../hooks/useHttp';
-import { useCompanyContext } from '../../../context';
 const RoleList = () => {
     const { uid } = useParams();
-    const { userProfile } = useCompanyContext();
     const [loading, setLoading] = useState(false)
     const [roles, setRoles] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState([]);
