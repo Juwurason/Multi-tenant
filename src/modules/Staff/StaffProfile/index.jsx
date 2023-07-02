@@ -140,7 +140,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
     formData.append("twitter", editedProfile.twitter);
     formData.append("linkedIn", editedProfile.linkedIn);
     formData.append("instagram", editedProfile.instagram);
-    formData.append("isActive", true);
+    formData.append("isActive", profile.isActive);
     formData.append("facebook", editedProfile.facebook);
     try {
       setLoading(true)
