@@ -16,7 +16,6 @@ const ClientChart = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(true);
         dispatch(fetchChart({ value: selectedPeriod }))
             .then(() => setIsLoading(false))
             .catch(() => setIsLoading(false));

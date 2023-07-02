@@ -246,6 +246,7 @@ const AttendanceReport = () => {
     }
 
   }
+
   const AdjustAttendance = async (e) => {
 
     setLoading4(true)
