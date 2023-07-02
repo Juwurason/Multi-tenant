@@ -98,7 +98,6 @@
     "reactstrap": "^8.5.1",
     "recharts": "^2.4.3",
     "redux": "^4.2.1",
-    "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.2",
     "slick-carousel": "^1.8.1",
     "source-map-loader": "^4.0.1",
