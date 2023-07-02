@@ -53,7 +53,7 @@ const Loginpage = () => {
       setLoading(true)
 
       const { data } = await publicHttp.post('/Account/auth_login', info)
-    
+
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
@@ -153,11 +153,12 @@ const Loginpage = () => {
               <input type="email" className="form-control" placeholder="Email"
                 onChange={e => setEmail(e.target.value)}
                 value={email}
+                autoComplete={email}
                 required />
             </div>
             <div className="form-group d-flex justify-content-between border mt-4">
               <input
-
+                autoComplete={password}
                 onChange={e => setPassword(e.target.value)}
                 value={password}
                 type={pwdVisible ? "text" : "password"}

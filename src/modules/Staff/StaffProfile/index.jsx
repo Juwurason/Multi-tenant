@@ -5,7 +5,6 @@ import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
 import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
@@ -38,17 +37,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
       display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
     }
   }
-  // const FetchExising = async (e) => {
-  //   try {
-  //     const { data } = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
-  //     console.log(data)
-  //     setProfile(data);
-  //     setEditedProfile(data);
-  //   } catch (error) {
-  //     toast.error(error.response.data.message);
-  //     toast.error(error.response.data.title);
-  //   }
-  // }
+
 
 
   const handleModal0 = () => {
@@ -88,7 +77,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   const handleSave = async (e) => {
     e.preventDefault()
     const formData = new FormData();
-    
+
     for (const key in editedProfile) {
       const value = editedProfile[key];
       if (value === null) {
