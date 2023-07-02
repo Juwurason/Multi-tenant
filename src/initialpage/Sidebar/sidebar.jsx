@@ -36,7 +36,7 @@ const Sidebar = (props) => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   const claims = JSON.parse(localStorage.getItem('claims'));
-  const requiredClaimTypes = ['Staff Dashboard', 'otherClaim1', 'otherClaim2'];
+  const requiredClaimTypes = ['Staff Dashboard', 'Progress Note'];
 
 const hasRequiredClaims = requiredClaimTypes.every(requiredClaimType =>
   claims.some(claim => claim.type === requiredClaimType)
