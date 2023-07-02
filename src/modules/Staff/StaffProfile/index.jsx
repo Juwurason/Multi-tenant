@@ -11,7 +11,7 @@ import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
 
-const StaffProfile = ({staffOne, FetchData}) => {
+const StaffProfile = ({ staffOne, FetchData }) => {
   const { uid } = useParams()
   // const [staffOne, setStaffOne] = useState({});
   const [profile, setProfile] = useState({})
@@ -51,8 +51,8 @@ const StaffProfile = ({staffOne, FetchData}) => {
   }
   const FetchExising = async (e) => {
     try {
-      const {data} = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
-    console.log(data)
+      const { data } = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
+      console.log(data)
       setProfile(data);
       setEditedProfile(data);
     } catch (error) {
@@ -60,7 +60,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
       toast.error(error.response.data.title);
     }
   }
-  // http://localhost:3001/staff/main/edit-progress/7918/8260
+
 
   const handleModal0 = (e) => {
     setInformModal(true)
@@ -190,8 +190,8 @@ const StaffProfile = ({staffOne, FetchData}) => {
               <div className="col-sm-12">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Staff</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Staff</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
               </div>
@@ -217,7 +217,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                             <div className="small">About Me : {staffOne.aboutMe === "null" ? "" : staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189"}} to={`/staff/main/document`} className="py-1 px-2 rounded text-white">Staff Doc</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/staff/staff/document`} className="py-1 px-2 rounded text-white">Staff Doc</Link>
                             </div>
                           </div>
                         </div>
@@ -317,7 +317,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
                   <select className="form-control" name="gender" value={editedProfile.gender || ''} onChange={handleInputChange}>
-                  <option defaultValue hidden>Select Gender</option>
+                    <option defaultValue hidden>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
@@ -331,7 +331,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
 
                 <div className="form-group col-md-12">
                   <label>About Me</label><br />
-                  <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe  || ''} onChange={handleInputChange}></textarea>
+                  <textarea className='form-control' name="aboutMe" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.aboutMe || ''} onChange={handleInputChange}></textarea>
                 </div>
 
 
@@ -458,12 +458,12 @@ const StaffProfile = ({staffOne, FetchData}) => {
                           <div className="title">Post Code</div>
                           <div className="text">{staffOne.postcode}</div>
                         </li>
-                        
+
                         <li>
                           <div className="title">Tel</div>
                           <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                         </li>
-                        
+
                         <li>
                           <div className="title">Marital status</div>
                           <div className="text"></div>
@@ -764,7 +764,7 @@ const StaffProfile = ({staffOne, FetchData}) => {
                       <ul className="personal-info">
                         <li>
                           <div className="title"><FaInstagram /> Instagram</div>
-                          <div className="text">{staffOne.instagram === "null" || staffOne.instagram === "undefined" || staffOne.instagram === ""  ?  "---" : staffOne.instagram}</div>
+                          <div className="text">{staffOne.instagram === "null" || staffOne.instagram === "undefined" || staffOne.instagram === "" ? "---" : staffOne.instagram}</div>
                         </li>
                         <li>
                           <div className="title"><FaFacebook /> Facebook</div>

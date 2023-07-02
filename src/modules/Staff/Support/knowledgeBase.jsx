@@ -345,7 +345,7 @@ const KnowledgeBase = () => {
                         <div className="col">
                             <h3 className="page-title">Knowledge Base</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Knowledge Base</li>
                             </ul>
                         </div>

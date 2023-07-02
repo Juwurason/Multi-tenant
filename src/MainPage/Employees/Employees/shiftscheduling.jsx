@@ -322,7 +322,7 @@ const ShiftScheduling = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Shift Roster</title>
-          <meta name="description" content="Shift Roaster" />
+          <meta name="description" content="Shift Roster" />
         </Helmet>
 
         {/* Page Content */}
@@ -401,9 +401,7 @@ const ShiftScheduling = () => {
                 >
 
 
-                  {loading ? <div className="spinner-grow text-light" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div> : "Load"}
+                  Load
                 </button>
 
               </div>
@@ -416,7 +414,7 @@ const ShiftScheduling = () => {
                 >
                   {loading3 ? <div className="spinner-grow text-light" role="status">
                     <span className="sr-only">Loading...</span>
-                  </div> : "Send Roaster Notification"}
+                  </div> : "Send Roster Notification"}
                 </button>
 
               </div>
@@ -451,11 +449,22 @@ const ShiftScheduling = () => {
                   </button>
                 </span>
 
-                <span>
-                  <h1 className='text-muted fw-bold'>
-                    {startDate.format('YYYY')}
-                  </h1>
-                </span>
+                {
+                  loading ?
+                    <div className="text-center d-flex align-items-center gap-2 ">
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      <span>Please Wait</span>
+                    </div>
+
+                    :
+                    <span>
+                      <h1 className='text-muted fw-bold'>
+                        {startDate.format('YYYY')}
+                      </h1>
+                    </span>
+                }
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                     <option defaultValue hidden>Week</option>
@@ -808,7 +817,7 @@ const ShiftScheduling = () => {
             size="lg"
             onHide={() => setPeriodicModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Add New Shift Roaster</Modal.Title>
+              <Modal.Title>Add New Shift Roster</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="row">

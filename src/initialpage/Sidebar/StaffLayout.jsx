@@ -5,12 +5,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, Route, useHistory, withRouter } from 'react-router-dom';
 
 // router service
-import routerService from "../../staff_Routes";
+import routerService from "../../router_service";
 
-import Header from './header.jsx';
-import SidebarContent from './sidebar';
 import StaffHeader from '../../modules/Staff/Components/StaffHeader';
-import StaffSidebar from '../../modules/Staff/Components/StaffSidebar';
+import Sidebar from './sidebar';
 
 const StaffLayout = (props) => {
     const navigate = useHistory()
@@ -40,7 +38,7 @@ const StaffLayout = (props) => {
                         <Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
                     )}
                 </div>
-                <StaffSidebar onMenuClick={(value) => toggleMobileMenu()} />
+                <Sidebar onMenuClick={(value) => toggleMobileMenu()} />
 
             </div>
         </>

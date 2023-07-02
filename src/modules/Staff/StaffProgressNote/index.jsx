@@ -268,7 +268,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
                             <div className="col">
                                 <h3 className="page-title">Progress Note Report</h3>
                                 <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Progress Note Report</li>
                                 </ul>
                             </div>
@@ -359,23 +359,23 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
                                         <div className="form-group">
                                             <label className="col-form-label">FollowUp:</label>
                                             <div>
-                                                <textarea rows={2} className="form-control summernote" placeholder=""  name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
+                                                <textarea rows={2} className="form-control summernote" placeholder="" name="followUp" value={selectedActivity.followUp || ''} onChange={handleInputChange} />
                                             </div>
                                         </div>
 
                                         <div className="form-group">
                                             <label className="col-form-label">Progress:</label>
                                             <div>
-                                                <textarea rows={2} className="form-control summernote" placeholder=""  name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} />
-                                                
-                                                </div>
+                                                <textarea rows={2} className="form-control summernote" placeholder="" name="progress" value={selectedActivity.progress || ''} onChange={handleInputChange} />
+
+                                            </div>
 
                                         </div>
 
                                         <div className="form-group">
                                             <label className="col-form-label">Report:</label>
                                             <div>
-                                            <textarea rows={2} className="form-control summernote" placeholder=""  name="report" value={selectedActivity.report || ''} onChange={handleInputChange} />
+                                                <textarea rows={2} className="form-control summernote" placeholder="" name="report" value={selectedActivity.report || ''} onChange={handleInputChange} />
                                             </div>
                                         </div>
 

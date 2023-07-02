@@ -65,7 +65,7 @@ const Loginpage = () => {
       }
 
       if (data.userProfile?.role === "Staff") {
-        navigate.push('/staff/main/dashboard')
+        navigate.push('/staff/staff/dashboard')
         localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }

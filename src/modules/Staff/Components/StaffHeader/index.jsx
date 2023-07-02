@@ -51,7 +51,7 @@ const StaffHeader = (props) => {
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
-                <Link to="/staff/main/dashboard" className="logo">
+                <Link to="/staff/staff/dashboard" className="logo">
                     <img src={headerlogo} width={40} height={40} alt="" />
                 </Link>
             </div>
@@ -75,14 +75,14 @@ const StaffHeader = (props) => {
 
                 <li className="nav-item dropdown has-arrow flag-nav">
                     <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                        <span className='fw-bold' style={{fontSize: "16px"}}>
+                        <span className='fw-bold' style={{ fontSize: "16px" }}>
                             {timeString}
 
                         </span>
                     </a>
 
                 </li>
-                
+
                 {/* /Search */}
                 {/* Flag */}
                 <li className="nav-item">
@@ -108,7 +108,7 @@ const StaffHeader = (props) => {
                 {/* /Notifications */}
                 {/* Message Notifications */}
                 <li className="nav-item dropdown">
-                    <Link to={'/staff/main/messageInbox'} >
+                    <Link to={'/staff/staff/messageInbox'} >
                         <i className="fa fa-comment-o" />
                         {/* <span className="badge badge-pill">8</span> */}
                     </Link>
@@ -157,8 +157,8 @@ const StaffHeader = (props) => {
 
                             </div>
                         </div>
-                        <Link className="dropdown-item" to={"/staff/main/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                        <Link className="dropdown-item" to={"/staff/main/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                        <Link className="dropdown-item" to={"/staff/staff/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                        <Link className="dropdown-item" to={"/staff/staff/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
@@ -181,8 +181,8 @@ const StaffHeader = (props) => {
                     <i className="fa fa-ellipsis-v" /></a>
                 <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
 
-                    <Link className="dropdown-item" to={"/staff/main/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-                    <Link className="dropdown-item" to={"/staff/main/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <Link className="dropdown-item" to={"/staff/staff/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
+                    <Link className="dropdown-item" to={"/staff/staff/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>

@@ -34,7 +34,7 @@ const StaffChangePassword = () => {
       console.log(data);
       if (data.status === "Success") {
         toast.success(data.message)
-        navigate.push("/staff/main/dashboard")
+        navigate.push("/staff/staff/dashboard")
       } else {
         toast.error(data.message)
         return

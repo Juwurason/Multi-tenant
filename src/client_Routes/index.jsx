@@ -22,10 +22,10 @@ import ClientRoute from '../modules/Client';
 
 export default [
 
-    // {
-    //     path: 'main',
-    //     component: ClientRoute
-    //  },
+    {
+        path: 'main',
+        component: ClientRoute
+    },
 
     {
         path: 'client',

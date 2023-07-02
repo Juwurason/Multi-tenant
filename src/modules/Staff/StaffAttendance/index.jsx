@@ -17,11 +17,11 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import moment from 'moment';
 
-const StaffAttendance = ({staffAtten}) => {
+const StaffAttendance = ({ staffAtten }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
- 
+
   useEffect(() => {
     if ($('.select').length > 0) {
       $('.select').select2({
@@ -67,7 +67,7 @@ const StaffAttendance = ({staffAtten}) => {
         const duration = clockOutTime.diff(clockInTime, 'minutes');
         const hours = Math.floor(duration / 60);
         const minutes = duration % 60;
-    
+
         return `${hours}h ${minutes}m`;
       },
       sortable: false,
@@ -144,20 +144,20 @@ const StaffAttendance = ({staffAtten}) => {
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-      <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
-      <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
-      <div>
-        <Link to={`/staff/main/attendance-report/${data.attendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
-        >
-          Add Report
-        </Link> |
-        <Link to={`/staff/main/attendance-details/${data.attendanceId}`}
-         className="btn text-secondary fw-bold" style={{ fontSize: "12px" }}>
-          Details
-        </Link>
-      </div>
+        <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
+        <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+        <div>
+          <Link to={`/staff/staff/attendance-report/${data.attendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }}
+          >
+            Add Report
+          </Link> |
+          <Link to={`/staff/staff/attendance-details/${data.attendanceId}`}
+            className="btn text-secondary fw-bold" style={{ fontSize: "12px" }}>
+            Details
+          </Link>
+        </div>
 
-    </div>
+      </div>
     );
   };
 
@@ -187,11 +187,11 @@ const StaffAttendance = ({staffAtten}) => {
               <div className="col">
                 <h3 className="page-title">Attendance</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Attendance</li>
                 </ul>
               </div>
-       
+
             </div>
           </div>
 

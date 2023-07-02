@@ -79,7 +79,7 @@ const CreateProgressNote = () => {
       if (data.status === 'Success') {
         localStorage.setItem("rosterId", uid);
         localStorage.setItem("progressNoteId", data.progressNote.progressNoteId);
-        navigate.push(`/staff/main/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
+        navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }
       setLoading1(false)
@@ -108,7 +108,7 @@ const CreateProgressNote = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Create Progress Note</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Create Progress Note</li>
                 </ul>
               </div>

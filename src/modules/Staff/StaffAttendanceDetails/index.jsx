@@ -73,8 +73,8 @@ const AttendanceDetails = () => {
                             <div className="col-sm-12">
                                 <h3 className="page-title">Attendance Details</h3>
                                 <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active"><Link to="/staff/main/attendance">Attendance</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item active"><Link to="/staff/staff/attendance">Attendance</Link></li>
                                     <li className="breadcrumb-item active">Attendance Details</li>
                                 </ul>
                             </div>
@@ -86,7 +86,7 @@ const AttendanceDetails = () => {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="border-bottom">
-                                        <Link to="/staff/main/attendance" className="edit-icon bg-danger text-white" >
+                                        <Link to="/staff/staff/attendance" className="edit-icon bg-danger text-white" >
                                             <i className="la la-times-circle" />
                                         </Link>
                                         <h3>Attendance Details</h3>
