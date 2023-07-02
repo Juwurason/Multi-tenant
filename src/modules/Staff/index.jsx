@@ -40,6 +40,7 @@ const StaffRoute = ({ match }) => {
   const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(false);
   const [staffOne, setStaffOne] = useState({});
+  const [editedProfile, setEditedProfile] = useState({});
   const [staffAvail, setStaffAvail] = useState([]);
   const [staffAtten, setStaffAttendance] = useState([]);
   const [staffPro, setStaffPro] = useState([]);
@@ -63,7 +64,8 @@ const StaffRoute = ({ match }) => {
 
     try {
       const { data } = await get(`/Staffs/${staffProfile.staffId}`, { cacheTimeout: 300000 })
-      setStaffOne(data)
+      setStaffOne(data);
+      setEditedProfile({ ...data });
       setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message)
@@ -182,7 +184,9 @@ const StaffRoute = ({ match }) => {
       <Route path={`${match.url}/edit-progress/:uid/:pro`} render={() => <EditProgressNote />} />
       <Route path={`${match.url}/table`} render={() => <StaffTable />} />
       <Route path={`${match.url}/profile`}
-        render={() => <StaffProfile staffOne={staffOne} FetchData={FetchData} />} />
+        render={() => <StaffProfile staffOne={staffOne} FetchData={FetchData}
+          editedProfile={editedProfile} setEditedProfile={setEditedProfile}
+        />} />
       <Route path={`${match.url}/edit-profile`} render={() => <StaffEditProfile />} />
       <Route path={`${match.url}/changepassword`} render={() => <StaffChangePassword />} />
       <Route path={`${match.url}/attendance`}

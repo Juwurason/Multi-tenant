@@ -200,7 +200,7 @@ const ClientProfile = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
               </div>
@@ -213,8 +213,10 @@ const ClientProfile = () => {
                 <div className="col-md-12">
                   <div className="profile-view">
                     <div className="profile-img-wrap">
-                      <div className="profile-img">
-                        <a className='text-primary' href="#"><img alt="" src={staffOne.imageUrl === null || staffOne.imageUrl === "null" ? Avatar_02 : staffOne.imageUrl} /></a>
+                      <div className="profile-img border border-2 rounded rounded-circle">
+                        <a className='text-primary rounded rounded-circle' href="#"><img alt=""
+                          className='rounded rounded-circle'
+                          src={staffOne.imageUrl === null || staffOne.imageUrl === "null" ? "" : staffOne.imageUrl} /></a>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -226,11 +228,11 @@ const ClientProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
                             </div>
 
                             <div>
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
                             </div>
                           </div>
                         </div>

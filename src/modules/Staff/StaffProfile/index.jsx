@@ -11,11 +11,7 @@ import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
 
-const StaffProfile = ({ staffOne, FetchData }) => {
-  const { uid } = useParams()
-  // const [staffOne, setStaffOne] = useState({});
-  const [profile, setProfile] = useState({})
-  const [editedProfile, setEditedProfile] = useState({});
+const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState('');
   const [informModal, setInformModal] = useState(false);
@@ -27,14 +23,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
   const privateHttp = useHttp()
 
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        width: '100%',
-        minimumResultsForSearch: -1,
-      });
-    }
-  });
+
   const styles = {
     main: {
       backgroundColor: 'black',
@@ -49,53 +38,47 @@ const StaffProfile = ({ staffOne, FetchData }) => {
       display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
     }
   }
-  const FetchExising = async (e) => {
-    try {
-      const { data } = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
-      console.log(data)
-      setProfile(data);
-      setEditedProfile(data);
-    } catch (error) {
-      toast.error(error.response.data.message);
-      toast.error(error.response.data.title);
-    }
-  }
+  // const FetchExising = async (e) => {
+  //   try {
+  //     const { data } = await privateHttp.get(`/Staffs/${e}`, { cacheTimeout: 300000 })
+  //     console.log(data)
+  //     setProfile(data);
+  //     setEditedProfile(data);
+  //   } catch (error) {
+  //     toast.error(error.response.data.message);
+  //     toast.error(error.response.data.title);
+  //   }
+  // }
 
 
-  const handleModal0 = (e) => {
+  const handleModal0 = () => {
     setInformModal(true)
-    FetchExising(e);
 
   }
-  const handleModal1 = (e) => {
+  const handleModal1 = () => {
     setStateModal(true)
-    FetchExising(e);
 
   }
-  const handleModal2 = (e) => {
+  const handleModal2 = () => {
     setKinModal(true)
-    FetchExising(e);
   }
-  const handleModal3 = (e) => {
+  const handleModal3 = () => {
     setBankModal(true)
-    FetchExising(e);
   }
-  const handleModal4 = (e) => {
+  const handleModal4 = () => {
     setSocialModal(true);
-    FetchExising(e);
   }
 
 
-  function handleInputChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value;
-    const newValue = value === "" ? "" : value;
-    setEditedProfile({
-      ...editedProfile,
-      [name]: newValue
-    });
-  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedProfile((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+
   const handlechange = (e) => {
     setImage(e.target.files[0]);
   }
@@ -104,50 +87,23 @@ const StaffProfile = ({ staffOne, FetchData }) => {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    const formData = new FormData()
-    formData.append("CompanyId", id.companyId);
-    formData.append("StaffId", getStaffProfile.staffId);
-    formData.append("firstName", profile.firstName);
-    formData.append("email", profile.email);
-    formData.append("phoneNumber", profile.phoneNumber);
-    formData.append("surName", profile.surName);
-    formData.append("maxStaffId", profile.maxStaffId);
-    formData.append("middleName", editedProfile.middleName);
-    formData.append("gender", editedProfile.gender);
-    formData.append("dateOfBirth", editedProfile.dateOfBirth);
-    formData.append("aboutMe", editedProfile.aboutMe);
-    formData.append("address", profile.address);
-    formData.append("city", editedProfile.city);
-    formData.append("country", editedProfile.country);
-    formData.append("state", editedProfile.state);
-    formData.append("Postcode", editedProfile.postcode);
-    formData.append("accountName", editedProfile.accountName);
-    formData.append("accountNumber", editedProfile.accountNumber);
-    formData.append("bankName", editedProfile.bankName);
-    formData.append("branch", editedProfile.branch);
-    formData.append("bsb", editedProfile.bsb);
-    formData.append("suburb", editedProfile.kinSuburb);
-    formData.append("NextOfKin", editedProfile.nextOfKin);
-    formData.append("kinAddress", editedProfile.kinAddress);
-    formData.append("kinCity", editedProfile.kinCity);
-    formData.append("kinCountry", editedProfile.kinCountry);
-    formData.append("kinEmail", editedProfile.kinEmail);
-    formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
-    formData.append("kinPostcode", editedProfile.kinPostCode);
-    formData.append("kinState", editedProfile.kinState);
-    formData.append("relationship", editedProfile.relationship);
-    formData.append("imageFile", editedProfile.image);
-    formData.append("twitter", editedProfile.twitter);
-    formData.append("linkedIn", editedProfile.linkedIn);
-    formData.append("instagram", editedProfile.instagram);
-    formData.append("isActive", profile.isActive);
-    formData.append("facebook", editedProfile.facebook);
+    const formData = new FormData();
+    
+    for (const key in editedProfile) {
+      const value = editedProfile[key];
+      if (value === null) {
+        formData.append(key, ''); // Pass empty string if value is null
+      } else {
+        formData.append(key, value);
+      }
+    }
+
     try {
       setLoading(true)
       const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
         formData
       )
-      console.log(data)
+
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -204,8 +160,10 @@ const StaffProfile = ({ staffOne, FetchData }) => {
                 <div className="col-md-12">
                   <div className="profile-view">
                     <div className="profile-img-wrap">
-                      <div className="profile-img">
-                        <a className='text-primary' href="#"><img alt="" src={staffOne.imageUrl === null || staffOne.imageUrl === "" ? Avatar_02 : staffOne.imageUrl} /></a>
+                      <div className="profile-img border rounded rounded-circle">
+                        <a className='text-primary' href="#">
+                          <img alt="" src={staffOne.imageUrl || man} width={"100%"} className='rounded-circle' />
+                        </a>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -217,7 +175,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
                             <div className="small">About Me : {staffOne.aboutMe === "null" ? "" : staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189" }} to={`/staff/staff/document`} className="py-1 px-2 rounded text-white">Staff Doc</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/staff/staff/document`} className="py-1 px-2 rounded text-white">Staff Document</Link>
                             </div>
                           </div>
                         </div>
@@ -270,7 +228,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
           >
             <Modal.Header closeButton>
               <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                Update profile for {profile.firstName} {profile.lastName}
+                Update profile for {editedProfile.firstName} {editedProfile.lastName}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -291,11 +249,11 @@ const StaffProfile = ({ staffOne, FetchData }) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>SurName</label>
-                  <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={profile.firstName} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
@@ -303,7 +261,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="number" className="form-control" value={editedProfile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -312,7 +270,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={profile.email} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.email} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
@@ -391,7 +349,7 @@ const StaffProfile = ({ staffOne, FetchData }) => {
                         >
                           <Modal.Header closeButton>
                             <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                              Update profile for {profile.firstName} {profile.lastName}
+                              Update profile for {editedProfile.firstName} {editedProfile.lastName}
                             </Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
@@ -719,22 +677,22 @@ const StaffProfile = ({ staffOne, FetchData }) => {
                               <div className="col-md-6">
                                 <div className="form-group">
                                   <label>Instagram</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='instagram' value={editedProfile.instagram || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https:......' name='instagram' value={editedProfile.instagram || ''} onChange={handleInputChange} />
                                 </div>
 
                                 <div className="form-group">
                                   <label>Facebook</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='facebook' value={editedProfile.facebook || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https:......' name='facebook' value={editedProfile.facebook || ''} onChange={handleInputChange} />
                                 </div>
                               </div>
                               <div className="col-md-6">
                                 <div className="form-group">
                                   <label>Twitter</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='twitter' value={editedProfile.twitter || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https:......' name='twitter' value={editedProfile.twitter || ''} onChange={handleInputChange} />
                                 </div>
                                 <div className="form-group">
                                   <label>LinkedIn</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='linkedIn' value={editedProfile.linkedIn || ''} onChange={handleInputChange} />
+                                  <input type="text" className="form-control" placeholder='https:......' name='linkedIn' value={editedProfile.linkedIn || ''} onChange={handleInputChange} />
                                 </div>
 
                               </div>

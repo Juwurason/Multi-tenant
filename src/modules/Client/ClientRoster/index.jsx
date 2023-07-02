@@ -270,8 +270,8 @@ const ClientRoster = () => {
                             <div className="col">
                                 <h3 className="page-title">Shift Roster</h3>
                                 <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/client/client/Dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item"><Link to="/client/client/Dashboard">Client</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/client/app/dashboard">Client</Link></li>
                                     <li className="breadcrumb-item active">Shift Roster</li>
                                 </ul>
                             </div>

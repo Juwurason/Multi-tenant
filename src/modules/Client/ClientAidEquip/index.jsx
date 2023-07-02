@@ -390,7 +390,7 @@ const ClientAidEquip = () => {
                         <div className="col">
                             {/* <h3 className="page-title">Staff Aids & Equipments</h3> */}
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Aids & Equipments</li>
                             </ul>
                         </div>

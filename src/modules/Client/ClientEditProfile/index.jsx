@@ -341,7 +341,7 @@ const ClientEditProfile = () => {
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-             </div>
+            </div>
 
           </div>
 
@@ -375,9 +375,9 @@ const ClientEditProfile = () => {
 
         </div>
         <div className="form-group">
-              <label>NDIS Plan Notes If Yes above, Include Plan approval Date and if No, State reason (e.g waiting for plan approval or plan review)</label><br />
-              <textarea className='form-control' name="ndisPlanNote" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.ndisPlanNote || ''} onChange={handleInputChange}></textarea>
-            </div>
+          <label>NDIS Plan Notes If Yes above, Include Plan approval Date and if No, State reason (e.g waiting for plan approval or plan review)</label><br />
+          <textarea className='form-control' name="ndisPlanNote" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.ndisPlanNote || ''} onChange={handleInputChange}></textarea>
+        </div>
       </div>
     );
   }
@@ -408,7 +408,7 @@ const ClientEditProfile = () => {
                         <span className="sr-only">Loading...</span>
                       </div> : "Save"}
                     </button>}
-                  <Link to="/client/client-profile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
+                  <Link to="/client/app/client-profile" style={{ marginLeft: '10px' }}><button className="btn btn-danger"> Cancel </button></Link>
                 </div>
               </form>
             </div>

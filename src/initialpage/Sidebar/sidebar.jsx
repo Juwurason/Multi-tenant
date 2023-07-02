@@ -79,6 +79,7 @@ console.log(hasRequiredClaims)
 
                 </li> : ""
               }
+              {/* Staff Dashboard */}
               {
                 user.role === "Staff" || hasRequiredClaims ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
@@ -122,6 +123,7 @@ console.log(hasRequiredClaims)
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
 
+              {/* Staff SideBar Starts */}
               {user.role === "Staff" ? <li className="menu-title">
                 <span>Account Management</span>
               </li> : ""}
@@ -194,6 +196,9 @@ console.log(hasRequiredClaims)
                   : ""
                 }
               </li> : ""}
+
+
+              {/* Staff SideBar Ends */}
 
               {user.role === "CompanyAdmin" ? <li className="menu-title">
                 <span>Rostering Management</span>
@@ -268,6 +273,96 @@ console.log(hasRequiredClaims)
 
                     <li><Link className={pathname.includes('knowledge-base') ? "active" : pathname.includes('knowledge-base')}
                       to="/app/support/knowledge-base" onClick={() => onMenuClik()}>Knowledge Base</Link>
+                    </li>
+
+                  </ul>
+                  : ""
+                }
+              </li> : ""}
+              {/* Client SideBar */}
+              {user.role === "Client" ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
+
+                <Link to="/client/app/dashboard"  >
+                  <i className="la la-dashboard" />
+                  <span> Dashboard</span></Link>
+
+              </li> : ""}
+
+              {user.role === "Client" ? <li className="menu-title">
+                <span>Account Management</span>
+              </li> : ""}
+              {user.role === "Client" ? <li className={pathname.includes('client-profile') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('change-password') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/change-password"><i className="la la-lock" /> <span>Change Password</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className="menu-title">
+                <span>Client Management</span>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-roster') || pathname.includes('client-roster') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-roster"><i className="la la-calendar" /> <span>Shift Roster</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-rep') || pathname.includes('client-rep') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-rep"><i className="la la-rub" /> <span>Representatives</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-disability') || pathname.includes('client-disability') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-disability"><i className="la la-wheelchair" /> <span>Disability Support Needs</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-aid-equip') || pathname.includes('client-aid-equip') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-aid-equip"><i className="la la-eraser" /> <span>Aids & Equipments</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-daily-living') || pathname.includes('client-daily-living') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-daily-living"><i className="la la-sun-o" /> <span>Daily Living & Night Support</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-health') || pathname.includes('client-health') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-health"><i className="la la-yelp" /> <span>Health Support Needs</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-behaviuor') || pathname.includes('client-behaviuor') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-behaviuor"><i className="la la-bell-o" /> <span>Behaviour Support Needs</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-document') || pathname.includes('client-document') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-document"><i className="la la-book" /> <span>Documents</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className="menu-title">
+                <span>Communication</span>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-message') || pathname.includes('client-message') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-message"><i className="la la-comment" /> <span>Messages</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className="submenu">
+                <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
+                  e.preventDefault()
+                  toggleSidebar(isSideMenu == "support" ? "" : "support")
+                }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "support" ?
+                  <ul>
+                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('client-view_ticket') ? "active" : pathname.includes('client-view_ticket') ?
+                      "active" : pathname.includes('client-view_ticket') ? "active" : ""}
+                      to="/client/app/client-view_ticket">View Tickets</Link>
+                    </li>
+
+                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('client-raise_ticket') ? "active" : pathname.includes('client-raise_ticket') ?
+                      "active" : pathname.includes('client-raise_ticket') ? "active" : ""}
+                      to="/client/app/client-raise_ticket">Raise a Ticket</Link>
+                    </li>
+
+                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('client-knowledge_base') ? "active" : pathname.includes('client-knowledge_base') ?
+                      "active" : pathname.includes('client-knowledge_base') ? "active" : ""}
+                      to="/client/app/client-knowledge_base">Knowledge Base</Link>
                     </li>
 
                   </ul>
