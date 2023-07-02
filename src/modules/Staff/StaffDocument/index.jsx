@@ -377,7 +377,7 @@ const StaffDocument = ({ staffDocument, FetchData }) => {
               <div className="col">
                 <h3 className="page-title">Documents</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">User Documents</li>
                 </ul>
               </div>

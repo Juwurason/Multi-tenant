@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchAdmin = createAsyncThunk('Admin/fetchAdmin', async () => {
-    const response = await api.fetchAdminData();
+export const fetchAdmin = createAsyncThunk('Admin/fetchAdmin', async (companyId) => {
+    const response = await api.fetchAdminData(companyId);
     // const filteredData = response.filter((admin) => admin.isActive);
     return response;
 });

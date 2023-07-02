@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const AllUser = () => {
-
+    const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
 
     // Fetch user data and update the state
@@ -39,13 +39,12 @@ const AllUser = () => {
         // Check if user data already exists in the store
         if (!users.length) {
             // Fetch user data only if it's not available in the store
-            dispatch(fetchUser());
+            dispatch(fetchUser(id.companyId));
         }
     }, [dispatch, users]);
 
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
-    const id = JSON.parse(localStorage.getItem('user'));
 
 
 

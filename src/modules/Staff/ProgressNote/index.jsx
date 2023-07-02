@@ -42,7 +42,7 @@ const ProgressNote = () => {
       setStaff(staff.staff.fullName);
       // console.log(staff);
       setClientName(staff.clients)
-      
+
       setDetails(staff.profile);
       setLoading(false);
     } catch (error) {
@@ -96,11 +96,11 @@ const ProgressNote = () => {
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
       if (data.status === 'Success') {
         if (data.progressNote.progressNoteId === 0) {
-          navigate.push(`staff/main/create-progress/${uid}`)
+          navigate.push(`staff/staff/create-progress/${uid}`)
         }
         localStorage.setItem("rosterId", uid);
         localStorage.setItem("progressNoteId", data.progressNote.progressNoteId);
-        navigate.push(`/staff/main/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
+        navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }
       setLoading1(false)
@@ -151,7 +151,7 @@ const ProgressNote = () => {
               'success'
             )
 
-            navigate.push(`/staff/main/report/${uid}`)
+            navigate.push(`/staff/staff/report/${uid}`)
           }
         } catch (error) {
           // console.log(error);
@@ -182,7 +182,7 @@ const ProgressNote = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Progress Note</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Progress Note</li>
                 </ul>
               </div>

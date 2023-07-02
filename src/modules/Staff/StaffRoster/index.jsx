@@ -21,7 +21,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
   const [staffCancel, setStaffCancel] = useState('');
- 
+
   // const [loading, setLoading] = useState(false);
 
 
@@ -32,7 +32,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const privateHttp = useHttp()
 
-  
+
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
@@ -46,16 +46,16 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
 
   const [editedProfile, setEditedProfile] = useState({});
 
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditedProfile({
-            ...editedProfile,
-            [name]: newValue
-        });
-    }
+  function handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const newValue = value === "" ? "" : value;
+    setEditedProfile({
+      ...editedProfile,
+      [name]: newValue
+    });
+  }
 
   const HandleSubmit = async (e) => {
     setReasonModal(true)
@@ -65,11 +65,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
       // console.log(data);
       setEditedProfile(data);
       // setLoading(false)
-  } catch (error) {
+    } catch (error) {
       toast.error(error.response.data.message);
       toast.error(error.response.data.title);
       // setLoading(false)
-  }
+    }
   };
 
   const CancelShift = async () => {
@@ -136,11 +136,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     }
   }
 
- 
+
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = () => {
-    navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
+    navigate.push(`/staff/staff/edit-progress/${rosterId}/${progressNoteId}`);
   }
   const [showModal, setShowModal] = useState(false);
   const [reasonModal, setReasonModal] = useState(false);
@@ -166,7 +166,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
               <div className="col">
                 <h3 className="page-title">Shift Roaster</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Shift Roaster</li>
                 </ul>
               </div>
@@ -228,7 +228,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div
                       className="col-sm-12 text-center border roster p-2"
                       style={{ height: "65vh", overflow: "auto", overflowX: "hidden" }}
@@ -255,7 +255,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                   fontSize: '10px',
                                   overflow: 'hidden',
                                   backgroundColor:
-                                        activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
+                                    activity.status === "Pending" ? "#ffbc34" : activity.status === "Cancelled" ? "#f62d51" : "#405189"
                                 }}
                               >
                                 <div onClick={() => handleActivityClick(activity)}>
@@ -278,7 +278,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                             const longitude = position.coords.longitude;
                                             localStorage.setItem("latit", latitude)
                                             localStorage.setItem("log", longitude)
-                                            navigate.push(`/staff/main/progress/${activity.shiftRosterId}`);
+                                            navigate.push(`/staff/staff/progress/${activity.shiftRosterId}`);
                                           },
                                           (error) => {
                                             toast.error('Error getting location:', error.message);
@@ -290,7 +290,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     }}
                                       className="bg-success p-1 rounded"
                                     >
-                                     <BiStopwatch /> Clock-In
+                                      <BiStopwatch /> Clock-In
                                     </small>
                                     {/* <small
                                       className='bg-secondary p-1 rounded'

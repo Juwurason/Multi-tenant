@@ -32,11 +32,13 @@ const options = [
 
 ];
 const EditShiftRoaster = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
+
     const dispatch = useDispatch();
 
     // Fetch staff data and update the state
     useEffect(() => {
-        dispatch(fetchStaff());
+        dispatch(fetchStaff(id.companyId));
         dispatch(formatClient());
     }, [dispatch]);
 
@@ -46,7 +48,6 @@ const EditShiftRoaster = () => {
 
 
     const { uid } = useParams();
-    const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
     const { loading, setLoading } = useCompanyContext();
     const navigate = useHistory();

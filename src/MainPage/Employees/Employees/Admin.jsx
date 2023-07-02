@@ -29,7 +29,7 @@ const AllAdmin = () => {
 
     // Fetch admin data and update the state
     useEffect(() => {
-        dispatch(fetchAdmin());
+        dispatch(fetchAdmin(id.companyId));
     }, [dispatch]);
 
     // Access the entire state
@@ -40,7 +40,7 @@ const AllAdmin = () => {
         // Check if admin data already exists in the store
         if (!admin.length) {
             // Fetch admin data only if it's not available in the store
-            dispatch(fetchAdmin());
+            dispatch(fetchAdmin(id.companyId));
         }
     }, [dispatch, admin]);
 
@@ -131,7 +131,7 @@ const AllAdmin = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchAdmin());
+                        dispatch(fetchAdmin(id.companyId));
                     } else {
                         toast.error(data.message);
                     }

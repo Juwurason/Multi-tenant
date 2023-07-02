@@ -5,7 +5,7 @@ import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 
 const AddClient = () => {
-  const { userProfile } = useCompanyContext();
+  const id = JSON.parse(localStorage.getItem('user'));
   const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState('');
   const [surName, setSurName] = useState('');
@@ -46,7 +46,7 @@ const AddClient = () => {
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Profiles/add_client?userId=${userProfile.userId}`,
+      const { data } = await privateHttp.post(`/Profiles/add_client?userId=${id.userId}`,
         formData
       )
       toast.success(data.message)

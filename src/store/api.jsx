@@ -2,63 +2,63 @@ import axiosInstance from "./axiosInstance";
 
 const id = JSON.parse(localStorage.getItem('user'));
 
-const fetchUserData = async () => {
+const fetchUserData = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Account/get_all_users?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Account/get_all_users?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching User Data:', error);
         throw error;
     }
 };
-const fetchAdminData = async () => {
+const fetchAdminData = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Administrators?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Administrators?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching admin data:', error);
         throw error;
     }
 };
-const fetchStaffData = async () => {
+const fetchStaffData = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Staffs?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Staffs?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching staff data:', error);
         throw error;
     }
 };
-const fetchClientData = async () => {
+const fetchClientData = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Profiles?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Profiles?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching client data:', error);
         throw error;
     }
 };
-const fetchDocumentData = async () => {
+const fetchDocumentData = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Documents/get_all_documents?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Documents/get_all_documents?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching document data:', error);
         throw error;
     }
 };
-const fetchShiftRoaster = async () => {
+const fetchShiftRoaster = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/ShiftRosters/get_all_shift_rosters?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/ShiftRosters/get_all_shift_rosters?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching shift Roaster:', error);
         throw error;
     }
 };
-const fetchAttendance = async () => {
+const fetchAttendance = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Attendances/get_all_attendances_by_company?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Attendances/get_all_attendances_by_company?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching Attendance:', error);
@@ -121,9 +121,9 @@ const fetchProgressNotes = async () => {
         throw error;
     }
 };
-const fetchTicket = async () => {
+const fetchTicket = async (companyId) => {
     try {
-        const response = await axiosInstance.get(`/Tickets/get_all_tickets?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Tickets/get_all_tickets?companyId=${companyId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching Tickets', error);

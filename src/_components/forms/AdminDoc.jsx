@@ -130,7 +130,6 @@ const AdminDoc = () => {
             alert('Please select a PDF or DOC file');
         }
     };
-    const id = JSON.parse(localStorage.getItem('user'));
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault()
@@ -155,7 +154,7 @@ const AdminDoc = () => {
             toast.success(data.message)
 
             setLoading1(false)
-            FetchStaff();
+            FetchStaff()
             setDocumentName("");
             setDocument(null);
             setExpire("");

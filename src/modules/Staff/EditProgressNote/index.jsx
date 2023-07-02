@@ -38,7 +38,7 @@ const EditProgressNote = () => {
       setClientName(staff.clients)
       setLoading(false);
     } catch (error) {
-     toast.error(error.response.data.message)
+      toast.error(error.response.data.message)
       toast.error(error.response.data.title)
     }
     finally {
@@ -51,7 +51,7 @@ const EditProgressNote = () => {
       setEditPro(editpro.data);
       setLoading(false)
     } catch (error) {
-     toast.error(error.response.data.message)
+      toast.error(error.response.data.message)
       toast.error(error.response.data.title)
     }
     finally {
@@ -151,11 +151,11 @@ const EditProgressNote = () => {
               'success'
             )
             setLoading2(false)
-            navigate.push(`/staff/main/report/${uid}`)
+            navigate.push(`/staff/staff/report/${uid}`)
           }
         } catch (error) {
-         toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
           toast.error(error.response.data.message);
           setLoading2(false)
         }
@@ -185,7 +185,7 @@ const EditProgressNote = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Progress Note</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Edit Progress Note</li>
                 </ul>
               </div>

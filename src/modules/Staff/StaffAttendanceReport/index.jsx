@@ -25,10 +25,10 @@ const AttendanceReport = () => {
   const FetchSchedule = async () => {
     setLoading(true)
     try {
-      const {data} = await get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
+      const { data } = await get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
       // console.log(data);
       setEditPro(data)
-      
+
       setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message)
@@ -68,22 +68,22 @@ const AttendanceReport = () => {
   const SaveProgress = async (e) => {
     e.preventDefault()
     setLoading1(true)
-    const info = {   
-         attendanceId: uid,
-        report: editpro.report,
-        clockIn: editpro.clockIn,
-        clockOut: editpro.clockOut,
-        duration: editpro.duration,
-        inLongitude: editpro.inLongitude,
-        inLatitude: editpro.inLatitude,
-        startKm: editpro.startKm,
-        endKm: editpro.endKm,
-        staffId: editpro.staffId,
-        imageURL: editpro.imageURL,
-        companyID: user.companyId
+    const info = {
+      attendanceId: uid,
+      report: editpro.report,
+      clockIn: editpro.clockIn,
+      clockOut: editpro.clockOut,
+      duration: editpro.duration,
+      inLongitude: editpro.inLongitude,
+      inLatitude: editpro.inLatitude,
+      startKm: editpro.startKm,
+      endKm: editpro.endKm,
+      staffId: editpro.staffId,
+      imageURL: editpro.imageURL,
+      companyID: user.companyId
     }
     try {
-      const {data} = await post(`/Attendances/edit/${uid}?userId=${user.userId}`, info);
+      const { data } = await post(`/Attendances/edit/${uid}?userId=${user.userId}`, info);
       // console.log(data)
       toast.success(data.message);
       setLoading1(false);
@@ -114,8 +114,8 @@ const AttendanceReport = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Add A Report</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item active"><Link to="/staff/main/attendance">Attendance</Link></li>
+                  <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item active"><Link to="/staff/staff/attendance">Attendance</Link></li>
                   <li className="breadcrumb-item active">Add A Report</li>
                 </ul>
               </div>
@@ -153,10 +153,10 @@ const AttendanceReport = () => {
 
 
                     <div className="col-md-4">
-                        <div className="form-group">
-                          <label htmlFor="">Ending KiloMetre (Km) </label>
-                          <input type="text" placeholder="" name="endKm" value={editpro.endKm || ''} onChange={handleInputChange} className="form-control" />
-                        </div>
+                      <div className="form-group">
+                        <label htmlFor="">Ending KiloMetre (Km) </label>
+                        <input type="text" placeholder="" name="endKm" value={editpro.endKm || ''} onChange={handleInputChange} className="form-control" />
+                      </div>
                     </div>
 
                     <div className="form-group">
@@ -165,22 +165,22 @@ const AttendanceReport = () => {
                     </div>
                     <div className="form-group">
                       <div className="col-md-4">
-                      <label htmlFor="">ImageURL </label>
-                      <input type="file" className="form-control" accept=".pdf, .doc, .txt, .jpg, .jpeg, .png" onChange={e => setDocument(e.target.value)} />
+                        <label htmlFor="">ImageURL </label>
+                        <input type="file" className="form-control" accept=".pdf, .doc, .txt, .jpg, .jpeg, .png" onChange={e => setDocument(e.target.value)} />
                       </div>
                     </div>
                     <div className="form-group text-center mb-0">
                       <div className="text-center d-flex gap-2">
-                       
-                      <button
+
+                        <button
                           disabled={loading1 ? true : false}
                           className="btn btn-info add-btn text-white rounded-2 m-r-5"
                           onClick={SaveProgress}
-                          >{loading1 ? <div className="spinner-grow text-light" role="status">
-                            <span className="sr-only">Loading...</span>
-                          </div> : "Save"}</button>
+                        >{loading1 ? <div className="spinner-grow text-light" role="status">
+                          <span className="sr-only">Loading...</span>
+                        </div> : "Save"}</button>
                         <div>
-                        
+
                         </div>
                       </div>
                     </div>

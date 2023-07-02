@@ -43,7 +43,7 @@ const ClientDashboard = () => {
     };
   }, []);
 
-  
+
   const clientProfile = JSON.parse(localStorage.getItem('clientProfile'));
   async function FetchStaff() {
     setLoading(true)
@@ -140,7 +140,7 @@ const ClientDashboard = () => {
   };
 
   const [appoint, setAppoint] = useState("");
-  const userProfile = JSON.parse(localStorage.getItem('user'));
+  const id = JSON.parse(localStorage.getItem('user'));
   const [showModal, setShowModal] = useState(false);
   const [appointModal, setAppointModal] = useState(false)
   const [selectedActivity, setSelectedActivity] = useState(null);
@@ -162,7 +162,7 @@ const ClientDashboard = () => {
     }
     try {
       setLoading(true)
-      const { data } = await post(`ShiftRosters/add_appointment?userId=${userProfile.userId}&shiftId=${cli}&appointment=${appoint}`);
+      const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${appoint}`);
       // console.log(data);
       toast.success(data.message);
       setLoading(false);
@@ -261,13 +261,13 @@ const ClientDashboard = () => {
                           <button
                             className='btn btn-primary'
                             onClick={() => addAppoint(activitiesByDay[1][0]?.shiftRosterId)}
-                            disabled={ 
+                            disabled={
                               (dayjs(activitiesByDay[1][0]?.dateTo)).format('YYYY-MM-DD HH:mm:ss')
                               <
                               dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                           >
                             Add Appointment
-                          </button> 
+                          </button>
                         ) : (
                           <span>No Shift Today</span>
                         )}
@@ -297,7 +297,7 @@ const ClientDashboard = () => {
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
-                      <div style={{backgroundColor: "#5374A5"}} className="card-footer text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
+                      <div style={{ backgroundColor: "#5374A5" }} className="card-footer text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
                         View Details
 
                       </div>

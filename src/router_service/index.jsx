@@ -13,11 +13,10 @@ import Account from '../MainPage/Employees/Accounts'
 import Setup from '../MainPage/Employees/Setup'
 import Support from '../MainPage/Employees/Support'
 //Employees
-import Projects from '../MainPage/Employees/Projects';
 import Employee from '../MainPage/Employees/Employees';
-import ProjectList from '../MainPage/Employees/Projects/projectlist'
 //Messages
 import Message from '../MainPage/HR/Message'
+import StaffRoute from '../modules/Staff';
 
 export default [
    {
@@ -38,10 +37,7 @@ export default [
       component: Account,
    },
 
-   {
-      path: 'projects',
-      component: Projects
-   },
+
    {
       path: 'ui-interface',
       component: UIinterface
@@ -73,9 +69,10 @@ export default [
       path: 'setup',
       component: Setup
    },
-
    {
-      path: 'projectlist',
-      component: ProjectList
-   }
+      path: 'staff',
+      component: StaffRoute
+   },
+
+
 ]

@@ -14,7 +14,9 @@ const ClientRoute = ({ match }) => {
       
       {/* <Route path={`${match.url}/new-report`} render={() => <StaffNewReport />} /> */}
 
-    </Switch>
+
+
+  </Switch>
 
 }
 

@@ -9,6 +9,7 @@ import usePublicHttp from '../hooks/usePublicHttp';
 import {
   headerlogo,
 } from '../Entryfile/imagepath'
+import CryptoJS from 'crypto-js';
 
 
 const Loginpage = () => {
@@ -44,11 +45,18 @@ const Loginpage = () => {
       password,
       rememberMe: true
     }
+
+
+
+
     try {
       setLoading(true)
+
       const { data } = await publicHttp.post('/Account/auth_login', info)
       if (data.response.status === "Success") {
         toast.success(data.response.message)
+        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
+        localStorage.setItem('userEnc', encryptedData);
         localStorage.setItem("user", JSON.stringify(data.userProfile))
       }
       if (data.userProfile?.role === "CompanyAdmin") {
@@ -57,7 +65,7 @@ const Loginpage = () => {
       }
 
       if (data.userProfile?.role === "Staff") {
-        navigate.push('/staff/main/dashboard')
+        navigate.push('/staff/staff/dashboard')
         localStorage.setItem("staffProfile", JSON.stringify(data.staffProfile))
 
       }
@@ -92,7 +100,6 @@ const Loginpage = () => {
       else if (error.response?.data?.message === 'Invalid Login Attempt') {
         toast.error("Incorrect Password")
       }
-
     }
     finally {
       setLoading(false)

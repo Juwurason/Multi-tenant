@@ -25,13 +25,14 @@ import { fetchAdmin } from '../../../store/slices/AdminSlice';
 
 const Document = () => {
     const dispatch = useDispatch();
+    const id = JSON.parse(localStorage.getItem('user'));
 
     // Fetch staff data and update the state
     useEffect(() => {
-        dispatch(fetchDocument());
-        dispatch(fetchStaff());
-        dispatch(fetchClient());
-        dispatch(fetchAdmin());
+        dispatch(fetchDocument(id.companyId));
+        dispatch(fetchStaff(id.companyId));
+        dispatch(fetchClient(id.companyId));
+        dispatch(fetchAdmin(id.companyId));
     }, [dispatch]);
 
     // Access the entire state
@@ -45,13 +46,12 @@ const Document = () => {
         // Check if staff data already exists in the store
         if (!document.length) {
             // Fetch staff data only if it's not available in the store
-            dispatch(fetchDocument());
+            dispatch(fetchDocument(id.companyId));
         }
     }, [dispatch, document]);
 
 
     //Declaring Variables
-    const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
     const [rejectModal, setRejectModal] = useState(false);
     const [reason, setReason] = useState("");
@@ -287,7 +287,7 @@ const Document = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchDocument());
+                        dispatch(fetchDocument(id.companyId));
                     } else {
                         toast.error(data.message);
                     }
@@ -322,7 +322,7 @@ const Document = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchDocument());
+                        dispatch(fetchDocument(id.companyId));
                     } else {
                         toast.error("Error Accepting Document");
                     }
@@ -353,7 +353,7 @@ const Document = () => {
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
-                dispatch(fetchDocument());
+                dispatch(fetchDocument(id.companyId));
                 setLoading1(false);
                 setRejectModal(true)
             } else {

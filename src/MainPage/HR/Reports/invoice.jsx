@@ -96,6 +96,7 @@ const Invoice = () => {
     const FetchData = async () => {
         try {
             const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            console.log(clientResponse);
             const client = clientResponse.data;
             setClients(client);
             setLoading(false)

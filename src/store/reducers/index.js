@@ -13,6 +13,7 @@ import IntegrationSlice from '../slices/IntegrationSlice';
 import splittedAttendance from '../slices/splittedAttendance';
 import ProgressNoteSlice from '../slices/ProgressNoteSlice';
 import TicketSlice from '../slices/TicketSlice';
+import AuthSlice from '../slices/AuthSlice';
 
 const rootReducer = combineReducers({
     dashboard: DashboardSlice,

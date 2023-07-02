@@ -15,8 +15,6 @@ import { MdDoneOutline, MdOutlineEditCalendar, MdThumbUpOffAlt } from 'react-ico
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { set } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { fetchRoaster, filterRoaster } from '../../../store/slices/shiftRoasterSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,12 +31,13 @@ const ShiftScheduling = () => {
   dayjs.tz.setDefault('Australia/Sydney');
   //Declaring Variables
   const dispatch = useDispatch();
+  const id = JSON.parse(localStorage.getItem('user'));
 
   // Fetch staff data and update the state
   useEffect(() => {
-    dispatch(fetchRoaster());
-    dispatch(fetchStaff());
-    dispatch(fetchClient());
+    dispatch(fetchRoaster(id.companyId));
+    dispatch(fetchStaff(id.companyId));
+    dispatch(fetchClient(id.companyId));
   }, [dispatch]);
 
   // Access the entire state
@@ -51,13 +50,12 @@ const ShiftScheduling = () => {
     // Check if staff data already exists in the store
     if (!schedule.length) {
       // Fetch staff data only if it's not available in the store
-      dispatch(fetchRoaster());
+      dispatch(fetchRoaster(id.companyId));
     }
   }, [dispatch, schedule]);
 
 
 
-  const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
   const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false);
@@ -163,7 +161,7 @@ const ShiftScheduling = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            dispatch(fetchRoaster());
+            dispatch(fetchRoaster(id.companyId));
           } else {
             toast.error(data.message);
           }
@@ -201,7 +199,7 @@ const ShiftScheduling = () => {
           console.log(data);
           if (data.status === 'Success') {
             toast.success(data.message);
-            dispatch(fetchRoaster());
+            dispatch(fetchRoaster(id.companyId));
           } else {
             toast.error(data.message);
           }
@@ -282,7 +280,7 @@ const ShiftScheduling = () => {
 
     } else {
 
-      dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli }));
+      dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli, companyId: id.companyId }));
     }
   }
 
@@ -324,7 +322,7 @@ const ShiftScheduling = () => {
       <div className="page-wrapper">
         <Helmet>
           <title>Shift Roster</title>
-          <meta name="description" content="Shift Roaster" />
+          <meta name="description" content="Shift Roster" />
         </Helmet>
 
         {/* Page Content */}
@@ -403,9 +401,7 @@ const ShiftScheduling = () => {
                 >
 
 
-                  {loading ? <div className="spinner-grow text-light" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div> : "Load"}
+                  Load
                 </button>
 
               </div>
@@ -418,7 +414,7 @@ const ShiftScheduling = () => {
                 >
                   {loading3 ? <div className="spinner-grow text-light" role="status">
                     <span className="sr-only">Loading...</span>
-                  </div> : "Send Roaster Notification"}
+                  </div> : "Send Roster Notification"}
                 </button>
 
               </div>
@@ -453,11 +449,22 @@ const ShiftScheduling = () => {
                   </button>
                 </span>
 
-                <span>
-                  <h1 className='text-muted fw-bold'>
-                    {startDate.format('YYYY')}
-                  </h1>
-                </span>
+                {
+                  loading ?
+                    <div className="text-center d-flex align-items-center gap-2 ">
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      <span>Please Wait</span>
+                    </div>
+
+                    :
+                    <span>
+                      <h1 className='text-muted fw-bold'>
+                        {startDate.format('YYYY')}
+                      </h1>
+                    </span>
+                }
                 <span>
                   <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>
                     <option defaultValue hidden>Week</option>
@@ -810,7 +817,7 @@ const ShiftScheduling = () => {
             size="lg"
             onHide={() => setPeriodicModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Add New Shift Roaster</Modal.Title>
+              <Modal.Title>Add New Shift Roster</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div className="row">

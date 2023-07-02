@@ -8,7 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -27,31 +27,32 @@ const PublicHoliday = () => {
     const [showModal, setShowModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
+    const [loading4, setLoading4] = useState(false);
     const [editpro, setEditPro] = useState({})
     const { get, post } = useHttp();
 
     const columns = [
-        // {
-        //     name: '#',
-        //     cell: (row, index) => index + 1
-        // },
-
         {
-            name: "",
-            cell: (row) => (
+            name: '',
+            selector: "",
+            sortable: true,
+            expandable: true,
+            cell: (row) => <div className='d-flex justify-content-center align-items-center'>
+                <button
+                    className='btn'
+                    title='Adjust Attendance'
+                    onClick={() => AdjustAttendance(row.date)}
 
-                <span className='text-center'>
-                    <button
-                        className="btn"
-                        title='Adjust Attendance'
-
-                    >
-                        <SlSettings />
-                    </button>
-                </span>
-
-
-            ),
+                    disabled={loading4 ? true : false}
+                >
+                    {
+                        loading4 ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div> :
+                            <FaRegClock />
+                    }
+                </button>
+            </div>
         },
         {
             name: 'Name',
@@ -62,17 +63,15 @@ const PublicHoliday = () => {
             name: 'Date',
             selector: row => row.date,
             sortable: true,
+
+
         },
         {
             name: 'Date Created',
-            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
+            selector: row => dayjs(row.dateCreated).format('ddd MMM YYYY HH:mm'),
             sortable: true
         },
-        {
-            name: 'Date Modified',
-            selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
-            sortable: true
-        },
+
 
         {
             name: "Actions",
@@ -98,6 +97,31 @@ const PublicHoliday = () => {
         },
 
     ];
+
+
+    // /
+
+
+
+    const AdjustAttendance = async (e) => {
+
+        setLoading4(true)
+
+        try {
+            const { data } = await get(`/SetUp/adjust_public_holiday?userId=${id.userId}&shiftdate=${e}`, { cacheTimeout: 300000 });
+            console.log(data);
+            toast.success(data.message);
+            FetchHoliday();
+            setLoading4(false);
+
+
+        } catch (error) {
+            toast.error("Ooops!😔 Error Occurred")
+            console.log(error);
+            setLoading4(false)
+        }
+
+    }
 
     const handleEdit = async (e) => {
         // console.log(e);
@@ -127,11 +151,11 @@ const PublicHoliday = () => {
         });
     }
 
-    const FetchClient = async () => {
+    const FetchHoliday = async () => {
         try {
             setLoading(true)
             const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
-            // console.log(data);
+            console.log(data);
             setGetHoli(data);
             setLoading(false)
         } catch (error) {
@@ -142,21 +166,13 @@ const PublicHoliday = () => {
         }
     };
     useEffect(() => {
-        FetchClient()
+        FetchHoliday()
     }, []);
 
     const handleActivityClick = () => {
         setShowModal(true);
     };
 
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -235,10 +251,19 @@ const PublicHoliday = () => {
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                {data.name}
+            <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+                <span>
+                    <span className='fw-bold'>Name: </span>
+                    <span>   {data.name}</span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Date Modified: </span>
+                    <span>   {data.dateModified}</span>
+                </span>
+
 
             </div>
+
         );
     };
     const [searchText, setSearchText] = useState("");

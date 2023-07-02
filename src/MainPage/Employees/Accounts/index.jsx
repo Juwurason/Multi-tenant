@@ -8,6 +8,7 @@ import UserRoles from './userroles';
 import EditRole from '../../../_components/forms/EditRole';
 import RoleList from './roleList';
 import PriviledgesList from './priviledgesList';
+import CompanyProfile from './CompanyProfile';
 
 const AccountRoute = ({ match }) => (
     <Switch>
@@ -18,6 +19,7 @@ const AccountRoute = ({ match }) => (
         <Route path={`${match.url}/edituser/:uid`} component={EditAccount} />
         <Route path={`${match.url}/editrole/:uid`} component={EditRole} />
         <Route path={`${match.url}/role-list/:uid`} component={RoleList} />
+        <Route path={`${match.url}/company-profile`} component={CompanyProfile} />
         <Route path={`${match.url}/priviledges-list/:uid`} component={PriviledgesList} />
 
     </Switch>

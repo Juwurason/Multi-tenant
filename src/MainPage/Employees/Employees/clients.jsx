@@ -20,10 +20,11 @@ import { fetchClient } from '../../../store/slices/ClientSlice';
 
 const Clients = () => {
   const dispatch = useDispatch();
+  const id = JSON.parse(localStorage.getItem('user'));
 
   // Fetch staff data and update the state
   useEffect(() => {
-    dispatch(fetchClient());
+    dispatch(fetchClient(id.companyId));
   }, [dispatch]);
 
   // Access the entire state
@@ -34,13 +35,13 @@ const Clients = () => {
     // Check if staff data already exists in the store
     if (!clients.length) {
       // Fetch staff data only if it's not available in the store
-      dispatch(fetchClient());
+      dispatch(fetchClient(id.companyId));
     }
   }, [dispatch, clients]);
 
-  const id = JSON.parse(localStorage.getItem('user'));
   const { get, post } = useHttp();
   const status = useRef(false)
+  console.log(clients);
 
   const columns = [
 
@@ -300,7 +301,7 @@ const Clients = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            dispatch(fetchClient());
+            dispatch(fetchClient(id.companyId));
           } else {
             toast.error(data.message);
           }

@@ -21,11 +21,11 @@ import { toast } from 'react-toastify';
 
 dayjs.extend(isBetween);
 
-const StaffDashboard = ({roster, loading}) => {
+const StaffDashboard = ({ roster, loading }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
-  
+
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
   const daysOfWeek = [
@@ -44,60 +44,60 @@ const StaffDashboard = ({roster, loading}) => {
   const Tomorrow = currentDate.add(1, 'day').startOf('day');
 
   // Filter the shifts starting from tomorrow's date
-  const filteredShifts = roster.filter(shift => dayjs(shift.dateFrom) >(Tomorrow));
+  const filteredShifts = roster.filter(shift => dayjs(shift.dateFrom) > (Tomorrow));
 
   // Sort the shifts in ascending order based on the start time
   filteredShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
 
   // Get the first 5 shifts
   const shifts = filteredShifts.slice(0, 5);
-  
+
 
   // const sorted = () => {
-    
+
   // };
-  
+
   const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD');
 
   // Filter the shifts for today
-const todayShifts = roster.filter(actToday => dayjs(actToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
- 
-// Sort the shifts in ascending order based on the start time
-const sortedShifts = todayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
+  const todayShifts = roster.filter(actToday => dayjs(actToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
 
-// Get the last shift after sorting
-const lastShift = sortedShifts[sortedShifts.length - 1];
+  // Sort the shifts in ascending order based on the start time
+  const sortedShifts = todayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
 
-// Function to get the next shift
-function getNextShift() {
-  const currentTime = dayjs().tz(); // Get the current time in Australia
+  // Get the last shift after sorting
+  const lastShift = sortedShifts[sortedShifts.length - 1];
 
-  while (sortedShifts.length > 0) {
-    const nextShift = sortedShifts.shift(); // Get the first shift
+  // Function to get the next shift
+  function getNextShift() {
+    const currentTime = dayjs().tz(); // Get the current time in Australia
 
-    // Check if the current shift's dateTo is over the current time
-    if (dayjs(nextShift.dateTo)>(currentTime)) {
-      return nextShift; // Return the current shift if dateTo is not over the current time
+    while (sortedShifts.length > 0) {
+      const nextShift = sortedShifts.shift(); // Get the first shift
+
+      // Check if the current shift's dateTo is over the current time
+      if (dayjs(nextShift.dateTo) > (currentTime)) {
+        return nextShift; // Return the current shift if dateTo is not over the current time
+      }
     }
+
+    return lastShift; // Return the last shift if no more shifts available
   }
 
-  return lastShift; // Return the last shift if no more shifts available
-}
+  // Call getNextShift() to get the shifts one by one
+  let currentShift = getNextShift();
+  // console.log(currentShift)
+  const nowInAus = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
+  if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < nowInAus) {
+    currentShift = getNextShift();
+  }
 
-// Call getNextShift() to get the shifts one by one
-let currentShift = getNextShift();
-// console.log(currentShift)
-const nowInAus = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < nowInAus) {
-  currentShift = getNextShift();
-}
+  // if (currentShift) {
+  //   // console.log(currentShift); // Access properties of the current shift if it exists
+  // } else {
+  //   // console.log('No more shifts available.'); // Handle the case when no shifts are available
+  // }
 
-// if (currentShift) {
-//   // console.log(currentShift); // Access properties of the current shift if it exists
-// } else {
-//   // console.log('No more shifts available.'); // Handle the case when no shifts are available
-// }
- 
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
     setMenu(!menu)
@@ -128,7 +128,7 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
             const longitude = position.coords.longitude;
             localStorage.setItem("latit", latitude);
             localStorage.setItem("log", longitude);
-            navigate.push(`/staff/main/progress/${currentShift?.shiftRosterId}`);
+            navigate.push(`/staff/staff/progress/${currentShift?.shiftRosterId}`);
           },
           (error) => {
             toast.error('Error getting location:', error.message);
@@ -139,7 +139,7 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
       }
 
     }, 2000); // Set an appropriate delay to simulate the loading time
-    
+
     // Optionally, you can clear the loading state after the specified time
     setTimeout(() => {
       setIsLoading(false);
@@ -148,8 +148,8 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
 
   const rosterId = JSON.parse(localStorage.getItem('rosterId'));
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'));
-  const HandleFill = () =>{
-    navigate.push(`/staff/main/edit-progress/${rosterId}/${progressNoteId}`);
+  const HandleFill = () => {
+    navigate.push(`/staff/staff/edit-progress/${rosterId}/${progressNoteId}`);
   }
   const [showModal, setShowModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
@@ -163,7 +163,7 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
     if (!activitiesByDay) {
       return 'No Shift Today';
     }
-   
+
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
     const activityDateFrom = dayjs(currentShift.dateFrom).format('YYYY-MM-DD HH:mm:ss');
     const activityDateTo = dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss');
@@ -174,7 +174,7 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
     else if (activityDateTo < nowInAustraliaTime) {
       return currentShift.attendance === true ? 'Present' : 'Absent';
     }
-    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false ) {
+    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false) {
       return 'You are already Clocked in';
     }
     else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === true) {
@@ -186,9 +186,9 @@ if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < n
   }
 
   const AlltodayShifts = roster.filter(AllActToday => dayjs(AllActToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
- 
-// Sort the shifts in ascending order based on the start time
-const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
+
+  // Sort the shifts in ascending order based on the start time
+  const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
 
 
   return (
@@ -290,31 +290,31 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                               </span>
                             ) : (
                               <div className='d-flex gap-2 flex-wrap justify-content-center'>
-                              <small
-                                className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
-                                  getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
-                                  getActivityStatus(activitiesByDay) === 'You are already Clocked in' ? 'bg-primary text-white' :
-                                    getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
-                                  }`}
-                              >
-                                {getActivityStatus(activitiesByDay)}
-                              </small>
+                                <small
+                                  className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
+                                    getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
+                                      getActivityStatus(activitiesByDay) === 'You are already Clocked in' ? 'bg-primary text-white' :
+                                        getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
+                                    }`}
+                                >
+                                  {getActivityStatus(activitiesByDay)}
+                                </small>
 
-                              {getActivityStatus(activitiesByDay) === 'You are already Clocked in' && (
-                                      <button
-                                        className='btn btn-secondary text-white p-2 rounded'
-                                        onClick={HandleFill}
-                                      >
-                                        {isLoading ?
-                                  <div>
-                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                      <span class="visually-hidden">Loading...</span>
-                                    </div> Please wait....
-                                  </div>
-                                  : <span> <CiStickyNote /> Fill progress note</span>
-                                }
-                                      </button>
-                                    )}
+                                {getActivityStatus(activitiesByDay) === 'You are already Clocked in' && (
+                                  <button
+                                    className='btn btn-secondary text-white p-2 rounded'
+                                    onClick={HandleFill}
+                                  >
+                                    {isLoading ?
+                                      <div>
+                                        <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div> Please wait....
+                                      </div>
+                                      : <span> <CiStickyNote /> Fill progress note</span>
+                                    }
+                                  </button>
+                                )}
                               </div>
                             )}
                           </>
@@ -348,7 +348,7 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
-                      <div style={{backgroundColor: "#5374A5"}} className="card-footer text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
+                      <div style={{ backgroundColor: "#5374A5" }} className="card-footer text-white pointer" onClick={() => handleActivityClick(activitiesByDay[2])}>
                         View Details
 
                       </div>
@@ -370,10 +370,10 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                           <div className='d-flex flex-column justify-content-start'>
                             {/* <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span> */}
                             <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>Start Time: </span><span className='text-truncate'>{dayjs(activity.dateFrom).format('hh:mm A')}</span></span>
-                        <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>End Time: </span><span className='text-truncate'>{dayjs(activity.dateTo).format('hh:mm A')}</span></span>
+                            <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>End Time: </span><span className='text-truncate'>{dayjs(activity.dateTo).format('hh:mm A')}</span></span>
                             <span style={{ fontSize: "15px" }} className='text-dark fw-bold'><span>Clients:</span>{activity.clients}</span>
                           </div>
-                         
+
                         </div>
                       </span>
                     ))
@@ -381,7 +381,7 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                     <span>No shifts Today</span>
                   )}
                   <div className='d-flex justify-content-end mt-2'>
-                    <Link to="/staff/main/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
+                    <Link to="/staff/staff/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
                       See all <FaLongArrowAltRight className='fs-3' />
                     </Link>
                   </div>
@@ -401,7 +401,7 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                             <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span>
                             <span className='text-dark fs-7 fw-bold'>{activity.clients}</span>
                           </div>
-                         
+
                         </div>
                       </span>
                     ))
@@ -409,7 +409,7 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                     <span>No upcoming shifts</span>
                   )}
                   <div className='d-flex justify-content-end mt-2'>
-                    <Link to="/staff/main/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
+                    <Link to="/staff/staff/roster" className='text-dark pointer' style={{ fontSize: "12px" }}>
                       See More <FaLongArrowAltRight className='fs-3' />
                     </Link>
                   </div>
@@ -431,8 +431,8 @@ const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(day
                     <p><b>Date:</b> <span style={{ fontSize: '15px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span></p>
                     <p><b>Time:</b> {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'} - {activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</p>
                     <p><b>Client:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0].clients : " -- "}</p>
-                    <p><b>Status:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0]?.status: "--"}</p>
-                    <p><b>Description:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0]?.activities: "--"}</p>
+                    <p><b>Status:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0]?.status : "--"}</p>
+                    <p><b>Description:</b> {activitiesByDay[2].length > 0 ? activitiesByDay[2][0]?.activities : "--"}</p>
                   </>
                 )}
               </Modal.Body>

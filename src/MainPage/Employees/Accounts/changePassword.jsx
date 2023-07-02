@@ -20,7 +20,7 @@ const ChangePassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (email === "" || oldPassword === "" || password === "" || confirmPassword === "") {
+        if (email.current.value === "" || oldPassword.current.value === "" || password.current.value === "" || confirmPassword.current.value === "") {
             return toast.error("Input Fields cannot be empty")
         }
         const info = {
@@ -78,15 +78,15 @@ const ChangePassword = () => {
                                 </div>
                                 <div className="form-group">
                                     <label>Old password</label>
-                                    <input type="text" ref={oldPassword} className="form-control" />
+                                    <input type="text" ref={oldPassword} className="form-control" required />
                                 </div>
                                 <div className="form-group">
                                     <label>New password</label>
-                                    <input type="text" ref={password} className="form-control" />
+                                    <input type="text" ref={password} className="form-control" required />
                                 </div>
                                 <div className="form-group">
                                     <label>Confirm password</label>
-                                    <input type="text" ref={confirmPassword} className="form-control" />
+                                    <input type="text" ref={confirmPassword} className="form-control" required />
                                 </div>
                                 <div className="submit-section">
                                     <button className="btn btn-info text-white rounded add-btn" disabled={loading ? true : false}>

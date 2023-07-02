@@ -282,7 +282,7 @@ const ViewTicket = ({ ticket, FetchData }) => {
                         <div className="col">
                             <h3 className="page-title">View Ticket</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/main/dashboard">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">View Ticket</li>
                             </ul>
                         </div>
@@ -343,7 +343,7 @@ const ViewTicket = ({ ticket, FetchData }) => {
                         </div>
                         <div className='col-md-4'>
 
-                            <Link to={'/staff/main/raise-ticket'} className="btn btn-info add-btn rounded-2 text-white">
+                            <Link to={'/staff/staff/raise-ticket'} className="btn btn-info add-btn rounded-2 text-white">
                                 Contact Service Provider
                             </Link>
                         </div>

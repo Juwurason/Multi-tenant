@@ -3,8 +3,6 @@ import { Redirect, Route, Switch, useLocation, useHistory } from 'react-router-d
 import LoginPage from './loginpage';
 import ForgotPassword from './forgotpassword';
 import DefaultLayout from './Sidebar/DefaultLayout';
-import Tasklayout from './Sidebar/tasklayout';
-import chatlayout from './Sidebar/chatlayout';
 import uicomponents from '../MainPage/UIinterface/components';
 import Error404 from '../MainPage/Pages/ErrorPage/error404';
 import Error500 from '../MainPage/Pages/ErrorPage/error500';
@@ -66,8 +64,7 @@ const App = () => {
             <Route path="/staff" component={StaffLayout} />
             <Route path="/administrator" component={AdminLayout} />
             <Route path="/client" component={ClientLayout} />
-            <Route path="/tasks" component={Tasklayout} />
-            <Route path="/conversation" component={chatlayout} />
+
             <Route path="/ui-components" component={uicomponents} />
             <Route path="/error-500" component={Error500} />
             <Route path={`/staff-timesheet/:sta/:dateFrom/:dateTo`} component={Timesheet} />
