@@ -8,11 +8,10 @@ import ClientProfile from './ClientProfile';
 const ClientRoute = ({ match }) => {
 
     <Switch>
-      <Redirect exact from={`${match.url}/`} to={`${match.url}/dashboard`} />
+      {/* <Redirect exact from={`${match.url}/`} to={`${match.url}/dashboard`} />
       <Route path={`${match.url}/dashboard`} render={() => <ClientDashboard />} />
-      <Route path={`${match.url}/profile`} render={() => <ClientProfile />} />
-      
-      {/* <Route path={`${match.url}/new-report`} render={() => <StaffNewReport />} /> */}
+      <Route path={`${match.url}/profile`} render={() => <ClientProfile />} /> */}
+    
 
 
 

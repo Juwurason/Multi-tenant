@@ -27,18 +27,18 @@ export default [
         component: ClientRoute
     },
 
-    // {
-    //     path: 'client',
-    //     component: Dashboard
-    // },
+    {
+        path: 'client',
+        component: Dashboard
+    },
     {
         path: 'change-password',
         component: ClientChangePassword
     },
-    // {
-    //     path: 'client-profile',
-    //     component: ClientProfile
-    // },
+    {
+        path: 'client-profile',
+        component: ClientProfile
+    },
     {
         path: 'client-edit-profile',
         component: ClientEditProfile
