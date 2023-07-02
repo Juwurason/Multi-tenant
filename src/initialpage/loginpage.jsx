@@ -53,6 +53,7 @@ const Loginpage = () => {
       setLoading(true)
 
       const { data } = await publicHttp.post('/Account/auth_login', info)
+    
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
@@ -62,6 +63,13 @@ const Loginpage = () => {
       if (data.userProfile?.role === "CompanyAdmin") {
         navigate.push('/app/main/dashboard')
 
+      }
+
+      if (data.claims) {
+        const filteredClaims = data.claims.filter(claim => {
+          return claim.properties;
+        });
+        localStorage.setItem("claims", JSON.stringify(filteredClaims))
       }
 
       if (data.userProfile?.role === "Staff") {

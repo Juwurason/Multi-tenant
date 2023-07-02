@@ -35,7 +35,14 @@ const Sidebar = (props) => {
 
   const user = JSON.parse(localStorage.getItem('user'));
 
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const requiredClaimTypes = ['Staff Dashboard', 'Progress Note'];
 
+const hasRequiredClaims = requiredClaimTypes.every(requiredClaimType =>
+  claims.some(claim => claim.type === requiredClaimType)
+);
+console.log(hasRequiredClaims)
+  
   let pathname = props.location.pathname
   return (
     <div id="sidebar" className="sidebar bg-primary">
@@ -74,7 +81,7 @@ const Sidebar = (props) => {
               }
               {/* Staff Dashboard */}
               {
-                user.role === "Staff" ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
+                user.role === "Staff" || hasRequiredClaims ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
                   <Link to="/staff/staff/dashboard"  >
                     <i className="la la-dashboard" />

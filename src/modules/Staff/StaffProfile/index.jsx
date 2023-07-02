@@ -87,7 +87,8 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
 
   const handleSave = async (e) => {
     e.preventDefault()
-    const formData = new FormData()
+    const formData = new FormData();
+    
     for (const key in editedProfile) {
       const value = editedProfile[key];
       if (value === null) {
