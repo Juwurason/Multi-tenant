@@ -17,6 +17,7 @@ import Employee from '../MainPage/Employees/Employees';
 //Messages
 import Message from '../MainPage/HR/Message'
 import StaffRoute from '../modules/Staff';
+import ClientRoute from '../modules/Client';
 
 export default [
    {
@@ -73,6 +74,9 @@ export default [
       path: 'staff',
       component: StaffRoute
    },
-
+   {
+      path: 'app',
+      component: ClientRoute
+   },
 
 ]

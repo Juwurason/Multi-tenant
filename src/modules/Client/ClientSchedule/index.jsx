@@ -391,7 +391,7 @@ const ClientSchedule = () => {
                         <div className="col">
                             {/* <h3 className="page-title">Staff Client Schedule</h3> */}
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Client Schedule</li>
                             </ul>
                         </div>

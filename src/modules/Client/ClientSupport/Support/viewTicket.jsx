@@ -369,7 +369,7 @@ const ClientViewTicket = () => {
                         </div>
                         <div className='col-md-4'>
 
-                            <Link to={'/client/client-raise_ticket'} className="btn btn-info add-btn rounded-2 text-white">
+                            <Link to={'/client/app/client-raise_ticket'} className="btn btn-info add-btn rounded-2 text-white">
                                 Contact Service Provider
                             </Link>
                         </div>

@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, Route, useHistory, withRouter } from 'react-router-dom';
 
 // router service
-import routerService from "../../client_Routes";
+import routerService from "../../router_service";
 import ClientHeader from '../../modules/Client/Components/ClientHeader';
-import ClientSideBar from '../../modules/Client/Components/ClientSideBar';
+import Sidebar from './sidebar';
 
 
 const ClientLayout = (props) => {
@@ -37,7 +37,7 @@ const ClientLayout = (props) => {
                         <Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
                     )}
                 </div>
-                <ClientSideBar onMenuClick={(value) => toggleMobileMenu()} />
+                <Sidebar onMenuClick={(value) => toggleMobileMenu()} />
 
             </div>
         </>

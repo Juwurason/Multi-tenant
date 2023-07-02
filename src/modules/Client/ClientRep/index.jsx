@@ -388,7 +388,7 @@ const ClientRep = () => {
                     <div className="row">
                         <div className="col">
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Repesentative Details</li>
                             </ul>
                         </div>

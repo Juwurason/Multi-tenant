@@ -394,7 +394,7 @@ const ClientDocument = () => {
               <div className="col">
                 <h3 className="page-title">Documents</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/client/client">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">User Documents</li>
                 </ul>
               </div>
