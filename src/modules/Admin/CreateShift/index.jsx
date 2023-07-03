@@ -6,8 +6,11 @@ import { MdCancel } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useCompanyContext } from '../../../context';
+// import { useCompanyContext } from '../../context';
 import useHttp from '../../../hooks/useHttp';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchClient, formatClient } from '../../../store/slices/ClientSlice';
 
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
@@ -30,16 +33,35 @@ const options = [
 ];
 const CreateShift = () => {
     const id = JSON.parse(localStorage.getItem('user'));
+
+    const dispatch = useDispatch();
+
+    // Fetch staff data and update the state
+    useEffect(() => {
+        dispatch(fetchStaff(id.companyId));
+        dispatch(formatClient());
+    }, [dispatch]);
+
+    // Access the entire state
+    const staff = useSelector((state) => state.staff.data);
+    const clients = useSelector((state) => state.client.data);
+
+    useEffect(() => {
+        // Check if staff data already exists in the store
+        if (!staff.length) {
+            // Fetch staff data only if it's not available in the store
+            dispatch(fetchStaff(id.companyId));
+        }
+    }, [dispatch, staff]);
+
     const { get, post } = useHttp();
-    const { loading, setLoading } = useCompanyContext()
-    const [staff, setStaff] = useState([]);
-    const [clients, setClients] = useState([]);
+    const [loading, setLoading] = useState(false)
+    const [selectedClient, setSelectedClient] = useState([]);
     const navigate = useHistory();
     const [selected, setSelected] = useState([]);
     const [staffId, setStaffId] = useState(0);
     const [dateFrom, setDatefrom] = useState("");
     const [dateTo, setDateTo] = useState("");
-    const [profileId, setProfileId] = useState(0);
     const [isNightShift, setIsNightShift] = useState(false);
     const [isExceptionalShift, setIsExceptionalShift] = useState(false);
     const [days, setDays] = useState({
@@ -52,35 +74,33 @@ const CreateShift = () => {
         saturday: false
     });
     const [stopDate, setStopDate] = useState("");
-    const FetchSchedule = async () => {
+    // const FetchSchedule = async () => {
+    //     const formattedOptions = clients.map((item) => ({
+    //         label: item.fullName,
+    //         value: item.fullName,
+    //     }));
 
-        try {
-            const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            setStaff(staff);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
+    //     try {
+    //         const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+    //         const client = clientResponse.data;
 
-        try {
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            setClients(client);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
+    //         setClients(formattedOptions);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
 
-    };
-    useEffect(() => {
-        FetchSchedule()
-    }, []);
+    // };
+    // useEffect(() => {
+    //     FetchSchedule()
+    // }, []);
 
     const [repeat, setRepeat] = useState(false);
     const [numOfDays, setNumOfDays] = useState(1);
+
+    const handleSelectionChange = (selected) => {
+        setSelectedClient(selected);
+    };
+    const selectClients = selectedClient.map(option => option.label).join(', ');
 
     const handleRepeatChange = (e) => {
         setRepeat(e.target.checked);
@@ -107,20 +127,21 @@ const CreateShift = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (staffId === 0 || profileId === 0
+        if (staffId === 0 && selected.length <= 0
         ) {
-            return toast.error("Invalid Request")
+            return toast.error("Select Either a staff or client")
         }
+
         try {
             setLoading(true)
-            const { data } = await post(`/ShiftRosters/add_shift?userId=${id.userId}`,
+            const { data } = await post(`/ShiftRosters/add_multipleclient_shifts?userId=${id.userId}`,
                 {
                     companyId: id.companyId,
                     staffId: Number(staffId),
                     dateFrom,
                     dateTo,
                     activities: selectedValues,
-                    profileId: Number(profileId),
+                    clientList: selectClients,
                     isNightShift,
                     isExceptionalShift,
                     repeat,
@@ -185,14 +206,13 @@ const CreateShift = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Client Name</label>
-                                                <div>
-                                                    <select className="form-select" onChange={e => setProfileId(e.target.value)}>
-                                                        <option defaultValue hidden>--Select a Client--</option>
-                                                        {
-                                                            clients.map((data, index) =>
-                                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
-                                                        }
-                                                    </select></div>
+                                                <MultiSelect
+                                                    options={clients}
+                                                    value={selectedClient}
+                                                    onChange={handleSelectionChange}
+                                                    labelledBy="Select Clients"
+                                                />
+
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
@@ -231,7 +251,7 @@ const CreateShift = () => {
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isExceptionalShift} onChange={handleExceptionChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Exceptional Shift</label>
+                                                <label className="col-form-label">Is Active Night</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
@@ -310,7 +330,7 @@ const CreateShift = () => {
                                     </div>
 
                                     <div className="submit-section">
-                                        <button className="btn btn-primary submit-btn" type='submit'>
+                                        <button className="btn btn-primary rounded submit-btn" type='submit'>
 
                                             {loading ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { FaBackspace } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
@@ -6,18 +6,19 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // import { useCompanyContext } from '../../context';
 import useHttp from '../../../hooks/useHttp';
-const CreateStaff = () => {
+const CreateUser = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const [loading, setLoading] = useState(false)
-    const [firstName, setFirstName] = useState('');
-    const [surName, setSurName] = useState('');
-    const [middleName, setMiddleName] = useState('');
-    const [address, setAddress] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [offerLetter, setOfferLetter] = useState(null);
+    const firstName = useRef(null);
+    const lastName = useRef(null);
+    const email = useRef(null);
+    const phoneNumber = useRef(null);
+    const password = useRef(null);
+    const confirmPassword = useRef(null);
+    const role = useRef(null);
     const privateHttp = useHttp();
     const navigate = useHistory()
+
 
 
     const submitForm = async (e) => {
@@ -29,29 +30,28 @@ const CreateStaff = () => {
         }
 
 
-        const formData = new FormData()
-        // Add input field values to formData
-        formData.append("CompanyId", id.companyId);
-        formData.append("FirstName", firstName);
-        formData.append("SurName", surName);
-        formData.append("MiddleName", middleName);
-        formData.append("Address", address);
-        formData.append("Email", email);
-        formData.append("PhoneNumber", phoneNumber);
-        formData.append("OfferLetter", offerLetter);
+        const info = {
+            "firstName": firstName.current.value,
+            "lastName": lastName.current.value,
+            "phoneNumber": phoneNumber.current.value,
+            "email": email.current.value,
+            "password": password.current.value,
+            "confirmPassword": confirmPassword.current.value,
+            "role": role.current.value
+        }
 
 
         try {
             setLoading(true)
-            const { data } = await privateHttp.post(`/Staffs/add_staff?userId=${id.userId}`,
-                formData
+            const { data } = await privateHttp.post(`/Account/add_user/Account/add_user`,
+                info
             )
             toast.success(data.message)
-            navigate.push('/administrator/allStaff')
+            navigate.push('/app/account/alluser')
             setLoading(false)
 
         } catch (error) {
-            toast.error("Error creating Staff")
+            toast.error("Error creating user")
 
             setLoading(false)
 
@@ -63,7 +63,7 @@ const CreateStaff = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Add Staff</title>
+                <title>Add User</title>
                 <meta name="description" content="" />
             </Helmet>
             <div className="content container-fluid">
@@ -71,8 +71,8 @@ const CreateStaff = () => {
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header d-flex justify-content-between align-items-center">
-                                <h4 className="card-title mb-0">Add New Staff</h4>
-                                <Link to={'/administrator/allStaff'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                <h4 className="card-title mb-0">Add New User</h4>
+                                <Link to={'/administrator/allUsers'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
 
                             <div className="card-body">
@@ -81,47 +81,49 @@ const CreateStaff = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">First Name <span className="text-danger">*</span></label>
-                                                <input className="form-control" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} />
+                                                <input className="form-control" required type="text" ref={firstName} onChange={e => setFirstName(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Last Name <span className="text-danger">*</span></label>
-                                                <input className="form-control" type="text" value={surName} onChange={e => setSurName(e.target.value)} />
+                                                <input className="form-control" required type="text" ref={lastName} />
                                             </div>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <label className="col-form-label">Middle Name </label>
-                                                <input className="form-control" type="text" value={middleName} onChange={e => setMiddleName(e.target.value)} />
-                                            </div>
-                                        </div>
+
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Email <span className="text-danger">*</span></label>
-                                                <input className="form-control" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                                                <input className="form-control" required type="email" ref={email} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Phone Number <span className="text-danger">*</span></label>
-                                                <input className="form-control" type="tel" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
+                                                <input className="form-control" required type="tel" ref={phoneNumber} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
-                                                <label className="col-form-label">Address </label>
-                                                <input className="form-control" type="text" value={address} onChange={e => setAddress(e.target.value)} />
+                                                <label className="col-form-label">Password <span className="text-danger">*</span></label>
+                                                <input className="form-control" required type="password" ref={password} />
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Confirm Password <span className="text-danger">*</span></label>
+                                                <input className="form-control" required type="password" ref={confirmPassword} />
                                             </div>
                                         </div>
 
-                                        <div className="col-sm-12">
+                                        <div className="col-sm-6">
                                             <div className="form-group">
-                                                <label className="col-form-label">Offer Letter <span className="text-danger">*</span></label>
-                                                <div><input className="form-control" type="file"
-                                                    accept=".pdf,.doc,.docx"
-                                                    maxsize={1024 * 1024 * 2}
-                                                    onChange={e => setOfferLetter(e.target.files[0])} /></div>
+                                                <label className="col-form-label">Role <span className="text-danger">*</span></label>
+                                                <div>
+                                                    <select className="form-select" ref={role}>
+                                                        <option defaultValue hidden value="">--Select a role--</option>
+                                                        <option value=""></option>
+                                                    </select></div>
                                             </div>
                                         </div>
 
@@ -145,4 +147,4 @@ const CreateStaff = () => {
     );
 }
 
-export default CreateStaff;
+export default CreateUser;

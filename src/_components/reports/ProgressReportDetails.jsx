@@ -17,6 +17,10 @@ const ProgressReportDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedDetails, setEditedDetails] = useState({});
     const id = JSON.parse(localStorage.getItem('user'));
+    const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
     const { get, post } = useHttp();
 
@@ -204,13 +208,13 @@ const ProgressReportDetails = () => {
                                             </button>
                                         ) : (
                                             <>
-                                                <button className="add-btn btn btn-secondary rounded-2 text-white" onClick={handleEdit}>
+                                                {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Progress Report") ? <button className="add-btn btn btn-secondary rounded-2 text-white" onClick={handleEdit}>
                                                     Edit
-                                                </button>
+                                                </button> : "" }
 
 
 
-                                                <button
+                                                {id.role === "CompanyAdmin" || hasRequiredClaims("Print Progress Report") ?<button
                                                     type='button'
                                                     onClick={handlePrint}
                                                     className="btn btn-primary add-btn text-white rounded-2 m-r-5"
@@ -226,7 +230,7 @@ const ProgressReportDetails = () => {
                                                     )}
 
 
-                                                </button>
+                                                </button>: "" }
 
 
                                             </>
