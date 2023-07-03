@@ -153,12 +153,11 @@ const Loginpage = () => {
               <input type="email" className="form-control" placeholder="Email"
                 onChange={e => setEmail(e.target.value)}
                 value={email}
-                autoComplete={email}
                 required />
             </div>
             <div className="form-group d-flex justify-content-between border mt-4">
               <input
-                autoComplete={password}
+                autoComplete="current-password"
                 onChange={e => setPassword(e.target.value)}
                 value={password}
                 type={pwdVisible ? "text" : "password"}

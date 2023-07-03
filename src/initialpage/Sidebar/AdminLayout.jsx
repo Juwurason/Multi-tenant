@@ -21,12 +21,13 @@ const AdminLayout = (props) => {
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
         if (!user || !user.token) {
+            localStorage.clear();
             navigate.push('/')
         }
     }, [localStorage.getItem('user')]);
 
     const handleLogout = () => {
-        localStorage.removeItem('user')
+        localStorage.clear();
         navigate.push('/')
     }
 
