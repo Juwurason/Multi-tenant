@@ -151,6 +151,7 @@ const Integration = () => {
             const { data } = await post(`/Integrations/edit/${editId}`, info)
             console.log(data);
             toast.success(data.message)
+            dispatch(fetchIntegration());
             setEditModal(false)
 
         } catch (error) {
@@ -478,7 +479,7 @@ const Integration = () => {
                                     <div>
                                         <select name="" id="" className="form-select" value={thirdParty} onChange={e => setThirdParty(e.target.value)}>
                                             <option defaultValue>--Select--</option>
-                                            <option value="">Xero</option>
+                                            <option value="Xero">Xero</option>
                                         </select>
                                     </div>
                                 </div>
@@ -547,7 +548,7 @@ const Integration = () => {
                                     <div>
                                         <select name="" id="" className="form-select" value={editThirdParty} onChange={e => setEditThirdParty(e.target.value)}>
                                             <option defaultValue>--Select--</option>
-                                            <option value="">Xero</option>
+                                            <option value="Xero">Xero</option>
                                         </select>
                                     </div>
                                 </div>

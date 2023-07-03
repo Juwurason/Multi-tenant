@@ -257,6 +257,7 @@ const ShiftScheduling = () => {
           `${data.message}`,
           'success'
         )
+        dispatch(fetchRoaster(id.companyId));
         setLoading2(false)
         setLgShow(false);
       }
@@ -405,8 +406,9 @@ const ShiftScheduling = () => {
                   disabled={loading ? true : false}
                 >
 
-
-                  Load
+                  {loading ? <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div> : "Load"}
                 </button>
 
               </div>
