@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -8,28 +8,43 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
-import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchClient } from '../../../store/slices/ClientSlice';
 
 const AllClients = () => {
-  const { loading, setLoading } = useCompanyContext()
+  const dispatch = useDispatch();
   const id = JSON.parse(localStorage.getItem('user'));
-  const [clients, setClients] = useState([]);
+
+  // Fetch staff data and update the state
+  useEffect(() => {
+    dispatch(fetchClient(id.companyId));
+  }, [dispatch]);
+
+  // Access the entire state
+  const loading = useSelector((state) => state.client.isLoading);
+  const clients = useSelector((state) => state.client.data);
+
+  useEffect(() => {
+    // Check if staff data already exists in the store
+    if (!clients.length) {
+      // Fetch staff data only if it's not available in the store
+      dispatch(fetchClient(id.companyId));
+    }
+  }, [dispatch, clients]);
+
   const { get, post } = useHttp();
+  const status = useRef(false)
+  console.log(clients);
 
   const columns = [
-    // {
-    //   name: '#',
-    //   cell: (row, index) => index + 1
-    // },
+
 
     {
       name: 'Full Name',
@@ -57,6 +72,7 @@ const AllClients = () => {
       selector: row => row.phoneNumber,
       sortable: true
     },
+
     {
       name: "Actions",
       cell: (row) => (
@@ -83,33 +99,6 @@ const AllClients = () => {
 
   ];
 
-  const FetchClient = async () => {
-    try {
-      setLoading(true)
-      const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      const client = clientResponse.data;
-      setClients(client);
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false)
-    } finally {
-      setLoading(false)
-    }
-  };
-  useEffect(() => {
-    FetchClient()
-  }, []);
-
-
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
 
   const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
@@ -185,29 +174,44 @@ const AllClients = () => {
     });
     doc.save("clients.pdf");
   };
-
   const handleActivate = async (e) => {
     try {
       const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+
       )
       console.log(response);
+
+
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
-    }
-  }
 
+
+    }
+
+
+
+
+  }
   const handleDeactivate = async (e) => {
     try {
       const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
       )
       console.log(response);
+
+
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
+
+
     }
+
+
+
+
   }
 
   const ButtonRow = ({ data }) => {
@@ -226,6 +230,8 @@ const AllClients = () => {
         </div>
 
       </div>
+
+
     );
   };
   const [searchText, setSearchText] = useState("");
@@ -235,8 +241,33 @@ const AllClients = () => {
   };
 
   const filteredData = clients.filter((item) =>
-    item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.email.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const HandleFilter = async (e) => {
+    e.preventDefault()
+    // Profiles/get_active_clients?companyId=1&IsActive=false
+    try {
+      const response = await get(`/Profiles/get_active_clients?companyId=${id.companyId}&IsActive=${status.current.value}`,
+      )
+      console.log(response);
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+
+
   const customStyles = {
 
     headCells: {
@@ -255,12 +286,12 @@ const AllClients = () => {
 
   const handleDelete = async (e) => {
     Swal.fire({
-      html: `<h3>Are you sure? you want to delete ${e.firstName} ${e.surName}</h3>`,
+      html: `<h3>Delete ${e.firstName} ${e.surName}</h3>`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
-      confirmButtonText: 'Confirm Delete',
+      confirmButtonText: 'Confirm',
       showLoaderOnConfirm: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -270,7 +301,7 @@ const AllClients = () => {
           )
           if (data.status === 'Success') {
             toast.success(data.message);
-            FetchClient();
+            dispatch(fetchClient(id.companyId));
           } else {
             toast.error(data.message);
           }
@@ -309,33 +340,78 @@ const AllClients = () => {
             </div>
           </div>
         </div>
-        {/* /Page Header */}
-        {/* Search Filter */}
-        {/* <div className="row filter-row">
-          <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client ID</label>
-            </div>
-          </div>
-          <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client Name</label>
-            </div>
-          </div>
-          <div className="col-sm-6 col-md-3">
-            <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client Email</label>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="card">
+
+              <div className="card-body">
+                <form>
+                  <div className="row align-items-center py-2">
+                    <div className="col-sm-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Select Client</label>
+                        <div>
+                          <select className="form-select" >
+                            <option defaultValue hidden>--Select Client--</option>
+
+                            {
+                              clients.map((data, index) =>
+                                <option value={data.profileId} key={index}>{data.fullName}</option>)
+                            }
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-sm-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Registration Date From</label>
+                        <input className="form-control" type="datetime-local"
+
+                        />
+                      </div>
+                    </div>
+                    <div className="col-sm-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Registration Date To</label>
+                        <input className="form-control" type="datetime-local"
+
+                        />
+                      </div>
+                    </div>
+                    <div className="col-sm-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Select Status</label>
+                        <div>
+                          <select className="form-select" ref={status}>
+                            <option defaultValue hidden>--Select Status--</option>
+                            <option value={false}>InActive</option>
+                            <option value={true}>Active</option>
+
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <div className="col-auto mt-3">
+                      <div className="form-group">
+                        <button className="btn btn-info rounded-2 add-btn text-white" type='button'
+                          onClick={HandleFilter}
+                        >
+                          Load
+
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+              </div>
             </div>
           </div>
 
-          <div className="col-sm-6 col-md-3">
-            <a href="javascript:void(0)" className="btn btn-primary btn-block w-100"> Search </a>
-          </div>
-        </div> */}
-        {/* Search Filter */}
+        </div>
 
 
 
@@ -399,14 +475,14 @@ const AllClients = () => {
             highlightOnHover
             searchable
             searchTerm={searchText}
-            progressPending={loading}
-            progressComponent={<div className='text-center fs-1'>
-              <div className="spinner-grow text-secondary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>}
-            responsive
+            // progressPending={loading}
+            // progressComponent={<div className='text-center fs-1'>
+            //   <div className="spinner-grow text-secondary" role="status">
+            //     <span className="sr-only">Loading...</span>
+            //   </div>
+            // </div>}
             expandableRows
+            responsive
             expandableRowsComponent={ButtonRow}
             paginationTotalRows={filteredData.length}
             customStyles={customStyles}

@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaCopy, FaDharmachakra, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit } from 'react-icons/fa';
+import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
 import { useCompanyContext } from '../../../context';
 import EditUser from '../../../_components/modelbox/EditUser';
 import DataTable from "react-data-table-component";
@@ -18,17 +17,40 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import ExcelJS from 'exceljs';
 import Swal from 'sweetalert2';
-import AdminHeader from '../Components/AdminHeader';
-import AdminSidebar from '../Components/AdminSidebar';
+import { fetchUser } from '../../../store/slices/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
 const AllUsers = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
+    const dispatch = useDispatch();
+
+    // Fetch user data and update the state
+    useEffect(() => {
+        dispatch(fetchUser());
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.user.isLoading);
+    const users = useSelector((state) => state.user.data);
+
+    useEffect(() => {
+        // Check if user data already exists in the store
+        if (!users.length) {
+            // Fetch user data only if it's not available in the store
+            dispatch(fetchUser(id.companyId));
+        }
+    }, [dispatch, users]);
+
     const { get, post } = useHttp()
     const [menu, setMenu] = useState(false)
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const id = JSON.parse(localStorage.getItem('user'));
+
+
+
+
+
+
 
     const columns = [
 
@@ -37,9 +59,11 @@ const AllUsers = () => {
             name: '',
             cell: (row) => (
                 <span className='w-100 d-flex justify-content-center'>
-                    <small className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center'>
+                    <Link to={``} className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center pointer'
+                        title='Manage Roles and Priviledges'
+                    >
                         <FaDharmachakra className='text-white' />
-                    </small>
+                    </Link>
 
                 </span>
             ),
@@ -50,7 +74,7 @@ const AllUsers = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <Link href={`https://example.com/${row.id}`} className="fw-bold text-dark">
+                <Link href={``} className="fw-bold text-dark">
                     {row.fullName}
                 </Link>
             ),
@@ -95,27 +119,6 @@ const AllUsers = () => {
 
     ];
 
-    const FetchStaff = async () => {
-        try {
-            setLoading(true);
-            const UserResponse = await get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const users = UserResponse.data;
-            setUsers(users);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-
-        } finally {
-            setLoading(false)
-
-        }
-    };
-    useEffect(() => {
-
-        FetchStaff()
-    }, []);
-
     const handleDelete = async (e) => {
 
         Swal.fire({
@@ -133,16 +136,16 @@ const AllUsers = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchStaff()
+                        dispatch(fetchUser());
                     } else {
                         toast.error(data.message);
                     }
 
 
                 } catch (error) {
+                    toast.error("Ooops😔 Error Occurred")
                     console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
+
 
 
                 }
@@ -235,36 +238,16 @@ const AllUsers = () => {
     };
 
     const filteredData = users.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+        item?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        // item?.role.includes(searchText.toLowerCase()) ||
+        item?.email.toLowerCase().includes(searchText.toLowerCase())
     );
 
-
-
-
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    }
-
-
-
-
-
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
 
     return (
         <>
             <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
-
-                {/* <AdminHeader onMenuClick={(value) => toggleMobileMenu()} />
-                <AdminSidebar /> */}
                 <div className="page-wrapper">
                     <Helmet>
                         <title>All User</title>
@@ -340,7 +323,8 @@ const AllUsers = () => {
                                     </CopyToClipboard>
                                 </div>
                                 <div className='col-md-4'>
-                                    <button className='btn btn-info text-white add-btn rounded-2'>Add New User</button>
+                                    <Link to={'/administrator/createUser'} className="btn btn-info add-btn text-white rounded-2">
+                                        Create New User</Link>
                                 </div>
                             </div>
 
@@ -349,16 +333,15 @@ const AllUsers = () => {
                                 pagination
                                 highlightOnHover
                                 searchable
-                                searchTerm={searchText}
                                 progressPending={loading}
-                                responsive
                                 progressComponent={<div className='text-center fs-1'>
                                     <div className="spinner-grow text-secondary" role="status">
                                         <span className="sr-only">Loading...</span>
                                     </div>
-                                </div>
+                                </div>}
+                                responsive
+                                searchTerm={searchText}
 
-                                }
                             />
                         </div>
 

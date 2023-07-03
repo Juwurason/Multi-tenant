@@ -21,6 +21,11 @@ import { fetchClient } from '../../../store/slices/ClientSlice';
 const Clients = () => {
   const dispatch = useDispatch();
   const id = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
   // Fetch staff data and update the state
   useEffect(() => {
@@ -77,12 +82,17 @@ const Clients = () => {
       name: "Actions",
       cell: (row) => (
         <span className="d-flex gap-1">
-          <Link to={`/app/profile/edit-client/${row.profileId}`}
+
+         {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Client") ? <div className='col-md-4'>
+         <Link to={`/app/profile/edit-client/${row.profileId}`}
             className="btn"
             title='edit'
           >
             <FaRegEdit />
           </Link>
+          </div> : ""}
+         
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Client") ? <div className='col-md-4'>
           <button
             className='btn'
             title='Delete'
@@ -90,6 +100,9 @@ const Clients = () => {
           >
             <GoTrashcan />
           </button>
+          </div> : ""}
+         
+          
 
         </span>
       ),
@@ -221,12 +234,16 @@ const Clients = () => {
         <div><span className='fw-bold'>Email: </span> {data.email}</div>
         <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
-          <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+        {user.role === "CompanyAdmin" || hasRequiredClaims("Activate Client") ?
+        <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
             Activate Client
-          </button> |
+            | </button> 
+          : ""}
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Deactivate Client") ?
           <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
             Deactivate Client
           </button>
+         : ""}
         </div>
 
       </div>
@@ -466,8 +483,10 @@ const Clients = () => {
               </CopyToClipboard>
             </div>
             <div className='col-md-4'>
-              <Link to="/app/employee/addclients" className="btn btn-info text-white add-btn rounded-2">
+            {user.role === "CompanyAdmin" || hasRequiredClaims("Add Client") ?
+            <Link to="/app/employee/addclients" className="btn btn-info text-white add-btn rounded-2">
                 Create New clients</Link>
+               : ""}         
             </div>
           </div>
           <DataTable data={filteredData} columns={columns}

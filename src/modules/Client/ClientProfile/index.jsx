@@ -65,7 +65,7 @@ const ClientProfile = () => {
       const { data } = await privateHttp.get(`/Profiles/${e}`, { cacheTimeout: 300000 })
       // console.log(data);
       setProfile(data);
-      setEditedProfile(data)
+      setEditedProfile({ ...data })
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -117,47 +117,21 @@ const ClientProfile = () => {
   const handleSave = async (e) => {
     e.preventDefault()
     const formData = new FormData()
-    formData.append("CompanyId", id.companyId);
-    formData.append("ProfileId", getClientProfile.profileId);
-    formData.append("firstName", profile.firstName);
-    formData.append("email", profile.email);
-    formData.append("clientId", profile.clientId);
-    formData.append("phoneNumber", profile.phoneNumber);
-    formData.append("surName", profile.surName);
-    formData.append("middleName", editedProfile.middleName);
-    formData.append("gender", editedProfile.gender);
-    formData.append("dateOfBirth", editedProfile.dateOfBirth);
-    formData.append("ndisPlanNote", editedProfile.ndisPlanNote);
-    formData.append("address", profile.address);
-    formData.append("city", editedProfile.city);
-    formData.append("country", editedProfile.country);
-    formData.append("state", editedProfile.state);
-    formData.append("postcode", editedProfile.postalCode);
-    formData.append("culturalBackground", editedProfile.culturalBackground);
-    formData.append("indigenousSatatus", editedProfile.indigenousSatatus);
-    formData.append("preferredLanguage", editedProfile.preferredLanguage);
-    formData.append("ndisPlan", editedProfile.ndisPlan);
-    formData.append("requireInterpreter", editedProfile.requireInterpreter);
-    formData.append("suburb", editedProfile.kinSuburb);
-    formData.append("nextOfKin", editedProfile.nextOfKin);
-    formData.append("kinAddress", editedProfile.kinAddress);
-    formData.append("kinCity", editedProfile.kinCity);
-    formData.append("kinCountry", editedProfile.kinCountry);
-    formData.append("kinEmail", editedProfile.kinEmail);
-    formData.append("kinPhoneNumber", editedProfile.kinPhoneNumber);
-    formData.append("kinPostcode", editedProfile.kinPostCode);
-    formData.append("isActive", profile.isActive);
-    formData.append("kinState", editedProfile.kinState);
-    formData.append("relationship", editedProfile.relationship);
-    formData.append("imageFile", editedProfile.image);
-    formData.append("financialArrangement", editedProfile.financialArrangement);
-    formData.append("privacyPreferences", editedProfile.privacyPreferences);
+    for (const key in editedProfile) {
+      const value = editedProfile[key];
+      if (value === null) {
+        formData.append(key, ''); // Pass empty string if value is null
+      } else {
+        formData.append(key, value);
+      }
+    }
+
     try {
       setLoading(true)
       const { data } = await privateHttp.post(`/Profiles/edit/${getClientProfile.profileId}?userId=${id.userId}`,
         formData
       )
-      // console.log(data)
+      console.log(data)
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -216,7 +190,7 @@ const ClientProfile = () => {
                       <div className="profile-img border border-2 rounded rounded-circle">
                         <a className='text-primary rounded rounded-circle' href="#"><img alt=""
                           className='rounded rounded-circle'
-                          src={staffOne.imageUrl === null || staffOne.imageUrl === "null" ? "" : staffOne.imageUrl} /></a>
+                          src={staffOne.imageUrl === null || staffOne.imageUrl === "null" ? man : staffOne.imageUrl} /></a>
                       </div>
                     </div>
                     <div className="profile-basic">
@@ -524,7 +498,7 @@ const ClientProfile = () => {
                               </div>
                               <div className="form-group col-md-4">
                                 <label>Post Code</label>
-                                <input type="email" className="form-control" name='kinPostCode' value={editedProfile.kinPostCode || ''} onChange={handleInputChange} />
+                                <input type="email" className="form-control" name='kinPostcode' value={editedProfile.kinPostcode || ''} onChange={handleInputChange} />
                               </div>
                               <div className="form-group col-md-4">
                                 <label>Address</label>
@@ -601,7 +575,7 @@ const ClientProfile = () => {
                         </li>
                         <li>
                           <div className="title">Post Code</div>
-                          <div className="text">{staffOne.kinPostCode === "null" ? "---" : staffOne.kinPostCode}</div>
+                          <div className="text">{staffOne.kinPostcode === "null" ? "---" : staffOne.kinPostcode}</div>
                         </li>
 
                       </ul>

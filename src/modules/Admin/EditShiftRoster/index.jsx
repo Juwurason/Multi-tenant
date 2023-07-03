@@ -8,6 +8,9 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { formatClient } from '../../../store/slices/ClientSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
@@ -29,26 +32,44 @@ const options = [
 
 ];
 const EditShiftRoaster = () => {
-    const { uid } = useParams();
     const id = JSON.parse(localStorage.getItem('user'));
+
+    const dispatch = useDispatch();
+
+    // Fetch staff data and update the state
+    useEffect(() => {
+        dispatch(fetchStaff(id.companyId));
+        dispatch(formatClient());
+    }, [dispatch]);
+
+    // Access the entire state
+    const staff = useSelector((state) => state.staff.data);
+    const clients = useSelector((state) => state.client.data);
+
+
+    const { uid } = useParams();
     const { get, post } = useHttp();
-    const { loading, setLoading } = useCompanyContext()
-    const [staff, setStaff] = useState([]);
-    const [clients, setClients] = useState([]);
+    const { loading, setLoading } = useCompanyContext();
     const navigate = useHistory();
     const [shiftOne, setShiftOne] = useState({});
     const [staffId, setStaffId] = useState(0);
     const [dateFrom, setDatefrom] = useState("");
     const [dateTo, setDateTo] = useState("");
-    const [profileId, setProfileId] = useState(0);
     const [isNightShift, setIsNightShift] = useState(false);
     const [isExceptionalShift, setIsExceptionalShift] = useState(false);
     const [activities, setActivities] = useState([]);
     const [selectedActivities, setSelectedActivities] = useState([]);
     const [selectedStaff, setSelectedStaff] = useState("");
-    const [selectedClient, setSelectedClient] = useState("");
+
+    const [selectedClient, setSelectedClient] = useState([]);
+    const [newClient, setNewClient] = useState([]);
+    const handleSelectionChange = (selected) => {
+        setNewClient(selected);
+    };
+    const selectClients = newClient.map(option => option.label).join(', ');
 
     const FetchSchedule = async () => {
+
 
         try {
             const { data } = await get(`ShiftRosters/${uid}`, { cacheTimeout: 300000 });
@@ -57,42 +78,23 @@ const EditShiftRoaster = () => {
             setActivities(activities.split(',').map((activity) => ({ label: activity, value: activity })));
             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
             setSelectedStaff(data.staff.fullName);
-            setSelectedClient(data.profile.fullName);
+            setSelectedClient(data.clients.split(/,\s*/).map((client) => ({ label: client, value: client })));
+            setNewClient(data.clients.split(/,\s*/).map((client) => ({ label: client, value: client })));
             setStaffId(data.staff.staffId);
-            setProfileId(data.profile.profileId);
             setDatefrom(data.dateFrom);
             setDateTo(data.dateTo);
 
 
             setLoading(false)
         } catch (error) {
+            toast.error("Error Fetching Schedule")
             console.log(error);
-        }
-        try {
-            const staffResponse = await get(`Staffs?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const staff = staffResponse.data;
-            setStaff(staff);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        }
-
-        try {
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            setClients(client);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
         }
 
     };
     useEffect(() => {
         FetchSchedule()
     }, []);
-
     const [repeat, setRepeat] = useState(false);
 
     const handleRepeatChange = (e) => {
@@ -113,11 +115,6 @@ const EditShiftRoaster = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
-        if (staffId === 0 || profileId === 0
-        ) {
-            return toast.error("Invalid Request")
-        }
         try {
             setLoading(true)
             const { data } = await post(`/ShiftRosters/edit_shift/${uid}?userId=${id.userId}`,
@@ -125,10 +122,10 @@ const EditShiftRoaster = () => {
                     companyId: id.companyId,
                     shiftRosterId: uid,
                     staffId: Number(staffId),
+                    clientList: selectClients,
                     dateFrom,
                     dateTo,
                     activities: selectedValues,
-                    profileId: Number(profileId),
                     isNightShift,
                     isExceptionalShift,
 
@@ -139,6 +136,7 @@ const EditShiftRoaster = () => {
             setLoading(false)
 
         } catch (error) {
+            toast.error("Error Editing Shift Roster")
             toast.error(error.response?.data?.message)
 
             setLoading(false)
@@ -163,7 +161,7 @@ const EditShiftRoaster = () => {
 
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Edit Shift Details</h4>
-                                <Link to={'/administrator/shiftRoster'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                <Link to="/administrator/shiftRoster" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
@@ -187,6 +185,19 @@ const EditShiftRoaster = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Client Name</label>
+                                                <MultiSelect
+                                                    options={clients.concat(selectedClient)}
+                                                    value={newClient}
+                                                    onChange={handleSelectionChange}
+                                                    labelledBy="Select Clients"
+                                                />
+
+                                            </div>
+                                        </div>
+
+                                        {/* <div className="col-sm-6">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Client Name</label>
                                                 <div>
                                                     <select className="form-select" onChange={e => setProfileId(e.target.value)}>
                                                         <option defaultValue hidden>{selectedClient}</option>
@@ -196,7 +207,7 @@ const EditShiftRoaster = () => {
                                                         }
                                                     </select></div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Start Time</label>
@@ -233,7 +244,7 @@ const EditShiftRoaster = () => {
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isExceptionalShift} onChange={handleExceptionChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Exceptional Shift</label>
+                                                <label className="col-form-label">Is Active Night</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
@@ -253,7 +264,7 @@ const EditShiftRoaster = () => {
                                     </div>
 
                                     <div className="submit-section">
-                                        <button className="btn btn-primary submit-btn" type='submit'>
+                                        <button className="btn btn-primary rounded submit-btn" type='submit'>
 
                                             {loading ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>

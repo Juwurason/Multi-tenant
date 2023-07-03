@@ -50,6 +50,10 @@ const AttendanceReport = () => {
   const dispatch = useDispatch();
 
   const id = JSON.parse(localStorage.getItem('user'));
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
   // Fetch staff data and update the state
   useEffect(() => {
     dispatch(fetchAttendance(id.companyId));
@@ -93,7 +97,8 @@ const AttendanceReport = () => {
       sortable: true,
       expandable: true,
       cell: (row) => <div className='d-flex justify-content-center align-items-center'>
-        <button
+        <>
+        {id.role === "CompanyAdmin" || hasRequiredClaims("Adjust Attendances") ? <button
           className='btn'
           title='Adjust Attendance'
           onClick={() => AdjustAttendance(row.attendanceId)}
@@ -106,7 +111,8 @@ const AttendanceReport = () => {
             </div> :
               <FaRegClock />
           }
-        </button>
+        </button>:""}
+        </>
       </div>
     },
     {
@@ -159,7 +165,7 @@ const AttendanceReport = () => {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex" style={{ overflow: "hidden" }}>
-          <Link
+          {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ?<Link
             className='btn'
             title='Edit'
             to={`/app/reports/edit-attendance/${row.attendanceId}`}
@@ -167,7 +173,7 @@ const AttendanceReport = () => {
 
           >
             <FaRegEdit />
-          </Link>
+          </Link> : ""}
 
           <Link
             className='btn'

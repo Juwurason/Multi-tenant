@@ -1,314 +1,294 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, withRouter } from 'react-router-dom';
+import man from "../../../assets/img/user.jpg"
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
-import { useCompanyContext } from '../../../context/index.jsx';
 import DashboardCard from '../../../_components/cards/dashboardCard.jsx';
-import useHttp from '../../../hooks/useHttp.jsx';
-import { MdOutlineEventNote, MdOutlineFolderOpen, MdOutlinePeople, MdOutlineQueryBuilder } from 'react-icons/md';
-import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
-import { GoNote } from 'react-icons/go';
-import { GiNotebook } from 'react-icons/gi';
-import { AiOutlineFolder } from 'react-icons/ai';
-import man from "../../../assets/img/user.jpg"
-import AdminHeader from '../Components/AdminHeader';
-import AdminSidebar from '../Components/AdminSidebar';
-
-
-
+import ClientChart from '../../../_components/chart/ClientChart.jsx';
+import { MdCalendarMonth, MdCalendarToday, MdCalendarViewWeek, MdOutlineEventNote, MdOutlineFeed, MdOutlineFolderOpen, MdOutlineGroup, MdOutlinePages, MdOutlinePersonOutline, MdOutlineQueryBuilder, MdOutlineSwitchAccount } from 'react-icons/md';
+import { FaLongArrowAltRight } from 'react-icons/fa';
+import { GrTicket } from 'react-icons/gr';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAttendanceCount, fetchShiftRosterCount, fetchProgressNoteCount, fetchShiftAnalysisCount } from '../../../store/slices/CountsSlice';
+import { fetchAdmin } from '../../../store/slices/AdminSlice';
+import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchClient } from '../../../store/slices/ClientSlice';
+import { fetchDocument } from '../../../store/slices/DocumentSlice';
+import { fetchTicket } from '../../../store/slices/TicketSlice';
+import { useCompanyContext } from '../../../context';
 
 const AdminDashboard = () => {
-    const userObj = JSON.parse(localStorage.getItem('user'));
-    const [staff, setStaff] = useState([]);
-    const [clients, setClients] = useState([]);
-    const [attendance, setAttendance] = useState([]);
-    const [rosters, setRosters] = useState([]);
-    const [recentUsers, setRecentUsers] = useState([]);
-    const [progressNote, setProgressNote] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [document, setDocument] = useState([]);
-    const { get } = useHttp();
+  const { userProfile } = useCompanyContext();
+  const id = JSON.parse(localStorage.getItem('user'));
+  const [recentUsers, setRecentUsers] = useState([]);
 
-    let isMounted = true;
+  const dispatch = useDispatch();
+  const shiftRosterCount = useSelector((state) => state.dashboard.shiftRosterCount);
+  const attendanceCount = useSelector((state) => state.dashboard.attendanceCount);
+  const progressNoteCount = useSelector((state) => state.dashboard.progressNoteCount);
+  const perMonthCount = useSelector((state) => state.dashboard.shiftForMonth);
+  const perDayCount = useSelector((state) => state.dashboard.shiftForDay);
+  const month = useSelector((state) => state.dashboard.month);
+  const monthPercentage = useSelector((state) => state.dashboard.monthPercentage);
+  const fromWeek = useSelector((state) => state.dashboard.fromWeek);
+  const toWeek = useSelector((state) => state.dashboard.toWeek);
+  const weekCount = useSelector((state) => state.dashboard.weekCount);
+  const weekPercentage = useSelector((state) => state.dashboard.weekPercentage);
+  const dayPercentage = useSelector((state) => state.dashboard.dayPercentage);
+  const admin = useSelector((state) => state.admin.data);
+  const staff = useSelector((state) => state.staff.data);
+  const clients = useSelector((state) => state.client.data);
+  const document = useSelector((state) => state.document.data);
+  const ticket = useSelector((state) => state.ticket.data);
+
+
+  const isLoading = useSelector((state) => state.dashboard.isLoading);
+  const error = useSelector((state) => state.dashboard.error);
+
+  useEffect(() => {
+    dispatch(fetchShiftRosterCount(id.companyId));
+    dispatch(fetchAttendanceCount(id.companyId));
+    dispatch(fetchAttendanceCount(id.companyId));
+    dispatch(fetchProgressNoteCount(id.companyId));
+    dispatch(fetchShiftAnalysisCount(id.companyId));
+    dispatch(fetchAdmin(id.companyId));
+    dispatch(fetchStaff(id.companyId));
+    dispatch(fetchClient(id.companyId));
+    dispatch(fetchDocument(id.companyId));
+    dispatch(fetchTicket(id.companyId));
+  }, [dispatch, id.companyId, clients, admin, ticket]);
+  useEffect(() => {
+    setRecentUsers(clients.slice(-5))
+
+  }, [clients, admin, attendanceCount])
 
 
 
-    useEffect(() => {
-        if (isMounted) {
-            FetchStaff();
-        }
 
-        return () => {
-            isMounted = false;
-        };
-    }, []);
-
-    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
-
-    async function FetchStaff() {
-        setLoading(true)
-        try {
-            const { data } = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            setClients(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-
-        try {
-            const clientResponse = await get(`/Profiles?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            const client = clientResponse.data;
-            const recentUsers = client.slice(-5);
-            setRecentUsers(recentUsers);
-            setClients(client);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-
-        try {
-            const { data } = await get(`Staffs?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            setStaff(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-
-        try {
-            const { data } = await get(`ShiftRosters/get_all_shift_rosters?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            setRosters(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-
-        try {
-            setLoading(true)
-            const { data } = await get(`Attendances/get_all_attendances_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setAttendance(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-
-        try {
-            const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            setDocument(data)
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
-
-        try {
-            const { data } = await get(`ProgressNotes/get_all_progressnote_by_company?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-            setProgressNote(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
-
-        finally {
-            setLoading(false)
-        }
-    }
+  // console.log(userProfile);
 
 
 
 
 
-    const [menu, setMenu] = useState(false);
-    // const { staff, clients, FetchStaff, document } = useCompanyContext()
-    const toggleMobileMenu = () => {
-        setMenu(!menu)
-    };
-
-    useEffect(() => {
-        FetchStaff()
-    }, []);
-
-    // useEffect(() => {
-    //     let firstload = localStorage.getItem("firstload")
-    //     if (firstload === "false") {
-    //         setTimeout(function () {
-    //             window.location.reload(1)
-    //             localStorage.removeItem("firstload")
-    //         }, 1000)
-    //     }
-    // });
+  return (
+    <>
 
 
+      <div className="page-wrapper">
+        <Helmet>
+          <title>Dashboard - Promax Staff-Admin Dashboard</title>
+          <meta name="description" content="Dashboard" />
+        </Helmet>
+        {/* Page Content */}
+        <div className="content container-fluid">
+          {/* Page Header */}
+          <div className="page-header">
+            <div className="row">
+              <div className="col-sm-12">
+                {/* <h3 className="page-title">Welcome {id.firstName}</h3> */}
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item active">Dashboard</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          {/* /Page Header */}
+          <div className="row g-1">
+            <div className='col-md-7'>
+              <h4 className='fw-bold'>Overview</h4>
+              <div className="row">
+              
+                <DashboardCard title={"Clients"} sty={'success'} content={clients.length} icon={<MdOutlineGroup className='fs-4' />}
+                  loading={isLoading} link={`/administrator/allClient`}
+                />
 
-    return (
-        <>
-            <div className={`main-wrapper ${menu ? 'slide-nav' : ''}`}>
 
-                {/* <AdminHeader />
-                <AdminSidebar /> */}
-                <div className="page-wrapper">
-                    <Helmet>
-                        <title>Dashboard - Promax Admin Dashboard</title>
-                        <meta name="description" content="Admin Dashboard" />
-                    </Helmet>
-                    {/* Page Content */}
-                    <div className="content container-fluid">
-                        {/* Page Header */}
-                        <div className="page-header">
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    {/* <h3 className="page-title">Welcome {userObj.firstName}</h3> */}
-                                    <ul className="breadcrumb">
-                                        <li className="breadcrumb-item active">Dashboard</li>
-                                    </ul>
-                                </div>
-                            </div>
+                <DashboardCard title={"Shift Roster"} content={shiftRosterCount} icon={<MdOutlineEventNote className='fs-4' />}
+                  link={`/administrator/shiftRoster`}
+                  sty={'danger'}
+
+                  loading={isLoading}
+                />
+                <DashboardCard title={"Progress Notes "} content={progressNoteCount} icon={<MdOutlineFeed className='fs-4' />}
+                  link={`/administrator/progressReport`} sty={'warning'}
+                  loading={isLoading}
+                />
+
+                <DashboardCard title={"Tickets"} sty={'danger'}
+                  content={ticket.length} icon={<GrTicket className='fs-4' />}
+                  link={'/administrator/viewTickets'}
+                  loading={isLoading}
+                />
+
+                <DashboardCard title={"Attendances"} content={attendanceCount} icon={<MdOutlineQueryBuilder className='fs-4' />}
+                  link={`/administrator/attendanceReport`} sty={'warning'} loading={isLoading}
+                />
+                <DashboardCard title={`Total shift roaster for ${month}`} content={perMonthCount} icon={<MdCalendarMonth className='fs-4' />}
+                  linkTitle={`${monthPercentage}% increase compared to last month`} link={``} sty={'secondary'}
+                  loading={isLoading}
+                />
+
+
+                <DashboardCard title={`Total shift roaster for today`} sty={'danger'}
+                  content={perDayCount} icon={<MdCalendarToday className='fs-4' />}
+                  link={''}
+                  linkTitle={`${dayPercentage}% increase compared to yesterday`}
+                  loading={isLoading}
+                />
+
+                <DashboardCard title={"Documents"} sty={'info'}
+                  content={document.length} icon={<MdOutlineFolderOpen className='fs-4' />}
+                  link={'/administrator/allDocuments'}
+                  loading={isLoading}
+                />
+
+              </div>
+
+            </div>
+
+
+            <div className='col-md-5 p-2'>
+
+
+
+              <div className='p-3 shadow-sm mb-3'>
+                <small className='fw-bold'>Staffs</small>
+                <div className='d-flex justify-content-center flex-column p-2 gap-2'>
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <span><MdOutlineSwitchAccount className='fs-2' /> Total number of Staffs</span>
+                    <h2 className='text-primary'>
+
+                      {staff.length}
+                    </h2>
+                  </div>
+                  <div className='d-flex justify-content-end'>
+                    <Link style={{ fontSize: "12px" }}
+
+                      to={`/administrator/allStaff`} className='pointer text-dark'>View all</Link>
+                  </div>
+                  {/* <div className='p-2 bg-1 rounded-2'>
+
+                    <ClientChart />
+
+                  </div> */}
+                  <div className='p-3 shadow-sm'>
+                    <small className='fw-bold'>Recently Onboarded Clients</small>
+                    {
+                      isLoading && <div className='text-center fs-1'>
+                        <div className="spinner-grow text-secondary" role="status">
+                          <span className="sr-only">Loading...</span>
                         </div>
-                        {/* /Page Header */}
-                        <div className="row g-1 gap-5">
-                            <div className='col-md-7'>
-                                <div className="row">
-                                    <h4>Overview</h4>
-                                    <DashboardCard title={"Total Client"} content={clients.length} icon={<MdOutlinePeople className='fs-4' />}
-                                        link={`/administrator/allClient`}
-                                        sty={'primary'}
-                                    />
-                                    <DashboardCard title={"Total Staff"} content={staff.length} icon={<MdOutlinePeople className='fs-4' />}
-                                        link={`/administrator/allStaff`}
-                                        sty={'danger'}
-                                    />
-                                    <DashboardCard title={"Total Tickets"} content={0} icon={<MdOutlineEventNote className='fs-4' />}
-                                        link={`/administrator/viewTickets`}
-                                        sty={'warning'}
-                                    />
-                                    <DashboardCard title={"Total Documents"} content={document.length} icon={<AiOutlineFolder className='fs-4' />}
-                                        linkTitle={"Total Documents"} link={`/administrator/allDocuments`} sty={'info'}
-                                    />
+                      </div>
+                    }
 
-                                    <DashboardCard title={"Total Progress Notes"} content={progressNote.length} icon={<GoNote className='fs-4' />}
-                                        link={`/administrator/progressReport`} sty={'danger'}
-                                    />
 
-                                    <DashboardCard title={"Total Shift Roster"} content={rosters.length} icon={<MdOutlineQueryBuilder className='fs-4' />}
-                                        link={`/administrator/shiftRoster`} sty={'success'}
-                                    />
-                                    <DashboardCard title={"Total Attendances"} content={attendance.length} icon={<GiNotebook className='fs-4' />}
-                                        link={`/administrator/attendanceReport`} sty={'info'}
-                                    />
-                                    {/* <DashboardCard title={"Total Shift Roster For May"} content={0} icon={<MdOutlineSummarize className='fs-4' />}
-                                        link={``} sty={'info'}
-                                    /> */}
-                                    <DashboardCard title={"Total Shift Roster for Today"} content={0} icon={<MdOutlineQueryBuilder className='fs-4' />}
-                                        link={``} sty={'danger'}
-                                    />
-                                </div>
-
+                    {
+                      !isLoading && clients.length >= 1 && recentUsers && recentUsers.length > 0 ? (
+                        recentUsers.map((data, index) => (
+                          <Link to={`/administrator/clientProfile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
+                            <div className="col-2">
+                              <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                                <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                              </div>
                             </div>
 
+                            <div className="col-10 d-flex flex-column justify-content-start text-dark">
+                              <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
+                              <span style={{ fontSize: "10px", }}>{data.address}</span>
+                              <span style={{ fontSize: "7px", }}>{data.email}</span>
+                            </div>
 
-                            <div className='col-md-4 p-2 d-flex  flex-column gap-2 justify-content-start'>
-                                <div className='p-3 shadow-sm'>
-                                    <h5>Recently Onboarded Clients</h5>
-                                    {
-                                        loading && <div className='text-center fs-1'>
-                                            <div className="spinner-grow text-secondary" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                    }
+                          </Link>
+                        ))
+                      ) : !isLoading && clients.length <= 0 ? (
+                        <div className="text-center text-danger fs-6">
+                          <p>Not Available</p>
+                        </div>
+                      ) : null
+                    }
 
-                                    {
-                                        !loading && recentUsers.length >= 1 && recentUsers.map((data, index) =>
 
-                                            <Link to={`/administrator/clientProfile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
-                                                <div className="col-2">
-                                                    <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                                                        <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
-                                                    </div>
-                                                </div>
 
-                                                <div className="col-10 d-flex flex-column justify-content-start text-dark">
-                                                    <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
-                                                    <span style={{ fontSize: "10px", }}>{data.address}</span>
-                                                    <span style={{ fontSize: "7px", }}>{data.email}</span>
-                                                </div>
 
-                                            </Link>
-                                        )
-                                    }
-                                    {
-                                        !loading && recentUsers.length <= 0 && <div className='text-center text-danger fs-6'>
-                                            <p>Not Available</p>
-                                        </div>
-                                    }
+                    <div className='d-flex justify-content-end mt-2'>
+                      <Link to={'/administrator/allClient'}
+                        className='text-primary pointer' style={{ fontSize: "12px", }}>
+                        See all <FaLongArrowAltRight className='fs-3' />
+                      </Link>
+                    </div>
 
-                                    <div className='d-flex justify-content-end mt-2'>
-                                        <Link to={'/administrator/allClient'}
-                                            className='text-primary pointer' style={{ fontSize: "12px", }}>
-                                            See all <FaLongArrowAltRight className='fs-3' />
-                                        </Link>
-                                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={`card shadow-sm bg-white`}>
+                <div className="card-content">
+                  <div className="card-body">
+                    <div className="media d-flex justify-content-between">
+                      <div className="media-body text-left">
+                        <span>{`Total shift roaster from ${fromWeek} - ${toWeek}`}</span>
 
-                                </div>
-                                <div className={`card border border-info`}>
-                                    <div className="card-content">
-                                        <div className="card-body">
-                                            <div className="media d-flex justify-content-between">
-                                                <div className="media-body text-left">
-                                                    <span>Documents</span>
+                        {
+                          isLoading ? (<div className=" d-flex py-2 justify-content-start fs-6">
+                            <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          </div>
+                          )
 
-                                                    {
-                                                        loading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                                                            <div className="spinner-grow text-light" role="status">
-                                                                <span className="sr-only">Loading...</span>
-                                                            </div>
-                                                        </div>
-                                                        )
+                            :
+                            <h3 className='text-info'>{weekCount}</h3>
+                        }
 
-                                                            :
-                                                            <h3 className='text-info'>{document.length}</h3>
-                                                    }
+                        <Link style={{ fontSize: "12px" }}
 
-                                                    {/* <Link style={{ fontSize: "12px" }}
-
-                                                        to={`/app/employee/document`} className='pointer text-dark text-end'>View all</Link> */}
-                                                </div>
-                                                <div className="align-self-center">
-                                                    <MdOutlineFolderOpen className='fs-4' />
-                                                </div>
-                                            </div>
-                                            {/* <div className='d-flex justify-content-end'>
+                          to={``} className='pointer text-dark text-end'>{`${weekPercentage}% increase compared to last week`}</Link>
+                      </div>
+                      <div className="align-self-center">
+                        <MdCalendarViewWeek className='fs-4' />
+                      </div>
+                    </div>
+                    {/* <div className='d-flex justify-content-end'>
                         <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span>
                       </div> */}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
-                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
 
 
 
-            {/* /Page Content */}
 
 
-            <Offcanvas />
-        </>
-    );
+
+
+          </div>
+          <div className="row g-1">
+            <div className='col-md-7'>
+              <div className="row">
+                <div className='col-md-6  d-flex  flex-column gap-2 justify-content-start'>
+                  {/*  */}
+
+
+                </div>
+               
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+
+
+      {/* /Page Content */}
+
+
+      {/* <Offcanvas /> */}
+    </>
+  );
 }
 
 export default withRouter(AdminDashboard);

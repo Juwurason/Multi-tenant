@@ -4,7 +4,8 @@ import { FaArrowLeft, FaBackspace } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useCompanyContext } from '../../../context';
+// import http from '../../api/http'
+// import { useCompanyContext } from '../../context';
 import useHttp from '../../../hooks/useHttp';
 
 const CreateClient = () => {
@@ -25,16 +26,16 @@ const CreateClient = () => {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        if (firstName.trim() === "" || surName.trim() === "" || middleName.trim() === "" || address.trim() === "" ||
+        if (firstName.trim() === "" || surName.trim() === "" || address.trim() === "" ||
             email.trim() === "" || agreementEndDate.trim() === "" || agreementStartDate.trim() === "" || NDISNo.trim() === ""
         ) {
-            return toast.error("All Fields must be filled")
+            return toast.error("Marked Fields must be filled")
         }
 
 
         const formData = new FormData()
         // Add input field values to formData
-        formData.append("CompanyId", 30);
+        formData.append("CompanyId", id.companyId);
         formData.append("FirstName", firstName);
         formData.append("SurName", surName);
         formData.append("MiddleName", middleName);
@@ -65,7 +66,7 @@ const CreateClient = () => {
             setAgreementEndDate('');
             setNDISNo('');
         } catch (error) {
-            toast.error(error.response?.data?.message)
+            toast.error("Error Creating Client")
             console.log(error);
             setLoading(false)
 
@@ -146,10 +147,12 @@ const CreateClient = () => {
                                             </div>
                                         </div>
 
+
+
                                     </div>
 
                                     <div className="submit-section">
-                                        <button className="btn btn-primary submit-btn" type='submit'>
+                                        <button className="btn btn-primary rounded submit-btn" type='submit'>
 
                                             {loading ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>
