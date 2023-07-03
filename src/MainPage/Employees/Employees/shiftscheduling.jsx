@@ -128,6 +128,9 @@ const ShiftScheduling = () => {
     else if (activityDateTo < nowInAustraliaTime || activity.attendance === true) {
       return 'Present'
     }
+    else if (activityDateTo < nowInAustraliaTime || activity.attendance === false) {
+      return 'Present'
+    }
     else if (activity.status === "Pending") {
       return 'Pending'
     }
@@ -627,7 +630,7 @@ const ShiftScheduling = () => {
                                     )
                                   }
                                   {
-                                    getActivityStatus(activity) === 'Pending' && "Absent" && (
+                                    getActivityStatus(activity) === 'Pending' || "Absent" && (
 
                                       <small
                                         className={`text-truncate d-flex 
@@ -749,6 +752,8 @@ const ShiftScheduling = () => {
                     <div className="row">
                       <div className="col-sm-6">
                         <div className="form-group">
+                          <label className="col-form-label">Start Km</label>
+
                           <input className="form-control" type="text"
                             value={startKm}
                             placeholder='Start Km' onChange={(e) => setStartKm(e.target.value)} />
@@ -756,6 +761,8 @@ const ShiftScheduling = () => {
                       </div>
                       <div className="col-sm-6">
                         <div className="form-group">
+                          <label className="col-form-label">End Km</label>
+
                           <input className="form-control" type="text" placeholder='End Km'
                             value={endKm}
                             onChange={(e) => setEndKm(e.target.value)} />
