@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { MdDashboard } from 'react-icons/md';
+import HasClaim from '../../hooks/HasClaim'
 
 const Sidebar = (props) => {
   const MenuMore = () => {
@@ -32,21 +33,16 @@ const Sidebar = (props) => {
     setLevel3Menu(value)
   }
 
-
-  const user = JSON.parse(localStorage.getItem('user'));
-
-  const claims = JSON.parse(localStorage.getItem('claims'));
+  // const claims = JSON.parse(localStorage.getItem('claims'));
   // console.log(claims);
-  const claimType = claims.map((claim) => claim.value);
+  // const claimType = claims.map((claim) => claim.value);
   // console.log(claimType);
 
-
-  // const requiredClaimTypes = ['Staff Dashboard', 'Progress Note'];
-
-  // const hasRequiredClaims = requiredClaimTypes.every(requiredClaimType =>
-  //   claims.some(claim => claim.type === requiredClaimType)
-  // );
-  // console.log(hasRequiredClaims)
+  const user = JSON.parse(localStorage.getItem('user'));
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
   let pathname = props.location.pathname
   return (
@@ -121,10 +117,29 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/app/employee/allstaff"><i className="la la-user" /> <span>Staffs</span></Link>
-              </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Staff") ? 
+                
+                  <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
+                    <Link to="/app/employee/allstaff">
+                      <i className="la la-user" />
+                      <span>Staffs</span>
+                    </Link>
+                  </li>
+              : ""
+              }
+
+              {/* {user.role === "CompanyAdmin" || (
+                <HasClaim claimType="View Staff">
+                  <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClick()}>
+                    <Link to="/app/employee/allstaff">
+                      <i className="la la-user" />
+                      <span>Staffs</span>
+                    </Link>
+                  </li>
+                </HasClaim>
+              )} */}
+              
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Client") ? <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
 
@@ -215,6 +230,7 @@ const Sidebar = (props) => {
                 }}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "setup" ?
                   <ul>
+                    
                     <li><Link className={pathname.includes('public-holiday') ? "active" : pathname.includes('public-holiday')}
                       to="/app/setup/public-holiday" onClick={() => onMenuClik()}>Public Holidays</Link>
                     </li>
@@ -234,7 +250,7 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Shift Roster Calendar") || hasRequiredClaims("View Shift Roster") ? <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
                 <Link to="/app/employee/shift-scheduling" onClick={() => onMenuClik()}><i className="la la-calendar" /> <span>Shift Roaster</span></Link>
               </li> : ""}
 
@@ -242,10 +258,10 @@ const Sidebar = (props) => {
                 <span>Report Management</span>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
+              {user.role === "CompanyAdmin"|| hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
                 <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Attendance Report</span></Link>
               </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Progress Report") ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
                 <Link to="/app/reports/progress-reports" onClick={() => onMenuClik()}><i className="la la-folder-open" /> <span>Progress Report</span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" ? <li className={pathname.includes('invoice') || pathname.includes('invoice') ? "active" : ""}>

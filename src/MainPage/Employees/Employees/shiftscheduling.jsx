@@ -32,6 +32,11 @@ const ShiftScheduling = () => {
   //Declaring Variables
   const dispatch = useDispatch();
   const id = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
   // Fetch staff data and update the state
   useEffect(() => {
@@ -333,14 +338,14 @@ const ShiftScheduling = () => {
               <div className="col">
                 <h3 className="page-title">Shift Roster</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item"><Link to="/app/employee/allemployees">Employees</Link></li>
+                  <li className="breadcrumb-item"><Link to="">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="">Employees</Link></li>
                   <li className="breadcrumb-item active">Shift Roster</li>
                 </ul>
               </div>
-              <div className="col-auto float-end ml-auto p-4">
+              {user.role === "CompanyAdmin" || hasRequiredClaims("Add Shift Roster") ? <div className="col-auto float-end ml-auto p-4">
                 <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
-              </div>
+              </div> : ""}
             </div>
           </div>
 
@@ -547,7 +552,7 @@ const ShiftScheduling = () => {
                             getActivityStatus(activity) === 'Active' ?
                               (
                                 <div className='d-flex gap-2'>
-                                  <small
+                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Shift Roster") ? <small
                                     className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
@@ -556,8 +561,8 @@ const ShiftScheduling = () => {
                                     title="Delete"
                                   >
                                     <GoTrashcan className='fs-6' />
-                                  </small>
-                                  <Link
+                                  </small>:""}
+                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ?<Link
                                     to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                     className={`text-truncate d-flex 
                               align-items-center
@@ -566,8 +571,8 @@ const ShiftScheduling = () => {
 
                                   >
                                     <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                  </Link>
-                                  <small
+                                  </Link>: ""}
+                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Mark Attendances") ?<small
                                     className={`text-truncate d-flex 
                                align-items-center
                                justify-content-center px-2 py-1 rounded bg-warning pointer`}
@@ -576,14 +581,14 @@ const ShiftScheduling = () => {
                                     title="Mark attendance for staff"
                                   >
                                     <MdDoneOutline className='fs-6' />
-                                  </small>
+                                  </small>: ""}
                                 </div>
                               )
                               :
                               (
                                 <div className='d-flex gap-2' >
 
-                                  <small
+                                 { (user.role === "CompanyAdmin" || hasRequiredClaims("Delete Shift Roster")) && (<small
                                     className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
@@ -592,11 +597,11 @@ const ShiftScheduling = () => {
                                     title="Delete"
                                   >
                                     <GoTrashcan className='fs-6' />
-                                  </small>
+                                  </small>)}
 
                                   {
                                     getActivityStatus(activity) === 'Upcoming' && (
-                                      <Link
+                                      (user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster")) && (<Link
                                         to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                         className={`text-truncate d-flex 
                               align-items-center
@@ -605,13 +610,13 @@ const ShiftScheduling = () => {
 
                                       >
                                         <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                      </Link>
+                                      </Link>)
 
                                     )
                                   }
                                   {
                                     getActivityStatus(activity) === 'Absent' && (
-                                      <small
+                                      (user.role === "CompanyAdmin" || hasRequiredClaims("Mark Attendances")) && (<small
                                         className={`text-truncate d-flex 
                                  align-items-center
                                  justify-content-center px-2 py-1 rounded bg-warning pointer`}
@@ -620,7 +625,7 @@ const ShiftScheduling = () => {
                                         title="Mark attendance for staff"
                                       >
                                         <MdDoneOutline className='fs-6' />
-                                      </small>
+                                      </small>)
 
                                     )
                                   }
@@ -698,10 +703,11 @@ const ShiftScheduling = () => {
                 </>
               )}
             </Modal.Body>
-            <Modal.Footer>
+           
+            {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ? <Modal.Footer>
               <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
 
-            </Modal.Footer>
+            </Modal.Footer>: ""}
           </Modal>
           <Modal
             size="lg"

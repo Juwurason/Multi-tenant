@@ -11,6 +11,7 @@ import AdminProfile from '../modules/Admin/Components/AdminProfile';
 import ChangePassword from '../modules/Admin/Components/ChangePassword';
 import EditAdminProfile from '../modules/Admin/Components/EditAdminProfile';
 import CreateClient from '../modules/Admin/CreateClient';
+import CreateUser from '../modules/Admin/CreateUser';
 import CreateShift from '../modules/Admin/CreateShift';
 import CreateStaff from '../modules/Admin/CreateStaff';
 import EditClientPro from '../modules/Admin/EditClientPro';
@@ -66,6 +67,10 @@ export default [
     {
         path: 'createStaff',
         component: CreateStaff
+    },
+    {
+        path: 'createUser',
+        component: CreateUser
     },
     {
         path: 'staffDocum/:uid',

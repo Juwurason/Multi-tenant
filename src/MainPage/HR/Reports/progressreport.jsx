@@ -25,6 +25,10 @@ const ProgressReport = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     //Declaring Variables
     const dispatch = useDispatch();
+    const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
     // Fetch staff data and update the state
     useEffect(() => {
@@ -79,12 +83,14 @@ const ProgressReport = () => {
                 <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
             ),
         },
+       
         {
             name: "Actions",
             cell: (row) => (
-
-
-                <button
+                
+                    <>
+                    
+                {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Progress Report") ? <button
                     className='btn'
                     title='Delete'
                     onClick={() => {
@@ -93,7 +99,8 @@ const ProgressReport = () => {
                     }}
                 >
                     <GoTrashcan />
-                </button>
+                </button>: ""}
+                    </>
 
             ),
         },

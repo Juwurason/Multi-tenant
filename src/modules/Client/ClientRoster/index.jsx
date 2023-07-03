@@ -303,9 +303,22 @@ const ClientRoster = () => {
                                 </span>
 
                                 <span>
-                                    <h1 className='text-muted fw-bold'>
-                                        {startDate.format('YYYY')}
-                                    </h1>
+                                    {
+                                        loading ?
+                                            <div className="text-center d-flex align-items-center gap-2 ">
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                <span>Please Wait</span>
+                                            </div>
+
+                                            :
+                                            <span>
+                                                <h1 className='text-muted fw-bold'>
+                                                    {startDate.format('YYYY')}
+                                                </h1>
+                                            </span>
+                                    }
                                 </span>
                                 <span>
                                     <select className="form-select border-0 fw-bold" style={{ backgroundColor: '#F4F4F4' }}>

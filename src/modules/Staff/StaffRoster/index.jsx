@@ -192,9 +192,22 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                 </span>
 
                 <span>
-                  <h1 className='text-muted fw-bold'>
-                    {startDate.format('YYYY')}
-                  </h1>
+                {
+                  loading ?
+                    <div className="text-center d-flex align-items-center gap-2 ">
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      <span>Please Wait</span>
+                    </div>
+
+                    :
+                    <span>
+                      <h1 className='text-muted fw-bold'>
+                        {startDate.format('YYYY')}
+                      </h1>
+                    </span>
+                }
                 </span>
 
                 <span>

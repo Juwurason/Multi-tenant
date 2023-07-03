@@ -22,6 +22,11 @@ import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { useDispatch, useSelector } from 'react-redux';
 const AllEmployees = () => {
   const id = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
   const dispatch = useDispatch();
 
@@ -31,6 +36,7 @@ const AllEmployees = () => {
   }, [dispatch]);
 
   // Access the entire state
+  
   const loading = useSelector((state) => state.staff.isLoading);
   const staff = useSelector((state) => state.staff.data);
 
@@ -82,13 +88,18 @@ const AllEmployees = () => {
     {
       name: "Actions",
       cell: (row) => (
+        
         <div className="d-flex gap-1">
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Staff") ? <div className='col-md-4'>
           <Link to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`}
             className="btn"
             title='edit'
           >
             <FaRegEdit />
           </Link>
+          </div> : ""}
+          
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Staff") ? <div className='col-md-4'>
           <button
             className='btn'
             title='Delete'
@@ -96,7 +107,7 @@ const AllEmployees = () => {
           >
             <GoTrashcan />
           </button>
-
+          </div> : ""}
 
         </div>
       ),
@@ -286,12 +297,17 @@ const AllEmployees = () => {
         <div><span className='fw-bold'>Email: </span> {data.email}</div>
         <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
-          <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-            Activate Staff
-          </button> |
+        {user.role === "CompanyAdmin" || hasRequiredClaims("Activate Staff") ?
+        <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+            Activate Staff |
+          </button> 
+           : ""} 
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Deactivate Staff") ?
           <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
             Deactivate Staff
           </button>
+           : ""}
+          
         </div>
 
       </div>
@@ -340,7 +356,7 @@ const AllEmployees = () => {
               <div className="col">
                 <h3 className="page-title">Staffs</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item">Dashboard</li>
                   <li className="breadcrumb-item active">Staffs</li>
                 </ul>
               </div>
@@ -482,10 +498,10 @@ const AllEmployees = () => {
                   </button>
                 </CopyToClipboard>
               </div>
-              <div className='col-md-4'>
+              {user.role === "CompanyAdmin" || hasRequiredClaims("Add Staff") ? <div className='col-md-4'>
                 <Link to={'/app/employee/addstaff'} className="btn btn-info text-white add-btn rounded-2">
                   Create New staff</Link>
-              </div>
+              </div> : ""}
             </div>
             <DataTable data={filteredData} columns={columns}
               pagination
