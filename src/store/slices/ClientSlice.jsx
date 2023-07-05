@@ -3,12 +3,10 @@ import api from '../api';
 
 export const fetchClient = createAsyncThunk('Client/fetchClient', async (companyId) => {
     const response = await api.fetchClientData(companyId);
-    // const filteredData = response.filter((client) => client.isActive);
     return response;
 });
-export const formatClient = createAsyncThunk('Client/formatClient', async () => {
-    const response = await api.fetchClientData();
-    // const filteredData = response.filter((client) => client.isActive);
+export const formatClient = createAsyncThunk('Client/formatClient', async (companyId) => {
+    const response = await api.fetchClientData(companyId);
     const formattedData = response.map((item) => ({
         label: item.fullName,
         value: item.fullName,

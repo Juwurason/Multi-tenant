@@ -39,7 +39,7 @@ const CreateShift = () => {
     // Fetch staff data and update the state
     useEffect(() => {
         dispatch(fetchStaff(id.companyId));
-        dispatch(formatClient());
+        dispatch(formatClient(id.companyId));
     }, [dispatch]);
 
     // Access the entire state

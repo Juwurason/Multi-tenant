@@ -18,6 +18,14 @@ import { Modal } from 'react-bootstrap';
 dayjs.extend(isBetween);
 
 const ClientDashboard = () => {
+  const navigate = useHistory();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user.token) {
+      localStorage.clear();
+      navigate.push('/')
+    }
+  }, [localStorage.getItem('user')]);
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
@@ -107,7 +115,6 @@ const ClientDashboard = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useHistory()
 
   const handleClockIn = () => {
     setIsLoading(true);
