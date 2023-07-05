@@ -193,9 +193,9 @@ const Sidebar = (props) => {
                 <Link to="/staff/staff/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
               </li> : ""}
 
-              {user.role === "Staff" ? <li className="submenu">
+               {user.role === "Staff" ? <li className="submenu">
                 <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
-                  e.preventDefault()
+                 e.preventDefault()
                   toggleSidebar(isSideMenu == "support" ? "" : "support")
                 }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "support" ?
@@ -281,13 +281,13 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/document" onClick={() => onMenuClik()}><i className="la la-book" /> <span>Documents</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Send Messages to all") ? <li className="menu-title">
+              {user.role === "CompanyAdmin" ? <li className="menu-title">
                 <span>Communication</span>
               </li> : ""}
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Send Messages to all") || hasRequiredClaims("View Tickets") ? <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
+              {user.role === "CompanyAdmin"  ? <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
                 <Link to="/app/message/inbox" onClick={() => onMenuClik()}><i className="la la-comment" /> <span>Messages</span></Link>
               </li> : ""}
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Tickets") ? <li className="submenu">
+              {user.role === "CompanyAdmin" ? <li className="submenu">
                 <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
                   e.preventDefault();
                   toggleSidebar(isSideMenu == "support" ? "" : "support")
@@ -311,7 +311,7 @@ const Sidebar = (props) => {
                 }
               </li> : ""}
 
-              {user.role === "Staff" ? <li className="menu-title">
+              {/* {user.role === "Staff" ? <li className="menu-title">
                 <span>Communication</span>
               </li> : ""}
 
@@ -344,7 +344,7 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
-              </li> : ""}
+              </li> : ""} */}
 
 
               {/* Staff SideBar Ends */}
