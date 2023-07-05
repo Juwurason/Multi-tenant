@@ -121,9 +121,9 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    // else if (activityDateFrom > nowInAustraliaTime || activity.status === "Cancelled") {
-    //   return 'Cancelled'
-    // }
+    else if (activity.status === "Cancelled" ) {
+      return 'Cancelled'
+    }
     else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
     }
@@ -150,6 +150,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
+    // console.log(activity);
     setSelectedActivity(activity);
     setShowModal(true);
   };
@@ -195,22 +196,22 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                 </span>
 
                 <span>
-                {
-                  loading ?
-                    <div className="text-center d-flex align-items-center gap-2 ">
-                      <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
+                  {
+                    loading ?
+                      <div className="text-center d-flex align-items-center gap-2 ">
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        <span>Please Wait</span>
                       </div>
-                      <span>Please Wait</span>
-                    </div>
 
-                    :
-                    <span>
-                      <h1 className='text-muted fw-bold'>
-                        {startDate.format('YYYY')}
-                      </h1>
-                    </span>
-                }
+                      :
+                      <span>
+                        <h1 className='text-muted fw-bold'>
+                          {startDate.format('YYYY')}
+                        </h1>
+                      </span>
+                  }
                 </span>
 
                 <span>
@@ -320,14 +321,22 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     <small
                                       className={`p-1 rounded text-truncate ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
                                         getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
+                                        getActivityStatus(activity) === 'Cancelled' ? 'bg-secondary' :
                                           getActivityStatus(activity) === 'You are already Clocked in' ? 'bg-primary' :
                                             getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
                                         }`}
                                     >
                                       {getActivityStatus(activity)}
                                     </small>
+                                    {
+                                      activity.status === "Cancelled" ? (
+                                        <small className='bg-secondary p-1 rounded'>
+                                          Shift Cancelled
+                                        </small>
+                                      ) : null
+                                    }
 
-                                    {getActivityStatus(activity) === 'Upcoming' && (
+                                    {activity.status !== "Cancelled" && getActivityStatus(activity) === 'Upcoming' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
                                         onClick={() => HandleSubmit(activity.shiftRosterId)}
@@ -336,13 +345,8 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                       </small>
                                     )}
 
-                                    {getActivityStatus(activity) === 'Cancelled' && (
-                                      <small
-                                        className='bg-secondary p-1 rounded'
-                                      >
-                                        Shift Cancelled
-                                      </small>
-                                    )}
+                                    
+
 
                                     {getActivityStatus(activity) === 'You are already Clocked in' && (
                                       <small
