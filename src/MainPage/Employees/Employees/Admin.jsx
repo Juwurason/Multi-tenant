@@ -47,6 +47,10 @@ const AllAdmin = () => {
 
 
     const id = JSON.parse(localStorage.getItem('user'));
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
     const privateHttp = useHttp();
 
 
@@ -85,15 +89,15 @@ const AllAdmin = () => {
         }, {
             name: "Actions",
             cell: (row) => (
-                <div className="d-flex gap-1" style={{ overflow: "hidden" }}>
-                    <Link
+                <div className="d-flex gap-1" style={{ overflow: "hidden" }}>   
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Administrator") ?<Link
                         className='btn'
                         title='Edit'
                         to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`}
                     >
                         <FaRegEdit />
-                    </Link>
-                    <button
+                    </Link>: ""}
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Administrator") ?<button
                         className='btn'
                         title='Delete'
                         onClick={() => {
@@ -102,7 +106,7 @@ const AllAdmin = () => {
                         }}
                     >
                         <GoTrashcan />
-                    </button>
+                    </button>: ""}
 
                 </div>
             ),
@@ -403,8 +407,8 @@ const AllAdmin = () => {
                                 </CopyToClipboard>
                             </div>
                             <div className='col-md-4'>
-                                <Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
-                                    Create New Admin</Link>
+                                {id.role === "CompanyAdmin" || hasRequiredClaims("Add Administrator") ?<Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
+                                    Create New Admin</Link>:""}
                             </div>
                         </div>
                         <DataTable data={filteredData} columns={columns}

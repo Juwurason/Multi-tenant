@@ -79,13 +79,13 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     }
     try {
       const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
-      FetchData()
+      // FetchData()
       // setStaffCancel(cancel);
       // console.log(response);
       // setLoading(false);
       setReasonModal(false)
     } catch (error) {
-      FetchData()
+      // FetchData()
       // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -121,6 +121,9 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
+    // else if (activityDateFrom > nowInAustraliaTime || activity.status === "Cancelled") {
+    //   return 'Cancelled'
+    // }
     else if (activityDateTo < nowInAustraliaTime) {
       return activity.attendance === true ? 'Present' : 'Absent';
     }
@@ -330,6 +333,14 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                         onClick={() => HandleSubmit(activity.shiftRosterId)}
                                       >
                                         Cancel shift
+                                      </small>
+                                    )}
+
+                                    {getActivityStatus(activity) === 'Cancelled' && (
+                                      <small
+                                        className='bg-secondary p-1 rounded'
+                                      >
+                                        Shift Cancelled
                                       </small>
                                     )}
 
