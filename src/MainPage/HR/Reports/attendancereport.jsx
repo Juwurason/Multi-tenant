@@ -98,20 +98,20 @@ const AttendanceReport = () => {
       expandable: true,
       cell: (row) => <div className='d-flex justify-content-center align-items-center'>
         <>
-        {id.role === "CompanyAdmin" || hasRequiredClaims("Adjust Attendances") ? <button
-          className='btn'
-          title='Adjust Attendance'
-          onClick={() => AdjustAttendance(row.attendanceId)}
+          {id.role === "CompanyAdmin" || hasRequiredClaims("Adjust Attendances") ? <button
+            className='btn'
+            title='Adjust Attendance'
+            onClick={() => AdjustAttendance(row.attendanceId)}
 
-          disabled={loading4 ? true : false}
-        >
-          {
-            loading4 ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div> :
-              <FaRegClock />
-          }
-        </button>:""}
+            disabled={loading4 ? true : false}
+          >
+            {
+              loading4 ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div> :
+                <FaRegClock />
+            }
+          </button> : ""}
         </>
       </div>
     },
@@ -165,7 +165,7 @@ const AttendanceReport = () => {
       name: "Actions",
       cell: (row) => (
         <div className="d-flex" style={{ overflow: "hidden" }}>
-          {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ?<Link
+          {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
             className='btn'
             title='Edit'
             to={`/app/reports/edit-attendance/${row.attendanceId}`}
@@ -422,10 +422,10 @@ const AttendanceReport = () => {
             <div className="row">
               <div className="col-sm-12">
                 <h3 className="page-title">Attendance Reports</h3>
-                <ul className="breadcrumb">
+                {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Attendance Reports</li>
-                </ul>
+                </ul> : ""}
               </div>
             </div>
           </div>
@@ -483,7 +483,7 @@ const AttendanceReport = () => {
               sta === "" || periodic.length <= 0 || loading ? "" :
                 <div className="col-auto mt-3">
                   <div className="form-group">
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Generate Timesheet") ?<button
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Generate Timesheet") ? <button
                       type='button'
                       onClick={GetTimeshift}
                       className="btn btn-primary add-btn text-white rounded-2 m-r-5"
@@ -499,7 +499,7 @@ const AttendanceReport = () => {
                       )}
 
 
-                    </button>:""}
+                    </button> : ""}
                     <button
                       type='button'
                       onClick={SendTimesheet}

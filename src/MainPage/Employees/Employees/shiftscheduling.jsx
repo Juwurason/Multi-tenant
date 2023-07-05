@@ -400,11 +400,11 @@ const ShiftScheduling = () => {
             <div className="row">
               <div className="col">
                 <h3 className="page-title">Shift Roster</h3>
-                <ul className="breadcrumb">
+                {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="">Employees</Link></li>
                   <li className="breadcrumb-item active">Shift Roster</li>
-                </ul>
+                </ul> : ""}
               </div>
               {user.role === "CompanyAdmin" || hasRequiredClaims("Add Shift Roster") ? <div className="col-auto float-end ml-auto p-4">
                 <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
@@ -605,7 +605,9 @@ const ShiftScheduling = () => {
 
 
 
-                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance === true ? "bg-success" : "bg-danger"} rounded-circle`}></span>
+                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance === true ? "bg-success" : activity.attendance === false ? "bg-danger" :
+                                activity.status === "Pending" ? "" : activity.status === "Cancelled" ? "" : "bg-danger"
+                                } rounded-circle`}></span>
                             </div>
                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
                             <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>

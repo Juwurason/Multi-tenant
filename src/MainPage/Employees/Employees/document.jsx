@@ -377,20 +377,29 @@ const Document = () => {
 
     const handleFilter = async (e) => {
         e.preventDefault();
-        try {
-            // const { data } = await privateHttp.get(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${""}&status=${status.current.value}&role=${role.current.value}`)
-            const { response } = await privateHttp.get(`/Documents/filter_documents?companyId=1&fromDate=2023-01-01T11:26&toDate=2023-06-24T11:26&staff=Adedamola%20Adepoju%20Ayobamidele&admin=&status=Accepted&role=Staff`)
-            console.log(response[0]);
+        // try {
+        //     // /api/Documents/filter_documents?companyId=&fromDate=&toDate=&staff=&admin=&status=&role=
+        //     const data = await privateHttp.get(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
+        //     // const { response } = await privateHttp.get(`/Documents/filter_documents?companyId=1&fromDate=2023-01-01T11:26&toDate=2023-06-24T11:26&staff=Adedamo`)
+        //     console.log(data.response);
 
 
-        } catch (error) {
-            // setLoading1(false);
-            toast.error("Ooooops😔 Error Occurred ")
-            console.log(error);
+        // } catch (error) {
+        //     // setLoading1(false);
+        //     toast.error("Ooooops😔 Error Occurred ")
+        //     console.log(error);
 
 
 
-        }
+        // }
+        fetch(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Process the data
+            })
+            .catch(error => {
+                console.error(error); // Handle errors
+            });
     }
 
 
@@ -431,10 +440,12 @@ const Document = () => {
                         <div className="row align-items-center">
                             <div className="col">
                                 <h3 className="page-title">Document</h3>
-                                <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Documents</li>
-                                </ul>
+                                {id.role === "CompanyAdmin" ?
+                                    <ul className="breadcrumb">
+                                        <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                        <li className="breadcrumb-item active">Documents</li>
+                                    </ul>
+                                    : ""}
                             </div>
 
                         </div>
@@ -450,7 +461,7 @@ const Document = () => {
                                 <label className="col-form-label">Staff Name</label>
                                 <div>
                                     <select className="form-select" ref={sta}>
-                                        <option defaultValue hidden value={""} >--Select Staff--</option>
+                                        <option defaultValue value={""} >--Select Staff--</option>
                                         {
                                             staff.map((data, index) =>
                                                 <option value={data.fullName} key={index}>{data.fullName}</option>)
@@ -464,7 +475,7 @@ const Document = () => {
                                 <label className="col-form-label">Admin Name</label>
                                 <div>
                                     <select className="form-select" ref={cli}>
-                                        <option defaultValue hidden value={""}>--Select Admin--</option>
+                                        <option defaultValue value={""}>--Select Admin--</option>
                                         {
                                             admin.map((data, index) =>
                                                 <option value={data.fullName} key={index}>{data.fullName}</option>)

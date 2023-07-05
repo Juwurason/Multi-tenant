@@ -331,10 +331,10 @@ const SupportType = () => {
                     <div className="row align-items-center">
                         <div className="col">
                             <h3 className="page-title">Support Type</h3>
-                            <ul className="breadcrumb">
+                            {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Support Type</li>
-                            </ul>
+                            </ul> : ""}
                         </div>
                     </div>
                 </div>

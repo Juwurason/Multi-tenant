@@ -223,7 +223,7 @@ const UserRoles = () => {
                     {/* Page Content */}
                     <div className="content container-fluid">
                         {/* Page Header */}
-                        <div className="page-header">
+                        {id.role === "CompanyAdmin" ? <div className="page-header">
                             <div className="row align-items-center">
                                 <div className="col">
                                     <h3 className="page-title">Manage Roles</h3>
@@ -236,7 +236,7 @@ const UserRoles = () => {
 
                                 </div>
                             </div>
-                        </div>
+                        </div> : ""}
 
 
                         <div className='mt-4 bg-white shadow-sm'>

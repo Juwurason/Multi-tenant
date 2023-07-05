@@ -26,9 +26,9 @@ const ProgressReport = () => {
     //Declaring Variables
     const dispatch = useDispatch();
     const claims = JSON.parse(localStorage.getItem('claims'));
-  const hasRequiredClaims = (claimType) => {
-    return claims.some(claim => claim.value === claimType);
-  };
+    const hasRequiredClaims = (claimType) => {
+        return claims.some(claim => claim.value === claimType);
+    };
 
     // Fetch staff data and update the state
     useEffect(() => {
@@ -83,24 +83,24 @@ const ProgressReport = () => {
                 <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
             ),
         },
-       
+
         {
             name: "Actions",
             cell: (row) => (
-                
-                    <>
-                    
-                {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Progress Report") ? <button
-                    className='btn'
-                    title='Delete'
-                    onClick={() => {
-                        // handle action here, e.g. open a modal or navigate to a new page
 
-                    }}
-                >
-                    <GoTrashcan />
-                </button>: ""}
-                    </>
+                <>
+
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Progress Report") ? <button
+                        className='btn'
+                        title='Delete'
+                        onClick={() => {
+                            // handle action here, e.g. open a modal or navigate to a new page
+
+                        }}
+                    >
+                        <GoTrashcan />
+                    </button> : ""}
+                </>
 
             ),
         },
@@ -233,10 +233,10 @@ const ProgressReport = () => {
                         <div className="row">
                             <div className="col-sm-12">
                                 <h3 className="page-title">Progress Reports</h3>
-                                <ul className="breadcrumb">
+                                {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Progress Reports</li>
-                                </ul>
+                                </ul> : ""}
                             </div>
                         </div>
                     </div>

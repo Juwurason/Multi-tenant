@@ -83,26 +83,26 @@ const Clients = () => {
       cell: (row) => (
         <span className="d-flex gap-1">
 
-         {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Client") ? <div className='col-md-4'>
-         <Link to={`/app/profile/edit-client/${row.profileId}`}
-            className="btn"
-            title='edit'
-          >
-            <FaRegEdit />
-          </Link>
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Client") ? <div className='col-md-4'>
+            <Link to={`/app/profile/edit-client/${row.profileId}`}
+              className="btn"
+              title='edit'
+            >
+              <FaRegEdit />
+            </Link>
           </div> : ""}
-         
+
           {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Client") ? <div className='col-md-4'>
-          <button
-            className='btn'
-            title='Delete'
-            onClick={() => handleDelete(row)}
-          >
-            <GoTrashcan />
-          </button>
+            <button
+              className='btn'
+              title='Delete'
+              onClick={() => handleDelete(row)}
+            >
+              <GoTrashcan />
+            </button>
           </div> : ""}
-         
-          
+
+
 
         </span>
       ),
@@ -234,16 +234,16 @@ const Clients = () => {
         <div><span className='fw-bold'>Email: </span> {data.email}</div>
         <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
-        {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Client") ?
-        <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-            Activate Client
-            | </button> 
-          : ""}
           {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Client") ?
-          <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
-            Deactivate Client
-          </button>
-         : ""}
+            <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+              Activate Client
+              | </button>
+            : ""}
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Client") ?
+            <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+              Deactivate Client
+            </button>
+            : ""}
         </div>
 
       </div>
@@ -346,7 +346,7 @@ const Clients = () => {
       {/* Page Content */}
       <div className="content container-fluid">
         {/* Page Header */}
-        <div className="page-header">
+        {id.role === "CompanyAdmin" ? <div className="page-header">
           <div className="row align-items-center">
             <div className="col">
               <h3 className="page-title">Clients</h3>
@@ -356,7 +356,7 @@ const Clients = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div> : ""}
         <div className="row">
           <div className="col-md-12">
             <div className="card">
@@ -483,10 +483,10 @@ const Clients = () => {
               </CopyToClipboard>
             </div>
             <div className='col-md-4'>
-            {user.role === "CompanyAdmin" || hasRequiredClaims("Add Client") ?
-            <Link to="/app/employee/addclients" className="btn btn-info text-white add-btn rounded-2">
-                Create New clients</Link>
-               : ""}         
+              {user.role === "CompanyAdmin" || hasRequiredClaims("Add Client") ?
+                <Link to="/app/employee/addclients" className="btn btn-info text-white add-btn rounded-2">
+                  Create New clients</Link>
+                : ""}
             </div>
           </div>
           <DataTable data={filteredData} columns={columns}
