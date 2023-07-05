@@ -11,7 +11,7 @@ import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { GoTrashcan } from 'react-icons/go';
-import { MdDoneOutline, MdOutlineEditCalendar, MdThumbUpOffAlt } from 'react-icons/md';
+import { MdDoneOutline, MdOutlineEditCalendar, MdOutlineRefresh, MdThumbUpOffAlt } from 'react-icons/md';
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -59,7 +59,14 @@ const ShiftScheduling = () => {
     }
   }, [dispatch, schedule]);
 
+  // useEffect(() => {
+  //   const now = new Date(); // Current date and time
+  //   const options = { timeZone: 'Australia/Sydney' };
 
+  //   // Format the current date and time in the 'Australia/Sydney' timezone
+  //   const nowInAustraliaTime = now.toLocaleString('en-US', options);
+  //   console.log(nowInAustraliaTime);
+  // }, [])
 
   const { get, post } = useHttp();
   const [loading1, setLoading1] = useState(false)
@@ -73,6 +80,7 @@ const ShiftScheduling = () => {
   const [startKm, setStartKm] = useState(0);
   const [endKm, setEndKm] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [assignModal, setAssignModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [periodicModal, setPeriodicModal] = useState(false);
   const dateFrom = useRef(null);
@@ -124,6 +132,7 @@ const ShiftScheduling = () => {
 
 
 
+
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
@@ -134,7 +143,7 @@ const ShiftScheduling = () => {
       return 'Present'
     }
     else if (activityDateTo < nowInAustraliaTime || activity.attendance === false) {
-      return 'Present'
+      return 'Absent'
     }
     else if (activity.status === "Pending") {
       return 'Pending'
@@ -143,7 +152,25 @@ const ShiftScheduling = () => {
       return 'Active';
     }
   }
+  // function getActivityStatus(activity) {
+  //   const now = new Date(); // Current date and time
+  //   const options = { timeZone: 'Australia/Sydney' };
 
+  //   // Format the current date and time in the 'Australia/Sydney' timezone
+  //   const nowInAustraliaTime = now.toLocaleString('en-US', options);
+
+  //   if (new Date(activity.dateFrom) > nowInAustraliaTime) {
+  //     return 'Upcoming';
+  //   } else if (new Date(activity.dateTo) < nowInAustraliaTime || activity.attendance === true) {
+  //     return 'Present';
+  //   } else if (new Date(activity.dateTo) < nowInAustraliaTime || activity.attendance === false) {
+  //     return 'Absent';
+  //   } else if (activity.status === 'Pending') {
+  //     return 'Pending';
+  //   } else {
+  //     return 'Active';
+  //   }
+  // }
 
 
   //To view details of a shift roaster
@@ -201,20 +228,19 @@ const ShiftScheduling = () => {
       showLoaderOnConfirm: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
+
         try {
-          const { data } = await get(`/ShiftRosters/cancel_shift/${e.shiftRosterId}?userId=${id.userId}`,
+          const data = await get(`/ShiftRosters/cancel_shift?userId=${id.userId}&shiftId=${e.shiftRosterId}`,
           )
-          console.log(data);
-          if (data.status === 'Success') {
-            toast.success(data.message);
-            dispatch(fetchRoaster(id.companyId));
-          } else {
-            toast.error(data.message);
-          }
+          dispatch(fetchRoaster(id.companyId));
+          // if (data.status === 'Success') {
+          //   toast.success(data.message);
+          // } else {
+          //   toast.error(data.message);
+          // }
 
 
         } catch (error) {
-          toast.error("Error Cancelling Shift");
           toast.error(error.response.data.message)
           toast.error(error.response.data.title)
 
@@ -233,6 +259,11 @@ const ShiftScheduling = () => {
     setSelectedActivity(activity);
     setLgShow(true);
   }
+  const reAssign = (activity) => {
+    setSelectedActivity(activity);
+    setPeriodicModal(true);
+  }
+
 
   const handleConfirmation = async (e) => {
     if (endKm === 0) {
@@ -317,6 +348,34 @@ const ShiftScheduling = () => {
         setLoading3(false)
       }
     }
+  }
+
+  const handleReassign = async (e) => {
+
+    setLoading3(true);
+    try {
+      const { data } = await get(`/ShiftRosters/reassign_staff?shiftId=${e}&staffId=${sta}&userId=${id.userId}`)
+      dispatch(fetchRoaster(id.companyId));
+      if (data.status === "Success") {
+        Swal.fire(
+          '',
+          `${data.message}`,
+          'success'
+        )
+        setLoading3(false)
+        setPeriodicModal(false);
+      }
+      setLoading3(false)
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+      setLoading3(false)
+
+    }
+    finally {
+      setLoading3(false)
+      setPeriodicModal(false);
+    }
+
   }
 
   const [isChecked, setIsChecked] = useState(false);
@@ -566,8 +625,8 @@ const ShiftScheduling = () => {
                                     title="Delete"
                                   >
                                     <GoTrashcan className='fs-6' />
-                                  </small>:""}
-                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ?<Link
+                                  </small> : ""}
+                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ? <Link
                                     to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                     className={`text-truncate d-flex 
                               align-items-center
@@ -576,8 +635,8 @@ const ShiftScheduling = () => {
 
                                   >
                                     <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                  </Link>: ""}
-                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Mark Attendances") ?<small
+                                  </Link> : ""}
+                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Mark Attendances") ? <small
                                     className={`text-truncate d-flex 
                                align-items-center
                                justify-content-center px-2 py-1 rounded bg-warning pointer`}
@@ -586,14 +645,15 @@ const ShiftScheduling = () => {
                                     title="Mark attendance for staff"
                                   >
                                     <MdDoneOutline className='fs-6' />
-                                  </small>: ""}
+                                  </small> : ""}
                                 </div>
                               )
                               :
                               (
+
                                 <div className='d-flex gap-2' >
 
-                                 { (user.role === "CompanyAdmin" || hasRequiredClaims("Delete Shift Roster")) && (<small
+                                  {(user.role === "CompanyAdmin" || hasRequiredClaims("Delete Shift Roster")) && (<small
                                     className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
@@ -605,7 +665,7 @@ const ShiftScheduling = () => {
                                   </small>)}
 
                                   {
-                                    getActivityStatus(activity) === 'Upcoming' && (
+                                    getActivityStatus(activity) === 'Upcoming' && activity.status !== 'Pending' && activity.status !== 'Cancelled' && (
                                       (user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster")) && (<Link
                                         to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                         className={`text-truncate d-flex 
@@ -619,36 +679,131 @@ const ShiftScheduling = () => {
 
                                     )
                                   }
+
+
                                   {
-                                    getActivityStatus(activity) === 'Absent' && (
-                                      (user.role === "CompanyAdmin" || hasRequiredClaims("Mark Attendances")) && (<small
-                                        className={`text-truncate d-flex 
-                                 align-items-center
-                                 justify-content-center px-2 py-1 rounded bg-warning pointer`}
-
-                                        onClick={() => markAttendance(activity)}
-                                        title="Mark attendance for staff"
-                                      >
-                                        <MdDoneOutline className='fs-6' />
-                                      </small>)
-
+                                    getActivityStatus(activity) === 'Absent' && activity.status !== 'Pending' && (
+                                      (user.role === 'CompanyAdmin' || hasRequiredClaims('Mark Attendances')) && (
+                                        <small
+                                          className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-warning pointer`}
+                                          onClick={() => markAttendance(activity)}
+                                          title="Mark attendance for staff"
+                                        >
+                                          <MdDoneOutline className="fs-6" />
+                                        </small>
+                                      )
                                     )
                                   }
-                                  {
-                                    getActivityStatus(activity) === 'Pending' || "Absent" && (
 
-                                      <small
-                                        className={`text-truncate d-flex 
+
+
+
+                                  {
+                                    getActivityStatus(activity) === 'Upcoming' && activity.status === 'Pending' &&
+
+                                    (<small
+                                      className={`text-truncate d-flex 
                                      align-items-center
                                      justify-content-center px-2 py-1 rounded bg-secondary pointer`}
 
-                                        onClick={() => handleCancelShift(activity)}
-                                        title="Approve Cancelling Shift"
-                                      >
-                                        <MdThumbUpOffAlt className='fs-6' />
-                                      </small>
-
+                                      onClick={() => handleCancelShift(activity)}
+                                      title="Approve Cancelling Shift"
+                                    >
+                                      <MdThumbUpOffAlt className='fs-6' />
+                                    </small>
                                     )
+
+
+
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Absent' && activity.status === 'Pending' &&
+
+                                    (<small
+                                      className={`text-truncate d-flex 
+                                     align-items-center
+                                     justify-content-center px-2 py-1 rounded bg-secondary pointer`}
+
+                                      onClick={() => handleCancelShift(activity)}
+                                      title="Approve Cancelling Shift"
+                                    >
+                                      <MdThumbUpOffAlt className='fs-6' />
+                                    </small>
+                                    )
+
+
+
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Present' && activity.status === 'Pending' &&
+
+                                    (<small
+                                      className={`text-truncate d-flex 
+                                     align-items-center
+                                     justify-content-center px-2 py-1 rounded bg-secondary pointer`}
+
+                                      onClick={() => handleCancelShift(activity)}
+                                      title="Approve Cancelling Shift"
+                                    >
+                                      <MdThumbUpOffAlt className='fs-6' />
+                                    </small>
+                                    )
+
+
+
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Absent' && activity.status === 'Cancelled' &&
+
+                                    (<small
+                                      className={`text-truncate d-flex 
+                                     align-items-center
+                                     justify-content-center px-2 py-1 rounded bg-primary pointer`}
+
+                                      onClick={() => () => reAssign(activity)}
+                                      title="Re-assign Shift"
+                                    >
+                                      <MdOutlineRefresh className='fs-6' />
+                                    </small>
+                                    )
+
+
+
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Present' && activity.status === 'Cancelled' &&
+
+                                    (<small
+                                      className={`text-truncate d-flex 
+                                     align-items-center
+                                     justify-content-center px-2 py-1 rounded bg-primary pointer`}
+
+                                      onClick={() => reAssign(activity)}
+                                      title="Re-assign Shift"
+                                    >
+                                      <MdOutlineRefresh className='fs-6' />
+                                    </small>
+                                    )
+
+
+
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Upcoming' && activity.status === 'Cancelled' &&
+
+
+                                    (<small
+                                      className={`text-truncate d-flex 
+                                     align-items-center
+                                     justify-content-center px-2 py-1 rounded bg-primary pointer`}
+
+                                      onClick={() => reAssign(activity)}
+                                      title="Re-assign Shift"
+                                    >
+                                      <MdOutlineRefresh className='fs-6' />
+                                    </small>
+                                    )
+
 
 
                                   }
@@ -708,12 +863,15 @@ const ShiftScheduling = () => {
                 </>
               )}
             </Modal.Body>
-           
+
             {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ? <Modal.Footer>
               <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
 
-            </Modal.Footer>: ""}
+            </Modal.Footer> : ""}
           </Modal>
+
+
+
           <Modal
             size="lg"
             show={lgShow}
@@ -829,14 +987,14 @@ const ShiftScheduling = () => {
           </Modal>
 
           <Modal show={periodicModal}
-            size="lg"
+
             onHide={() => setPeriodicModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Add New Shift Roster</Modal.Title>
+              <Modal.Title>Re-Assign New Staff</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div className="row">
-                <div className="col-md-6">
+              {selectedActivity && <div className="row">
+                <div className="col-md-12">
                   <div className="form-group">
                     <label className="col-form-label">Staff Name</label>
                     <div>
@@ -849,30 +1007,17 @@ const ShiftScheduling = () => {
                       </select></div>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">Client Name</label>
-                    <div>
-                      <select className="form-select" onChange={e => setCli(e.target.value)}>
-                        <option defaultValue hidden>--Select a Client--</option>
-                        {
-                          clients.map((data, index) =>
-                            <option value={data.profileId} key={index}>{data.fullName}</option>)
-                        }
-                      </select></div>
-                  </div>
-                </div>
 
-              </div>
+              </div>}
             </Modal.Body>
             <Modal.Footer>
-              {/* <button className="ml-4 text-white add-btn rounded btn btn-info"
-                onClick={GetPeriodic}
+              <button className="ml-4 text-white add-btn rounded btn btn-info"
+                onClick={() => handleReassign(selectedActivity.shiftRosterId)}
               >
                 {loading3 ? <div className="spinner-grow text-light" role="status">
                   <span className="sr-only">Loading...</span>
-                </div> : "Load"}
-              </button> */}
+                </div> : "Submit"}
+              </button>
             </Modal.Footer>
           </Modal>
 

@@ -22,6 +22,15 @@ import { toast } from 'react-toastify';
 dayjs.extend(isBetween);
 
 const StaffDashboard = ({ roster, loading }) => {
+  const navigate = useHistory();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user.token) {
+      localStorage.clear();
+      navigate.push('/')
+    }
+  }, [localStorage.getItem('user')]);
+
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
@@ -114,7 +123,7 @@ const StaffDashboard = ({ roster, loading }) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useHistory()
+
 
   const handleClockIn = () => {
     setIsLoading(true);

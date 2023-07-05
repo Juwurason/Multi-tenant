@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, useHistory } from 'react-router-dom';
 import man from "../../../assets/img/user.jpg"
 import Offcanvas from '../../../Entryfile/offcanvance/index.jsx';
 import "../../index.css"
@@ -20,6 +20,15 @@ import { useCompanyContext } from '../../../context';
 
 const AdminDashboard = () => {
   const { userProfile } = useCompanyContext();
+  const navigate = useHistory();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user || !user.token) {
+      localStorage.clear();
+      navigate.push('/')
+    }
+  }, [localStorage.getItem('user')]);
+
   const id = JSON.parse(localStorage.getItem('user'));
   const [recentUsers, setRecentUsers] = useState([]);
 

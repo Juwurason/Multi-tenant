@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { MdDashboard } from 'react-icons/md';
-import HasClaim from '../../hooks/HasClaim'
 
 const Sidebar = (props) => {
   const MenuMore = () => {
@@ -117,15 +116,15 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Staff") ? 
-                
-                  <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
-                    <Link to="/app/employee/allstaff">
-                      <i className="la la-user" />
-                      <span>Staffs</span>
-                    </Link>
-                  </li>
-              : ""
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Staff") ?
+
+                <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
+                  <Link to="/app/employee/allstaff">
+                    <i className="la la-user" />
+                    <span>Staffs</span>
+                  </Link>
+                </li>
+                : ""
               }
 
               {/* {user.role === "CompanyAdmin" || (
@@ -138,7 +137,7 @@ const Sidebar = (props) => {
                   </li>
                 </HasClaim>
               )} */}
-              
+
               {user.role === "CompanyAdmin" || hasRequiredClaims("View Client") ? <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
@@ -181,45 +180,6 @@ const Sidebar = (props) => {
               {user.role === "Staff" ? <li className={pathname.includes('daily-report') || pathname.includes('daily-report') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/staff/staff/daily-report"><i className="la la-newspaper-o" /> <span>Staff Daily Report</span></Link>
               </li> : ""}
-
-              {user.role === "Staff" ? <li className="menu-title">
-                <span>Communication</span>
-              </li> : ""}
-
-              {user.role === "Staff" ? <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/staff/staff/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
-              </li> : ""}
-
-              {user.role === "Staff" ? <li className="submenu">
-                <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
-                  e.preventDefault()
-                  toggleSidebar(isSideMenu == "support" ? "" : "support")
-                }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
-                {isSideMenu == "support" ?
-                  <ul>
-                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('view-ticket') ? "active" : pathname.includes('view-ticket') ?
-                      "active" : pathname.includes('view-ticket') ? "active" : ""}
-                      to="/staff/staff/view-ticket">View Tickets</Link>
-                    </li>
-
-                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('raise-ticket') ? "active" : pathname.includes('raise-ticket') ?
-                      "active" : pathname.includes('raise-ticket') ? "active" : ""}
-                      to="/staff/staff/raise-ticket">Raise a Ticket</Link>
-                    </li>
-
-                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('knowledge') ? "active" : pathname.includes('knowledge') ?
-                      "active" : pathname.includes('knowledge') ? "active" : ""}
-                      to="/staff/staff/knowledge">Knowledge Base</Link>
-                    </li>
-
-                  </ul>
-                  : ""
-                }
-              </li> : ""}
-
-
-              {/* Staff SideBar Ends */}
-
               {user.role === "CompanyAdmin" ? <li className="menu-title">
                 <span>Rostering Management</span>
               </li> : ""}
@@ -230,7 +190,7 @@ const Sidebar = (props) => {
                 }}><i className="la la-map" /> <span>Set Up</span> <span className="menu-arrow" /></a>
                 {isSideMenu == "setup" ?
                   <ul>
-                    
+
                     <li><Link className={pathname.includes('public-holiday') ? "active" : pathname.includes('public-holiday')}
                       to="/app/setup/public-holiday" onClick={() => onMenuClik()}>Public Holidays</Link>
                     </li>
@@ -258,7 +218,7 @@ const Sidebar = (props) => {
                 <span>Report Management</span>
               </li> : ""}
 
-              {user.role === "CompanyAdmin"|| hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
                 <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Attendance Report</span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" || hasRequiredClaims("View Progress Report") ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
@@ -300,6 +260,49 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> : ""}
+
+              {user.role === "Staff" ? <li className="menu-title">
+                <span>Communication</span>
+              </li> : ""}
+
+              {user.role === "Staff" ? <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/staff/staff/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
+              </li> : ""}
+
+              {user.role === "Staff" ? <li className="submenu">
+                <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
+                  e.preventDefault()
+                  toggleSidebar(isSideMenu == "support" ? "" : "support")
+                }}><i className="la la-headphones" /> <span>Support</span> <span className="menu-arrow" /></a>
+                {isSideMenu == "support" ?
+                  <ul>
+                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('view-ticket') ? "active" : pathname.includes('view-ticket') ?
+                      "active" : pathname.includes('view-ticket') ? "active" : ""}
+                      to="/staff/staff/view-ticket">View Tickets</Link>
+                    </li>
+
+                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('raise-ticket') ? "active" : pathname.includes('raise-ticket') ?
+                      "active" : pathname.includes('raise-ticket') ? "active" : ""}
+                      to="/staff/staff/raise-ticket">Raise a Ticket</Link>
+                    </li>
+
+                    <li><Link onClick={() => onMenuClik()} className={pathname.includes('knowledge') ? "active" : pathname.includes('knowledge') ?
+                      "active" : pathname.includes('knowledge') ? "active" : ""}
+                      to="/staff/staff/knowledge">Knowledge Base</Link>
+                    </li>
+
+                  </ul>
+                  : ""
+                }
+              </li> : ""}
+
+
+              {/* Staff SideBar Ends */}
+
+
+
+
+
               {/* Client SideBar */}
               {user.role === "Client" ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
