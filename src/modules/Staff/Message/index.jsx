@@ -23,6 +23,10 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [editorValue, setEditorValue] = useState('');
     const subject = useRef(null);
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
     // const [options, setOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [lgShow, setLgShow] = useState(false);
@@ -663,8 +667,8 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="form-group">
-                            <div className="fw-bold">
-                                {/* <label>
+                            {id.role === "Staff" || hasRequiredClaims("Send Messages to all") ? <div className="fw-bold">
+                                <label>
                                     <input
                                         type="checkbox"
                                         name="toAllAdmins"
@@ -673,9 +677,9 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     />
                                     &nbsp;
                                     To All Admins
-                                </label> */}
-                                {/* &nbsp; &nbsp; */}
-                                {/* <label>
+                                </label>
+                                &nbsp; &nbsp;
+                                <label>
                                     <input
                                         type="checkbox"
                                         name="toAllStaffs"
@@ -684,9 +688,9 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     />
                                     &nbsp;
                                     To All Staffs
-                                </label> */}
-                                {/* &nbsp; &nbsp; */}
-                                {/* <label>
+                                </label>
+                                &nbsp; &nbsp;
+                                <label>
                                     <input
                                         type="checkbox"
                                         name="toAllClients"
@@ -695,7 +699,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     />
                                     &nbsp;
                                     To All Clients
-                                </label> &nbsp; &nbsp; */}
+                                </label> &nbsp; &nbsp;
                                 <label>
                                     <input
                                         type="checkbox"
@@ -706,7 +710,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     &nbsp;
                                     Send As SMS
                                 </label>
-                            </div>
+                            </div>: ""}
                             <hr />
                             {!sendAsSMS ? (
                                 <>
