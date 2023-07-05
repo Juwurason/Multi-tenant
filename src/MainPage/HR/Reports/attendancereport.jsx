@@ -483,7 +483,7 @@ const AttendanceReport = () => {
               sta === "" || periodic.length <= 0 || loading ? "" :
                 <div className="col-auto mt-3">
                   <div className="form-group">
-                    <button
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Generate Timesheet") ?<button
                       type='button'
                       onClick={GetTimeshift}
                       className="btn btn-primary add-btn text-white rounded-2 m-r-5"
@@ -499,7 +499,7 @@ const AttendanceReport = () => {
                       )}
 
 
-                    </button>
+                    </button>:""}
                     <button
                       type='button'
                       onClick={SendTimesheet}
