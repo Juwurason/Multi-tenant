@@ -92,10 +92,11 @@ const ClientBehaviuor = () => {
 
 
     const PostAvail = async (e) => {
+        e.preventDefault()
         if (selectedDay === "" || selectedTimeFrom === "" || selectedPhone === "") {
             return toast.error("Input Fields cannot be empty")
         }
-        e.preventDefault()
+       
         setLoading1(true)
 
         const info = {

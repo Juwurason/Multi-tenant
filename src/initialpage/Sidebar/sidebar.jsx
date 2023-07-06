@@ -69,7 +69,7 @@ const Sidebar = (props) => {
                 <span>Main</span>
               </li>
               {
-                user.role === "CompanyAdmin" ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
+                user.role === "CompanyAdmin" || hasRequiredClaims("Admin Dashboard") ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
                   <Link to="/app/main/dashboard"  >
                     <i className="la la-dashboard" />
@@ -403,6 +403,10 @@ const Sidebar = (props) => {
 
               {user.role === "Client" ? <li className={pathname.includes('client-behaviuor') || pathname.includes('client-behaviuor') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/client/app/client-behaviuor"><i className="la la-bell-o" /> <span>Behaviour Support Needs</span></Link>
+              </li> : ""}
+
+              {user.role === "Client" ? <li className={pathname.includes('client-community') || pathname.includes('client-community') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/client-community"><i className="la la-bank" /> <span>Community Support Needs</span></Link>
               </li> : ""}
 
               {user.role === "Client" ? <li className={pathname.includes('client-document') || pathname.includes('client-document') ? "active" : ""} onClick={() => onMenuClik()}>
