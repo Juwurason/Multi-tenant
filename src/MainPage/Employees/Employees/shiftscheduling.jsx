@@ -400,11 +400,11 @@ const ShiftScheduling = () => {
             <div className="row">
               <div className="col">
                 <h3 className="page-title">Shift Roster</h3>
-                <ul className="breadcrumb">
+                {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="">Employees</Link></li>
                   <li className="breadcrumb-item active">Shift Roster</li>
-                </ul>
+                </ul> : ""}
               </div>
               {user.role === "CompanyAdmin" || hasRequiredClaims("Add Shift Roster") ? <div className="col-auto float-end ml-auto p-4">
                 <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
@@ -412,83 +412,88 @@ const ShiftScheduling = () => {
             </div>
           </div>
 
-          <div className="row align-items-center py-2 shadow-sm">
-            {/* <span className='fw-bold' draggable>Filter Shift Roaster By User</span>
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card">
+
+                <div className="card-body">
+                  <div className="row align-items-center py-2">
+                    {/* <span className='fw-bold' draggable>Filter Shift Roaster By User</span>
             <br />
             <br /> */}
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">Staff Name</label>
-                <div>
-                  <select className="form-select" onChange={e => setSta(e.target.value)}>
-                    <option defaultValue hidden>--Select a staff--</option>
-                    <option value="">All Staff</option>
-                    {
-                      staff.map((data, index) =>
-                        <option value={data.staffId} key={index}>{data.fullName}</option>)
-                    }
-                  </select></div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">Client Name</label>
-                <div>
-                  <select className="form-select" onChange={e => setCli(e.target.value)}>
-                    <option defaultValue hidden>--Select a Client--</option>
-                    <option value="">All Clients</option>
-                    {
-                      clients.map((data, index) =>
-                        <option value={data.profileId} key={index}>{data.fullName}</option>)
-                    }
-                  </select></div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">Start Date</label>
-                <div>
-                  <input type="date" ref={dateFrom} className=' form-control' name="" id="" />
-                </div>
-              </div>
-            </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Staff Name</label>
+                        <div>
+                          <select className="form-select" onChange={e => setSta(e.target.value)}>
+                            <option defaultValue hidden>--Select a staff--</option>
+                            <option value="">All Staff</option>
+                            {
+                              staff.map((data, index) =>
+                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                            }
+                          </select></div>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Client Name</label>
+                        <div>
+                          <select className="form-select" onChange={e => setCli(e.target.value)}>
+                            <option defaultValue hidden>--Select a Client--</option>
+                            <option value="">All Clients</option>
+                            {
+                              clients.map((data, index) =>
+                                <option value={data.profileId} key={index}>{data.fullName}</option>)
+                            }
+                          </select></div>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Start Date</label>
+                        <div>
+                          <input type="date" ref={dateFrom} className='form-control' name="" id="" />
+                        </div>
+                      </div>
+                    </div>
 
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">End Date</label>
-                <div>
-                  <input type="date" ref={dateTo} className=' form-control' name="" id="" />
-                </div>
-              </div>
-            </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">End Date</label>
+                        <div>
+                          <input type="date" ref={dateTo} className=' form-control' name="" id="" />
+                        </div>
+                      </div>
+                    </div>
 
-            <div className="col-auto mt-3">
-              <div className="form-group">
-                <button onClick={GetPeriodic} className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                  disabled={loading ? true : false}
-                >
+                    <div className="col-auto mt-3">
+                      <div className="form-group">
+                        <button onClick={GetPeriodic} className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                          disabled={loading ? true : false}
+                        >
 
-                  {loading ? <div class="spinner-border text-light" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div> : "Load"}
-                </button>
+                          {loading ? <div class="spinner-border text-light text-sm spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div> : "Load"}
+                        </button>
 
-              </div>
-            </div>
+                      </div>
+                    </div>
 
-            <div className="col-auto mt-3">
-              <div className="form-group">
-                <button className="btn btn-primary add-btn rounded-2 m-r-5"
-                  onClick={SendRosterNotice}
-                >
-                  {loading3 ? <div className="spinner-grow text-light" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div> : "Send Roster Notification"}
-                </button>
+                    <div className="col-auto mt-3">
+                      <div className="form-group">
+                        <button className="btn btn-primary add-btn rounded-2 m-r-5"
+                          onClick={SendRosterNotice}
+                        >
+                          {loading3 ? <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div> : "Send Roster Notification"}
+                        </button>
 
-              </div>
-            </div>
-            {/* <div className="col-auto mt-3">
+                      </div>
+                    </div>
+                    {/* <div className="col-auto mt-3">
               <div className="form-group">
                 <button className="btn btn-warning text-white add-btn rounded-2 m-r-5"
                   onClick={() => GetPeriodic()}
@@ -499,6 +504,10 @@ const ShiftScheduling = () => {
             </div> */}
 
 
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
 
@@ -520,11 +529,11 @@ const ShiftScheduling = () => {
 
                 {
                   loading ?
-                    <div className="text-center d-flex align-items-center gap-2 ">
-                      <div className="spinner-border" role="status">
+                    <div className="text-center d-flex flex-column align-items-center gap-2 ">
+                      <div className="spinner-border text-info" role="status">
                         <span className="visually-hidden">Loading...</span>
                       </div>
-                      <span>Please Wait</span>
+                      <span>Loading Activities</span>
                     </div>
 
                     :
@@ -605,7 +614,9 @@ const ShiftScheduling = () => {
 
 
 
-                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance === true ? "bg-success" : "bg-danger"} rounded-circle`}></span>
+                              <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance === true ? "bg-success" : activity.attendance === false ? "bg-danger" :
+                                activity.status === "Pending" ? "" : activity.status === "Cancelled" ? "" : "bg-danger"
+                                } rounded-circle`}></span>
                             </div>
                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
                             <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>

@@ -223,7 +223,7 @@ const UserRoles = () => {
                     {/* Page Content */}
                     <div className="content container-fluid">
                         {/* Page Header */}
-                        <div className="page-header">
+                        {id.role === "CompanyAdmin" ? <div className="page-header">
                             <div className="row align-items-center">
                                 <div className="col">
                                     <h3 className="page-title">Manage Roles</h3>
@@ -236,60 +236,68 @@ const UserRoles = () => {
 
                                 </div>
                             </div>
-                        </div>
+                        </div> : ""}
 
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="card">
 
-                        <div className='mt-4 bg-white shadow-sm'>
-                            <div className="d-flex justify-content-between align-items-center flex-wrap px-2 py-3">
-                                <h4 className='fw-bold'>
-                                    All Roles
-                                </h4>
-                                <button
-                                    onClick={() => setShowModal(true)}
-                                    className='btn add-btn btn-info text-white rounded-2'>Create New Role</button>
-                            </div>
-                            <div className="row px-2 py-3">
+                                    <div className="card-body">
+                                        <div className='mt-4 bg-white'>
+                                            <div className="d-flex justify-content-between align-items-center flex-wrap px-2 py-3">
+                                                <h4 className='fw-bold'>
+                                                    All Roles
+                                                </h4>
+                                                <button
+                                                    onClick={() => setShowModal(true)}
+                                                    className='btn add-btn btn-info text-white rounded-2'>Create New Role</button>
+                                            </div>
+                                            <div className="row px-2 py-3">
 
-                                {
-                                    roles.map((data, index) =>
-                                        <div className="col-md-3" key={index}>
-                                            <div className="card" style={{ height: "10rem" }}>
+                                                {
+                                                    roles.map((data, index) =>
+                                                        <div className="col-md-3" key={index}>
+                                                            <div className="card" style={{ height: "10rem" }}>
 
-                                                <div className="card-body">
-                                                    <span className='fs-6'>
-                                                        <span className="card-title fw-bold">Role Name: </span>
+                                                                <div className="card-body">
+                                                                    <span className='fs-6'>
+                                                                        <span className="card-title fw-bold">Role Name: </span>
 
-                                                        <span>{data.role} </span>
-                                                    </span>
-                                                </div>
-                                                <div className="card-body ">
-                                                    <div className='d-flex gap-3'>
-                                                        <button
-                                                            onClick={(e) =>
-                                                                setEditModal(true)
-                                                            }
-                                                            className="btn btn-primary btn-sm" >Edit</button>
+                                                                        <span>{data.role} </span>
+                                                                    </span>
+                                                                </div>
+                                                                <div className="card-body ">
+                                                                    <div className='d-flex gap-3'>
+                                                                        <button
+                                                                            onClick={(e) =>
+                                                                                setEditModal(true)
+                                                                            }
+                                                                            className="btn btn-primary btn-sm" >Edit</button>
 
-                                                        <span >
-                                                            <button
-                                                                onClick={() =>
+                                                                        <span >
+                                                                            <button
+                                                                                onClick={() =>
 
-                                                                    handleDelete(data.uRolesId)
-                                                                }
-                                                                href="#" className="btn btn-outline-danger btn-sm" >Delete</button>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                                                    handleDelete(data.uRolesId)
+                                                                                }
+                                                                                href="#" className="btn btn-outline-danger btn-sm" >Delete</button>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    )
+                                                }
 
                                             </div>
                                         </div>
 
-                                    )
-                                }
-
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                     {/* /Page Content */}
 

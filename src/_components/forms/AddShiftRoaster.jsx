@@ -74,25 +74,7 @@ const AddShiftRoaster = () => {
         saturday: false
     });
     const [stopDate, setStopDate] = useState("");
-    // const FetchSchedule = async () => {
-    //     const formattedOptions = clients.map((item) => ({
-    //         label: item.fullName,
-    //         value: item.fullName,
-    //     }));
 
-    //     try {
-    //         const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-    //         const client = clientResponse.data;
-
-    //         setClients(formattedOptions);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-
-    // };
-    // useEffect(() => {
-    //     FetchSchedule()
-    // }, []);
 
     const [repeat, setRepeat] = useState(false);
     const [numOfDays, setNumOfDays] = useState(1);
@@ -183,7 +165,7 @@ const AddShiftRoaster = () => {
                         <div className="card">
 
                             <div className="card-header d-flex justify-content-between align-items-center">
-                                <h4 className="card-title mb-0">Add To Shift Roster</h4>
+                                <h4 className="card-title mb-0">Add Shift Roster</h4>
                                 <Link to={'/app/employee/shift-scheduling'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
                             <div className="card-body">

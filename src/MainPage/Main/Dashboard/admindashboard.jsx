@@ -23,9 +23,9 @@ const AdminDashboard = () => {
   const navigate = useHistory();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
-    if (!user || !user.token) {
-      localStorage.clear();
-      navigate.push('/')
+    if (!user || !user.token || user.role !== "CompanyAdmin") {
+      return
+
     }
   }, [localStorage.getItem('user')]);
 

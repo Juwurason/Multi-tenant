@@ -13,7 +13,7 @@ const DefaultLayout = (props) => {
 	};
 	useEffect(() => {
 		const user = JSON.parse(localStorage.getItem('user'))
-		if (!user || !user.token) {
+		if (!user || !user.token || !user.role) {
 			navigate.push('/')
 		}
 	}, [localStorage.getItem('user')]);

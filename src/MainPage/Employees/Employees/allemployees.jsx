@@ -36,7 +36,7 @@ const AllEmployees = () => {
   }, [dispatch]);
 
   // Access the entire state
-  
+
   const loading = useSelector((state) => state.staff.isLoading);
   const staff = useSelector((state) => state.staff.data);
 
@@ -88,25 +88,25 @@ const AllEmployees = () => {
     {
       name: "Actions",
       cell: (row) => (
-        
+
         <div className="d-flex gap-1">
           {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Staff") ? <div className='col-md-4'>
-          <Link to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`}
-            className="btn"
-            title='edit'
-          >
-            <FaRegEdit />
-          </Link>
+            <Link to={`/app/profile/employee-profile/${row.staffId}/${row.firstName}`}
+              className="btn"
+              title='edit'
+            >
+              <FaRegEdit />
+            </Link>
           </div> : ""}
-          
+
           {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Staff") ? <div className='col-md-4'>
-          <button
-            className='btn'
-            title='Delete'
-            onClick={() => handleDelete(row.staffId)}
-          >
-            <GoTrashcan />
-          </button>
+            <button
+              className='btn'
+              title='Delete'
+              onClick={() => handleDelete(row.staffId)}
+            >
+              <GoTrashcan />
+            </button>
           </div> : ""}
 
         </div>
@@ -297,17 +297,17 @@ const AllEmployees = () => {
         <div><span className='fw-bold'>Email: </span> {data.email}</div>
         <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
-        {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Staff") ?
-        <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-            Activate Staff |
-          </button> 
-           : ""} 
           {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Staff") ?
-          <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
-            Deactivate Staff
-          </button>
-           : ""}
-          
+            <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+              Activate Staff |
+            </button>
+            : ""}
+          {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Staff") ?
+            <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+              Deactivate Staff
+            </button>
+            : ""}
+
         </div>
 
       </div>
@@ -351,7 +351,7 @@ const AllEmployees = () => {
         {/* Page Content */}
         <div className="content container-fluid">
 
-          <div className="page-header">
+          {id.role === "CompanyAdmin" ? <div className="page-header">
             <div className="row align-items-center">
               <div className="col">
                 <h3 className="page-title">Staffs</h3>
@@ -364,7 +364,7 @@ const AllEmployees = () => {
 
               </div>
             </div>
-          </div>
+          </div> : ""}
 
 
 

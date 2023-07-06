@@ -377,20 +377,29 @@ const Document = () => {
 
     const handleFilter = async (e) => {
         e.preventDefault();
-        try {
-            // const { data } = await privateHttp.get(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${""}&status=${status.current.value}&role=${role.current.value}`)
-            const { response } = await privateHttp.get(`/Documents/filter_documents?companyId=1&fromDate=2023-01-01T11:26&toDate=2023-06-24T11:26&staff=Adedamola%20Adepoju%20Ayobamidele&admin=&status=Accepted&role=Staff`)
-            console.log(response[0]);
+        // try {
+        //     // /api/Documents/filter_documents?companyId=&fromDate=&toDate=&staff=&admin=&status=&role=
+        //     const data = await privateHttp.get(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
+        //     // const { response } = await privateHttp.get(`/Documents/filter_documents?companyId=1&fromDate=2023-01-01T11:26&toDate=2023-06-24T11:26&staff=Adedamo`)
+        //     console.log(data.response);
 
 
-        } catch (error) {
-            // setLoading1(false);
-            toast.error("Ooooops😔 Error Occurred ")
-            console.log(error);
+        // } catch (error) {
+        //     // setLoading1(false);
+        //     toast.error("Ooooops😔 Error Occurred ")
+        //     console.log(error);
 
 
 
-        }
+        // }
+        fetch(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Process the data
+            })
+            .catch(error => {
+                console.error(error); // Handle errors
+            });
     }
 
 
@@ -431,10 +440,12 @@ const Document = () => {
                         <div className="row align-items-center">
                             <div className="col">
                                 <h3 className="page-title">Document</h3>
-                                <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Documents</li>
-                                </ul>
+                                {id.role === "CompanyAdmin" ?
+                                    <ul className="breadcrumb">
+                                        <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                        <li className="breadcrumb-item active">Documents</li>
+                                    </ul>
+                                    : ""}
                             </div>
 
                         </div>
@@ -443,93 +454,100 @@ const Document = () => {
 
                     {/* Search Filter */}
 
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="card">
 
-                    <form className="row shadow-sm py-2" onSubmit={handleFilter}>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Staff Name</label>
-                                <div>
-                                    <select className="form-select" ref={sta}>
-                                        <option defaultValue hidden value={""} >--Select Staff--</option>
-                                        {
-                                            staff.map((data, index) =>
-                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
-                                        }
-                                    </select>
+                                <div className="card-body">
+                                    <form className="row py-2" onSubmit={handleFilter}>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Staff Name</label>
+                                                <div>
+                                                    <select className="form-select" ref={sta}>
+                                                        <option defaultValue value={""} >--Select Staff--</option>
+                                                        {
+                                                            staff.map((data, index) =>
+                                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Admin Name</label>
+                                                <div>
+                                                    <select className="form-select" ref={cli}>
+                                                        <option defaultValue value={""}>--Select Admin--</option>
+                                                        {
+                                                            admin.map((data, index) =>
+                                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Date From</label>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Date To</label>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group" >
+                                                <label className="col-form-label">Status</label>
+                                                <div>
+                                                    <select className="form-select" ref={status} required>
+                                                        <option defaultValue hidden value={""}>--Select a Status...</option>
+                                                        <option value="Accepted">Accepted</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                        <option value="Pending">Pending</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">User Role</label>
+                                                <div>
+                                                    <select className="form-select" ref={role} required>
+                                                        <option defaultValue hidden value={""}>--Select Role--</option>
+                                                        <option value="Admin">Admin</option>
+                                                        <option value="Staff">Staff</option>
+                                                        <option value="Client">Client</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className="col-auto text-left">
+                                            <div className="form-group">
+                                                <button
+                                                    type='submit'
+                                                    className="btn btn-info add-btn text-white rounded-2 m-r-5">
+                                                    Load
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Admin Name</label>
-                                <div>
-                                    <select className="form-select" ref={cli}>
-                                        <option defaultValue hidden value={""}>--Select Admin--</option>
-                                        {
-                                            admin.map((data, index) =>
-                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Date From</label>
-                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
-                            </div>
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Date To</label>
-                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
-                            </div>
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group" >
-                                <label className="col-form-label">Status</label>
-                                <div>
-                                    <select className="form-select" ref={status} required>
-                                        <option defaultValue hidden value={""}>--Select a Status...</option>
-                                        <option value="Accepted">Accepted</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Pending">Pending</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">User Role</label>
-                                <div>
-                                    <select className="form-select" ref={role} required>
-                                        <option defaultValue hidden value={""}>--Select Role--</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Staff">Staff</option>
-                                        <option value="Client">Client</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-auto text-left">
-                            <div className="form-group">
-                                <button
-                                    type='submit'
-                                    className="btn btn-info add-btn text-white rounded-2 m-r-5">
-                                    Load
-                                </button>
-
-
-                            </div>
-                        </div>
-
-                    </form>
-
+                    </div>
                     {/* <div className="submit-section">
                         </div> */}
 

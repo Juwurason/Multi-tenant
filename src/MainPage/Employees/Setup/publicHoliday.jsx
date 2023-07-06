@@ -374,10 +374,10 @@ const PublicHoliday = () => {
                     <div className="row align-items-center">
                         <div className="col">
                             <h3 className="page-title">Public Holiday</h3>
-                            <ul className="breadcrumb">
+                            {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Public Holiday</li>
-                            </ul>
+                            </ul> : ""}
                         </div>
                     </div>
                 </div>

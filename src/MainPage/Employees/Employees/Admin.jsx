@@ -47,10 +47,10 @@ const AllAdmin = () => {
 
 
     const id = JSON.parse(localStorage.getItem('user'));
-  const claims = JSON.parse(localStorage.getItem('claims'));
-  const hasRequiredClaims = (claimType) => {
-    return claims.some(claim => claim.value === claimType);
-  };
+    const claims = JSON.parse(localStorage.getItem('claims'));
+    const hasRequiredClaims = (claimType) => {
+        return claims.some(claim => claim.value === claimType);
+    };
     const privateHttp = useHttp();
 
 
@@ -89,15 +89,15 @@ const AllAdmin = () => {
         }, {
             name: "Actions",
             cell: (row) => (
-                <div className="d-flex gap-1" style={{ overflow: "hidden" }}>   
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Administrator") ?<Link
+                <div className="d-flex gap-1" style={{ overflow: "hidden" }}>
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Administrator") ? <Link
                         className='btn'
                         title='Edit'
                         to={`/app/profile/admin-profile/${row.administratorId}/${row.firstName}`}
                     >
                         <FaRegEdit />
-                    </Link>: ""}
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Administrator") ?<button
+                    </Link> : ""}
+                    {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Administrator") ? <button
                         className='btn'
                         title='Delete'
                         onClick={() => {
@@ -106,7 +106,7 @@ const AllAdmin = () => {
                         }}
                     >
                         <GoTrashcan />
-                    </button>: ""}
+                    </button> : ""}
 
                 </div>
             ),
@@ -260,24 +260,24 @@ const AllAdmin = () => {
                 </Helmet>
 
                 <div className="content container-fluid">
+                    {id.role === "CompanyAdmin" ?
+                        <div className="page-header">
+                            <div className="row align-items-center">
+                                <div className="col">
+                                    <h3 className="page-title">Administrators</h3>
+                                    <ul className="breadcrumb">
+                                        <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                        <li className="breadcrumb-item active">Administrators</li>
+                                    </ul>
+                                </div>
+                                <div className="col-auto float-end ml-auto">
 
-                    <div className="page-header">
-                        <div className="row align-items-center">
-                            <div className="col">
-                                <h3 className="page-title">Administrators</h3>
-                                <ul className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Administrators</li>
-                                </ul>
-                            </div>
-                            <div className="col-auto float-end ml-auto">
-
-                                <div className="view-icons">
-                                    <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
+                                    <div className="view-icons">
+                                        <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </div> : ""}
 
                     <div className="row">
                         <div className="col-md-12">
@@ -407,8 +407,8 @@ const AllAdmin = () => {
                                 </CopyToClipboard>
                             </div>
                             <div className='col-md-4'>
-                                {id.role === "CompanyAdmin" || hasRequiredClaims("Add Administrator") ?<Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
-                                    Create New Admin</Link>:""}
+                                {id.role === "CompanyAdmin" || hasRequiredClaims("Add Administrator") ? <Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
+                                    Create New Admin</Link> : ""}
                             </div>
                         </div>
                         <DataTable data={filteredData} columns={columns}
