@@ -430,126 +430,135 @@ const AttendanceReport = () => {
             </div>
           </div>
 
-          <form className="row align-items-center shadow-sm py-3" onSubmit={FilterAttendance}>
 
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">Staff Name</label>
-                <div>
-                  <select className="form-select" onChange={e => setSta(e.target.value)}>
-                    <option defaultValue value={""}>All Staff</option>
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card">
+
+                <div className="card-body">
+                  <form className="row align-items-center py-3" onSubmit={FilterAttendance}>
+
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Staff Name</label>
+                        <div>
+                          <select className="form-select" onChange={e => setSta(e.target.value)}>
+                            <option defaultValue value={""}>All Staff</option>
+                            {
+                              staff.map((data, index) =>
+                                <option value={data.staffId} key={index}>{data.fullName}</option>)
+                            }
+                          </select></div>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">Start Date</label>
+                        <div>
+                          <input type="datetime-local" ref={dateFrom} className=' form-control' name="" id="" required />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="col-form-label">End Date</label>
+                        <div>
+                          <input type="datetime-local" ref={dateTo} className=' form-control' name="" id="" required />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-auto mt-3">
+                      <div className="form-group">
+                        <button
+                          type='submit'
+                          className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                          disabled={loading1 ? true : false}
+                        >
+
+
+                          {loading1 ? <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div> : "Load"}
+                        </button>
+
+                      </div>
+                    </div>
+
                     {
-                      staff.map((data, index) =>
-                        <option value={data.staffId} key={index}>{data.fullName}</option>)
+                      sta === "" || periodic.length <= 0 || loading ? "" :
+                        <div className="col-auto mt-3">
+                          <div className="form-group">
+                            {id.role === "CompanyAdmin" || hasRequiredClaims("Generate Timesheet") ? <button
+                              type='button'
+                              onClick={GetTimeshift}
+                              className="btn btn-primary add-btn text-white rounded-2 m-r-5"
+                              disabled={loading2 ? true : false}
+                            >
+                              {loading2 ? (
+                                <>
+                                  <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                  Please wait...
+                                </>
+                              ) : (
+                                "Generate Timesheet"
+                              )}
+
+
+                            </button> : ""}
+                            <button
+                              type='button'
+                              onClick={SendTimesheet}
+                              className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
+                              disabled={loading3 ? true : false}
+                            >
+                              {loading3 ? (
+                                <>
+                                  <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                  Please wait...
+                                </>
+                              ) : (
+                                "Send Timesheet to staff"
+                              )}
+
+
+                            </button>
+
+                          </div>
+                        </div>
                     }
-                  </select></div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">Start Date</label>
-                <div>
-                  <input type="datetime-local" ref={dateFrom} className=' form-control' name="" id="" required />
+                    {
+                      sta !== "" || periodic.length <= 0 || loading ? "" :
+                        <div className="col-auto mt-3">
+                          <div className="form-group">
+                            <button style={{ fontSize: "12px" }}
+                              type='button'
+                              onClick={GetAllTimeshift}
+                              className="btn btn-dark add-btn text-white rounded-2 m-r-5"
+                              disabled={loading2 ? true : false}
+                            >
+                              {loading2 ? (
+                                <>
+                                  <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                  Please wait...
+                                </>
+                              ) : (
+                                "Generate Timesheet for all staff"
+                              )}
+
+
+                            </button>
+
+                          </div>
+                        </div>
+                    }
+
+
+                  </form>
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="form-group">
-                <label className="col-form-label">End Date</label>
-                <div>
-                  <input type="datetime-local" ref={dateTo} className=' form-control' name="" id="" required />
-                </div>
-              </div>
-            </div>
-
-            <div className="col-auto mt-3">
-              <div className="form-group">
-                <button
-                  type='submit'
-                  className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                  disabled={loading1 ? true : false}
-                >
-
-
-                  {loading1 ? <div className="spinner-grow text-light" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div> : "Load"}
-                </button>
-
-              </div>
-            </div>
-
-            {
-              sta === "" || periodic.length <= 0 || loading ? "" :
-                <div className="col-auto mt-3">
-                  <div className="form-group">
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Generate Timesheet") ? <button
-                      type='button'
-                      onClick={GetTimeshift}
-                      className="btn btn-primary add-btn text-white rounded-2 m-r-5"
-                      disabled={loading2 ? true : false}
-                    >
-                      {loading2 ? (
-                        <>
-                          <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
-                          Please wait...
-                        </>
-                      ) : (
-                        "Generate Timesheet"
-                      )}
-
-
-                    </button> : ""}
-                    <button
-                      type='button'
-                      onClick={SendTimesheet}
-                      className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
-                      disabled={loading3 ? true : false}
-                    >
-                      {loading3 ? (
-                        <>
-                          <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
-                          Please wait...
-                        </>
-                      ) : (
-                        "Send Timesheet to staff"
-                      )}
-
-
-                    </button>
-
-                  </div>
-                </div>
-            }
-            {
-              sta !== "" || periodic.length <= 0 || loading ? "" :
-                <div className="col-auto mt-3">
-                  <div className="form-group">
-                    <button style={{ fontSize: "12px" }}
-                      type='button'
-                      onClick={GetAllTimeshift}
-                      className="btn btn-dark add-btn text-white rounded-2 m-r-5"
-                      disabled={loading2 ? true : false}
-                    >
-                      {loading2 ? (
-                        <>
-                          <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
-                          Please wait...
-                        </>
-                      ) : (
-                        "Generate Timesheet for all staff"
-                      )}
-
-
-                    </button>
-
-                  </div>
-                </div>
-            }
-
-
-          </form>
-
+          </div>
 
 
           <div className='mt-4 border'>

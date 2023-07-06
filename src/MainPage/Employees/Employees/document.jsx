@@ -454,93 +454,100 @@ const Document = () => {
 
                     {/* Search Filter */}
 
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="card">
 
-                    <form className="row shadow-sm py-2" onSubmit={handleFilter}>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Staff Name</label>
-                                <div>
-                                    <select className="form-select" ref={sta}>
-                                        <option defaultValue value={""} >--Select Staff--</option>
-                                        {
-                                            staff.map((data, index) =>
-                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
-                                        }
-                                    </select>
+                                <div className="card-body">
+                                    <form className="row py-2" onSubmit={handleFilter}>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Staff Name</label>
+                                                <div>
+                                                    <select className="form-select" ref={sta}>
+                                                        <option defaultValue value={""} >--Select Staff--</option>
+                                                        {
+                                                            staff.map((data, index) =>
+                                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Admin Name</label>
+                                                <div>
+                                                    <select className="form-select" ref={cli}>
+                                                        <option defaultValue value={""}>--Select Admin--</option>
+                                                        {
+                                                            admin.map((data, index) =>
+                                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Date From</label>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Date To</label>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group" >
+                                                <label className="col-form-label">Status</label>
+                                                <div>
+                                                    <select className="form-select" ref={status} required>
+                                                        <option defaultValue hidden value={""}>--Select a Status...</option>
+                                                        <option value="Accepted">Accepted</option>
+                                                        <option value="Rejected">Rejected</option>
+                                                        <option value="Pending">Pending</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">User Role</label>
+                                                <div>
+                                                    <select className="form-select" ref={role} required>
+                                                        <option defaultValue hidden value={""}>--Select Role--</option>
+                                                        <option value="Admin">Admin</option>
+                                                        <option value="Staff">Staff</option>
+                                                        <option value="Client">Client</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div className="col-auto text-left">
+                                            <div className="form-group">
+                                                <button
+                                                    type='submit'
+                                                    className="btn btn-info add-btn text-white rounded-2 m-r-5">
+                                                    Load
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Admin Name</label>
-                                <div>
-                                    <select className="form-select" ref={cli}>
-                                        <option defaultValue value={""}>--Select Admin--</option>
-                                        {
-                                            admin.map((data, index) =>
-                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Date From</label>
-                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
-                            </div>
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Date To</label>
-                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
-                            </div>
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group" >
-                                <label className="col-form-label">Status</label>
-                                <div>
-                                    <select className="form-select" ref={status} required>
-                                        <option defaultValue hidden value={""}>--Select a Status...</option>
-                                        <option value="Accepted">Accepted</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Pending">Pending</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="form-group">
-                                <label className="col-form-label">User Role</label>
-                                <div>
-                                    <select className="form-select" ref={role} required>
-                                        <option defaultValue hidden value={""}>--Select Role--</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Staff">Staff</option>
-                                        <option value="Client">Client</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="col-auto text-left">
-                            <div className="form-group">
-                                <button
-                                    type='submit'
-                                    className="btn btn-info add-btn text-white rounded-2 m-r-5">
-                                    Load
-                                </button>
-
-
-                            </div>
-                        </div>
-
-                    </form>
-
+                    </div>
                     {/* <div className="submit-section">
                         </div> */}
 

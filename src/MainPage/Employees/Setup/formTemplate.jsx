@@ -19,7 +19,7 @@ import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
 
 
-const SupportType = () => {
+const FormType = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
     const [showModal, setShowModal] = useState(false);
@@ -30,41 +30,34 @@ const SupportType = () => {
     const columns = [
 
         {
-            name: 'Item Number',
+            name: 'Template Name',
             selector: row => row.itemNumber,
             sortable: true,
 
         },
         {
-            name: 'Item Name',
-            selector: row => row.itemName,
+            name: 'Template Type',
+            selector: row => row.itemNumber,
             sortable: true,
-            cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
-                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.itemName}`}
-            >{row.itemName}</span>,
 
         },
 
+
         {
-            name: 'Unit',
+            name: 'Is Employment Form',
             selector: row => row.unit,
             sortable: true
         },
         {
-            name: 'National',
+            name: 'Is General',
             selector: row => row.national,
             sortable: true
         },
         {
-            name: 'Remote',
+            name: 'Date Created',
             selector: row => row.remote,
             sortable: true
-        },
-        {
-            name: 'Very Remote',
-            selector: row => row.veryRemote,
-            sortable: true
-        },
+        }
 
 
     ];
@@ -75,7 +68,7 @@ const SupportType = () => {
     const FetchData = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/Invoice/get_all_support_type`, { cacheTimeout: 300000 });
+            const { data } = await get(`/Templates/get_templates`, { cacheTimeout: 300000 });
             setSupportType(data);
             setLoading(false)
         } catch (error) {
@@ -90,18 +83,7 @@ const SupportType = () => {
         FetchData()
     }, []);
 
-    const handleActivityClick = () => {
-        setShowModal(true);
-    };
 
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -309,7 +291,7 @@ const SupportType = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Support Type</title>
+                <title>Form Templates</title>
                 <meta name="description" content="Support Type" />
             </Helmet>
             {/* Page Content */}
@@ -318,10 +300,10 @@ const SupportType = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Support Type</h3>
+                            <h3 className="page-title">Form Templates</h3>
                             {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Support Type</li>
+                                <li className="breadcrumb-item active">Form Template</li>
                             </ul> : ""}
                         </div>
                     </div>
@@ -382,7 +364,9 @@ const SupportType = () => {
                         <div className='col-md-4'>
                             {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
                 Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add Support Type</button>
+                            <Link
+                                to={"/app/setup/create-template"}
+                                className="btn btn-info add-btn rounded-2 text-white">Add New Template</Link>
                         </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
@@ -404,73 +388,6 @@ const SupportType = () => {
 
                     />
 
-                    {/* Modal */}
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered size='lg'>
-                        <Modal.Header closeButton>
-                            <Modal.Title> Add Support Type </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
-
-                                    <div className="form-group col-md-6">
-                                        <label className="col-form-label">Item Number</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group col-md-6">
-                                        <label className="col-form-label">Item Name</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group col-md-6">
-                                        <label className="col-form-label">Unit</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group col-md-6">
-                                        <label className="col-form-label">National</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group col-md-6">
-                                        <label className="col-form-label">Remote</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group col-md-6">
-                                        <label className="col-form-label">Very Remote</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button
-                                disabled={loading1 ? true : false}
-                                className="btn btn-primary add-btn rounded-2 text-white" >
-                                {loading1 ? <div className="spinner-grow text-light" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div> : "Create"}
-                            </button>
-                        </Modal.Footer>
-                    </Modal>
 
                     {/*Edit Modal */}
 
@@ -487,4 +404,4 @@ const SupportType = () => {
     );
 }
 
-export default SupportType;
+export default FormType;

@@ -241,50 +241,55 @@ const ProgressReport = () => {
                         </div>
                     </div>
 
-                    <div className="row align-items-center shadow-sm p-2">
-                        <div className="col-md-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Staff Name</label>
-                                <div>
-                                    <select className="form-select" onChange={e => setSta(e.target.value)}>
-                                        <option defaultValue value={""}>--Select a staff--</option>
-                                        {
-                                            staff.map((data, index) =>
-                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
-                                        }
-                                    </select></div>
-                            </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="form-group">
-                                <label className="col-form-label">Client Name</label>
-                                <div>
-                                    <select className="form-select" onChange={e => setCli(e.target.value)}>
-                                        <option defaultValue value={""}>--Select a Client--</option>
-                                        {
-                                            clients.map((data, index) =>
-                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
-                                        }
-                                    </select></div>
-                            </div>
-                        </div>
-                        <div className="col-auto mt-3">
-                            <div className="form-group">
-                                <button
-                                    onClick={FilterReport}
-                                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                                    disabled={loading1 ? true : false}
-                                >
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="card">
+
+                                <div className="card-body">
+                                    <div className="row align-items-center  p-2">
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Staff Name</label>
+                                                <div>
+                                                    <select className="form-select" onChange={e => setSta(e.target.value)}>
+                                                        <option defaultValue value={""}>--Select a staff--</option>
+                                                        {
+                                                            staff.map((data, index) =>
+                                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Client Name</label>
+                                                <div>
+                                                    <select className="form-select" onChange={e => setCli(e.target.value)}>
+                                                        <option defaultValue value={""}>--Select a Client--</option>
+                                                        {
+                                                            clients.map((data, index) =>
+                                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-auto mt-3">
+                                            <div className="form-group">
+                                                <button
+                                                    onClick={FilterReport}
+                                                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                                    disabled={loading1 ? true : false}
+                                                >
 
 
-                                    {loading1 ? <div className="spinner-grow text-light" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div> : "Load"}
-                                </button>
+                                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div> : "Load"}
+                                                </button>
 
-                            </div>
-                        </div>
-                        {/* <div className="col-auto mt-3">
+                                            </div>
+                                        </div>
+                                        {/* <div className="col-auto mt-3">
                             <div className="form-group">
                                 <button
                                     onClick={FetchProgress}
@@ -294,8 +299,11 @@ const ProgressReport = () => {
                         </div> */}
 
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
 
 
 

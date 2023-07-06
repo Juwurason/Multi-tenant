@@ -5,6 +5,8 @@ import PublicHoliday from './publicHoliday';
 import ScheduleSupport from './scheduleSupport';
 import SupportType from './supportType';
 import Integration from './Integration';
+import FormTemplate from './formTemplate';
+import AddFormTemplate from '../../../_components/forms/AddFormTemplate';
 
 const SetupRoute = ({ match }) => (
     <Switch>
@@ -13,6 +15,8 @@ const SetupRoute = ({ match }) => (
         <Route path={`${match.url}/schedule-support`} component={ScheduleSupport} />
         <Route path={`${match.url}/support-type`} component={SupportType} />
         <Route path={`${match.url}/integrations`} component={Integration} />
+        <Route path={`${match.url}/form-template`} component={FormTemplate} />
+        <Route path={`${match.url}/create-template`} component={AddFormTemplate} />
 
     </Switch>
 );

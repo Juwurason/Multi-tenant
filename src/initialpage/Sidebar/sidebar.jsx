@@ -252,6 +252,9 @@ const Sidebar = (props) => {
                     {user.role === "CompanyAdmin" || hasRequiredClaims("Support Coordinator") ? <li><Link className={pathname.includes('support-type') ? "active" : pathname.includes('support-type')}
                       to="/app/setup/support-type" onClick={() => onMenuClik()}>Support Type</Link>
                     </li> : ""}
+                    {user.role === "CompanyAdmin" ? <li><Link className={pathname.includes('form-template') ? "active" : pathname.includes('form-template')}
+                      to="/app/setup/form-template" onClick={() => onMenuClik()}>Form Templates</Link>
+                    </li> : ""}
                     {user.role === "CompanyAdmin" || hasRequiredClaims("Third Party Integration") ? <li><Link className={pathname.includes('integrations') ? "active" : pathname.includes('integrations')}
                       to="/app/setup/integrations" onClick={() => onMenuClik()}>Third Party Integration</Link>
                     </li> : ""}
