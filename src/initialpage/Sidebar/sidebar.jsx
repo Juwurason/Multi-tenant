@@ -73,7 +73,7 @@ const Sidebar = (props) => {
 
                   <Link to="/app/main/dashboard"  >
                     <i className="la la-dashboard" />
-                    <span> Dashboard</span></Link>
+                    <span> {user.role === "CompanyAdmin" ? "Dashboard" : "Admin Dashboard"}</span></Link>
 
 
 
@@ -83,7 +83,7 @@ const Sidebar = (props) => {
               {
                 user.role === "Staff" || hasRequiredClaims("Staff Dashboard") ? <li className={pathname.includes('dashboard') ? "active" : ""} onClick={() => onMenuClik()}>
 
-                  <Link to="/staff/staff/dashboard"  >
+                  <Link to="/staff/staff/dashboard" >
                     <i className="la la-dashboard" />
                     <span> Dashboard</span></Link>
 
