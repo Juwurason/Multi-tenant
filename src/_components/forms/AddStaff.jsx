@@ -51,8 +51,8 @@ const AddStaff = () => {
             setLoading(false)
 
         } catch (error) {
-            toast.error("Error creating Staff")
-
+            toast.error("Error Creating Staff")
+            toast.error(error.response?.data?.message)
             setLoading(false)
 
         } finally {

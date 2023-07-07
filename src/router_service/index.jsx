@@ -9,6 +9,7 @@ import ProfilePage from '../MainPage/Pages/Profile';
 //Performance
 //HR
 import Reports from '../MainPage/HR/Reports';
+import ResponseUrl from '../MainPage/Employees/report';
 import Account from '../MainPage/Employees/Accounts'
 import Setup from '../MainPage/Employees/Setup'
 import Support from '../MainPage/Employees/Support'
@@ -69,6 +70,11 @@ export default [
    {
       path: 'setup',
       component: Setup
+   },
+
+   {
+      path: 'report',
+      component: ResponseUrl
    },
    {
       path: 'staff',

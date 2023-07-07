@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -19,32 +19,39 @@ import ExcelJS from 'exceljs';
 import Swal from 'sweetalert2';
 import { fetchUser } from '../../../store/slices/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchActivity, filterActivityLogs } from '../../../store/slices/ActivitySlice';
+import dayjs from 'dayjs';
 
 
 
-const AllUser = () => {
+const ActivityLog = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
 
+
     // Fetch user data and update the state
     useEffect(() => {
+        dispatch(fetchActivity(id.companyId));
         dispatch(fetchUser(id.companyId));
+
     }, [dispatch]);
 
     // Access the entire state
-    const loading = useSelector((state) => state.user.isLoading);
+    const loading = useSelector((state) => state.activity.isLoading);
+    const activity = useSelector((state) => state.activity.data);
     const users = useSelector((state) => state.user.data);
 
     useEffect(() => {
         // Check if user data already exists in the store
-        if (!users.length) {
+        if (!activity.length) {
             // Fetch user data only if it's not available in the store
-            dispatch(fetchUser(id.companyId));
+            dispatch(fetchActivity(id.companyId));
         }
-    }, [dispatch, users]);
-
-    const { get, post } = useHttp()
-
+    }, [dispatch, activity]);
+    const [user, setUser] = useState("")
+    const dateFrom = useRef("");
+    const dateTo = useRef("");
+    const [loading1, setLoading1] = useState(false);
 
 
 
@@ -56,68 +63,36 @@ const AllUser = () => {
 
 
         {
-            name: '',
-            cell: (row) => (
-                <span className='w-100 d-flex justify-content-center'>
-                    <Link to={`/app/account/editrole/${row.id}`} className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center pointer'
-                        title='Manage Roles and Priviledges'
-                    >
-                        <FaDharmachakra className='text-white' />
-                    </Link>
-
-                </span>
-            ),
-        },
-        {
-            name: 'Full Name',
-            selector: row => row.fullName,
-            sortable: true,
-            expandable: true,
-            cell: (row) => (
-                <Link href={`/app/account/editrole/${row.id}`} className="fw-bold text-dark">
-                    {row.fullName}
-                </Link>
-            ),
-        },
-
-
-        {
-            name: 'Role',
-            selector: row => row.role,
+            name: 'User',
+            selector: row => row.user,
             sortable: true
         },
         {
-            name: 'Email',
-            selector: row => row.email,
+            name: 'Activity',
+            selector: row => row.activity,
             sortable: true
         },
         {
-            name: "Actions",
-            cell: (row) => (
-                <div className="d-flex gap-1">
-                    <Link
-                        className='btn'
-                        title='Edit'
-                        to={`/app/account/edituser/${row.id}`}
-                    >
-                        <FaRegEdit />
-                    </Link>
-                    <button
-                        className='btn'
-                        title='Delete'
-                        onClick={() => handleDelete(row.id)}
-                    >
-                        <GoTrashcan />
-                    </button>
-
-                </div>
-            ),
+            name: 'Date Created',
+            selector: row => dayjs(row.dateCreated).format('DD-MM-YYYY HH:mm'),
+            sortable: true
         },
+
 
 
 
 
     ];
+    const filterActivity = (e) => {
+        e.preventDefault();
+        setLoading1(true);
+
+        dispatch(filterActivityLogs({ company: id.companyId, fromDate: dateFrom.current.value, toDate: dateTo.current.value, user: user, }));
+
+        if (!loading) {
+            setLoading1(false);
+        }
+    }
 
     const handleDelete = async (e) => {
 
@@ -164,7 +139,7 @@ const AllUser = () => {
         sheet.addRow(headers);
 
         // Add data
-        users.forEach((dataRow) => {
+        activity.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -191,7 +166,7 @@ const AllUser = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(users);
+        const csvData = Papa.unparse(activity);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -210,9 +185,9 @@ const AllUser = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("User Table", marginLeft, 40);
+        doc.text("Activity log Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = users.map((dataRow) =>
+        const dataValues = activity.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -227,7 +202,7 @@ const AllUser = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("Users.pdf");
+        doc.save("Activity log.pdf");
     };
 
 
@@ -237,20 +212,25 @@ const AllUser = () => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = users.filter((item) =>
-        item?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-        // item?.role.includes(searchText.toLowerCase()) ||
-        item?.email.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = activity.filter((item) =>
+        item?.user.toLowerCase().includes(searchText.toLowerCase())
     );
 
 
-
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-2 d-flex flex-column gap-1" style={{ fontSize: "12px" }}>
+                <div ><span className='fw-bold'>Activity: </span> {data.activity}</div>
+                <div><span className='fw-bold'>Medium: </span>{data.medium}</div>
+            </div>
+        );
+    };
     return (
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>All User</title>
-                    <meta name="description" content="All user" />
+                    <title>Activity Log</title>
+                    <meta name="description" content="Activity Log" />
                 </Helmet>
                 {/* Page Content */}
                 <div className="content container-fluid">
@@ -258,14 +238,76 @@ const AllUser = () => {
                     <div className="page-header">
                         <div className="row align-items-center">
                             <div className="col">
-                                <h3 className="page-title">Users List</h3>
+                                <h3 className="page-title">Activity Log</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">users</li>
+                                    <li className="breadcrumb-item active">Activity Log</li>
                                 </ul>
                             </div>
                             <div className="col-auto float-end ml-auto">
 
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="card">
+
+                                <div className="card-body">
+                                    <form className="row align-items-center py-3" onSubmit={filterActivity}>
+
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Select User</label>
+                                                <div>
+                                                    <select className="form-select" onChange={e => setUser(e.target.value)}>
+                                                        <option defaultValue value={""}>All User</option>
+                                                        {
+                                                            users.map((data, index) =>
+                                                                <option value={data.fullName} key={index}>{data.fullName}</option>)
+                                                        }
+                                                    </select></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Start Date</label>
+                                                <div>
+                                                    <input type="datetime-local" ref={dateFrom} className=' form-control' name="" id="" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">End Date</label>
+                                                <div>
+                                                    <input type="datetime-local" ref={dateTo} className=' form-control' name="" id="" required />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-auto mt-3">
+                                            <div className="form-group">
+                                                <button
+                                                    type='submit'
+                                                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                                    disabled={loading1 ? true : false}
+                                                >
+
+
+                                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div> : "Load"}
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -282,7 +324,7 @@ const AllUser = () => {
                             </div>
                             <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                                 <CSVLink
-                                    data={users}
+                                    data={activity}
                                     filename={"data.csv"}
 
                                 >
@@ -310,7 +352,7 @@ const AllUser = () => {
                                 >
                                     <FaFileExcel />
                                 </button>
-                                <CopyToClipboard text={JSON.stringify(users)}>
+                                <CopyToClipboard text={JSON.stringify(activity)}>
                                     <button
 
                                         className='btn text-warning'
@@ -321,10 +363,7 @@ const AllUser = () => {
                                     </button>
                                 </CopyToClipboard>
                             </div>
-                            <div className='col-md-4'>
-                                <Link to={'/app/employee/adduser'} className="btn btn-info add-btn text-white rounded-2">
-                                    Create New User</Link>
-                            </div>
+
                         </div>
 
 
@@ -338,7 +377,9 @@ const AllUser = () => {
                                     <span className="sr-only">Loading...</span>
                                 </div>
                             </div>}
+                            expandableRows
                             responsive
+                            expandableRowsComponent={ButtonRow}
                             searchTerm={searchText}
 
                         />
@@ -359,4 +400,4 @@ const AllUser = () => {
     );
 }
 
-export default AllUser;
+export default ActivityLog;

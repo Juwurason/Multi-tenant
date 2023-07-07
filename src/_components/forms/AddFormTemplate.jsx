@@ -8,11 +8,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchStaff } from '../../store/slices/StaffSlice';
-import { fetchClient, formatClient } from '../../store/slices/ClientSlice';
-import Editor from '../../MainPage/HR/Message/editor';
-import Edit from '../../MainPage/HR/Message/edit';
+import { JoditText } from '../Editor/JoditEditor';
 
 
 const AddFormTemplate = () => {
@@ -76,7 +72,7 @@ const AddFormTemplate = () => {
 
         const formData = new FormData()
         // Add input field values to formData
-        formData.append("TemplateName", templateName);
+        formData.append("TemplateName", templateName.current.value);
         formData.append("TemplateType", type);
         formData.append("Content", editorValue);
         formData.append("IsEmploymentForm", employment);
@@ -163,11 +159,13 @@ const AddFormTemplate = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">Content</label>
 
-                                                <Edit
+                                                <JoditText
                                                     placeholder="Write something..."
                                                     onChange={handleEditorChange}
                                                     value={editorValue}
-                                                ></Edit>
+
+                                                />
+
 
                                             </div>
                                         </div>}

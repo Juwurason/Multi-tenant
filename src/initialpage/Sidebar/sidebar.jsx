@@ -108,6 +108,9 @@ const Sidebar = (props) => {
                     {user.role === "CompanyAdmin" || hasRequiredClaims("Add & Edit Role") ? <li><Link className={pathname.includes('user-roles') ? "active" : pathname.includes('user-roles')}
                       onClick={() => onMenuClik()}
                       to="/app/account/user-roles" >Manage Roles</Link> </li> : ""}
+                    {user.role === "CompanyAdmin" ? <li><Link className={pathname.includes('activity-log') ? "active" : pathname.includes('activity-log')}
+                      onClick={() => onMenuClik()}
+                      to="/app/account/activity-log" >Activity Logs</Link> </li> : ""}
                   </ul>
                   : ""
                 }

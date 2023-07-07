@@ -52,6 +52,7 @@ const AddAdministrator = () => {
 
         } catch (error) {
             toast.error("Error Creating Admin")
+            toast.error(error.response?.data?.message)
 
             setLoading1(false)
 

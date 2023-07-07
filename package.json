@@ -76,6 +76,7 @@
     "react-html-parser": "^2.0.2",
     "react-icons": "^4.8.0",
     "react-input-mask": "^2.0.4",
+    "react-jodit-editor": "^1.1.0",
     "react-multi-select-component": "^4.3.4",
     "react-owl-carousel": "^2.3.1",
     "react-paginate": "^8.1.5",
