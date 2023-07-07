@@ -19,29 +19,7 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
-import { MultiSelect } from 'react-multi-select-component';
-const options = [
-    { label: "Medication Supervision", value: "Medication Supervision" },
-    { label: "Medication administering", value: "Medication administering" },
-    { label: "Personal Support", value: "Personal Support" },
-    { label: "Domestic Cleaning", value: "Domestic Cleaning" },
-    { label: "Transport", value: "Transport" },
-    { label: "Dog training", value: "Dog training" },
-    { label: "Install phone", value: "Install phone" },
-    { label: "Welfare check", value: "Welfare check" },
-    { label: "Support Groceries shopping", value: "Support Groceries shopping" },
-    { label: "Pick up", value: "Pick up" },
-    { label: "Baby sitting", value: "Baby sitting" },
-    { label: "Taking to solicitors appointment", value: "Taking to solicitors appointment" },
-    { label: "Meal Preparation", value: "Meal Preparation" },
-    { label: "Shopping", value: "Shopping" },
-    { label: "Groceries Transport", value: "Groceries Transport" },
-    { label: "Domestics Social Support", value: "Domestics Social Support" },
 
-
-
-];
 
 
 const ClientBehaviuor = () => {
@@ -68,27 +46,7 @@ const ClientBehaviuor = () => {
     const id = JSON.parse(localStorage.getItem('user'))
     const [showModal, setShowModal] = useState(false);
     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
-    const handleSelected = (selectedOptions) => {
-        setSelected(selectedOptions);
-    }
-    const selectedValues = selected.map(option => option.label).join(', ');
-
-
-    const convertTo12HourFormat = (time24h) => {
-        let [hours, minutes] = time24h.split(':');
-        let suffix = 'AM';
-
-        if (hours >= 12) {
-            suffix = 'PM';
-            hours = hours - 12;
-        }
-
-        if (hours === 0) {
-            hours = 12;
-        }
-
-        return `${hours}:${minutes} ${suffix}`;
-    };
+    
 
 
     const PostAvail = async (e) => {

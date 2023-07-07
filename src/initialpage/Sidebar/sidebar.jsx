@@ -412,6 +412,10 @@ const Sidebar = (props) => {
                 <Link to="/client/app/client-community"><i className="la la-bank" /> <span>Community Support Needs</span></Link>
               </li> : ""}
 
+              {user.role === "Client" ? <li className={pathname.includes('privacy-statement') || pathname.includes('privacy-statement') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/client/app/privacy-statement"><i className="la la-check-circle-o" /> <span>Privacy Statement</span></Link>
+              </li> : ""}
+
               {user.role === "Client" ? <li className={pathname.includes('client-document') || pathname.includes('client-document') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/client/app/client-document"><i className="la la-book" /> <span>Documents</span></Link>
               </li> : ""}
