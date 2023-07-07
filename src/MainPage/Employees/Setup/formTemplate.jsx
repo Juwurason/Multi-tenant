@@ -68,7 +68,7 @@ const FormType = () => {
     const FetchData = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/Templates/get_templates`, { cacheTimeout: 300000 });
+            const { data } = await get(`/api/Templates/get_templates?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             setSupportType(data);
             setLoading(false)
         } catch (error) {

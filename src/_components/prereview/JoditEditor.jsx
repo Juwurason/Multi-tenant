@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import "jodit";
 import "jodit/build/jodit.min.css";
 import JoditEditor from "jodit-react";
 
-export function JoditText({ placeholder, onChange, value }) {
+
+const JoditText = ({ placeholder, onChange, value }) => {
 
 
     const copyStringToClipboard = function (str) {
@@ -164,6 +164,7 @@ export function JoditText({ placeholder, onChange, value }) {
         </div>
     );
 }
+export default JoditText;
 
 
 
