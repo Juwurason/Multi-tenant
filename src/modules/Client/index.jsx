@@ -17,6 +17,7 @@ import ClientSchedule from './ClientSchedule';
 import ClientViewTicket from './ClientSupport/Support/viewTicket';
 import ClientRaiseTicket from './ClientSupport/Support/raiseTicket';
 import ClientKnowledgeBase from './ClientSupport/Support/knowledgeBase';
+import ClientComunitySupport from './ClientComunitySupport';
 
 
 
@@ -44,6 +45,7 @@ const ClientRoute = ({ match }) => {
       <Route path={`${match.url}/client-raise_ticket`} render={() => <ClientRaiseTicket />} />
       <Route path={`${match.url}/client-knowledge_base`} render={() => <ClientKnowledgeBase />} />
       <Route path={`${match.url}/client-schedule`} render={() => <ClientSchedule />} />
+      <Route path={`${match.url}/client-community`} render={() => <ClientComunitySupport />} />
 
     </Switch>
   )
