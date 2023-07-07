@@ -66,7 +66,8 @@ const AddClients = () => {
             setNDISNo('');
         } catch (error) {
             toast.error("Error Creating Client")
-            console.log(error);
+            toast.error(error.response?.data?.message)
+
             setLoading(false)
 
         } finally {

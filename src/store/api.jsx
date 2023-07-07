@@ -11,6 +11,15 @@ const fetchUserData = async (companyId) => {
         throw error;
     }
 };
+const fetchActivityLog = async (companyId) => {
+    try {
+        const response = await axiosInstance.get(`/Account/activity_logs?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Activity Log:', error);
+        throw error;
+    }
+};
 const fetchAdminData = async (companyId) => {
     try {
         const response = await axiosInstance.get(`/Administrators?companyId=${companyId}`);
@@ -71,6 +80,15 @@ const filterAttendance = async (fromDate, toDate, staff, company) => {
         return response.data;
     } catch (error) {
         console.error('Error filtering Attendance:', error);
+        throw error;
+    }
+};
+const filterActivityLogs = async (company, fromDate, toDate, user,) => {
+    try {
+        const response = await axiosInstance.post(`/Account/get_periodic_activities?companyId=${company}&fromDate=${fromDate}&toDate=${toDate}&username=${user}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting Activities:', error);
         throw error;
     }
 };
@@ -156,6 +174,8 @@ const api = {
     filterProgressNotes,
     getShiftsByUser,
     fetchTicket,
+    fetchActivityLog,
+    filterActivityLogs
     // Add other API endpoints and corresponding methods as needed
 };
 
