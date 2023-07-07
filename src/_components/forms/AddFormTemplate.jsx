@@ -87,7 +87,7 @@ const AddFormTemplate = () => {
                 formData
             )
             toast.success(data.message)
-            navigate.push('/app/employee/shift-scheduling')
+            navigate.push('/app/setup/form-template')
             setLoading(false)
 
         } catch (error) {
