@@ -19,7 +19,8 @@ const Header = (props) => {
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const pathname = location.pathname;
-
+  const user = JSON.parse(localStorage.getItem('user'));
+  
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.clear();
@@ -145,7 +146,7 @@ const Header = (props) => {
               </div>
             </div>
             <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-            <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link>
+            {user.role === "CompanyAdmin" ? <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link>:""}
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
           </div>
         </li>
