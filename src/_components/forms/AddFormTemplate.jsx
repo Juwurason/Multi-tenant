@@ -8,7 +8,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
-import { JoditText } from '../Editor/JoditEditor';
+import JoditText from '../prereview/JoditEditor';
+
 
 
 const AddFormTemplate = () => {
@@ -87,7 +88,7 @@ const AddFormTemplate = () => {
                 formData
             )
             toast.success(data.message)
-            navigate.push('/app/employee/shift-scheduling')
+            navigate.push('/app/setup/form-template')
             setLoading(false)
 
         } catch (error) {
@@ -159,11 +160,11 @@ const AddFormTemplate = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">Content</label>
 
-                                                <JoditText
-                                                    placeholder="Write something..."
-                                                    onChange={handleEditorChange}
-                                                    value={editorValue}
 
+                                                <JoditText
+                                                    value={editorValue}
+                                                    placeholder="Enter text"
+                                                    onChange={handleEditorChange}
                                                 />
 
 
