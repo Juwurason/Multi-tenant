@@ -77,13 +77,13 @@ const Sidebar = (props) => {
                   <ul>
 
 
-                    {user.role === "CompanyAdmin" || hasRequiredClaims("Admin Dashboard")  ?
+                    {user.role === "CompanyAdmin" || hasRequiredClaims("Admin Dashboard") ?
                       <li><Link className={pathname.includes('admin-dashboard') ? "active" : pathname.includes('admin-dashboard')}
 
-                        to="/app/main/dashboard" onClick={() => onMenuClik()}> {user.role === "CompanyAdmin" ? "Dashboard" : "Admin Dashboard"} </Link>
+                        to="/app/main/dashboard" onClick={() => onMenuClik()}> {user.role === "CompanyAdmin" ? "My Dashboard" : "Admin Dashboard"} </Link>
                       </li> : ""}
 
-                    {user.role === "Staff" || hasRequiredClaims("Staff Dashboard")  ?
+                    {user.role === "Staff" || hasRequiredClaims("Staff Dashboard") ?
                       <li><Link className={pathname.includes('staff-dashboard') ? "active" : pathname.includes('staff-dashboard')}
 
                         to="/staff/staff/dashboard" onClick={() => onMenuClik()}> Dashboard </Link>
@@ -93,8 +93,8 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> : ""}
-              
-              
+
+
 
               {/* Staff SideBar Starts */}
               {user.role === "Staff" ? <li className="menu-title">
@@ -176,10 +176,10 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
 
-             
 
 
-              
+
+
 
               {user.role === "CompanyAdmin" || hasRequiredClaims("View & Assign Admin Roster") ? <li className="menu-title">
 
@@ -210,7 +210,7 @@ const Sidebar = (props) => {
                     {user.role === "CompanyAdmin" || hasRequiredClaims("Support Coordinator") ? <li><Link className={pathname.includes('support-type') ? "active" : pathname.includes('support-type')}
                       to="/app/setup/support-type" onClick={() => onMenuClik()}>Support Type</Link>
                     </li> : ""}
-                    {user.role === "CompanyAdmin" || hasRequiredClaims("Add, View, Edit & Delete Template") ?  <li><Link className={pathname.includes('form-template') ? "active" : pathname.includes('form-template')}
+                    {user.role === "CompanyAdmin" || hasRequiredClaims("Add, View, Edit & Delete Template") ? <li><Link className={pathname.includes('form-template') ? "active" : pathname.includes('form-template')}
                       to="/app/setup/form-template" onClick={() => onMenuClik()}>Form Templates</Link>
                     </li> : ""}
                     {user.role === "CompanyAdmin" || hasRequiredClaims("Third Party Integration") ? <li><Link className={pathname.includes('integrations') ? "active" : pathname.includes('integrations')}

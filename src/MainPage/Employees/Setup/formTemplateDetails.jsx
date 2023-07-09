@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
 });
 
 const Template = ({ details }) => {
-    const parsedContent = parse(details.content);
+    // const parsedContent = parse(details.content.replace(/\\"/g, '"'));
+    const parsedContent = details.content ? parse(details.content.replace(/\\"/g, '"')) : null;
 
 
     return (
@@ -49,7 +50,7 @@ const Template = ({ details }) => {
                     </View>
 
                     <View style={styles.content}>
-                        <PdfText>{details.content}</PdfText>
+                        {parsedContent}
                     </View>
 
 
