@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClient } from "../../../store/slices/ClientSlice";
 
 
 function formatDuration(duration) {
@@ -25,8 +27,8 @@ function formatDuration(duration) {
 }
 
 const Invoice = () => {
+    const dispatch = useDispatch();
     const id = JSON.parse(localStorage.getItem('user'));
-    const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [profileId, setProfileId] = useState(0);
@@ -36,6 +38,9 @@ const Invoice = () => {
     const [type, setType] = useState('');
     const [invoice, setInvoice] = useState([]);
     const [name, setName] = useState({});
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [totalAgreed, setTotalAgreed] = useState(0);
+    const [totalDuration, setTotalDuration] = useState(0);
 
     const columns = [
 
@@ -93,24 +98,13 @@ const Invoice = () => {
 
     ];
 
-    const FetchData = async () => {
-        try {
-            const clientResponse = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            console.log(clientResponse);
-            const client = clientResponse.data;
-            setClients(client);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-
-
-    };
     useEffect(() => {
-        FetchData()
-    }, []);
+        dispatch(fetchClient(id.companyId));
+    }, [dispatch]);
+
+    // Access the entire state
+    const clients = useSelector((state) => state.client.data);
+
 
     const FetchInvoice = async (e) => {
         e.preventDefault();
@@ -124,6 +118,13 @@ const Invoice = () => {
             if (data.status === "Success") {
                 console.log(data);
                 toast.success(data.message);
+                console.log(data?.invoiceItems);
+                setTotalAgreed(data?.invoiceItems?.totalAgreedDuration)
+                setTotalAmount(data?.invoiceItems?.totalAmount)
+                setTotalDuration(data?.invoiceItems?.totalDuration)
+
+
+
                 setInvoice(data?.invoiceItems?.grouped_Agreed_Actual);
                 setName(data?.invoiceItems);
             }
@@ -134,6 +135,7 @@ const Invoice = () => {
             setLoading1(false)
         }
     }
+
 
 
     const handleExcelDownload = () => {
@@ -322,10 +324,10 @@ const Invoice = () => {
                                                 >
                                                     {
                                                         loading1 ?
-                                                            <div className="spinner-grow text-white" role="status">
-                                                                <span className="sr-only">Loading...</span>
-                                                            </div>
-
+                                                            <>
+                                                                <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                                                Please wait...This might take a while..
+                                                            </>
                                                             :
 
 
@@ -335,6 +337,18 @@ const Invoice = () => {
                                                 </button>
                                             </div>
                                         </div>
+                                        {invoice.length <= 0 ? "" :
+                                            <div className="col-auto mt-3">
+                                                <div className="form-group">
+                                                    <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+
+                                                    >
+                                                        Group Invoice by item Number
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
 
                                 </form>
@@ -414,6 +428,11 @@ const Invoice = () => {
                                 </div>
 
                             </div>
+                            <div className="d-flex px-2 py-3 justify-content-evenly align-items-center">
+                                <div><span>Total Duration: </span><span className="fw-bold ">{formatDuration(totalDuration)}</span></div>
+                                <div><span>Total Amount: </span><span className="fw-bold ">{totalAmount}</span></div>
+                                <div><span>Total Agreed Duration: </span><span className="fw-bold ">{totalAgreed}</span></div>
+                            </div>
                             <DataTable data={filteredData} columns={columns}
                                 pagination
                                 highlightOnHover
@@ -429,6 +448,7 @@ const Invoice = () => {
                                 paginationTotalRows={filteredData.length}
                                 expandableRows
                                 expandableRowsComponent={ButtonRow}
+
 
 
                             />
