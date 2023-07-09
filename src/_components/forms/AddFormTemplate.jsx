@@ -8,7 +8,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
-import JoditText from '../prereview/JoditEditor';
+import Edit from '../../MainPage/HR/Message/edit';
 
 
 
@@ -161,7 +161,7 @@ const AddFormTemplate = () => {
                                                 <label className="col-form-label">Content</label>
 
 
-                                                <JoditText
+                                                <Edit
                                                     value={editorValue}
                                                     placeholder="Enter text"
                                                     onChange={handleEditorChange}
