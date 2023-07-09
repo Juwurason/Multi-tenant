@@ -19,15 +19,15 @@ import { fetchTicket } from '../../../store/slices/TicketSlice';
 import { useCompanyContext } from '../../../context';
 
 const AdminDashboard = () => {
-  const { userProfile } = useCompanyContext();
+  // const { userProfile } = useCompanyContext();
   const navigate = useHistory();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
-    if (!user || !user.token || user.role !== "CompanyAdmin") {
-      return
+    if (!user) {
+      navigate.push('/login');
 
     }
-  }, [localStorage.getItem('user')]);
+  }, [navigate]);
 
   const id = JSON.parse(localStorage.getItem('user'));
   const [recentUsers, setRecentUsers] = useState([]);

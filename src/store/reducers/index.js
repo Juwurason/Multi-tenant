@@ -15,6 +15,7 @@ import ProgressNoteSlice from '../slices/ProgressNoteSlice';
 import TicketSlice from '../slices/TicketSlice';
 import AuthSlice from '../slices/AuthSlice';
 import ActivitySlice from '../slices/ActivitySlice';
+import FormTemplateSlice from '../slices/FormTemplateSlice';
 
 const rootReducer = combineReducers({
     dashboard: DashboardSlice,
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     splittedAttendance: splittedAttendance,
     progress: ProgressNoteSlice,
     ticket: TicketSlice,
-    activity: ActivitySlice
+    activity: ActivitySlice,
+    template: FormTemplateSlice
 
 });
 

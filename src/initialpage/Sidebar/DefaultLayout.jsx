@@ -16,7 +16,7 @@ const DefaultLayout = (props) => {
 		if (!user || !user.token || !user.role) {
 			navigate.push('/')
 		}
-	}, [localStorage.getItem('user')]);
+	}, [navigate]);
 
 
 	const { match } = props;

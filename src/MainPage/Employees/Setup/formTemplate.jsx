@@ -17,27 +17,37 @@ import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTemplate } from '../../../store/slices/FormTemplateSlice';
 
 
 const FormType = () => {
-    const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
     const [showModal, setShowModal] = useState(false);
-    const [loading1, setLoading1] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const { get, post } = useHttp();
-    const [supportType, setSupportType] = useState([]);
+    const dispatch = useDispatch();
+
+    // Fetch user data and update the state
+    useEffect(() => {
+        dispatch(fetchTemplate(id.companyId));
+    }, [dispatch]);
+
+    // Access the entire state
+    const loading = useSelector((state) => state.template.isLoading);
+    const template = useSelector((state) => state.template.data);
 
     const columns = [
 
         {
             name: 'Template Name',
-            selector: row => row.itemNumber,
+            selector: row => row.templateName,
             sortable: true,
 
         },
         {
             name: 'Template Type',
-            selector: row => row.itemNumber,
+            selector: row => row.templateType,
             sortable: true,
 
         },
@@ -45,43 +55,42 @@ const FormType = () => {
 
         {
             name: 'Is Employment Form',
-            selector: row => row.unit,
-            sortable: true
+            selector: row => row.isEmploymentForm,
+            sortable: true,
+            cell: row => (
+                <input type="checkbox" checked={row.isEmploymentForm} readOnly />
+            )
         },
         {
             name: 'Is General',
-            selector: row => row.national,
-            sortable: true
+            selector: row => row.isGeneral,
+            sortable: true,
+            cell: row => (
+                <input type="checkbox" checked={row.isGeneral} readOnly />
+            )
         },
         {
-            name: 'Date Created',
-            selector: row => row.remote,
-            sortable: true
-        }
+            name: 'Is Incident Form',
+            selector: row => row.isIncidentForm,
+            sortable: true,
+            cell: row => (
+                <input type="checkbox" checked={row.isIncidentForm} readOnly />
+            )
+        },
+        // {
+        //     name: 'Is Care Plan',
+        //     selector: row => row.isCarePlan,
+        //     sortable: true,
+        //     cell: row => (
+        //         <input type="checkbox" checked={row.isCarePlan} readOnly />
+        //     )
+        // },
 
 
     ];
 
 
 
-
-    const FetchData = async () => {
-        setLoading(true)
-        try {
-            const { data } = await get(`/api/Templates/get_templates?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setSupportType(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-        finally {
-            setLoading(false)
-        }
-    };
-    useEffect(() => {
-        FetchData()
-    }, []);
 
 
 
@@ -94,7 +103,7 @@ const FormType = () => {
         sheet.addRow(headers);
 
         // Add data
-        supportType.forEach((dataRow) => {
+        template.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -110,7 +119,7 @@ const FormType = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'supportType.xlsx';
+            link.download = 'template.xlsx';
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -121,12 +130,12 @@ const FormType = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(supportType);
+        const csvData = Papa.unparse(template);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "supportType.csv");
+        link.setAttribute("download", "template.csv");
         link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
@@ -140,9 +149,9 @@ const FormType = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("supportType Table", marginLeft, 40);
+        doc.text("template Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = supportType.map((dataRow) =>
+        const dataValues = template.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -157,15 +166,26 @@ const FormType = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("supportType.pdf");
+        doc.save("template.pdf");
+    };
+    const handleView = (templateUrl) => {
+        window.open(templateUrl, '_blank');
+    };
+    const handleDetails = (e) => {
+        setLoading2(true);
+        setTimeout(() => {
+            const url = `/form-details/${e}`;
+            window.open(url, '_blank');
+            setLoading2(false);
+        }, 2000);
     };
 
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
                 <span>
-                    <span className='fw-bold'>Item Name: </span>
-                    <span> {data.itemName}</span>
+                    <span className='fw-bold'>Template Name: </span>
+                    <span> {data.templateName}</span>
                 </span>
 
                 <span>
@@ -185,12 +205,40 @@ const FormType = () => {
                     <button className="btn text-primary" style={{ fontSize: "12px" }}>
                         Edit
                     </button> |
-                    <button className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                    {
+                        data.templateUrl ?
+                            <button className="btn text-secondary" style={{ fontSize: "12px" }}
+                                onClick={() => handleView(data.templateUrl)}>
+
+                                View
+                            </button> :
+
+
+                            <button className="btn text-secondary" style={{ fontSize: "12px" }}
+                                onClick={() => handleDetails(data.templateId)}
+                            >
+                                {
+                                    loading2 ?
+                                        <>
+                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                            Please wait...
+                                        </>
+                                        :
+                                        "View"
+
+                                }
+                            </button>
+                    }
+                    |
+                    <button className="btn text-danger fw-bold" style={{ fontSize: "12px" }}
+                        onClick={() => handleDelete(data.templateId)}
+                    >
+
                         Delete
                     </button>
                 </div>
 
-            </div>
+            </div >
         );
     };
     const [searchText, setSearchText] = useState("");
@@ -199,8 +247,8 @@ const FormType = () => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = supportType.filter((item) =>
-        item.itemName.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = template.filter((item) =>
+        item.templateName.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -220,7 +268,7 @@ const FormType = () => {
 
     const handleDelete = async (e) => {
         Swal.fire({
-            html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
+            html: `<h3>Are you sure? you want to delete this template</h3>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#405189',
@@ -230,12 +278,12 @@ const FormType = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
-                        // { userId: id.userId }
+                    const { data } = await post(`/Templates/delete/${e}`,
+
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchClient();
+                        dispatch(fetchTemplate(id.companyId));
                     } else {
                         toast.error(data.message);
                     }
@@ -254,39 +302,9 @@ const FormType = () => {
 
     }
 
-    const [holidayName, setHolidayName] = useState('')
-    const [holidayDate, setHolidayDate] = useState('')
 
 
-    const addHoliday = async () => {
 
-        if (holidayName === '' || holidayDate.length === 0) {
-            return toast.error("Input Fields cannot be empty")
-        }
-
-        setLoading1(true)
-        const info = {
-            name: holidayName,
-            date: holidayDate
-        }
-        try {
-            const { data } = await post(`/SetUp/add_holiday`, info)
-            // console.log(data);
-            toast.success(data.message)
-            setShowModal(false)
-            FetchClient()
-            setLoading1(false)
-            setHolidayName('')
-            setHolidayDate('')
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
-            setLoading1(false)
-        }
-    }
 
     return (
         <div className="page-wrapper">
@@ -322,8 +340,8 @@ const FormType = () => {
                         </div>
                         <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
-                                data={supportType}
-                                filename={"supportType.csv"}
+                                data={template}
+                                filename={"template.csv"}
 
                             >
                                 <button
@@ -350,7 +368,7 @@ const FormType = () => {
                             >
                                 <FaFileExcel />
                             </button>
-                            <CopyToClipboard text={JSON.stringify(supportType)}>
+                            <CopyToClipboard text={JSON.stringify(template)}>
                                 <button
 
                                     className='btn text-warning'
@@ -376,7 +394,7 @@ const FormType = () => {
                         searchTerm={searchText}
                         progressPending={loading}
                         progressComponent={<div className='text-center fs-1'>
-                            <div className="spinner-grow text-secondary" role="status">
+                            <div className="spinner-grow text-secondary">
                                 <span className="sr-only">Loading...</span>
                             </div>
                         </div>}

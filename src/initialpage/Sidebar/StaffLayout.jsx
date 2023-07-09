@@ -23,7 +23,7 @@ const StaffLayout = (props) => {
         if (!user || !user.token) {
             navigate.push('/')
         }
-    }, [localStorage.getItem('user')]);
+    }, [navigate]);
 
 
 

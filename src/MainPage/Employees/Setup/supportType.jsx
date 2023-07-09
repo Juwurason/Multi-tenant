@@ -236,75 +236,7 @@ const SupportType = () => {
         },
     };
 
-    const handleDelete = async (e) => {
-        Swal.fire({
-            html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#405189',
-            cancelButtonColor: '#777',
-            confirmButtonText: 'Confirm Delete',
-            showLoaderOnConfirm: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
-                        // { userId: id.userId }
-                    )
-                    if (data.status === 'Success') {
-                        toast.success(data.message);
-                        FetchClient();
-                    } else {
-                        toast.error(data.message);
-                    }
 
-
-                } catch (error) {
-                    console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
-
-                }
-
-
-            }
-        })
-
-    }
-
-    const [holidayName, setHolidayName] = useState('')
-    const [holidayDate, setHolidayDate] = useState('')
-
-
-    const addHoliday = async () => {
-
-        if (holidayName === '' || holidayDate.length === 0) {
-            return toast.error("Input Fields cannot be empty")
-        }
-
-        setLoading1(true)
-        const info = {
-            name: holidayName,
-            date: holidayDate
-        }
-        try {
-            const { data } = await post(`/SetUp/add_holiday`, info)
-            // console.log(data);
-            toast.success(data.message)
-            setShowModal(false)
-            FetchClient()
-            setLoading1(false)
-            setHolidayName('')
-            setHolidayDate('')
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
-            setLoading1(false)
-        }
-    }
 
     return (
         <div className="page-wrapper">
@@ -416,42 +348,42 @@ const SupportType = () => {
                                     <div className="form-group col-md-6">
                                         <label className="col-form-label">Item Number</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' />
                                         </div>
                                     </div>
 
                                     <div className="form-group col-md-6">
                                         <label className="col-form-label">Item Name</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' />
                                         </div>
                                     </div>
 
                                     <div className="form-group col-md-6">
                                         <label className="col-form-label">Unit</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' />
                                         </div>
                                     </div>
 
                                     <div className="form-group col-md-6">
                                         <label className="col-form-label">National</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' />
                                         </div>
                                     </div>
 
                                     <div className="form-group col-md-6">
                                         <label className="col-form-label">Remote</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' />
                                         </div>
                                     </div>
 
                                     <div className="form-group col-md-6">
                                         <label className="col-form-label">Very Remote</label>
                                         <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
+                                            <input type="text" className='form-control' />
                                         </div>
                                     </div>
 

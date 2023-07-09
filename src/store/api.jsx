@@ -148,6 +148,15 @@ const fetchTicket = async (companyId) => {
         throw error;
     }
 };
+const fetchFormTemplate = async (companyId) => {
+    try {
+        const response = await axiosInstance.get(`/Templates/get_templates?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Form Templates', error);
+        throw error;
+    }
+};
 const filterProgressNotes = async (staff, client) => {
     try {
         const response = await axiosInstance.get(`/ProgressNotes/get_progressnote_by_user?staffname=${staff}&profileId=${client}`);
@@ -175,7 +184,8 @@ const api = {
     getShiftsByUser,
     fetchTicket,
     fetchActivityLog,
-    filterActivityLogs
+    filterActivityLogs,
+    fetchFormTemplate
     // Add other API endpoints and corresponding methods as needed
 };
 
