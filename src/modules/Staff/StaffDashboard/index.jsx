@@ -378,9 +378,20 @@ const StaffDashboard = ({ roster, loading }) => {
                         <div className="d-flex justify-content-between text-dark">
                           <div className='d-flex flex-column justify-content-start'>
                             {/* <span style={{ fontSize: "10px" }}>{dayjs(activity.dateFrom).format('dddd MMMM D, YYYY')}</span> */}
-                            <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>Start Time: </span><span className='text-truncate'>{dayjs(activity.dateFrom).format('hh:mm A')}</span></span>
-                            <span style={{ fontSize: "10px" }}><span className='fw-bold text-truncate'>End Time: </span><span className='text-truncate'>{dayjs(activity.dateTo).format('hh:mm A')}</span></span>
-                            <span style={{ fontSize: "15px" }} className='text-dark fw-bold'><span>Clients:</span>{activity.clients}</span>
+                            <div className='d-flex justify-content-between'>
+                            <span className='fw-bold text-trucate' style={{ fontSize: "10px" }}>
+                                      {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')} 
+                                     
+                            </span>
+                            <small style={{ fontSize: "8px" }} className={`p-1 rounded ${getActivityStatus(activitiesByDay) === 'Upcoming' ? 'bg-warning' :
+                                    getActivityStatus(activitiesByDay) === 'Absent' ? 'bg-danger text-white' :
+                                      getActivityStatus(activitiesByDay) === 'You are already Clocked in' ? 'bg-primary text-white' :
+                                        getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
+                                    }`}>
+                                      {getActivityStatus(activitiesByDay)}
+                            </small>
+                            </div>
+                            <span style={{ fontSize: "15px" }} className='text-dark fw-bold'> <span>Clients: </span>{activity.clients}</span>
                           </div>
 
                         </div>

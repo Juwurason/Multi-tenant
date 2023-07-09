@@ -18,6 +18,9 @@ import ClientViewTicket from './ClientSupport/Support/viewTicket';
 import ClientRaiseTicket from './ClientSupport/Support/raiseTicket';
 import ClientKnowledgeBase from './ClientSupport/Support/knowledgeBase';
 import ClientComunitySupport from './ClientComunitySupport';
+import PrivacyStatement from './PrivacyStatement';
+import ClientEditHealth from './ClientEditHealth';
+import ClientBehaviuorEdit from './ClientBehaviuorEdit';
 
 
 
@@ -39,13 +42,16 @@ const ClientRoute = ({ match }) => {
       <Route path={`${match.url}/client-aid-equip`} render={() => <ClientAidEquip />} />
       <Route path={`${match.url}/client-daily-living`} render={() => <ClientDailyLiving />} />
       <Route path={`${match.url}/client-health`} render={() => <ClientHealth />} />
+      <Route path={`${match.url}/client-edit-health/:uid`} render={() => <ClientEditHealth />} />
       <Route path={`${match.url}/client-behaviuor`} render={() => <ClientBehaviuor />} />
+      <Route path={`${match.url}/client-behaviuor-edit/:uid`} render={() => <ClientBehaviuorEdit />} />
       <Route path={`${match.url}/client-message`} render={() => <ClientMessage />} />
       <Route path={`${match.url}/client-view_ticket`} render={() => <ClientViewTicket />} />
       <Route path={`${match.url}/client-raise_ticket`} render={() => <ClientRaiseTicket />} />
       <Route path={`${match.url}/client-knowledge_base`} render={() => <ClientKnowledgeBase />} />
       <Route path={`${match.url}/client-schedule`} render={() => <ClientSchedule />} />
       <Route path={`${match.url}/client-community`} render={() => <ClientComunitySupport />} />
+      <Route path={`${match.url}/privacy-statement`} render={() => <PrivacyStatement />} />
 
     </Switch>
   )
