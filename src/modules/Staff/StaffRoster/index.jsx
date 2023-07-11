@@ -178,12 +178,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
             </div>
           </div>
 
-
-          <div className='row  shadow-sm'>
+          <div className='row'>
 
 
             <div className="col-md-6 col-lg-12 ">
-              <div className=' py-3 d-flex justify-content-between align-items-center'>
+              <div className='mt-4 p-3 d-flex justify-content-between flex-wrap align-items-center'>
                 <span className=''>
                   <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
                     <FaAngleLeft className='pointer fs-4 text-white' />
