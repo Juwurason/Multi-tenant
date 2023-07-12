@@ -74,18 +74,20 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
 
   const CancelShift = async () => {
     // setLoading(true)
-    if (editedProfile.reason === "") {
+    if (editedProfile.reason === "" || editedProfile.reason === null) {
       return toast.error("Input Fields cannot be empty")
     }
     try {
       const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
-      // FetchData()
+      FetchData()
+
+    // Use the converted JSON data in your component
+    // console.log(json);
       // setStaffCancel(cancel);
-      // console.log(response);
       // setLoading(false);
       setReasonModal(false)
     } catch (error) {
-      // FetchData()
+      FetchData()
       // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
