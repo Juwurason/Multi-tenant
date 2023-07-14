@@ -17,12 +17,14 @@ import Swal from 'sweetalert2';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
+import moment from 'moment';
 
 
 
 const StaffDailyReport = () => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
+    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
     const [ticket, setTicket] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
@@ -30,55 +32,25 @@ const StaffDailyReport = () => {
 
     const columns = [
 
-
         {
-            name: 'Subject',
-            selector: row => row.subject,
-            sortable: true,
-            cell: (row) => <Link
-                to={`/staff/staff/ticket-details/${row.ticketId}`}
-                className="fw-bold text-dark" style={{ overflow: "hidden" }}
-            > {row.subject}</Link>
-
-        },
-        {
-            name: 'User',
-            selector: row => row.user,
+            name: 'Staff',
+            selector: row => row.staff.fullName,
             sortable: true,
         },
         {
-            name: 'Status',
-            selector: row => row.isOpen,
+            name: 'ClockIn',
+            selector: row => row.clockIn,
             sortable: true,
-            cell: (row) => <span className="long-cell" style={{ overflow: "hidden" }}
-            ><span className={`${row.isOpen === true ? "bg-info" : "bg-danger"} p-2 rounded-2 text-white`}>{row.isOpen === true ? "open" : "closed"}</span> </span>
         },
-
-
         {
-            name: "Actions",
-            cell: (row) => (
-                <div className="d-flex gap-1">
-
-                    <Link
-                        to={`/staff/staff/ticket-details/${row.ticketId}`}
-                        className='btn'
-                        title='Details'
-
-                    >
-                        <FaRegFileAlt />
-                    </Link>
-                    <button
-                        onClick={() => handleDelete(row.ticketId)}
-                        className='btn'
-                        title='Delete'
-
-                    >
-                        <GoTrashcan />
-                    </button>
-
-                </div>
-            ),
+            name: 'Duration',
+            selector: row => row.duration,
+            sortable: true,
+        },
+        {
+            name: 'ClockOut',
+            selector: row => row.clockOut,
+            sortable: true,
         },
 
     ];
@@ -92,9 +64,9 @@ const StaffDailyReport = () => {
     const FetchTicket = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/Tickets/get_user_tickets?userId=${id.userId}`, { cacheTimeout: 300000 });
-            // console.log(data)
-            // setTicket(data);
+            const { data } = await get(`/StaffAttendances/get_staff_attendances?staffId=${staffProfile.staffId}`, { cacheTimeout: 300000 });
+            console.log(data)
+            setTicket(data);
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -202,7 +174,7 @@ const StaffDailyReport = () => {
     };
 
     const filteredData = ticket.filter((item) =>
-        item.subject.toLowerCase().includes(searchText.toLowerCase())
+        item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
     );
 
 
@@ -264,7 +236,27 @@ const StaffDailyReport = () => {
 
     }
 
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+                <div><span className='fw-bold'>Document Name: </span>{data.documentName} </div>
+                <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+                <div>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
+                    // onClick={() => handleEdit(data.documentId)}
+                    >
+                        Edit
+                    </button> |
+                    <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                        Delete
+                    </button>
+                </div>
 
+            </div>
+        );
+
+
+    };
 
 
 
@@ -348,6 +340,7 @@ const StaffDailyReport = () => {
                             </Link>
                         </div>
                     </div>
+
                     <DataTable data={filteredData} columns={columns}
                         pagination
                         highlightOnHover
@@ -359,12 +352,14 @@ const StaffDailyReport = () => {
                                 <span className="sr-only">Loading...</span>
                             </div>
                         </div>}
+                        expandableRows
+                        expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
                         responsive
 
-                    />
 
+                    />
 
 
                 </div>

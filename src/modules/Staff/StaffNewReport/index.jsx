@@ -13,46 +13,22 @@ import Editor from './editor';
 
 const StaffNewReport = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    const { uid, } = useParams();
-    const [attendance, setAttendance] = useState({});
-    const [loading, setLoading] = useState(false);
+    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
     const [loading1, setLoading1] = useState(false);
     const navigate = useHistory();
     const privateHttp = useHttp();
 
 
-
-    const FetchData = async () => {
-        setLoading(true);
-        try {
-            const { data } = await privateHttp.get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
-            const attendId = data.attendId;
-
-            try {
-                const attendanceData = await privateHttp.get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
-                setAttendance(attendanceData.data);
-                // Process the attendance data here
-            } catch (attendanceError) {
-                console.log(attendanceError);
-            }
-
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        FetchData();
-    }, []);
-
-
     const [startKm, setStartKm] = useState(0);
     const [endKm, setEndKm] = useState(0);
+    const [clockIn, setClockIn] = useState("");
+    const [clockOut, setClockOut] = useState("");
     const [report, setReport] = useState("");
     const [url, setUrl] = useState(null)
 
+    const handleReportChange = (value) => {
+        setReport(value); // Update the state when the editor content changes
+      };
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
@@ -64,38 +40,59 @@ const StaffNewReport = () => {
         }
     };
 
-    const formData = new FormData();
-    formData.append("StartKm", startKm);
-    formData.append("EndKm", endKm);
-    formData.append("Report", report);
-    formData.append("ImageFile", url);
-
     const SendReport = async (e) => {
-        e.preventDefault()
-        setLoading1(true)
-
-        try {
-            // const { data } = await privateHttp.post(`/Attendances/add_report/${uid}?userId=${user.userId}&attendanceId=${attendance.attendanceId}`,
-            //     formData);
-            // if (data.status === "Success") {
-            //     Swal.fire(
-            //         '',
-            //         `${data.message}`,
-            //         'success'
-            //     )
-            //     setLoading1(false)
-            //     navigate.push(`/staff/staff-roster`)
-            // }
-            setLoading1(false)
-        } catch (error) {
-            // console.log(error);
-            setLoading1(false)
-
+        e.preventDefault();
+        setLoading1(true);
+      
+        // Get user's location
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+      
+              // Create the formData and append the values
+              const formData = new FormData();
+              formData.append("Report", report);
+              formData.append("ClockIn", clockIn);
+              formData.append("ClockOut", clockOut);
+              formData.append("InLongitude", longitude);
+              formData.append("InLatitude", latitude);
+              formData.append("StartKm", startKm);
+              formData.append("EndKm", endKm);
+              formData.append("StaffId", staffProfile.staffId);
+              formData.append("ImageFIle", url);
+              formData.append("CompanyId", user.companyId);
+      
+              // Make the post request
+               privateHttp.post(`/StaffAttendances/add_report?userId=${user.userId}`, formData)
+                .then((response) => {
+                    // console.log(response.data);
+                  if (response.data.status === "Success") {
+                    Swal.fire("", response.data.message, "success");
+                    setLoading1(false);
+                    navigate.push(`/staff/staff/daily-report`)
+                  }
+                })
+                .catch((error) => {
+                  // Handle error
+                  setLoading1(false);
+                  console.log(error);
+                });
+            },
+            (error) => {
+              // Handle location error
+              setLoading1(false);
+              console.log(error);
+            }
+          );
+        } else {
+          // Geolocation is not supported by the browser
+          setLoading1(false);
+          console.log("Geolocation is not supported");
         }
-        finally {
-            setLoading1(false)
-        }
-    }
+      };
+      
 
 
 
@@ -137,32 +134,27 @@ const StaffNewReport = () => {
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock In</label>
-                                                    <input className="form-control datetimepicker" type="datetime-local"
+                                                    <input className="form-control datetimepicker" onChange={e => setClockIn(e.target.value)} type="datetime-local"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock Out</label>
-                                                    <input className="form-control datetimepicker" type="datetime-local"
+                                                    <input className="form-control datetimepicker" onChange={e => setClockOut(e.target.value)} type="datetime-local"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
-                                                    <input type="text"
-
-
-                                                        className="form-control" />
+                                                    <input type="text" className="form-control" onChange={e => setStartKm(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
-                                                    <input type="text"
-
-                                                        className="form-control" />
+                                                    <input type="text" className="form-control" onChange={e => setEndKm(e.target.value)} />
                                                 </div>
                                             </div>
                                         </div>
@@ -172,14 +164,11 @@ const StaffNewReport = () => {
                                             <label>Day Report</label>
                                             <Editor
                                                 placeholder="Write something..."
-                                            // onChange={handleEditorChange}
-                                            // value={editorValue}
+                                            onChange={handleReportChange}
+                                            value={report}
                                             ></Editor>
                                             <br />
                                             <br />
-                                            {/* <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
-                                            <textarea rows={3} className="form-control summernote"
-                                                name="report"  /> */}
                                         </div>
 
                                         <div className="form-group">
