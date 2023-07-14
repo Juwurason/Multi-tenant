@@ -39,17 +39,22 @@ const StaffDailyReport = () => {
         },
         {
             name: 'ClockIn',
-            selector: row => row.clockIn,
+            selector: row => moment(row.clockIn).format('lll'),
             sortable: true,
         },
         {
             name: 'Duration',
-            selector: row => row.duration,
+            selector: row => {
+              const duration = moment.duration(row.duration);
+              const hours = Math.floor(duration.asHours());
+              const minutes = duration.minutes();
+              return `${hours}h ${minutes}min`;
+            },
             sortable: true,
         },
         {
             name: 'ClockOut',
-            selector: row => row.clockOut,
+            selector: row => moment(row.clockOut).format('lll'),
             sortable: true,
         },
 
@@ -239,16 +244,18 @@ const StaffDailyReport = () => {
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-                <div><span className='fw-bold'>Document Name: </span>{data.documentName} </div>
-                <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+                <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
+                <div ><span className='fw-bold'>Total Km: </span> {data.startKm - data.endKm}</div>
                 <div>
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
                     // onClick={() => handleEdit(data.documentId)}
                     >
                         Edit
                     </button> |
-                    <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
-                        Delete
+                    <button 
+                    // onClick={() => handleDelete(data.documentId)}
+                     className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                        Details
                     </button>
                 </div>
 
