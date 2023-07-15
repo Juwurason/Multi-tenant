@@ -19,6 +19,20 @@ import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
 import moment from 'moment';
 
+function formatDuration(duration) {
+    if (duration) {
+        const durationInMilliseconds = duration / 10000; // Convert ticks to milliseconds
+
+        const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+        const hours = Math.floor(durationInMinutes / 60);
+        const minutes = durationInMinutes % 60;
+
+        return `${hours} Hrs ${minutes} min`;
+    }
+
+    return "0 Hrs 0 min"; // Return an empty string if duration is not available
+}
+
 
 
 const StaffDailyReport = () => {
@@ -44,12 +58,7 @@ const StaffDailyReport = () => {
         },
         {
             name: 'Duration',
-            selector: row => {
-              const duration = moment.duration(row.duration);
-              const hours = Math.floor(duration.asHours());
-              const minutes = duration.minutes();
-              return `${hours}h ${minutes}min`;
-            },
+            selector: row => formatDuration(row.duration),
             sortable: true,
         },
         {
@@ -70,7 +79,7 @@ const StaffDailyReport = () => {
         setLoading(true)
         try {
             const { data } = await get(`/StaffAttendances/get_staff_attendances?staffId=${staffProfile.staffId}`, { cacheTimeout: 300000 });
-            console.log(data)
+            // console.log(data)
             setTicket(data);
             setLoading(false);
         } catch (error) {
@@ -245,19 +254,19 @@ const StaffDailyReport = () => {
         return (
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
-                <div ><span className='fw-bold'>Total Km: </span> {data.startKm - data.endKm}</div>
+                <div ><span className='fw-bold'>Total Km: </span> {data.endKm - data.startKm}</div>
                 <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div>
-                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
-                    // onClick={() => handleEdit(data.documentId)}
+                    <Link to={`/staff/staff/new-report-edit/${data.staffAttendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
+        
                     >
                         Edit
-                    </button> |
-                    <button 
+                    </Link> |
+                    <Link to={`/staff/staff/new-report-edit`}
                     // onClick={() => handleDelete(data.documentId)}
                      className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Details
-                    </button>
+                    </Link>
                 </div>
 
             </div>

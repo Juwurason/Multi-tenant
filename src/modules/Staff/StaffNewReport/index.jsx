@@ -69,7 +69,7 @@ const StaffNewReport = () => {
                 .then((response) => {
                     // console.log(response.data);
                   if (response.data.status === "Success") {
-                    Swal.fire("", response.data.message, "success");
+                    toast.success(response.data.message)
                     setLoading1(false);
                     navigate.push(`/staff/staff/daily-report`)
                   }
@@ -77,13 +77,15 @@ const StaffNewReport = () => {
                 .catch((error) => {
                   // Handle error
                   setLoading1(false);
-                  console.log(error);
+                  toast.error(error.response.data.message)
+                  toast.error(error.response.data.title)
                 });
             },
             (error) => {
               // Handle location error
               setLoading1(false);
-              console.log(error);
+              toast.error(error.response.data.message)
+              toast.error(error.response.data.title)
             }
           );
         } else {
@@ -167,6 +169,7 @@ const StaffNewReport = () => {
                                             onChange={handleReportChange}
                                             value={report}
                                             ></Editor>
+                                            <br />
                                             <br />
                                             <br />
                                         </div>
