@@ -246,6 +246,7 @@ const StaffDailyReport = () => {
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
                 <div ><span className='fw-bold'>Total Km: </span> {data.startKm - data.endKm}</div>
+                <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div>
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} 
                     // onClick={() => handleEdit(data.documentId)}
@@ -254,7 +255,7 @@ const StaffDailyReport = () => {
                     </button> |
                     <button 
                     // onClick={() => handleDelete(data.documentId)}
-                     className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                     className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Details
                     </button>
                 </div>

@@ -21,6 +21,7 @@ import StaffAttendanceReport from './StaffAttendanceReport';
 import StaffAttendanceDetails from './StaffAttendanceDetails';
 import StaffDailyReport from './StaffDailyReport';
 import StaffNewReport from './StaffNewReport';
+import StaffNewReportEdit from './StaffNewReportEdit';
 import StaffProfile from './StaffProfile';
 import StaffAttendance from './StaffAttendance';
 import AddReport from './AddReport';
@@ -208,6 +209,7 @@ const StaffRoute = ({ match }) => {
       <Route path={`${match.url}/attendance-details/:uid`} render={() => <StaffAttendanceDetails />} />
       <Route path={`${match.url}/daily-report`} render={() => <StaffDailyReport />} />
       <Route path={`${match.url}/new-report`} render={() => <StaffNewReport />} />
+      <Route path={`${match.url}/new-report-edit/:uid`} render={() => <StaffNewReportEdit />} />
 
     </Switch>
   )
