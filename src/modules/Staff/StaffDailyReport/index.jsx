@@ -262,7 +262,7 @@ const StaffDailyReport = () => {
                     >
                         Edit
                     </Link> |
-                    <Link to={`/staff/staff/new-report-edit`}
+                    <Link to={`/staff/staff/staff-report-details/${data.staffAttendanceId}`}
                     // onClick={() => handleDelete(data.documentId)}
                      className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Details
