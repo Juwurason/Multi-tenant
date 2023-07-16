@@ -286,7 +286,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                   </div>
                                 </div>
 
-                                {getActivityStatus(activity) === 'Clock-In' ? (
+                                {activity.status !== "Cancelled" && getActivityStatus(activity) === 'Clock-In' ? (
                                   <div className='d-flex gap-2'>
                                     <small onClick={() => {
                                       if (navigator.geolocation) {

@@ -388,7 +388,7 @@ const StaffDashboard = ({ roster, loading }) => {
                                       getActivityStatus(activitiesByDay) === 'You are already Clocked in' ? 'bg-primary text-white' :
                                         getActivityStatus(activitiesByDay) === 'Present' ? 'bg-success text-white' : ''
                                     }`}>
-                                      {getActivityStatus(activitiesByDay)}
+                                      {getActivityStatus(activity)}
                             </small>
                             </div>
                             <span style={{ fontSize: "15px" }} className='text-dark fw-bold'> <span>Clients: </span>{activity.clients}</span>
