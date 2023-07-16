@@ -16,7 +16,6 @@ import TicketSlice from '../slices/TicketSlice';
 import AuthSlice from '../slices/AuthSlice';
 import ActivitySlice from '../slices/ActivitySlice';
 import FormTemplateSlice from '../slices/FormTemplateSlice';
-import shiftAttendance from '../slices/shiftAttendance';
 import staffAttendanceSlice from '../slices/staffAttendanceSlice';
 
 const rootReducer = combineReducers({
@@ -35,7 +34,6 @@ const rootReducer = combineReducers({
     ticket: TicketSlice,
     activity: ActivitySlice,
     template: FormTemplateSlice,
-    shiftAttendance: shiftAttendance,
     staffAttendance: staffAttendanceSlice,
 
 });

@@ -213,8 +213,6 @@ const api = {
     fetchActivityLog,
     filterActivityLogs,
     fetchFormTemplate,
-    fetchShiftAttendance,
-    filterShiftAttendance,
     fetchStaffAttendance
     // Add other API endpoints and corresponding methods as needed
 };
