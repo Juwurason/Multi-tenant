@@ -11,6 +11,7 @@ import ShiftAttendanceReport from './shiftAttendanceReport';
 import StaffDailyReport from './staffDailyReport';
 import StaffReportDetails from './staffReportDetails';
 import EditStaffAttendance from '../../../_components/forms/EditStaffAttendance';
+import AdminDailyReport from './adminDailyReport';
 
 
 
@@ -20,6 +21,7 @@ const ReportsRoute = ({ match }) => (
       <Route path={`${match.url}/attendance-reports`} component={AttendanceReport} />
       <Route path={`${match.url}/shift-reports`} component={ShiftAttendanceReport} />
       <Route path={`${match.url}/staff-reports`} component={StaffDailyReport} />
+      <Route path={`${match.url}/administrator-reports`} component={AdminDailyReport} />
       <Route path={`${match.url}/progress-reports`} component={ProgressReport} />
       <Route path={`${match.url}/invoice`} component={Invoice} />
       <Route path={`${match.url}/progress-reportsDetails/:uid`} component={ProgressReportDetails} />

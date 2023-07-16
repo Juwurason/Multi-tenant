@@ -553,6 +553,9 @@ const AttendanceReport = () => {
                           </div>
                         </div>
                     }
+
+
+
                     {
                       sta !== "" || periodic.length <= 0 || loading ? "" :
                         <div className="col-auto mt-3">
@@ -560,7 +563,7 @@ const AttendanceReport = () => {
                             <button style={{ fontSize: "12px" }}
                               type='button'
                               onClick={GetAllTimeshift}
-                              className="btn btn-dark add-btn text-white rounded-2 m-r-5"
+                              className="btn btn-primary add-btn text-white rounded-2 m-r-5"
                               disabled={loading2 ? true : false}
                             >
                               {loading2 ? (
@@ -570,6 +573,24 @@ const AttendanceReport = () => {
                                 </>
                               ) : (
                                 "Generate Timesheet for all staff"
+                              )}
+
+
+                            </button>
+
+                            <button style={{ fontSize: "12px" }}
+                              type='button'
+                              onClick={SendTimesheet}
+                              className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
+                              disabled={loading3 ? true : false}
+                            >
+                              {loading3 ? (
+                                <>
+                                  <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                  Please wait...
+                                </>
+                              ) : (
+                                "Send Timesheet to all staff"
                               )}
 
 

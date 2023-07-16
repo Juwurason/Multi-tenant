@@ -242,8 +242,8 @@ const Sidebar = (props) => {
               {user.role === "CompanyAdmin" || hasRequiredClaims("Load Invoices") ? <li className={pathname.includes('invoice') || pathname.includes('invoice') ? "active" : ""}>
                 <Link to="/app/reports/invoice" onClick={() => onMenuClik()}><i className="la la-file-text" /> <span>Invoicing</span></Link>
               </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('admin-report') || pathname.includes('admin-report') ? "active" : ""}>
-                <Link to="/app/reports/admin-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Admin Daily Report</span></Link>
+              {user.role === "CompanyAdmin" ? <li className={pathname.includes('administrator-report') || pathname.includes('administrator-report') ? "active" : ""}>
+                <Link to="/app/reports/administrator-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Admin Daily Report</span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" ? <li className={pathname.includes('staff-report') || pathname.includes('staff-report') ? "active" : ""}>
                 <Link to="/app/reports/staff-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Staff Daily Report</span></Link>
