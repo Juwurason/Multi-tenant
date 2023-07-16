@@ -332,7 +332,7 @@ const Integration = () => {
                     </button> |
                     <a
                         href={`
-                        https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${data.clientID}&redirect_uri=https://promax-care1.vercel.app/app/report/auth/&scope=${data.scope}&state=test
+                        https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${data.clientID}&redirect_uri=${`/app/report/auth`}&scope=${data.scope}&state=test
                         
                         `}
                         className="btn text-success fw-bold" style={{ fontSize: "12px" }}>

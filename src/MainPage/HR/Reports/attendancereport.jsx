@@ -9,16 +9,10 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
-import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
-import Swal from 'sweetalert2';
-import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
 import { Modal } from 'react-bootstrap';
 import dayjs, { utc } from 'dayjs';
@@ -330,7 +324,7 @@ const AttendanceReport = () => {
 
   const handlePDFDownload = () => {
     const unit = "pt";
-    const size = "A4"; // Use A1, A2, A3 or A4
+    const size = "A4"; // Use A1, A2, A3, or A4
     const orientation = "portrait"; // portrait or landscape
     const marginLeft = 40;
     const doc = new jsPDF(orientation, unit, size);
@@ -352,8 +346,40 @@ const AttendanceReport = () => {
       body: dataValues,
       margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
     });
-    doc.save("Attendance.pdf");
+
+    // Generate the PDF as a blob URL
+    const pdfBlob = doc.output("bloburl");
+
+    // Open the PDF in a new tab
+    window.open(pdfBlob, "_blank");
   };
+
+  // const handlePDFDownload = () => {
+  //   const unit = "pt";
+  //   const size = "A4"; // Use A1, A2, A3 or A4
+  //   const orientation = "portrait"; // portrait or landscape
+  //   const marginLeft = 40;
+  //   const doc = new jsPDF(orientation, unit, size);
+  //   doc.setFontSize(13);
+  //   doc.text("User Table", marginLeft, 40);
+  //   const headers = columns.map((column) => column.name);
+  //   const dataValues = attendance.map((dataRow) =>
+  //     columns.map((column) => {
+  //       if (typeof column.selector === "function") {
+  //         return column.selector(dataRow);
+  //       }
+  //       return dataRow[column.selector];
+  //     })
+  //   );
+
+  //   doc.autoTable({
+  //     startY: 50,
+  //     head: [headers],
+  //     body: dataValues,
+  //     margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+  //   });
+  //   doc.save("Attendance.pdf");
+  // };
 
   const ButtonRow = ({ data }) => {
     return (
