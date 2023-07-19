@@ -74,7 +74,7 @@ const ActivityLog = () => {
         },
         {
             name: 'Date Created',
-            selector: row => dayjs(row.dateCreated).format('DD-MM-YYYY HH:mm'),
+            selector: row => dayjs(row.dateCreated).format('DD-MM-YYYY h:mm A'),
             sortable: true
         },
 

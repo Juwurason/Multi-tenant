@@ -37,6 +37,7 @@ const Invoice = () => {
     const [dateTo, setDateTo] = useState('');
     const [type, setType] = useState('');
     const [invoice, setInvoice] = useState([]);
+    const [grouped, setGrouped] = useState([]);
     const [name, setName] = useState({});
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalAgreed, setTotalAgreed] = useState(0);
@@ -425,6 +426,11 @@ const Invoice = () => {
                                             <FaCopy />
                                         </button>
                                     </CopyToClipboard>
+                                </div>
+
+                                <div className='col-md-4'>
+                                    <Link to={'/app/employee/addadmin'} className="btn btn-info add-btn text-white rounded-2">
+                                        Post to Xero</Link>
                                 </div>
 
                             </div>

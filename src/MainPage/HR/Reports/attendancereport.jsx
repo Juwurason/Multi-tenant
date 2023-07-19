@@ -61,13 +61,7 @@ const AttendanceReport = () => {
   const staff = useSelector((state) => state.staff.data);
   const splittedAttendance = useSelector((state) => state.splittedAttendance.data)
 
-  useEffect(() => {
-    // Check if staff data already exists in the store
-    if (!attendance.length) {
-      // Fetch staff data only if it's not available in the store
-      dispatch(fetchAttendance(id.companyId));
-    }
-  }, [dispatch, attendance]);
+
 
   const { get } = useHttp();
   const [loading1, setLoading1] = useState(false);

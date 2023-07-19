@@ -40,13 +40,6 @@ const AllEmployees = () => {
   const loading = useSelector((state) => state.staff.isLoading);
   const staff = useSelector((state) => state.staff.data);
 
-  useEffect(() => {
-    // Check if staff data already exists in the store
-    if (!staff.length) {
-      // Fetch staff data only if it's not available in the store
-      dispatch(fetchStaff(id.companyId));
-    }
-  }, [dispatch, staff]);
 
   const { post, get } = useHttp();
   const status = useRef(false);

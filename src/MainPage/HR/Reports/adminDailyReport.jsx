@@ -59,13 +59,7 @@ const AdminDailyReport = () => {
     const staffAttendance = useSelector((state) => state.staffAttendance.data);
     const admin = useSelector((state) => state.admin.data);
 
-    useEffect(() => {
-        // Check if staff data already exists in the store
-        if (!staffAttendance.length) {
-            // Fetch staff data only if it's not available in the store
-            dispatch(fetchStaffAttendance(id.companyId));
-        }
-    }, [dispatch, staffAttendance]);
+
 
     const { get } = useHttp();
     const [loading1, setLoading1] = useState(false);
