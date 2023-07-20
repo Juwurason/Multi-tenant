@@ -6,6 +6,10 @@ export const fetchStaff = createAsyncThunk('Staff/fetchStaff', async (companyId)
     // const filteredData = response.filter((staff) => staff.isActive);
     return response;
 });
+export const filterStaff = createAsyncThunk('Staff/filterStaff', async ({ companyId, status }) => {
+    const response = await api.filterStaffData(companyId, status);
+    return response
+});
 
 const StaffSlice = createSlice({
     name: 'Staff',
@@ -28,6 +32,18 @@ const StaffSlice = createSlice({
                 state.data = action.payload;
             })
             .addCase(fetchStaff.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            })
+            .addCase(filterStaff.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(filterStaff.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(filterStaff.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             });

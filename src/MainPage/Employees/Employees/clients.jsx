@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchClient } from '../../../store/slices/ClientSlice';
+import { fetchClient, filterClient } from '../../../store/slices/ClientSlice';
 
 const Clients = () => {
   const dispatch = useDispatch();
@@ -40,7 +40,6 @@ const Clients = () => {
 
   const { get, post } = useHttp();
   const status = useRef(false)
-  console.log(clients);
 
   const columns = [
 
@@ -255,28 +254,23 @@ const Clients = () => {
     item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
     item.email.toLowerCase().includes(searchText.toLowerCase())
   );
+  const [loading1, setLoading1] = useState(false);
 
-  const HandleFilter = async (e) => {
-    e.preventDefault()
-    // Profiles/get_active_clients?companyId=1&IsActive=false
-    try {
-      const response = await get(`/Profiles/get_active_clients?companyId=${id.companyId}&IsActive=${status.current.value}`,
-      )
-      console.log(response);
+  const HandleFilter = (e) => {
+    e.preventDefault();
+    setLoading1(true);
 
+    dispatch(filterClient({ companyId: id.companyId, status: status.current.value }));
 
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
-
-
+    if (!loading) {
+      setLoading1(false);
     }
-
-
-
-
   }
+
+
+
+
+
 
 
   const customStyles = {
@@ -356,7 +350,7 @@ const Clients = () => {
             <div className="card">
 
               <div className="card-body">
-                <form>
+                <form onSubmit={HandleFilter}>
                   <div className="row align-items-center py-2">
                     <div className="col-sm-4">
                       <div className="form-group">
@@ -393,7 +387,7 @@ const Clients = () => {
                       <div className="form-group">
                         <label className="col-form-label">Select Status</label>
                         <div>
-                          <select className="form-select" ref={status}>
+                          <select className="form-select" ref={status} required>
                             <option defaultValue hidden>--Select Status--</option>
                             <option value={false}>InActive</option>
                             <option value={true}>Active</option>
@@ -407,8 +401,8 @@ const Clients = () => {
 
                     <div className="col-auto mt-3">
                       <div className="form-group">
-                        <button className="btn btn-info rounded-2 add-btn text-white" type='button'
-                          onClick={HandleFilter}
+                        <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
+
                         >
                           Load
 

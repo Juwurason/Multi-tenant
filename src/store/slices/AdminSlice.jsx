@@ -6,6 +6,10 @@ export const fetchAdmin = createAsyncThunk('Admin/fetchAdmin', async (companyId)
     // const filteredData = response.filter((admin) => admin.isActive);
     return response;
 });
+export const filterAdmin = createAsyncThunk('Admin/filterAdmin', async ({ companyId, status }) => {
+    const response = await api.filterAdminData(companyId, status);
+    return response
+});
 
 const AdminSlice = createSlice({
     name: 'Admin',
@@ -28,6 +32,18 @@ const AdminSlice = createSlice({
                 state.data = action.payload;
             })
             .addCase(fetchAdmin.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            })
+            .addCase(filterAdmin.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(filterAdmin.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(filterAdmin.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             });

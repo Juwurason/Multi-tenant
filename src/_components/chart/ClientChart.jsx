@@ -7,6 +7,7 @@ import { fetchChart } from '../../store/slices/chartData';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ClientChart = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
     const result = useSelector((state) => state.chart.data);
     const staffNames = result.map((item) => item.staffName);
@@ -16,7 +17,7 @@ const ClientChart = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(fetchChart({ value: selectedPeriod }))
+        dispatch(fetchChart({ value: selectedPeriod, company: id.companyId }))
             .then(() => setIsLoading(false))
             .catch(() => setIsLoading(false));
     }, [dispatch, selectedPeriod]);

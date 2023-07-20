@@ -9,17 +9,14 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
-import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
-import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
-import { fetchStaff } from '../../../store/slices/StaffSlice';
+import { fetchStaff, filterStaff } from '../../../store/slices/StaffSlice';
 import { useDispatch, useSelector } from 'react-redux';
+
 const AllEmployees = () => {
   const id = JSON.parse(localStorage.getItem('user'));
   const user = JSON.parse(localStorage.getItem('user'));
@@ -39,6 +36,7 @@ const AllEmployees = () => {
 
   const loading = useSelector((state) => state.staff.isLoading);
   const staff = useSelector((state) => state.staff.data);
+  const [loading1, setLoading1] = useState(false);
 
 
   const { post, get } = useHttp();
@@ -153,7 +151,7 @@ const AllEmployees = () => {
   }
   const handleActivate = async (e) => {
     try {
-      const response = await get(`Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
+      const response = await get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
 
       )
       console.log(response);
@@ -174,7 +172,7 @@ const AllEmployees = () => {
 
   const handleDeactivate = async (e) => {
     try {
-      const response = await get(`Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      const response = await get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
       )
       console.log(response);
 
@@ -189,20 +187,18 @@ const AllEmployees = () => {
 
 
   }
-  const HandleFilter = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await get(`/Staffs/get_active_staffs?companyId=${id.companyId}&IsActive=${status.current.value}`);
-      const responseData = await response; // Await the Promise and access the data property
-      console.log(responseData.data); // Access the response data
 
-      // Further processing of the staff data...
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-      toast.error(error.response.data.title);
+
+  const HandleFilter = (e) => {
+    e.preventDefault();
+    setLoading1(true);
+
+    dispatch(filterStaff({ companyId: id.companyId, status: status.current.value }));
+
+    if (!loading) {
+      setLoading1(false);
     }
-  };
+  }
 
 
 
@@ -405,7 +401,7 @@ const AllEmployees = () => {
                         <div className="form-group">
                           <label className="col-form-label">Select Status</label>
                           <div>
-                            <select className="form-select" ref={status}>
+                            <select className="form-select" ref={status} required>
                               <option defaultValue hidden>--Select Status--</option>
                               <option value={false}>InActive</option>
                               <option value={true}>Active</option>
