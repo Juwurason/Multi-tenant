@@ -68,7 +68,7 @@ const Sidebar = (props) => {
               <li className="menu-title">
                 <span>Main</span>
               </li>
-              {user.role === "CompanyAdmin" || user.role === "Staff" || hasRequiredClaims("Staff Dashboard") || hasRequiredClaims("Admin Dashboard") ? (
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || user.role === "Staff" || hasRequiredClaims("Staff Dashboard") || hasRequiredClaims("Admin Dashboard") ? (
                 <li className="submenu">
                   <a href="#" className={isSideMenu === "dashboard" ? "subdrop" : ""} onClick={(e) => {
                     e.preventDefault();
@@ -80,7 +80,7 @@ const Sidebar = (props) => {
                   </a>
                   {isSideMenu === "dashboard" ? (
                     <ul>
-                      {user.role === "CompanyAdmin" || hasRequiredClaims("Admin Dashboard") ? (
+                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Admin Dashboard") ? (
                         <li>
                           <Link
                             className={pathname.includes('admin-dashboard') ? "active" : ""}
@@ -152,7 +152,7 @@ const Sidebar = (props) => {
                 </li>
               ) : null}
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Add & Edit Role") ? (
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add & Edit Role") ? (
                 <li className="submenu">
                   <a href="#" className={isSideMenu === "management" ? "subdrop" : ""} onClick={(e) => {
                     e.preventDefault();
@@ -164,7 +164,7 @@ const Sidebar = (props) => {
                   </a>
                   {isSideMenu === "management" ? (
                     <ul>
-                      {user.role === "CompanyAdmin" || hasRequiredClaims("Account Users") ? (
+                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") ? (
                         <li>
                           <Link
                             className={pathname.includes('alluser') ? "active" : ""}
@@ -176,7 +176,7 @@ const Sidebar = (props) => {
                         </li>
                       ) : null}
 
-                      {user.role === "CompanyAdmin" || hasRequiredClaims("Add & Edit Role") ? (
+                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add & Edit Role") ? (
                         <li>
                           <Link
                             className={pathname.includes('user-roles') ? "active" : ""}
@@ -188,7 +188,7 @@ const Sidebar = (props) => {
                         </li>
                       ) : null}
 
-                      {user.role === "CompanyAdmin" || hasRequiredClaims("View Activity Logs") ? (
+                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Activity Logs") ? (
                         <li>
                           <Link
                             className={pathname.includes('activity-log') ? "active" : ""}
@@ -205,13 +205,13 @@ const Sidebar = (props) => {
               ) : null}
 
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Administrator") ? <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Administrator") ? <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li> : null}
 
 
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Staff") ?
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Staff") ?
 
                 <li className={pathname.includes('allstaff') ? "active" : ""} onClick={() => onMenuClik()}>
                   <Link to="/app/employee/allstaff">
@@ -223,7 +223,7 @@ const Sidebar = (props) => {
 
               }
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Client") ? <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Client") ? <li className={pathname.includes('clients') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
 
@@ -232,11 +232,11 @@ const Sidebar = (props) => {
 
 
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View & Assign Admin Roster") ? <li className="menu-title">
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View & Assign Admin Roster") ? <li className="menu-title">
 
                 <span>Rostering Management</span>
               </li> : ""}
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Add & Delete Public Holiday") || hasRequiredClaims("Add, Edit & Delete Support of Schedule") || hasRequiredClaims("Support Coordinator") ? <li className="submenu">
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add & Delete Public Holiday") || hasRequiredClaims("Add, Edit & Delete Support of Schedule") || hasRequiredClaims("Support Coordinator") ? <li className="submenu">
                 <a href="#" className={isSideMenu == "setup" ? "subdrop" : ""} onClick={(e) => {
                   e.preventDefault();
                   toggleSidebar(isSideMenu == "setup" ? "" : "setup")
@@ -245,7 +245,7 @@ const Sidebar = (props) => {
                   <ul>
 
 
-                    {user.role === "CompanyAdmin" || hasRequiredClaims("Add & Delete Public Holiday") || hasRequiredClaims("Add, Edit & Delete Support of Schedule") ?
+                    {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add & Delete Public Holiday") || hasRequiredClaims("Add, Edit & Delete Support of Schedule") ?
                       <li><Link className={pathname.includes('public-holiday') ? "active" : pathname.includes('public-holiday')}
 
 
@@ -254,11 +254,11 @@ const Sidebar = (props) => {
                         to="/app/setup/public-holiday" onClick={() => onMenuClik()}>Public Holidays</Link>
                       </li> : ""}
 
-                    {user.role === "CompanyAdmin" || hasRequiredClaims("Add, Edit & Delete Support of Schedule") ? <li><Link className={pathname.includes('schedule-support') ? "active" : pathname.includes('schedule-support')}
+                    {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add, Edit & Delete Support of Schedule") ? <li><Link className={pathname.includes('schedule-support') ? "active" : pathname.includes('schedule-support')}
                       to="/app/setup/schedule-support" onClick={() => onMenuClik()}>Schedule Supports</Link>
                     </li> : ""}
 
-                    {user.role === "CompanyAdmin" || hasRequiredClaims("Support Coordinator") ? <li><Link className={pathname.includes('support-type') ? "active" : pathname.includes('support-type')}
+                    {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Support Coordinator") ? <li><Link className={pathname.includes('support-type') ? "active" : pathname.includes('support-type')}
                       to="/app/setup/support-type" onClick={() => onMenuClik()}>Support Type</Link>
                     </li> : ""}
                     {user.role === "CompanyAdmin" || hasRequiredClaims("Add, View, Edit & Delete Template") ? <li><Link className={pathname.includes('form-template') ? "active" : pathname.includes('form-template')}
@@ -272,21 +272,21 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> : ""}
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View & Assign Admin Roster") ? <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View & Assign Admin Roster") ? <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
                 <Link to="/app/employee/shift-scheduling" onClick={() => onMenuClik()}><i className="la la-calendar" /> <span>Shift Roster</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Progress Report") || hasRequiredClaims("Load Invoices") || hasRequiredClaims("View Attendances") || hasRequiredClaims("Accept & Reject Documents") ? <li className="menu-title">
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Progress Report") || hasRequiredClaims("Load Invoices") || hasRequiredClaims("View Attendances") || hasRequiredClaims("Accept & Reject Documents") ? <li className="menu-title">
                 <span>Report Management</span>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
                 <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Attendance Report</span></Link>
               </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('shift-report') || pathname.includes('shift-report') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className={pathname.includes('shift-report') || pathname.includes('shift-report') ? "active" : ""}>
                 <Link to="/app/reports/shift-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Shift Attendance Report</span></Link>
               </li> : ""}
-              {user.role === "CompanyAdmin" || hasRequiredClaims("View Progress Report") ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Progress Report") ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
                 <Link to="/app/reports/progress-reports" onClick={() => onMenuClik()}><i className="la la-folder-open" /> <span>Progress Report</span></Link>
               </li> : ""}
 
@@ -301,17 +301,17 @@ const Sidebar = (props) => {
               </li> : ""}
 
 
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Accept & Reject Documents") ? <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Accept & Reject Documents") ? <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
                 <Link to="/app/employee/document" onClick={() => onMenuClik()}><i className="la la-book" /> <span>Documents</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" ? <li className="menu-title">
+              {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className="menu-title">
                 <span>Communication</span>
               </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
                 <Link to="/app/message/inbox" onClick={() => onMenuClik()}><i className="la la-comment" /> <span>Messages</span></Link>
               </li> : ""}
-              {user.role === "CompanyAdmin" ? <li className="submenu">
+              {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className="submenu">
                 <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
                   e.preventDefault();
                   toggleSidebar(isSideMenu == "support" ? "" : "support")

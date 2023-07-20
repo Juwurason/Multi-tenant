@@ -60,7 +60,7 @@ const Loginpage = () => {
         localStorage.setItem('userEnc', encryptedData);
         localStorage.setItem("user", JSON.stringify(data.userProfile))
       }
-      if (data.userProfile?.role === "CompanyAdmin") {
+      if (data.userProfile?.role === "CompanyAdmin" || data.userProfile?.role === "Administrator") {
         navigate.push('/app/main/dashboard')
 
       }
@@ -82,11 +82,11 @@ const Loginpage = () => {
         localStorage.setItem("clientProfile", JSON.stringify(data.clientProfile))
 
       }
-      if (data.userProfile?.role === "Administrator") {
-        navigate.push('/administrator/administrator')
-        localStorage.setItem("adminProfile", JSON.stringify(data.adminProfile))
+      // if (data.userProfile?.role === "Administrator") {
+      //   navigate.push('/administrator/administrator')
+      //   localStorage.setItem("adminProfile", JSON.stringify(data.adminProfile))
 
-      }
+      // }
 
 
     } catch (error) {
