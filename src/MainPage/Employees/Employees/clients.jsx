@@ -477,7 +477,7 @@ const Clients = () => {
               </CopyToClipboard>
             </div>
             <div className='col-md-4'>
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Add Client") ?
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add Client") ?
                 <Link to="/app/employee/addclients" className="btn btn-info text-white add-btn rounded-2">
                   Create New clients</Link>
                 : ""}

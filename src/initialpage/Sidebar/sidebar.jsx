@@ -205,7 +205,7 @@ const Sidebar = (props) => {
               ) : null}
 
 
-              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Administrator") ? <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
+              {user.role === "CompanyAdmin" || hasRequiredClaims("View Administrator") ? <li className={pathname.includes('admin') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/alladmin"><i className="la la-user-lock" /> <span>Administrators</span></Link>
               </li> : null}
 

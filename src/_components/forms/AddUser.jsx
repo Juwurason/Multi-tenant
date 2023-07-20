@@ -72,7 +72,7 @@ const AddUser = () => {
                         <div className="card">
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Add New User</h4>
-                                <Link to={'/app/employee/allstaff'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                <Link to={'/app/account/alluser'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                             </div>
 
                             <div className="card-body">
