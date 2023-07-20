@@ -157,6 +157,33 @@ const fetchFormTemplate = async (companyId) => {
         throw error;
     }
 };
+const fetchShiftAttendance = async (companyId) => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/get_shift_attendance?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching shift Attendance', error);
+        throw error;
+    }
+};
+const fetchStaffAttendance = async (companyId) => {
+    try {
+        const response = await axiosInstance.get(`/StaffAttendances/get_all_staff_attendances?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching staff Attendance', error);
+        throw error;
+    }
+};
+const filterShiftAttendance = async (company, fromDate, toDate, staff, client, type) => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/get_periodic_shift_attendnace?companyId=${company}&fromDate=${fromDate}&toDate=${toDate}&staffId=${staff}&clientId=${client}&shifttype=${type}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error filtering Attendance:', error);
+        throw error;
+    }
+};
 const filterProgressNotes = async (staff, client) => {
     try {
         const response = await axiosInstance.get(`/ProgressNotes/get_progressnote_by_user?staffname=${staff}&profileId=${client}`);
@@ -185,7 +212,8 @@ const api = {
     fetchTicket,
     fetchActivityLog,
     filterActivityLogs,
-    fetchFormTemplate
+    fetchFormTemplate,
+    fetchStaffAttendance
     // Add other API endpoints and corresponding methods as needed
 };
 

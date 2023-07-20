@@ -32,6 +32,14 @@ const CompanyProfile = () => {
         FetchCompany()
     }, []);
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setEditedCompany((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
     const styles = {
         main: {
             backgroundColor: 'black',
@@ -129,30 +137,41 @@ const CompanyProfile = () => {
                                     <label>Company Head</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyHead || ""}
+                                        name='companyHead'
+                                        onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="form-group col-md-6">
                                     <label>Company Name</label>
                                     <input type="text" className="form-control"
-                                        value={editedCompany.companyName || ""}
+                                        value={editedCompany.companyName}
+                                        readOnly
                                     />
                                 </div>
                                 <div className="form-group col-md-6">
                                     <label>Company Email</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyEmail || ""}
+                                        name='companyEmail'
+                                        onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="form-group col-md-6">
                                     <label>Company Address</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyAddress || ""}
+                                        name='companyAddress'
+                                        onChange={handleInputChange}
+
                                     />
                                 </div>
                                 <div className="form-group col-md-6">
                                     <label>Company Phone</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyPhone || ""}
+                                        name='companyPhone'
+                                        onChange={handleInputChange}
+
                                     />
                                 </div>
                                 <div className="submit-section">

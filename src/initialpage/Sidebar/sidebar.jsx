@@ -283,12 +283,24 @@ const Sidebar = (props) => {
               {user.role === "CompanyAdmin" || hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
                 <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Attendance Report</span></Link>
               </li> : ""}
+              {user.role === "CompanyAdmin" ? <li className={pathname.includes('shift-report') || pathname.includes('shift-report') ? "active" : ""}>
+                <Link to="/app/reports/shift-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Shift Attendance Report</span></Link>
+              </li> : ""}
               {user.role === "CompanyAdmin" || hasRequiredClaims("View Progress Report") ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
                 <Link to="/app/reports/progress-reports" onClick={() => onMenuClik()}><i className="la la-folder-open" /> <span>Progress Report</span></Link>
               </li> : ""}
+
               {user.role === "CompanyAdmin" || hasRequiredClaims("Load Invoices") ? <li className={pathname.includes('invoice') || pathname.includes('invoice') ? "active" : ""}>
                 <Link to="/app/reports/invoice" onClick={() => onMenuClik()}><i className="la la-file-text" /> <span>Invoicing</span></Link>
               </li> : ""}
+              {user.role === "CompanyAdmin" ? <li className={pathname.includes('administrator-report') || pathname.includes('administrator-report') ? "active" : ""}>
+                <Link to="/app/reports/administrator-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Admin Daily Report</span></Link>
+              </li> : ""}
+              {user.role === "CompanyAdmin" ? <li className={pathname.includes('staff-report') || pathname.includes('staff-report') ? "active" : ""}>
+                <Link to="/app/reports/staff-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Staff Daily Report</span></Link>
+              </li> : ""}
+
+
               {user.role === "CompanyAdmin" || hasRequiredClaims("Accept & Reject Documents") ? <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
                 <Link to="/app/employee/document" onClick={() => onMenuClik()}><i className="la la-book" /> <span>Documents</span></Link>
               </li> : ""}

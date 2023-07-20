@@ -36,14 +36,6 @@ const AllAdmin = () => {
     const loading = useSelector((state) => state.admin.isLoading);
     const admin = useSelector((state) => state.admin.data);
 
-    useEffect(() => {
-        // Check if admin data already exists in the store
-        if (!admin.length) {
-            // Fetch admin data only if it's not available in the store
-            dispatch(fetchAdmin(id.companyId));
-        }
-    }, [dispatch, admin]);
-
 
 
     const id = JSON.parse(localStorage.getItem('user'));

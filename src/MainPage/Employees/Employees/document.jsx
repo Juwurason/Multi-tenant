@@ -42,13 +42,7 @@ const Document = () => {
     const clients = useSelector((state) => state.client.data);
     const admin = useSelector((state) => state.admin.data);
 
-    useEffect(() => {
-        // Check if staff data already exists in the store
-        if (!document.length) {
-            // Fetch staff data only if it's not available in the store
-            dispatch(fetchDocument(id.companyId));
-        }
-    }, [dispatch, document]);
+
 
 
     //Declaring Variables

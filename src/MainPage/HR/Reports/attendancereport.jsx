@@ -9,16 +9,10 @@ import "jspdf-autotable";
 import Papa from 'papaparse';
 import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
-import Sidebar from '../../../initialpage/Sidebar/sidebar';;
-import Header from '../../../initialpage/Sidebar/header'
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
-import { useCompanyContext } from '../../../context';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
-import Swal from 'sweetalert2';
-import moment from 'moment';
 import LocationMapModal from '../../../_components/map/MapModal';
 import { Modal } from 'react-bootstrap';
 import dayjs, { utc } from 'dayjs';
@@ -67,13 +61,7 @@ const AttendanceReport = () => {
   const staff = useSelector((state) => state.staff.data);
   const splittedAttendance = useSelector((state) => state.splittedAttendance.data)
 
-  useEffect(() => {
-    // Check if staff data already exists in the store
-    if (!attendance.length) {
-      // Fetch staff data only if it's not available in the store
-      dispatch(fetchAttendance(id.companyId));
-    }
-  }, [dispatch, attendance]);
+
 
   const { get } = useHttp();
   const [loading1, setLoading1] = useState(false);
@@ -330,7 +318,7 @@ const AttendanceReport = () => {
 
   const handlePDFDownload = () => {
     const unit = "pt";
-    const size = "A4"; // Use A1, A2, A3 or A4
+    const size = "A4"; // Use A1, A2, A3, or A4
     const orientation = "portrait"; // portrait or landscape
     const marginLeft = 40;
     const doc = new jsPDF(orientation, unit, size);
@@ -352,8 +340,40 @@ const AttendanceReport = () => {
       body: dataValues,
       margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
     });
-    doc.save("Attendance.pdf");
+
+    // Generate the PDF as a blob URL
+    const pdfBlob = doc.output("bloburl");
+
+    // Open the PDF in a new tab
+    window.open(pdfBlob, "_blank");
   };
+
+  // const handlePDFDownload = () => {
+  //   const unit = "pt";
+  //   const size = "A4"; // Use A1, A2, A3 or A4
+  //   const orientation = "portrait"; // portrait or landscape
+  //   const marginLeft = 40;
+  //   const doc = new jsPDF(orientation, unit, size);
+  //   doc.setFontSize(13);
+  //   doc.text("User Table", marginLeft, 40);
+  //   const headers = columns.map((column) => column.name);
+  //   const dataValues = attendance.map((dataRow) =>
+  //     columns.map((column) => {
+  //       if (typeof column.selector === "function") {
+  //         return column.selector(dataRow);
+  //       }
+  //       return dataRow[column.selector];
+  //     })
+  //   );
+
+  //   doc.autoTable({
+  //     startY: 50,
+  //     head: [headers],
+  //     body: dataValues,
+  //     margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+  //   });
+  //   doc.save("Attendance.pdf");
+  // };
 
   const ButtonRow = ({ data }) => {
     return (
@@ -527,6 +547,9 @@ const AttendanceReport = () => {
                           </div>
                         </div>
                     }
+
+
+
                     {
                       sta !== "" || periodic.length <= 0 || loading ? "" :
                         <div className="col-auto mt-3">
@@ -534,7 +557,7 @@ const AttendanceReport = () => {
                             <button style={{ fontSize: "12px" }}
                               type='button'
                               onClick={GetAllTimeshift}
-                              className="btn btn-dark add-btn text-white rounded-2 m-r-5"
+                              className="btn btn-primary add-btn text-white rounded-2 m-r-5"
                               disabled={loading2 ? true : false}
                             >
                               {loading2 ? (
@@ -544,6 +567,24 @@ const AttendanceReport = () => {
                                 </>
                               ) : (
                                 "Generate Timesheet for all staff"
+                              )}
+
+
+                            </button>
+
+                            <button style={{ fontSize: "12px" }}
+                              type='button'
+                              onClick={SendTimesheet}
+                              className="btn btn-secondary add-btn text-white rounded-2 m-r-5"
+                              disabled={loading3 ? true : false}
+                            >
+                              {loading3 ? (
+                                <>
+                                  <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                  Please wait...
+                                </>
+                              ) : (
+                                "Send Timesheet to all staff"
                               )}
 
 

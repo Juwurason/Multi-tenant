@@ -18,7 +18,7 @@ axiosInstance.interceptors.response.use(
             // Handle 401 error here, such as logging out the user
             // For example:
             localStorage.clear(); // Clear user data from local storage
-            window.location.reload(); // Reload the application or redirect to the login page
+            window.location.href = '/login'; // Redirect the user to the login page
         }
         return Promise.reject(error);
     }

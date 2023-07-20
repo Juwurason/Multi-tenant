@@ -37,10 +37,13 @@ const Invoice = () => {
     const [dateTo, setDateTo] = useState('');
     const [type, setType] = useState('');
     const [invoice, setInvoice] = useState([]);
+    const [grouped, setGrouped] = useState([]);
     const [name, setName] = useState({});
+    const [total, setTotal] = useState({});
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalAgreed, setTotalAgreed] = useState(0);
     const [totalDuration, setTotalDuration] = useState(0);
+    const [showInvoice, setShowInvoice] = useState(true);
 
     const columns = [
 
@@ -97,6 +100,62 @@ const Invoice = () => {
 
 
     ];
+    const columnsTwo = [
+
+        {
+            name: 'Description',
+            selector: row => row.description,
+            sortable: true,
+            cell: (row) => <span className="long-cell" style={{ overflow: "hidden", cursor: "pointer" }}
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.description} (${row.itemNumber})`}
+            >{row.description} ({row.itemNumber})</span>
+        },
+
+
+        // {
+        //     name: 'Date',
+        //     selector: row => row.date,
+        //     sortable: true,
+        //     expandable: true,
+        //     cell: (row) => (
+        //         <span style={{ overflow: "hidden" }}> {moment(row.dateCreated).format('LLL')}</span>
+        //     ),
+        // },
+        {
+            name: 'Quantity',
+            selector: row => row.quantity,
+            sortable: true
+        },
+        {
+            name: 'Actual Hours',
+            selector: row => formatDuration(row.duration),
+            sortable: true
+        },
+        {
+            name: 'Agreed Hours',
+            selector: row => row.agreedDuration,
+            sortable: true
+        },
+        {
+            name: 'Unit Price',
+            selector: row => row.unitPrice,
+            sortable: true
+        },
+        {
+            name: 'Amount ($)',
+            selector: row => row.amount,
+            sortable: true
+        },
+        {
+            name: 'Total Km',
+            selector: row => row.totalKm,
+            sortable: true
+        },
+
+
+
+    ];
+
 
     useEffect(() => {
         dispatch(fetchClient(id.companyId));
@@ -119,6 +178,7 @@ const Invoice = () => {
                 console.log(data);
                 toast.success(data.message);
                 console.log(data?.invoiceItems);
+                setTotal(data?.invoiceItems);
                 setTotalAgreed(data?.invoiceItems?.totalAgreedDuration)
                 setTotalAmount(data?.invoiceItems?.totalAmount)
                 setTotalDuration(data?.invoiceItems?.totalDuration)
@@ -126,6 +186,7 @@ const Invoice = () => {
 
 
                 setInvoice(data?.invoiceItems?.grouped_Agreed_Actual);
+                setGrouped(data?.invoiceItems?.groupInvoice);
                 setName(data?.invoiceItems);
             }
             setLoading1(false)
@@ -231,6 +292,9 @@ const Invoice = () => {
     };
 
     const filteredData = invoice.filter((item) =>
+        item.description.toLowerCase().includes(searchText.toLowerCase())
+    );
+    const filteredData2 = grouped.filter((item) =>
         item.description.toLowerCase().includes(searchText.toLowerCase())
     );
 
@@ -340,8 +404,8 @@ const Invoice = () => {
                                         {invoice.length <= 0 ? "" :
                                             <div className="col-auto mt-3">
                                                 <div className="form-group">
-                                                    <button className="btn btn-info rounded-2 add-btn text-white" type='submit'
-
+                                                    <button className="btn btn-info rounded-2 add-btn text-white" type="button"
+                                                        onClick={() => setShowInvoice(false)}
                                                     >
                                                         Group Invoice by item Number
 
@@ -370,92 +434,183 @@ const Invoice = () => {
 
 
                 {
-                    invoice.length <= 0 ?
-                        "" :
+                    invoice.length > 0 && showInvoice &&
 
-                        <div className='mt-4 border'>
-
+                    <div className='mt-4 border'>
 
 
-                            <div className="row px-2 py-3">
 
-                                <div className="col-md-3">
-                                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                        <input type="text" placeholder="Search invoice" className='border-0 outline-none' onChange={handleSearch} />
-                                        <GoSearch />
-                                    </div>
+                        <div className="row px-2 py-3">
+
+                            <div className="col-md-3">
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search invoice" className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
                                 </div>
-                                <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                    <CSVLink
-                                        data={invoice}
-                                        filename={"data.csv"}
-
-                                    >
-                                        <button
-
-                                            className='btn text-info'
-                                            title="Export as CSV"
-                                        >
-                                            <FaFileCsv />
-                                        </button>
-
-                                    </CSVLink>
-                                    <button
-                                        className='btn text-danger'
-                                        onClick={handlePDFDownload}
-                                        title="Export as PDF"
-                                    >
-                                        <FaFilePdf />
-                                    </button>
-                                    <button
-                                        className='btn text-primary'
-
-                                        onClick={handleExcelDownload}
-                                        title="Export as Excel"
-                                    >
-                                        <FaFileExcel />
-                                    </button>
-                                    <CopyToClipboard text={JSON.stringify(invoice)}>
-                                        <button
-
-                                            className='btn text-warning'
-                                            title="Copy Table"
-                                            onClick={() => toast("Table Copied")}
-                                        >
-                                            <FaCopy />
-                                        </button>
-                                    </CopyToClipboard>
-                                </div>
-
                             </div>
-                            <div className="d-flex px-2 py-3 justify-content-evenly align-items-center">
-                                <div><span>Total Duration: </span><span className="fw-bold ">{formatDuration(totalDuration)}</span></div>
-                                <div><span>Total Amount: </span><span className="fw-bold ">{totalAmount}</span></div>
-                                <div><span>Total Agreed Duration: </span><span className="fw-bold ">{totalAgreed}</span></div>
+                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                <CSVLink
+                                    data={invoice}
+                                    filename={"data.csv"}
+
+                                >
+                                    <button
+
+                                        className='btn text-info'
+                                        title="Export as CSV"
+                                    >
+                                        <FaFileCsv />
+                                    </button>
+
+                                </CSVLink>
+                                <button
+                                    className='btn text-danger'
+                                    onClick={handlePDFDownload}
+                                    title="Export as PDF"
+                                >
+                                    <FaFilePdf />
+                                </button>
+                                <button
+                                    className='btn text-primary'
+
+                                    onClick={handleExcelDownload}
+                                    title="Export as Excel"
+                                >
+                                    <FaFileExcel />
+                                </button>
+                                <CopyToClipboard text={JSON.stringify(invoice)}>
+                                    <button
+
+                                        className='btn text-warning'
+                                        title="Copy Table"
+                                        onClick={() => toast("Table Copied")}
+                                    >
+                                        <FaCopy />
+                                    </button>
+                                </CopyToClipboard>
                             </div>
-                            <DataTable data={filteredData} columns={columns}
-                                pagination
-                                highlightOnHover
-                                searchable
-                                searchTerm={searchText}
-                                invoicePending={loading}
-                                invoiceComponent={<div className='text-center fs-1'>
-                                    <div className="spinner-grow text-secondary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                </div>}
-                                responsive
-                                paginationTotalRows={filteredData.length}
-                                expandableRows
-                                expandableRowsComponent={ButtonRow}
 
-
-
-                            />
+                            <div className='col-md-4'>
+                                <a href={total.xeroUploadLink} className="btn btn-info add-btn text-white rounded-2">
+                                    Post to Xero</a>
+                            </div>
 
                         </div>
+                        <div className="d-flex px-2 py-3 justify-content-evenly align-items-center">
+                            <div><span>Total Duration: </span><span className="fw-bold ">{formatDuration(totalDuration)}</span></div>
+                            <div><span>Total Amount: </span><span className="fw-bold ">{totalAmount}</span></div>
+                            <div><span>Total Agreed Duration: </span><span className="fw-bold ">{totalAgreed}</span></div>
+                        </div>
+                        <DataTable data={filteredData} columns={columns}
+                            pagination
+                            highlightOnHover
+                            searchable
+                            searchTerm={searchText}
+                            invoicePending={loading}
+                            invoiceComponent={<div className='text-center fs-1'>
+                                <div className="spinner-grow text-secondary" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div>
+                            </div>}
+                            responsive
+                            paginationTotalRows={filteredData.length}
+                            expandableRows
+                            expandableRowsComponent={ButtonRow}
+
+
+
+                        />
+
+                    </div>
                 }
 
+                {!showInvoice && <div className='mt-4 border'>
+
+
+
+                    <div className="row px-2 py-3">
+
+                        <div className="col-md-3">
+                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                <input type="text" placeholder="Search grouped invoice" className='border-0 outline-none' onChange={handleSearch} />
+                                <GoSearch />
+                            </div>
+                        </div>
+                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                            <CSVLink
+                                data={grouped}
+                                filename={"data.csv"}
+
+                            >
+                                <button
+
+                                    className='btn text-info'
+                                    title="Export as CSV"
+                                >
+                                    <FaFileCsv />
+                                </button>
+
+                            </CSVLink>
+                            <button
+                                className='btn text-danger'
+                                onClick={handlePDFDownload}
+                                title="Export as PDF"
+                            >
+                                <FaFilePdf />
+                            </button>
+                            <button
+                                className='btn text-primary'
+
+                                onClick={handleExcelDownload}
+                                title="Export as Excel"
+                            >
+                                <FaFileExcel />
+                            </button>
+                            <CopyToClipboard text={JSON.stringify(grouped)}>
+                                <button
+
+                                    className='btn text-warning'
+                                    title="Copy Table"
+                                    onClick={() => toast("Table Copied")}
+                                >
+                                    <FaCopy />
+                                </button>
+                            </CopyToClipboard>
+                        </div>
+
+                        <div className='col-md-4'>
+                            <a href={total.xeroGroupUploadLink} className="btn btn-info add-btn text-white rounded-2">
+                                Post grouped Invoice to Xero</a>
+                        </div>
+
+                    </div>
+                    <div className="d-flex px-2 py-3 justify-content-evenly align-items-center">
+                        <div><span>Total Duration: </span><span className="fw-bold ">{formatDuration(totalDuration)}</span></div>
+                        <div><span>Total Amount: </span><span className="fw-bold ">{totalAmount}</span></div>
+                        <div><span>Total Agreed Duration: </span><span className="fw-bold ">{totalAgreed}</span></div>
+                    </div>
+                    <DataTable data={filteredData2} columns={columnsTwo}
+                        pagination
+                        highlightOnHover
+                        searchable
+                        searchTerm={searchText}
+                        invoicePending={loading}
+                        invoiceComponent={<div className='text-center fs-1'>
+                            <div className="spinner-grow text-secondary" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+                        responsive
+                        paginationTotalRows={filteredData2.length}
+                        expandableRows
+                        expandableRowsComponent={ButtonRow}
+
+
+
+                    />
+
+                </div>
+                }
 
 
 

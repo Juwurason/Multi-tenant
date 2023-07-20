@@ -51,14 +51,10 @@ const ClientChart = () => {
                 <span className='fw-semibold'>{selectedPeriod === 'y' ? "Yearly" : selectedPeriod === 'm' ? "Monthly" : selectedPeriod === 'w' ? "Weekly" : ""} Staff Duration Chart</span>
                 {/* <span style={{ fontSize: "10px" }}>From 1-6 Dec, 2021</span> */}
             </div>
-            <div className="d-flex justify-content-center w-100">
-                <div style={{ width: '200px', height: '200px' }}>
+            <div className="d-flex justify-content-center">
+                <div style={{ width: '200px', height: '200px' }} className='flex justify-content-center'>
                     {isLoading ? (
-                        <div className=" d-flex py-2 justify-content-center fs-6">
-                            <div className="spinner-grow text-muted" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>
+                        <div className="lds-spinner mt-4 ml-5"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                     ) : (
                         <Doughnut data={data} options={{ plugins: { legend: { display: false } } }} />
                     )}

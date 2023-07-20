@@ -51,13 +51,6 @@ const ShiftScheduling = () => {
   const staff = useSelector((state) => state.staff.data);
   const clients = useSelector((state) => state.client.data);
 
-  useEffect(() => {
-    // Check if staff data already exists in the store
-    if (!schedule.length) {
-      // Fetch staff data only if it's not available in the store
-      dispatch(fetchRoaster(id.companyId));
-    }
-  }, [dispatch, schedule]);
 
   // useEffect(() => {
   //   const now = new Date(); // Current date and time
