@@ -60,10 +60,7 @@ const Document = () => {
     const role = useRef("");
 
     const columns = [
-        // {
-        //   name: '#',
-        //   cell: (row, index) => index + 1
-        // },
+
         {
             name: 'User',
             selector: row => row.user,
