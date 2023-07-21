@@ -100,7 +100,7 @@ const AdminRegistration = () => {
             if (data.status === "Success") {
                 toast.success(data.message)
                 storeAdminEmail(data.companyAdmin?.email)
-                navigate.push('/otp')
+                navigate.replace('/otp')
 
             } else {
                 toast.error(data.message)
@@ -122,7 +122,7 @@ const AdminRegistration = () => {
             <div className="cover2-bg">
                 <div className="header-left p-4">
                     <span className="logo p-4">
-                        <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
+                        <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
                     </span>
                 </div>
                 <div className="container pt-3">

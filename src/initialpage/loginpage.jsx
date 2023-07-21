@@ -143,7 +143,7 @@ const Loginpage = () => {
       <div className='cover-bg'>
         <div className="header-left p-4">
           <span className="logo p-4">
-            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
+            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
           </span>
         </div>
         <div className="login-form px-3 shadow bg-white rounded" >
