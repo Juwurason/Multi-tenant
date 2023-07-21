@@ -74,18 +74,20 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
 
   const CancelShift = async () => {
     // setLoading(true)
-    if (editedProfile.reason === "") {
+    if (editedProfile.reason === "" || editedProfile.reason === null) {
       return toast.error("Input Fields cannot be empty")
     }
     try {
       const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
-      // FetchData()
+      FetchData()
+
+    // Use the converted JSON data in your component
+    // console.log(json);
       // setStaffCancel(cancel);
-      // console.log(response);
       // setLoading(false);
       setReasonModal(false)
     } catch (error) {
-      // FetchData()
+      FetchData()
       // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -178,12 +180,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
             </div>
           </div>
 
-
-          <div className='row  shadow-sm'>
+          <div className='row'>
 
 
             <div className="col-md-6 col-lg-12 ">
-              <div className=' py-3 d-flex justify-content-between align-items-center'>
+              <div className='mt-4 p-3 d-flex justify-content-between flex-wrap align-items-center'>
                 <span className=''>
                   <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
                     <FaAngleLeft className='pointer fs-4 text-white' />
@@ -285,7 +286,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                   </div>
                                 </div>
 
-                                {getActivityStatus(activity) === 'Clock-In' ? (
+                                {activity.status !== "Cancelled" && getActivityStatus(activity) === 'Clock-In' ? (
                                   <div className='d-flex gap-2'>
                                     <small onClick={() => {
                                       if (navigator.geolocation) {

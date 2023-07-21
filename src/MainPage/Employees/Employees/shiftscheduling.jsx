@@ -399,7 +399,7 @@ const ShiftScheduling = () => {
                   <li className="breadcrumb-item active">Shift Roster</li>
                 </ul> : ""}
               </div>
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Add Shift Roster") ? <div className="col-auto float-end ml-auto p-4">
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add Shift Roster") ? <div className="col-auto float-end ml-auto p-4">
                 <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
               </div> : ""}
             </div>
@@ -620,7 +620,7 @@ const ShiftScheduling = () => {
                             getActivityStatus(activity) === 'Active' ?
                               (
                                 <div className='d-flex gap-2'>
-                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Shift Roster") ? <small
+                                  {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster") ? <small
                                     className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
@@ -630,7 +630,7 @@ const ShiftScheduling = () => {
                                   >
                                     <GoTrashcan className='fs-6' />
                                   </small> : ""}
-                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ? <Link
+                                  {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster") ? <Link
                                     to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                     className={`text-truncate d-flex 
                               align-items-center
@@ -640,7 +640,7 @@ const ShiftScheduling = () => {
                                   >
                                     <MdOutlineEditCalendar className='fs-6 text-dark' />
                                   </Link> : ""}
-                                  {user.role === "CompanyAdmin" || hasRequiredClaims("Mark Attendances") ? <small
+                                  {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Mark Attendances") ? <small
                                     className={`text-truncate d-flex 
                                align-items-center
                                justify-content-center px-2 py-1 rounded bg-warning pointer`}
@@ -657,7 +657,7 @@ const ShiftScheduling = () => {
 
                                 <div className='d-flex gap-2' >
 
-                                  {(user.role === "CompanyAdmin" || hasRequiredClaims("Delete Shift Roster")) && (<small
+                                  {(user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster")) && (<small
                                     className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
@@ -670,7 +670,7 @@ const ShiftScheduling = () => {
 
                                   {
                                     getActivityStatus(activity) === 'Upcoming' && activity.status !== 'Pending' && activity.status !== 'Cancelled' && (
-                                      (user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster")) && (<Link
+                                      (user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster")) && (<Link
                                         to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                         className={`text-truncate d-flex 
                               align-items-center
@@ -687,7 +687,7 @@ const ShiftScheduling = () => {
 
                                   {
                                     getActivityStatus(activity) === 'Absent' && activity.status !== 'Pending' && (
-                                      (user.role === 'CompanyAdmin' || hasRequiredClaims('Mark Attendances')) && (
+                                      (user.role === 'CompanyAdmin' || user.role === "Administrator" || hasRequiredClaims('Mark Attendances')) && (
                                         <small
                                           className={`text-truncate d-flex align-items-center justify-content-center px-2 py-1 rounded bg-warning pointer`}
                                           onClick={() => markAttendance(activity)}
@@ -868,7 +868,7 @@ const ShiftScheduling = () => {
               )}
             </Modal.Body>
 
-            {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Shift Roster") ? <Modal.Footer>
+            {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster") ? <Modal.Footer>
               <Link to={`/app/employee/edit-shift/${selectedActivity?.shiftRosterId}`} className="btn btn-primary" >Edit Shift</Link>
 
             </Modal.Footer> : ""}

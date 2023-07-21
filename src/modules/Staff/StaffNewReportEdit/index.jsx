@@ -11,13 +11,13 @@ import useHttp from '../../../hooks/useHttp';
 import Swal from 'sweetalert2';
 import Editor from './editor';
 
-const StaffNewReport = () => {
+const StaffNewReportEdit = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
     const [loading1, setLoading1] = useState(false);
+    const { uid } = useParams()
     const navigate = useHistory();
     const privateHttp = useHttp();
-
 
     const [startKm, setStartKm] = useState(0);
     const [endKm, setEndKm] = useState(0);
@@ -25,9 +25,13 @@ const StaffNewReport = () => {
     const [clockOut, setClockOut] = useState("");
     const [report, setReport] = useState("");
     const [url, setUrl] = useState(null)
+    const [editpro, setEditPro] = useState({})
 
     const handleReportChange = (value) => {
-        setReport(value); // Update the state when the editor content changes
+        setEditPro({
+            ...editpro,
+            report: value
+          });
       };
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -40,7 +44,34 @@ const StaffNewReport = () => {
         }
     };
 
-    const SendReport = async (e) => {
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditPro({
+          ...editpro,
+          [name]: newValue
+        });
+      }
+
+    const FetchSchedule = async () => {
+        try {
+          const {data} = await privateHttp.get(`/StaffAttendances/get_attendance_record/${uid}`, { cacheTimeout: 300000 });
+        //   console.log(data);
+          setEditPro(data)
+        } catch (error) {
+          toast.error(error.response.data.message)
+          toast.error(error.response.data.title)
+        }
+    
+      };
+      useEffect(() => {
+        FetchSchedule()
+      }, []);
+ 
+
+      const SendReport = async (e) => {
         e.preventDefault();
         setLoading1(true);
       
@@ -53,23 +84,24 @@ const StaffNewReport = () => {
       
               // Create the formData and append the values
               const formData = new FormData();
-              formData.append("Report", report);
-              formData.append("ClockIn", clockIn);
-              formData.append("ClockOut", clockOut);
+              formData.append("StaffAttendanceId", uid);
+              formData.append("Report", editpro.report);
+              formData.append("ClockIn", editpro.clockIn);
+              formData.append("ClockOut", editpro.clockOut);
               formData.append("InLongitude", longitude);
               formData.append("InLatitude", latitude);
-              formData.append("StartKm", startKm);
-              formData.append("EndKm", endKm);
+              formData.append("StartKm", editpro.startKm);
+              formData.append("EndKm", editpro.endKm);
               formData.append("StaffId", staffProfile.staffId);
               formData.append("ImageFIle", url);
               formData.append("CompanyId", user.companyId);
       
               // Make the post request
-               privateHttp.post(`/StaffAttendances/add_report?userId=${user.userId}`, formData)
+               privateHttp.post(`/StaffAttendances/edit/${uid}?userId=${user.userId}`, formData)
                 .then((response) => {
                     // console.log(response.data);
                   if (response.data.status === "Success") {
-                    toast.success(response.data.message)
+                    toast.success(response.data.message);
                     setLoading1(false);
                     navigate.push(`/staff/staff/daily-report`)
                   }
@@ -94,16 +126,13 @@ const StaffNewReport = () => {
           console.log("Geolocation is not supported");
         }
       };
-      
-
-
 
     return (
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Add A Report</title>
-                    <meta name="description" content="Add A Report" />
+                    <title>Edit Report</title>
+                    <meta name="description" content="Edit Report" />
                 </Helmet>
                 {/* Page Content */}
                 <div className="content container-fluid">
@@ -114,7 +143,7 @@ const StaffNewReport = () => {
                                 <h3 className="page-title">Add A Report</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active">Add A Report</li>
+                                    <li className="breadcrumb-item active">Edit Report</li>
                                 </ul>
                             </div>
                         </div>
@@ -125,8 +154,7 @@ const StaffNewReport = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
-                                    <div style={{ fontSize: '12px' }}><p>Note: This report attendance is different from your shift rostering attendance. Fill in this report if you had other activities
-                                        within the day that are different from your shift rostering activities</p></div> <br />
+                                    
 
                                     <form onSubmit={SendReport}>
                                         <div className='col-md-4'>
@@ -136,27 +164,27 @@ const StaffNewReport = () => {
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock In</label>
-                                                    <input className="form-control datetimepicker" onChange={e => setClockIn(e.target.value)} type="datetime-local"
+                                                    <input className="form-control datetimepicker" name="clockIn" value={editpro.clockIn || ''} onChange={handleInputChange} type="datetime-local"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock Out</label>
-                                                    <input className="form-control datetimepicker" onChange={e => setClockOut(e.target.value)} type="datetime-local"
+                                                    <input className="form-control datetimepicker" name="clockOut" value={editpro.clockOut || ''} onChange={handleInputChange} type="datetime-local"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
-                                                    <input type="text" className="form-control" onChange={e => setStartKm(e.target.value)} />
+                                                    <input type="text" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
-                                                    <input type="text" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                                                    <input type="text" className="form-control" name="endKm" value={editpro.endKm || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                         </div>
@@ -166,8 +194,9 @@ const StaffNewReport = () => {
                                             <label>Day Report</label>
                                             <Editor
                                                 placeholder="Write something..."
-                                            onChange={handleReportChange}
-                                            value={report}
+                                            
+                                             value={editpro.report || ''} onChange={handleReportChange}
+                                            // onChange={handleInputChange}
                                             ></Editor>
                                             <br />
                                             <br />
@@ -212,4 +241,4 @@ const StaffNewReport = () => {
 }
 
 
-export default StaffNewReport;
+export default StaffNewReportEdit;

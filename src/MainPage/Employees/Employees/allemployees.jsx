@@ -487,7 +487,7 @@ const AllEmployees = () => {
                   </button>
                 </CopyToClipboard>
               </div>
-              {user.role === "CompanyAdmin" || hasRequiredClaims("Add Staff") ? <div className='col-md-4'>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add Staff") ? <div className='col-md-4'>
                 <Link to={'/app/employee/addstaff'} className="btn btn-info text-white add-btn rounded-2">
                   Create New staff</Link>
               </div> : ""}
