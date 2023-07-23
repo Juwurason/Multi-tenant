@@ -7,7 +7,6 @@ import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
 import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { useCompanyContext } from '../../../context';
 import EditUser from '../../../_components/modelbox/EditUser';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
@@ -35,13 +34,6 @@ const AllUser = () => {
     const loading = useSelector((state) => state.user.isLoading);
     const users = useSelector((state) => state.user.data);
 
-    useEffect(() => {
-        // Check if user data already exists in the store
-        if (!users.length) {
-            // Fetch user data only if it's not available in the store
-            dispatch(fetchUser(id.companyId));
-        }
-    }, [dispatch, users]);
 
     const { get, post } = useHttp()
 

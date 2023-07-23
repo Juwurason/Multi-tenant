@@ -29,6 +29,15 @@ const fetchAdminData = async (companyId) => {
         throw error;
     }
 };
+const filterAdminData = async (companyId, status) => {
+    try {
+        const response = await axiosInstance.get(`/Administrators/get_active_admin?companyId=${companyId}&IsActive=${status}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Admin data:', error);
+        throw error;
+    }
+};
 const fetchStaffData = async (companyId) => {
     try {
         const response = await axiosInstance.get(`/Staffs?companyId=${companyId}`);
@@ -38,9 +47,27 @@ const fetchStaffData = async (companyId) => {
         throw error;
     }
 };
+const filterStaffData = async (companyId, status) => {
+    try {
+        const response = await axiosInstance.get(`/Staffs/get_active_staffs?companyId=${companyId}&IsActive=${status}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching staff data:', error);
+        throw error;
+    }
+};
 const fetchClientData = async (companyId) => {
     try {
         const response = await axiosInstance.get(`/Profiles?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching client data:', error);
+        throw error;
+    }
+};
+const filterClientData = async (companyId, status) => {
+    try {
+        const response = await axiosInstance.get(`/Profiles/get_active_clients?companyId=${companyId}&IsActive=${status}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching client data:', error);
@@ -103,9 +130,10 @@ const getShiftsByUser = async (dateFrom, dateTo, staff, client) => {
     }
 };
 
-const getChartData = async (value) => {
+const getChartData = async (value, company) => {
+
     try {
-        const response = await axiosInstance.get(`/Attendances/staff_duration_chart?period=${value}`);
+        const response = await axiosInstance.get(`/Attendances/staff_duration_chart?period=${value}&companyId=${company}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching chart Data:', error);
@@ -196,8 +224,11 @@ const filterProgressNotes = async (staff, client) => {
 
 const api = {
     fetchAdminData,
+    filterAdminData,
     fetchStaffData,
+    filterStaffData,
     fetchClientData,
+    filterClientData,
     fetchDocumentData,
     fetchShiftRoaster,
     fetchAttendance,

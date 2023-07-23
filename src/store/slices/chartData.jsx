@@ -4,8 +4,8 @@ import api from '../api';
 
 export const fetchChart = createAsyncThunk(
     'Chart/fetchChart',
-    async ({ value }) => {
-        const response = await api.getChartData(value);
+    async ({ value, company }) => {
+        const response = await api.getChartData(value, company);
         return response.chart_info;
     }
 );

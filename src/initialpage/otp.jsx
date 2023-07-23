@@ -63,7 +63,7 @@ const OTPscreen = () => {
         setLoading(true)
         const res = await publicHttp.post('/Account/post_otp', postData)
         toast.success(res.data.message)
-        navigate.push('/')
+        navigate.replace('/')
         localStorage.removeItem("email")
         setLoading(false)
 
@@ -75,6 +75,17 @@ const OTPscreen = () => {
     }
 
   }
+
+  const ResendOtp = async () => {
+
+    try {
+      const res = await publicHttp.get(`/Account/resend_otp?email=${dmail}`)
+      toast.success(res.data.message)
+
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
+  }
   return (
     <>
       <Helmet>
@@ -84,7 +95,7 @@ const OTPscreen = () => {
       <div className="cover-bg">
         <div className="header-left p-4">
           <span className="logo p-4">
-            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
+            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
           </span>
         </div>
         <div >
@@ -92,8 +103,8 @@ const OTPscreen = () => {
             <div className='row justify-content-center align-items-center'>
               <div className='col-md-7 '>
                 <div className='text-center w-100 d-flex flex-column gap-4'>
-                  <h1 className='text-center fw-bold mb-2 fs-1 text-primary'>Check your email for a code</h1>
-                  <h5>
+                  <h1 className='text-center fw-bold mb-2 fs-1 text-white'>Check your email for a code</h1>
+                  <h5 className='text-white'>
                     We've sent a 6-digit code to <span className="text-danger fw-bold"> {dmail} </span>
                     The code expires shortly.
                   </h5>
@@ -116,7 +127,7 @@ const OTPscreen = () => {
                         )
                       }
                     </div>
-                    <button className="btn"
+                    <button className="btn text-white"
                       onClick={e => setOtp([...otp.map(v => "")])}
                     ><FaRegTrashAlt /></button>
 
@@ -124,18 +135,18 @@ const OTPscreen = () => {
                   </div>
 
                   <div>
-                    <button className='btn btn-info btn-lg rounded text-white w-50' to='/dashboard'
+                    <button className='btn btn-light  submit-btn rounded fw-bold text-info w-50' to='/dashboard'
                       onClick={handleSubmit}
                       disabled={loading ? true : false}
-                    >{loading ? <div className="spinner-grow text-light" role="status">
+                    >{loading ? <div className="spinner-grow" role="status">
                       <span className="sr-only">Loading...</span>
                     </div> : "Verify"}
                     </button>
                   </div>
-                  <div>
+                  <div className='text-white'>
                     <span> Can't find your code? Check your spam folder. or </span>
-                    <a className="text-primary"
-                      onClick={e => setOtp([...otp.map(v => "")])}
+                    <a className='fw-bold text-decoration-underline text-white'
+                      onClick={ResendOtp}
                     >Resend OTP</a>
                   </div>
 

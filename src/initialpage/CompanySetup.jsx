@@ -89,7 +89,7 @@ const CompanySetup = () => {
             if (data.status === "Success") {
                 toast.success(data.message)
                 storeCompanyId(data.company?.companyId);
-                navigate.push(`/admin/${data.company?.companyId}`)
+                navigate.replace(`/admin/${data.company?.companyId}`)
             } else {
                 toast.error(data.message)
                 return
@@ -109,7 +109,7 @@ const CompanySetup = () => {
             <div className="cover2-bg">
                 <div className="header-left p-4">
                     <span className="logo p-4">
-                        <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; Promax Care
+                        <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
                     </span>
                 </div>
                 <div className="container pt-3">

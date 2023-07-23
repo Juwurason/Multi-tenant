@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -21,7 +21,7 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
-import { fetchAdmin } from '../../../store/slices/AdminSlice';
+import { fetchAdmin, filterAdmin } from '../../../store/slices/AdminSlice';
 import { useDispatch } from 'react-redux';
 
 const AllAdmin = () => {
@@ -35,7 +35,7 @@ const AllAdmin = () => {
     // Access the entire state
     const loading = useSelector((state) => state.admin.isLoading);
     const admin = useSelector((state) => state.admin.data);
-
+    const status = useRef();
 
 
     const id = JSON.parse(localStorage.getItem('user'));
@@ -242,6 +242,15 @@ const AllAdmin = () => {
         item.email.toLowerCase().includes(searchText.toLowerCase())
     );
 
+    const HandleFilter = (e) => {
+        e.preventDefault();
+
+
+        dispatch(filterAdmin({ companyId: id.companyId, status: status.current.value }));
+
+
+    }
+
     return (
         <>
 
@@ -276,7 +285,7 @@ const AllAdmin = () => {
                             <div className="card">
 
                                 <div className="card-body">
-                                    <form  >
+                                    <form onSubmit={HandleFilter}>
                                         <div className="row align-items-center py-2">
                                             <div className="col-sm-4">
                                                 <div className="form-group">
@@ -313,10 +322,10 @@ const AllAdmin = () => {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Select Status</label>
                                                     <div>
-                                                        <select className="form-select">
+                                                        <select className="form-select" ref={status} required>
                                                             <option defaultValue hidden>--Select Status--</option>
-                                                            <option value="0">InActive</option>
-                                                            <option value="1">Active</option>
+                                                            <option value={false}>InActive</option>
+                                                            <option value={true}>Active</option>
 
                                                         </select>
                                                     </div>
