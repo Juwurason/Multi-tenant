@@ -19,6 +19,8 @@ import { fetchTicket } from '../../../store/slices/TicketSlice';
 import { BiStopwatch } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
+import axiosInstance from '../../../store/axiosInstance';
+import Swal from 'sweetalert2';
 
 const AdminDashboard = () => {
   // const { userProfile } = useCompanyContext();
@@ -90,11 +92,15 @@ const AdminDashboard = () => {
               
             }
             try {
-              const res = await get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`, info);
+              const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`, info);
               console.log(res);
-              // if (data.status === "Success") {
-                
-              // }
+              if (res.data.status === "Success") {
+                Swal.fire(
+                  'You have successfully clocked in',
+                  "",
+                  'success'
+                )
+              }
             } catch (error) {
               // console.log(error);
               toast.error(error.response.data.message)

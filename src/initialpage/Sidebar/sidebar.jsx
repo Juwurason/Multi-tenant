@@ -383,6 +383,7 @@ const Sidebar = (props) => {
               {user.role === "Client" ? <li className="menu-title">
                 <span>Account Management</span>
               </li> : ""}
+              
               {user.role === "Client" ? <li className={pathname.includes('client-profile') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/client/app/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
               </li> : ""}

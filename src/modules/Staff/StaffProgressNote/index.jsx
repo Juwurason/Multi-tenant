@@ -16,7 +16,8 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
+
+
 
 const StaffProgressNote = ({ staffPro, FetchData }) => {
     useEffect(() => {
@@ -30,10 +31,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
 
     const { get, post } = useHttp();
     const [loading, setLoading] = useState(false);
-    const [documentName, setDocumentName] = useState("")
-    const [expire, setExpire] = useState("")
     const [document, setDocument] = useState("")
-    // const [staffPro, setStaffPro] = useState([]);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const columns = [
@@ -64,10 +62,6 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
         }
 
     ];
-
-
-
-    const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -113,23 +107,6 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
         });
     };
 
-    // const getStaffProgressNote = async () => {
-    //     try {
-    //         const {data} = await privateHttp.get(`/ProgressNotes/get_progressnote_by_user?staffname=${getStaffProfile.fullName}&profileId=`, { cacheTimeout: 300000 })
-    //         setStaffPro(data.progressNote);
-
-    //         setLoading(false);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     finally {
-    //         setLoading(false)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     getStaffProgressNote()
-    // }, [])
 
     const handlePDFDownload = () => {
         const unit = "pt";
