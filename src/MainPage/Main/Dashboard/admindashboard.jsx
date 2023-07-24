@@ -16,7 +16,11 @@ import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchDocument } from '../../../store/slices/DocumentSlice';
 import { fetchTicket } from '../../../store/slices/TicketSlice';
-import { useCompanyContext } from '../../../context';
+import { BiStopwatch } from 'react-icons/bi';
+import { toast } from 'react-toastify';
+import useHttp from '../../../hooks/useHttp';
+import axiosInstance from '../../../store/axiosInstance';
+import Swal from 'sweetalert2';
 
 const AdminDashboard = () => {
   // const { userProfile } = useCompanyContext();
@@ -31,6 +35,7 @@ const AdminDashboard = () => {
 
   const id = JSON.parse(localStorage.getItem('user'));
   const [recentUsers, setRecentUsers] = useState([]);
+  const [isLoadin, setIsLoadin] = useState(false);
 
   const dispatch = useDispatch();
   const shiftRosterCount = useSelector((state) => state.dashboard.shiftRosterCount);
@@ -50,6 +55,7 @@ const AdminDashboard = () => {
   const clients = useSelector((state) => state.client.data);
   const document = useSelector((state) => state.document.data);
   const ticket = useSelector((state) => state.ticket.data);
+  const { get, post } = useHttp();
 
 
   const isLoading = useSelector((state) => state.dashboard.isLoading);
@@ -70,7 +76,54 @@ const AdminDashboard = () => {
   useEffect(() => {
     setRecentUsers(clients.slice(-5))
 
-  }, [clients, admin, attendanceCount])
+  }, [clients, admin, attendanceCount]);
+
+  const handleClockIn = () => {
+    setIsLoadin(true);
+    // Simulating an asynchronous action, such as an API call
+    setTimeout(() => {
+      // Perform any necessary logic here before routing to the - page
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async(position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const info ={
+              
+            }
+            try {
+              const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`, info);
+              console.log(res);
+              if (res.data.status === "Success") {
+                Swal.fire(
+                  'You have successfully clocked in',
+                  "",
+                  'success'
+                )
+              }
+            } catch (error) {
+              // console.log(error);
+              toast.error(error.response.data.message)
+              toast.error(error.response.data.title)
+    
+            }
+          },
+          (error) => {
+            toast.error('Error getting location:', error.message);
+          }
+        );
+      } else {
+        toast.error('Geolocation is not supported');
+      }
+
+    }, 2000); // Set an appropriate delay to simulate the loading time
+
+    // Optionally, you can clear the loading state after the specified time
+    setTimeout(() => {
+      setIsLoadin(false);
+    }, 3000);
+  };
+  
 
 
 
@@ -315,6 +368,27 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
+
+                {id.role === "Administrator" ? <div className={`card shadow-sm bg-white`} >
+                <div className="card-content">
+                  <div className="card-body">
+                    
+                      <div className="align-self-center">
+                      <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                                {isLoadin ?
+                                  <div>
+                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                      <span class="visually-hidden">Loading...</span>
+                                    </div> Please wait....
+                                  </div>
+                                  : <span> <BiStopwatch /> Clock In</span>
+                                }
+                      </span>
+                      </div>
+                  
+                  </div>
+                </div>
+              </div> : ""}
                 
               </div>
             </div>
