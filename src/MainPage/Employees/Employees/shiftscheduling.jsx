@@ -554,7 +554,7 @@ const ShiftScheduling = () => {
                 {daysOfWeek.map((day, index) => (
 
 
-                  <div className="col-md-6 col-lg-2 py-2" key={day.format('YYYY-MM-DD')}
+                  <div className="col-md-6 col-lg-2 col-xl-2 py-2" key={day.format('YYYY-MM-DD')}
 
 
                   >

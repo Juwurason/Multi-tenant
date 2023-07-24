@@ -22,6 +22,7 @@ import { fetchDocument } from '../../../store/slices/DocumentSlice';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
+import axiosInstance from '../../../store/axiosInstance';
 
 const Document = () => {
     const dispatch = useDispatch();
@@ -368,29 +369,20 @@ const Document = () => {
 
     const handleFilter = async (e) => {
         e.preventDefault();
-        // try {
-        //     // /api/Documents/filter_documents?companyId=&fromDate=&toDate=&staff=&admin=&status=&role=
-        //     const data = await privateHttp.get(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
-        //     // const { response } = await privateHttp.get(`/Documents/filter_documents?companyId=1&fromDate=2023-01-01T11:26&toDate=2023-06-24T11:26&staff=Adedamo`)
-        //     console.log(data.response);
+        try {
+            const { data } = await axiosInstance(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
+            console.log(data);
 
 
-        // } catch (error) {
-        //     // setLoading1(false);
-        //     toast.error("Ooooops😔 Error Occurred ")
-        //     console.log(error);
+        } catch (error) {
+            // setLoading1(false);
+            toast.error("Ooooops😔 Error Occurred ")
+            console.log(error);
 
 
 
-        // }
-        fetch(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Process the data
-            })
-            .catch(error => {
-                console.error(error); // Handle errors
-            });
+        }
+
     }
 
 

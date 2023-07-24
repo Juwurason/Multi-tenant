@@ -36,7 +36,7 @@ import '../assets/css/style.css';
 
 const MainApp = () => (
 
-   <Router basename={`${config.publicPath}`}>
+   <Router basename={`/`}>
       <Switch>
          <Route path="/" component={App} />
       </Switch>

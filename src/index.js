@@ -20,15 +20,17 @@ import dayjs from "dayjs";
 import { Provider } from "react-redux";
 import store from "./store/store";
 dayjs.locale('en-au');
-import moment from "moment";
-const container = document.getElementById('app');
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
+// const container = document.getElementById('app');
+// const root = createRoot(container); // createRoot(container!) if you use TypeScript
+const root = ReactDOM.createRoot(document.getElementById("app"));
 root.render(
-    <Provider store={store}>
-        <CompanyProvider>
-            <OnlineStatus />
-            <ToastContainer position="top-right" />
-            <Main />
-        </CompanyProvider>
-    </Provider>
+    <React.StrictMode>
+        <Provider store={store}>
+            <CompanyProvider>
+                <OnlineStatus />
+                <ToastContainer position="top-right" />
+                <Main />
+            </CompanyProvider>
+        </Provider>
+    </React.StrictMode>
 );

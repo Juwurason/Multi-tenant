@@ -35,7 +35,6 @@ const EditAccount = () => {
         const FetchUser = async () => {
             try {
                 const { data } = await get(`/Account/get_a_user?userId=${uid}`, { cacheTimeout: 300000 })
-                console.log(data);
                 setUserOne(data);
                 setEditedUser(data);
 

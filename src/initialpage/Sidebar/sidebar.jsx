@@ -32,10 +32,7 @@ const Sidebar = (props) => {
     setLevel3Menu(value)
   }
 
-  // const claims = JSON.parse(localStorage.getItem('claims'));
-  // console.log(claims);
-  // const claimType = claims.map((claim) => claim.value);
-  // console.log(claimType);
+
 
   const user = JSON.parse(localStorage.getItem('user'));
   const claims = JSON.parse(localStorage.getItem('claims'));

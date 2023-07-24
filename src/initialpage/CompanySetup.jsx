@@ -85,7 +85,6 @@ const CompanySetup = () => {
         try {
             setLoading(true)
             const { data } = await publicHttp.post("/Companies/add_company", info)
-            console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message)
                 storeCompanyId(data.company?.companyId);
