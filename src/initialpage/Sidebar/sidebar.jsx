@@ -32,10 +32,6 @@ const Sidebar = (props) => {
     setLevel3Menu(value)
   }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 13e9d59aaaf5da085e5513aa0f4344396ffea9f3
 
   const user = JSON.parse(localStorage.getItem('user'));
   const claims = JSON.parse(localStorage.getItem('claims'));
@@ -112,7 +108,7 @@ const Sidebar = (props) => {
 
 
               {/* Staff SideBar Starts */}
-              {user.role === "Staff" ? <li className="menu-title">
+              {user.role === "Staff" || hasRequiredClaims("Staff Daily Report") ? <li className="menu-title">
                 <span>Profile Management</span>
               </li> : ""}
               {user.role === "Staff" ? <li className={pathname.includes('profile') ? "active" : ""} onClick={() => onMenuClik()}>
@@ -387,7 +383,7 @@ const Sidebar = (props) => {
               {user.role === "Client" ? <li className="menu-title">
                 <span>Account Management</span>
               </li> : ""}
-              
+
               {user.role === "Client" ? <li className={pathname.includes('client-profile') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/client/app/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
               </li> : ""}

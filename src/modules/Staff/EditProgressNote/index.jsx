@@ -103,14 +103,15 @@ const EditProgressNote = () => {
     try {
       const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);
       const savePro = saveProgress.data;
-      toast.success(savePro.message)
-      setLoading1(false)
+      toast.success(savePro.message);
+      setLoading1(false);
     } catch (error) {
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
+      toast.error("Error saving progress note");
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
     }
     finally {
-      setLoading1(false)
+      setLoading1(false);
     }
   }
 
@@ -154,8 +155,9 @@ const EditProgressNote = () => {
             navigate.push(`/staff/staff/report/${uid}`)
           }
         } catch (error) {
-          toast.error(error.response.data.message)
-          toast.error(error.response.data.title)
+          toast.error("Error Clock Out")
+          toast.error(error.response.data.message);
+          toast.error(error.response.data.title);
           toast.error(error.response.data.message);
           setLoading2(false)
         }
