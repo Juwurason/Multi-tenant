@@ -32,10 +32,6 @@ const Sidebar = (props) => {
     setLevel3Menu(value)
   }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 13e9d59aaaf5da085e5513aa0f4344396ffea9f3
 
   const user = JSON.parse(localStorage.getItem('user'));
   const claims = JSON.parse(localStorage.getItem('claims'));
