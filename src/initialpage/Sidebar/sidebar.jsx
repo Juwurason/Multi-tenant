@@ -108,7 +108,7 @@ const Sidebar = (props) => {
 
 
               {/* Staff SideBar Starts */}
-              {user.role === "Staff" ? <li className="menu-title">
+              {user.role === "Staff" || hasRequiredClaims("Staff Daily Report") ? <li className="menu-title">
                 <span>Profile Management</span>
               </li> : ""}
               {user.role === "Staff" ? <li className={pathname.includes('profile') ? "active" : ""} onClick={() => onMenuClik()}>
