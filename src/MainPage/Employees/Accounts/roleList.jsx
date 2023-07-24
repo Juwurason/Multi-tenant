@@ -17,7 +17,6 @@ const RoleList = () => {
     const FetchRole = async () => {
         try {
             const { data } = await privateHttp.get(`/Account/get_user_roles?userId=${uid}`, { cacheTimeout: 300000 })
-            console.log(data);
             setRoles(data.userRoles);
         } catch (error) {
             console.log(error);
@@ -33,7 +32,6 @@ const RoleList = () => {
             return role;
         });
         setRoles(updatedRoles);
-        console.log(roles);
     };
 
     const handleAssignRoles = async () => {

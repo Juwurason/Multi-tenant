@@ -185,7 +185,6 @@ const Clients = () => {
       const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
 
       )
-      console.log(response);
 
 
     } catch (error) {
@@ -204,7 +203,6 @@ const Clients = () => {
     try {
       const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
       )
-      console.log(response);
 
 
     } catch (error) {

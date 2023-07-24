@@ -24,7 +24,6 @@ const EditStaffAttendance = () => {
 
         try {
             const { data } = await privateHttp.get(`/StaffAttendances/get_staff_attendances?staffId=${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
 
             setAttendance(data);
             // Process the attendance data here

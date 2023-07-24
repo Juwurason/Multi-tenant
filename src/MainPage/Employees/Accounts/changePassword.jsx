@@ -32,7 +32,6 @@ const ChangePassword = () => {
         try {
             setLoading(true)
             const { data } = await publicHttp.post("/Account/change_password", info)
-            console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message)
                 navigate.push("/app/main/dashboard")

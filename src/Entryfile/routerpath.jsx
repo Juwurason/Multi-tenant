@@ -1,7 +1,7 @@
-const publicPath = '/blue/';
+const publicPath = '/';
 
 export const routeCodes = {
   HOME: publicPath,
-  LOGIN: `${ publicPath }login`,
-  REGISTER: `${ publicPath }register`,
+  LOGIN: `${publicPath}login`,
+  REGISTER: `${publicPath}register`,
 };

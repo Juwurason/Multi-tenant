@@ -154,7 +154,6 @@ const AllEmployees = () => {
       const response = await get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
 
       )
-      console.log(response);
 
 
     } catch (error) {
@@ -174,7 +173,6 @@ const AllEmployees = () => {
     try {
       const response = await get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
       )
-      console.log(response);
 
 
     } catch (error) {
