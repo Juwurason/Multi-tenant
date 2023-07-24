@@ -108,7 +108,7 @@ const Sidebar = (props) => {
 
 
               {/* Staff SideBar Starts */}
-              {user.role === "Staff" ? <li className="menu-title">
+              {user.role === "Staff" || hasRequiredClaims("Staff Daily Report") ? <li className="menu-title">
                 <span>Profile Management</span>
               </li> : ""}
               {user.role === "Staff" ? <li className={pathname.includes('profile') ? "active" : ""} onClick={() => onMenuClik()}>
@@ -383,7 +383,7 @@ const Sidebar = (props) => {
               {user.role === "Client" ? <li className="menu-title">
                 <span>Account Management</span>
               </li> : ""}
-              
+
               {user.role === "Client" ? <li className={pathname.includes('client-profile') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/client/app/client-profile"><i className="la la-user" /> <span>Profile</span></Link>
               </li> : ""}
