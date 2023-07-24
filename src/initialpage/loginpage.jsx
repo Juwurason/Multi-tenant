@@ -117,7 +117,7 @@ const Loginpage = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.token && user.role === "CompanyAdmin") {
+    if (user && user.token && user.role === "CompanyAdmin" || user && user.token && user.role === "Administrator") {
       navigate.push('/app/main/dashboard');
     }
     if (user && user.token && user.role === "Staff") {
@@ -126,9 +126,9 @@ const Loginpage = () => {
     if (user && user.token && user.role === "Client") {
       navigate.push('/client/client');
     }
-    if (user && user.token && user.role === "Admin") {
-      navigate.push('/administrator/administrator');
-    }
+    // if (user && user.token && user.role === "Admin") {
+    //   navigate.push('/administrator/administrator');
+    // }
   }, []);
   return (
 
