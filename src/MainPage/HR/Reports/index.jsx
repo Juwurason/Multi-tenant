@@ -12,6 +12,7 @@ import StaffDailyReport from './staffDailyReport';
 import StaffReportDetails from './staffReportDetails';
 import EditStaffAttendance from '../../../_components/forms/EditStaffAttendance';
 import AdminDailyReport from './adminDailyReport';
+import AdminClockOutReport from '../../../_components/reports/AdminClockOutReport';
 
 
 
@@ -25,6 +26,7 @@ const ReportsRoute = ({ match }) => (
       <Route path={`${match.url}/progress-reports`} component={ProgressReport} />
       <Route path={`${match.url}/invoice`} component={Invoice} />
       <Route path={`${match.url}/progress-reportsDetails/:uid`} component={ProgressReportDetails} />
+      <Route path={`${match.url}/adminAttendances-clockOut/:uid`} component={AdminClockOutReport} />
       <Route path={`${match.url}/edit-attendance/:uid`} component={EditAttendance} />
       <Route path={`${match.url}/edit-staffAttendance/:uid`} component={EditStaffAttendance} />
       <Route path={`${match.url}/attendance-details/:uid`} component={AttendanceReportDetails} />

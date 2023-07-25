@@ -22,6 +22,7 @@ import useHttp from '../../../hooks/useHttp';
 import axiosInstance from '../../../store/axiosInstance';
 
 import Swal from 'sweetalert2';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const AdminDashboard = () => {
@@ -62,6 +63,7 @@ const AdminDashboard = () => {
 
   const isLoading = useSelector((state) => state.dashboard.isLoading);
   const error = useSelector((state) => state.dashboard.error);
+  const adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
 
   useEffect(() => {
     dispatch(fetchShiftRosterCount(id.companyId));
@@ -80,53 +82,61 @@ const AdminDashboard = () => {
 
   }, [clients, admin, attendanceCount]);
 
-  const handleClockIn = () => {
-    setIsLoadin(true);
-    // Simulating an asynchronous action, such as an API call
-    setTimeout(() => {
-      // Perform any necessary logic here before routing to the - page
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async(position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            const info ={
-              
-            }
-            try {
-              const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`, info);
-              console.log(res);
-              if (res.data.status === "Success") {
-                Swal.fire(
-                  'You have successfully clocked in',
-                  "",
-                  'success'
-                )
-              }
-            } catch (error) {
-              // console.log(error);
-              toast.error(error.response.data.message)
-              toast.error(error.response.data.title)
-    
-            }
-          },
-          (error) => {
-            toast.error('Error getting location:', error.message);
-          }
-        );
-      } else {
-        toast.error('Geolocation is not supported');
-      }
-
-    }, 2000); // Set an appropriate delay to simulate the loading time
-
-    // Optionally, you can clear the loading state after the specified time
-    setTimeout(() => {
-      setIsLoadin(false);
-    }, 3000);
-  };
   
-
+  
+  const handleClockIn = async() => {
+    setIsLoadin(true);
+    
+    if (adminAttendance.clockOutCheck === false) {
+      // console.log("clock out");
+      navigate.push(`/app/reports/adminAttendances-clockOut/${adminAttendance.adminAttendanceid}`)
+      setIsLoadin(false);
+    } else {
+      
+      setTimeout(() => {
+      
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async(position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              
+              try {
+                const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`);
+                
+                if (res.data.status === "Success") {
+                  Swal.fire(
+                    'You have successfully clocked in',
+                    "",
+                    'success'
+                  )
+                  // location.reload()
+                }
+              } catch (error) {
+                // console.log(error);
+                toast.error(error.response.data.message)
+                toast.error(error.response.data.title)
+      
+              }
+            },
+            (error) => {
+              toast.error('Error getting location:', error.message);
+            }
+          );
+        } else {
+          toast.error('Geolocation is not supported');
+        }
+  
+      }, 2000); // Set an appropriate delay to simulate the loading time
+  
+      // Optionally, you can clear the loading state after the specified time
+      setTimeout(() => {
+        setIsLoadin(false);
+      }, 3000);
+     
+    }
+    
+  };
 
 
 
@@ -383,8 +393,8 @@ const AdminDashboard = () => {
                                       <span class="visually-hidden">Loading...</span>
                                     </div> Please wait....
                                   </div>
-                                  : <span> <BiStopwatch /> Clock In</span>
-                                }
+                                  : <span> <BiStopwatch /> {adminAttendance.clockOutCheck === false ? "Clock Out" : "Clock In"}</span>
+                                  }
                       </span>
                       </div>
                   
