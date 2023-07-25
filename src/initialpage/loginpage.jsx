@@ -53,12 +53,13 @@ const Loginpage = () => {
       setLoading(true)
 
       const { data } = await publicHttp.post('/Account/auth_login', info)
-
+      
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
         localStorage.setItem('userEnc', encryptedData);
-        localStorage.setItem("user", JSON.stringify(data.userProfile))
+        localStorage.setItem("user", JSON.stringify(data.userProfile));
+        localStorage.setItem("adminAttendance", JSON.stringify(data.adminAttendance));
       }
       if (data.userProfile?.role === "CompanyAdmin" || data.userProfile?.role === "Administrator") {
         navigate.push('/app/main/dashboard')

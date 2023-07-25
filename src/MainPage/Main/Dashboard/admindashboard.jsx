@@ -22,6 +22,7 @@ import useHttp from '../../../hooks/useHttp';
 import axiosInstance from '../../../store/axiosInstance';
 
 import Swal from 'sweetalert2';
+import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const AdminDashboard = () => {
@@ -62,6 +63,7 @@ const AdminDashboard = () => {
 
   const isLoading = useSelector((state) => state.dashboard.isLoading);
   const error = useSelector((state) => state.dashboard.error);
+  const adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
 
   useEffect(() => {
     dispatch(fetchShiftRosterCount(id.companyId));
@@ -80,6 +82,7 @@ const AdminDashboard = () => {
 
   }, [clients, admin, attendanceCount]);
 
+<<<<<<< HEAD
   const handleClockIn = () => {
     setIsLoadin(true);
     // Simulating an asynchronous action, such as an API call
@@ -127,6 +130,63 @@ const AdminDashboard = () => {
   };
 
 
+=======
+  
+  
+  const handleClockIn = async() => {
+    setIsLoadin(true);
+    
+    if (adminAttendance.clockOutCheck === false) {
+      // console.log("clock out");
+      navigate.push(`/app/reports/adminAttendances-clockOut/${adminAttendance.adminAttendanceid}`)
+      setIsLoadin(false);
+    } else {
+      
+      setTimeout(() => {
+      
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async(position) => {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              
+              try {
+                const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`);
+                
+                if (res.data.status === "Success") {
+                  Swal.fire(
+                    'You have successfully clocked in',
+                    "",
+                    'success'
+                  )
+                  // location.reload()
+                }
+              } catch (error) {
+                // console.log(error);
+                toast.error(error.response.data.message)
+                toast.error(error.response.data.title)
+      
+              }
+            },
+            (error) => {
+              toast.error('Error getting location:', error.message);
+            }
+          );
+        } else {
+          toast.error('Geolocation is not supported');
+        }
+  
+      }, 2000); // Set an appropriate delay to simulate the loading time
+  
+      // Optionally, you can clear the loading state after the specified time
+      setTimeout(() => {
+        setIsLoadin(false);
+      }, 3000);
+     
+    }
+    
+  };
+>>>>>>> 4911308abc2e882d0bd64c2f9ef450f0b9062428
 
 
 
@@ -376,6 +436,7 @@ const AdminDashboard = () => {
                     <div className="card-body">
 
                       <div className="align-self-center">
+<<<<<<< HEAD
                         <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
                           {isLoadin ?
                             <div>
@@ -386,6 +447,18 @@ const AdminDashboard = () => {
                             : <span> <BiStopwatch /> Clock In</span>
                           }
                         </span>
+=======
+                      <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                                {isLoadin ?
+                                  <div>
+                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                      <span class="visually-hidden">Loading...</span>
+                                    </div> Please wait....
+                                  </div>
+                                  : <span> <BiStopwatch /> {adminAttendance.clockOutCheck === false ? "Clock Out" : "Clock In"}</span>
+                                  }
+                      </span>
+>>>>>>> 4911308abc2e882d0bd64c2f9ef450f0b9062428
                       </div>
 
                     </div>
