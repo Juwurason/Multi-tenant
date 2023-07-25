@@ -384,51 +384,54 @@ const ClientRoster = () => {
                                                         <span className='text-truncate'><span className='fw-bold'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                                     </div>
                                                     <div className='d-flex gap-2'>
-                                                        <button
+                                                       {(dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                        > 
+                                                       dayjs().tz().format('YYYY-MM-DD HH:mm:ss') && <button
 
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-light pointer`}
-                                                            disabled={
-                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
-                                                                <
-                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
+                                                           
                                                             onClick={() => editActivity(activity.shiftRosterId)}
                                                             title="Edit"
                                                         >
                                                             <FaRegEdit className='fs-6 text-dark' />
 
-                                                        </button>
+                                                        </button>}
 
-                                                        <button
+                                                        {(dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                        > 
+                                                       dayjs().tz().format('YYYY-MM-DD HH:mm:ss') && <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-danger pointer`}
-                                                            disabled={
-                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
-                                                                <
-                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
+                                                            // disabled={
+                                                            //     (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                            //     <
+                                                            //     dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             title="Cancel"
                                                             onClick={() => cancelShift(activity.shiftRosterId)}
 
                                                         >
                                                             <ImCancelCircle className='fs-6 text-white' />
-                                                        </button>
+                                                        </button>}
 
-                                                        <button
+                                                        {(dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                        > 
+                                                       dayjs().tz().format('YYYY-MM-DD HH:mm:ss') && <button
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-success pointer`}
                                                             title="Add Appointment"
-                                                            disabled={
-                                                                (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
-                                                                <
-                                                                dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
+                                                            // disabled={
+                                                            //     (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
+                                                            //     <
+                                                            //     dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             onClick={() => addAppoint(activity.shiftRosterId)}
 
                                                         >
                                                             <MdLibraryAdd className='fs-6 text-white' />
-                                                        </button>
+                                                        </button>}
 
                                                     </div>
                                                 </div>

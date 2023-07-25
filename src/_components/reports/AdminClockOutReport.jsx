@@ -4,8 +4,6 @@ import { Helmet } from "react-helmet";
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Offcanvas from '../../Entryfile/offcanvance';
-import moment from 'moment';
-import Swal from 'sweetalert2';
 import Editor from '../../modules/Admin/Message/editor';
 import useHttp from '../../hooks/useHttp';
 import axiosInstance from '../../store/axiosInstance';
@@ -21,8 +19,6 @@ const AdminClockOutReport = () => {
 
     const [startKm, setStartKm] = useState(0);
     const [endKm, setEndKm] = useState(0);
-    const [clockIn, setClockIn] = useState("");
-    const [clockOut, setClockOut] = useState("");
     const [report, setReport] = useState("");
     const [url, setUrl] = useState(null)
 

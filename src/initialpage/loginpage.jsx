@@ -59,7 +59,7 @@ const Loginpage = () => {
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
         localStorage.setItem('userEnc', encryptedData);
         localStorage.setItem("user", JSON.stringify(data.userProfile));
-        localStorage.setItem("adminAttendance", JSON.stringify(data.adminAttendance));
+        {data.userProfile?.role === "Administrator" ? localStorage.setItem("adminAttendance", JSON.stringify(data.adminAttendance)) : ""}
       }
       if (data.userProfile?.role === "CompanyAdmin" || data.userProfile?.role === "Administrator") {
         navigate.push('/app/main/dashboard')
