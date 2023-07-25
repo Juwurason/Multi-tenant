@@ -47,7 +47,7 @@ const ForgotPassword = () => {
         </div>
         <div className="login-form px-3 shadow bg-white rounded" >
           <form onSubmit={handleSubmit}>
-            <h4 className="text-center">Forgot Password</h4>
+            <h4 className="text-center text-primary fw-bold">Forgot Password</h4>
             <div className="form-group mt-4">
               <input type="email" className="form-control" placeholder="Email"
                 onChange={e => setEmail(e.target.value)}

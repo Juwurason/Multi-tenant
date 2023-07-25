@@ -4,8 +4,6 @@ import LoginPage from './loginpage';
 import ForgotPassword from './forgotpassword';
 import DefaultLayout from './Sidebar/DefaultLayout';
 import uicomponents from '../MainPage/UIinterface/components';
-import Error404 from '../MainPage/Pages/ErrorPage/error404';
-import Error500 from '../MainPage/Pages/ErrorPage/error500';
 import CompanySetup from './CompanySetup';
 import AdminRegistration from './AdminRegistration';
 import StaffLayout from './Sidebar/StaffLayout';
@@ -15,7 +13,6 @@ import Timesheet from '../MainPage/HR/Reports/timesheet';
 import TimesheetForAll from '../MainPage/HR/Reports/timesheetForAll';
 import OTPscreen from './otp';
 import StaffProgress from '../MainPage/HR/Reports/progressPrint';
-import ResponsePage from '../MainPage/Employees/report';
 import formTemplateDetails from '../MainPage/Employees/Setup/formTemplateDetails';
 
 const App = () => {
@@ -68,7 +65,6 @@ const App = () => {
             <Route path="/client" component={ClientLayout} />
 
             <Route path="/ui-components" component={uicomponents} />
-            <Route path="/error-500" component={Error500} />
             <Route path={`/staff-timesheet/:sta/:dateFrom/:dateTo`} component={Timesheet} />
             <Route path={`/Allstaff-timesheet/:dateFrom/:dateTo`} component={TimesheetForAll} />
             <Route path={`/staff-progress/:uid`} component={StaffProgress} />

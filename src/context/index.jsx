@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import CryptoJS from 'crypto-js';
+import { useHistory } from 'react-router-dom';
 
 export const CompanyContext = createContext();
 
@@ -11,6 +12,14 @@ export const CompanyProvider = ({ children }) => {
     const [email, setEmail] = useState('');
 
     const [userProfile, setUserProfile] = useState({});
+    const navigate = useHistory();
+
+    // useEffect(() => {
+    //     const user = JSON.parse(localStorage.getItem('user'))
+    //     if (!user || !user.token) {
+    //         navigate.push('/')
+    //     }
+    // }, []);
     // const decryptedUserProfileString = CryptoJS.AES.decrypt(
     //     encryptedUserProfile,
     //     'promax-care001#'

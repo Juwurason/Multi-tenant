@@ -87,11 +87,11 @@ const AdminDashboard = () => {
       // Perform any necessary logic here before routing to the - page
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          async(position) => {
+          async (position) => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            const info ={
-              
+            const info = {
+
             }
             try {
               const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`, info);
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
               // console.log(error);
               toast.error(error.response.data.message)
               toast.error(error.response.data.title)
-    
+
             }
           },
           (error) => {
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
       setIsLoadin(false);
     }, 3000);
   };
-  
+
 
 
 
@@ -215,7 +215,7 @@ const AdminDashboard = () => {
 
 
 
-              <div className='p-3 shadow-sm mb-3'>
+              <div className='p-3 shadow-sm bg-white mb-3'>
                 <small className='fw-bold'>Staffs</small>
                 <div className='d-flex justify-content-center flex-column p-2 gap-2'>
                   <div className='d-flex justify-content-between align-items-center'>
@@ -272,7 +272,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            
+
 
 
 
@@ -372,31 +372,31 @@ const AdminDashboard = () => {
 
 
                 {id.role === "Administrator" ? <div className={`card shadow-sm bg-white`} >
-                <div className="card-content">
-                  <div className="card-body">
-                    
+                  <div className="card-content">
+                    <div className="card-body">
+
                       <div className="align-self-center">
-                      <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                                {isLoadin ?
-                                  <div>
-                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                      <span class="visually-hidden">Loading...</span>
-                                    </div> Please wait....
-                                  </div>
-                                  : <span> <BiStopwatch /> Clock In</span>
-                                }
-                      </span>
+                        <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                          {isLoadin ?
+                            <div>
+                              <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                              </div> Please wait....
+                            </div>
+                            : <span> <BiStopwatch /> Clock In</span>
+                          }
+                        </span>
                       </div>
-                  
+
+                    </div>
                   </div>
-                </div>
-              </div> : ""}
-                
+                </div> : ""}
+
               </div>
             </div>
           </div>
 
-                      
+
 
         </div>
       </div>

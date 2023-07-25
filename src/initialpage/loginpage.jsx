@@ -148,7 +148,7 @@ const Loginpage = () => {
         </div>
         <div className="login-form px-3 shadow bg-white rounded" >
           <form onSubmit={handleLogin}>
-            <h3 className="text-center text-primary">Sign in to your account</h3>
+            <h3 className="text-center text-primary fw-bold">Sign in to your account</h3>
             <div className="form-group mt-4">
               <input type="email" className="form-control" placeholder="Email"
                 onChange={e => setEmail(e.target.value)}

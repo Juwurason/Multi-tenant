@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import axiosInstance from '../../../store/axiosInstance';
 
 const ResponsePage = () => {
     const history = useHistory();
     const location = useLocation();
+    const id = JSON.parse(localStorage.getItem('user'));
+
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -11,8 +14,9 @@ const ResponsePage = () => {
         const state = searchParams.get('state');
 
         // Handle the code and state as needed
-        console.log('Code:', code);
-        console.log('State:', state);
+        const { data } = axiosInstance.get(`/SetUp/xero_auth?userId=${id.userId}&code=${code}&state=${state}`);
+        console.log(data);
+
 
         // Redirect to another page after handling the response URL
         // history.push('/dashboard');

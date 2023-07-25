@@ -19,6 +19,7 @@ import Employee from '../MainPage/Employees/Employees';
 import Message from '../MainPage/HR/Message'
 import StaffRoute from '../modules/Staff';
 import ClientRoute from '../modules/Client';
+import ErrorRoute from '../MainPage/Pages/ErrorPage';
 
 export default [
    {
@@ -33,6 +34,10 @@ export default [
    {
       path: 'employee',
       component: Employee
+   },
+   {
+      path: 'error',
+      component: ErrorRoute
    },
    {
       path: 'account',

@@ -1,12 +1,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
-import { FaRegEdit } from 'react-icons/fa';
+import { FaCamera, FaRegEdit } from 'react-icons/fa';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import axiosInstance from '../../../store/axiosInstance';
 
 
 
@@ -15,12 +15,14 @@ const CompanyProfile = () => {
     const [companyOne, setCompanyOne] = useState({});
     const [editedCompany, setEditedCompany] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [image, setImage] = useState("");
 
     const privateHttp = useHttp();
     const FetchCompany = async () => {
         try {
-            const { data } = await privateHttp.get(`/Companies/get_company/${id.companyId}`, { cacheTimeout: 300000 })
+            const { data } = await axiosInstance.get(`/Companies/get_company/${id.companyId}`, { cacheTimeout: 300000 })
             setCompanyOne(data.company)
+            console.log(data.company);
             setEditedCompany({ ...data.company })
 
 
@@ -39,6 +41,38 @@ const CompanyProfile = () => {
             [name]: value,
         }));
     };
+
+    const handlechange = (e) => {
+        setImage(e.target.files[0]);
+    }
+    const formData = new FormData()
+    formData.append("CompanyId", id.companyId);
+    formData.append("CompanyName", editedCompany.companyName);
+    formData.append("CompanyEmail", editedCompany.companyEmail);
+    formData.append("companyAddress", editedCompany.companyAddress);
+    formData.append("companyPhone", editedCompany.companyPhone);
+    formData.append("companyState", editedCompany.companyState);
+    formData.append("companyDetails", editedCompany.companyDetails);
+    formData.append("companyHead", editedCompany.companyHead);
+    formData.append("PackagesId", editedCompany.PackagesId);
+    formData.append("PackagesId", editedCompany.SubscribtionDate);
+    formData.append("PackagesId", editedCompany.ExpirationDate);
+    formData.append("IsApproved", editedCompany.IsApproved);
+    formData.append("CompanyLogoFile", image);
+
+    //     CompanyId
+    // CompanyName
+    // CompanyEmail
+    // CompanyAddress
+    // CompanyPhone
+    // CompanyState
+    // CompanyDetails
+    // CompanyHead
+    // PackagesId
+    // SubscribtionDate
+    // ExpirationDate
+    // IsApproved
+    // CompanyLogoFile
 
     const styles = {
         main: {
@@ -67,15 +101,7 @@ const CompanyProfile = () => {
                 </Helmet>
                 <div className="content container-fluid">
                     <div className="row">
-                        <div style={{ display: "flex", justifyContent: 'center' }}>
-                            <div className="form-group">
-                                <label style={styles.label}>
-                                    <img className="" style={{ width: '100%', height: '100%' }}
-                                        src={companyOne.companyLogo || ""} alt="company logo" />
-                                </label>
 
-                            </div>
-                        </div>
                         <div className="col-md-12">
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between align-items-center">
@@ -88,7 +114,19 @@ const CompanyProfile = () => {
                                 <div className="card-body">
                                     <form action="#">
                                         <div className="row">
-                                            <div className="form-group col-md-12">
+                                            <div style={{ display: "flex", justifyContent: 'center' }}>
+                                                <div className="form-group">
+                                                    <label style={styles.label}>
+                                                        <img className="" style={{ width: '100%', height: '100%' }}
+                                                            src={companyOne.companyLogo || ""} alt="company logo" />
+                                                    </label>
+
+                                                </div>
+                                            </div>
+
+
+
+                                            <div className="form-group col-md-6">
                                                 <label>Company Head</label>
                                                 <input type="text" className="form-control"
                                                     value={companyOne.companyHead} readOnly
@@ -133,6 +171,20 @@ const CompanyProfile = () => {
                     <Modal.Body>
                         <form action="#" onSubmit={HandleSubmit}>
                             <div className="row">
+                                <div style={{ display: "flex", justifyContent: 'center' }}>
+                                    <div className="form-group">
+                                        <label style={styles.label} className="border border-2 rounded-pill">
+                                            <img className="rounded-pill" style={{ width: '100%', height: '100%' }}
+                                                src={image === "" ? "" : URL.createObjectURL(image)} alt="Company Logo" />
+                                        </label>
+
+                                        <label style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <FaCamera />
+                                            <input type="file" accept="image/jpeg, image/png" style={styles.main} onChange={handlechange} />
+                                        </label>
+
+                                    </div>
+                                </div>
                                 <div className="form-group col-md-12">
                                     <label>Company Head</label>
                                     <input type="text" className="form-control"
