@@ -13,8 +13,8 @@ import { Modal } from 'react-bootstrap';
 import { useHistory } from "react-router-dom"
 import { toast } from 'react-toastify';
 import { BiStopwatch } from 'react-icons/bi';
+// import axiosInstance from '../../../store/axiosInstance';
 
-// http://localhost:3001/staff/staff/edit-progress/7918/8260
 
 const StaffRoster = ({ staff, loading, FetchData }) => {
   dayjs.extend(utc);
