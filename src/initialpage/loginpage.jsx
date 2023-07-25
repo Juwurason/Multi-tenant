@@ -53,7 +53,7 @@ const Loginpage = () => {
       setLoading(true)
 
       const { data } = await publicHttp.post('/Account/auth_login', info)
-      
+
       if (data.response.status === "Success") {
         toast.success(data.response.message)
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
