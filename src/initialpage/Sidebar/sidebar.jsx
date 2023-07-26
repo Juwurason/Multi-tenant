@@ -90,13 +90,12 @@ const Sidebar = (props) => {
 
                       {user.role === "Staff" || hasRequiredClaims("Staff Dashboard") ? (
                         <li>
-                          <Link
+                          <a href="/staff/staff/dashboard"
                             className={pathname.includes('staff-dashboard') ? "active" : ""}
-                            to="/staff/staff/dashboard"
                             onClick={() => onMenuClik()}
                           >
                             My Dashboard
-                          </Link>
+                          </ a>
                         </li>
                       ) : null}
                     </ul>

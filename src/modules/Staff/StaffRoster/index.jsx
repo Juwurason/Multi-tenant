@@ -22,6 +22,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   dayjs.tz.setDefault('Australia/Sydney');
   const [staffCancel, setStaffCancel] = useState('');
 
+  // console.log(staff)
   // const [loading, setLoading] = useState(false);
 
 
@@ -126,13 +127,16 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     else if (activity.status === "Cancelled" ) {
       return 'Cancelled'
     }
-    else if (activityDateTo < nowInAustraliaTime) {
-      return activity.attendance === true ? 'Present' : 'Absent';
+    else if (activityDateTo < nowInAustraliaTime && activity.attendance === true && activity.isEnded === true) {
+      return  'Present'
+    }
+    else if (activityDateTo < nowInAustraliaTime && activity.attendance === false) {
+      return "Absent"
     }
     else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === false) {
       return 'You are already Clocked in'
     }
-    else if (activityDateTo < nowInAustraliaTime || activity.attendance === true && activity.isEnded === true) {
+    else if (activity.attendance === true && activity.isEnded === true) {
       return 'Present'
     }
     else {
@@ -144,15 +148,23 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
 
   const rosterId = JSON.parse(localStorage.getItem('rosterId'))
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
-  const HandleFill = () => {
-    navigate.push(`/staff/staff/edit-progress/${rosterId}/${progressNoteId}`);
-  }
+  const HandleFill = (data) => {
+    // Extract progressNoteId and shiftRosterId from the data object
+    const {  shiftRosterId, progressNoteId } = data;
+    // console.log(shiftRosterId, progressNoteId);
+    // Use the extracted values as needed
+    if (progressNoteId !== 0 && progressNoteId !== null) {
+      navigate.push(`/staff/staff/edit-progress/${shiftRosterId}/${progressNoteId}`);
+    } else {
+      navigate.push(`/staff/staff/progress/${shiftRosterId}`);
+    }
+  };
   const [showModal, setShowModal] = useState(false);
   const [reasonModal, setReasonModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
-    // console.log(activity);
+    console.log(activity);
     setSelectedActivity(activity);
     setShowModal(true);
   };
@@ -352,7 +364,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     {getActivityStatus(activity) === 'You are already Clocked in' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
-                                        onClick={HandleFill}
+                                       
+                                        onClick={() => HandleFill({
+                                          progressNoteId: activity.progressNoteId,
+                                          shiftRosterId: activity.shiftRosterId,
+                                        })}
                                       >
                                         Fill Progress Note
                                       </small>
