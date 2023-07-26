@@ -51,9 +51,9 @@ const StaffHeader = (props) => {
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
-                <Link to="/staff/staff/dashboard" className="logo">
+                <a href="/staff/staff/dashboard" className="logo">
                     <img src={headerlogo} width={40} height={40} alt="" />
-                </Link>
+                </a>
             </div>
             {/* /Logo */}
             <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>

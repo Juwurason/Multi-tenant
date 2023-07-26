@@ -18,11 +18,9 @@ import { fetchDocument } from '../../../store/slices/DocumentSlice';
 import { fetchTicket } from '../../../store/slices/TicketSlice';
 import { BiStopwatch } from 'react-icons/bi';
 import { toast } from 'react-toastify';
-import useHttp from '../../../hooks/useHttp';
 import axiosInstance from '../../../store/axiosInstance';
 
 import Swal from 'sweetalert2';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 
 
 const AdminDashboard = () => {

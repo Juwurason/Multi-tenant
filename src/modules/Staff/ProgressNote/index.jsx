@@ -26,6 +26,7 @@ const ProgressNote = () => {
   const [follow, setFollow] = useState('')
   const [clientNames, setClientName] = useState('')
   const [kilometer, setKilometer] = useState(0)
+  const [endKm, setEndKm] = useState(0)
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -65,8 +66,8 @@ const ProgressNote = () => {
       }
       setLoading(false)
     } catch (error) {
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
+      // toast.error(error.response.data.message)
+      // toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
@@ -76,7 +77,6 @@ const ProgressNote = () => {
   useEffect(() => {
     FetchSchedule()
   }, []);
-
 
 
   const SaveProgress = async (e) => {
@@ -89,6 +89,7 @@ const ProgressNote = () => {
       followUp: follow,
       staff: staff,
       startKm: kilometer,
+      end: endKm,
       profileId: details.profileId,
       companyID: companyId
     }
@@ -125,6 +126,7 @@ const ProgressNote = () => {
       staff: staff,
       date: "",
       startKm: kilometer,
+      endKm: endKm,
       profileId: details.profileId,
       companyID: companyId
     }
@@ -143,7 +145,7 @@ const ProgressNote = () => {
       if (result.isConfirmed) {
 
         try {
-          const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+          const { data } = await post(`/ProgressNotes/edit/${''}?userId=${user.userId}`, info);
           if (data.status === "Success") {
             Swal.fire(
               '',
@@ -189,9 +191,11 @@ const ProgressNote = () => {
             </div>
           </div>
           {/* /Page Header */}
+          
           <div className="row">
             <div className="col-sm-12">
               <div className="card">
+              <p>Kindly Note: You are to click on <b>SUBMIT</b> if you are through filling your progress note and will like to clock out.</p> 
                 <div className='d-flex justify-content-start p-2'>
                   <button className='btn btn-info text-white add-btn rounded-2' style={{ fontSize: "10px" }}>View Hand-over report by previous staff</button>
                 </div>
@@ -205,13 +209,20 @@ const ProgressNote = () => {
 
                       :
                       <form>
-                        <div className='col-md-4'>
+                       
+                        <div className="row">
+                        <div className='col-md-5'>
                           <div className="form-group">
-                            <label htmlFor="">Input Your Starting Kilometer</label>
+                            <label htmlFor="">Provide your Starting KiloMetre if any</label>
                             <input type="text" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
                           </div>
                         </div>
-                        <div className="row">
+                        <div className='col-md-5'>
+                          <div className="form-group">
+                            <label htmlFor="">Provide your Ending KiloMetre if any</label>
+                            <input type="text" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                          </div>
+                        </div>
                           <div className="col-md-4">
                             <div className="form-group">
                               <label htmlFor="">Client</label>

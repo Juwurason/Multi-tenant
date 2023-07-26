@@ -16,6 +16,7 @@ const EditProgressNote = () => {
   const [details, setDetails] = useState('')
   const [staff, setStaff] = useState('')
   const [kilometer, setKilometer] = useState('')
+  const [endKm, setEndKm] = useState('')
   const [editpro, setEditPro] = useState({})
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
@@ -82,9 +83,6 @@ const EditProgressNote = () => {
   const today = new Date();
   const formattedDate = formatDate(today);
 
-
-  // Pass `formattedDate` to your endpoint or perform any other actions here
-
   const SaveProgress = async (e) => {
     e.preventDefault()
     setLoading1(true)
@@ -97,11 +95,13 @@ const EditProgressNote = () => {
       date: formattedDate,
       staff: staff,
       startKm: editpro.startKm,
+      endKm: editpro.endKm,
       profileId: details.profileId,
       companyID: companyId,
+      IsCompleted: true
     }
     try {
-      const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);
+      const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);     
       const savePro = saveProgress.data;
       toast.success(savePro.message);
       setLoading1(false);
@@ -115,62 +115,127 @@ const EditProgressNote = () => {
     }
   }
 
+  // const CreateProgress = async (e) => {
+  //   e.preventDefault()
+  //   if (endKm === "") {
+  //     toast.error("input end Kilometer")
+  //   }
+  //   const info = {
+  //     progressNoteId: Number(pro),
+  //     report: editpro.report,
+  //     progress: editpro.progress,
+  //     position: "",
+  //     followUp: editpro.followUp,
+  //     staff: staff,
+  //     startKm: editpro.startKm,
+  //     endKm: endKm,
+  //     profileId: details.profileId,
+  //     companyID: companyId,
+  //     date: ""
+  //   }
+  //   Swal.fire({
+  //     html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
+  //     <h5>Do you wish to proceed ?<h5/>
+  //     `,
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#405189',
+  //     cancelButtonColor: '#777',
+  //     confirmButtonText: 'Proceed',
+  //     showLoaderOnConfirm: true,
+  //   }).then(async (result) => {
+
+  //     if (result.isConfirmed) {
+  //       setLoading2(false)
+  //       try {
+  //         const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
+  //         if (data.status === "Success") {
+  //           Swal.fire(
+  //             '',
+  //             `${data.message}`,
+  //             'success'
+  //           )
+  //           setLoading2(false)
+  //           navigate.push(`/staff/staff/report/${uid}`)
+  //         }
+  //       } catch (error) {
+  //         toast.error("Error Clock Out")
+  //         toast.error(error.response.data.message);
+  //         toast.error(error.response.data.title);
+  //         toast.error(error.response.data.message);
+  //         setLoading2(false)
+  //       }
+  //       finally {
+  //         setLoading2(false)
+  //       }
+
+
+  //     }
+  //   })
+
+
+  // }
   const CreateProgress = async (e) => {
-    e.preventDefault()
-    const info = {
-      progressNoteId: Number(pro),
-      report: editpro.report,
-      progress: editpro.progress,
-      position: "",
-      followUp: editpro.followUp,
-      staff: staff,
-      startKm: editpro.startKm,
-      profileId: details.profileId,
-      companyID: companyId,
-      date: ""
+    e.preventDefault();
+    if (endKm === "") {
+      toast.error("Input end Kilometer");
+      return; // Exit the function early if endKm is not provided
     }
+  
+    // Function to handle the SweetAlert confirmation
+    const proceedWithConfirmation = async () => {
+      try {
+        const info = {
+          progressNoteId: Number(pro),
+          report: editpro.report,
+          progress: editpro.progress,
+          position: "",
+          followUp: editpro.followUp,
+          staff: staff,
+          startKm: editpro.startKm,
+          endKm: endKm,
+          profileId: details.profileId,
+          companyID: companyId,
+          date: ""
+        };
+  
+        const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
+        if (data.status === "Success") {
+          Swal.fire(
+            '',
+            `${data.message}`,
+            'success'
+          );
+          setLoading2(false);
+          navigate.push(`/staff/staff/report/${uid}`);
+        }
+      } catch (error) {
+        toast.error("Error Clock Out");
+        toast.error(error.response.data.message);
+        toast.error(error.response.data.title);
+        setLoading2(false);
+      }
+    };
+  
+    // Show the SweetAlert confirmation
     Swal.fire({
       html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
-      <h5>Do you wish to proceed ?<h5/>
-      `,
+        <h5>Do you wish to proceed ?<h5/>
+        `,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#405189',
       cancelButtonColor: '#777',
       confirmButtonText: 'Proceed',
       showLoaderOnConfirm: true,
-    }).then(async (result) => {
-
+    }).then((result) => {
       if (result.isConfirmed) {
-        setLoading2(false)
-        try {
-          const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
-          if (data.status === "Success") {
-            Swal.fire(
-              '',
-              `${data.message}`,
-              'success'
-            )
-            setLoading2(false)
-            navigate.push(`/staff/staff/report/${uid}`)
-          }
-        } catch (error) {
-          toast.error("Error Clock Out")
-          toast.error(error.response.data.message);
-          toast.error(error.response.data.title);
-          toast.error(error.response.data.message);
-          setLoading2(false)
-        }
-        finally {
-          setLoading2(false)
-        }
-
-
+        setLoading2(false);
+        proceedWithConfirmation(); // Call the function to proceed with the confirmation
       }
-    })
-
-
-  }
+    });
+  };
+  
 
   return (
     <>
@@ -198,11 +263,22 @@ const EditProgressNote = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className="card-body">
+                  
                   <form>
-                    <div className='col-md-4'>
-
-                    </div>
+                    <p>Kindly Note: You are to click on <b>SUBMIT</b> if you are through filling your progress note and will like to clock out.</p>
                     <div className="row">
+                    <div className='col-md-5'>
+                          <div className="form-group">
+                            <label htmlFor="">Provide your Starting KiloMetre if any</label>
+                            <input type="text" placeholder="0" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
+                          </div>
+                     </div>
+                    <div className='col-md-5'>
+                          <div className="form-group">
+                            <label htmlFor="">Provide your Ending KiloMetre if any</label>
+                            <input type="text" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                          </div>
+                     </div>
                       <div className="col-md-4">
                         <div className="form-group">
                           <label htmlFor="">Client</label>
