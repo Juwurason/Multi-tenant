@@ -80,28 +80,28 @@ const AdminDashboard = () => {
 
   }, [clients, admin, attendanceCount]);
 
-  
-  
-  const handleClockIn = async() => {
+
+
+  const handleClockIn = async () => {
     setIsLoadin(true);
-    
+
     if (adminAttendance.clockOutCheck === false) {
       // console.log("clock out");
       navigate.push(`/app/reports/adminAttendances-clockOut/${adminAttendance.adminAttendanceid}`)
       setIsLoadin(false);
     } else {
-      
+
       setTimeout(() => {
-      
+
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
-            async(position) => {
+            async (position) => {
               const latitude = position.coords.latitude;
               const longitude = position.coords.longitude;
-              
+
               try {
                 const res = await axiosInstance.get(`/AdminAttendances/admin_clockin?userId=${id.userId}&lat=${latitude}&lng=${longitude}&companyId=${id.companyId}`);
-                
+
                 if (res.data.status === "Success") {
                   Swal.fire(
                     'You have successfully clocked in',
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
                 // console.log(error);
                 toast.error(error.response.data.message)
                 toast.error(error.response.data.title)
-      
+
               }
             },
             (error) => {
@@ -124,16 +124,16 @@ const AdminDashboard = () => {
         } else {
           toast.error('Geolocation is not supported');
         }
-  
+
       }, 2000); // Set an appropriate delay to simulate the loading time
-  
+
       // Optionally, you can clear the loading state after the specified time
       setTimeout(() => {
         setIsLoadin(false);
       }, 3000);
-     
+
     }
-    
+
   };
 
 
@@ -384,16 +384,16 @@ const AdminDashboard = () => {
                     <div className="card-body">
 
                       <div className="align-self-center">
-                      <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                                {isLoadin ?
-                                  <div>
-                                    <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                      <span class="visually-hidden">Loading...</span>
-                                    </div> Please wait....
-                                  </div>
-                                  : <span> <BiStopwatch /> {adminAttendance.clockOutCheck === false ? "Clock Out" : "Clock In"}</span>
-                                  }
-                      </span>
+                        <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                          {isLoadin ?
+                            <div>
+                              <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                              </div> Please wait....
+                            </div>
+                            : <span> <BiStopwatch /> {adminAttendance.clockOutCheck === false ? "Clock Out" : "Clock In"}</span>
+                          }
+                        </span>
                       </div>
 
                     </div>

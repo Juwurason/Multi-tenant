@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
             else if (response.status === 500) {
                 // Perform actions to handle the 500 error, e.g., show an error page
                 console.error('Internal Server Error:', response.data.message);
-                window.history.pushState(null, null, '/error-500');
+                window.history.pushState(null, null, '/app/error/500');
                 window.location.reload(); // Refresh the page to render the new route
             }
         } else {
