@@ -98,16 +98,6 @@ const ClientHealth = () => {
         }
         e.preventDefault()
         setLoading1(true)
-        //  {
-        //     "profileId": 0,
-        //     "healthIssues": "string",
-        //     "supportDetails": "string",
-        //     "requireMedication": true,
-        //     "support": "string",
-        //     "healthPlan": "string",
-        //     "documentation": "string",
-        //     "documentationFile": "string"
-        // }
         const info = {
             profileId: clientProfile.profileId,
             healthIssues: selectedDay,
@@ -138,7 +128,7 @@ const ClientHealth = () => {
         }
     }
 
-    const [saveId, setSaveId] = useState("");
+    const [idSave, setIdSave] = useState('')
     const FetchSchedule = async () => {
         // setLoading2(true)
         try {
@@ -148,8 +138,10 @@ const ClientHealth = () => {
              
              if (data && data.length > 0) {
                 const healthSupportId = data[0].healthSupportId;
+                setIdSave(healthSupportId)
                 const { data: secondData } = await get(`/HealthSupports/${healthSupportId}`, { cacheTimeout: 300000 });
-                console.log(secondData);
+                // console.log(secondData);
+                setEditPro(secondData);
                 // Do something with the second data (e.g., setEditPro(secondData))
               }
         } catch (error) {
@@ -165,6 +157,34 @@ const ClientHealth = () => {
     useEffect(() => {
         FetchSchedule()
     }, []);
+
+    const [editpro, setEditPro] = useState({})
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditPro({
+          ...editpro,
+          [name]: newValue
+        });
+      }
+
+      const handleInputChang = (e) => {
+        const { name, value } = e.target;
+      
+        // Convert the selected value to a boolean
+        const booleanValue = value === "true"; // The comparison should use strict comparison (===)
+      
+        setEditPro((prevEditPro) => ({
+          ...prevEditPro,
+          [name]: booleanValue,
+        }));
+      };
+      
+      
+    
+    
 
 
     const columns = [
@@ -301,7 +321,7 @@ const ClientHealth = () => {
     }
 
     const [editAvail, setEditAvail] = useState({});
-    const [idSave, setIdSave] = useState('')
+    
     const [selectedActivities, setSelectedActivities] = useState([]);
     const selectedValue = selectedActivities.map(option => option.label).join(', ');
     const handleEdit = async (e) => {
@@ -313,7 +333,7 @@ const ClientHealth = () => {
             const { data } = await get(`/ClientSchedules/get_schedule/${e}`, { cacheTimeout: 300000 });
             // console.log(data);
             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
-            console.log();
+            // console.log();
             setEditAvail(data);
         } catch (error) {
             // console.log(error);
@@ -322,46 +342,35 @@ const ClientHealth = () => {
         }
     };
 
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditAvail({
-            ...editAvail,
-            [name]: newValue
-        });
-    }
 
     const handleActivityChange = (selected) => {
         setSelectedActivities(selected);
     };
 
     const EditAvail = async (e) => {
-
         e.preventDefault()
         setLoading2(true)
         const info = {
-            clientScheduleId: idSave,
+            healthSupportId: idSave,
             profileId: clientProfile.profileId,
-            days: editAvail.days,
-            fromTimeOfDay: editAvail.fromTimeOfDay,
-            toTimeOfDay: editAvail.toTimeOfDay,
-            activities: selectedValue,
-            companyID: id.companyId
+            healthIssues: editpro.healthIssues,
+            supportDetails: editpro.supportDetails,
+            requireMedication: editpro.requireMedication == "true" ? true : false,
+            support: editpro.support,
+            healthPlan: editpro.healthPlan
         }
         try {
 
-            const { data } = await post(`/ClientSchedules/edit/${idSave}?userId=${id.userId}`, info);
-            // console.log(data);
+            const { data } = await post(`/HealthSupports/edit/${idSave}`, info);
+            console.log(data);
             if (data.status === 'Success') {
                 toast.success(data.message)
             }
             setLoading2(false)
-            setShowModal(false)
+            // setShowModal(false)
             FetchSchedule()
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
         }
@@ -443,7 +452,7 @@ const ClientHealth = () => {
                                         <div className="form-group">
                                             <label>Medication Required?</label>
                                             <select className='form-select' onChange={(e) => setSelectedTimeFrom(e.target.value)}>
-                                                <option value={"false"}>Select...</option>
+                                                <option defaultValue hidden>Select...</option>
                                                 <option value={"true"}>Yes</option>
                                                 <option value={"false"}>No</option>
                                             </select>
@@ -456,8 +465,8 @@ const ClientHealth = () => {
                                             <select className='form-select' onChange={(e) => setSelectedTimeTo(e.target.value)}>
                                                 <option defaultValue hidden>Please Select</option>
                                                 <option value={"Prompt Required"}>Prompt Required</option>
-                                                <option value={"Assitance Required"}>Assitance Required</option>
-                                                <option value={"Administration Required"}>Administrati Required</option>
+                                                <option value={"Assistance Required"}>Assistance Required</option>
+                                                <option value={"Administration Required"}>Administration Required</option>
                                             </select>
                                         </div>
                                     </div>
@@ -473,7 +482,7 @@ const ClientHealth = () => {
                                 </form>
                                 <div className="text-start">
                                     <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false}
-                                    //  onClick={PostAvail}
+                                     onClick={PostAvail}
                                     >
                                         {loading1 ? <div className="spinner-grow text-light" role="status">
                                             <span className="sr-only">Loading...</span>
@@ -495,22 +504,22 @@ const ClientHealth = () => {
                                     <div className='col-md-6'>
                                         <div className="form-group">
                                             <label>Describe any ongoing health issues you have, including mental health issues.</label>
-                                            <textarea className="form-control" onChange={(e) => setSelectedDay(e.target.value)} rows="2" cols="20" />
+                                            <textarea className="form-control" name="healthIssues" value={editpro.healthIssues || ''} onChange={handleInputChange} rows="2" cols="20" />
                                         </div>
                                     </div>
 
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label>Is additional support  for these issues? If so, please provide detail</label>
-                                            <textarea className="form-control" rows="2" cols="20" onChange={(e) => setStaffAva(e.target.value)} />
+                                            <textarea className="form-control" rows="2" cols="20" name="supportDetails" value={editpro.supportDetails || ''} onChange={handleInputChange} />
                                         </div>
                                     </div>
 
                                     <div className='col-md-6'>
                                         <div className="form-group">
                                             <label>Medication Required?</label>
-                                            <select className='form-select' onChange={(e) => setSelectedTimeFrom(e.target.value)}>
-                                                <option value={"false"}>Select...</option>
+                                            <select className='form-select' name="requireMedication" value={editpro.requireMedication || ''} onChange={handleInputChange}>
+                                                <option defaultValue hidden>Select...</option>
                                                 <option value={"true"}>Yes</option>
                                                 <option value={"false"}>No</option>
                                             </select>
@@ -520,11 +529,11 @@ const ClientHealth = () => {
                                     <div className='col-md-6'>
                                         <div className="form-group">
                                             <label>How Often do you require medication?</label>
-                                            <select className='form-select' onChange={(e) => setSelectedTimeTo(e.target.value)}>
+                                            <select className='form-select' name="support" value={editpro.support || ''} onChange={handleInputChange}>
                                                 <option defaultValue hidden>Please Select</option>
                                                 <option value={"Prompt Required"}>Prompt Required</option>
-                                                <option value={"Assitance Required"}>Assitance Required</option>
-                                                <option value={"Administration Required"}>Administrati Required</option>
+                                                <option value={"Assistance Required"}>Assistance Required</option>
+                                                <option value={"Administration Required"}>Administration Required</option>
                                             </select>
                                         </div>
                                     </div>
@@ -532,7 +541,7 @@ const ClientHealth = () => {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label>Provide details of your medication and treatment plan</label>
-                                            <textarea className="form-control" rows="2" cols="20" onChange={(e) => setSelectedTime(e.target.value)} />
+                                            <textarea className="form-control" rows="2" cols="20" name="healthPlan" value={editpro.healthPlan || ''} onChange={handleInputChange} />
                                         </div>
                                     </div>
 
@@ -540,7 +549,7 @@ const ClientHealth = () => {
                                 </form>
                                 <div className="text-start">
                                     <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false}
-                                    //  onClick={PostAvail}
+                                     onClick={EditAvail}
                                     >
                                         {loading1 ? <div className="spinner-grow text-light" role="status">
                                             <span className="sr-only">Loading...</span>
