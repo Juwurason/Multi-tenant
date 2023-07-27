@@ -22,7 +22,7 @@ const CompanyProfile = () => {
         try {
             const { data } = await axiosInstance.get(`/Companies/get_company/${id.companyId}`, { cacheTimeout: 300000 })
             setCompanyOne(data.company)
-            console.log(data.company);
+            // console.log(data.company);
             setEditedCompany({ ...data.company })
 
 
@@ -45,34 +45,7 @@ const CompanyProfile = () => {
     const handlechange = (e) => {
         setImage(e.target.files[0]);
     }
-    const formData = new FormData()
-    formData.append("CompanyId", id.companyId);
-    formData.append("CompanyName", editedCompany.companyName);
-    formData.append("CompanyEmail", editedCompany.companyEmail);
-    formData.append("companyAddress", editedCompany.companyAddress);
-    formData.append("companyPhone", editedCompany.companyPhone);
-    formData.append("companyState", editedCompany.companyState);
-    formData.append("companyDetails", editedCompany.companyDetails);
-    formData.append("companyHead", editedCompany.companyHead);
-    formData.append("PackagesId", editedCompany.PackagesId);
-    formData.append("PackagesId", editedCompany.SubscribtionDate);
-    formData.append("PackagesId", editedCompany.ExpirationDate);
-    formData.append("IsApproved", editedCompany.IsApproved);
-    formData.append("CompanyLogoFile", image);
-
-    //     CompanyId
-    // CompanyName
-    // CompanyEmail
-    // CompanyAddress
-    // CompanyPhone
-    // CompanyState
-    // CompanyDetails
-    // CompanyHead
-    // PackagesId
-    // SubscribtionDate
-    // ExpirationDate
-    // IsApproved
-    // CompanyLogoFile
+    
 
     const styles = {
         main: {
@@ -86,10 +59,41 @@ const CompanyProfile = () => {
             display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
         }
     }
-    const HandleSubmit = (e) => {
+    const HandleSubmit = async (e) => {
         e.preventDefault();
-        toast("Not editable at the moment");
-        setShowModal(false);
+        // toast("Not editable at the moment");
+       
+    const formData = new FormData()
+    formData.append("CompanyId", id.companyId);
+    formData.append("CompanyName", editedCompany.companyName);
+    formData.append("CompanyEmail", editedCompany.companyEmail);
+    formData.append("companyAddress", editedCompany.companyAddress);
+    formData.append("companyPhone", editedCompany.companyPhone);
+    formData.append("companyState", companyOne.companyState);
+    formData.append("companyDetails", companyOne.companyDetails);
+    formData.append("companyHead", editedCompany.companyHead);
+    formData.append("PackagesId", companyOne.packagesId);
+    formData.append("SubscribtionDate", companyOne.subscribtionDate);
+    formData.append("ExpirationDate", companyOne.expirationDate);
+    formData.append("IsApproved", companyOne.isApproved);
+    formData.append("CompanyLogoFile", image);
+        try {
+            const { data } = await axiosInstance.post(`/Companies/edit/${id.companyId}`, formData)
+            if (data.status === 'Success') {
+                toast.success(data.message);
+                 setShowModal(false);
+                 FetchCompany()
+              } else {
+                toast.error(data.message);
+              }
+        
+
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            // setLoading(false)
+          }
     }
 
     return (

@@ -97,10 +97,8 @@ const ProgressNote = () => {
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
       if (data.status === 'Success') {
         if (data.progressNote.progressNoteId === 0) {
-          navigate.push(`staff/staff/create-progress/${uid}`)
+          navigate.push(`/staff/staff/create-progress/${uid}`)
         }
-        localStorage.setItem("rosterId", uid);
-        localStorage.setItem("progressNoteId", data.progressNote.progressNoteId);
         navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }

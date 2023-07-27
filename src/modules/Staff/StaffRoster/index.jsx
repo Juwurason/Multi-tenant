@@ -156,7 +156,8 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     if (progressNoteId !== 0 && progressNoteId !== null) {
       navigate.push(`/staff/staff/edit-progress/${shiftRosterId}/${progressNoteId}`);
     } else {
-      navigate.push(`/staff/staff/progress/${shiftRosterId}`);
+      // navigate.push(`/staff/staff/progress/${shiftRosterId}`);
+      navigate.push(`/staff/staff/create-progress/${shiftRosterId}`);
     }
   };
   const [showModal, setShowModal] = useState(false);
@@ -164,7 +165,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   const handleActivityClick = (activity) => {
-    console.log(activity);
+    // console.log(activity);
     setSelectedActivity(activity);
     setShowModal(true);
   };
@@ -295,6 +296,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     </span>
                                     <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.clients}</span></span>
                                     <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
+                                    <span><span className='fw-bold text-truncate'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                   </div>
                                 </div>
 

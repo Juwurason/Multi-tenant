@@ -61,7 +61,7 @@ const ViewTicket = ({ ticket, FetchData }) => {
                 <div className="d-flex gap-1">
 
                     <Link
-                        to={`/staff/main/ticket-details/${row.ticketId}`}
+                        to={`/staff/staff/ticket-details/${row.ticketId}`}
                         className='btn'
                         title='Details'
 
