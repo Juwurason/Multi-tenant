@@ -190,13 +190,16 @@ const StaffDashboard = ({ roster, loading }) => {
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activityDateTo < nowInAustraliaTime) {
-      return currentShift.attendance === true ? 'Present' : 'Absent';
+    else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === true && currentShift.isEnded === true) {
+      return  'Present' 
+    }
+    else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === false) {
+      return 'Absent' 
     }
     else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false) {
       return 'You are already Clocked in';
     }
-    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === true) {
+    else if (currentShift.attendance === true && currentShift.isEnded === true) {
       return 'Present';
     }
     else {
@@ -266,7 +269,7 @@ const StaffDashboard = ({ roster, loading }) => {
 
             {/* All Today Shift */}
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {AlltodayShifts.length > 0 &&
+              {AlltodayShifts.length > 1 &&
                 AlltodayShifts.map((activity, index) => (
                   <div className='col-sm-4' key={index}>
                     <div className='p-2'>
