@@ -156,7 +156,8 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     if (progressNoteId !== 0 && progressNoteId !== null) {
       navigate.push(`/staff/staff/edit-progress/${shiftRosterId}/${progressNoteId}`);
     } else {
-      navigate.push(`/staff/staff/progress/${shiftRosterId}`);
+      // navigate.push(`/staff/staff/progress/${shiftRosterId}`);
+      navigate.push(`/staff/staff/create-progress/${shiftRosterId}`);
     }
   };
   const [showModal, setShowModal] = useState(false);
