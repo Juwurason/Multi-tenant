@@ -32,7 +32,6 @@ const EditProgressNote = () => {
     try {
       const staffResponse = await get(`/ShiftRosters/${uid}`, { cacheTimeout: 300000 });
       const staff = staffResponse.data;
-      console.log(staff);
       setStaff(staff.staff.fullName);
       setCompanyId(staff.companyID)
       setDetails(staff.profile);
@@ -115,66 +114,7 @@ const EditProgressNote = () => {
     }
   }
 
-  // const CreateProgress = async (e) => {
-  //   e.preventDefault()
-  //   if (endKm === "") {
-  //     toast.error("input end Kilometer")
-  //   }
-  //   const info = {
-  //     progressNoteId: Number(pro),
-  //     report: editpro.report,
-  //     progress: editpro.progress,
-  //     position: "",
-  //     followUp: editpro.followUp,
-  //     staff: staff,
-  //     startKm: editpro.startKm,
-  //     endKm: endKm,
-  //     profileId: details.profileId,
-  //     companyID: companyId,
-  //     date: ""
-  //   }
-  //   Swal.fire({
-  //     html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
-  //     <h5>Do you wish to proceed ?<h5/>
-  //     `,
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#405189',
-  //     cancelButtonColor: '#777',
-  //     confirmButtonText: 'Proceed',
-  //     showLoaderOnConfirm: true,
-  //   }).then(async (result) => {
 
-  //     if (result.isConfirmed) {
-  //       setLoading2(false)
-  //       try {
-  //         const { data } = await post(`/ProgressNotes/edit/${pro}?userId=${user.userId}`, info);
-  //         if (data.status === "Success") {
-  //           Swal.fire(
-  //             '',
-  //             `${data.message}`,
-  //             'success'
-  //           )
-  //           setLoading2(false)
-  //           navigate.push(`/staff/staff/report/${uid}`)
-  //         }
-  //       } catch (error) {
-  //         toast.error("Error Clock Out")
-  //         toast.error(error.response.data.message);
-  //         toast.error(error.response.data.title);
-  //         toast.error(error.response.data.message);
-  //         setLoading2(false)
-  //       }
-  //       finally {
-  //         setLoading2(false)
-  //       }
-
-
-  //     }
-  //   })
-
-
-  // }
   const CreateProgress = async (e) => {
     e.preventDefault();
     if (endKm === "") {

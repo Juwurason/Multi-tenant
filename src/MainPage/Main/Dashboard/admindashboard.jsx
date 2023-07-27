@@ -62,7 +62,12 @@ const AdminDashboard = () => {
 
   const isLoading = useSelector((state) => state.dashboard.isLoading);
   const error = useSelector((state) => state.dashboard.error);
-  const adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
+  
+  let adminAttendance = null; 
+
+    if (id.role === "Administrator") {
+        adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
+    }
 
   useEffect(() => {
     dispatch(fetchShiftRosterCount(id.companyId));

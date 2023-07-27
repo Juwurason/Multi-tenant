@@ -22,6 +22,7 @@ const CreateProgressNote = () => {
   const [progress, setProgress] = useState('')
   const [follow, setFollow] = useState('')
   const [kilometer, setKilometer] = useState(0)
+  const [endKm, setEndKm] = useState(0)
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const [loading, setLoading] = useState(false);
@@ -71,14 +72,13 @@ const CreateProgressNote = () => {
       staff: staff,
       date: formattedDate,
       startKm: kilometer,
+      endKm: endKm,
       profileId: details.profileId,
       companyID: companyId
     }
     try {
       const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
       if (data.status === 'Success') {
-        localStorage.setItem("rosterId", uid);
-        localStorage.setItem("progressNoteId", data.progressNote.progressNoteId);
         navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }
@@ -131,13 +131,21 @@ const CreateProgressNote = () => {
 
                       :
                       <form>
-                        <div className='col-md-4'>
+                        
+                        <div className="row">
+                        <div className='col-md-5'>
                           <div className="form-group">
-                            <label htmlFor="">Input Your Starting Kilometer</label>
+                            <label htmlFor="">Provide your Starting KiloMetre if any</label>
                             <input type="text" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
                           </div>
                         </div>
-                        <div className="row">
+                        <div className='col-md-5'>
+                          <div className="form-group">
+                            <label htmlFor="">Provide your Ending KiloMetre if any</label>
+                            <input type="text" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                          </div>
+                        </div>
+
                           <div className="col-md-4">
                             <div className="form-group">
                               <label htmlFor="">Client</label>

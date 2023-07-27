@@ -65,7 +65,10 @@
 
 }
 
-
+.modal-backdrop {
+    /* Adjust the transparency by changing the alpha value */
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
 
 .PhoneInput {
     border: 1px solid gainsboro;

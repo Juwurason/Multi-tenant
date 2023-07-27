@@ -10,7 +10,12 @@ import axiosInstance from '../../store/axiosInstance';
 
 const AdminClockOutReport = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    const adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
+    let adminAttendance = null; 
+
+    if (user.role === "Administrator") {
+        adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
+    }
+
     const [loading1, setLoading1] = useState(false);
     // const navigate = useHistory();
     const privateHttp = useHttp();
@@ -24,7 +29,7 @@ const AdminClockOutReport = () => {
 
     const handleReportChange = (value) => {
         setReport(value); // Update the state when the editor content changes
-      };
+    };
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
@@ -39,62 +44,62 @@ const AdminClockOutReport = () => {
     const SendReport = async (e) => {
         e.preventDefault();
         setLoading1(true);
-      
+
         // Get user's location
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const latitude = position.coords.latitude;
-              const longitude = position.coords.longitude;
-      
-              // Create the formData and append the values
-              const formData = new FormData();
-              formData.append("AdminAttendanceId", uid);
-              formData.append("Report", report);
-              formData.append("ClockIn", adminAttendance.clockIn);
-              formData.append("clockInCheck", adminAttendance.clockInCheck);
-              formData.append("InLongitude", longitude);
-              formData.append("InLatitude", latitude);
-              formData.append("StartKm", startKm);
-              formData.append("EndKm", endKm);
-              formData.append("AdministratorId", adminAttendance.administrator.administratorId);
-              formData.append("CompanyID", user.companyId);
-              formData.append("ImageFIle", url);
-              
-      
-              
-              // Make the post request
-              privateHttp.post(`/AdminAttendances/clock_out/${uid}&userId=${user.userId}`, formData)
-                .then((response) => {
-                    console.log(response);
-                  if (response.data.status === "Success") {
-                    toast.success(response.data.message)
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Create the formData and append the values
+                    const formData = new FormData();
+                    formData.append("AdminAttendanceId", uid);
+                    formData.append("Report", report);
+                    formData.append("ClockIn", adminAttendance.clockIn);
+                    formData.append("clockInCheck", adminAttendance.clockInCheck);
+                    formData.append("InLongitude", longitude);
+                    formData.append("InLatitude", latitude);
+                    formData.append("StartKm", startKm);
+                    formData.append("EndKm", endKm);
+                    formData.append("AdministratorId", adminAttendance.administrator.administratorId);
+                    formData.append("CompanyID", user.companyId);
+                    formData.append("ImageFIle", url);
+
+
+
+                    // Make the post request
+                    privateHttp.post(`/AdminAttendances/clock_out/${uid}&userId=${user.userId}`, formData)
+                        .then((response) => {
+                            console.log(response);
+                            if (response.data.status === "Success") {
+                                toast.success(response.data.message)
+                                setLoading1(false);
+                                // navigate.push(`/staff/staff/daily-report`)
+                            }
+                        })
+                        .catch((error) => {
+                            // Handle error
+                            console.log(error);
+                            setLoading1(false);
+                            toast.error(error.response.data.message)
+                            toast.error(error.response.data.title)
+                        });
+                },
+                (error) => {
+                    // Handle location error
                     setLoading1(false);
-                    // navigate.push(`/staff/staff/daily-report`)
-                  }
-                })
-                .catch((error) => {
-                  // Handle error
-                  console.log(error);
-                  setLoading1(false);
-                  toast.error(error.response.data.message)
-                  toast.error(error.response.data.title)
-                });
-            },
-            (error) => {
-              // Handle location error
-              setLoading1(false);
-              toast.error(error.response.data.message)
-              toast.error(error.response.data.title)
-            }
-          );
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+                }
+            );
         } else {
-          // Geolocation is not supported by the browser
-          setLoading1(false);
-          console.log("Geolocation is not supported");
+            // Geolocation is not supported by the browser
+            setLoading1(false);
+            console.log("Geolocation is not supported");
         }
-      };
-      
+    };
+
 
 
 
@@ -124,7 +129,7 @@ const AdminClockOutReport = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
-                                    
+
 
                                     <form onSubmit={SendReport}>
                                         <div className='col-md-4'>
@@ -150,8 +155,8 @@ const AdminClockOutReport = () => {
                                             <label>Report</label>
                                             <Editor
                                                 placeholder="Write something..."
-                                            onChange={handleReportChange}
-                                            value={report}
+                                                onChange={handleReportChange}
+                                                value={report}
                                             ></Editor>
                                             <br />
                                             <br />
