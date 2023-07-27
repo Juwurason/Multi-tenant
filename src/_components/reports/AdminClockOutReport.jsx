@@ -15,7 +15,7 @@ const AdminClockOutReport = () => {
     if (user.role === "Administrator") {
         adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
     }
-    
+
     const [loading1, setLoading1] = useState(false);
     // const navigate = useHistory();
     const privateHttp = useHttp();
