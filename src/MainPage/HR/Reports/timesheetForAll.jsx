@@ -44,7 +44,14 @@ const styles = StyleSheet.create({
 
     },
     tableCol: {
-        width: "55px",
+        width: "78px",
+        borderWidth: 0,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "#DEE2E6"
+    },
+    tableCol2: {
+        width: "88px",
         borderWidth: 0,
         borderStyle: "solid",
         borderWidth: 1,
@@ -70,8 +77,8 @@ const styles = StyleSheet.create({
 
 const TimesheetPDF = ({ total, timesheet }) => {
     return (
-        <Document>
-            <Page style={styles.page}>
+        <Document >
+            <Page style={styles.page} orientation="landscape">
                 <View>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <Image src={logo} style={styles.logo} />
@@ -80,7 +87,7 @@ const TimesheetPDF = ({ total, timesheet }) => {
                     <View style={styles.table}>
 
                         <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
+                            <View style={styles.tableCol2}>
                                 <Text style={styles.tableCell}>Staff Name</Text>
                             </View>
                             <View style={styles.tableCol}>
@@ -119,7 +126,7 @@ const TimesheetPDF = ({ total, timesheet }) => {
                         {timesheet.map((data, index) => (
                             <View style={styles.tableRow} key={index}>
 
-                                <View style={styles.tableCol}>
+                                <View style={styles.tableCol2}>
                                     <Text style={styles.tableCell}>{data.staffName}</Text>
                                 </View>
                                 <View style={styles.tableCol}>

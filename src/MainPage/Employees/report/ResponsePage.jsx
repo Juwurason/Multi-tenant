@@ -15,6 +15,7 @@ const ResponsePage = () => {
 
         // Handle the code and state as needed
         const { data } = axiosInstance.get(`/SetUp/xero_auth?userId=${id.userId}&code=${code}&state=${state}`);
+
         console.log(data);
 
 

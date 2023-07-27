@@ -55,7 +55,7 @@ const ClientChart = () => {
             <div className="d-flex justify-content-center">
                 <div style={{ width: '200px', height: '200px' }} className='flex justify-content-center'>
                     {isLoading ? (
-                        <div className="lds-spinner mt-4 ml-5"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                     ) : (
                         <Doughnut data={data} options={{ plugins: { legend: { display: false } } }} />
                     )}
