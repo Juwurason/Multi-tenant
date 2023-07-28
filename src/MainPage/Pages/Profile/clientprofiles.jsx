@@ -557,15 +557,19 @@ const [searchText, setSearchText] = useState("");
           <div className="card tab-box">
             <div className="row user-tabs">
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
-                <ul className="nav nav-tabs nav-tabs-bottom">
+                <div className="scrollable-tabs-container" style={{width: "100%", overflowY:"hidden", overflowX: "auto"}}>
+                <ul className="nav nav-tabs nav-tabs-bottom" style={{display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap"}}>
                   <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
-                  {/* <li className="nav-item"><a  href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
                   <li className="nav-item"><Link to="/app/clientForms/client-schedule" className="nav-link text-primary">Schedule</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Support Needs</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Disability Support Needs</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Daily Living & Night Support</Link></li>
                   <li className="nav-item"><Link to="#" className="nav-link text-primary">Aids & Equipment</Link></li>
                   <li className="nav-item"><Link to="#" className="nav-link text-primary">Health Support Needs</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Community Support</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Community Support Needs</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Behaviour Support Needs</Link></li>
+                 
                 </ul>
+                </div>
               </div>
             </div>
           </div>
