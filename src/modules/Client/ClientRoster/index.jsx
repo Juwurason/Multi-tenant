@@ -451,8 +451,8 @@ const ClientRoster = () => {
                                                 <Modal.Body>
                                                     {selectedActivity && (
                                                         <>
-                                                            <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('YYYY-MM-DD')}</p>
-                                                            <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).tz('Australia/Sydney').format('hh:mm A')} - {dayjs(selectedActivity.dateTo).tz('Australia/Sydney').format('hh:mm A')}</p>
+                                                            <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
+                                                            <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                                                             <p><b>Status:</b> {selectedActivity.status}</p>
                                                             <p><b>Description:</b> {selectedActivity.activities}</p>
                                                         </>

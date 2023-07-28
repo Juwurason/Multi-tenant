@@ -10,10 +10,27 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import DataTable from "react-data-table-component";
+import { CSVLink } from "react-csv";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { GoSearch, GoTrashcan } from 'react-icons/go';
+import isBetween from 'dayjs/plugin/isBetween';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.locale('en-au');
+dayjs.extend(isBetween);
 
-const ClientProfile = () => {
+const ClientProfiles = () => {
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    dayjs.tz.setDefault('Australia/Sydney');
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
+  const [clientRoster, setClientRoster] = useState([]);
   const [profile, setProfile] = useState({})
   const [editedProfile, setEditedProfile] = useState({});
   const [loading, setLoading] = useState(false);
@@ -24,15 +41,24 @@ const ClientProfile = () => {
   const [bankModal, setBankModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
 
-  const getClientProfile = JSON.parse(localStorage.getItem('clientProfile'))
-  const privateHttp = useHttp()
+  const { get, post} = useHttp()
   const FetchStaff = async () => {
     try {
-      const { data } = await privateHttp.get(`/Profiles/${getClientProfile.profileId}`, { cacheTimeout: 300000 })
+      const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
       setStaffOne(data)
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
+    }
+
+    try {
+        const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=${uid}&staff=`, { cacheTimeout: 300000 });
+       console.log(data);
+       setClientRoster(data.shiftRoster)
+
+    } catch (error) {
+        toast.error(error.response.data.message)
+        toast.error(error.response.data.title)
     }
   }
   useEffect(() => {
@@ -46,6 +72,107 @@ const ClientProfile = () => {
       });
     }
   });
+
+  const columns = [
+    {
+        name: 'Staff',
+        selector: row => row.staff?.fullName || 'N/A',
+        sortable: true
+    },
+    // {
+    //     name: 'Client',
+    //     selector: row => row.profile.fullName,
+    //     sortable: true
+    // },
+    {
+        name: 'Date',
+        selector: row => dayjs(row.dateFrom).format('YYYY-MM-DD'),
+        sortable: true,
+    },
+    {
+        name: 'Start Time',
+        selector: row => dayjs(row.dateFrom).format('hh:mm A'),
+        sortable: true
+    },
+    {
+        name: 'End Time',
+        selector: row => dayjs(row.dateTo).format('hh:mm A'),
+        sortable: true
+    },
+    {
+        name: 'Activities',
+        selector: row => row.activities,
+        sortable: true
+    },
+    // {
+    //     name: 'DateModified',
+    //     selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
+    //     sortable: true
+    // }
+
+];
+
+const handleExcelDownload = () => {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Sheet1');
+
+    // Add headers
+    const headers = columns.map((column) => column.name);
+    sheet.addRow(headers);
+
+    // Add data
+    clientRoster.forEach((dataRow) => {
+        const values = columns.map((column) => {
+            if (typeof column.selector === 'function') {
+                return column.selector(dataRow);
+            }
+            return dataRow[column.selector];
+        });
+        sheet.addRow(values);
+    });
+
+    // Generate Excel file
+    workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'data.xlsx';
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+};
+
+
+const handlePDFDownload = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.setFontSize(13);
+    doc.text("User Table", marginLeft, 40);
+    const headers = columns.map((column) => column.name);
+    const dataValues = clientRoster.map((dataRow) =>
+        columns.map((column) => {
+            if (typeof column.selector === "function") {
+                return column.selector(dataRow);
+            }
+            return dataRow[column.selector];
+        })
+    );
+
+    doc.autoTable({
+        startY: 50,
+        head: [headers],
+        body: dataValues,
+        margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+    });
+    doc.save("Admin.pdf");
+};
+  
   const styles = {
     main: {
       backgroundColor: 'black',
@@ -62,7 +189,7 @@ const ClientProfile = () => {
   }
   const FetchExising = async (e) => {
     try {
-      const { data } = await privateHttp.get(`/Profiles/${e}`, { cacheTimeout: 300000 })
+      const { data } = await get(`/Profiles/${e}`, { cacheTimeout: 300000 })
       // console.log(data);
       setProfile(data);
       setEditedProfile({ ...data })
@@ -72,6 +199,45 @@ const ClientProfile = () => {
 
 
     }
+  }
+
+  const handleActivate = async (e) => {
+    try {
+      const response = await get(`/Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+
+      )
+
+
+    } catch (error) {
+      toast.error("Error Occurred")
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
+  }
+  const handleDeactivate = async (e) => {
+    try {
+      const response = await get(`/Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+      )
+
+
+    } catch (error) {
+      toast.error("Error Occurred")
+      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+
+
+
+
   }
 
   const handleModal0 = (e) => {
@@ -128,10 +294,10 @@ const ClientProfile = () => {
 
     try {
       setLoading(true)
-      const { data } = await privateHttp.post(`/Profiles/edit/${getClientProfile.profileId}?userId=${id.userId}`,
+      const { data } = await post(`/Profiles/edit/${uid}?userId=${id.userId}`,
         formData
       )
-      // console.log(data)
+    //   console.log(data)
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -158,6 +324,35 @@ const ClientProfile = () => {
     }
   }
 
+  const ButtonRow = ({ data }) => {
+    return (
+
+        <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+            <div ><span className='fw-bold'>Staff: </span>{data.staff.fullName}</div>
+            <div><span className='fw-bold'>Client: </span>{data.profile.fullName}</div>
+            <div><span className='fw-bold'>Activities: </span>{data.activities}</div>
+            <div>
+                {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleActivityClick(data.progressNoteId)}>
+                    Edit
+                </button> */}
+            </div>
+
+        </div>
+    );
+};
+
+const [searchText, setSearchText] = useState("");
+
+    const handleSearch = (event) => {
+        setSearchText(event.target.value);
+    };
+
+    const filteredData = clientRoster.filter((item) =>
+        item.activities?.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.staff?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.dateFrom?.toLowerCase().includes(searchText.toLowerCase())
+    );
+
 
   return (
     <>
@@ -174,75 +369,85 @@ const ClientProfile = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item"><Link to="/app/employee/clients">Client</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
               </div>
             </div>
           </div>
           {/* /Page Header */}
-          <div className="card mb-0">
+         <div className="card mb-0">
             <div className="card-body">
               <div className="row">
                 <div className="col-md-12">
                   <div className="profile-view">
                     <div className="profile-img-wrap">
-                      <div className="profile-img border border-2 rounded rounded-circle">
-                        <a className='text-primary rounded rounded-circle' href="#"><img alt=""
-                          className='rounded rounded-circle'
-                          src={staffOne.imageUrl === null || staffOne.imageUrl === "null" ? man : staffOne.imageUrl} /></a>
+                      <div className="profile-img rounded-circle border">
+                        <a href="">
+                          <img src={staffOne.imageUrl || man} alt="" width={"100%"} className='rounded-cirle' />
+                        </a>
                       </div>
                     </div>
                     <div className="profile-basic">
                       <div className="row">
                         <div className="col-md-5">
-                          <div className="profile-info-left d-flex flex-column">
-                            <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
-                            <div className="staff-id">Client ID : {staffOne.clientId === "null" ? "" : staffOne.clientId}</div>
-                            <div className="small doj text-muted">{staffOne.aboutMe}</div>
+                          <div className="profile-info-left">
+                            <h3 className="user-name m-t-0">{staffOne.fullName}</h3>
+                            {/* <h5 className="company-role m-t-0 mb-0">Barry Cuda</h5> */}
+                            <small className="text-muted">{staffOne.email}</small>
+                            {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                             <div className="staff-msg d-flex gap-2">
-                              {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
-                            </div>
 
-                            <div>
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
+                              <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`} className="btn btn-primary py-1 px-2 btn-sm">Client's Doc</Link>
+                              {
+                                staffOne.isActive ?
+                                  <button onClick={() => handleDeactivate(staffOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-danger">
+                                    Deactivate Client
+                                  </button>
+                                  :
+                                  <button onClick={() => handleActivate(staffOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-success">
+                                    Activate Client
+                                  </button>
+
+                              }
                             </div>
                           </div>
                         </div>
                         <div className="col-md-7">
                           <ul className="personal-info">
                             <li>
-                              <div className="title">Phone:</div>
-                              <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
+                              <span className="title">Phone:</span>
+                              <span className="text"><a href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></span>
                             </li>
                             <li>
-                              <div className="title">Email:</div>
-                              <div className="text"><a className='text-primary' href={`mailto:${staffOne.email}`}>{staffOne.email}</a></div>
+                              <span className="title">Email:</span>
+                              <span className="text"><a href={`mailto:${staffOne.email}`}>{staffOne.email}</a></span>
                             </li>
                             <li>
-                              <div className="title">Birthday:</div>
-                              <div className="text">{moment(staffOne.dateOfBirth).format('ll')}</div>
+                              <span className="title">Birthday:</span>
+                              <span className="text">{!staffOne.dateOfBirth ? "Not Updated" : moment(staffOne.dateOfBirth).format('ll')}</span>
                             </li>
                             <li>
-                              <div className="title">Address:</div>
-                              <div className="text">{staffOne.address}</div>
+                              <span className="title">Address:</span>
+                              <span className="text">{staffOne.address}</span>
                             </li>
                             <li>
-                              <div className="title">Gender:</div>
-                              <div className="text">{staffOne.gender || "None"}</div>
+                              <span className="title">Gender:</span>
+                              <span className="text">{staffOne.gender}</span>
                             </li>
-
                           </ul>
                         </div>
                       </div>
                     </div>
-
-                    <div className="pro-edit">
-                      <a className="edit-icon bg-info text-white" onClick={() => handleModal0(staffOne.profileId)}>
+                    {/* <div className="pro-edit">
+                      <Link to={`/app/profile/edit-client/${staffOne.profileId}`} className="edit-icon bg-info text-white">
+                        <i className="fa fa-pencil" />
+                      </Link>
+                    </div> */}
+                    <a className="edit-icon bg-info text-white" onClick={() => handleModal0(staffOne.profileId)}>
                         <i className="fa fa-pencil" />
                       </a>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -352,10 +557,19 @@ const ClientProfile = () => {
           <div className="card tab-box">
             <div className="row user-tabs">
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
-                <ul className="nav nav-tabs nav-tabs-bottom">
+                <div className="scrollable-tabs-container" style={{width: "100%", overflowY:"hidden", overflowX: "auto"}}>
+                <ul className="nav nav-tabs nav-tabs-bottom" style={{display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap"}}>
                   <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
-                  {/* <li className="nav-item"><a  href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
+                  <li className="nav-item"><Link to="/app/clientForms/client-schedule" className="nav-link text-primary">Schedule</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Disability Support Needs</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Daily Living & Night Support</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Aids & Equipment</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Health Support Needs</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Community Support Needs</Link></li>
+                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Behaviour Support Needs</Link></li>
+                 
                 </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -710,101 +924,82 @@ const ClientProfile = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="col-md-6 d-flex">
-                  <div className="card profile-box flex-fill">
-                    <div className="card-body">
-                      <div className="pro-edit">
-                        <a className="edit-icon bg-info text-white" onClick={() => handleModal4(staffOne.profileId)}>
-                          <i className="fa fa-pencil" />
-                        </a>
-                        <Modal
-                          show={socialModal}
-                          onHide={() => setSocialModal(false)}
-                          size="lg"
-                          aria-labelledby="contained-modal-title-vcenter"
-
-                        >
-                          <Modal.Header closeButton>
-                            <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                              Other Information
-                            </Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="form-group">
-                                  <label>Instagram</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
-                                </div>
-
-                                <div className="form-group">
-                                  <label>Facebook</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
-                                </div>
-                              </div>
-                              <div className="col-md-6">
-                                <div className="form-group">
-                                  <label>Twitter</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                  <label>LinkedIn</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
-                                </div>
-
-                              </div>
-                            </div>
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <button
-                              className="btn add-btn rounded btn-outline-danger"
-                              onClick={() => setSocialModal(false)}
-                            >
-                              Close
-                            </button>
-                            <button
-                              className="ml-2 btn add-btn rounded text-white btn-info"
-                              onClick={handleSave}
-                            >
-                              {loading ? <div className="spinner-grow text-light" role="status">
-                                <span className="sr-only">Loading...</span>
-                              </div> : "Send"}
-                            </button>
-                          </Modal.Footer>
-
-                        </Modal>
-
-                      </div>
-                      <h3 className="card-title">Other Informations</h3>
-                      <ul className="personal-info">
-                        <li>
-                          <div className="title"><FaInstagram /> Instagram</div>
-                          <div className="text">{staffOne.instagram === "null" || "" ? "---" : staffOne.instagram}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaFacebook /> Facebook</div>
-                          <div className="text">{staffOne.facebook === "null" || "" ? "---" : staffOne.facebook}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaTwitter /> Twitter</div>
-                          <div className="text">{staffOne.twitter === "null" || "" ? "---" : staffOne.twitter}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaLinkedin /> Linked-In</div>
-                          <div className="text">{staffOne.linkedIn === "null" || "" ? "---" : staffOne.linkedIn}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaYoutube /> Youtube</div>
-                          <div className="text">{staffOne.youtube === "null" || "" ? "---" : staffOne.youtube}</div>
-                        </li>
-
-                      </ul>
-                    </div>
-                  </div>
-                </div> */}
+                
               </div>
 
+              <div className='mt-4 border'>
+                        <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 
+                            <div className="col-md-3">
+                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                    <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
+                                    <GoSearch />
+                                </div>
+                            </div>
+                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                                <CSVLink
+                                    data={clientRoster}
+                                    filename={"document.csv"}
+
+                                >
+                                    <button
+
+                                        className='btn text-info'
+                                        title="Export as CSV"
+                                    >
+                                        <FaFileCsv />
+                                    </button>
+
+                                </CSVLink>
+                                <button
+                                    className='btn text-danger'
+                                    onClick={handlePDFDownload}
+                                    title="Export as PDF"
+                                >
+                                    <FaFilePdf />
+                                </button>
+                                <button
+                                    className='btn text-primary'
+
+                                    onClick={handleExcelDownload}
+                                    title="Export as Excel"
+                                >
+                                    <FaFileExcel />
+                                </button>
+                                <CopyToClipboard text={JSON.stringify(clientRoster)}>
+                                    <button
+
+                                        className='btn text-warning'
+                                        title="Copy Table"
+                                        onClick={() => toast("Table Copied")}
+                                    >
+                                        <FaCopy />
+                                    </button>
+                                </CopyToClipboard>
+                            </div>
+                        </div>
+                        <DataTable data={filteredData} columns={columns}
+                            pagination
+                            highlightOnHover
+                            searchable
+                            searchTerm={searchText}
+                            progressPending={loading}
+                            progressComponent={<div className='text-center fs-1'>
+                                <div className="spinner-grow text-secondary" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div>
+                            </div>}
+                            expandableRows
+                            expandableRowsComponent={ButtonRow}
+                            paginationTotalRows={filteredData.length}
+                            responsive
+
+
+                        />
+
+                       
+
+                    </div>
             </div>
           </div>
         </div>
@@ -816,4 +1011,4 @@ const ClientProfile = () => {
 
   );
 }
-export default ClientProfile;
+export default ClientProfiles;
