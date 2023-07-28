@@ -39,7 +39,7 @@ const Integration = () => {
     // Access the entire state
     const integration = useSelector((state) => state.integration.data);
 
-
+    console.log(integration);
 
     const id = JSON.parse(localStorage.getItem('user'));
     const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ const Integration = () => {
     const secretID = useRef(null);
     const clientID = useRef(null);
     const [scope, setScope] = useState("accounting.transactions accounting.settings accounting.contacts payroll.employees payroll.timesheets payroll.settings");
-    const [responseUrl, setResponseUrl] = useState("http://test.maxicareplus.com/Report/Auth");
+    const [responseUrl, setResponseUrl] = useState("");
 
     const [editThirdParty, setEditThirdParty] = useState("");
     const [editSecretID, setEditSecretID] = useState("");
@@ -332,7 +332,7 @@ const Integration = () => {
                     </button> |
                     <a
                         href={`
-                        https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${data.clientID}&redirect_uri=${`/app/report/auth`}&scope=${data.scope}&state=test
+                        https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${data.clientID}&redirect_uri=${data.responseUrl}&scope=${data.scope}&state=test
                         
                         `}
                         className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
