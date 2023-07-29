@@ -217,7 +217,8 @@ const EmployeeProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`} className="btn py-1 px-2 rounded text-white bg-primary">Staff Document</Link>
+                              <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`}
+                                className="btn py-2 rounded text-white bg-primary">Staff Document</Link>
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">

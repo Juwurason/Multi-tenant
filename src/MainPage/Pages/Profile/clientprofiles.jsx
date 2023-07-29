@@ -388,7 +388,8 @@ const ClientProfiles = () => {
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                             <div className="staff-msg d-flex gap-2">
 
-                              <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`} className="btn btn-primary py-1 px-2 btn-sm">Client's Doc</Link>
+                              <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}
+                                className="btn btn-primary py-2  btn-sm">Client's Doc</Link>
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-danger">
