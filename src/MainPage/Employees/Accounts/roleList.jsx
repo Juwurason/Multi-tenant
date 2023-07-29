@@ -58,23 +58,19 @@ const RoleList = () => {
     const HandleUpdate = async () => {
         try {
             setLoading1(true)
-            const { data } = await privateHttp.post(`/Account/add_claims_to_user`,
-                {
-                    userId: uid,
-                    claims: updatedClaims
-
-                }
+            const { data } = await privateHttp.post(`/Account/assign_role_to_user?userId=${uid}`,
+                updatedRoles
             )
             if (data.status === 'Success') {
 
                 toast.success(data.message)
-                FetchClaims()
+                FetchRole()
                 setLoading1(false);
             }
             setLoading1(false);
 
         } catch (error) {
-            toast.error("Add Claim to user failed")
+            toast.error("Assign Role to user failed")
             toast.error(error.response?.data?.message)
 
             setLoading1(false)
@@ -144,8 +140,11 @@ const RoleList = () => {
                                 </div>
                                 <div className="form-group text-center mb-0">
                                     <div className="text-center d-flex gap-2">
-                                        <button className="btn btn-info add-btn text-white rounded-2 m-r-5">
-                                            Update
+                                        <button className="btn btn-info add-btn text-white rounded-2 m-r-5" onClick={HandleUpdate}>
+
+                                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div> : "Update"}
                                         </button>
                                         <Link
                                             to={`/app/account/editrole/${uid}`}
