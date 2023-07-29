@@ -26,14 +26,14 @@ const ErrorComponent = ({ message }) => {
                     <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold'>Promax Care</span>
                 </span>
             </div>
-            <div className="container">
+            <div className="containerr">
                 <div className="gif">
                     <img src={sad} alt="sad bird" />
                 </div>
                 <div className="contentt">
-                    <h1 className="main-heading text-primary fw-bold">An Unexpected Error Occurred.</h1>
+                    <h1 className="main-heading text-primary fw-bold">Ooops!.. Seems your Session has Ended</h1>
                     <p className='p'>
-                        ...Kindly reload the page using the button below. {message}
+                        ...Kindly retry using the button below.
                     </p>
 
                     <button className='btn btn-primary btn-lg' onClick={handleReload}>Back to home

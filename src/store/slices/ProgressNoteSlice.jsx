@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api';
 
-export const fetchProgress = createAsyncThunk('Progress/fetchProgress', async () => {
-    const response = await api.fetchProgressNotes();
+export const fetchProgress = createAsyncThunk('Progress/fetchProgress', async (company) => {
+    const response = await api.fetchProgressNotes(company);
     return response;
 });
 export const filterProgress = createAsyncThunk(

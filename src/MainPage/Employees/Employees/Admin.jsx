@@ -231,6 +231,7 @@ const AllAdmin = () => {
             </div>
         );
     };
+
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {

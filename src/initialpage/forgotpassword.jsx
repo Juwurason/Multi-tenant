@@ -9,12 +9,14 @@ import {
 import './login.css'
 import usePublicHttp from '../hooks/usePublicHttp';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 
 const ForgotPassword = () => {
   const publicHttp = usePublicHttp();
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
+  const navigate = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,10 +24,20 @@ const ForgotPassword = () => {
       toast.error("Enter your Email")
     }
     try {
-      const { data } = await publicHttp.get(`/Account/forgot_password?=${email}`)
-      console.log(data);
+      setLoading(true);
+      const { data } = await publicHttp.get(`/Account/forgot_password?email=${email}`)
+      if (data.status === "Success") {
+        toast.success(data.message)
+        navigate.replace(`/resetpassword`)
+      } else {
+        toast.error(data.message)
+        return
+      }
+      setLoading(false)
     } catch (error) {
+      toast.error(error.response.data.message);
       console.log(error);
+      setLoading(false);
     }
   }
 

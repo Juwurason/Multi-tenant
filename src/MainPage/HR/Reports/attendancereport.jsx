@@ -130,7 +130,7 @@ const AttendanceReport = () => {
     {
 
       name: 'Clock-In',
-      selector: row => dayjs(row.clockIn).format('DD/MM/YYYY HH:mm'),
+      selector: row => dayjs(row.clockIn).format('DD/MM/YYYY h:mm A'),
       sortable: true,
       expandable: true,
 
@@ -146,7 +146,7 @@ const AttendanceReport = () => {
 
     {
       name: 'Clock-Out',
-      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY HH:mm'),
+      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY h:mm A'),
       sortable: true,
       expandable: true,
 
@@ -162,35 +162,7 @@ const AttendanceReport = () => {
         </span>
       ),
     },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="d-flex" style={{ overflow: "hidden" }}>
-          {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
-            className='btn'
-            title='Edit'
-            to={`/app/reports/edit-attendance/${row.attendanceId}`}
-          // onClick={() => setEditModal(true)}
 
-          >
-            <FaRegEdit />
-          </Link> : ""}
-
-          <Link
-            className='btn'
-            title='Details'
-            to={`/app/reports/attendance-details/${row.attendanceId}`}
-
-
-          >
-            <FaRegFileAlt />
-          </Link>
-
-
-
-        </div>
-      ),
-    },
 
 
 
@@ -413,6 +385,28 @@ const AttendanceReport = () => {
             {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
           </span>
         </span>
+        <div>
+          {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
+            className='fw-bold text-warning'
+            title='Edit'
+            to={`/app/reports/edit-attendance/${data.attendanceId}`}
+          // onClick={() => setEditModal(true)}
+
+          >
+            Edit
+          </Link> : ""} &nbsp; | &nbsp;
+
+
+          <Link
+            className='fw-bold text-info'
+            title='Details'
+            to={`/app/reports/attendance-details/${data.attendanceId}`}
+
+
+          >
+            Details
+          </Link>
+        </div>
 
 
       </div>
@@ -806,9 +800,9 @@ const AttendanceReport = () => {
                   {
                     splittedAttendance.map((data, index) =>
                       <tr key={index}>
-                        <td>  {dayjs(data.clockIn).format('DD/MM/YYYY HH:mm')}</td>
+                        <td>  {dayjs(data.clockIn).format('DD/MM/YYYY h:mm A')}</td>
                         <td>{formatDuration(data.duration)}</td>
-                        <td>{dayjs(data.clockOut).format('DD/MM/YYYY HH:mm')}</td>
+                        <td>{dayjs(data.clockOut).format('DD/MM/YYYY h:mm A')}</td>
                         <td>{data.totalKm}</td>
                         <td><small style={{ fontSize: "12px" }} className={`px-2 py-1 rounded text-white
                           bg-${data.shift === 'M' ? 'primary' : data.shift === 'E' ? 'secondary' : data.shift === 'N' ? 'dark' : 'transparent'}

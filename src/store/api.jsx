@@ -1,7 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-const id = JSON.parse(localStorage.getItem('user'));
-
 const fetchUserData = async (companyId) => {
     try {
         const response = await axiosInstance.get(`/Account/get_all_users?companyId=${companyId}`);
@@ -120,9 +118,9 @@ const filterActivityLogs = async (company, fromDate, toDate, user,) => {
     }
 };
 
-const getShiftsByUser = async (dateFrom, dateTo, staff, client) => {
+const getShiftsByUser = async (dateFrom, dateTo, staff, client, company) => {
     try {
-        const response = await axiosInstance.get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom}&toDate=${dateTo}&staffId=${staff}&clientId=${client}&companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/ShiftRosters/get_periodic_shift_rosters?fromDate=${dateFrom}&toDate=${dateTo}&staffId=${staff}&clientId=${client}&companyId=${company}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching shift Roaster:', error);
@@ -149,18 +147,18 @@ const getSplittedAttendance = async (value) => {
         throw error;
     }
 };
-const fetchIntegrationData = async () => {
+const fetchIntegrationData = async (company) => {
     try {
-        const response = await axiosInstance.get(`/Integrations/get_integrations?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/Integrations/get_integrations?companyId=${company}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching third-party Data:', error);
         throw error;
     }
 };
-const fetchProgressNotes = async () => {
+const fetchProgressNotes = async (company) => {
     try {
-        const response = await axiosInstance.get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${id.companyId}`);
+        const response = await axiosInstance.get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${company}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching Progress Notes', error);

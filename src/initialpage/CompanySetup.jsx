@@ -20,21 +20,27 @@ const CompanySetup = () => {
     const packagesId = useRef(null)
     const [value, setValue] = useState("")
     const [loading, setLoading] = useState(false)
+    const [loading1, setLoading1] = useState(false)
     let errorsObj = { companyName: '', companyEmail: '', companyAddress: '', companyHead: '', Phone: '' };
     const [errors, setErrors] = useState(errorsObj);
     const publicHttp = usePublicHttp()
     useEffect(() => {
         const fetchPackages = async () => {
+            setLoading1(true);
             try {
                 const response = await publicHttp.get("/Packages/get_all_packages")
                 setPackages(response.data)
+                setLoading1(false)
             } catch (error) {
                 console.log(error);
+                setLoading1(false)
             }
         }
         fetchPackages()
 
     }, [])
+
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user && user.token && user.role === "CompanyAdmin") {
@@ -188,20 +194,34 @@ const CompanySetup = () => {
 
 
                                         <div className="form-group">
-                                            <select className="form-select"
-                                                style={{ height: "3rem" }}
-                                                ref={packagesId}
-                                                aria-label="Default select example">
+                                            {
 
-                                                <option hidden>Choose a package</option>
+                                                !loading1 && packages.length > 0 ?
+                                                    <select className="form-select"
+                                                        style={{ height: "3rem" }}
+                                                        ref={packagesId}
+                                                        aria-label="Default select example">
 
-                                                {
-                                                    packages.map((item) =>
-                                                        <option value={item.packagesId} key={item.packagesId}>{item.package}</option>
-                                                    )
-                                                }
-                                            </select>
+                                                        <option hidden>Choose a package</option>
 
+                                                        {
+                                                            packages.map((item) =>
+                                                                <option value={item.packagesId} key={item.packagesId}>{item.package}</option>
+                                                            )
+                                                        }
+                                                    </select> :
+                                                    <div className="d-flex align-items-center gap-3">
+                                                        <div className="spinner-grow" role="status">
+                                                            <span className="sr-only">Loading...</span>
+                                                        </div>  <span className="fw-bold">Loading Packages</span>
+                                                    </div>
+                                            }
+
+                                            {
+                                                !loading1 && packages.length < 0 ?
+                                                    <span className="text-danger">Packages not available.. Try Reloading this page</span>
+                                                    : ""
+                                            }
                                         </div>
 
 

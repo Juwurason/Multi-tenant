@@ -29,19 +29,19 @@ function formatDuration(duration) {
 }
 
 const Integration = () => {
+    const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
 
     // Fetch user data and update the state
     useEffect(() => {
-        dispatch(fetchIntegration());
+        dispatch(fetchIntegration(id.companyId));
     }, [dispatch]);
 
     // Access the entire state
     const integration = useSelector((state) => state.integration.data);
 
-    console.log(integration);
 
-    const id = JSON.parse(localStorage.getItem('user'));
+
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [showModal, setShowModal] = useState(false);

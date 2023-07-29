@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const axiosInstance = axios.create({
     baseURL: 'https://profitmax-001-site10.ctempurl.com/api',
@@ -19,7 +20,8 @@ axiosInstance.interceptors.response.use(
             // Handle 401 Unauthorized error
             if (response.status === 401) {
                 localStorage.clear(); // Clear user data from local storage
-                window.location.href = '/login'; // Redirect the user to the login page
+                toast.error("Session TimeOut")
+                window.location.replace = '/login'; // Redirect the user to the login page
             }
             // Handle 403 Forbidden error
             else if (response.status === 403) {

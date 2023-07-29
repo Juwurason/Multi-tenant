@@ -14,6 +14,7 @@ import TimesheetForAll from '../MainPage/HR/Reports/timesheetForAll';
 import OTPscreen from './otp';
 import StaffProgress from '../MainPage/HR/Reports/progressPrint';
 import formTemplateDetails from '../MainPage/Employees/Setup/formTemplateDetails';
+import ResetPassword from './resetPassword';
 
 const App = () => {
     const location = useLocation();
@@ -56,6 +57,7 @@ const App = () => {
         <Switch>
             <Route path="/login" component={LoginPage} />
             <Route path="/forgotpassword" component={ForgotPassword} />
+            <Route path="/resetpassword" component={ResetPassword} />
             <Route path="/register" component={CompanySetup} />
             <Route path="/admin/:companyId" component={AdminRegistration} />
             <Route path="/otp" component={OTPscreen} />

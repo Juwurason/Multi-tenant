@@ -11,7 +11,7 @@ import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { GoTrashcan } from 'react-icons/go';
-import { MdDoneOutline, MdOutlineEditCalendar, MdOutlineRefresh, MdThumbUpOffAlt } from 'react-icons/md';
+import { MdDoneOutline, MdOutlineCancel, MdOutlineEditCalendar, MdOutlineRefresh, MdThumbUpOffAlt } from 'react-icons/md';
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -73,11 +73,13 @@ const ShiftScheduling = () => {
   const [startKm, setStartKm] = useState(0);
   const [endKm, setEndKm] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [assignModal, setAssignModal] = useState(false);
+  const [reasonModal, setReasonModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [periodicModal, setPeriodicModal] = useState(false);
   const dateFrom = useRef(null);
   const dateTo = useRef(null);
+
+  const [reason, setReason] = useState("");
 
 
 
@@ -620,16 +622,8 @@ const ShiftScheduling = () => {
                             getActivityStatus(activity) === 'Active' ?
                               (
                                 <div className='d-flex gap-2'>
-                                  {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster") ? <small
-                                    className={`text-truncate d-flex 
-                             align-items-center
-                             justify-content-center px-2 py-1 rounded bg-danger pointer`}
 
-                                    onClick={() => handleDelete(activity?.shiftRosterId)}
-                                    title="Delete"
-                                  >
-                                    <GoTrashcan className='fs-6' />
-                                  </small> : ""}
+
                                   {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster") ? <Link
                                     to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
                                     className={`text-truncate d-flex 
@@ -657,29 +651,37 @@ const ShiftScheduling = () => {
 
                                 <div className='d-flex gap-2' >
 
-                                  {(user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster")) && (<small
-                                    className={`text-truncate d-flex 
+                                  {(user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster")) && (
+
+                                    <small
+                                      className={`text-truncate d-flex 
                              align-items-center
                              justify-content-center px-2 py-1 rounded bg-danger pointer`}
 
-                                    onClick={() => handleDelete(activity?.shiftRosterId)}
-                                    title="Delete"
-                                  >
-                                    <GoTrashcan className='fs-6' />
-                                  </small>)}
+                                      onClick={() => handleDelete(activity?.shiftRosterId)}
+                                      title="Delete"
+                                    >
+                                      <GoTrashcan className='fs-6' />
+                                    </small>
+
+
+
+                                  )}
 
                                   {
                                     getActivityStatus(activity) === 'Upcoming' && activity.status !== 'Pending' && activity.status !== 'Cancelled' && (
-                                      (user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster")) && (<Link
-                                        to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                                        className={`text-truncate d-flex 
+                                      (user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster")) && (
+                                        <Link
+                                          to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                                          className={`text-truncate d-flex 
                               align-items-center
                               justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                        title="Edit"
+                                          title="Edit"
 
-                                      >
-                                        <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                      </Link>)
+                                        >
+                                          <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                        </Link>
+                                      )
 
                                     )
                                   }
@@ -711,7 +713,7 @@ const ShiftScheduling = () => {
                                      justify-content-center px-2 py-1 rounded bg-secondary pointer`}
 
                                       onClick={() => handleCancelShift(activity)}
-                                      title="Approve Cancelling Shift"
+                                      title="Approve Request"
                                     >
                                       <MdThumbUpOffAlt className='fs-6' />
                                     </small>
@@ -805,6 +807,25 @@ const ShiftScheduling = () => {
                                       title="Re-assign Shift"
                                     >
                                       <MdOutlineRefresh className='fs-6' />
+                                    </small>
+                                    )
+
+
+
+                                  }
+                                  {
+                                    getActivityStatus(activity) === 'Upcoming' &&
+
+
+                                    (<small
+                                      className={`text-truncate d-flex 
+                           align-items-center
+                           justify-content-center px-2 py-1 rounded bg-white pointer`}
+
+                                      onClick={() => setReasonModal(true)}
+                                      title="Cancel Client Shift"
+                                    >
+                                      <MdOutlineCancel className='fs-6 text-danger' />
                                     </small>
                                     )
 
@@ -1022,6 +1043,26 @@ const ShiftScheduling = () => {
                   <span className="sr-only">Loading...</span>
                 </div> : "Submit"}
               </button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Cancel Client Shift Modal Here */}
+
+          <Modal show={reasonModal} onHide={() => setReasonModal(false)} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Cancel Client Shift</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <label htmlFor="">Please provide reasons for cancelling shift</label>
+                <textarea rows={3} className="form-control summernote" placeholder="" name='reason'
+                  value={reason} onChange={e => setReason(e.target.value)} />
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <button
+                // onClick={CancelShift}
+                className="btn btn-primary add-btn rounded">Submit</button>
             </Modal.Footer>
           </Modal>
 

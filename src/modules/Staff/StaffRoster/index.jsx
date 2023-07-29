@@ -82,8 +82,8 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
       const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
       FetchData()
 
-    // Use the converted JSON data in your component
-    // console.log(json);
+      // Use the converted JSON data in your component
+      // console.log(json);
       // setStaffCancel(cancel);
       // setLoading(false);
       setReasonModal(false)
@@ -124,11 +124,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activity.status === "Cancelled" ) {
+    else if (activity.status === "Cancelled") {
       return 'Cancelled'
     }
     else if (activityDateTo < nowInAustraliaTime && activity.attendance === true && activity.isEnded === true) {
-      return  'Present'
+      return 'Present'
     }
     else if (activityDateTo < nowInAustraliaTime && activity.attendance === false) {
       return "Absent"
@@ -150,7 +150,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = (data) => {
     // Extract progressNoteId and shiftRosterId from the data object
-    const {  shiftRosterId, progressNoteId } = data;
+    const { shiftRosterId, progressNoteId } = data;
     // console.log(shiftRosterId, progressNoteId);
     // Use the extracted values as needed
     if (progressNoteId !== 0 && progressNoteId !== null) {
@@ -336,9 +336,9 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     <small
                                       className={`p-1 rounded text-truncate ${getActivityStatus(activity) === 'Upcoming' ? 'bg-warning' :
                                         getActivityStatus(activity) === 'Absent' ? 'bg-danger' :
-                                        getActivityStatus(activity) === 'Cancelled' ? 'bg-secondary' :
-                                          getActivityStatus(activity) === 'You are already Clocked in' ? 'bg-primary' :
-                                            getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
+                                          getActivityStatus(activity) === 'Cancelled' ? 'bg-secondary' :
+                                            getActivityStatus(activity) === 'You are already Clocked in' ? 'bg-primary' :
+                                              getActivityStatus(activity) === 'Present' ? 'bg-success' : ''
                                         }`}
                                     >
                                       {getActivityStatus(activity)}
@@ -360,13 +360,13 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                       </small>
                                     )}
 
-                                    
+
 
 
                                     {getActivityStatus(activity) === 'You are already Clocked in' && (
                                       <small
                                         className='bg-secondary p-1 rounded'
-                                       
+
                                         onClick={() => HandleFill({
                                           progressNoteId: activity.progressNoteId,
                                           shiftRosterId: activity.shiftRosterId,
@@ -413,6 +413,8 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                         </Modal.Footer>
                       </Modal>
 
+
+
                       <Modal show={reasonModal} onHide={() => setReasonModal(false)} centered>
                         <Modal.Header closeButton>
                           <Modal.Title>Request to Cancel Shift</Modal.Title>
@@ -427,6 +429,8 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                           <button onClick={CancelShift} className="btn btn-success">Submit</button>
                         </Modal.Footer>
                       </Modal>
+
+
                     </div>
                   </div>
                 ))}

@@ -32,10 +32,10 @@ const ProgressReport = () => {
 
     // Fetch staff data and update the state
     useEffect(() => {
-        dispatch(fetchProgress());
+        dispatch(fetchProgress(id.companyId));
         dispatch(fetchStaff(id.companyId));
         dispatch(fetchClient(id.companyId));
-    }, [dispatch]);
+    }, [dispatch, progress]);
 
     // Access the entire state
     const loading = useSelector((state) => state.progress.isLoading);

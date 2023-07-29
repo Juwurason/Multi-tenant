@@ -9,12 +9,16 @@
 
 .cover2-bg {
     background-image: url(../assets/img/cover.jpg);
-    /* height: 100vh; */
     padding-bottom: 50px;
+    height: 100vh;
     background-repeat: no-repeat;
     background-color: #405189;
     background-blend-mode: lighten;
-    background-size: cover;
+    background-size: 100% 100%;
+    overflow-y: auto;
+    /* Updated property */
+    background-position: center;
+    /* Optional: Adjust the position if needed */
 }
 
 .login-form {

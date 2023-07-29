@@ -18,6 +18,7 @@ import ExcelJS from 'exceljs';
 import Swal from 'sweetalert2';
 import { fetchUser } from '../../../store/slices/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { MdOutlineLockReset } from 'react-icons/md';
 
 
 
@@ -86,17 +87,24 @@ const AllUser = () => {
         {
             name: "Actions",
             cell: (row) => (
-                <div className="d-flex gap-1">
+                <div className="d-flex">
                     <Link
                         className='btn'
-                        title='Edit'
+                        title='Edit User'
                         to={`/app/account/edituser/${row.id}`}
                     >
                         <FaRegEdit />
                     </Link>
                     <button
                         className='btn'
-                        title='Delete'
+                        title='Reset User Password'
+                        onClick={() => handleResetPassword(row.email)}
+                    >
+                        <MdOutlineLockReset className='fs-5' />
+                    </button>
+                    <button
+                        className='btn'
+                        title='Delete User'
                         onClick={() => handleDelete(row.id)}
                     >
                         <GoTrashcan />
@@ -115,7 +123,7 @@ const AllUser = () => {
 
         Swal.fire({
             html: `<h3>Are you sure? you want to delete this user</h3>`,
-            icon: 'question',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#405189',
             cancelButtonColor: '#777',
@@ -125,6 +133,41 @@ const AllUser = () => {
             if (result.isConfirmed) {
                 try {
                     const { data } = await post(`/Account/delete_user/${e}?userId=${id.userId}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        dispatch(fetchUser());
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    toast.error("Ooops😔 Error Occurred")
+                    console.log(error);
+
+
+
+                }
+
+
+            }
+        })
+    }
+    const handleResetPassword = async (e) => {
+
+        Swal.fire({
+            html: `<h3>Are you sure? you want to reset this user Password</h3>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#405189',
+            cancelButtonColor: '#777',
+            confirmButtonText: 'Confirm Reset',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await post(`/Account/reset_user_password?userId=${id.userId}&email=${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
@@ -235,6 +278,15 @@ const AllUser = () => {
         item?.email.toLowerCase().includes(searchText.toLowerCase())
     );
 
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-2 d-flex flex-column gap-1" style={{ fontSize: "12px" }}>
+                <div ><span className='fw-bold'>Full Name: </span> {data.fullName}</div>
+                <div><span className='fw-bold'>Email: </span> {data.email}</div>
+            </div>
+        );
+    };
+
 
 
     return (
@@ -330,7 +382,9 @@ const AllUser = () => {
                                     <span className="sr-only">Loading...</span>
                                 </div>
                             </div>}
+                            expandableRows
                             responsive
+                            expandableRowsComponent={ButtonRow}
                             searchTerm={searchText}
 
                         />
