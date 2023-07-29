@@ -553,7 +553,7 @@ const ClientProfiles = () => {
                     <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Disability Support Needs</Link></li>
                     <li className="nav-item"><Link to={`/app/forms/client-daily-living/${uid}`} className="nav-link text-primary fw-bold">Daily Living & Night Support</Link></li>
                     <li className="nav-item"><Link to={`/app/forms/client-aids/${uid}`} className="nav-link text-primary fw-bold">Aids & Equipment</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Health Support Needs</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-health/${uid}`} className="nav-link text-primary fw-bold">Health Support Needs</Link></li>
                     <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Community Support Needs</Link></li>
                     <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Behaviour Support Needs</Link></li>
 

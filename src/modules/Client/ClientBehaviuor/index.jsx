@@ -57,7 +57,7 @@ const ClientBehaviuor = () => {
             console.log(data)
             if (data.status === 'Success') {
                 toast.success(data.message)
-                navigate.push(`/client/app/client-behaviuor-edit/${data.behaviourSupportId}`)
+                // navigate.push(`/client/app/client-behaviuor-edit/${data.behaviourSupportId}`)
             }
             setLoading1(false)
         } catch (error) {
