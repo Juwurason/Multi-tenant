@@ -65,8 +65,6 @@ const ClientSchedule = () => {
     const [selectedTimeTo, setSelectedTimeTo] = useState("");
     const id = JSON.parse(localStorage.getItem('user'))
     const [showModal, setShowModal] = useState(false);
-    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'))
-    const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
     const handleSelected = (selectedOptions) => {
         setSelected(selectedOptions);
     }
