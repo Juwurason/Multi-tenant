@@ -3,7 +3,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -53,6 +53,7 @@ const ClientSchedule = () => {
         }
     });
 
+    const {uid} = useParams()
     const [selected, setSelected] = useState([]);
     const [staffAvail, setStaffAvail] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -126,7 +127,7 @@ const ClientSchedule = () => {
     const FetchSchedule = async () => {
         // setLoading2(true)
         try {
-            const { data } = await get(`/ClientSchedules/get_client_schedule?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
+            const { data } = await get(`/ClientSchedules/get_client_schedule?clientId=${uid}`, { cacheTimeout: 300000 });
             // console.log(data);
             setStaffAvail(data)
             // setLoading2(false);

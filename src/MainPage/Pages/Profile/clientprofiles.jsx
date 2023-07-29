@@ -45,6 +45,7 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
+      console.log(data);
       setStaffOne(data)
     } catch (error) {
       toast.error(error.response.data.message)
@@ -559,7 +560,7 @@ const ClientProfiles = () => {
                 <div className="scrollable-tabs-container" style={{ width: "100%", overflowY: "hidden", overflowX: "auto" }}>
                   <ul className="nav nav-tabs nav-tabs-bottom" style={{ display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
                     <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary fw-bold">Profile</a></li>
-                    <li className="nav-item"><Link to="/app/forms/client-schedule" className="nav-link text-primary fw-bold">Schedule</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-schedule/${uid}`} className="nav-link text-primary fw-bold">Schedule</Link></li>
                     <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Disability Support Needs</Link></li>
                     <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Daily Living & Night Support</Link></li>
                     <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Aids & Equipment</Link></li>
