@@ -3,7 +3,7 @@
  */
  import React, { useEffect, useState } from 'react';
  import { Helmet } from "react-helmet";
- import { Link, useHistory } from 'react-router-dom';
+ import { Link, useHistory, useParams } from 'react-router-dom';
  import "jspdf-autotable";
  import { toast } from 'react-toastify';
 import useHttp from '../../../../hooks/useHttp';
@@ -27,8 +27,7 @@ import useHttp from '../../../../hooks/useHttp';
      const { get, post } = useHttp();
      const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
      const [selectedTimeTo, setSelectedTimeTo] = useState("");
-     const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
-     
+    const {uid} = useParams()     
  
  
      const PostAvail = async (e) => {
@@ -40,7 +39,7 @@ import useHttp from '../../../../hooks/useHttp';
          setLoading1(true)
  
          const info = {
-             profileId: clientProfile.profileId,
+             profileId: uid,
              question1: selectedDay,
              question2: selectedTimeFrom,
              question3: selectedTimeTo,
@@ -53,7 +52,7 @@ import useHttp from '../../../../hooks/useHttp';
          try {
  
              const { data } = await post(`/BehaviourSupports`, info);
-             console.log(data)
+            //  console.log(data)
              if (data.status === 'Success') {
                  toast.success(data.message)
                  // navigate.push(`/client/app/client-behaviuor-edit/${data.behaviourSupportId}`)
@@ -84,7 +83,7 @@ import useHttp from '../../../../hooks/useHttp';
                      <div className="row">
                          <div className="col">
                              <ul className="breadcrumb">
-                                 <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
+                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                  <li className="breadcrumb-item active">Behaviour Support Needs</li>
                              </ul>
                          </div>
