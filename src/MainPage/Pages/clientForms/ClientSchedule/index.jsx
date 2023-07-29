@@ -97,7 +97,7 @@ const ClientSchedule = () => {
         e.preventDefault()
         setLoading1(true)
         const info = {
-            profileId: clientProfile.profileId,
+            profileId: uid,
             days: selectedDay,
             fromTimeOfDay: selectedTimeFrom,
             toTimeOfDay: selectedTimeTo,
@@ -107,7 +107,7 @@ const ClientSchedule = () => {
         try {
 
             const { data } = await post(`/ClientSchedules/add_client_schedule?userId=${id.userId}`, info);
-            console.log(data)
+            // console.log(data)
             if (data.status === 'Success') {
                 toast.success(data.message)
             }
@@ -323,7 +323,7 @@ const ClientSchedule = () => {
         setLoading2(true)
         const info = {
             clientScheduleId: idSave,
-            profileId: clientProfile.profileId,
+            profileId: uid,
             days: editAvail.days,
             fromTimeOfDay: editAvail.fromTimeOfDay,
             toTimeOfDay: editAvail.toTimeOfDay,

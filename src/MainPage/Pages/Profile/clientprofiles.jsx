@@ -45,7 +45,6 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
-      console.log(data);
       setStaffOne(data)
     } catch (error) {
       toast.error(error.response.data.message)
@@ -79,11 +78,6 @@ const ClientProfiles = () => {
       selector: row => row.staff?.fullName || 'N/A',
       sortable: true
     },
-    // {
-    //     name: 'Client',
-    //     selector: row => row.profile.fullName,
-    //     sortable: true
-    // },
     {
       name: 'Date',
       selector: row => dayjs(row.dateFrom).format('YYYY-MM-DD'),
@@ -104,11 +98,6 @@ const ClientProfiles = () => {
       selector: row => row.activities,
       sortable: true
     },
-    // {
-    //     name: 'DateModified',
-    //     selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
-    //     sortable: true
-    // }
 
   ];
 
