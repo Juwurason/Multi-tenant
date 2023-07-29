@@ -4,6 +4,7 @@ import ClientAidEquip from './ClientAid';
 import ClientBehaviuor from './ClientBehaviour';
 import ClientComunitySupport from './ClientComminitySupport';
 import ClientDailyLiving from './ClientDailyNightAndLiving';
+import ClientDisability from './ClientDisability';
 import ClientHealth from './ClientHealthSupport';
 import ClientSchedule from './ClientSchedule';
 
@@ -16,6 +17,7 @@ const ClientForms = ({ match }) => (
       <Route path={`${match.url}/client-health/:uid`} component={ClientHealth} />
       <Route path={`${match.url}/client-behaviour/:uid`} component={ClientBehaviuor} />
       <Route path={`${match.url}/client-community-support/:uid`} component={ClientComunitySupport} />
+      <Route path={`${match.url}/client-disability-support/:uid`} component={ClientDisability} />
    </Switch>
 
 );
