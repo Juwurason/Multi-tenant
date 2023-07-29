@@ -44,10 +44,11 @@ const ClientDailyLiving = () => {
 
 
     const PostAvail = async (e) => {
+        e.preventDefault()
         if (selectedDay === "" || selectedForm === "") {
             return toast.error("Input Fields cannot be empty")
         }
-        e.preventDefault()
+        
         setLoading1(true)
         const info = {
             profileId: clientProfile.profileId,

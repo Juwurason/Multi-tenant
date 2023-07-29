@@ -78,11 +78,6 @@ const ClientProfiles = () => {
       selector: row => row.staff?.fullName || 'N/A',
       sortable: true
     },
-    // {
-    //     name: 'Client',
-    //     selector: row => row.profile.fullName,
-    //     sortable: true
-    // },
     {
       name: 'Date',
       selector: row => dayjs(row.dateFrom).format('YYYY-MM-DD'),
@@ -103,11 +98,6 @@ const ClientProfiles = () => {
       selector: row => row.activities,
       sortable: true
     },
-    // {
-    //     name: 'DateModified',
-    //     selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
-    //     sortable: true
-    // }
 
   ];
 
@@ -559,13 +549,13 @@ const ClientProfiles = () => {
                 <div className="scrollable-tabs-container" style={{ width: "100%", overflowY: "hidden", overflowX: "auto" }}>
                   <ul className="nav nav-tabs nav-tabs-bottom" style={{ display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
                     <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary fw-bold">Profile</a></li>
-                    <li className="nav-item"><Link to="/app/forms/client-schedule" className="nav-link text-primary fw-bold">Schedule</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Disability Support Needs</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Daily Living & Night Support</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Aids & Equipment</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Health Support Needs</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Community Support Needs</Link></li>
-                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Behaviour Support Needs</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-schedule/${uid}`} className="nav-link text-primary fw-bold">Schedule</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-disability-support/${uid}`} className="nav-link text-primary fw-bold">Disability Support Needs</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-daily-living/${uid}`} className="nav-link text-primary fw-bold">Daily Living & Night Support</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-aids/${uid}`} className="nav-link text-primary fw-bold">Aids & Equipment</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-health/${uid}`} className="nav-link text-primary fw-bold">Health Support Needs</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-community-support/${uid}`} className="nav-link text-primary fw-bold">Community Support Needs</Link></li>
+                    <li className="nav-item"><Link to={`/app/forms/client-behaviour/${uid}`} className="nav-link text-primary fw-bold">Behaviour Support Needs</Link></li>
 
                   </ul>
                 </div>

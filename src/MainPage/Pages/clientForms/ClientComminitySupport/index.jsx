@@ -16,16 +16,11 @@
  import moment from 'moment';
  import Swal from 'sweetalert2';
  import { Modal } from 'react-bootstrap';
- import { MultiSelect } from 'react-multi-select-component';
+import { useCompanyContext } from '../../../../context';
 import useHttp from '../../../../hooks/useHttp';
- const options = [
-     { label: "Equipment Require Assistance", value: "Equipment Require Assistance" },
-     { label: "Equipment Require Staff Training", value: "Equipment Require Staff Training" },
- 
- ];
  
  
- const ClientAidEquip = () => {
+ const ClientComunitySupport = () => {
      useEffect(() => {
          if ($('.select').length > 0) {
              $('.select').select2({
@@ -34,55 +29,50 @@ import useHttp from '../../../../hooks/useHttp';
              });
          }
      });
-     
+ 
      const [selected, setSelected] = useState([]);
      const [staffAvail, setStaffAvail] = useState([]);
-     const [loading, setLoading] = useState(false);
+     const { loading, setLoading } = useCompanyContext();
      const [loading1, setLoading1] = useState(false);
      const [loading2, setLoading2] = useState(false);
-     const [info, setInfo] = useState("");
+     const [selectedDay, setSelectedDay] = useState("");
+     const [selectedPosition, setSelectedPosition] = useState("");
+     const [selectedPhone, setSelectedPhone] = useState("");
      const { get, post } = useHttp();
-     const [equipmentUsed, setEquipmentUsed] = useState("");
+     const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
+     const [selectedTimeTo, setSelectedTimeTo] = useState("");
+     const id = JSON.parse(localStorage.getItem('user'))
      const [showModal, setShowModal] = useState(false);
      const {uid} = useParams()
  
- 
-     const handleSelected = (selectedOptions) => {
-         const updatedInfo = {
-             equipmentAssistance: selectedOptions.some(option => option.value === 'Equipment Require Assistance'),
-             requireStaffTraining: selectedOptions.some(option => option.value === 'Equipment Require Staff Training'),
-         };
- 
-         setInfo(updatedInfo);
-         setSelected(selectedOptions);
-     };
- 
- 
- 
+    
      const PostAvail = async (e) => {
-         if (equipmentUsed === "") {
+        e.preventDefault()
+         if (selectedDay === "" || selectedTimeFrom === "" || selectedPhone === "") {
              return toast.error("Input Fields cannot be empty")
          }
-         e.preventDefault()
+       
          setLoading1(true)
- 
-         const inf = {
+       
+         const info = {
              profileId: uid,
-             equipmentUsed: equipmentUsed,
-             equipmentAssistance: info.equipmentAssistance,
-             requireStaffTraining: info.requireStaffTraining,
+             communityAssistance: selectedDay,
+             transportType: selectedTimeFrom,
+             transportAssistance: selectedTimeTo,
+             activitiesParticipation: selectedPhone,
+             activitiesAssistance: selectedPosition,
          }
          try {
  
-             const { data } = await post(`/Aids`, inf);
-             //  console.log(data)
+             const { data } = await post(`/CommunitySupports`, info);
+             console.log(data)
              if (data.status === 'Success') {
                  toast.success(data.message)
              }
              setLoading1(false)
              FetchSchedule()
          } catch (error) {
-             //  console.log(error);
+             console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
@@ -95,9 +85,9 @@ import useHttp from '../../../../hooks/useHttp';
      const FetchSchedule = async () => {
          // setLoading2(true)
          try {
-             const { data } = await get(`/Aids/get_client_aids?clientId=${uid}`, { cacheTimeout: 300000 });
-             //  console.log(data);
-             setStaffAvail(data)
+             const { data } = await get(`/CommunitySupports/get_all?clientId=${uid}`, { cacheTimeout: 300000 });
+        
+              setStaffAvail(data)
              // setLoading2(false);
          } catch (error) {
              // console.log(error);
@@ -116,25 +106,31 @@ import useHttp from '../../../../hooks/useHttp';
  
  
      const columns = [
-         
+ 
          {
-             name: 'Equipment Used',
-             selector: row => row.equipmentUsed,
+             name: 'Community Assistance',
+             selector: row => row.communityAssistance,
              sortable: true,
              expandable: true,
          },
          {
-             name: 'Equipment Require Assistance',
-             selector: row => (
-                 <input type="checkbox" checked={row.equipmentAssistance} readOnly />
-             ),
+             name: 'Transport Type',
+             selector: row => row.transportType,
              sortable: true,
          },
          {
-             name: 'Equipment Require Staff Training',
-             selector: row => (
-                 <input type="checkbox" checked={row.requireStaffTraining} readOnly />
-             ),
+             name: 'Transport Assistance',
+             selector: row => row.transportAssistance,
+             sortable: true
+         },
+         {
+             name: 'Activities Participation',
+             selector: row => row.activitiesParticipation,
+             sortable: true
+         },
+         {
+             name: 'Activities Assistance',
+             selector: row => row.activitiesAssistance,
              sortable: true
          },
          {
@@ -153,7 +149,8 @@ import useHttp from '../../../../hooks/useHttp';
          // Add headers
          const headers = columns.map((column) => column.name);
          sheet.addRow(headers);
- 
+        
+         
          // Add data
          staffAvail.forEach((dataRow) => {
              const values = columns.map((column) => {
@@ -164,6 +161,7 @@ import useHttp from '../../../../hooks/useHttp';
              });
              sheet.addRow(values);
          });
+         
  
          // Generate Excel file
          workbook.xlsx.writeBuffer().then((buffer) => {
@@ -178,6 +176,8 @@ import useHttp from '../../../../hooks/useHttp';
              document.body.removeChild(link);
          });
      };
+
+    
  
      const handlePDFDownload = () => {
          const unit = "pt";
@@ -208,7 +208,7 @@ import useHttp from '../../../../hooks/useHttp';
  
      const handleDelete = async (e) => {
          Swal.fire({
-             html: `<h3>Are you sure? you want to delete this </h3>`,
+             html: `<h3>Are you sure? you want to delete this</h3>`,
              icon: 'question',
              showCancelButton: true,
              confirmButtonColor: '#405189',
@@ -218,7 +218,7 @@ import useHttp from '../../../../hooks/useHttp';
          }).then(async (result) => {
              if (result.isConfirmed) {
                  try {
-                     const { data } = await post(`/Aids/delete/${e}`)
+                     const { data } = await post(`/CommunitySupports/delete/${e}`)
                      // console.log(data);
                      if (data.status === 'Success') {
                          toast.success(data.message);
@@ -244,7 +244,7 @@ import useHttp from '../../../../hooks/useHttp';
      }
  
      const [editAvail, setEditAvail] = useState({});
-     const [idSave, setIdSave] = useState('');
+     const [idSave, setIdSave] = useState('')
      const [selectedActivities, setSelectedActivities] = useState([]);
      const selectedValue = selectedActivities.map(option => option.label).join(', ');
      const handleEdit = async (e) => {
@@ -253,24 +253,15 @@ import useHttp from '../../../../hooks/useHttp';
          // setLoading2(true)
          try {
  
-             const { data } = await get(`/Aids/${e}`, { cacheTimeout: 300000 });
-             // console.log(data);
-             const { equipmentAssistance, requireStaffTraining } = data;
- 
-             const selectedValues = [];
-             if (equipmentAssistance) {
-                 selectedValues.push({ label: 'Equipment Require Assistance', value: 'Equipment Require Assistance' });
-             }
-             if (requireStaffTraining) {
-                 selectedValues.push({ label: 'Equipment Require Staff Training', value: 'Equipment Require Staff Training' });
-             }
- 
-             setSelectedActivities(selectedValues);
+             const { data } = await get(`/CommunitySupports/${e}`, { cacheTimeout: 300000 });
+             //  console.log(data);
+             //  setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
+             console.log();
              setEditAvail(data);
          } catch (error) {
              // console.log(error);
-             toast.error(error.response.data.message);
-             toast.error(error.response.data.title);
+             toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
          }
      };
  
@@ -285,24 +276,25 @@ import useHttp from '../../../../hooks/useHttp';
          });
      }
  
-     const handleActivityChange = (selected) => {
-         setSelectedActivities(selected);
-     };
  
      const EditAvail = async (e) => {
+ 
          e.preventDefault()
          setLoading2(true)
+        
          const info = {
-             aidsId: idSave,
+            communitySupportId: idSave,
              profileId: uid,
-             equipmentUsed: editAvail.equipmentUsed,
-             equipmentAssistance: selectedActivities.find(option => option.value === 'Equipment Require Assistance') !== undefined,
-             requireStaffTraining: selectedActivities.find(option => option.value === 'Equipment Require Staff Training') !== undefined,
-         };
+             communityAssistance: editAvail.communityAssistance,
+             transportType: editAvail.transportType,
+             transportAssistance: editAvail.transportAssistance,
+             activitiesParticipation: editAvail.activitiesParticipation,
+             activitiesAssistance: editAvail.activitiesAssistance,
+         }
          try {
  
-             const { data } = await post(`/Aids/edit/${idSave}`, info);
-            //  console.log(data);
+             const { data } = await post(`/CommunitySupports/edit/${idSave}`, info);
+             //  console.log(data);
              if (data.status === 'Success') {
                  toast.success(data.message)
              }
@@ -310,7 +302,7 @@ import useHttp from '../../../../hooks/useHttp';
              setShowModal(false)
              FetchSchedule()
          } catch (error) {
-             console.log(error);
+             // console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
@@ -322,13 +314,12 @@ import useHttp from '../../../../hooks/useHttp';
      const ButtonRow = ({ data }) => {
          return (
              <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-                 <div><span className='fw-bold'>Equipment Used: </span> {data.equipmentUsed}</div>
                  <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                  <div>
-                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.aidsId)}>
+                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.communitySupportId)}>
                          Edit
                      </button> |
-                     <button onClick={() => handleDelete(data.aidsId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                     <button onClick={() => handleDelete(data.communitySupportId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                          Delete
                      </button>
                  </div>
@@ -337,31 +328,38 @@ import useHttp from '../../../../hooks/useHttp';
          );
  
      };
+   
+      
  
      const [searchText, setSearchText] = useState("");
  
      const handleSearch = (event) => {
          setSearchText(event.target.value);
      };
- 
-     const filteredData = staffAvail.filter((item) =>
-         item.equipmentUsed.toLowerCase().includes(searchText.toLowerCase())
-     );
+     
+    
+    const filteredData = staffAvail.filter((item) => {
+        if (item.communityAssistance && typeof item.communityAssistance === "string") {
+          return item.communityAssistance.toLowerCase().includes(searchText.toLowerCase());
+        }
+        return false;
+      });
+      
+
      return (
          <div className="page-wrapper">
              <Helmet>
-                 <title> Aids & Equipments</title>
-                 <meta name="description" content="Aids & Equipments" />
+                 <title> Community Support Needs</title>
+                 <meta name="description" content="Community Support Needs" />
              </Helmet>
              <div className="content container-fluid">
                  {/* Page Header */}
                  <div className="page-header">
                      <div className="row">
                          <div className="col">
-                             {/* <h3 className="page-title">Staff Aids & Equipments</h3> */}
                              <ul className="breadcrumb">
                                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                 <li className="breadcrumb-item active">Aids & Equipments</li>
+                                 <li className="breadcrumb-item active">Community Support Needs</li>
                              </ul>
                          </div>
                      </div>
@@ -371,30 +369,48 @@ import useHttp from '../../../../hooks/useHttp';
                      <div className="col-md-12">
                          <div className="card">
                              <div className="card-header">
-                                 <h4 className="card-title mb-0">Aids & Equipments</h4>
+                                 <h4 style={{ fontSize: "15px" }} className="card-title mb-0">Community Support Needs</h4>
                              </div>
                              <div className="card-body">
-                                 <form className="">
+                                 <form className="row">
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Equipment Used</label>
-                                             <input className="form-control" type="text" onChange={e => setEquipmentUsed(e.target.value)} required />
+                                             <label>Do you need assistance getting around the community? If so, please provide detail</label>
+                                             <textarea className="form-control" rows="2" onChange={(e) => setSelectedDay(e.target.value)} cols="20" />
+                                         </div>
+                                     </div>
+ 
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>Do you need assistance to use transport? If so, please provide detail.</label>
+                                             <textarea className="form-control" rows="2" onChange={(e) => setSelectedTimeFrom(e.target.value)} cols="20" />
                                          </div>
                                      </div>
  
                                      <div className="col-md-6">
                                          <div className="form-group">
-                                             <label></label>
-                                             <MultiSelect
-                                                 options={options}
-                                                 value={selected}
-                                                 onChange={handleSelected}
-                                                 labelledBy="Select..."
-                                             />
+                                             <label>What type of transport do you mainly use?</label>
+                                             <textarea className="form-control" rows="2" onChange={(e) => setSelectedTimeTo(e.target.value)} cols="20" />
                                          </div>
                                      </div>
  
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>Do you participate in any activities (such as employment, training or community activities)? If yes, please provide detail.</label>
+                                             <textarea className="form-control" rows="2" onChange={(e) => setSelectedPhone(e.target.value)} cols="20" />
+                                         </div>
+                                     </div>
  
+                                    
+ 
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>Do you need assistance to access these activities? If yes, please provide detail.</label>
+                                             <textarea className="form-control" onChange={(e) => setSelectedPosition(e.target.value)} rows="2" cols="20" />
+                                         </div>
+                                     </div>
+ 
+                    
  
                                      <div className="text-start">
                                          <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
@@ -459,7 +475,9 @@ import useHttp from '../../../../hooks/useHttp';
                              </CopyToClipboard>
                          </div>
                      </div>
-                     <DataTable data={filteredData} columns={columns}
+                     <DataTable 
+                     data={filteredData} 
+                     columns={columns}
                          pagination
                          highlightOnHover
                          searchable
@@ -482,31 +500,107 @@ import useHttp from '../../../../hooks/useHttp';
                  </div>
                  <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                      <Modal.Header closeButton>
-                         <Modal.Title>Edit Aids & Equipments</Modal.Title>
+                         <Modal.Title>Edit Community Support Needs</Modal.Title>
                      </Modal.Header>
                      <Modal.Body>
-                         <div className="card-body">
-                             <form className="">
-                                 <div className='col-md-12'>
+                         {/* <div className="card-body">
+                             <form className="row">
+                                 <div className='col-md-6'>
                                      <div className="form-group">
-                                         <label>Equipment Used</label>
-                                         <input className="form-control" type="text" name='equipmentUsed' value={editAvail.equipmentUsed || ''} onChange={handleInputChange} required />
+                                         <label>FullName</label>
+                                         <input className="form-control" type="text" name="fullName" value={editAvail.fullName || ''} onChange={handleInputChange} />
                                      </div>
                                  </div>
  
-                                 <div className="col-md-12">
+                                 <div className="col-md-6">
                                      <div className="form-group">
-                                         <label></label>
-                                         <MultiSelect
-                                             options={options}
-                                             value={selectedActivities}
-                                             onChange={handleActivityChange}
-                                             labelledBy="Select..."
-                                         />
+                                         <label>Relationship</label>
+                                         <input className="form-control" type="text" />
                                      </div>
                                  </div>
+ 
+                                 <div className='col-md-6'>
+                                     <div className="form-group">
+                                         <label>Mobile Phone</label>
+                                         <input className="form-control" type="number" name="phone" value={editAvail.phone || ''} onChange={handleInputChange} />
+                                     </div>
+                                 </div>
+ 
+                                 <div className='col-md-6'>
+                                     <div className="form-group">
+                                         <label>Position</label>
+                                         <input className="form-control" type="text" name="personel" value={editAvail.personel || ''} onChange={handleInputChange} />
+                                     </div>
+                                 </div>
+ 
+                                 <div className='col-md-6'>
+                                     <div className="form-group">
+                                         <label>Organization</label>
+                                         <input className="form-control" type="text" />
+                                     </div>
+                                 </div>
+ 
+                                 <div className='col-md-6'>
+                                     <div className="form-group">
+                                         <label>Address</label>
+                                         <textarea className="form-control" rows="2" cols="20" />
+                                     </div>
+                                 </div>
+ 
+                                 <div className='col-md-12'>
+                                     <div className="form-group">
+                                         <label>Email</label>
+                                         <input className="form-control" type="email" name="email" value={editAvail.email || ''} onChange={handleInputChange} />
+                                     </div>
+                                 </div>
+ 
+ 
                              </form>
-                         </div>
+                         </div> */}
+                         <div className="card-body">
+                                 <form className="row">
+                                     <div className='col-md-12'>
+                                         <div className="form-group">
+                                             <label>Do you need assistance getting around the community? If so, please provide detail</label>
+                                             <textarea className="form-control" rows="2" cols="20" name="communityAssistance" value={editAvail.communityAssistance || ''} onChange={handleInputChange} />
+                                         </div>
+                                     </div>
+ 
+                                     <div className='col-md-12'>
+                                         <div className="form-group">
+                                             <label>Do you need assistance to use transport? If so, please provide detail.</label>
+                                             <textarea className="form-control" rows="2"  cols="20" name="transportType" value={editAvail.transportType || ''} onChange={handleInputChange} />
+                                         </div>
+                                     </div>
+ 
+                                     <div className="col-md-12">
+                                         <div className="form-group">
+                                             <label>What type of transport do you mainly use?</label>
+                                             <textarea className="form-control" rows="2"  cols="20" name="transportAssistance" value={editAvail.transportAssistance || ''} onChange={handleInputChange} />
+                                         </div>
+                                     </div>
+ 
+                                     <div className='col-md-12'>
+                                         <div className="form-group">
+                                             <label>Do you participate in any activities (such as employment, training or community activities)? If yes, please provide detail.</label>
+                                             <textarea className="form-control" rows="2"  cols="20" name="activitiesParticipation" value={editAvail.activitiesParticipation || ''} onChange={handleInputChange} />
+                                         </div>
+                                     </div>
+ 
+                                    
+ 
+                                     <div className='col-md-12'>
+                                         <div className="form-group">
+                                             <label>Do you need assistance to access these activities? If yes, please provide detail.</label>
+                                             <textarea className="form-control"  rows="2" cols="20" name="activitiesAssistance" value={editAvail.activitiesAssistance || ''} onChange={handleInputChange} />
+                                         </div>
+                                     </div>
+ 
+                    
+ 
+                                    
+                                 </form>
+                             </div>
                      </Modal.Body>
                      <Modal.Footer>
                          <button
@@ -532,4 +626,4 @@ import useHttp from '../../../../hooks/useHttp';
          </div>
      );
  }
- export default ClientAidEquip;
+ export default ClientComunitySupport;

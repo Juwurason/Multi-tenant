@@ -9,23 +9,17 @@
  import { CopyToClipboard } from "react-copy-to-clipboard";
  import jsPDF from "jspdf";
  import "jspdf-autotable";
- import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+ import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
  import { toast } from 'react-toastify';
  import { GoSearch, GoTrashcan } from 'react-icons/go';
  import dayjs from 'dayjs';
  import moment from 'moment';
  import Swal from 'sweetalert2';
  import { Modal } from 'react-bootstrap';
- import { MultiSelect } from 'react-multi-select-component';
+import { useCompanyContext } from '../../../../context';
 import useHttp from '../../../../hooks/useHttp';
- const options = [
-     { label: "Equipment Require Assistance", value: "Equipment Require Assistance" },
-     { label: "Equipment Require Staff Training", value: "Equipment Require Staff Training" },
  
- ];
- 
- 
- const ClientAidEquip = () => {
+ const ClientDailyLiving = () => {
      useEffect(() => {
          if ($('.select').length > 0) {
              $('.select').select2({
@@ -34,47 +28,38 @@ import useHttp from '../../../../hooks/useHttp';
              });
          }
      });
-     
+ 
      const [selected, setSelected] = useState([]);
      const [staffAvail, setStaffAvail] = useState([]);
-     const [loading, setLoading] = useState(false);
+     const { loading, setLoading } = useCompanyContext();
      const [loading1, setLoading1] = useState(false);
      const [loading2, setLoading2] = useState(false);
-     const [info, setInfo] = useState("");
+     const [selectedDay, setSelectedDay] = useState("");
+     const [selectedDetails, setSelectedDetails] = useState("");
+     const [selectedForm, setSelectedForm] = useState("");
+     const [selectedSupport, setSelectedSupport] = useState("");
      const { get, post } = useHttp();
-     const [equipmentUsed, setEquipmentUsed] = useState("");
      const [showModal, setShowModal] = useState(false);
      const {uid} = useParams()
  
  
-     const handleSelected = (selectedOptions) => {
-         const updatedInfo = {
-             equipmentAssistance: selectedOptions.some(option => option.value === 'Equipment Require Assistance'),
-             requireStaffTraining: selectedOptions.some(option => option.value === 'Equipment Require Staff Training'),
-         };
- 
-         setInfo(updatedInfo);
-         setSelected(selectedOptions);
-     };
- 
- 
- 
      const PostAvail = async (e) => {
-         if (equipmentUsed === "") {
+        e.preventDefault()
+         if (selectedDay === "" || selectedForm === "") {
              return toast.error("Input Fields cannot be empty")
          }
-         e.preventDefault()
          setLoading1(true)
- 
-         const inf = {
+         const info = {
              profileId: uid,
-             equipmentUsed: equipmentUsed,
-             equipmentAssistance: info.equipmentAssistance,
-             requireStaffTraining: info.requireStaffTraining,
+             activities: selectedDay,
+             support: selectedSupport,
+             supportLevel: selectedDetails,
+             details: selectedForm,
+             //  companyID: id.companyId
          }
          try {
  
-             const { data } = await post(`/Aids`, inf);
+             const { data } = await post(`/DailyLivings`, info);
              //  console.log(data)
              if (data.status === 'Success') {
                  toast.success(data.message)
@@ -82,7 +67,7 @@ import useHttp from '../../../../hooks/useHttp';
              setLoading1(false)
              FetchSchedule()
          } catch (error) {
-             //  console.log(error);
+             // console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
@@ -95,8 +80,8 @@ import useHttp from '../../../../hooks/useHttp';
      const FetchSchedule = async () => {
          // setLoading2(true)
          try {
-             const { data } = await get(`/Aids/get_client_aids?clientId=${uid}`, { cacheTimeout: 300000 });
-             //  console.log(data);
+             const { data } = await get(`/DailyLivings/get_all?clientId=${uid}`, { cacheTimeout: 300000 });
+            //   console.log(data);
              setStaffAvail(data)
              // setLoading2(false);
          } catch (error) {
@@ -104,10 +89,6 @@ import useHttp from '../../../../hooks/useHttp';
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
-         // finally {
-         //   setLoading2(false)
-         // }
- 
  
      };
      useEffect(() => {
@@ -116,25 +97,25 @@ import useHttp from '../../../../hooks/useHttp';
  
  
      const columns = [
-         
          {
-             name: 'Equipment Used',
-             selector: row => row.equipmentUsed,
+             name: 'Activities',
+             selector: row => row.activities,
              sortable: true,
              expandable: true,
          },
          {
-             name: 'Equipment Require Assistance',
-             selector: row => (
-                 <input type="checkbox" checked={row.equipmentAssistance} readOnly />
-             ),
+             name: 'Support',
+             selector: row => row.support,
              sortable: true,
          },
          {
-             name: 'Equipment Require Staff Training',
-             selector: row => (
-                 <input type="checkbox" checked={row.requireStaffTraining} readOnly />
-             ),
+             name: 'Level of Support',
+             selector: row => row.supportLevel,
+             sortable: true
+         },
+         {
+             name: 'Details',
+             selector: row => row.details,
              sortable: true
          },
          {
@@ -208,7 +189,7 @@ import useHttp from '../../../../hooks/useHttp';
  
      const handleDelete = async (e) => {
          Swal.fire({
-             html: `<h3>Are you sure? you want to delete this </h3>`,
+             html: `<h3>Are you sure? you want to delete this</h3>`,
              icon: 'question',
              showCancelButton: true,
              confirmButtonColor: '#405189',
@@ -218,7 +199,7 @@ import useHttp from '../../../../hooks/useHttp';
          }).then(async (result) => {
              if (result.isConfirmed) {
                  try {
-                     const { data } = await post(`/Aids/delete/${e}`)
+                     const { data } = await post(`/DailyLivings/delete/${e}`)
                      // console.log(data);
                      if (data.status === 'Success') {
                          toast.success(data.message);
@@ -229,7 +210,7 @@ import useHttp from '../../../../hooks/useHttp';
  
  
                  } catch (error) {
-                     // console.log(error);
+                     console.log(error);
                      toast.error(error.response.data.message)
                      toast.error(error.response.data.title)
  
@@ -244,7 +225,7 @@ import useHttp from '../../../../hooks/useHttp';
      }
  
      const [editAvail, setEditAvail] = useState({});
-     const [idSave, setIdSave] = useState('');
+     const [idSave, setIdSave] = useState('')
      const [selectedActivities, setSelectedActivities] = useState([]);
      const selectedValue = selectedActivities.map(option => option.label).join(', ');
      const handleEdit = async (e) => {
@@ -253,24 +234,14 @@ import useHttp from '../../../../hooks/useHttp';
          // setLoading2(true)
          try {
  
-             const { data } = await get(`/Aids/${e}`, { cacheTimeout: 300000 });
-             // console.log(data);
-             const { equipmentAssistance, requireStaffTraining } = data;
- 
-             const selectedValues = [];
-             if (equipmentAssistance) {
-                 selectedValues.push({ label: 'Equipment Require Assistance', value: 'Equipment Require Assistance' });
-             }
-             if (requireStaffTraining) {
-                 selectedValues.push({ label: 'Equipment Require Staff Training', value: 'Equipment Require Staff Training' });
-             }
- 
-             setSelectedActivities(selectedValues);
+             const { data } = await get(`/DailyLivings/${e}`, { cacheTimeout: 300000 });
+             //  console.log(data);
+            
              setEditAvail(data);
          } catch (error) {
              // console.log(error);
-             toast.error(error.response.data.message);
-             toast.error(error.response.data.title);
+             toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
          }
      };
  
@@ -290,19 +261,22 @@ import useHttp from '../../../../hooks/useHttp';
      };
  
      const EditAvail = async (e) => {
+ 
          e.preventDefault()
          setLoading2(true)
          const info = {
-             aidsId: idSave,
+             dailyLivingId: idSave,
              profileId: uid,
-             equipmentUsed: editAvail.equipmentUsed,
-             equipmentAssistance: selectedActivities.find(option => option.value === 'Equipment Require Assistance') !== undefined,
-             requireStaffTraining: selectedActivities.find(option => option.value === 'Equipment Require Staff Training') !== undefined,
-         };
+             activities: editAvail.activities,
+             support: editAvail.support,
+             supportLevel: editAvail.supportLevel,
+             details: editAvail.details,
+             //  companyID: id.companyId
+         }
          try {
  
-             const { data } = await post(`/Aids/edit/${idSave}`, info);
-            //  console.log(data);
+             const { data } = await post(`/DailyLivings/edit/${idSave}`, info);
+             //  console.log(data);
              if (data.status === 'Success') {
                  toast.success(data.message)
              }
@@ -310,7 +284,7 @@ import useHttp from '../../../../hooks/useHttp';
              setShowModal(false)
              FetchSchedule()
          } catch (error) {
-             console.log(error);
+             // console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
@@ -322,13 +296,15 @@ import useHttp from '../../../../hooks/useHttp';
      const ButtonRow = ({ data }) => {
          return (
              <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-                 <div><span className='fw-bold'>Equipment Used: </span> {data.equipmentUsed}</div>
+                 <div><span className='fw-bold'>Activities: </span> {data.activities}</div>
+                 <div><span className='fw-bold'>Support: </span> {data.support}</div>
+                 <div><span className='fw-bold'>Level of Support: </span> {data.supportLevel}</div>
                  <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                  <div>
-                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.aidsId)}>
+                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleEdit(data.dailyLivingId)}>
                          Edit
                      </button> |
-                     <button onClick={() => handleDelete(data.aidsId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                     <button onClick={() => handleDelete(data.dailyLivingId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                          Delete
                      </button>
                  </div>
@@ -345,23 +321,22 @@ import useHttp from '../../../../hooks/useHttp';
      };
  
      const filteredData = staffAvail.filter((item) =>
-         item.equipmentUsed.toLowerCase().includes(searchText.toLowerCase())
+         item.activities.toLowerCase().includes(searchText.toLowerCase())
      );
      return (
          <div className="page-wrapper">
              <Helmet>
-                 <title> Aids & Equipments</title>
-                 <meta name="description" content="Aids & Equipments" />
+                 <title> Daily Living & Night Support</title>
+                 <meta name="description" content="Daily Living & Night Support" />
              </Helmet>
              <div className="content container-fluid">
                  {/* Page Header */}
                  <div className="page-header">
                      <div className="row">
                          <div className="col">
-                             {/* <h3 className="page-title">Staff Aids & Equipments</h3> */}
                              <ul className="breadcrumb">
                                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                 <li className="breadcrumb-item active">Aids & Equipments</li>
+                                 <li className="breadcrumb-item active">Daily Living & Night Support</li>
                              </ul>
                          </div>
                      </div>
@@ -371,30 +346,51 @@ import useHttp from '../../../../hooks/useHttp';
                      <div className="col-md-12">
                          <div className="card">
                              <div className="card-header">
-                                 <h4 className="card-title mb-0">Aids & Equipments</h4>
+                                 <h4 style={{ fontSize: "15px" }} className="card-title mb-0"> Add one or more Daily Activities</h4>
                              </div>
                              <div className="card-body">
-                                 <form className="">
+                                 <form className="row">
                                      <div className='col-md-6'>
                                          <div className="form-group">
-                                             <label>Equipment Used</label>
-                                             <input className="form-control" type="text" onChange={e => setEquipmentUsed(e.target.value)} required />
+                                             <label>Activities</label>
+                                             <input className="form-control" type="text" onChange={(e) => setSelectedDay(e.target.value)} required />
                                          </div>
                                      </div>
  
                                      <div className="col-md-6">
                                          <div className="form-group">
-                                             <label></label>
-                                             <MultiSelect
-                                                 options={options}
-                                                 value={selected}
-                                                 onChange={handleSelected}
-                                                 labelledBy="Select..."
-                                             />
+                                             <label>Support</label>
+                                             <select className='form-select' onChange={(e) => setSelectedSupport(e.target.value)}>
+                                                 <option defaultValue hidden >Select Issues</option>
+                                                 <option value={"No help required"}>No help required</option>
+                                                 <option value={"Aids used"}>Aids used</option>
+                                                 <option value={"Prompting required"}>Prompting required</option>
+                                                 <option value={"Some support required"}>Some support required</option>
+                                                 <option value={"Full physical support required"}>Full physical support required</option>
+ 
+                                             </select>
                                          </div>
                                      </div>
  
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>How often do you require supervision or support throughout the day?</label>
+                                             <select className='form-select' onChange={(e) => setSelectedDetails(e.target.value)}>
+                                                 <option defaultValue hidden >Select Issues</option>
+                                                 <option value={"None of the time"}>None of the time</option>
+                                                 <option value={"All the time"}>All the time</option>
+                                                 <option value={"Prompting required"}>Prompting required</option>
+                                                 <option value={"During active times"}>During active times</option>
+                                             </select>
+                                         </div>
+                                     </div>
  
+                                     <div className='col-md-6'>
+                                         <div className="form-group">
+                                             <label>Details</label>
+                                             <textarea className="form-control" onChange={(e) => setSelectedForm(e.target.value)} rows="2" cols="20" />
+                                         </div>
+                                     </div>
  
                                      <div className="text-start">
                                          <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
@@ -480,29 +476,53 @@ import useHttp from '../../../../hooks/useHttp';
  
  
                  </div>
+ 
                  <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                      <Modal.Header closeButton>
-                         <Modal.Title>Edit Aids & Equipments</Modal.Title>
+                         <Modal.Title>Edit Daily Living & Night Support</Modal.Title>
                      </Modal.Header>
                      <Modal.Body>
                          <div className="card-body">
-                             <form className="">
-                                 <div className='col-md-12'>
+                             <form className="row">
+                                 <div className='col-md-6'>
                                      <div className="form-group">
-                                         <label>Equipment Used</label>
-                                         <input className="form-control" type="text" name='equipmentUsed' value={editAvail.equipmentUsed || ''} onChange={handleInputChange} required />
+                                         <label>Activities</label>
+                                         <input className="form-control" type="text" name="activities" value={editAvail.activities || ''} onChange={handleInputChange} />
                                      </div>
                                  </div>
  
-                                 <div className="col-md-12">
+                                 <div className="col-md-6">
                                      <div className="form-group">
-                                         <label></label>
-                                         <MultiSelect
-                                             options={options}
-                                             value={selectedActivities}
-                                             onChange={handleActivityChange}
-                                             labelledBy="Select..."
-                                         />
+                                         <label>Support</label>
+                                         <select className='form-select' name="support" value={editAvail.support || ''} onChange={handleInputChange}>
+                                             <option defaultValue hidden >Select Issues</option>
+                                             <option value={"No help required"}>No help required</option>
+                                             <option value={"Aids used"}>Aids used</option>
+                                             <option value={"Prompting required"}>Prompting required</option>
+                                             <option value={"Some support required"}>Some support required</option>
+                                             <option value={"Full physical support required"}>Full physical support required</option>
+ 
+                                         </select>
+                                     </div>
+                                 </div>
+ 
+                                 <div className='col-md-6'>
+                                     <div className="form-group">
+                                         <label>How often do you require supervision or support throughout the day?</label>
+                                         <select className='form-select' name="supportLevel" value={editAvail.supportLevel || ''} onChange={handleInputChange}>
+                                             <option defaultValue hidden >Select Issues</option>
+                                             <option value={"None of the time"}>None of the time</option>
+                                             <option value={"All the time"}>All the time</option>
+                                             <option value={"Prompting required"}>Prompting required</option>
+                                             <option value={"During active times"}>During active times</option>
+                                         </select>
+                                     </div>
+                                 </div>
+ 
+                                 <div className='col-md-6'>
+                                     <div className="form-group">
+                                         <label>Details</label>
+                                         <textarea className="form-control" name="details" value={editAvail.details || ''} onChange={handleInputChange} rows="2" cols="20" />
                                      </div>
                                  </div>
                              </form>
@@ -520,7 +540,7 @@ import useHttp from '../../../../hooks/useHttp';
                                      <span className="sr-only">Loading...</span>
                                  </div>
                              ) : (
-                                 "Add"
+                                 "Submit"
                              )}
                          </button>
                      </Modal.Footer>
@@ -532,4 +552,5 @@ import useHttp from '../../../../hooks/useHttp';
          </div>
      );
  }
- export default ClientAidEquip;
+ export default ClientDailyLiving;
+ 
