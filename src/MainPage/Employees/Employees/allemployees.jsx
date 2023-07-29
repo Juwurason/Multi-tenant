@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
+import { FaCopy, FaDharmachakra, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
@@ -44,6 +44,19 @@ const AllEmployees = () => {
 
 
   const columns = [
+    // {
+    //   name: '',
+    //   cell: (row) => (
+    //     <span className='w-100 d-flex justify-content-center'>
+    //       <Link to={`/app/account/editrole/${row.employeeId}`} className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center pointer'
+    //         title='Manage Roles and Priviledges'
+    //       >
+    //         <FaDharmachakra className='text-white' />
+    //       </Link>
+
+    //     </span>
+    //   ),
+    // },
 
     {
       name: 'Staff ID',

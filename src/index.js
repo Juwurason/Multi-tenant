@@ -19,18 +19,23 @@ import OnlineStatus from "./hooks/onlineStatus";
 import dayjs from "dayjs";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import ErrorBoundaryWrapper from "./context/errorBoundary";
 dayjs.locale('en-au');
-// const container = document.getElementById('app');
-// const root = createRoot(container); // createRoot(container!) if you use TypeScript
-const root = ReactDOM.createRoot(document.getElementById("app"));
+const container = document.getElementById('app');
+const root = createRoot(container); // createRoot(container!) if you use TypeScript
+
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <CompanyProvider>
-                <OnlineStatus />
-                <ToastContainer position="top-right" />
+
+    <Provider store={store}>
+        <CompanyProvider>
+            <OnlineStatus />
+            <ToastContainer position="top-right" />
+            <ErrorBoundaryWrapper>
+
                 <Main />
-            </CompanyProvider>
-        </Provider>
-    </React.StrictMode>
+            </ErrorBoundaryWrapper>
+        </CompanyProvider>
+    </Provider>
+
 );
+

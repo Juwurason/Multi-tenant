@@ -203,6 +203,15 @@ const fetchStaffAttendance = async (companyId) => {
         throw error;
     }
 };
+const fetchAdminAttendance = async (companyId) => {
+    try {
+        const response = await axiosInstance.get(`/AdminAttendances/get_admin_attendance?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Admin Attendance', error);
+        throw error;
+    }
+};
 const filterShiftAttendance = async (company, fromDate, toDate, staff, client, type) => {
     try {
         const response = await axiosInstance.get(`/Attendances/get_periodic_shift_attendnace?companyId=${company}&fromDate=${fromDate}&toDate=${toDate}&staffId=${staff}&clientId=${client}&shifttype=${type}`);
@@ -244,7 +253,8 @@ const api = {
     fetchActivityLog,
     filterActivityLogs,
     fetchFormTemplate,
-    fetchStaffAttendance
+    fetchStaffAttendance,
+    fetchAdminAttendance
     // Add other API endpoints and corresponding methods as needed
 };
 

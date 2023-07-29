@@ -76,7 +76,20 @@ const AttendanceReport = () => {
   const [periodic, setPeriodic] = useState([]);
   const history = useHistory();
 
+  const [loadingClockId, setLoadingClockId] = useState(null);
 
+  const handleClockClick = (attendanceId) => {
+    setLoadingClockId(attendanceId);
+    // Perform any actions you need when the clock is clicked, for example, the AdjustAttendance function
+    AdjustAttendance(attendanceId)
+      .then(() => {
+        setLoadingClockId(null); // Set the loading status back to normal when the action is complete
+      })
+      .catch((error) => {
+        console.error(error); // Handle errors appropriately if needed
+        setLoadingClockId(null); // Set the loading status back to normal in case of an error
+      });
+  };
 
   const columns = [
     {
@@ -89,12 +102,12 @@ const AttendanceReport = () => {
           {id.role === "CompanyAdmin" || hasRequiredClaims("Adjust Attendances") ? <button
             className='btn'
             title='Adjust Attendance'
-            onClick={() => AdjustAttendance(row.attendanceId)}
+            onClick={() => handleClockClick(row.attendanceId)}
 
-            disabled={loading4 ? true : false}
+            disabled={loadingClockId === row.attendanceId} // Disable the button only for the clicked clock
           >
             {
-              loading4 ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
+              loadingClockId === row.attendanceId ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div> :
                 <FaRegClock />
@@ -247,7 +260,6 @@ const AttendanceReport = () => {
 
     try {
       const { data } = await get(`/attendances/adjust_attendances?userId=${id.userId}&attendanceId=${e}`, { cacheTimeout: 300000 });
-      console.log(data);
       toast.success(data.message);
       dispatch(fetchAttendance(id.companyId));
       setLoading4(false);
@@ -260,7 +272,6 @@ const AttendanceReport = () => {
     }
 
   }
-
 
 
 

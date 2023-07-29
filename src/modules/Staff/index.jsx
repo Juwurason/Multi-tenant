@@ -10,7 +10,6 @@ import StaffEditProfile from './StaffEditProfile';
 import StaffChangePassword from './StaffForgettingPassword';
 import StaffProgressNote from './StaffProgressNote';
 import StaffRoster from './StaffRoster';
-import StaffTable from './StaffTable';
 import RaiseTicket from './Support/raiseTicket';
 import ViewTicket from './Support/viewTicket';
 import TicketDetails from './Support/ticketDetails';
@@ -184,7 +183,6 @@ const StaffRoute = ({ match }) => {
       <Route path={`${match.url}/progress/:uid`} render={() => <ProgressNote />} />
       <Route path={`${match.url}/create-progress/:uid`} render={() => <CreateProgressNote />} />
       <Route path={`${match.url}/edit-progress/:uid/:pro`} render={() => <EditProgressNote />} />
-      <Route path={`${match.url}/table`} render={() => <StaffTable />} />
       <Route path={`${match.url}/profile`}
         render={() => <StaffProfile staffOne={staffOne} FetchData={FetchData}
           editedProfile={editedProfile} setEditedProfile={setEditedProfile}

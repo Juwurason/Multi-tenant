@@ -8,13 +8,22 @@ import { useParams } from 'react-router-dom';
 import useHttp from '../../../hooks/useHttp';
 const RoleList = () => {
     const { uid } = useParams();
-    const [loading, setLoading] = useState(false)
+    const [loading1, setLoading1] = useState(false)
     const [roles, setRoles] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState([]);
+    const [userName, setUserName] = useState({});
     const privateHttp = useHttp();
     const navigate = useHistory();
+    const [updatedRoles, setUpdatedRoles] = useState([]);
 
     const FetchRole = async () => {
+        try {
+            const { data } = await privateHttp.get(`/Account/get_a_user?userId=${uid}`, { cacheTimeout: 300000 })
+            setUserName(data)
+
+        } catch (error) {
+            console.log(error);
+        }
         try {
             const { data } = await privateHttp.get(`/Account/get_user_roles?userId=${uid}`, { cacheTimeout: 300000 })
             setRoles(data.userRoles);
@@ -24,28 +33,6 @@ const RoleList = () => {
 
 
     }
-    const handleCheckboxChange = (roleId) => {
-        const updatedRoles = roles.map((role) => {
-            if (role.roleId === roleId) {
-                return { ...role, isSelected: !role.isSelected };
-            }
-            return role;
-        });
-        setRoles(updatedRoles);
-    };
-
-    const handleAssignRoles = async () => {
-        try {
-            const selectedRolesData = userRoles
-                .filter((role) => role.isSelected)
-                .map(({ isSelected, ...role }) => role);
-            await post("/assignroles", selectedRolesData); // Replace with your actual endpoint
-            // Show success message or perform other actions
-        } catch (error) {
-            console.log(error);
-            // Show error message or handle the error
-        }
-    };
 
     useEffect(() => {
 
@@ -53,6 +40,50 @@ const RoleList = () => {
     }, []);
     // /Account/assign_role_to_user?userId=7a1cb5d1-1b6a-402e-a38c-b01b734f53fb
 
+    const handleCheckboxChange = (index) => {
+        const updatedRoles = [...roles];
+        updatedRoles[index].isSelected = !updatedRoles[index].isSelected;
+        setRoles(updatedRoles);
+
+        // Filter the claims to include only selected claims
+        const selectedRoles = updatedRoles.filter((role) => role.isSelected);
+        setUpdatedRoles(selectedRoles);
+
+    };
+    console.log(updatedRoles);
+
+
+
+
+    const HandleUpdate = async () => {
+        try {
+            setLoading1(true)
+            const { data } = await privateHttp.post(`/Account/add_claims_to_user`,
+                {
+                    userId: uid,
+                    claims: updatedClaims
+
+                }
+            )
+            if (data.status === 'Success') {
+
+                toast.success(data.message)
+                FetchClaims()
+                setLoading1(false);
+            }
+            setLoading1(false);
+
+        } catch (error) {
+            toast.error("Add Claim to user failed")
+            toast.error(error.response?.data?.message)
+
+            setLoading1(false)
+
+        } finally {
+            setLoading1(false)
+        }
+
+    }
 
 
     return (
@@ -74,14 +105,14 @@ const RoleList = () => {
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <div className="form-group">
-                                            <label className="col-form-label fw-bold">User Roles for</label>
+                                            <label className="col-form-label fw-bold">User Roles for {userName.email}</label>
                                             <div className='p-2 d-flex flex-column'>
                                                 {
                                                     roles.map((role, index) =>
                                                         <span key={index}><input
                                                             type="checkbox"
                                                             checked={role.isSelected}
-                                                            onChange={() => handleCheckboxChange(role.roleId)}
+                                                            onChange={() => handleCheckboxChange(index)}
 
                                                             name="" id="" /> &nbsp;
                                                             <span className='fw-bold'>
@@ -105,8 +136,8 @@ const RoleList = () => {
                                                 </h5>
 
 
-                                                DO NOT ASSIGN ANY OTHER ROLE TO A STAFF ASIDE "STAFF" & "ADMINSTAFF" ONLY
-                                                DO NOT ASIDE ANY OTHER ROLE TO AN ADMIN EXCEPT "ADMIN" ONLY
+                                                DO NOT ASSIGN ANY OTHER ROLE TO A STAFF ASIDE "STAFF" & "ADMINSTAFF" ONLY. <br />
+                                                DO NOT ASSIGN ANY OTHER ROLE TO AN ADMIN EXCEPT "ADMIN" ONLY
                                             </p>
                                         </div>
                                     </div>
@@ -116,10 +147,11 @@ const RoleList = () => {
                                         <button className="btn btn-info add-btn text-white rounded-2 m-r-5">
                                             Update
                                         </button>
-                                        <button
+                                        <Link
+                                            to={`/app/account/editrole/${uid}`}
                                             className="btn add-btn rounded-2 m-r-5 btn-outline-secondary ml-4">
                                             Cancel
-                                        </button>
+                                        </Link>
 
 
                                     </div>

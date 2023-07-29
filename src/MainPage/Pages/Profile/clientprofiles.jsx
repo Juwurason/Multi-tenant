@@ -25,9 +25,9 @@ dayjs.locale('en-au');
 dayjs.extend(isBetween);
 
 const ClientProfiles = () => {
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
-    dayjs.tz.setDefault('Australia/Sydney');
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.tz.setDefault('Australia/Sydney');
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
   const [clientRoster, setClientRoster] = useState([]);
@@ -41,7 +41,7 @@ const ClientProfiles = () => {
   const [bankModal, setBankModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
 
-  const { get, post} = useHttp()
+  const { get, post } = useHttp()
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
@@ -52,13 +52,12 @@ const ClientProfiles = () => {
     }
 
     try {
-        const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=${uid}&staff=`, { cacheTimeout: 300000 });
-       console.log(data);
-       setClientRoster(data.shiftRoster)
+      const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=${uid}&staff=`, { cacheTimeout: 300000 });
+      setClientRoster(data.shiftRoster)
 
     } catch (error) {
-        toast.error(error.response.data.message)
-        toast.error(error.response.data.title)
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
   }
   useEffect(() => {
@@ -75,9 +74,9 @@ const ClientProfiles = () => {
 
   const columns = [
     {
-        name: 'Staff',
-        selector: row => row.staff?.fullName || 'N/A',
-        sortable: true
+      name: 'Staff',
+      selector: row => row.staff?.fullName || 'N/A',
+      sortable: true
     },
     // {
     //     name: 'Client',
@@ -85,24 +84,24 @@ const ClientProfiles = () => {
     //     sortable: true
     // },
     {
-        name: 'Date',
-        selector: row => dayjs(row.dateFrom).format('YYYY-MM-DD'),
-        sortable: true,
+      name: 'Date',
+      selector: row => dayjs(row.dateFrom).format('YYYY-MM-DD'),
+      sortable: true,
     },
     {
-        name: 'Start Time',
-        selector: row => dayjs(row.dateFrom).format('hh:mm A'),
-        sortable: true
+      name: 'Start Time',
+      selector: row => dayjs(row.dateFrom).format('hh:mm A'),
+      sortable: true
     },
     {
-        name: 'End Time',
-        selector: row => dayjs(row.dateTo).format('hh:mm A'),
-        sortable: true
+      name: 'End Time',
+      selector: row => dayjs(row.dateTo).format('hh:mm A'),
+      sortable: true
     },
     {
-        name: 'Activities',
-        selector: row => row.activities,
-        sortable: true
+      name: 'Activities',
+      selector: row => row.activities,
+      sortable: true
     },
     // {
     //     name: 'DateModified',
@@ -110,9 +109,9 @@ const ClientProfiles = () => {
     //     sortable: true
     // }
 
-];
+  ];
 
-const handleExcelDownload = () => {
+  const handleExcelDownload = () => {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Sheet1');
 
@@ -122,31 +121,31 @@ const handleExcelDownload = () => {
 
     // Add data
     clientRoster.forEach((dataRow) => {
-        const values = columns.map((column) => {
-            if (typeof column.selector === 'function') {
-                return column.selector(dataRow);
-            }
-            return dataRow[column.selector];
-        });
-        sheet.addRow(values);
+      const values = columns.map((column) => {
+        if (typeof column.selector === 'function') {
+          return column.selector(dataRow);
+        }
+        return dataRow[column.selector];
+      });
+      sheet.addRow(values);
     });
 
     // Generate Excel file
     workbook.xlsx.writeBuffer().then((buffer) => {
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'data.xlsx';
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'data.xlsx';
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
-};
+  };
 
 
-const handlePDFDownload = () => {
+  const handlePDFDownload = () => {
     const unit = "pt";
     const size = "A4"; // Use A1, A2, A3 or A4
     const orientation = "portrait"; // portrait or landscape
@@ -156,23 +155,23 @@ const handlePDFDownload = () => {
     doc.text("User Table", marginLeft, 40);
     const headers = columns.map((column) => column.name);
     const dataValues = clientRoster.map((dataRow) =>
-        columns.map((column) => {
-            if (typeof column.selector === "function") {
-                return column.selector(dataRow);
-            }
-            return dataRow[column.selector];
-        })
+      columns.map((column) => {
+        if (typeof column.selector === "function") {
+          return column.selector(dataRow);
+        }
+        return dataRow[column.selector];
+      })
     );
 
     doc.autoTable({
-        startY: 50,
-        head: [headers],
-        body: dataValues,
-        margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+      startY: 50,
+      head: [headers],
+      body: dataValues,
+      margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
     });
     doc.save("Admin.pdf");
-};
-  
+  };
+
   const styles = {
     main: {
       backgroundColor: 'black',
@@ -297,7 +296,7 @@ const handlePDFDownload = () => {
       const { data } = await post(`/Profiles/edit/${uid}?userId=${id.userId}`,
         formData
       )
-    //   console.log(data)
+      //   console.log(data)
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -327,31 +326,31 @@ const handlePDFDownload = () => {
   const ButtonRow = ({ data }) => {
     return (
 
-        <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
-            <div ><span className='fw-bold'>Staff: </span>{data.staff.fullName}</div>
-            <div><span className='fw-bold'>Client: </span>{data.profile.fullName}</div>
-            <div><span className='fw-bold'>Activities: </span>{data.activities}</div>
-            <div>
-                {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleActivityClick(data.progressNoteId)}>
+      <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+        <div ><span className='fw-bold'>Staff: </span>{data.staff.fullName}</div>
+        <div><span className='fw-bold'>Client: </span>{data.profile.fullName}</div>
+        <div><span className='fw-bold'>Activities: </span>{data.activities}</div>
+        <div>
+          {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleActivityClick(data.progressNoteId)}>
                     Edit
                 </button> */}
-            </div>
-
         </div>
+
+      </div>
     );
-};
+  };
 
-const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
 
-    const handleSearch = (event) => {
-        setSearchText(event.target.value);
-    };
+  const handleSearch = (event) => {
+    setSearchText(event.target.value);
+  };
 
-    const filteredData = clientRoster.filter((item) =>
-        item.activities?.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.staff?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.dateFrom?.toLowerCase().includes(searchText.toLowerCase())
-    );
+  const filteredData = clientRoster.filter((item) =>
+    item.activities?.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.staff?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.dateFrom?.toLowerCase().includes(searchText.toLowerCase())
+  );
 
 
   return (
@@ -377,7 +376,7 @@ const [searchText, setSearchText] = useState("");
             </div>
           </div>
           {/* /Page Header */}
-         <div className="card mb-0">
+          <div className="card mb-0">
             <div className="card-body">
               <div className="row">
                 <div className="col-md-12">
@@ -446,8 +445,8 @@ const [searchText, setSearchText] = useState("");
                       </Link>
                     </div> */}
                     <a className="edit-icon bg-info text-white" onClick={() => handleModal0(staffOne.profileId)}>
-                        <i className="fa fa-pencil" />
-                      </a>
+                      <i className="fa fa-pencil" />
+                    </a>
                   </div>
                 </div>
               </div>
@@ -557,18 +556,18 @@ const [searchText, setSearchText] = useState("");
           <div className="card tab-box">
             <div className="row user-tabs">
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
-                <div className="scrollable-tabs-container" style={{width: "100%", overflowY:"hidden", overflowX: "auto"}}>
-                <ul className="nav nav-tabs nav-tabs-bottom" style={{display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap"}}>
-                  <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
-                  <li className="nav-item"><Link to="/app/clientForms/client-schedule" className="nav-link text-primary">Schedule</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Disability Support Needs</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Daily Living & Night Support</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Aids & Equipment</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Health Support Needs</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Community Support Needs</Link></li>
-                  <li className="nav-item"><Link to="#" className="nav-link text-primary">Behaviour Support Needs</Link></li>
-                 
-                </ul>
+                <div className="scrollable-tabs-container" style={{ width: "100%", overflowY: "hidden", overflowX: "auto" }}>
+                  <ul className="nav nav-tabs nav-tabs-bottom" style={{ display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
+                    <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary fw-bold">Profile</a></li>
+                    <li className="nav-item"><Link to="/app/forms/client-schedule" className="nav-link text-primary fw-bold">Schedule</Link></li>
+                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Disability Support Needs</Link></li>
+                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Daily Living & Night Support</Link></li>
+                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Aids & Equipment</Link></li>
+                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Health Support Needs</Link></li>
+                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Community Support Needs</Link></li>
+                    <li className="nav-item"><Link to="#" className="nav-link text-primary fw-bold">Behaviour Support Needs</Link></li>
+
+                  </ul>
                 </div>
               </div>
             </div>
@@ -924,82 +923,82 @@ const [searchText, setSearchText] = useState("");
                     </div>
                   </div>
                 </div>
-                
+
               </div>
 
               <div className='mt-4 border'>
-                        <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
+                <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 
-                            <div className="col-md-3">
-                                <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                    <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
-                                    <GoSearch />
-                                </div>
-                            </div>
-                            <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                                <CSVLink
-                                    data={clientRoster}
-                                    filename={"document.csv"}
-
-                                >
-                                    <button
-
-                                        className='btn text-info'
-                                        title="Export as CSV"
-                                    >
-                                        <FaFileCsv />
-                                    </button>
-
-                                </CSVLink>
-                                <button
-                                    className='btn text-danger'
-                                    onClick={handlePDFDownload}
-                                    title="Export as PDF"
-                                >
-                                    <FaFilePdf />
-                                </button>
-                                <button
-                                    className='btn text-primary'
-
-                                    onClick={handleExcelDownload}
-                                    title="Export as Excel"
-                                >
-                                    <FaFileExcel />
-                                </button>
-                                <CopyToClipboard text={JSON.stringify(clientRoster)}>
-                                    <button
-
-                                        className='btn text-warning'
-                                        title="Copy Table"
-                                        onClick={() => toast("Table Copied")}
-                                    >
-                                        <FaCopy />
-                                    </button>
-                                </CopyToClipboard>
-                            </div>
-                        </div>
-                        <DataTable data={filteredData} columns={columns}
-                            pagination
-                            highlightOnHover
-                            searchable
-                            searchTerm={searchText}
-                            progressPending={loading}
-                            progressComponent={<div className='text-center fs-1'>
-                                <div className="spinner-grow text-secondary" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            </div>}
-                            expandableRows
-                            expandableRowsComponent={ButtonRow}
-                            paginationTotalRows={filteredData.length}
-                            responsive
-
-
-                        />
-
-                       
-
+                  <div className="col-md-3">
+                    <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                      <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
+                      <GoSearch />
                     </div>
+                  </div>
+                  <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                    <CSVLink
+                      data={clientRoster}
+                      filename={"document.csv"}
+
+                    >
+                      <button
+
+                        className='btn text-info'
+                        title="Export as CSV"
+                      >
+                        <FaFileCsv />
+                      </button>
+
+                    </CSVLink>
+                    <button
+                      className='btn text-danger'
+                      onClick={handlePDFDownload}
+                      title="Export as PDF"
+                    >
+                      <FaFilePdf />
+                    </button>
+                    <button
+                      className='btn text-primary'
+
+                      onClick={handleExcelDownload}
+                      title="Export as Excel"
+                    >
+                      <FaFileExcel />
+                    </button>
+                    <CopyToClipboard text={JSON.stringify(clientRoster)}>
+                      <button
+
+                        className='btn text-warning'
+                        title="Copy Table"
+                        onClick={() => toast("Table Copied")}
+                      >
+                        <FaCopy />
+                      </button>
+                    </CopyToClipboard>
+                  </div>
+                </div>
+                <DataTable data={filteredData} columns={columns}
+                  pagination
+                  highlightOnHover
+                  searchable
+                  searchTerm={searchText}
+                  progressPending={loading}
+                  progressComponent={<div className='text-center fs-1'>
+                    <div className="spinner-grow text-secondary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>}
+                  expandableRows
+                  expandableRowsComponent={ButtonRow}
+                  paginationTotalRows={filteredData.length}
+                  responsive
+
+
+                />
+
+
+
+              </div>
             </div>
           </div>
         </div>

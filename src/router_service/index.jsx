@@ -20,6 +20,7 @@ import Message from '../MainPage/HR/Message'
 import StaffRoute from '../modules/Staff';
 import ClientRoute from '../modules/Client';
 import ErrorRoute from '../MainPage/Pages/ErrorPage';
+import ClientForms from '../MainPage/Pages/clientForms';
 
 export default [
    {
@@ -52,6 +53,10 @@ export default [
    {
       path: 'profile',
       component: ProfilePage
+   },
+   {
+      path: 'forms',
+      component: ClientForms
    },
 
 

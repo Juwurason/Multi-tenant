@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { FaBackspace } from 'react-icons/fa';
+import { FaBackspace, FaCaretRight } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 import { useParams } from 'react-router-dom';
+import axiosInstance from '../../store/axiosInstance';
 const EditRole = () => {
     const { uid } = useParams();
     const [roles, setRoles] = useState([]);
@@ -26,14 +27,14 @@ const EditRole = () => {
         }
         try {
             const { data } = await privateHttp.get(`/Account/get_user_roles?userId=${uid}`, { cacheTimeout: 300000 })
-
-            setRoles(data.userRoles);
+            const selectedRoles = data.userRoles.filter(roles => roles.isSelected);
+            setRoles(selectedRoles);
 
         } catch (error) {
             console.log(error);
         }
         try {
-            const { data } = await privateHttp.get(`/Account/get_user_claims?userId=${uid}`, { cacheTimeout: 300000 })
+            const { data } = await axiosInstance.get(`/Account/get_user_claims?userId=${uid}`)
             const selectedClaims = data.userClaims.claims.filter(claims => claims.isSelected);
             setClaims(selectedClaims);
 
@@ -88,7 +89,7 @@ const EditRole = () => {
                                             <label className="col-form-label fw-bold fs-5">User Roles</label>
                                             <ol>
                                                 {roles.map((role) => (
-                                                    <li key={role.roleId}>{role.roleName}</li>
+                                                    <li key={role.roleId}><span className='fw-bold'><FaCaretRight /> </span> {role.roleName}</li>
                                                 ))}
                                             </ol>
                                         </div>
@@ -104,7 +105,7 @@ const EditRole = () => {
                                             <label className="fw-bold fs-5 col-form-label">User Priviledges</label>
                                             <ol className='row'>
                                                 {claims.map((claim, index) => (
-                                                    <li key={index} className='col-md-3 px-3'><span className='fw-bold fs-4'>-</span> {claim.claimType}</li>
+                                                    <li key={index} className='col-md-3 px-3'><span className='fw-bold'><FaCaretRight /> </span> {claim.claimType}</li>
                                                 ))}
                                             </ol>
                                         </div>

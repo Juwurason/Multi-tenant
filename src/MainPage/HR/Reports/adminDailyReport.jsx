@@ -17,10 +17,8 @@ import LocationMapModal from '../../../_components/map/MapModal';
 import { Modal } from 'react-bootstrap';
 import dayjs, { utc } from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchStaff } from '../../../store/slices/StaffSlice';
-import { fetchClient } from '../../../store/slices/ClientSlice';
-import { fetchStaffAttendance } from '../../../store/slices/staffAttendanceSlice';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
+import { fetchAdminAttendance } from '../../../store/slices/adminAttendanceSlice';
 
 function formatDuration(duration) {
     if (duration) {
@@ -50,13 +48,13 @@ const AdminDailyReport = () => {
     };
     // Fetch staff data and update the state
     useEffect(() => {
-        dispatch(fetchStaffAttendance(id.companyId));
+        dispatch(fetchAdminAttendance(id.companyId));
         dispatch(fetchAdmin(id.companyId));
     }, [dispatch]);
 
     // Access the entire state
-    const loading = useSelector((state) => state.staffAttendance.isLoading);
-    const staffAttendance = useSelector((state) => state.staffAttendance.data);
+    const loading = useSelector((state) => state.adminAttendance.isLoading);
+    const adminAttendance = useSelector((state) => state.adminAttendance.data);
     const admin = useSelector((state) => state.admin.data);
 
 
@@ -77,13 +75,13 @@ const AdminDailyReport = () => {
 
         {
             name: 'Admin',
-            selector: row => row.staff.fullName,
+            selector: row => row.administrator,
             sortable: true,
             cell: (row) => <span className="long-cell fw-bold" style={{ overflow: "hidden", cursor: "pointer" }}
-                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.staff.fullName}`}
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.administrator}`}
                 onClick={() => handleSplitted(row.attendanceId
                 )}
-            >{row.staff.fullName}</span>
+            >{!row.administrator ? "No Name" : row.administrator}</span>
 
         },
         {
@@ -112,7 +110,7 @@ const AdminDailyReport = () => {
         },
         {
             name: 'Total Km',
-            selector: row => (row.endKm + row.startKm || 0),
+            selector: row => (row.endKm - row.startKm || 0),
             sortable: true,
             expandable: true,
 
@@ -125,7 +123,7 @@ const AdminDailyReport = () => {
                     {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
                         className='btn'
                         title='Edit'
-                        to={`/app/reports/edit-staffAttendance/${row.staffId}`}
+                        to={`/app/reports/edit-adminAttendance/${row.administratorId}`}
                     // onClick={() => setEditModal(true)}
 
                     >
@@ -135,7 +133,7 @@ const AdminDailyReport = () => {
                     <Link
                         className='btn'
                         title='Details'
-                        to={`/app/reports/staffReport-details/${row.staffAttendanceId}`}
+                        to={`/app/reports/staffReport-details/${row.adminAttendanceId}`}
 
 
                     >
@@ -185,7 +183,7 @@ const AdminDailyReport = () => {
         sheet.addRow(headers);
 
         // Add data
-        staffAttendance.forEach((dataRow) => {
+        adminAttendance.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -212,7 +210,7 @@ const AdminDailyReport = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(staffAttendance);
+        const csvData = Papa.unparse(adminAttendance);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -233,7 +231,7 @@ const AdminDailyReport = () => {
         doc.setFontSize(13);
         doc.text("User Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = staffAttendance.map((dataRow) =>
+        const dataValues = adminAttendance.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -288,7 +286,7 @@ const AdminDailyReport = () => {
             <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
                 <span>
                     <span className='fw-bold'>Staff: </span>
-                    <span> {data.staff.fullName}</span>
+                    <span> {data.administrator}</span>
                 </span>
                 <span>
                     <span className='fw-bold'>Latitude: </span>
@@ -322,9 +320,9 @@ const AdminDailyReport = () => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = staffAttendance.filter((item) =>
-        item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
-    );
+    // const filteredData = adminAttendance.filter((item) =>
+    //     item?.administrator.toLowerCase().includes(searchText.toLowerCase())
+    // );
 
 
     return (
@@ -428,7 +426,7 @@ const AdminDailyReport = () => {
                             </div>
                             <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
                                 <CSVLink
-                                    data={staffAttendance}
+                                    data={adminAttendance}
                                     filename={"data.csv"}
 
                                 >
@@ -456,7 +454,7 @@ const AdminDailyReport = () => {
                                 >
                                     <FaFileExcel />
                                 </button>
-                                <CopyToClipboard text={JSON.stringify(staffAttendance)}>
+                                <CopyToClipboard text={JSON.stringify(adminAttendance)}>
                                     <button
 
                                         className='btn text-warning'
@@ -469,7 +467,7 @@ const AdminDailyReport = () => {
                             </div>
 
                         </div>
-                        <DataTable data={filteredData} columns={columns}
+                        <DataTable data={adminAttendance} columns={columns}
                             pagination
                             highlightOnHover
                             searchable
@@ -483,7 +481,7 @@ const AdminDailyReport = () => {
                             responsive
                             expandableRows
                             expandableRowsComponent={ButtonRow}
-                            paginationTotalRows={filteredData.length}
+                            paginationTotalRows={adminAttendance.length}
 
 
 
