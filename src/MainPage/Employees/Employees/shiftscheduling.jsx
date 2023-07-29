@@ -20,6 +20,7 @@ import { fetchRoaster, filterRoaster } from '../../../store/slices/shiftRoasterS
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
+import axiosInstance from '../../../store/axiosInstance';
 
 
 
@@ -258,6 +259,10 @@ const ShiftScheduling = () => {
     setSelectedActivity(activity);
     setPeriodicModal(true);
   }
+  const cancelClientShift = (activity) => {
+    setSelectedActivity(activity);
+    setReasonModal(true);
+  }
 
 
   const handleConfirmation = async (e) => {
@@ -378,6 +383,34 @@ const ShiftScheduling = () => {
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
+
+  const cancelShift = async (e) => {
+    // setLoading(true)
+    if (reason.trim() === "") {
+      return toast.error("Please Provide A Reason")
+    }
+    try {
+      // 
+      const { data } = await axiosInstance.get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${reason}&shiftid=${e}`)
+      if (data.status === "Success") {
+        toast.success(data.message)
+        setReason("");
+        setReasonModal(false)
+        dispatch(fetchRoaster(id.companyId));
+      }
+
+    } catch (error) {
+      setReasonModal(false)
+
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+    }
+    finally {
+      // setLoading(false)
+      setReasonModal(false)
+    }
+  };
+
 
 
   return (
@@ -822,7 +855,7 @@ const ShiftScheduling = () => {
                            align-items-center
                            justify-content-center px-2 py-1 rounded bg-white pointer`}
 
-                                      onClick={() => setReasonModal(true)}
+                                      onClick={() => cancelClientShift(activity)}
                                       title="Cancel Client Shift"
                                     >
                                       <MdOutlineCancel className='fs-6 text-danger' />
@@ -1053,15 +1086,15 @@ const ShiftScheduling = () => {
               <Modal.Title>Cancel Client Shift</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div>
+              {selectedActivity && <div>
                 <label htmlFor="">Please provide reasons for cancelling shift</label>
                 <textarea rows={3} className="form-control summernote" placeholder="" name='reason'
                   value={reason} onChange={e => setReason(e.target.value)} />
-              </div>
+              </div>}
             </Modal.Body>
             <Modal.Footer>
               <button
-                // onClick={CancelShift}
+                onClick={() => cancelShift(selectedActivity.shiftRosterId)}
                 className="btn btn-primary add-btn rounded">Submit</button>
             </Modal.Footer>
           </Modal>
