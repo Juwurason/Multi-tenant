@@ -22,11 +22,12 @@ const CreateProgressNote = () => {
   const [progress, setProgress] = useState('')
   const [follow, setFollow] = useState('')
   const [kilometer, setKilometer] = useState(0)
-  const [endKm, setEndKm] = useState(0)
+  const [endKm, setEndKm] = useState("")
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
 
 
@@ -70,15 +71,18 @@ const CreateProgressNote = () => {
       position: "",
       followUp: follow,
       staff: staff,
-      date: formattedDate,
       startKm: kilometer,
-      endKm: endKm,
+      end: endKm,
       profileId: details.profileId,
       companyID: companyId
     }
     try {
-      const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+      const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
+      console.log(data);
       if (data.status === 'Success') {
+        // if (data.progressNote.progressNoteId === 0) {
+        //   navigate.push(`/staff/staff/create-progress/${uid}`)
+        // }
         navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }
@@ -91,6 +95,68 @@ const CreateProgressNote = () => {
       setLoading1(false)
     }
   }
+
+  const SubmitProgress = async (e) => {
+    e.preventDefault();
+    if (endKm === "") {
+      toast.error("Input end Kilometer");
+      return; // Exit the function early if endKm is not provided
+    }
+  
+    // Function to handle the SweetAlert confirmation
+    const proceedWithConfirmation = async () => {
+      try {
+        const info = {
+          report: report,
+          progress: progress,
+          position: "",
+          followUp: follow,
+          staff: staff,
+          date: formattedDate,
+          startKm: kilometer,
+          endKm: endKm,
+          profileId: details.profileId,
+          companyID: companyId
+        }
+  
+        const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+        // console.log(data);
+        if (data.status === "Success") {
+          Swal.fire(
+            '',
+            `${data.message}`,
+            'success'
+          );
+          setLoading2(false);
+          navigate.push(`/staff/staff/report/${uid}`);
+        }
+      } catch (error) {
+        // console.log(error);
+        toast.error("Error Clock Out");
+        toast.error(error.response.data.message);
+        toast.error(error.response.data.title);
+        setLoading2(false);
+      }
+    };
+  
+    // Show the SweetAlert confirmation
+    Swal.fire({
+      html: `<h3>Submitting your progress note will automatically clock you out</h3> <br/> 
+        <h5>Do you wish to proceed ?<h5/>
+        `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#405189',
+      cancelButtonColor: '#777',
+      confirmButtonText: 'Proceed',
+      showLoaderOnConfirm: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLoading2(false);
+        proceedWithConfirmation(); // Call the function to proceed with the confirmation
+      }
+    });
+  };
 
 
   return (
@@ -136,13 +202,13 @@ const CreateProgressNote = () => {
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Starting KiloMetre if any</label>
-                            <input type="text" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
+                            <input type="number" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
                           </div>
                         </div>
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="text" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
                           </div>
                         </div>
 
@@ -183,7 +249,15 @@ const CreateProgressNote = () => {
                         <div className="form-group text-center mb-0">
                           <div className="text-center d-flex gap-2">
 
+                            
+
                             <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                              disabled={loading1 ? true : false}
+                              onClick={SubmitProgress}>{loading1 ? <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                              </div> : "Submit"}</button>
+
+                              <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
                               disabled={loading1 ? true : false}
                               onClick={SaveProgress}>{loading1 ? <div className="spinner-grow text-light" role="status">
                                 <span className="sr-only">Loading...</span>

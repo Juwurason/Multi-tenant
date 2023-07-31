@@ -61,45 +61,7 @@ const StaffDashboard = ({ roster, loading }) => {
   // Get the first 5 shifts
   const shifts = filteredShifts.slice(0, 5);
 
-
-  // const sorted = () => {
-
-  // };
-
   const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD');
-
-  // Filter the shifts for today
-  const todayShifts = roster.filter(actToday => dayjs(actToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
-
-  // Sort the shifts in ascending order based on the start time
-  const sortedShifts = todayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
-
-  // Get the last shift after sorting
-  const lastShift = sortedShifts[sortedShifts.length - 1];
-
-  // Function to get the next shift
-  function getNextShift() {
-    const currentTime = dayjs().tz(); // Get the current time in Australia
-
-    while (sortedShifts.length > 0) {
-      const nextShift = sortedShifts.shift(); // Get the first shift
-
-      // Check if the current shift's dateTo is over the current time
-      if (dayjs(nextShift.dateTo) > (currentTime)) {
-        return nextShift; // Return the current shift if dateTo is not over the current time
-      }
-    }
-
-    return lastShift; // Return the last shift if no more shifts available
-  }
-
-  // Call getNextShift() to get the shifts one by one
-  let currentShift = getNextShift();
-  // console.log(currentShift)
-  const nowInAus = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-  if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < nowInAus) {
-    currentShift = getNextShift();
-  }
 
   const yesterday = dayjs().subtract(1, 'day').startOf('day');
   //filter unclock Out shift
@@ -127,7 +89,7 @@ const StaffDashboard = ({ roster, loading }) => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const handleClockIn = () => {
+  const handleClockIn = (e) => {
     setIsLoading(true);
     // Simulating an asynchronous action, such as an API call
     setTimeout(() => {
@@ -139,7 +101,7 @@ const StaffDashboard = ({ roster, loading }) => {
             const longitude = position.coords.longitude;
             localStorage.setItem("latit", latitude);
             localStorage.setItem("log", longitude);
-            navigate.push(`/staff/staff/progress/${currentShift?.shiftRosterId}`);
+            navigate.push(`/staff/staff/progress/${e}`);
           },
           (error) => {
             toast.error('Error getting location:', error.message);
@@ -184,22 +146,22 @@ const StaffDashboard = ({ roster, loading }) => {
     }
 
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-    const activityDateFrom = dayjs(currentShift.dateFrom).format('YYYY-MM-DD HH:mm:ss');
-    const activityDateTo = dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activitiesByDay[1][0]?.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(activitiesByDay[1][0]?.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === true && currentShift.isEnded === true) {
-      return  'Present' 
+    else if (activityDateTo < nowInAustraliaTime && activitiesByDay[1][0]?.attendance === true && activitiesByDay[1][0]?.isEnded === true) {
+      return 'Present'
     }
-    else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === false) {
-      return 'Absent' 
+    else if (activityDateTo < nowInAustraliaTime && activitiesByDay[1][0]?.attendance === false) {
+      return 'Absent'
     }
-    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false) {
+    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0]?.attendance === true && activitiesByDay[1][0]?.isEnded === false) {
       return 'You are already Clocked in';
     }
-    else if (currentShift.attendance === true && currentShift.isEnded === true) {
+    else if (activitiesByDay[1][0]?.attendance === true && activitiesByDay[1][0]?.isEnded === true) {
       return 'Present';
     }
     else {
@@ -215,11 +177,11 @@ const StaffDashboard = ({ roster, loading }) => {
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activity.status === "Cancelled" ) {
+    else if (activity.status === "Cancelled") {
       return 'Cancelled'
     }
     else if (activityDateTo < nowInAustraliaTime && activity.attendance === true && activity.isEnded === true) {
-      return  'Present'
+      return 'Present'
     }
     else if (activityDateTo < nowInAustraliaTime && activity.attendance === false) {
       return "Absent"
@@ -237,9 +199,6 @@ const StaffDashboard = ({ roster, loading }) => {
   }
 
   const AlltodayShifts = roster.filter(AllActToday => dayjs(AllActToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
-  // Sort the shifts in ascending order based on the start time
-  const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
-
 
   return (
     <>
@@ -278,7 +237,7 @@ const StaffDashboard = ({ roster, loading }) => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                          <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
                         </div>
                       </div>
@@ -289,7 +248,7 @@ const StaffDashboard = ({ roster, loading }) => {
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
-                      <BsClockHistory /> &nbsp; Activities
+                        <BsClockHistory /> &nbsp; Activities
                       </div>
 
                       <div className='px-5 py-4'>
@@ -302,7 +261,7 @@ const StaffDashboard = ({ roster, loading }) => {
                             {getActivityStatu(activity) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatu(activity) === 'Clock-In' ? (
-                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={() => handleClockIn(activity?.shiftRosterId)}>
                                 {isLoading ?
                                   <div>
                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
@@ -329,8 +288,8 @@ const StaffDashboard = ({ roster, loading }) => {
                                     className='btn btn-secondary text-white p-2 rounded'
                                     // onClick={HandleFill}
                                     onClick={() => HandleCheck({
-                                      progressNoteId: currentShift?.progressNoteId,
-                                      shiftRosterId: currentShift?.shiftRosterId,
+                                      progressNoteId: activity?.progressNoteId,
+                                      shiftRosterId: activity?.shiftRosterId,
                                     })}
                                   >
                                     {isLoading ?
@@ -358,52 +317,64 @@ const StaffDashboard = ({ roster, loading }) => {
 
 
             {/* UnClocked Out Shift */}
-            {unClockedOutRoster.length > 0 && (
-              unClockedOutRoster.map((activity, index) => (<div className='col-sm-4'>
-                <div className='p-2' key={index}>
-                  <label className='d-flex justify-content-center fw-bold text-muted'>UnClocked out shift</label>
-                </div>
+            <div className="row">
+              {unClockedOutRoster.length > 0 &&
+                unClockedOutRoster.map((activity, index) => {
+                  const activityDate = dayjs(activity.dateFrom).format('YYYY-MM-DD');
+                  const isTodayShift = activityDate === nowInAustraliaTime;
+                  if (isTodayShift) {
+                    return null;
+                  }
 
-                <div className="card text-center">
-                  <div className="card-header bg-info text-white">
-                    <div className='d-flex justify-content-between align-items-center'>
-                      <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
-                      <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
-                    </div>
-                  </div>
-                  <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
+                  return (
+                    <div className='col-sm-4' key={index}>
+                      <div className='p-2'>
+                        <label className='d-flex justify-content-center fw-bold text-muted'>UnClocked out shift</label>
+                      </div>
 
-                    <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
-                    <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
-                    <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
-                  </div>
-                  <div className="card-footer text-body-secondary bg-secondary text-white">
-                    <BsClockHistory /> &nbsp; You are already Clocked in
-                  </div>
-
-                  <div className='px-5 py-4'>
-                    <button
-                      className='btn btn-warning text-white p-2 rounded'
-
-                      onClick={() => HandleCheck({
-                        progressNoteId: activity.progressNoteId,
-                        shiftRosterId: activity.shiftRosterId,
-                      })}
-                    >
-                      {isLoading ?
-                        <div>
-                          <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div> Please wait....
+                      <div className="card text-center">
+                        <div className="card-header bg-info text-white">
+                          <div className='d-flex justify-content-between align-items-center'>
+                            <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                            <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
+                          </div>
                         </div>
-                        : <span> <CiStickyNote /> Fill progress note</span>
-                      }
-                    </button>
-                  </div>
+                        <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                </div>
-              </div>))
-            )}
+                          <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
+                          <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
+                          <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
+                        </div>
+                        <div className="card-footer text-body-secondary bg-secondary text-white">
+                          <BsClockHistory /> &nbsp; You are already Clocked in
+                        </div>
+
+                        <div className='px-5 py-4'>
+                          <button
+                            className='btn btn-warning text-white p-2 rounded'
+
+                            onClick={() => HandleCheck({
+                              progressNoteId: activity.progressNoteId,
+                              shiftRosterId: activity.shiftRosterId,
+                            })}
+                          >
+                            {isLoading ?
+                              <div>
+                                <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                  <span class="visually-hidden">Loading...</span>
+                                </div> Please wait....
+                              </div>
+                              : <span> <CiStickyNote /> Fill progress note</span>
+                            }
+                          </button>
+                        </div>
+
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
 
 
 
@@ -445,31 +416,31 @@ const StaffDashboard = ({ roster, loading }) => {
                       <div className="card-header bg-primary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
                           <span style={{ fontSize: '12px' }}> {`${dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}`}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{currentShift ? currentShift.status : ""}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesByDay[1][0]?.status === "string" ? "Active" : activitiesByDay[1][0]?.status}</span>
                         </div>
                       </div>
 
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{currentShift ? currentShift.clients : "--"}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {currentShift ? dayjs(currentShift?.dateFrom).format('hh:mm A') : '--'}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {currentShift ? dayjs(currentShift?.dateTo).format('hh:mm A') : '--'}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[1][0]?.clients}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
                       </div>
 
-                      <div className='px-5 py-4'>
-                        {currentShift ? (
+                      {AlltodayShifts.length === 1 && <div className='px-5 py-4'>
+                        {activitiesByDay[1][0] ? (
                           <>
-                            <span>{currentShift?.activities}</span>
+                            <span>{activitiesByDay[1][0]?.activities}</span>
                             <br />
                             <br />
 
                             {getActivityStatus(activitiesByDay) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatus(activitiesByDay) === 'Clock-In' ? (
-                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={() => handleClockIn(activitiesByDay[1][0]?.shiftRosterId)}>
                                 {isLoading ?
                                   <div>
                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
@@ -496,8 +467,8 @@ const StaffDashboard = ({ roster, loading }) => {
                                     className='btn btn-secondary text-white p-2 rounded'
                                     // onClick={HandleFill}
                                     onClick={() => HandleCheck({
-                                      progressNoteId: currentShift?.progressNoteId,
-                                      shiftRosterId: currentShift?.shiftRosterId,
+                                      progressNoteId: activitiesByDay[1][0]?.progressNoteId,
+                                      shiftRosterId: activitiesByDay[1][0]?.shiftRosterId,
                                     })}
                                   >
                                     {isLoading ?
@@ -517,7 +488,7 @@ const StaffDashboard = ({ roster, loading }) => {
                           <span>No Shift Today</span>
 
                         )}
-                      </div>
+                      </div>}
 
                     </div>
 
