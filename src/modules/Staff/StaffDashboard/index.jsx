@@ -61,45 +61,7 @@ const StaffDashboard = ({ roster, loading }) => {
   // Get the first 5 shifts
   const shifts = filteredShifts.slice(0, 5);
 
-
-  // const sorted = () => {
-
-  // };
-
   const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD');
-
-  // Filter the shifts for today
-  const todayShifts = roster.filter(actToday => dayjs(actToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
-
-  // Sort the shifts in ascending order based on the start time
-  const sortedShifts = todayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
-
-  // Get the last shift after sorting
-  const lastShift = sortedShifts[sortedShifts.length - 1];
-
-  // Function to get the next shift
-  function getNextShift() {
-    const currentTime = dayjs().tz(); // Get the current time in Australia
-
-    while (sortedShifts.length > 0) {
-      const nextShift = sortedShifts.shift(); // Get the first shift
-
-      // Check if the current shift's dateTo is over the current time
-      if (dayjs(nextShift.dateTo) > (currentTime)) {
-        return nextShift; // Return the current shift if dateTo is not over the current time
-      }
-    }
-
-    return lastShift; // Return the last shift if no more shifts available
-  }
-
-  // Call getNextShift() to get the shifts one by one
-  let currentShift = getNextShift();
-  // console.log(currentShift)
-  const nowInAus = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-  if (currentShift && dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss') < nowInAus) {
-    currentShift = getNextShift();
-  }
 
   const yesterday = dayjs().subtract(1, 'day').startOf('day');
   //filter unclock Out shift
@@ -184,22 +146,22 @@ const StaffDashboard = ({ roster, loading }) => {
     }
 
     const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD HH:mm:ss');
-    const activityDateFrom = dayjs(currentShift.dateFrom).format('YYYY-MM-DD HH:mm:ss');
-    const activityDateTo = dayjs(currentShift.dateTo).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateFrom = dayjs(activitiesByDay[1][0]?.dateFrom).format('YYYY-MM-DD HH:mm:ss');
+    const activityDateTo = dayjs(activitiesByDay[1][0]?.dateTo).format('YYYY-MM-DD HH:mm:ss');
 
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === true && currentShift.isEnded === true) {
+    else if (activityDateTo < nowInAustraliaTime && activitiesByDay[1][0]?.attendance === true && activitiesByDay[1][0]?.isEnded === true) {
       return 'Present'
     }
-    else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === false) {
+    else if (activityDateTo < nowInAustraliaTime && activitiesByDay[1][0]?.attendance === false) {
       return 'Absent'
     }
-    else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false) {
+    else if (activityDateTo < nowInAustraliaTime || activitiesByDay[1][0]?.attendance === true && activitiesByDay[1][0]?.isEnded === false) {
       return 'You are already Clocked in';
     }
-    else if (currentShift.attendance === true && currentShift.isEnded === true) {
+    else if (activitiesByDay[1][0]?.attendance === true && activitiesByDay[1][0]?.isEnded === true) {
       return 'Present';
     }
     else {
@@ -237,9 +199,6 @@ const StaffDashboard = ({ roster, loading }) => {
   }
 
   const AlltodayShifts = roster.filter(AllActToday => dayjs(AllActToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
-  // Sort the shifts in ascending order based on the start time
-  const AllsortedShifts = AlltodayShifts.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
-
 
   return (
     <>
@@ -358,67 +317,64 @@ const StaffDashboard = ({ roster, loading }) => {
 
 
             {/* UnClocked Out Shift */}
-            {unClockedOutRoster.length > 0 && (
-              unClockedOutRoster.map((activity, index) => {
+            <div className="row">
+              {unClockedOutRoster.length > 0 &&
+                unClockedOutRoster.map((activity, index) => {
+                  const activityDate = dayjs(activity.dateFrom).format('YYYY-MM-DD');
+                  const isTodayShift = activityDate === nowInAustraliaTime;
+                  if (isTodayShift) {
+                    return null;
+                  }
 
-                const activityDate = dayjs(activity.dateFrom).format('YYYY-MM-DD');
+                  return (
+                    <div className='col-sm-4' key={index}>
+                      <div className='p-2'>
+                        <label className='d-flex justify-content-center fw-bold text-muted'>UnClocked out shift</label>
+                      </div>
 
-                // Check if the activity date is equal to today's date
-                const isTodayShift = activityDate === nowInAustraliaTime;
+                      <div className="card text-center">
+                        <div className="card-header bg-info text-white">
+                          <div className='d-flex justify-content-between align-items-center'>
+                            <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                            <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
+                          </div>
+                        </div>
+                        <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                // If it's today's shift, skip rendering it
-                if (isTodayShift) {
-                  return null;
-                }
+                          <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
+                          <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
+                          <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
+                        </div>
+                        <div className="card-footer text-body-secondary bg-secondary text-white">
+                          <BsClockHistory /> &nbsp; You are already Clocked in
+                        </div>
 
-                return ( 
-                
-                <div className='col-sm-4'>
-                  <div className='p-2' key={index}>
-                    <label className='d-flex justify-content-center fw-bold text-muted'>UnClocked out shift</label>
-                  </div>
+                        <div className='px-5 py-4'>
+                          <button
+                            className='btn btn-warning text-white p-2 rounded'
 
-                  <div className="card text-center">
-                    <div className="card-header bg-info text-white">
-                      <div className='d-flex justify-content-between align-items-center'>
-                        <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
-                        <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
+                            onClick={() => HandleCheck({
+                              progressNoteId: activity.progressNoteId,
+                              shiftRosterId: activity.shiftRosterId,
+                            })}
+                          >
+                            {isLoading ?
+                              <div>
+                                <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                  <span class="visually-hidden">Loading...</span>
+                                </div> Please wait....
+                              </div>
+                              : <span> <CiStickyNote /> Fill progress note</span>
+                            }
+                          </button>
+                        </div>
+
                       </div>
                     </div>
-                    <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
+                  );
+                })}
+            </div>
 
-                      <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
-                      <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
-                      <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
-                    </div>
-                    <div className="card-footer text-body-secondary bg-secondary text-white">
-                      <BsClockHistory /> &nbsp; You are already Clocked in
-                    </div>
-
-                    <div className='px-5 py-4'>
-                      <button
-                        className='btn btn-warning text-white p-2 rounded'
-
-                        onClick={() => HandleCheck({
-                          progressNoteId: activity.progressNoteId,
-                          shiftRosterId: activity.shiftRosterId,
-                        })}
-                      >
-                        {isLoading ?
-                          <div>
-                            <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                              <span class="visually-hidden">Loading...</span>
-                            </div> Please wait....
-                          </div>
-                          : <span> <CiStickyNote /> Fill progress note</span>
-                        }
-                      </button>
-                    </div>
-
-                  </div>
-                </div>)
-              })
-            )}
 
 
 

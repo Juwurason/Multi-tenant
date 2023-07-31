@@ -78,6 +78,7 @@ const CreateProgressNote = () => {
     }
     try {
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
+      console.log(data);
       if (data.status === 'Success') {
         // if (data.progressNote.progressNoteId === 0) {
         //   navigate.push(`/staff/staff/create-progress/${uid}`)
@@ -119,7 +120,7 @@ const CreateProgressNote = () => {
         }
   
         const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
-        console.log(data);
+        // console.log(data);
         if (data.status === "Success") {
           Swal.fire(
             '',
@@ -130,7 +131,7 @@ const CreateProgressNote = () => {
           navigate.push(`/staff/staff/report/${uid}`);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         toast.error("Error Clock Out");
         toast.error(error.response.data.message);
         toast.error(error.response.data.title);
