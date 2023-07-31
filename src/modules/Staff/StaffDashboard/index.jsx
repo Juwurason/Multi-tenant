@@ -127,7 +127,7 @@ const StaffDashboard = ({ roster, loading }) => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const handleClockIn = () => {
+  const handleClockIn = (e) => {
     setIsLoading(true);
     // Simulating an asynchronous action, such as an API call
     setTimeout(() => {
@@ -139,7 +139,7 @@ const StaffDashboard = ({ roster, loading }) => {
             const longitude = position.coords.longitude;
             localStorage.setItem("latit", latitude);
             localStorage.setItem("log", longitude);
-            navigate.push(`/staff/staff/progress/${currentShift?.shiftRosterId}`);
+            navigate.push(`/staff/staff/progress/${e}`);
           },
           (error) => {
             toast.error('Error getting location:', error.message);
@@ -191,10 +191,10 @@ const StaffDashboard = ({ roster, loading }) => {
       return 'Upcoming';
     }
     else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === true && currentShift.isEnded === true) {
-      return  'Present' 
+      return 'Present'
     }
     else if (activityDateTo < nowInAustraliaTime && currentShift.attendance === false) {
-      return 'Absent' 
+      return 'Absent'
     }
     else if (activityDateTo < nowInAustraliaTime || currentShift.attendance === true && currentShift.isEnded === false) {
       return 'You are already Clocked in';
@@ -215,11 +215,11 @@ const StaffDashboard = ({ roster, loading }) => {
     if (activityDateFrom > nowInAustraliaTime) {
       return 'Upcoming';
     }
-    else if (activity.status === "Cancelled" ) {
+    else if (activity.status === "Cancelled") {
       return 'Cancelled'
     }
     else if (activityDateTo < nowInAustraliaTime && activity.attendance === true && activity.isEnded === true) {
-      return  'Present'
+      return 'Present'
     }
     else if (activityDateTo < nowInAustraliaTime && activity.attendance === false) {
       return "Absent"
@@ -278,7 +278,7 @@ const StaffDashboard = ({ roster, loading }) => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                          <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
                         </div>
                       </div>
@@ -289,7 +289,7 @@ const StaffDashboard = ({ roster, loading }) => {
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
-                      <BsClockHistory /> &nbsp; Activities
+                        <BsClockHistory /> &nbsp; Activities
                       </div>
 
                       <div className='px-5 py-4'>
@@ -302,7 +302,7 @@ const StaffDashboard = ({ roster, loading }) => {
                             {getActivityStatu(activity) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatu(activity) === 'Clock-In' ? (
-                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={() => handleClockIn(activity?.shiftRosterId)}>
                                 {isLoading ?
                                   <div>
                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
@@ -329,8 +329,8 @@ const StaffDashboard = ({ roster, loading }) => {
                                     className='btn btn-secondary text-white p-2 rounded'
                                     // onClick={HandleFill}
                                     onClick={() => HandleCheck({
-                                      progressNoteId: currentShift?.progressNoteId,
-                                      shiftRosterId: currentShift?.shiftRosterId,
+                                      progressNoteId: activity?.progressNoteId,
+                                      shiftRosterId: activity?.shiftRosterId,
                                     })}
                                   >
                                     {isLoading ?
@@ -359,50 +359,65 @@ const StaffDashboard = ({ roster, loading }) => {
 
             {/* UnClocked Out Shift */}
             {unClockedOutRoster.length > 0 && (
-              unClockedOutRoster.map((activity, index) => (<div className='col-sm-4'>
-                <div className='p-2' key={index}>
-                  <label className='d-flex justify-content-center fw-bold text-muted'>UnClocked out shift</label>
-                </div>
+              unClockedOutRoster.map((activity, index) => {
 
-                <div className="card text-center">
-                  <div className="card-header bg-info text-white">
-                    <div className='d-flex justify-content-between align-items-center'>
-                      <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
-                      <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
+                const activityDate = dayjs(activity.dateFrom).format('YYYY-MM-DD');
+
+                // Check if the activity date is equal to today's date
+                const isTodayShift = activityDate === nowInAustraliaTime;
+
+                // If it's today's shift, skip rendering it
+                if (isTodayShift) {
+                  return null;
+                }
+
+                return ( 
+                
+                <div className='col-sm-4'>
+                  <div className='p-2' key={index}>
+                    <label className='d-flex justify-content-center fw-bold text-muted'>UnClocked out shift</label>
+                  </div>
+
+                  <div className="card text-center">
+                    <div className="card-header bg-info text-white">
+                      <div className='d-flex justify-content-between align-items-center'>
+                        <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                        <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
+                    <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                    <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
-                    <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
-                    <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
-                  </div>
-                  <div className="card-footer text-body-secondary bg-secondary text-white">
-                    <BsClockHistory /> &nbsp; You are already Clocked in
-                  </div>
+                      <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
+                      <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
+                      <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
+                    </div>
+                    <div className="card-footer text-body-secondary bg-secondary text-white">
+                      <BsClockHistory /> &nbsp; You are already Clocked in
+                    </div>
 
-                  <div className='px-5 py-4'>
-                    <button
-                      className='btn btn-warning text-white p-2 rounded'
+                    <div className='px-5 py-4'>
+                      <button
+                        className='btn btn-warning text-white p-2 rounded'
 
-                      onClick={() => HandleCheck({
-                        progressNoteId: activity.progressNoteId,
-                        shiftRosterId: activity.shiftRosterId,
-                      })}
-                    >
-                      {isLoading ?
-                        <div>
-                          <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div> Please wait....
-                        </div>
-                        : <span> <CiStickyNote /> Fill progress note</span>
-                      }
-                    </button>
+                        onClick={() => HandleCheck({
+                          progressNoteId: activity.progressNoteId,
+                          shiftRosterId: activity.shiftRosterId,
+                        })}
+                      >
+                        {isLoading ?
+                          <div>
+                            <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                            </div> Please wait....
+                          </div>
+                          : <span> <CiStickyNote /> Fill progress note</span>
+                        }
+                      </button>
+                    </div>
+
                   </div>
-
-                </div>
-              </div>))
+                </div>)
+              })
             )}
 
 
@@ -459,7 +474,7 @@ const StaffDashboard = ({ roster, loading }) => {
                         <BsClockHistory /> &nbsp; Activities
                       </div>
 
-                      <div className='px-5 py-4'>
+                      {AlltodayShifts.length === 1 && <div className='px-5 py-4'>
                         {currentShift ? (
                           <>
                             <span>{currentShift?.activities}</span>
@@ -517,7 +532,7 @@ const StaffDashboard = ({ roster, loading }) => {
                           <span>No Shift Today</span>
 
                         )}
-                      </div>
+                      </div>}
 
                     </div>
 

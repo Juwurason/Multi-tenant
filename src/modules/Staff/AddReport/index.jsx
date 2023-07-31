@@ -83,13 +83,13 @@ const AddReport = () => {
                     'success'
                 )
                 setLoading1(false)
-                navigate.push(`/staff/main/roster`)
+                navigate.push(`/staff/staff/roster`)
             }
             setLoading1(false)
         } catch (error) {
             console.log(error);
             setLoading1(false)
-            // http://localhost:3001/staff/main/edit-progress/4682/5054
+           
         }
         finally {
             setLoading1(false)
