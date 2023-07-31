@@ -61,7 +61,7 @@ const PublicHoliday = () => {
         },
         {
             name: 'Date',
-            selector: row => row.date,
+            selector: row => dayjs(row.date).format('MMMM D, YYYY'),
             sortable: true,
 
 
@@ -256,7 +256,7 @@ const PublicHoliday = () => {
                 </span>
                 <span>
                     <span className='fw-bold'>Date Modified: </span>
-                    <span>   {data.dateModified}</span>
+                    <span>   {dayjs(data.dateModified).format('ddd MMM YYYY HH:mm')}</span>
                 </span>
 
 

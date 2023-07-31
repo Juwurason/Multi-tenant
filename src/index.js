@@ -31,7 +31,6 @@ root.render(
             <OnlineStatus />
             <ToastContainer position="top-right" />
             <ErrorBoundaryWrapper>
-
                 <Main />
             </ErrorBoundaryWrapper>
         </CompanyProvider>

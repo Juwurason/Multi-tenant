@@ -27,8 +27,8 @@ const ErrorComponent = ({ message }) => {
                 </span>
             </div>
             <div className="containerr">
-                <div className="gif">
-                    <img src={sad} alt="sad bird" />
+                <div className="gif " >
+                    <img src={sad} alt="sad bird" width={350} height={350} className="bounce2" />
                 </div>
                 <div className="contentt">
                     <h1 className="main-heading text-primary fw-bold">Ooops!.. Seems your Session has Ended</h1>

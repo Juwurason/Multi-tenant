@@ -385,29 +385,31 @@ const AttendanceReport = () => {
             {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
           </span>
         </span>
-        <div>
-          {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
-            className='fw-bold text-warning'
-            title='Edit'
-            to={`/app/reports/edit-attendance/${data.attendanceId}`}
-          // onClick={() => setEditModal(true)}
+        <span>
+          <span className='fw-bold'>Actions: </span>
+          <div>
+            {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
+              className='fw-bold text-warning'
+              title='Edit'
+              to={`/app/reports/edit-attendance/${data.attendanceId}`}
+            // onClick={() => setEditModal(true)}
 
-          >
-            Edit
-          </Link> : ""} &nbsp; | &nbsp;
-
-
-          <Link
-            className='fw-bold text-info'
-            title='Details'
-            to={`/app/reports/attendance-details/${data.attendanceId}`}
+            >
+              Edit
+            </Link> : ""} &nbsp; | &nbsp;
 
 
-          >
-            Details
-          </Link>
-        </div>
+            <Link
+              className='fw-bold text-info'
+              title='Details'
+              to={`/app/reports/attendance-details/${data.attendanceId}`}
 
+
+            >
+              Details
+            </Link>
+          </div>
+        </span>
 
       </div>
     );

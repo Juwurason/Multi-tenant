@@ -1,3 +1,26 @@
+.bounce2 {
+    animation: bounce2 2s ease infinite;
+}
+
+@keyframes bounce2 {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-30px);
+    }
+
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
 .containerr {
     position: absolute;
     top: 50%;
@@ -23,4 +46,24 @@
 .p {
     font-size: 1.3rem;
     padding: 0.7rem 0;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    .containerr {
+        width: 100%;
+        /* Ensure the container takes the full width */
+        padding: 0 1rem;
+        /* Add padding on smaller screens */
+    }
+
+    .contentt .main-heading {
+        font-size: 2rem;
+        /* Reduce font size for smaller screens */
+    }
+
+    .p {
+        font-size: 1rem;
+        /* Reduce font size for smaller screens */
+    }
 }
