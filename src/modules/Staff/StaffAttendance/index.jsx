@@ -48,7 +48,7 @@ const StaffAttendance = ({ staffAtten }) => {
     },
     {
       name: 'Start Time',
-      selector: row => dayjs(row.clockIn).tz().format('h:mm A'),
+      selector: row => dayjs(row.clockIn).format('h:mm A'),
       sortable: true,
     },
     {
