@@ -390,8 +390,8 @@ const ShiftScheduling = () => {
       return toast.error("Please Provide A Reason")
     }
     try {
-      // 
-      const { data } = await axiosInstance.get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${reason}&shiftid=${e}`)
+
+      const { data } = await axiosInstance.get(`/ShiftRosters/cancel_client_shift?shiftId=${e}&userId=${id.userId}&cancellationdate=${reason}`)
       if (data.status === "Success") {
         toast.success(data.message)
         setReason("");
@@ -799,7 +799,7 @@ const ShiftScheduling = () => {
                                      align-items-center
                                      justify-content-center px-2 py-1 rounded bg-primary pointer`}
 
-                                      onClick={() => () => reAssign(activity)}
+                                      onClick={() => reAssign(activity)}
                                       title="Re-assign Shift"
                                     >
                                       <MdOutlineRefresh className='fs-6' />
@@ -913,6 +913,7 @@ const ShiftScheduling = () => {
             <Modal.Body>
               {selectedActivity && (
                 <>
+                  <p><b>Status:</b> <span style={{ fontSize: "10px" }} className={`px-3 py-1 rounded fw-bold text-white ${selectedActivity.status === "Pending" ? "bg-warning" : selectedActivity.status === "Cancelled" ? "bg-danger" : "bg-primary"}`}>{selectedActivity.status}</span></p>
                   <p><b>Date:</b> {moment(selectedActivity.dateFrom).format('LLL')} - {moment(selectedActivity.dateTo).format('LLL')}</p>
                   <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                   <p><b>Staff:</b> {selectedActivity.staff?.fullName}</p>
@@ -1086,10 +1087,12 @@ const ShiftScheduling = () => {
               <Modal.Title>Cancel Client Shift</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {selectedActivity && <div>
-                <label htmlFor="">Please provide reasons for cancelling shift</label>
-                <textarea rows={3} className="form-control summernote" placeholder="" name='reason'
-                  value={reason} onChange={e => setReason(e.target.value)} />
+              {selectedActivity && <div className="form-group">
+                <label className="col-form-label">Select Date</label>
+
+                <input className="form-control" type="date"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)} />
               </div>}
             </Modal.Body>
             <Modal.Footer>

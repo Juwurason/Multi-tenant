@@ -10,6 +10,7 @@ import Editor from '../../HR/Message/editor';
 import ReactHtmlParser from 'react-html-parser';
 import moment from 'moment';
 import Swal from 'sweetalert2';
+import axiosInstance from '../../../store/axiosInstance';
 
 const ticketDetails = () => {
 
@@ -31,7 +32,7 @@ const ticketDetails = () => {
     const FetchTicket = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/Tickets/${uid}`, { cacheTimeout: 300000 });
+            const { data } = await axiosInstance.get(`/Tickets/${uid}`, { cacheTimeout: 300000 });
             console.log(data);
             if (data.status === 'Success') {
                 setTicketDetails(data.ticket.ticket);

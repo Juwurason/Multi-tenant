@@ -123,7 +123,7 @@ const ShiftAttendanceReport = () => {
         {
 
             name: 'Date',
-            selector: row => dayjs(row.dateCreated).format('DD/MM/YYYY h:mm A'),
+            selector: row => dayjs(row.clockIn).format('dddd, MMMM DD, YYYY'),
             sortable: true,
             expandable: true,
 

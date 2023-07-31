@@ -202,9 +202,11 @@ const FormType = () => {
                 </span>
                 <div>
                     <span className='fw-bold'>Actions: </span>
-                    <button className="btn text-primary" style={{ fontSize: "12px" }}>
-                        Edit
-                    </button> |
+                    {
+                        data.templateType === "Editable" ? <button className="btn text-primary" style={{ fontSize: "12px" }}>
+                            Edit
+                        </button> : ""
+                    } |
                     {
                         data.templateUrl ?
                             <button className="btn text-secondary" style={{ fontSize: "12px" }}
