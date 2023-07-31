@@ -460,31 +460,31 @@ const StaffDashboard = ({ roster, loading }) => {
                       <div className="card-header bg-primary text-white">
                         <div className='d-flex justify-content-between align-items-center'>
                           <span style={{ fontSize: '12px' }}> {`${dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}`}</span>
-                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{currentShift ? currentShift.status : ""}</span>
+                          <span style={{ fontSize: '12px' }} className='text-white bg-warning rounded px-2'>{activitiesByDay[1][0]?.status === "string" ? "Active" : activitiesByDay[1][0]?.status}</span>
                         </div>
                       </div>
 
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
-                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{currentShift ? currentShift.clients : "--"}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {currentShift ? dayjs(currentShift?.dateFrom).format('hh:mm A') : '--'}</span></span>
-                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {currentShift ? dayjs(currentShift?.dateTo).format('hh:mm A') : '--'}</span></span>
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[1][0]?.clients}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
+                        <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
                       </div>
 
                       {AlltodayShifts.length === 1 && <div className='px-5 py-4'>
-                        {currentShift ? (
+                        {activitiesByDay[1][0] ? (
                           <>
-                            <span>{currentShift?.activities}</span>
+                            <span>{activitiesByDay[1][0]?.activities}</span>
                             <br />
                             <br />
 
                             {getActivityStatus(activitiesByDay) === 'Upcoming' ? (
                               <span className='fw-bold text-warning pointer'>Upcoming</span>
                             ) : getActivityStatus(activitiesByDay) === 'Clock-In' ? (
-                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
+                              <span className={`pointer btn text-white rounded ${isLoading ? "btn-warning" : "btn-success"}`} onClick={() => handleClockIn(activitiesByDay[1][0]?.shiftRosterId)}>
                                 {isLoading ?
                                   <div>
                                     <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
@@ -511,8 +511,8 @@ const StaffDashboard = ({ roster, loading }) => {
                                     className='btn btn-secondary text-white p-2 rounded'
                                     // onClick={HandleFill}
                                     onClick={() => HandleCheck({
-                                      progressNoteId: currentShift?.progressNoteId,
-                                      shiftRosterId: currentShift?.shiftRosterId,
+                                      progressNoteId: activitiesByDay[1][0]?.progressNoteId,
+                                      shiftRosterId: activitiesByDay[1][0]?.shiftRosterId,
                                     })}
                                   >
                                     {isLoading ?

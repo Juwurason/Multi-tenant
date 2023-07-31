@@ -95,39 +95,6 @@ const CreateProgressNote = () => {
     }
   }
 
-  // const SubmitProgre = async (e) => {
-  //   e.preventDefault()
-  //   setLoading1(true)
-  //   const info = {
-  //     report: report,
-  //     progress: progress,
-  //     position: "",
-  //     followUp: follow,
-  //     staff: staff,
-  //     date: formattedDate,
-  //     startKm: kilometer,
-  //     endKm: endKm,
-  //     profileId: details.profileId,
-  //     companyID: companyId
-  //   }
-  //   try {
-  //     const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
-  //     console.log(data);
-  //     // if (data.status === 'Success') {
-  //     //   navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
-  //     //   toast.success(data.message)
-  //     // }
-  //     setLoading1(false)
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error.response.data.message)
-  //     toast.error(error.response.data.title)
-  //   }
-  //   finally {
-  //     setLoading1(false)
-  //   }
-  // }
-
   const SubmitProgress = async (e) => {
     e.preventDefault();
     if (endKm === "") {
