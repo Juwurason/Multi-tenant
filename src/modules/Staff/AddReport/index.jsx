@@ -15,6 +15,7 @@ const AddReport = () => {
     const { uid, } = useParams();
     const [attendance, setAttendance] = useState({});
     const [loading, setLoading] = useState(false);
+    const [editpro, setEditPro] = useState({});
     const [loading1, setLoading1] = useState(false);
     const navigate = useHistory();
     const privateHttp = useHttp();
@@ -28,8 +29,9 @@ const AddReport = () => {
             const attendId = data.attendId;
 
             try {
-                const attendanceData = await privateHttp.get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
-                setAttendance(attendanceData.data);
+                const {data}= await privateHttp.get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
+                setAttendance(data);
+                setEditPro(data)
                 // Process the attendance data here
             } catch (error) {
                 console.log(error);
@@ -62,6 +64,17 @@ const AddReport = () => {
             alert('Please upload an image');
         }
     };
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setEditPro({
+          ...editpro,
+          [name]: newValue
+        });
+      }
 
     const formData = new FormData();
     formData.append("StartKm", startKm);
@@ -148,8 +161,7 @@ const AddReport = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
                                                     <input type="text"
-                                                        value={startKm}
-                                                        onChange={e => setStartKm(e.target.value)}
+                                                        name="startKm" value={editpro.startKm || ''} onChange={handleInputChange}
                                                         className="form-control" />
                                                 </div>
                                             </div>
@@ -157,8 +169,7 @@ const AddReport = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
                                                     <input type="text"
-                                                        value={endKm}
-                                                        onChange={e => setEndKm(e.target.value)}
+                                                        name="endKm" value={editpro.endKm || ''} onChange={handleInputChange}
                                                         className="form-control" />
                                                 </div>
                                             </div>
