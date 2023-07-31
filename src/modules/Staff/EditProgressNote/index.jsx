@@ -46,9 +46,8 @@ const EditProgressNote = () => {
     }
 
     try {
-      const editProgress = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
-      const editpro = editProgress;
-      setEditPro(editpro.data);
+      const {data} = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
+      setEditPro(data);
       setLoading(false)
     } catch (error) {
       toast.error(error.response.data.message)
