@@ -26,7 +26,7 @@ const ProgressNote = () => {
   const [follow, setFollow] = useState('')
   const [clientNames, setClientName] = useState('')
   const [kilometer, setKilometer] = useState(0)
-  const [endKm, setEndKm] = useState(0)
+  const [endKm, setEndKm] = useState("")
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -66,8 +66,9 @@ const ProgressNote = () => {
       }
       setLoading(false)
     } catch (error) {
-      // toast.error(error.response.data.message)
-      // toast.error(error.response.data.title)
+      // console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
     }
     finally {
       setLoading(false)
@@ -115,7 +116,11 @@ const ProgressNote = () => {
 
   const CreateProgress = async (e) => {
     e.preventDefault()
-
+    if (endKm === "") {
+      toast.error("Input end Kilometer");
+      return; // Exit the function early if endKm is not provided
+    }
+   
     const info = {
       report: report,
       progress: progress,
@@ -143,7 +148,7 @@ const ProgressNote = () => {
       if (result.isConfirmed) {
 
         try {
-          const { data } = await post(`/ProgressNotes/edit/${''}?userId=${user.userId}`, info);
+          const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
           if (data.status === "Success") {
             Swal.fire(
               '',
@@ -212,13 +217,13 @@ const ProgressNote = () => {
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Starting KiloMetre if any</label>
-                            <input type="text" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
+                            <input type="number" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
                           </div>
                         </div>
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="text" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
                           </div>
                         </div>
                           <div className="col-md-4">

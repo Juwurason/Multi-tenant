@@ -46,9 +46,8 @@ const EditProgressNote = () => {
     }
 
     try {
-      const editProgress = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
-      const editpro = editProgress;
-      setEditPro(editpro.data);
+      const {data} = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
+      setEditPro(data);
       setLoading(false)
     } catch (error) {
       toast.error(error.response.data.message)
@@ -210,13 +209,13 @@ const EditProgressNote = () => {
                     <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Starting KiloMetre if any</label>
-                            <input type="text" placeholder="0" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
+                            <input type="number" placeholder="0" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
                           </div>
                      </div>
                     <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="text" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
                           </div>
                      </div>
                       <div className="col-md-4">

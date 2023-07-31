@@ -294,7 +294,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     <span className='fw-bold text-trucate'>
                                       {dayjs(activity.dateFrom).format('hh:mm A')} - {dayjs(activity.dateTo).format('hh:mm A')}
                                     </span>
-                                    <span><span className='fw-bold text-truncate'>Client: </span><span className='text-truncate'>{activity.clients}</span></span>
+                                    <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
                                     <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
                                     <span><span className='fw-bold text-truncate'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                   </div>
@@ -402,9 +402,9 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                             <>
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
-                              <p><b>Client:</b> {selectedActivity.clients}</p>
+                              <p><b>Client(s):</b> {selectedActivity.clients}</p>
                               <p><b>Status:</b> {selectedActivity.status}</p>
-                              <p><b>Description:</b> {selectedActivity.activities}</p>
+                              <p><b>Activities:</b> {selectedActivity.activities}</p>
                             </>
                           )}
                         </Modal.Body>
