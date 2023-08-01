@@ -83,7 +83,7 @@ const ClientBehaviuor = () => {
              if (data && data.length > 0) {
                 const behaviourSupportId = data[0].behaviourSupportId;
                 setIdSave(behaviourSupportId)
-                const { data: secondData } = await get(`/BehaviourSupports//${behaviourSupportId}`, { cacheTimeout: 300000 });
+                const { data: secondData } = await get(`/BehaviourSupports/${behaviourSupportId}`, { cacheTimeout: 300000 });
                 // console.log(secondData);
                 setEditPro(secondData);
                 // Do something with the second data (e.g., setEditPro(secondData))
