@@ -43,6 +43,7 @@ const RaiseTicket = () => {
                 formData
             )
             toast.success(data.message)
+            navigate.push('/app/support/view-tickets')
             setLoading(false)
 
         } catch (error) {
