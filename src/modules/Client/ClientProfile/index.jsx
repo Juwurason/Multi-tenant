@@ -202,11 +202,11 @@ const ClientProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-document`} className="py-1 px-2 rounded text-white btn">Client Doc</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-document`} className="py-1 px-2 rounded text-white btn">My Dococument</Link>
                             </div>
 
                             <div>
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">Client's Schedule</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-schedule`} className="py-1 px-2 rounded text-white btn mt-2">My Schedule</Link>
                             </div>
                           </div>
                         </div>

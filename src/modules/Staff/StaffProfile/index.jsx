@@ -164,7 +164,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                             <div className="small">About Me : {staffOne.aboutMe === "null" ? "" : staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189" }} to={`/staff/staff/document`} className="py-1 px-2 rounded text-white">Staff Document</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/staff/staff/document`} className="py-1 px-2 rounded text-white">My Document</Link>
                             </div>
                           </div>
                         </div>
