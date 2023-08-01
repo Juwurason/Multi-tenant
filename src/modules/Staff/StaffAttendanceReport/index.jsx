@@ -84,11 +84,15 @@ const AttendanceReport = () => {
     }
     try {
       const { data } = await post(`/Attendances/edit/${uid}?userId=${user.userId}`, info);
-      // console.log(data)
+     
+     if (data.status === "Success") {
       toast.success(data.message);
       setLoading1(false);
-    } catch (error) {
+      navigate.push("/staff/staff/attendance")
+     }
       // console.log(error);
+    }
+    catch{
       toast.error("Error Updating Attendance Report")
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
