@@ -163,7 +163,7 @@ const ClientHealth = () => {
                     </div>
                 </div>
                 {/* /Page Header */}
-                {staffAvail.length < 0 && <div className="row">
+                {staffAvail.length === 0 && <div className="row">
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header">

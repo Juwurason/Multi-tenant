@@ -150,13 +150,13 @@ const StaffNewReport = () => {
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
-                                                    <input type="text" className="form-control" onChange={e => setStartKm(e.target.value)} />
+                                                    <input type="number" className="form-control" onChange={e => setStartKm(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
-                                                    <input type="text" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                                                    <input type="number" className="form-control" onChange={e => setEndKm(e.target.value)} />
                                                 </div>
                                             </div>
                                         </div>
