@@ -857,11 +857,11 @@ const ClientProfiles = () => {
                                   <option value="no">No</option>
                                 </select>
                               </div>
-                              <div className="form-group col-md-4">
+                              <div className="form-group col-md-12">
                                 <label>Financial Arrangement</label><br />
                                 <textarea className='form-control' name="financialArrangement" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.financialArrangement || ''} onChange={handleInputChange}></textarea>
                               </div>
-                              <div className="form-group col-md-4">
+                              <div className="form-group col-md-12">
                                 <label>NDIS Plan Notes If Yes above, Include Plan approval Date and if No, State reason (e.g waiting for plan approval or plan review)</label><br />
                                 <textarea className='form-control' name="ndisPlanNote" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.ndisPlanNote || ''} onChange={handleInputChange}></textarea>
                               </div>
@@ -903,8 +903,8 @@ const ClientProfiles = () => {
                           <div className="text">{staffOne.privacyPreferences === "null" ? "---" : staffOne.privacyPreferences}</div>
                         </li>
                         <li>
-                          <div className="title">Do you have an NDIS plan</div>
-                          <div className="text">{staffOne.ndisPlan === "null" ? "---" : staffOne.ndisPlan}</div>
+                          <div className="title">Do you have an NDIS plan </div>
+                          <div className="text"> {staffOne.ndisPlan === "null" ? "---" : staffOne.ndisPlan}</div>
                         </li>
                         <li>
                           <div className="title">Indigenous Satatus</div>
@@ -916,7 +916,7 @@ const ClientProfiles = () => {
                 </div>
 
               </div>
-
+                            <label className='d-flex justify-content-center align-items-center'>{staffOne.fullName} Shift Roster</label>
               <div className='mt-4 border'>
                 <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 

@@ -466,26 +466,26 @@ const EmployeeProfile = () => {
                           <div className="title">Post Code</div>
                           <div className="text">{staffOne.postcode}</div>
                         </li>
-                        <li>
+                        {/* <li>
                           <div className="title">Passport No.</div>
                           <div className="text"></div>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                           <div className="title">Passport Exp Date.</div>
                           <div className="text"></div>
-                        </li>
+                        </li> */}
                         <li>
                           <div className="title">Tel</div>
                           <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                         </li>
-                        <li>
+                        {/* <li>
                           <div className="title">Religion</div>
                           <div className="text"></div>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                           <div className="title">Marital status</div>
                           <div className="text"></div>
-                        </li>
+                        </li> */}
 
                       </ul>
                     </div>

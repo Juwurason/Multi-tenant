@@ -653,11 +653,11 @@ const ClientProfile = () => {
                                   <option value="no">No</option>
                                 </select>
                               </div>
-                              <div className="form-group col-md-4">
+                              <div className="form-group col-md-12">
                                 <label>Financial Arrangement</label><br />
                                 <textarea className='form-control' name="financialArrangement" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.financialArrangement || ''} onChange={handleInputChange}></textarea>
                               </div>
-                              <div className="form-group col-md-4">
+                              <div className="form-group col-md-12">
                                 <label>NDIS Plan Notes If Yes above, Include Plan approval Date and if No, State reason (e.g waiting for plan approval or plan review)</label><br />
                                 <textarea className='form-control' name="ndisPlanNote" id="" style={{ width: "100%", height: "auto" }} value={editedProfile.ndisPlanNote || ''} onChange={handleInputChange}></textarea>
                               </div>
@@ -710,98 +710,7 @@ const ClientProfile = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="col-md-6 d-flex">
-                  <div className="card profile-box flex-fill">
-                    <div className="card-body">
-                      <div className="pro-edit">
-                        <a className="edit-icon bg-info text-white" onClick={() => handleModal4(staffOne.profileId)}>
-                          <i className="fa fa-pencil" />
-                        </a>
-                        <Modal
-                          show={socialModal}
-                          onHide={() => setSocialModal(false)}
-                          size="lg"
-                          aria-labelledby="contained-modal-title-vcenter"
-
-                        >
-                          <Modal.Header closeButton>
-                            <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                              Other Information
-                            </Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="form-group">
-                                  <label>Instagram</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='insta' value={editedProfile.insta || ''} onChange={handleInputChange} />
-                                </div>
-
-                                <div className="form-group">
-                                  <label>Facebook</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='fbook' value={editedProfile.fbook || ''} onChange={handleInputChange} />
-                                </div>
-                              </div>
-                              <div className="col-md-6">
-                                <div className="form-group">
-                                  <label>Twitter</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='tweet' value={editedProfile.tweet || ''} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                  <label>LinkedIn</label>
-                                  <input type="text" className="form-control" placeholder='https://WWW......' name='linkd' value={editedProfile.linkd || ''} onChange={handleInputChange} />
-                                </div>
-
-                              </div>
-                            </div>
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <button
-                              className="btn add-btn rounded btn-outline-danger"
-                              onClick={() => setSocialModal(false)}
-                            >
-                              Close
-                            </button>
-                            <button
-                              className="ml-2 btn add-btn rounded text-white btn-info"
-                              onClick={handleSave}
-                            >
-                              {loading ? <div className="spinner-grow text-light" role="status">
-                                <span className="sr-only">Loading...</span>
-                              </div> : "Send"}
-                            </button>
-                          </Modal.Footer>
-
-                        </Modal>
-
-                      </div>
-                      <h3 className="card-title">Other Informations</h3>
-                      <ul className="personal-info">
-                        <li>
-                          <div className="title"><FaInstagram /> Instagram</div>
-                          <div className="text">{staffOne.instagram === "null" || "" ? "---" : staffOne.instagram}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaFacebook /> Facebook</div>
-                          <div className="text">{staffOne.facebook === "null" || "" ? "---" : staffOne.facebook}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaTwitter /> Twitter</div>
-                          <div className="text">{staffOne.twitter === "null" || "" ? "---" : staffOne.twitter}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaLinkedin /> Linked-In</div>
-                          <div className="text">{staffOne.linkedIn === "null" || "" ? "---" : staffOne.linkedIn}</div>
-                        </li>
-                        <li>
-                          <div className="title"><FaYoutube /> Youtube</div>
-                          <div className="text">{staffOne.youtube === "null" || "" ? "---" : staffOne.youtube}</div>
-                        </li>
-
-                      </ul>
-                    </div>
-                  </div>
-                </div> */}
+               
               </div>
 
 
