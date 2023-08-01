@@ -40,7 +40,6 @@ const StaffDailyReport = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
     const [ticket, setTicket] = useState([]);
-    const [showModal, setShowModal] = useState(false);
 
     const { get, post } = useHttp();
 
@@ -214,41 +213,7 @@ const StaffDailyReport = () => {
     };
 
 
-    const handleDelete = async (e) => {
-        Swal.fire({
-            html: `<h3>Delete this Ticket</h3>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#405189',
-            cancelButtonColor: '#777',
-            confirmButtonText: 'Confirm',
-            showLoaderOnConfirm: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const { data } = await post(`/Tickets/delete/${e}`,
-
-                    )
-                    if (data.status === 'Success') {
-                        toast.success(data.message);
-                        FetchTicket();
-                    } else {
-                        toast.error(data.message);
-                    }
-
-
-                } catch (error) {
-                    console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
-
-                }
-
-
-            }
-        })
-
-    }
+   
 
     const ButtonRow = ({ data }) => {
         return (

@@ -178,13 +178,13 @@ const StaffNewReportEdit = () => {
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
-                                                    <input type="text" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
+                                                    <input type="number" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
-                                                    <input type="text" className="form-control" name="endKm" value={editpro.endKm || ''} onChange={handleInputChange} />
+                                                    <input type="number" className="form-control" name="endKm" value={editpro.endKm || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                         </div>
