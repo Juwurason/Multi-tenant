@@ -25,7 +25,7 @@ const ClientViewTicket = () => {
     const [ticket, setTicket] = useState([]);
     const { get, post } = useHttp();
 
-    const FetchSchedule = async () => {
+    const FetchData = async () => {
         // setLoading2(true)
         try {
             const { data } = await get(`/Tickets/get_user_tickets?userId=${id.userId}`, { cacheTimeout: 300000 });
@@ -38,7 +38,7 @@ const ClientViewTicket = () => {
           }
     };
     useEffect(() => {
-        FetchSchedule()
+        FetchData()
     }, []);
 
     const columns = [
@@ -231,7 +231,7 @@ const ClientViewTicket = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Tickets/delete/${e}`,
+                    const { data } = await post(`/Tickets/delete/${e}?userId=${id.userId}`,
 
                     )
                     if (data.status === 'Success') {

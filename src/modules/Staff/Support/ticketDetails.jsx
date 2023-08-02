@@ -99,7 +99,7 @@ const ticketDetails = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Tickets/close_ticket/${uid}?userId=${id.userId}`,
+                    const { data } = await get(`/Tickets/close_ticket/${uid}?userId=${id.userId}`,
 
                     )
                     if (data.status === 'Success') {
@@ -112,7 +112,8 @@ const ticketDetails = () => {
 
 
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
+                    toast.error("error closing Ticket");
                     toast.error(error.response.data.message)
                     toast.error(error.response.data.title)
 

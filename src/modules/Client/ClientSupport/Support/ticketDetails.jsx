@@ -98,7 +98,7 @@ const ClientTicketDetails = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Tickets/close_ticket/${uid}?userId=${id.userId}`,
+                    const { data } = await get(`/Tickets/close_ticket/${uid}?userId=${id.userId}`,
 
                     )
                     if (data.status === 'Success') {
@@ -106,12 +106,14 @@ const ClientTicketDetails = () => {
                         history.push('/staff/view-ticket')
 
                     } else {
+                        // toast.error("error closing Ticket");
                         toast.error(data.message);
                     }
 
 
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
+                    toast.error("error closing Ticket");
                     toast.error(error.response.data.message)
                     toast.error(error.response.data.title)
 
@@ -128,7 +130,7 @@ const ClientTicketDetails = () => {
                 <title>Ticket Details</title>
                 <meta name="description" content="" />
             </Helmet>
-            
+
             <div className="content container-fluid">
                 <div className="page-header">
                     <div className="row align-items-center">

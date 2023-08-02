@@ -219,7 +219,7 @@ const ViewTicket = ({ ticket, FetchData }) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Tickets/delete/${e}`,
+                    const { data } = await post(`/Tickets/delete/${e}?userId=${id.userId}`,
 
                     )
                     if (data.status === 'Success') {
