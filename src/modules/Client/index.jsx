@@ -21,6 +21,7 @@ import ClientComunitySupport from './ClientComunitySupport';
 import PrivacyStatement from './PrivacyStatement';
 import ClientEditHealth from './ClientEditHealth';
 import ClientBehaviuorEdit from './ClientBehaviuorEdit';
+import ClientTicketDetails from './ClientSupport/Support/ticketDetails';
 
 
 
@@ -48,6 +49,7 @@ const ClientRoute = ({ match }) => {
       <Route path={`${match.url}/client-message`} render={() => <ClientMessage />} />
       <Route path={`${match.url}/client-view_ticket`} render={() => <ClientViewTicket />} />
       <Route path={`${match.url}/client-raise_ticket`} render={() => <ClientRaiseTicket />} />
+      <Route path={`${match.url}/client-ticket_details/:uid`} render={() => <ClientTicketDetails />} />
       <Route path={`${match.url}/client-knowledge_base`} render={() => <ClientKnowledgeBase />} />
       <Route path={`${match.url}/client-schedule`} render={() => <ClientSchedule />} />
       <Route path={`${match.url}/client-community`} render={() => <ClientComunitySupport />} />

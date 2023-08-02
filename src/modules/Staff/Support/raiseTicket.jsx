@@ -15,7 +15,7 @@ const RaiseTicket = () => {
 
     const [subject, setSubject] = useState('');
     const [image, setImage] = useState(null);
-    const privateHttp = useHttp();
+    const { post } = useHttp();
     const navigate = useHistory();
     const [loading1, setLoading1] = useState(false)
     const [editorValue, setEditorValue] = useState('');
@@ -39,11 +39,14 @@ const RaiseTicket = () => {
 
         try {
             setLoading1(true)
-            const { data } = await privateHttp.post(`/Tickets/raise_ticket?userId=${id.userId}`,
+            const { data } = await post(`/Tickets/raise_ticket?userId=${id.userId}`,
                 formData
             )
-            toast.success(data.message)
+            if (data.status === "Success") {
+                toast.success(data.message)
             setLoading(false)
+            navigate.push("/staff/staff/view-ticket")
+            }
 
         } catch (error) {
             toast.error(error.response?.data?.message)

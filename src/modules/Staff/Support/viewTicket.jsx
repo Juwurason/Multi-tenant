@@ -23,6 +23,7 @@ import dayjs from 'dayjs';
 const ViewTicket = ({ ticket, FetchData }) => {
     const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
+    // console.log(ticket.ticket);
     // const [ticket, setTicket] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
@@ -36,7 +37,7 @@ const ViewTicket = ({ ticket, FetchData }) => {
             selector: row => row.subject,
             sortable: true,
             cell: (row) => <Link
-                to={`/app/support/ticket-details/${row.ticketId}`}
+                to={`/staff/staff/ticket-details/${row.ticketId}`}
                 className="fw-bold text-dark" style={{ overflow: "hidden" }}
             > {row.subject}</Link>
 
@@ -85,28 +86,6 @@ const ViewTicket = ({ ticket, FetchData }) => {
 
 
 
-
-
-
-
-    // const FetchTicket = async () => {
-    //     setLoading(true)
-    //     try {
-    //         const { data } = await get(`/Tickets/get_user_tickets?userId=${id.userId}`, { cacheTimeout: 300000 });
-    //         console.log(data)
-    //         setTicket(data);
-    //         setLoading(false);
-    //     } catch (error) {
-    //         console.log(error);
-    //         setLoading(false)
-    //     } finally {
-    //         setLoading(false)
-    //     }
-
-    // };
-    // useEffect(() => {
-    //     FetchTicket()
-    // }, []);
 
 
 
@@ -344,7 +323,7 @@ const ViewTicket = ({ ticket, FetchData }) => {
                         <div className='col-md-4'>
 
                             <Link to={'/staff/staff/raise-ticket'} className="btn btn-info add-btn rounded-2 text-white">
-                                Contact Service Provider
+                            Raise A Ticket
                             </Link>
                         </div>
                     </div>
