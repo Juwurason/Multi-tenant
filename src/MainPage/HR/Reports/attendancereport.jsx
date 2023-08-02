@@ -373,14 +373,6 @@ const AttendanceReport = () => {
           <span> {data.staff.fullName}</span>
         </span>
         <span>
-          <span className='fw-bold'>Latitude: </span>
-          <span> {data.inLatitude}</span>
-        </span>
-        <span>
-          <span className='fw-bold'>Longitude: </span>
-          <span> {data.inLongitude}</span>
-        </span>
-        <span>
           <span className='fw-bold'>Date Created: </span>
           <span>
             {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}

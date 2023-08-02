@@ -265,8 +265,8 @@ const AdminDailyReport = () => {
         return (
             <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
                 <span>
-                    <span className='fw-bold'>Staff: </span>
-                    <span> {data.administrator}</span>
+                    <span className='fw-bold'>Administrator: </span>
+                    <span> {data.administrator.fullName}</span>
                 </span>
                 <span>
                     <span className='fw-bold'>Report: </span>
