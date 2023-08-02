@@ -7,10 +7,10 @@ import Offcanvas from '../../Entryfile/offcanvance';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import useHttp from '../../hooks/useHttp';
-import { MdCancel } from 'react-icons/md';
 import Editor from '../../MainPage/HR/Message/editor';
+import { MdCancel } from 'react-icons/md';
 
-const EditStaffAttendance = () => {
+const EditAdminAttendance = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, } = useParams();
     const [attendance, setAttendance] = useState({});
@@ -26,7 +26,7 @@ const EditStaffAttendance = () => {
         setLoading(true);
 
         try {
-            const { data } = await privateHttp.get(`/StaffAttendances/get_attendance_record/${uid}`, { cacheTimeout: 300000 });
+            const { data } = await privateHttp.get(`/AdminAttendances/get_attendance/${uid}`, { cacheTimeout: 300000 });
             setAttendance(data);
             // Process the attendance data here
             setEditorValue(data.report || "");
@@ -64,18 +64,19 @@ const EditStaffAttendance = () => {
     };
 
     const formData = new FormData();
-    formData.append("attendanceId", uid);
-    formData.append("StartKm", startKm);
-    formData.append("EndKm", endKm);
     formData.append("Report", editorValue);
     formData.append("ClockIn", attendance.clockIn);
-    formData.append("ClockOut", attendance.clockOut);
+    formData.append("ClockInCheck", attendance.clockInCheck);
     formData.append("InLongitude", longitude);
     formData.append("InLatitude", latitude);
+    formData.append("StartKm", startKm);
+    formData.append("EndKm", endKm);
+    formData.append("AdministratorId", attendance.administratorId);
+    formData.append("companyID", user.companyId);
     formData.append("ImageFile", url);
-    formData.append("companyId", user.companyId);
-    formData.append("staffId", attendance.staffId);
-
+    formData.append("ClockOut", attendance.clockOut);
+    formData.append("ClockOutCheck", attendance.clockOutCheck);
+    formData.append("Duration", attendance.duration);
 
 
     const SendReport = async (e) => {
@@ -83,7 +84,7 @@ const EditStaffAttendance = () => {
         setLoading1(true)
 
         try {
-            const { data } = await privateHttp.post(`/StaffAttendances/edit/${uid}?userId=${user.userId}`,
+            const { data } = await privateHttp.post(`/AdminAttendances/edit/${uid}?userId=${user.userId}`,
                 formData);
             if (data.status === "Success") {
                 Swal.fire(
@@ -92,7 +93,7 @@ const EditStaffAttendance = () => {
                     'success'
                 )
                 setLoading1(false)
-                navigate.push(`/app/reports/staff-reports`)
+                navigate.push(`/app/reports/administrator-reports`)
             }
             setLoading1(false)
         } catch (error) {
@@ -106,18 +107,18 @@ const EditStaffAttendance = () => {
             setLoading1(false)
         }
     }
-
     const [editorValue, setEditorValue] = useState('');
     const handleEditorChange = (value) => {
         setEditorValue(value);
     };
 
+
     return (
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Edit Staff Report</title>
-                    <meta name="description" content="Edit Staff Report" />
+                    <title>Edit Administrator Report</title>
+                    <meta name="description" content="Edit Administrator Report" />
                 </Helmet>
                 {/* Page Content */}
                 <div className="content container-fluid">
@@ -127,8 +128,8 @@ const EditStaffAttendance = () => {
                             <div className="col-sm-12">
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item"><Link to="/app/reports/staff-reports">Reports</Link></li>
-                                    <li className="breadcrumb-item active">Edit Staff Report</li>
+                                    <li className="breadcrumb-item"><Link to="/app/reports/administrator-reports">Reports</Link></li>
+                                    <li className="breadcrumb-item active">Edit Administrator Report</li>
                                 </ul>
                             </div>
                         </div>
@@ -139,7 +140,8 @@ const EditStaffAttendance = () => {
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">Edit Report</h4>
-                                    <Link to="/app/reports/staff-reports" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+
+                                    <Link to="/app/reports/administrator-reports" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className="card-body">
                                     <form onSubmit={SendReport}>
@@ -186,6 +188,7 @@ const EditStaffAttendance = () => {
                                                 </div>
                                             </div>
                                         </div>
+
 
 
                                         <div className="col-sm-12">
@@ -240,4 +243,4 @@ const EditStaffAttendance = () => {
 }
 
 
-export default EditStaffAttendance;
+export default EditAdminAttendance;

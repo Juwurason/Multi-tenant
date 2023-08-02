@@ -19,6 +19,7 @@ import dayjs, { utc } from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
 import { fetchAdminAttendance } from '../../../store/slices/adminAttendanceSlice';
+import ReactHtmlParser from 'react-html-parser';
 
 function formatDuration(duration) {
     if (duration) {
@@ -74,7 +75,7 @@ const AdminDailyReport = () => {
     const columns = [
 
         {
-            name: 'Admin',
+            name: 'Administrator',
             selector: row => row.administrator,
             sortable: true,
             cell: (row) => <span className="long-cell fw-bold" style={{ overflow: "hidden", cursor: "pointer" }}
@@ -109,44 +110,23 @@ const AdminDailyReport = () => {
 
         },
         {
+            name: 'Location',
+            sortable: true,
+            expandable: true,
+            cell: (row) => (
+                <span style={{ overflow: "hidden" }}>
+
+                    <LocationMapModal latitude={row.inLatitude} longitude={row.inLongitude} />
+                </span>
+            ),
+        },
+        {
             name: 'Total Km',
             selector: row => (row.endKm - row.startKm || 0),
             sortable: true,
             expandable: true,
 
         },
-
-        {
-            name: "Actions",
-            cell: (row) => (
-                <div className="d-flex" style={{ overflow: "hidden" }}>
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
-                        className='btn'
-                        title='Edit'
-                        to={`/app/reports/edit-adminAttendance/${row.administratorId}`}
-                    // onClick={() => setEditModal(true)}
-
-                    >
-                        <FaRegEdit />
-                    </Link> : ""}
-
-                    <Link
-                        className='btn'
-                        title='Details'
-                        to={`/app/reports/staffReport-details/${row.adminAttendanceId}`}
-
-
-                    >
-                        <FaRegFileAlt />
-                    </Link>
-
-
-
-                </div>
-            ),
-        },
-
-
 
     ];
 
@@ -289,13 +269,10 @@ const AdminDailyReport = () => {
                     <span> {data.administrator}</span>
                 </span>
                 <span>
-                    <span className='fw-bold'>Latitude: </span>
-                    <span> {data.inLatitude}</span>
+                    <span className='fw-bold'>Report: </span>
+                    <span> {ReactHtmlParser(data.report)}</span>
                 </span>
-                <span>
-                    <span className='fw-bold'>Longitude: </span>
-                    <span> {data.inLongitude}</span>
-                </span>
+
                 <span>
                     <span className='fw-bold'>Date Created: </span>
                     <span>
@@ -306,6 +283,31 @@ const AdminDailyReport = () => {
                     <span className='fw-bold'>Date Modified: </span>
                     <span>
                         {dayjs(data.dateModified).format('DD/MM/YYYY h:mm A')}
+                    </span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Actions: </span>
+                    <span>
+                        {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
+                            className='fw-bold text-warning'
+                            title='Edit'
+                            to={`/app/reports/edit-AdminAttendance/${data.adminAttendanceid}`}
+                        // onClick={() => setEditModal(true)}
+
+                        >
+                            Edit
+                        </Link> : ""} &nbsp; | &nbsp;
+
+
+                        <Link
+                            className='fw-bold text-info'
+                            title='Details'
+                            to={`/app/reports/administratorReport-details/${data.administratorId}`}
+
+
+                        >
+                            Details
+                        </Link>
                     </span>
                 </span>
 

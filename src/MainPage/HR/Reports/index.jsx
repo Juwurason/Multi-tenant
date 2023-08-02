@@ -13,6 +13,8 @@ import StaffReportDetails from './staffReportDetails';
 import EditStaffAttendance from '../../../_components/forms/EditStaffAttendance';
 import AdminDailyReport from './adminDailyReport';
 import AdminClockOutReport from '../../../_components/reports/AdminClockOutReport';
+import AdminReportDetails from './adminReportDetails';
+import EditAdminAttendance from '../../../_components/forms/EditAdminAttendance';
 
 
 
@@ -29,8 +31,10 @@ const ReportsRoute = ({ match }) => (
       <Route path={`${match.url}/adminAttendances-clockOut/:uid`} component={AdminClockOutReport} />
       <Route path={`${match.url}/edit-attendance/:uid`} component={EditAttendance} />
       <Route path={`${match.url}/edit-staffAttendance/:uid`} component={EditStaffAttendance} />
+      <Route path={`${match.url}/edit-AdminAttendance/:uid`} component={EditAdminAttendance} />
       <Route path={`${match.url}/attendance-details/:uid`} component={AttendanceReportDetails} />
       <Route path={`${match.url}/staffReport-details/:uid`} component={StaffReportDetails} />
+      <Route path={`${match.url}/administratorReport-details/:uid`} component={AdminReportDetails} />
 
    </Switch>
 );

@@ -26,7 +26,7 @@ function formatDuration(duration) {
     return "0 Hrs 0 min"; // Return an empty string if duration is not available
 }
 
-const StaffReportDetails = () => {
+const AdminReportDetails = () => {
     const { uid, pro } = useParams()
     const [details, setDetails] = useState('')
     const { get, post } = useHttp();
@@ -35,7 +35,7 @@ const StaffReportDetails = () => {
     const FetchSchedule = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/StaffAttendances/get_attendance_record/${uid}`, { cacheTimeout: 300000 });
+            const { data } = await get(`/AdminAttendances/get_attendance/${uid}`, { cacheTimeout: 300000 });
             setDetails(data);
             setLoading(false);
         } catch (error) {
@@ -60,7 +60,7 @@ const StaffReportDetails = () => {
         <>
             <div className="page-wrapper">
                 <Helmet>
-                    <title>Staff Report Details</title>
+                    <title>Administrator Report Details</title>
                     <meta name="description" content="Attendance Details" />
                 </Helmet>
                 {/* Page Content */}
@@ -71,8 +71,8 @@ const StaffReportDetails = () => {
                             <div className="col-sm-12">
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                    <li className="breadcrumb-item active"><Link to="/app/reports/staff-reports">Reports</Link></li>
-                                    <li className="breadcrumb-item active">Staff Report Details</li>
+                                    <li className="breadcrumb-item active"><Link to="/app/reports/administrator-reports">Reports</Link></li>
+                                    <li className="breadcrumb-item active">Administrator Report Details</li>
                                 </ul>
                             </div>
                         </div>
@@ -82,8 +82,7 @@ const StaffReportDetails = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between align-items-center">
-                                    <h4 className="card-title mb-0">Staff Report Details</h4>
-                                    <Link to="/app/reports/staff-reports" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                    <Link to="/app/reports/administrator-reports" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className="card-body">
 
@@ -135,4 +134,4 @@ const StaffReportDetails = () => {
 }
 
 
-export default StaffReportDetails;
+export default AdminReportDetails;

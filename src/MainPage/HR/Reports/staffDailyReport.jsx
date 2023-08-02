@@ -125,7 +125,7 @@ const StaffDailyReport = () => {
                     {id.role === "CompanyAdmin" || hasRequiredClaims("Edit Attendances") ? <Link
                         className='btn'
                         title='Edit'
-                        to={`/app/reports/edit-staffAttendance/${row.staffId}`}
+                        to={`/app/reports/edit-staffAttendance/${row.staffAttendanceId}`}
                     // onClick={() => setEditModal(true)}
 
                     >
