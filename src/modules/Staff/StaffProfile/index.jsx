@@ -235,7 +235,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                     </label>
 
                   </div>
-                </div>
+                </div> 
                 <div className="form-group col-md-4">
                   <label>SurName</label>
                   <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
@@ -411,10 +411,10 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                           <div className="text"><a className='text-primary' href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></div>
                         </li>
 
-                        <li>
+                        {/* <li>
                           <div className="title">Marital status</div>
                           <div className="text"></div>
-                        </li>
+                        </li> */}
 
                       </ul>
                     </div>
