@@ -3,6 +3,7 @@ import api from '../api';
 
 export const fetchAdminAttendance = createAsyncThunk('AdminAttendance/fetchAdminAttendance', async (companyId) => {
     const response = await api.fetchAdminAttendance(companyId);
+
     return response;
 });
 export const filterAdminAttendance = createAsyncThunk(

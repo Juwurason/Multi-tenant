@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { FaBackspace } from 'react-icons/fa';
-import { MdCancel } from 'react-icons/md';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import Editor from '../../HR/Message/editor';
 
@@ -42,9 +40,11 @@ const RaiseTicket = () => {
             const { data } = await privateHttp.post(`/Tickets/raise_ticket?userId=${id.userId}`,
                 formData
             )
-            toast.success(data.message)
-            navigate.push('/app/support/view-tickets')
-            setLoading(false)
+            if (data.status === "Success") {
+                toast.success(data.message)
+                navigate.push('/app/support/view-tickets')
+                setLoading(false)
+            }
 
         } catch (error) {
             toast.error(error.response?.data?.message)
@@ -60,7 +60,7 @@ const RaiseTicket = () => {
         <div className="page-wrapper">
             <Helmet>
                 <title>Raise A Ticket</title>
-                <meta name="description" content="" />
+                <meta name="description" content="Raise Ticket" />
             </Helmet>
 
 

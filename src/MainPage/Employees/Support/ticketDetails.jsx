@@ -29,14 +29,15 @@ const ticketDetails = () => {
         setEditorValue(value);
     };
 
-    const FetchTicket = async () => {
+    const fetchTicket = async () => {
         setLoading(true)
         try {
             const { data } = await axiosInstance.get(`/Tickets/${uid}`, { cacheTimeout: 300000 });
             console.log(data);
             if (data.status === 'Success') {
-                setTicketDetails(data.ticket.ticket);
-                setTicketReplies(data.ticket.ticketReplies);
+                toast.success(data.status);
+                setTicketDetails(data.ticket);
+                setTicketReplies(data.ticketReplies);
             }
             setLoading(false)
         } catch (error) {
@@ -48,7 +49,7 @@ const ticketDetails = () => {
 
     };
     useEffect(() => {
-        FetchTicket()
+        fetchTicket()
     }, []);
 
 
@@ -187,9 +188,9 @@ const ticketDetails = () => {
                         <div className="card" key={index}>
                             <div className="card-body">
                                 <h5 className="card-title"></h5>
-                                <p className="card-text"></p>
+                                <p className="card-text"> {ReactHtmlParser(reply.reply)}</p>
                             </div>
-                            <h5 className="card-footer"> </h5>
+                            <h5 className="card-footer">Replied by {reply.user} on {moment(ticketDetails.dateCreated).format("LLL")} </h5>
                         </div>
 
                     )

@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchSplittedAttendance } from '../../../store/slices/splittedAttendance';
+import { fetchTimesheet } from '../../../store/slices/TimeSheetSlice';
 
 function formatDuration(duration) {
   if (duration) {
@@ -53,7 +54,7 @@ const AttendanceReport = () => {
     dispatch(fetchAttendance(id.companyId));
     dispatch(fetchStaff(id.companyId));
     dispatch(fetchClient(id.companyId));
-  }, [dispatch]);
+  }, [dispatch, id.companyId]);
 
   // Access the entire state
   const loading = useSelector((state) => state.attendance.isLoading);
@@ -69,8 +70,8 @@ const AttendanceReport = () => {
   const [loading3, setLoading3] = useState(false);
   const [loading4, setLoading4] = useState(false);
   const [sta, setSta] = useState('');
-  const dateFrom = useRef(null);
-  const dateTo = useRef(null);
+  const dateFrom = useRef("");
+  const dateTo = useRef("");
   const [editModal, setEditModal] = useState(false);
   const [splittedModal, setSplittedModal] = useState(false);
   const [periodic, setPeriodic] = useState([]);
@@ -97,7 +98,9 @@ const AttendanceReport = () => {
       selector: "",
       sortable: true,
       expandable: true,
-      cell: (row) => <div className='d-flex justify-content-center align-items-center'>
+      //    
+
+      cell: (row) => <div className='w-100 d-flex justify-content-center align-items-center'>
         <>
           {id.role === "CompanyAdmin" || hasRequiredClaims("Adjust Attendances") ? <button
             className='btn'
@@ -177,14 +180,18 @@ const AttendanceReport = () => {
     dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
     setPeriodic(attendance);
 
+
     if (!loading) {
       setLoading1(false);
+
     }
   }
+  const timesheet = useSelector((state) => state.timesheet.data);
+  // console.log(timesheet?.timesheet?.xeroUploadLink);
 
   const GetTimeshift = async (e) => {
     e.preventDefault();
-
+    dispatch(fetchTimesheet({ user: id.userId, sta: sta, dateFrom: dateFrom.current.value, dateTo: dateTo.current.value }));
     setLoading2(true);
     setTimeout(() => {
       const url = `/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
@@ -425,9 +432,7 @@ const AttendanceReport = () => {
     item.staff.fullName.toLowerCase().includes(searchText.toLowerCase())
   );
   const handleSplitted = (e) => {
-    console.log(e);
     dispatch(fetchSplittedAttendance({ value: e }));
-    console.log(splittedAttendance);
 
     setSplittedModal(true);
   }
@@ -600,6 +605,20 @@ const AttendanceReport = () => {
                           </div>
                         </div>
                     }
+                    {timesheet?.timesheet?.xeroUploadLink && !loading && sta !== "" && <div className="col-auto mt-3">
+                      <div className="form-group">
+                        <a href={timesheet?.timesheet?.xeroUploadLink}
+                          type='submit'
+                          className="btn btn-success add-btn text-white rounded-2 m-r-5"
+
+                        >
+
+
+                          Post Staff Timesheet to Xero
+                        </a>
+
+                      </div>
+                    </div>}
 
 
                   </form>

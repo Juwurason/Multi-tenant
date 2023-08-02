@@ -32,18 +32,15 @@ const Document = () => {
     useEffect(() => {
         dispatch(fetchDocument(id.companyId));
         dispatch(fetchStaff(id.companyId));
-        dispatch(fetchClient(id.companyId));
+        // dispatch(fetchClient(id.companyId));
         dispatch(fetchAdmin(id.companyId));
-    }, [dispatch]);
+    }, [dispatch, id.companyId]);
 
     // Access the entire state
     const loading = useSelector((state) => state.document.isLoading);
     const document = useSelector((state) => state.document.data);
     const staff = useSelector((state) => state.staff.data);
-    const clients = useSelector((state) => state.client.data);
     const admin = useSelector((state) => state.admin.data);
-
-
 
 
     //Declaring Variables

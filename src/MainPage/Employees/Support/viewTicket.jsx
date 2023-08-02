@@ -28,7 +28,7 @@ const ViewTicket = () => {
     // Fetch user data and update the state
     useEffect(() => {
         dispatch(fetchTicket(id.companyId));
-    }, [dispatch]);
+    }, [dispatch, id.companyId]);
 
     // Access the entire state
     const loading = useSelector((state) => state.ticket.isLoading);
@@ -215,7 +215,7 @@ const ViewTicket = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Tickets/delete/${e}`,
+                    const { data } = await post(`/Tickets/delete/${e}?userId=${id.userId}`,
 
                     )
                     if (data.status === 'Success') {
