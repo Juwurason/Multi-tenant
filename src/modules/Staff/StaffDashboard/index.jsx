@@ -228,7 +228,7 @@ const StaffDashboard = ({ roster, loading }) => {
 
             {/* All Today Shift */}
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {AlltodayShifts.length > 1 &&
+              {AlltodayShifts.length > 0 &&
                 AlltodayShifts.map((activity, index) => (
                   <div className='col-sm-4' key={index}>
                     <div className='p-2'>
@@ -384,7 +384,7 @@ const StaffDashboard = ({ roster, loading }) => {
 
                 <div className='row'>
 
-                  <div className='col-sm-3'>
+                  <div className='col-sm-6'>
                     <div className='p-2'>
                       <label className='d-flex justify-content-center fw-bold text-muted'>Yesterday</label>
                     </div>
@@ -408,7 +408,7 @@ const StaffDashboard = ({ roster, loading }) => {
                     </div>
                   </div>
 
-                  <div className='col-sm-6'>
+                  {/* <div className='col-sm-6'>
                     <div className='p-2'>
                       <label className='d-flex justify-content-center fw-bold text-primary'>Today</label>
                     </div>
@@ -492,11 +492,11 @@ const StaffDashboard = ({ roster, loading }) => {
 
                     </div>
 
-                  </div>
+                  </div> */}
 
 
 
-                  <div className='col-sm-3'>
+                  <div className='col-sm-6'>
                     <div className='p-2'>
                       <label className='d-flex justify-content-center fw-bold text-muted'>Tomorrow</label>
                     </div>

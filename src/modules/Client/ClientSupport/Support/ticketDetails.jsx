@@ -4,14 +4,13 @@ import { FaBackspace } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useCompanyContext } from '../../../context';
-import useHttp from '../../../hooks/useHttp';
 import Editor from './editor';
 import ReactHtmlParser from 'react-html-parser';
 import moment from 'moment';
 import Swal from 'sweetalert2';
+import useHttp from '../../../../hooks/useHttp';
 
-const ticketDetails = () => {
+const ClientTicketDetails = () => {
 
     const [loading, setLoading] = useState(false);
     const id = JSON.parse(localStorage.getItem('user'));
@@ -107,6 +106,7 @@ const ticketDetails = () => {
                         history.push('/staff/view-ticket')
 
                     } else {
+                        // toast.error("error closing Ticket");
                         toast.error(data.message);
                     }
 
@@ -131,21 +131,14 @@ const ticketDetails = () => {
                 <meta name="description" content="" />
             </Helmet>
 
-
-            {/* Page Header */}
-
-
-
-
-
             <div className="content container-fluid">
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
                             <h3 className="page-title">Ticket Trail</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/staff/staff/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item"><Link to="/staff/staff/view-ticket">Ticket</Link></li>
+                                <li className="breadcrumb-item"><Link to="/client/app/dashboard">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/client/app/client-view_ticket">Ticket</Link></li>
                                 <li className="breadcrumb-item active">Ticket Trail</li>
                             </ul>
                         </div>
@@ -255,4 +248,4 @@ const ticketDetails = () => {
     );
 }
 
-export default ticketDetails;
+export default ClientTicketDetails;
