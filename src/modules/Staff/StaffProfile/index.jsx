@@ -11,7 +11,6 @@ import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
 
 const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) => {
-  console.log(staffOne);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState('');
   const [informModal, setInformModal] = useState(false);
@@ -649,6 +648,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                   </div>
                 </div>
 
+                        {/* Employment Details */}
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
@@ -756,6 +756,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                 </div>
 
 
+                          {/* Social */}
                 <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
