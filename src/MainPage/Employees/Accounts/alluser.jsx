@@ -67,7 +67,7 @@ const AllUser = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <Link href={`/app/account/editrole/${row.id}`} className="fw-bold text-dark">
+                <Link href={`/app/account/editrole/${row.id}`} className="fw-bold text-dark overflow-hidden" >
                     {row.fullName}
                 </Link>
             ),
@@ -87,7 +87,7 @@ const AllUser = () => {
         {
             name: "Actions",
             cell: (row) => (
-                <div className="d-flex">
+                <div className="d-flex overflow-hidden">
                     <Link
                         className='btn'
                         title='Edit User'
@@ -132,7 +132,7 @@ const AllUser = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Account/delete_user/${e}?userId=${id.userId}`,
+                    const { data } = await post(`/Account/delete_user?id=${e}&userId=${id.userId}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);

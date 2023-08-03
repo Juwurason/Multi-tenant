@@ -89,7 +89,7 @@ const AllAdmin = () => {
                     >
                         <FaRegEdit />
                     </Link> : ""}
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Administrator") ? <button
+                    {/* {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Administrator") ? <button
                         className='btn'
                         title='Delete'
                         onClick={() => {
@@ -98,7 +98,7 @@ const AllAdmin = () => {
                         }}
                     >
                         <GoTrashcan />
-                    </button> : ""}
+                    </button> : ""} */}
 
                 </div>
             ),

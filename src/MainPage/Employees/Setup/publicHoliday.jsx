@@ -27,9 +27,28 @@ const PublicHoliday = () => {
     const [showModal, setShowModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const [loading4, setLoading4] = useState(false);
     const [editpro, setEditPro] = useState({})
     const { get, post } = useHttp();
+
+
+    const [loadingClockId, setLoadingClockId] = useState(null);
+
+    const handleClockClick = (date) => {
+        setLoadingClockId(date);
+        // Perform any actions you need when the clock is clicked, for example, the AdjustAttendance function
+        AdjustAttendance(date)
+            .then(() => {
+                setLoadingClockId(null); // Set the loading status back to normal when the action is complete
+            })
+            .catch((error) => {
+                console.error(error); // Handle errors appropriately if needed
+                setLoadingClockId(null); // Set the loading status back to normal in case of an error
+            });
+    };
+
+
 
     const columns = [
         {
@@ -37,16 +56,15 @@ const PublicHoliday = () => {
             selector: "",
             sortable: true,
             expandable: true,
-            cell: (row) => <div className='d-flex justify-content-center align-items-center'>
+            cell: (row) => <div className='w-100 d-flex justify-content-center align-items-center'>
                 <button
                     className='btn'
                     title='Adjust Attendance'
-                    onClick={() => AdjustAttendance(row.date)}
-
-                    disabled={loading4 ? true : false}
+                    onClick={() => handleClockClick(row.date)}
+                    disabled={loadingClockId === row.date} // Disable the button only for the clicked clock
                 >
                     {
-                        loading4 ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                        loadingClockId === row.date ? <div class="spinner-border spinner-border-sm text-secondary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div> :
                             <FaRegClock />
@@ -61,14 +79,14 @@ const PublicHoliday = () => {
         },
         {
             name: 'Date',
-            selector: row => dayjs(row.date).format('MMMM D, YYYY'),
+            selector: row => dayjs(row.date).format('MMMM D'),
             sortable: true,
 
 
         },
         {
             name: 'Date Created',
-            selector: row => dayjs(row.dateCreated).format('ddd MMM YYYY HH:mm'),
+            selector: row => dayjs(row.dateCreated).format('ddd MMM YYYY HH:mmA'),
             sortable: true
         },
 
@@ -126,16 +144,15 @@ const PublicHoliday = () => {
         // console.log(e);
         setEditModal(true);
         try {
-            setLoading(true)
+            setLoading2(true)
             const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
             setEditPro(data);
-            setLoading(false)
+            setLoading2(false)
         } catch (error) {
             console.log(error);
-            setLoading(false)
+            setLoading2(false)
         } finally {
-            setLoading(false)
+            setLoading2(false)
         }
     };
 
@@ -256,7 +273,7 @@ const PublicHoliday = () => {
                 </span>
                 <span>
                     <span className='fw-bold'>Date Modified: </span>
-                    <span>   {dayjs(data.dateModified).format('ddd MMM YYYY HH:mm')}</span>
+                    <span>   {dayjs(data.dateModified).format('ddd MMM YYYY HH:mmA')}</span>
                 </span>
 
 

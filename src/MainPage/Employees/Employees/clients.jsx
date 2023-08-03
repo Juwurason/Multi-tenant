@@ -85,7 +85,7 @@ const Clients = () => {
             </Link>
           </div> : ""}
 
-          {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Client") ? <div className='col-md-4'>
+          {/* {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Client") ? <div className='col-md-4'>
             <button
               className='btn'
               title='Delete'
@@ -93,7 +93,7 @@ const Clients = () => {
             >
               <GoTrashcan />
             </button>
-          </div> : ""}
+          </div> : ""} */}
 
 
 

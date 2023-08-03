@@ -19,6 +19,7 @@ import staffAttendanceSlice from '../slices/staffAttendanceSlice';
 import adminAttendanceSlice from '../slices/adminAttendanceSlice';
 import TimeSheetSlice from '../slices/TimeSheetSlice';
 import AllTimeSheetSlice from '../slices/AllTimeSheetSlice';
+import SupportSchedule from '../slices/SupportSchedule';
 
 const rootReducer = combineReducers({
     dashboard: DashboardSlice,
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
     template: FormTemplateSlice,
     staffAttendance: staffAttendanceSlice,
     adminAttendance: adminAttendanceSlice,
+    supportSchedule: SupportSchedule,
 
 });
 

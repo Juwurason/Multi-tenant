@@ -16,6 +16,7 @@ import { SlSettings } from 'react-icons/sl'
 import dayjs from 'dayjs';
 import { fetchStaff, filterStaff } from '../../../store/slices/StaffSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 
 const AllEmployees = () => {
   const id = JSON.parse(localStorage.getItem('user'));
@@ -30,7 +31,7 @@ const AllEmployees = () => {
   // Fetch staff data and update the state
   useEffect(() => {
     dispatch(fetchStaff(id.companyId));
-  }, [dispatch]);
+  }, [dispatch, id.companyId]);
 
   // Access the entire state
 
@@ -103,7 +104,7 @@ const AllEmployees = () => {
             </Link>
           </div> : ""}
 
-          {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Staff") ? <div className='col-md-4'>
+          {/* {user.role === "CompanyAdmin" || hasRequiredClaims("Delete Staff") ? <div className='col-md-4'>
             <button
               className='btn'
               title='Delete'
@@ -111,7 +112,7 @@ const AllEmployees = () => {
             >
               <GoTrashcan />
             </button>
-          </div> : ""}
+          </div> : ""} */}
 
         </div>
       ),
