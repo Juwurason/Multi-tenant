@@ -82,6 +82,7 @@ const AdminReportDetails = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between align-items-center">
+                                    <h4 className="card-title mb-0">Administrator Report Details</h4>
                                     <Link to="/app/reports/administrator-reports" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className="card-body">

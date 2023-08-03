@@ -45,7 +45,7 @@ const ShiftScheduling = () => {
         dispatch(fetchRoaster(id.companyId));
         dispatch(fetchStaff(id.companyId));
         dispatch(fetchClient(id.companyId));
-    }, [dispatch]);
+    }, [dispatch, id.companyId]);
 
     // Access the entire state
     const loading = useSelector((state) => state.roaster.isLoading);

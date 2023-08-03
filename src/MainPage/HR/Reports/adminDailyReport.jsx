@@ -51,7 +51,7 @@ const AdminDailyReport = () => {
     useEffect(() => {
         dispatch(fetchAdminAttendance(id.companyId));
         dispatch(fetchAdmin(id.companyId));
-    }, [dispatch]);
+    }, [dispatch, id.companyId]);
 
     // Access the entire state
     const loading = useSelector((state) => state.adminAttendance.isLoading);
@@ -76,13 +76,13 @@ const AdminDailyReport = () => {
 
         {
             name: 'Administrator',
-            selector: row => row.administrator,
+            selector: row => row.administrator.fullName,
             sortable: true,
             cell: (row) => <span className="long-cell fw-bold" style={{ overflow: "hidden", cursor: "pointer" }}
-                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.administrator}`}
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.administrator.fullName}`}
                 onClick={() => handleSplitted(row.attendanceId
                 )}
-            >{!row.administrator ? "No Name" : row.administrator}</span>
+            >{!row.administrator.fullName ? "No Name" : row.administrator.fullName}</span>
 
         },
         {
@@ -132,17 +132,17 @@ const AdminDailyReport = () => {
 
 
 
-    const FilterAttendance = (e) => {
-        e.preventDefault();
-        setLoading1(true);
+    // const FilterAttendance = (e) => {
+    //     e.preventDefault();
+    //     setLoading1(true);
 
-        dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
-        setPeriodic(attendance);
+    //     dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
+    //     setPeriodic(attendance);
 
-        if (!loading) {
-            setLoading1(false);
-        }
-    }
+    //     if (!loading) {
+    //         setLoading1(false);
+    //     }
+    // }
 
 
 
@@ -265,8 +265,8 @@ const AdminDailyReport = () => {
         return (
             <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
                 <span>
-                    <span className='fw-bold'>Staff: </span>
-                    <span> {data.administrator}</span>
+                    <span className='fw-bold'>Administrator: </span>
+                    <span> {data.administrator.fullName}</span>
                 </span>
                 <span>
                     <span className='fw-bold'>Report: </span>
@@ -358,7 +358,7 @@ const AdminDailyReport = () => {
                             <div className="card">
 
                                 <div className="card-body">
-                                    <form className="row align-items-center py-3" onSubmit={FilterAttendance}>
+                                    <form className="row align-items-center py-3" >
 
                                         <div className="col-md-4">
                                             <div className="form-group">
@@ -497,95 +497,7 @@ const AdminDailyReport = () => {
                     </div>
 
 
-                    {/*Edit Modal */}
-                    <Modal show={editModal} onHide={() => setEditModal(false)} centered size='lg'>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Edit Attendance</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
 
-                                    <form
-                                    // onSubmit={SendReport}
-                                    >
-
-                                        <div className="row">
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label htmlFor="">Clock In</label>
-                                                    <input type="text" className="form-control"
-                                                        // value={moment(attendance.clockIn).format("LLL")}
-                                                        readOnly />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label htmlFor="">Clock Out</label>
-                                                    <input type="text" className="form-control"
-                                                        // value={moment(attendance.clockOut).format("LLL")}
-                                                        readOnly />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label htmlFor="">Starting Kilometre (km)</label>
-                                                    <input type="text"
-                                                        // value={startKm}
-                                                        // onChange={e => setStartKm(e.target.value)}
-                                                        className="form-control" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label htmlFor="">Ending Kilometre (km)</label>
-                                                    <input type="text"
-                                                        // value={endKm}
-                                                        // onChange={e => setEndKm(e.target.value)}
-                                                        className="form-control" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div className="form-group">
-                                            {/* <DefaultEditor value={html} onChange={onChange} /> */}
-                                            <label htmlFor="">Additional Report <span className='text-success' style={{ fontSize: '10px' }}>This could be reasons why you were late or information you want your admin to be aware of</span></label>
-                                            <textarea rows={3} className="form-control summernote"
-                                                name="report"
-                                            // value={report} onChange={e => setReport(e.target.value)}
-                                            />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="">Image URL </label>
-                                            <input className="form-control" type="file"
-                                                accept=".png,.jpg,.jpeg"
-                                                maxsize={1024 * 1024 * 2}
-                                            // onChange={handleFileChange}
-                                            />
-                                        </div>
-                                        <div className="form-group text-center mb-0">
-                                            <div className="text-center d-flex gap-2">
-                                                <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
-                                                    disabled={loading1 ? true : false}
-                                                    type='submit'
-                                                >
-
-                                                    {loading1 ? <div className="spinner-grow text-light" role="status">
-                                                        <span className="sr-only">Loading...</span>
-                                                    </div> : "Save"}</button>
-
-
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </Modal.Body>
-
-                    </Modal>
 
 
 
