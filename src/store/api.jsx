@@ -237,6 +237,15 @@ const fetchTimesheet = async (user, sta, dateFrom, dateTo) => {
         throw error;
     }
 };
+const fetchAllTimesheet = async (user, dateFrom, dateTo) => {
+    try {
+        const response = await axiosInstance.get(`/Attendances/generate_all_staff_timesheet?userId=${user}&fromDate=${dateFrom}&toDate=${dateTo}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Timesheet', error);
+        throw error;
+    }
+};
 
 const api = {
     fetchAdminData,
@@ -262,7 +271,8 @@ const api = {
     fetchFormTemplate,
     fetchStaffAttendance,
     fetchAdminAttendance,
-    fetchTimesheet
+    fetchTimesheet,
+    fetchAllTimesheet
     // Add other API endpoints and corresponding methods as needed
 };
 

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
     },
     tableCol: {
-        width: "70px",
+        width: "100px",
         borderWidth: 0,
         borderStyle: "solid",
         borderWidth: 1,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 const TimesheetPDF = ({ total, timesheet }) => {
     return (
         <Document>
-            <Page style={styles.page}>
+            <Page style={styles.page} orientation="landscape">
                 <View>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <Image src={logo} style={styles.logo} />
@@ -211,7 +211,7 @@ const TimesheetPDF = ({ total, timesheet }) => {
 
                     <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 30 }}>
                         <View style={{ flexDirection: "column", alignItems: "center", gap: 5 }}>
-                            <Text style={{ fontWeight: "extrabold", textTransform: "uppercase", fontSize: 10 }}>{total.staffName}</Text>
+                            <Text style={{ fontWeight: "ultrabold", textTransform: "uppercase", fontSize: 10 }}>{total.staffName}</Text>
                             <Text style={{ fontSize: 10 }}>NAME OF STAFF</Text>
                         </View>
                         <View style={{ flexDirection: "column", alignItems: "center", gap: 5 }}>

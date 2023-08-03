@@ -276,7 +276,7 @@ const Sidebar = (props) => {
               </li> : ""}
 
               {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
-                <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Attendance Report</span></Link>
+                <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Timesheet Report</span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className={pathname.includes('shift-report') || pathname.includes('shift-report') ? "active" : ""}>
                 <Link to="/app/reports/shift-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Shift Attendance Report</span></Link>

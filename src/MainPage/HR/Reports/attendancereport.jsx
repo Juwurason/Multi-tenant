@@ -22,6 +22,7 @@ import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchSplittedAttendance } from '../../../store/slices/splittedAttendance';
 import { fetchTimesheet } from '../../../store/slices/TimeSheetSlice';
+import { fetchAllTimesheet } from '../../../store/slices/AllTimeSheetSlice';
 
 function formatDuration(duration) {
   if (duration) {
@@ -186,8 +187,6 @@ const AttendanceReport = () => {
 
     }
   }
-  const timesheet = useSelector((state) => state.timesheet.data);
-  // console.log(timesheet?.timesheet?.xeroUploadLink);
 
   const GetTimeshift = async (e) => {
     e.preventDefault();
@@ -200,21 +199,22 @@ const AttendanceReport = () => {
     }, 2000);
   }
 
+  const timesheet = useSelector((state) => state.timesheet.data);
+  // console.log(timesheet?.timesheet?.xeroUploadLink);
 
   const GetAllTimeshift = async (e) => {
     e.preventDefault();
-
-
+    dispatch(fetchAllTimesheet({ user: id.userId, dateFrom: dateFrom.current.value, dateTo: dateTo.current.value }));
     setLoading2(true);
     setTimeout(() => {
       const url = `/Allstaff-timesheet/${dateFrom.current.value}/${dateTo.current.value}`;
       window.open(url, '_blank');
       setLoading2(false);
     }, 2000);
-
-
   }
-  // /ShiftRosters/send_timesheet?userId=&fromDate=&toDate=&staffId=
+  const allTimesheet = useSelector((state) => state.allTimesheet.data);
+  console.log(allTimesheet);
+
   const SendTimesheet = async () => {
 
     setLoading3(true)
@@ -607,6 +607,20 @@ const AttendanceReport = () => {
 
 
                           Post Staff Timesheet to Xero
+                        </a>
+
+                      </div>
+                    </div>}
+                    {allTimesheet?.timesheet?.xeroUploadLink && !loading && sta === "" && <div className="col-auto mt-3">
+                      <div className="form-group">
+                        <a href={allTimesheet?.timesheet?.xeroUploadLink}
+                          type='submit'
+                          className="btn btn-success add-btn text-white rounded-2 m-r-5"
+                          style={{ fontSize: "12px" }}
+                        >
+
+
+                          Post All Staff Timesheet to Xero
                         </a>
 
                       </div>
