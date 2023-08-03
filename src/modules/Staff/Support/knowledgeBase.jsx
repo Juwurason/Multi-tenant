@@ -113,7 +113,7 @@ const KnowledgeBase = () => {
     const FetchClient = async () => {
         setLoading(true)
         try {
-            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
+            const { data } = await get(`/Tickets/get_knowledgebase`, { cacheTimeout: 300000 });
             // console.log(data);
             //   setGetHoli(data);
             setLoading(false)
