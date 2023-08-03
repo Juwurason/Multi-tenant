@@ -7,9 +7,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { useCompanyContext } from '../context/index.jsx';
 import './login.css';
 import usePublicHttp from '../hooks/usePublicHttp.jsx';
-import {
-  headerlogo,
-} from '../Entryfile/imagepath';
+import loggo from '../assets/img/promaxcare_logo_white.png';
 
 const OTPscreen = () => {
   // const { email, companyId } = useCompanyContext();
@@ -89,13 +87,13 @@ const OTPscreen = () => {
   return (
     <>
       <Helmet>
-        <title>OTP - Promax Multitenant APP</title>
+        <title>OTP - Page</title>
         <meta name="description" content="Auth page" />
       </Helmet>
       <div className="cover-bg">
         <div className="header-left p-4">
           <span className="logo p-4">
-            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
+            <img src={loggo} width={180} height={180} alt="" />
           </span>
         </div>
         <div >

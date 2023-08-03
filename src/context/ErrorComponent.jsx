@@ -4,6 +4,7 @@ import {
     headerlogo,
 } from '../Entryfile/imagepath';
 import sad from '../assets/img/sad-bird.png'
+import loggo from '../assets/img/promaxcare_logo (2).png'
 
 const ErrorComponent = ({ message }) => {
 
@@ -23,10 +24,10 @@ const ErrorComponent = ({ message }) => {
         <>
             <div className="header-left p-4">
                 <span className="logo p-4">
-                    <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold'>Promax Care</span>
+                    <img src={loggo} width={180} height={180} alt="" />
                 </span>
             </div>
-            <div className="containerr">
+            <div className="containerr bg-white">
                 <div className="gif " >
                     <img src={sad} alt="sad bird" width={350} height={350} className="bounce2" />
                 </div>

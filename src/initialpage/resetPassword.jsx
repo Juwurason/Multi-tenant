@@ -3,13 +3,11 @@ import React, { useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { FaArrowLeft, FaLongArrowAltLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import {
-    headerlogo,
-} from '../Entryfile/imagepath'
 import './login.css'
 import usePublicHttp from '../hooks/usePublicHttp';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import loggo from '../assets/img/promaxcare_logo_white.png';
 
 
 const ResetPassword = () => {
@@ -59,13 +57,13 @@ const ResetPassword = () => {
                 <meta name="description" content="Password" />
             </Helmet>
 
-            <div className="cover-bg">
+            <div className="cover-bg px-2">
                 <div className="header-left p-4">
                     <span className="logo p-4">
-                        <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
+                        <img src={loggo} width={180} height={180} alt="" />
                     </span>
                 </div>
-                <div className="login-form px-3 shadow bg-white rounded" >
+                <div className="login-form px-1 shadow bg-white rounded" >
                     <form onSubmit={handleSubmit}>
                         <h4 className="text-center text-primary fw-bold">Create New Password</h4>
                         <div className="form-group mt-3">

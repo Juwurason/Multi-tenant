@@ -10,6 +10,7 @@ import './login.css'
 import usePublicHttp from '../hooks/usePublicHttp';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import loggo from '../assets/img/promaxcare_logo_white.png';
 
 
 const ForgotPassword = () => {
@@ -28,16 +29,18 @@ const ForgotPassword = () => {
       const { data } = await publicHttp.get(`/Account/forgot_password?email=${email}`)
       if (data.status === "Success") {
         toast.success(data.message)
-        navigate.replace(`/resetpassword`)
+        navigate.replace(`/resetpassword`);
+        setLoading(false)
+
       } else {
         toast.error(data.message)
-        return
+
+        setLoading(false)
       }
-      setLoading(false)
     } catch (error) {
+      setLoading(false);
       toast.error(error.response.data.message);
       console.log(error);
-      setLoading(false);
     }
   }
 
@@ -47,17 +50,17 @@ const ForgotPassword = () => {
 
     <>
       <Helmet>
-        <title>Forget Password - Promax Multitenant App</title>
+        <title>Forget Password -</title>
         <meta name="description" content="Password" />
       </Helmet>
 
-      <div className="cover-bg">
+      <div className="cover-bg px-2">
         <div className="header-left p-4">
           <span className="logo p-4">
-            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
+            <img src={loggo} width={180} height={180} alt="" />
           </span>
         </div>
-        <div className="login-form px-3 shadow bg-white rounded" >
+        <div className="login-form px-1 shadow bg-white rounded" >
           <form onSubmit={handleSubmit}>
             <h4 className="text-center text-primary fw-bold">Forgot Password</h4>
             <div className="form-group mt-4">

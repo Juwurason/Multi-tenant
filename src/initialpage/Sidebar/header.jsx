@@ -3,10 +3,7 @@ import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useHistory, withRouter, Link } from 'react-router-dom';
 import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineSettings } from 'react-icons/md';
 import man from "../../assets/img/user.jpg";
-import {
-  headerlogo,
-} from '../../Entryfile/imagepath';
-
+import loggo from '../../assets/img/promaxcare_logo_icon.png';
 const Header = (props) => {
   const navigate = useHistory();
   const handlesidebar = () => {
@@ -20,7 +17,7 @@ const Header = (props) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const pathname = location.pathname;
   const user = JSON.parse(localStorage.getItem('user'));
-  
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.clear();
@@ -46,7 +43,7 @@ const Header = (props) => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={headerlogo} width={40} height={40} alt="" />
+          <img src={loggo} width={40} height={40} alt="" />
         </Link>
       </div>
       {/* /Logo */}
@@ -146,7 +143,7 @@ const Header = (props) => {
               </div>
             </div>
             <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
-            {user.role === "CompanyAdmin" ? <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link>:""}
+            {user.role === "CompanyAdmin" ? <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link> : ""}
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
           </div>
         </li>

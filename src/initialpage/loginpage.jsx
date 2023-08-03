@@ -6,10 +6,8 @@ import './login.css'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import usePublicHttp from '../hooks/usePublicHttp';
-import {
-  headerlogo,
-} from '../Entryfile/imagepath'
 import CryptoJS from 'crypto-js';
+import loggo from '../assets/img/promaxcare_logo_white.png'
 
 
 const Loginpage = () => {
@@ -59,7 +57,7 @@ const Loginpage = () => {
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data.data), 'promax-001#').toString();
         localStorage.setItem('userEnc', encryptedData);
         localStorage.setItem("user", JSON.stringify(data.userProfile));
-        {data.userProfile?.role === "Administrator" ? localStorage.setItem("adminAttendance", JSON.stringify(data.adminAttendance)) : ""}
+        { data.userProfile?.role === "Administrator" ? localStorage.setItem("adminAttendance", JSON.stringify(data.adminAttendance)) : "" }
       }
       if (data.userProfile?.role === "CompanyAdmin" || data.userProfile?.role === "Administrator") {
         navigate.push('/app/main/dashboard')
@@ -141,13 +139,13 @@ const Loginpage = () => {
       </Helmet>
 
 
-      <div className='cover-bg'>
+      <div className='cover-bg px-2'>
         <div className="header-left p-4">
           <span className="logo p-4">
-            <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
+            <img src={loggo} width={180} height={180} alt="" />
           </span>
         </div>
-        <div className="login-form px-3 shadow bg-white rounded" >
+        <div className="login-form px-1 shadow bg-white rounded" >
           <form onSubmit={handleLogin}>
             <h3 className="text-center text-primary fw-bold">Sign in to your account</h3>
             <div className="form-group mt-4">
@@ -166,7 +164,7 @@ const Loginpage = () => {
                 minLength="6"
                 // maxLength="15"
                 required
-                className="form-control border-0" placeholder="password" />
+                className="form-control border-0" placeholder="Password" />
               <button onClick={() => setPwdVisible(!pwdVisible)} type='button' className="btn">
                 {pwdVisible ? <FaEye /> : <FaEyeSlash />}
 

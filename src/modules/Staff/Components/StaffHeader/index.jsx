@@ -5,12 +5,9 @@ import React, { useState, useEffect } from 'react'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import {
-    headerlogo, lnEnglish, lnFrench, lnSpanish, lnGerman, Avatar_02, Avatar_03, Avatar_05,
-    Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
-} from '../../../../Entryfile/imagepath'
 import man from "../../../../assets/img/user.jpg"
 import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout } from "react-icons/md"
+import loggo from '../../../../assets/img/promaxcare_logo_icon.png';
 
 const StaffHeader = (props) => {
     const navigate = useHistory()
@@ -52,7 +49,7 @@ const StaffHeader = (props) => {
             {/* Logo */}
             <div className="header-left">
                 <a href="/staff/staff/dashboard" className="logo">
-                    <img src={headerlogo} width={40} height={40} alt="" />
+                    <img src={loggo} width={40} height={40} alt="" />
                 </a>
             </div>
             {/* /Logo */}

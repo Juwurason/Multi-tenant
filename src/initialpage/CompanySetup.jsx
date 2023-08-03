@@ -6,9 +6,7 @@ import http from "../api/http";
 import { useCompanyContext } from "../context";
 import usePublicHttp from "../hooks/usePublicHttp";
 import Phone from "../_components/Phone/Phone";
-import {
-    headerlogo,
-} from '../Entryfile/imagepath'
+import loggo from '../assets/img/promaxcare_logo_white.png';
 
 const CompanySetup = () => {
     const { storeCompanyId } = useCompanyContext();
@@ -108,13 +106,13 @@ const CompanySetup = () => {
     return (
         <>
             <Helmet>
-                <title>Company Setup - Promax Multitenant APP</title>
+                <title>Company Setup</title>
                 <meta name="description" content="Company Registration Page" />
             </Helmet>
             <div className="cover2-bg">
                 <div className="header-left p-4">
                     <span className="logo p-4">
-                        <img src={headerlogo} width={40} height={40} alt="" /> &nbsp; <span className='fw-bold text-white'>Promax Care</span>
+                        <img src={loggo} width={180} height={180} alt="" />
                     </span>
                 </div>
                 <div className="container pt-3">
