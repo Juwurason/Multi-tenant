@@ -17,7 +17,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   const [stateModal, setStateModal] = useState(false);
   const [kinModal, setKinModal] = useState(false);
   const [bankModal, setBankModal] = useState(false);
-  const [employmentModal, setEmploymentModal] = useState(false);
+  // const [employmentModal, setEmploymentModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
 
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
@@ -55,9 +55,9 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   const handleModal3 = () => {
     setBankModal(true)
   }
-  const handleModal4 = () => {
+  // const handleModal4 = () => {
     setEmploymentModal(true);
-  }
+  // }
   const handleModal5 = () => {
     setSocialModal(true);
   }
@@ -103,7 +103,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
         setStateModal(false);
         setKinModal(false);
         setBankModal(false);
-        setEmploymentModal(false);
+        // setEmploymentModal(false);
         setSocialModal(false);
         FetchData();
       } else {
@@ -649,7 +649,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                 </div>
 
                         {/* Employment Details */}
-                <div className="col-md-6 d-flex">
+                {/* <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
                       <div className="pro-edit">
@@ -753,7 +753,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                       </ul>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
 
                           {/* Social */}

@@ -738,7 +738,7 @@ const EmployeeProfile = () => {
                         >
                           <Modal.Header closeButton>
                             <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
-                              Employment Details
+                            Update Employment Status for {staffOne.fullName}
                             </Modal.Title>
                           </Modal.Header>
                           <Modal.Body>
