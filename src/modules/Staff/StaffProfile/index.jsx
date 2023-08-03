@@ -17,6 +17,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   const [stateModal, setStateModal] = useState(false);
   const [kinModal, setKinModal] = useState(false);
   const [bankModal, setBankModal] = useState(false);
+  // const [employmentModal, setEmploymentModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
 
   const getStaffProfile = JSON.parse(localStorage.getItem('staffProfile'))
@@ -54,10 +55,13 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   const handleModal3 = () => {
     setBankModal(true)
   }
-  const handleModal4 = () => {
+  const handleModal5 = () => {
     setSocialModal(true);
   }
-
+  
+  // const handleModal4 = () => {
+    // setEmploymentModal(true);
+  // }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -99,6 +103,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
         setStateModal(false);
         setKinModal(false);
         setBankModal(false);
+        // setEmploymentModal(false);
         setSocialModal(false);
         FetchData();
       } else {
@@ -642,11 +647,121 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 d-flex">
+
+                        {/* Employment Details */}
+                {/* <div className="col-md-6 d-flex">
                   <div className="card profile-box flex-fill">
                     <div className="card-body">
                       <div className="pro-edit">
                         <a className="edit-icon bg-info text-white" onClick={() => handleModal4(staffOne.staffId)}>
+                          <i className="fa fa-pencil" />
+                        </a>
+                        <Modal
+                          show={employmentModal}
+                          onHide={() => setEmploymentModal(false)}
+                          size="lg"
+                          aria-labelledby="contained-modal-title-vcenter"
+
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title id="contained-modal-title-vcenter" style={{ fontSize: "10px" }}>
+                            Employment Details
+                            </Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <div className="row">
+                              <div className="col-md-6">
+                                <div className="form-group">
+                                  <label>Employment Type</label>
+                                  <input type="text" className="form-control" placeholder='' name='employmentType' value={editedProfile.employmentType || ''} onChange={handleInputChange} />
+                                </div>
+
+                                <div className="form-group">
+                                  <label>PayRate</label>
+                                  <input type="text" className="form-control" placeholder='' name='payRate' value={editedProfile.payRate || ''} onChange={handleInputChange} />
+                                </div>
+                                <div className="form-group">
+                                  <label>Earning Rate</label>
+                                  <input type="text" className="form-control" placeholder='' name='earningRate' value={editedProfile.earningRate || ''} onChange={handleInputChange} />
+                                </div>
+                              </div>
+                              <div className="col-md-6">
+                                <div className="form-group">
+                                  <label>Date Joined</label>
+                                  <input type="date" className="form-control" placeholder='' name='dateJoined' value={editedProfile.dateJoined || ''} onChange={handleInputChange} />
+                                </div>
+                                <div className="form-group">
+                                  <label>Salary</label>
+                                  <input type="text" className="form-control" placeholder='' name='salary' value={editedProfile.salary || ''} onChange={handleInputChange} />
+                                </div>
+                                
+                                <div className="form-group">
+                                  <label>Level</label>
+                                  <input type="number" className="form-control" placeholder='' name='level' value={editedProfile.level || ''} onChange={handleInputChange} />
+                                </div>
+
+                              </div>
+                            </div>
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <button
+                              className="btn add-btn rounded btn-outline-danger"
+                              onClick={() => setEmploymentModal(false)}
+                            >
+                              Close
+                            </button>
+                            <button
+                              className="ml-2 btn add-btn rounded text-white btn-info"
+                              onClick={handleSave}
+                            >
+                              {loading ? <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                              </div> : "Send"}
+                            </button>
+                          </Modal.Footer>
+
+                        </Modal>
+
+                      </div>
+                      <h3 className="card-title">Employment Details</h3>
+                      <ul className="personal-info">
+                        <li>
+                          <div className="title"> Employment Status</div>
+                          <div className="text">{staffOne.employmentType === "null" || staffOne.employmentType === "undefined" || staffOne.employmentType === "" ? "---" : staffOne.employmentType}</div>
+                        </li>
+                        <li>
+                          <div className="title"> Date Joined</div>
+                          <div className="text">{staffOne.dateJoined === "null" || staffOne.dateJoined === "undefined" || staffOne.dateJoined === "" ? "---" : staffOne.dateJoined}</div>
+                        </li>
+                        <li>
+                          <div className="title"> Salary</div>
+                          <div className="text">{staffOne.salary === "null" || staffOne.salary === "undefined" || staffOne.salary === "" ? "---" : staffOne.salary}</div>
+                        </li>
+                        <li>
+                          <div className="title"> Pay Rate</div>
+                          <div className="text">{staffOne.payRate === "null" || staffOne.payRate === "undefined" || staffOne.payRate === "" ? "---" : staffOne.payRate}</div>
+                        </li>
+                        <li>
+                          <div className="title"> Earning Rate</div>
+                          <div className="text">{staffOne.earningRate === null || staffOne.earningRate === "undefined" || staffOne.earningRate === " " ? "---" : staffOne.earningRate}</div>
+                        </li>
+                        <li>
+                          <div className="title"> Level</div>
+                          <div className="text">{staffOne.level === null || staffOne.level === "undefined" || staffOne.level === " " ? "---" : staffOne.level}</div>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </div>
+                </div> */}
+
+
+                          {/* Social */}
+                <div className="col-md-6 d-flex">
+                  <div className="card profile-box flex-fill">
+                    <div className="card-body">
+                      <div className="pro-edit">
+                        <a className="edit-icon bg-info text-white" onClick={() => handleModal5(staffOne.staffId)}>
                           <i className="fa fa-pencil" />
                         </a>
                         <Modal
@@ -734,6 +849,8 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                     </div>
                   </div>
                 </div>
+
+
               </div>
 
 

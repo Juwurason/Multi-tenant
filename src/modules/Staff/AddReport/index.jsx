@@ -34,11 +34,14 @@ const AddReport = () => {
                 setEditPro(data)
                 // Process the attendance data here
             } catch (error) {
-                console.log(error);
+                toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
             }
 
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
+             setLoading(false);
         } finally {
             setLoading(false);
         }
@@ -77,8 +80,8 @@ const AddReport = () => {
       }
 
     const formData = new FormData();
-    formData.append("StartKm", startKm);
-    formData.append("EndKm", endKm);
+    formData.append("StartKm", editpro.startKm);
+    formData.append("EndKm", editpro.endKm);
     formData.append("Report", report);
     formData.append("ImageFile", url);
 
@@ -100,7 +103,9 @@ const AddReport = () => {
             }
             setLoading1(false)
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
             setLoading1(false)
            
         }
