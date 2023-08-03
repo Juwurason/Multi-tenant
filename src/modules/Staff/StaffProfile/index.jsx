@@ -60,7 +60,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   }
   
   // const handleModal4 = () => {
-    setEmploymentModal(true);
+    // setEmploymentModal(true);
   // }
 
   const handleInputChange = (e) => {
