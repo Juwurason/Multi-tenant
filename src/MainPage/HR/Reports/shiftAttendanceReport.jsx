@@ -123,7 +123,7 @@ const ShiftAttendanceReport = () => {
         {
 
             name: 'Date',
-            selector: row => dayjs(row.clockIn).format('dddd, MMMM DD, YYYY'),
+            selector: row => dayjs(row.clockIn).format('ddd, MMMM DD YYYY'),
             sortable: true,
             expandable: true,
 
@@ -138,7 +138,7 @@ const ShiftAttendanceReport = () => {
         },
         {
             name: 'End Date',
-            selector: row => dayjs(row.clockOut).format('DD/MM/YYYY h:mm A'),
+            selector: row => dayjs(row.clockOut).format('ddd, MMM DD, h:mm A'),
             sortable: true,
             expandable: true,
 

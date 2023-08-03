@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
+import axiosInstance from '../../../store/axiosInstance';
 
 const MessageInbox = () => {
     const id = JSON.parse(localStorage.getItem('user'));
@@ -95,9 +96,9 @@ const MessageInbox = () => {
     const toggleBcc = () => {
         setShowBcc(!showBcc);
     };
-    const FetchClient = async () => {
+    const fetchClient = async () => {
         try {
-            const { data } = await privateHttp.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const { data } = await axiosInstance.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             const formattedOptions = data.map((item) => ({
                 label: item.email,
                 value: item.email,
@@ -107,22 +108,20 @@ const MessageInbox = () => {
             console.log(error);
         }
         try {
-            const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
+            const { data } = await axiosInstance.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
             setSentEmail(data.message);
-            console.log(data);
         } catch (error) {
             console.log(error);
         }
         try {
-            const { data } = await privateHttp.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
+            const { data } = await axiosInstance.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
             setInbox(data.message);
-            console.log(data);
         } catch (error) {
             console.log(error);
         }
     }
     useEffect(() => {
-        FetchClient()
+        fetchClient()
     }, []);
 
     const handleSelectionChange = (selected) => {
@@ -148,11 +147,11 @@ const MessageInbox = () => {
             // 
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
+                const { data } = await axiosInstance.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
                 toast.success(data.message)
-                FetchClient();
+                fetchClient();
                 setLoading(false)
 
             } catch (error) {
@@ -181,14 +180,14 @@ const MessageInbox = () => {
             };
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
+                const { data } = await axiosInstance.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
                 toast.success(data.message)
                 setEditorValue("");
                 subject.current.value = ''
                 setSelectedOptions([]);
-                FetchClient();
+                fetchClient();
                 setLgShow(false);
 
 
@@ -218,11 +217,11 @@ const MessageInbox = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`Messages/delete/${e}`,
+                    const { data } = await axiosInstance.post(`/Messages/delete/${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchClient();
+                        fetchClient();
                     } else {
                         toast.error(data.message);
                     }
