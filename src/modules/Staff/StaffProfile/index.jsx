@@ -55,13 +55,13 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
   const handleModal3 = () => {
     setBankModal(true)
   }
-  // const handleModal4 = () => {
-    setEmploymentModal(true);
-  // }
   const handleModal5 = () => {
     setSocialModal(true);
   }
-
+  
+  // const handleModal4 = () => {
+    setEmploymentModal(true);
+  // }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
