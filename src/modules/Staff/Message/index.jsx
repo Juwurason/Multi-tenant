@@ -40,10 +40,12 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const [lgShow, setLgShow] = useState(false);
     const [sendAsSMS, setSendAsSMS] = useState(false);
     const [smsRecipient, setSmsRecipient] = useState('');
+    const [email, setEmail] = useState('');
     const [smsContent, setSmsContent] = useState('');
     const [toAllAdmins, setToAllAdmins] = useState(false);
     const [toAllStaffs, setToAllStaffs] = useState(false);
     const [toAllClients, setToAllClients] = useState(false);
+    const [replyModal, setReplyModal] = useState(false);
     const [loading, setLoading] = useState(false);
     // const [inbox, setInbox] = useState([]);
     // const [sentEmail, setSentEmail] = useState([]);
@@ -96,6 +98,44 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const handleEmailClick = (email) => {
         setSelectedEmail(email);
     };
+
+    const handleReply = async (e) => {
+        setEmail(e)
+        setReplyModal(true);
+    };
+
+    // const handleReplyMessage = async() =>{
+    //     const payload = {
+    //         content: editorValue,
+    //         subject: subject.current.value,
+    //         emailTo: email,
+    //         status: true,
+    //         emailFrom: id.email, // Replace with the appropriate sender email
+    //         // admin: toAllAdmins,
+    //         // staff: toAllStaffs,
+    //         // client: toAllClients,
+    //         sms: false,
+    //         companyId: id.companyId // Replace with the actual companyId
+    //     };
+    //     try {
+    //         setLoading(true)
+    //         const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
+    //             payload
+    //         )
+    //         toast.success(data.message)
+    //         // FetchData();
+    //         setLoading(false)
+
+    //     } catch (error) {
+    //         toast.error(error.response?.data?.message)
+
+    //         setLoading(false)
+
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+
     const [showCc, setShowCc] = useState(false);
     const [showBcc, setShowBcc] = useState(false);
 
@@ -396,6 +436,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                         <span>
                                             {inbox?.length} Message(s)
                                         </span>
+
                                     </div>
 
                                     {
@@ -411,6 +452,9 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                         <h4>{selectedEmail.subject}</h4>
                                                         <p>From: {selectedEmail.emailFrom}</p>
                                                         <p>{ReactHtmlParser(selectedEmail.content)}</p>
+                                                        <div>
+                                                            <button className='btn btn-primary'  onClick={() => handleReply(selectedEmail.emailFrom)}>Reply</button>
+                                                        </div>
                                                     </div>
                                                 ) : (
                                                     <ul className="list-group" style={{ height: "62vh", overflowY: 'auto' }}>
@@ -463,6 +507,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                     ))}
                                                                 </tbody>
                                                             </table>
+
                                                         </div>
                                                     </ul>
                                                 )}
@@ -807,7 +852,32 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                     </Modal.Footer>
                 </Modal>
 
+                <Modal show={replyModal} onHide={() => setReplyModal(false)} size="lg" centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Reply Message</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                        <div className="form-group">
+                            <label> email: </label>
+                            <input type="email" className="form-control" value={email} readOnly />
+                        </div>
 
+                        <div>
+                            <Editor
+                                placeholder="Write something..."
+                                onChange={handleEditorChange}
+                                value={editorValue}
+                                style={{ height: '100%' }}
+                            />
+                        </div>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {/* <button
+                            // onClick={CancelShift}
+                            className="btn btn-success">Submit</button> */}
+                    </Modal.Footer>
+                </Modal>
                 {/* /Page Content */}
             </div>
         </div>
