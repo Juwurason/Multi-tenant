@@ -229,6 +229,15 @@ const filterShiftAttendance = async (company, fromDate, toDate, staff, client, t
         throw error;
     }
 };
+const filterAdminAttendance = async (admin, fromDate, toDate, company) => {
+    try {
+        const response = await axiosInstance.get(`/AdminAttendances/get_periodic_admin_attendance?adminId=${admin}&fromDate=${fromDate}&toDate=${toDate}&companyId=${company}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error filtering Admin Attendance:', error);
+        throw error;
+    }
+};
 const filterProgressNotes = async (staff, client) => {
     try {
         const response = await axiosInstance.get(`/ProgressNotes/get_progressnote_by_user?staffname=${staff}&profileId=${client}`);
@@ -293,6 +302,7 @@ const api = {
     fetchAllTimesheet,
     fetchSupportSchedule,
     filterDocument,
+    filterAdminAttendance
     // Add other API endpoints and corresponding methods as needed
 };
 

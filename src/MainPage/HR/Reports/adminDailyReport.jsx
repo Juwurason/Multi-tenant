@@ -18,7 +18,7 @@ import { Modal } from 'react-bootstrap';
 import dayjs, { utc } from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
-import { fetchAdminAttendance } from '../../../store/slices/adminAttendanceSlice';
+import { fetchAdminAttendance, filterAdminAttendance } from '../../../store/slices/adminAttendanceSlice';
 import ReactHtmlParser from 'react-html-parser';
 
 function formatDuration(duration) {
@@ -132,17 +132,15 @@ const AdminDailyReport = () => {
 
 
 
-    // const FilterAttendance = (e) => {
-    //     e.preventDefault();
-    //     setLoading1(true);
+    const getPeriodic = (e) => {
+        e.preventDefault();
 
-    //     dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
-    //     setPeriodic(attendance);
 
-    //     if (!loading) {
-    //         setLoading1(false);
-    //     }
-    // }
+        dispatch(filterAdminAttendance({ admin: sta, fromDate: dateFrom.current.value, toDate: dateTo.current.value, company: id.companyId }));
+
+
+
+    }
 
 
 
@@ -234,32 +232,7 @@ const AdminDailyReport = () => {
         window.open(pdfBlob, "_blank");
     };
 
-    // const handlePDFDownload = () => {
-    //   const unit = "pt";
-    //   const size = "A4"; // Use A1, A2, A3 or A4
-    //   const orientation = "portrait"; // portrait or landscape
-    //   const marginLeft = 40;
-    //   const doc = new jsPDF(orientation, unit, size);
-    //   doc.setFontSize(13);
-    //   doc.text("User Table", marginLeft, 40);
-    //   const headers = columns.map((column) => column.name);
-    //   const dataValues = attendance.map((dataRow) =>
-    //     columns.map((column) => {
-    //       if (typeof column.selector === "function") {
-    //         return column.selector(dataRow);
-    //       }
-    //       return dataRow[column.selector];
-    //     })
-    //   );
 
-    //   doc.autoTable({
-    //     startY: 50,
-    //     head: [headers],
-    //     body: dataValues,
-    //     margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
-    //   });
-    //   doc.save("Attendance.pdf");
-    // };
 
     const ButtonRow = ({ data }) => {
         return (
@@ -358,7 +331,7 @@ const AdminDailyReport = () => {
                             <div className="card">
 
                                 <div className="card-body">
-                                    <form className="row align-items-center py-3" >
+                                    <form className="row align-items-center py-3" onSubmit={getPeriodic}>
 
                                         <div className="col-md-4">
                                             <div className="form-group">
@@ -407,7 +380,20 @@ const AdminDailyReport = () => {
                                             </div>
                                         </div>
 
+                                        <div className="col-auto mt-4">
+                                            <div className="form-group">
+                                                {
+                                                    loading &&
 
+                                                    <div className="spinner-border text-secondary" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+
+                                                    </div>
+                                                }
+
+
+                                            </div>
+                                        </div>
 
 
                                     </form>
@@ -474,12 +460,12 @@ const AdminDailyReport = () => {
                             highlightOnHover
                             searchable
                             searchTerm={searchText}
-                            progressPending={loading}
-                            progressComponent={<div className='text-center fs-1'>
-                                <div className="spinner-grow text-secondary" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            </div>}
+                            // progressPending={loading}
+                            // progressComponent={<div className='text-center fs-1'>
+                            //     <div className="spinner-grow text-secondary" role="status">
+                            //         <span className="sr-only">Loading...</span>
+                            //     </div>
+                            // </div>}
                             responsive
                             expandableRows
                             expandableRowsComponent={ButtonRow}

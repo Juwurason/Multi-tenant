@@ -508,6 +508,20 @@ const AttendanceReport = () => {
 
                       </div>
                     </div>
+                    <div className="col-auto mt-4">
+                      <div className="form-group">
+                        {
+                          loading &&
+
+                          <div className="spinner-border text-secondary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+
+                          </div>
+                        }
+
+
+                      </div>
+                    </div>
 
                     {
                       sta === "" || periodic.length <= 0 || loading ? "" :
@@ -691,12 +705,12 @@ const AttendanceReport = () => {
               highlightOnHover
               searchable
               searchTerm={searchText}
-              progressPending={loading}
-              progressComponent={<div className='text-center fs-1'>
-                <div className="spinner-grow text-secondary" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
-              </div>}
+              // progressPending={loading}
+              // progressComponent={<div className='text-center fs-1'>
+              //   <div className="spinner-grow text-secondary" role="status">
+              //     <span className="sr-only">Loading...</span>
+              //   </div>
+              // </div>}
               responsive
               expandableRows
               expandableRowsComponent={ButtonRow}

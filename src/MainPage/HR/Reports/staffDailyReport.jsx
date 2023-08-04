@@ -154,17 +154,17 @@ const StaffDailyReport = () => {
 
 
 
-    const FilterAttendance = (e) => {
-        e.preventDefault();
-        setLoading1(true);
+    // const FilterAttendance = (e) => {
+    //     e.preventDefault();
+    //     setLoading1(true);
 
-        dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
-        setPeriodic(attendance);
+    //     dispatch(filterAttendance({ fromDate: dateFrom.current.value, toDate: dateTo.current.value, staffId: sta, companyId: id.companyId }));
+    //     setPeriodic(attendance);
 
-        if (!loading) {
-            setLoading1(false);
-        }
-    }
+    //     if (!loading) {
+    //         setLoading1(false);
+    //     }
+    // }
 
 
 
@@ -358,7 +358,7 @@ const StaffDailyReport = () => {
                             <div className="card">
 
                                 <div className="card-body">
-                                    <form className="row align-items-center py-3" onSubmit={FilterAttendance}>
+                                    <form className="row align-items-center py-3">
 
                                         <div className="col-md-4">
                                             <div className="form-group">
@@ -406,7 +406,20 @@ const StaffDailyReport = () => {
 
                                             </div>
                                         </div>
+                                        <div className="col-auto mt-4">
+                                            <div className="form-group">
+                                                {
+                                                    loading &&
 
+                                                    <div className="spinner-border text-secondary" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+
+                                                    </div>
+                                                }
+
+
+                                            </div>
+                                        </div>
 
 
 
@@ -474,12 +487,12 @@ const StaffDailyReport = () => {
                             highlightOnHover
                             searchable
                             searchTerm={searchText}
-                            progressPending={loading}
-                            progressComponent={<div className='text-center fs-1'>
-                                <div className="spinner-grow text-secondary" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            </div>}
+                            // progressPending={loading}
+                            // progressComponent={<div className='text-center fs-1'>
+                            //     <div className="spinner-grow text-secondary" role="status">
+                            //         <span className="sr-only">Loading...</span>
+                            //     </div>
+                            // </div>}
                             responsive
                             expandableRows
                             expandableRowsComponent={ButtonRow}

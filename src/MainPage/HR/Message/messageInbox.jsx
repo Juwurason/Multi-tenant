@@ -114,7 +114,7 @@ const MessageInbox = () => {
             console.log(error);
         }
         try {
-            const { data } = await axiosInstance.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
+            const { data } = await axiosInstance.get(`/Messages/inbox?userId=${id.userId}`, { cacheTimeout: 300000 });
             setInbox(data.message);
         } catch (error) {
             console.log(error);
@@ -440,6 +440,12 @@ const MessageInbox = () => {
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody style={{ overflow: 'scroll', height: "20vh" }}>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>From</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
                                                                     {inbox?.map((email, index) => (
                                                                         <tr key={index}
 
@@ -529,7 +535,7 @@ const MessageInbox = () => {
                                                 {selectedEmail ? (
                                                     <div>
                                                         <h4>{selectedEmail.subject}</h4>
-                                                        <p>From: {selectedEmail.emailFrom}</p>
+                                                        <p>To: {selectedEmail.emailTo}</p>
                                                         <p>{ReactHtmlParser(selectedEmail.content)}</p>
                                                     </div>
                                                 ) : (
@@ -543,6 +549,12 @@ const MessageInbox = () => {
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>To</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
                                                                     {sentEmail?.map((email, index) => (
                                                                         <tr key={index}
 

@@ -8,9 +8,9 @@ export const fetchAdminAttendance = createAsyncThunk('AdminAttendance/fetchAdmin
 });
 export const filterAdminAttendance = createAsyncThunk(
     'Attendance/filterAdminAttendance',
-    async ({ fromDate, toDate, staffId, companyId }) => {
-        const response = await api.filterAdminAttendance(fromDate, toDate, staffId, companyId);
-        return response;
+    async ({ admin, fromDate, toDate, company }) => {
+        const response = await api.filterAdminAttendance(admin, fromDate, toDate, company);
+        return response.adminAttendance;
     }
 );
 

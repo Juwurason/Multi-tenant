@@ -33,7 +33,6 @@ const ticketDetails = () => {
         setLoading(true)
         try {
             const { data } = await axiosInstance.get(`/Tickets/${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
             if (data.status === 'Success') {
                 toast.success(data.status);
                 setTicketDetails(data.ticket);
