@@ -95,8 +95,8 @@ const AttendanceReport = () => {
     catch (error){
 
       // toast.error("Error Updating Attendance Report")
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
       setLoading1(false);
     }
     finally {

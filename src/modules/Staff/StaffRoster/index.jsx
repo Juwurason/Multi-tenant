@@ -296,6 +296,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                     </span>
                                     <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
                                     <span><span className='fw-bold text-truncate'>Status: </span><span className='text-truncate'>{activity.status}</span></span>
+                                    <span><span className='fw-bold text-truncate'>Appointment: </span><span className='text-truncate'>{activity.appointment ? activity.appointment : <span className='text-muted'>No Appointment</span>}</span></span>
                                     <span><span className='fw-bold text-truncate'>Task: </span><span className='text-truncate'>{activity.activities}</span></span>
                                   </div>
                                 </div>
@@ -404,6 +405,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Client(s):</b> {selectedActivity.clients}</p>
                               <p><b>Status:</b> {selectedActivity.status}</p>
+                              <p><b>Appointment:</b> {selectedActivity.appointment}</p>
                               <p><b>Activities:</b> {selectedActivity.activities}</p>
                             </>
                           )}
