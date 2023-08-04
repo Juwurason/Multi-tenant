@@ -95,11 +95,7 @@ const EditShiftRoaster = () => {
     useEffect(() => {
         FetchSchedule()
     }, []);
-    const [repeat, setRepeat] = useState(false);
 
-    const handleRepeatChange = (e) => {
-        setRepeat(e.target.checked);
-    };
     const handleExceptionChange = (e) => {
         setIsExceptionalShift(e.target.checked);
     };
@@ -114,28 +110,31 @@ const EditShiftRoaster = () => {
     const selectedValues = selectedActivities.map(option => option.label).join(', ');
 
     const handleSubmit = async (e) => {
+        const info = {
+            ...shiftOne,
+            companyID: id.companyId,
+            shiftRosterId: uid,
+            staffId: Number(staffId),
+            clientList: selectClients,
+            dateFrom,
+            dateTo,
+            activities: selectedValues,
+            isNightShift,
+            isExceptionalShift,
+
+        }
+        delete info.profile;
+        delete info.staff;
         e.preventDefault()
         try {
             setLoading(true)
-            const { data } = await post(`/ShiftRosters/edit_shift/${uid}?userId=${id.userId}`,
-                {
-                    companyId: id.companyId,
-                    shiftRosterId: uid,
-                    staffId: Number(staffId),
-                    clientList: selectClients,
-                    dateFrom,
-                    dateTo,
-                    activities: selectedValues,
-                    isNightShift,
-                    isExceptionalShift,
-
-                }
-            )
+            const { data } = await post(`/ShiftRosters/edit_shift/${uid}?userId=${id.userId}`, info)
             toast.success(data.message)
             navigate.push('/app/employee/shift-scheduling')
             setLoading(false)
 
         } catch (error) {
+            console.log(error);
             toast.error("Error Editing Shift Roster")
             toast.error(error.response?.data?.message)
 
@@ -194,20 +193,6 @@ const EditShiftRoaster = () => {
 
                                             </div>
                                         </div>
-
-                                        {/* <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <label className="col-form-label">Client Name</label>
-                                                <div>
-                                                    <select className="form-select" onChange={e => setProfileId(e.target.value)}>
-                                                        <option defaultValue hidden>{selectedClient}</option>
-                                                        {
-                                                            clients.map((data, index) =>
-                                                                <option value={data.profileId} key={index}>{data.fullName}</option>)
-                                                        }
-                                                    </select></div>
-                                            </div>
-                                        </div> */}
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Start Time</label>
@@ -254,13 +239,6 @@ const EditShiftRoaster = () => {
                                                 <label className="col-form-label">Is Night Shift</label>
                                             </div>
                                         </div>
-                                        {/* <div className="col-sm-6">
-                                            <div className="form-group">
-                                                <input type="checkbox" checked={isNightShift} onChange={handleNightChange} />
-                                                &nbsp; &nbsp;
-                                                <label className="col-form-label">Apply to Repeated Shifts </label>
-                                            </div>
-                                        </div> */}
                                     </div>
 
                                     <div className="submit-section">

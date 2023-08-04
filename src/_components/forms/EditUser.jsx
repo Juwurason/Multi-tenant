@@ -52,11 +52,12 @@ const EditAccount = () => {
             setLoading(true)
             const { data } = await post(`/Account/user_edit/${uid}?userId=${id.userId}`,
                 {
+                    ...userOne,
                     email: editedUser.email,
                     id: uid,
                     firstName: editedUser.firstName,
                     lastName: editedUser.lastName,
-                    phoneNumber: editedUser.lastName,
+                    phoneNumber: editedUser.phoneNumber,
                 }
             )
             toast.success(data.message)
