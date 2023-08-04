@@ -138,7 +138,7 @@ const StaffRoute = ({ match }) => {
       setLoading(false)
     }
     try {
-      const { data } = await get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
+      const { data } = await get(`/Messages/inbox?userId=${id.userId}`, { cacheTimeout: 300000 });
       setInbox(data.message);
       setLoading(false)
       // console.log(data);

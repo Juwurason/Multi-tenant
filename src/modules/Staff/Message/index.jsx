@@ -16,6 +16,14 @@ import moment from 'moment';
 import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
 
+function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+        return str.slice(0, maxLength - 3) + "...";
+    } else {
+        return str;
+    }
+}
+
 const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
@@ -23,10 +31,10 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [editorValue, setEditorValue] = useState('');
     const subject = useRef(null);
-  const claims = JSON.parse(localStorage.getItem('claims'));
-  const hasRequiredClaims = (claimType) => {
-    return claims.some(claim => claim.value === claimType);
-  };
+    const claims = JSON.parse(localStorage.getItem('claims'));
+    const hasRequiredClaims = (claimType) => {
+        return claims.some(claim => claim.value === claimType);
+    };
     // const [options, setOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [lgShow, setLgShow] = useState(false);
@@ -98,35 +106,6 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const toggleBcc = () => {
         setShowBcc(!showBcc);
     };
-    // const FetchClient = async () => {
-    //     try {
-    //         const { data } = await privateHttp.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-    //         const formattedOptions = data.map((item) => ({
-    //             label: item.email,
-    //             value: item.email,
-    //         }));
-    //         setOptions(formattedOptions);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     try {
-    //         const { data } = await privateHttp.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
-    //         setSentEmail(data.message);
-    //         // console.log(data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     try {
-    //         const { data } = await privateHttp.get(`/Messages/get_all_message?userId=${id.userId}`, { cacheTimeout: 300000 });
-    //         setInbox(data.message);
-    //         // console.log(data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    // useEffect(() => {
-    //     FetchClient()
-    // }, []);
 
     const handleSelectionChange = (selected) => {
         setSelectedOptions(selected);
@@ -292,7 +271,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                         <MdMoveToInbox className='fs-4' />
                                         <span className='fw-bold'>Inbox</span>
                                     </div>
-                                    <span className='text-warning'>0</span>
+                                    <span className='text-warning'>{inbox.length}</span>
                                 </a>
                                 {/* Other tabs */}
                                 <a
@@ -443,7 +422,13 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                 style={{ cursor: 'pointer' }}
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
-                                                                <tbody style={{ overflow: 'scroll', height: "20vh" }}>
+                                                                <tbody style={{ overflowY: 'scroll', height: "20vh" }}>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>From</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
                                                                     {inbox?.map((email, index) => (
                                                                         <tr key={index}
 
@@ -456,14 +441,16 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
                                                                             <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                                <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
+                                                                                <span className="mb-0 text-muted text-truncate" >
+                                                                                    {truncateString(email.emailFrom, 30)}
+                                                                                </span>
                                                                             </td>
                                                                             {/* Message */}
                                                                             <td>
                                                                                 <a className="link" href="javascript: void(0)" >
                                                                                     <span className="text-dark fw-bold text-truncate"
                                                                                         onClick={() => handleEmailClick(email)}
-                                                                                    >{email.subject}</span>
+                                                                                    >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
                                                                             {/* Attachment */}
@@ -524,7 +511,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                 {selectedEmail ? (
                                                     <div>
                                                         <h4>{selectedEmail.subject}</h4>
-                                                        <p>From: {selectedEmail.emailFrom}</p>
+                                                        <p>To: {selectedEmail.emailTo}</p>
                                                         <p>{ReactHtmlParser(selectedEmail.content)}</p>
                                                     </div>
                                                 ) : (
@@ -538,6 +525,12 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>To</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
                                                                     {sentEmail?.map((email, index) => (
                                                                         <tr key={index}
 
@@ -550,7 +543,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
                                                                             <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                                <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
+                                                                                <span className="mb-0 text-muted text-truncate" >  {truncateString(email.emailTo, 30)} </span>
                                                                             </td>
                                                                             {/* Message */}
                                                                             <td style={{ cursor: 'pointer' }}>
@@ -560,7 +553,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                                             e.preventDefault()
                                                                                             handleEmailClick(email)
                                                                                         }}
-                                                                                    >{email.subject}</span>
+                                                                                    > {truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
                                                                             {/* Attachment */}
@@ -710,7 +703,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     &nbsp;
                                     Send As SMS
                                 </label>
-                            </div>: ""}
+                            </div> : ""}
                             <hr />
                             {!sendAsSMS ? (
                                 <>

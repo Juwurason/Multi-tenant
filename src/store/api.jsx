@@ -108,6 +108,15 @@ const filterAttendance = async (fromDate, toDate, staff, company) => {
         throw error;
     }
 };
+const filterDocument = async (company, dateFrom, dateTo, sta, cli, status, role) => {
+    try {
+        const response = await axiosInstance.get(`/Documents/filter_documents?companyId=${company}&fromDate=${dateFrom}&toDate=${dateTo}&staff=${sta}&admin=${cli}&status=${status}&role=${role}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error filtering Document:', error);
+        throw error;
+    }
+};
 const filterActivityLogs = async (company, fromDate, toDate, user,) => {
     try {
         const response = await axiosInstance.post(`/Account/get_periodic_activities?companyId=${company}&fromDate=${fromDate}&toDate=${toDate}&username=${user}`);
@@ -282,7 +291,8 @@ const api = {
     fetchAdminAttendance,
     fetchTimesheet,
     fetchAllTimesheet,
-    fetchSupportSchedule
+    fetchSupportSchedule,
+    filterDocument,
     // Add other API endpoints and corresponding methods as needed
 };
 

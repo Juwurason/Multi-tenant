@@ -378,7 +378,7 @@ const EmployeeProfile = () => {
                 <ul className="nav nav-tabs nav-tabs-bottom">
                   <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
                   {/* <li className="nav-item"><a  href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
-                  <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link text-primary">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li>
+                  {/* <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link text-primary">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li> */}
                 </ul>
               </div>
             </div>

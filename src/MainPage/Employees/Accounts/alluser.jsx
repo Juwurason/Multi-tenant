@@ -67,7 +67,7 @@ const AllUser = () => {
             sortable: true,
             expandable: true,
             cell: (row) => (
-                <Link href={`/app/account/editrole/${row.id}`} className="fw-bold text-dark overflow-hidden" >
+                <Link to={`/app/account/editrole/${row.id}`} className="fw-bold text-dark overflow-hidden" >
                     {row.fullName}
                 </Link>
             ),

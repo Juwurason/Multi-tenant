@@ -407,6 +407,19 @@ const Clients = () => {
                         </button>
                       </div>
                     </div>
+                    <div className="col-auto mt-4">
+                      <div className="form-group">
+                        {
+                          loading &&
+
+                          <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
+
+                        }
+
+                      </div>
+                    </div>
                   </div>
 
                 </form>

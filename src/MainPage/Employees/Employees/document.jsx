@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDocument } from '../../../store/slices/DocumentSlice';
+import { fetchDocument, filterDocument } from '../../../store/slices/DocumentSlice';
 import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
@@ -365,29 +365,25 @@ const Document = () => {
 
 
     const handleFilter = async (e) => {
+        // company,dateFrom, dateTo, sta,cli, status, role
         e.preventDefault();
-        try {
-            const { data } = await axiosInstance(`/Documents/filter_documents?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staff=${sta.current.value}&admin=${cli.current.value}&status=${status.current.value}&role=${role.current.value}`)
-            console.log(data);
-
-
-        } catch (error) {
-            // setLoading1(false);
-            toast.error("Ooooops😔 Error Occurred ")
-            console.log(error);
-
-
-
-        }
+        dispatch(filterDocument({ company: id.companyId, dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta: sta.current.value, cli: cli.current.value, status: status.current.value, role: role.current.value }));
 
     }
 
 
 
-    const filteredData = document.filter((item) =>
-        item?.user.toLowerCase().includes(searchText.toLowerCase())
-        || item?.documentName.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const filteredData = document.filter((item) => {
+
+        return (
+            item?.user?.toLowerCase().includes(searchText?.toLowerCase()) ||
+            item?.documentName?.toLowerCase().includes(searchText?.toLowerCase())
+        );
+    });
+
+
+
+
     const customStyles = {
 
         headCells: {
@@ -519,6 +515,19 @@ const Document = () => {
                                                     Load
                                                 </button>
 
+
+                                            </div>
+                                        </div>
+                                        <div className="col-auto text-left">
+                                            <div className="form-group">
+                                                {
+                                                    loading &&
+
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+
+                                                }
 
                                             </div>
                                         </div>
