@@ -65,7 +65,14 @@ const StaffHeader = (props) => {
                 <h3>Promax Care</h3>
             </div>
             {/* /Header Title */}
-            <a id="mobile_btn" className="mobile_btn" href="#" onClick={() => onMenuClik()}><i className="fa fa-bars" /></a>
+            <a id="mobile_btn" className="mobile_btn" href="#"
+                onClick={(e) => {
+                    e.preventDefault();
+                    onMenuClik();
+                }}
+            >
+                <i className="fa fa-bars" /></a>
+
             {/* Header Menu */}
             <ul className="nav user-menu">
                 {/* Search */}
