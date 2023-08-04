@@ -436,7 +436,7 @@ const AttendanceReport = () => {
 
       <div className="page-wrapper">
         <Helmet>
-          <title>Attendance Reports</title>
+          <title>Timesheet Reports</title>
           <meta name="description" content="Login page" />
         </Helmet>
 
@@ -445,10 +445,10 @@ const AttendanceReport = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h3 className="page-title">Attendance Reports</h3>
+                <h3 className="page-title">Timesheet Reports</h3>
                 {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item active">Attendance Reports</li>
+                  <li className="breadcrumb-item active">Timesheet Reports</li>
                 </ul> : ""}
               </div>
             </div>
@@ -639,7 +639,7 @@ const AttendanceReport = () => {
 
               <div className="col-md-3">
                 <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                  <input type="text" placeholder="Search Attendance" className='border-0 outline-none' onChange={handleSearch} />
+                  <input type="text" placeholder="Search Timesheet" className='border-0 outline-none' onChange={handleSearch} />
                   <GoSearch />
                 </div>
               </div>

@@ -2,23 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import Header from '../../../initialpage/Sidebar/header'
-import Sidebar from '../../../initialpage/Sidebar/sidebar';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
-import { GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
-import { useCompanyContext } from '../../../context';
 import EditUser from '../../../_components/modelbox/EditUser';
-import DataTable from "react-data-table-component";
-import { CSVLink } from "react-csv";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import Papa from 'papaparse';
-import ExcelJS from 'exceljs';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
 
@@ -134,81 +121,6 @@ const UserRoles = () => {
         })
     }
 
-    const handleExcelDownload = () => {
-        const workbook = new ExcelJS.Workbook();
-        const sheet = workbook.addWorksheet('Sheet1');
-
-        // Add headers
-        const headers = columns.map((column) => column.name);
-        sheet.addRow(headers);
-
-        // Add data
-        users.forEach((dataRow) => {
-            const values = columns.map((column) => {
-                if (typeof column.selector === 'function') {
-                    return column.selector(dataRow);
-                }
-                return dataRow[column.selector];
-            });
-            sheet.addRow(values);
-        });
-
-        // Generate Excel file
-        workbook.xlsx.writeBuffer().then((buffer) => {
-            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'data.xlsx';
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    };
-
-
-
-    const handleCSVDownload = () => {
-        const csvData = Papa.unparse(users);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", "data.csv");
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const handlePDFDownload = () => {
-        const unit = "pt";
-        const size = "A4"; // Use A1, A2, A3 or A4
-        const orientation = "portrait"; // portrait or landscape
-        const marginLeft = 40;
-        const doc = new jsPDF(orientation, unit, size);
-        doc.setFontSize(13);
-        doc.text("User Table", marginLeft, 40);
-        const headers = columns.map((column) => column.name);
-        const dataValues = users.map((dataRow) =>
-            columns.map((column) => {
-                if (typeof column.selector === "function") {
-                    return column.selector(dataRow);
-                }
-                return dataRow[column.selector];
-            })
-        );
-
-        doc.autoTable({
-            startY: 50,
-            head: [headers],
-            body: dataValues,
-            margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
-        });
-        doc.save("Users.pdf");
-    };
-
 
 
 
@@ -255,7 +167,7 @@ const UserRoles = () => {
                                             <div className="row px-2 py-3">
 
                                                 {
-                                                    roles.map((data, index) =>
+                                                    roles.length > 0 ? roles.map((data, index) =>
                                                         <div className="col-md-3" key={index}>
                                                             <div className="card" style={{ height: "10rem" }}>
 
@@ -288,7 +200,10 @@ const UserRoles = () => {
                                                             </div>
                                                         </div>
 
-                                                    )
+                                                    ) : <div className='w-100'>
+                                                        <h4 className='text-center text-bold'>No Roles Found</h4>
+
+                                                    </div>
                                                 }
 
                                             </div>

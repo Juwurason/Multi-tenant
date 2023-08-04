@@ -19,6 +19,9 @@ import useHttp from '../../../hooks/useHttp';
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { MultiSelect } from 'react-multi-select-component';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchClient } from '../../../store/slices/ClientSlice';
+import { fetchSupportSchedule } from '../../../store/slices/SupportSchedule';
 const options = [
     { label: "Sunday", value: "Sunday" },
     { label: "Monday", value: "Monday" },
@@ -38,7 +41,6 @@ const ScheduleSupport = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const [showModal, setShowModal] = useState(false);
     const [loading1, setLoading1] = useState(false);
-    const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
     const [supportType, setSupportType] = useState([]);
     const [selectedSupportType, setSelectedSupportType] = useState(0);
@@ -48,7 +50,15 @@ const ScheduleSupport = () => {
     const quantity = useRef(null);
     const [selected, setSelected] = useState([]);
     const [profileId, setProfileId] = useState(0);
-    const [supportSchedule, setSupportSchedule] = useState([]);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchClient(id.companyId));
+        dispatch(fetchSupportSchedule(id.companyId));
+    }, [dispatch, id.companyId]);
+
+    // Access the entire state
+    const clients = useSelector((state) => state.client.data);
+    const supportSchedule = useSelector((state) => state.supportSchedule.data);
 
     const handleSelected = (selectedOptions) => {
         setSelected(selectedOptions);
@@ -142,25 +152,7 @@ const ScheduleSupport = () => {
             console.log(error);
             setLoading(false)
         }
-        try {
-            const { data } = await get(`/Invoice/get_all_support_schedules?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setSupportSchedule(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
 
-        try {
-            const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            setClients(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
     };
     useEffect(() => {
         FetchData()
@@ -570,46 +562,7 @@ const ScheduleSupport = () => {
                                             onChange={handleSelected}
                                             labelledBy="Select Days"
                                         />
-                                        {/* <div>
-                                            <label>
-                                                <input type="checkbox" name="sunday" checked={days.sunday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                Sunday
-                                            </label>
-                                            &nbsp; &nbsp;
-                                            <label>
-                                                <input type="checkbox" name="monday" checked={days.monday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                Monday
-                                            </label> &nbsp; &nbsp;
-                                            <label>
-                                                <input type="checkbox" name="tuesday" checked={days.tuesday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                Tuesday
-                                            </label> &nbsp; &nbsp;
-                                            <label>
-                                                <input type="checkbox" name="wednesday" checked={days.wednesday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                wednesday
-                                            </label> &nbsp; &nbsp;
-                                            <label>
-                                                <input type="checkbox" name="thursday" checked={days.thursday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                Thursday
-                                            </label> &nbsp; &nbsp;
-                                            <label>
-                                                <input type="checkbox" name="friday" checked={days.friday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                Friday
-                                            </label> &nbsp; &nbsp;
-                                            <label>
-                                                <input type="checkbox" name="saturday" checked={days.saturday} onChange={handleCheckboxChange} />
-                                                &nbsp;
-                                                Saturday
-                                            </label> &nbsp; &nbsp;
 
-
-                                        </div> */}
                                     </div>
 
                                     <div className="form-group col-md-6">
@@ -639,34 +592,7 @@ const ScheduleSupport = () => {
                         </Modal.Footer>
                     </Modal>
 
-                    {/*Edit Modal */}
-                    {/* <Modal show={editModal} onHide={() => setEditModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>View Holiday</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
-                                    <div className="">
-                                        <div className="form-group">
-                                            <label className="col-form-label">Name of Holiday</label>
-                                            <div>
-                                                <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="col-form-label">Date</label>
-                                        <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
-                                    </div>
 
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
-                        </Modal.Footer>
-                    </Modal> */}
 
                 </div>
 

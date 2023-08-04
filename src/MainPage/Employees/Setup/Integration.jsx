@@ -51,7 +51,7 @@ const Integration = () => {
     const secretID = useRef(null);
     const clientID = useRef(null);
     const [scope, setScope] = useState("accounting.transactions accounting.settings accounting.contacts payroll.employees payroll.timesheets payroll.settings");
-    const [responseUrl, setResponseUrl] = useState("");
+    const [responseUrl, setResponseUrl] = useState("https://app.promaxcare.com.au/app/report/auth");
 
     const [editThirdParty, setEditThirdParty] = useState("");
     const [editSecretID, setEditSecretID] = useState("");
@@ -510,7 +510,7 @@ const Integration = () => {
                                     <label className="col-form-label">Scope</label>
                                     <div>
                                         <small className="text-danger">scopes should be seperated by space</small>
-                                        <input type="text" className='form-control' value={scope} onChange={e => setScope(e.target.value)} />
+                                        <input type="text" className='form-control' value={scope} onChange={e => setScope(e.target.value)} readOnly />
                                     </div>
                                 </div>
 
@@ -519,7 +519,7 @@ const Integration = () => {
 
                                     <div>
                                         <small className="text-success">Copy and paste the below Response Url to your Xero App</small>
-                                        <input type="text" className='form-control' value={responseUrl} onChange={e => setResponseUrl(e.target.value)} />
+                                        <input type="text" className='form-control' value={responseUrl} onChange={e => setResponseUrl(e.target.value)} readOnly />
                                     </div>
                                 </div>
 
@@ -579,7 +579,7 @@ const Integration = () => {
                                     <label className="col-form-label">Scope</label>
                                     <div>
                                         <small className="text-danger">scopes should be seperated by space</small>
-                                        <input type="text" className='form-control' value={editScope} onChange={e => setEditScope(e.target.value)} />
+                                        <input type="text" className='form-control' value={editScope} onChange={e => setEditScope(e.target.value)} readOnly />
                                     </div>
                                 </div>
 
@@ -588,7 +588,7 @@ const Integration = () => {
 
                                     <div>
                                         <small className="text-success">Copy and paste the below Response Url to your Xero App</small>
-                                        <input type="text" className='form-control' value={editResponseUrl} onChange={e => setEditResponseUrl(e.target.value)} />
+                                        <input type="text" className='form-control' value={editResponseUrl} onChange={e => setEditResponseUrl(e.target.value)} readOnly />
                                     </div>
                                 </div>
 
