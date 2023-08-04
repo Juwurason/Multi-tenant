@@ -17,6 +17,15 @@ import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
 import axiosInstance from '../../../store/axiosInstance';
 
+function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+        return str.slice(0, maxLength - 3) + "...";
+    } else {
+        return str;
+    }
+}
+
+
 const MessageInbox = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
@@ -34,8 +43,11 @@ const MessageInbox = () => {
     const [toAllStaffs, setToAllStaffs] = useState(false);
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [replyModal, setReplyModal] = useState(false);
     const [inbox, setInbox] = useState([]);
     const [sentEmail, setSentEmail] = useState([]);
+    const [email, setEmail] = useState("");
+
 
     const handleSendAsSMSChange = (event) => {
         setSendAsSMS(event.target.checked);
@@ -95,6 +107,10 @@ const MessageInbox = () => {
 
     const toggleBcc = () => {
         setShowBcc(!showBcc);
+    };
+    const handleReply = async (e) => {
+        setEmail(e)
+        setReplyModal(true);
     };
     const fetchClient = async () => {
         try {
@@ -428,6 +444,9 @@ const MessageInbox = () => {
                                                         <h4>{selectedEmail.subject}</h4>
                                                         <p>From: {selectedEmail.emailFrom}</p>
                                                         <p>{ReactHtmlParser(selectedEmail.content)}</p>
+                                                        <div>
+                                                            <button className='btn btn-primary' onClick={() => handleReply(selectedEmail.emailFrom)}>Reply</button>
+                                                        </div>
                                                     </div>
                                                 ) : (
                                                     <ul className="list-group" style={{ height: "62vh", overflowY: 'auto' }}>
@@ -458,14 +477,14 @@ const MessageInbox = () => {
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
                                                                             <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                                <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
+                                                                                <span className="mb-0 text-muted text-truncate" > {truncateString(email.emailTo, 30)} </span>
                                                                             </td>
                                                                             {/* Message */}
                                                                             <td>
                                                                                 <a className="link" href="javascript: void(0)" >
                                                                                     <span className="text-dark fw-bold text-truncate"
                                                                                         onClick={() => handleEmailClick(email)}
-                                                                                    >{email.subject}</span>
+                                                                                    >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
                                                                             {/* Attachment */}
@@ -567,14 +586,14 @@ const MessageInbox = () => {
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
                                                                             <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                                <span className="mb-0 text-muted text-truncate" > {email.emailTo} </span>
+                                                                                <span className="mb-0 text-muted text-truncate" > {truncateString(email.emailTo, 30)} </span>
                                                                             </td>
                                                                             {/* Message */}
                                                                             <td style={{ cursor: 'pointer' }}>
                                                                                 <a className="link" href="javascript: void(0)" >
                                                                                     <span className="text-dark fw-bold text-truncate"
                                                                                         onClick={() => handleEmailClick(email)}
-                                                                                    >{email.subject}</span>
+                                                                                    >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
                                                                             {/* Attachment */}
@@ -840,6 +859,33 @@ const MessageInbox = () => {
                                 <span className="sr-only">Loading...</span>
                             </div> : "Send"}
                         </button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={replyModal} onHide={() => setReplyModal(false)} size="lg" centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Reply Message</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                        <div className="form-group">
+                            <label> email: </label>
+                            <input type="email" className="form-control" value={email} readOnly />
+                        </div>
+
+                        <div>
+                            <Editor
+                                placeholder="Write something..."
+                                onChange={handleEditorChange}
+                                value={editorValue}
+                                style={{ height: '100%' }}
+                            />
+                        </div>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {/* <button
+                            // onClick={CancelShift}
+                            className="btn btn-success">Submit</button> */}
                     </Modal.Footer>
                 </Modal>
 
