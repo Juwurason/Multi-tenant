@@ -5,7 +5,6 @@ import { Link, Redirect } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { FaAngleLeft, FaAngleRight, FaPlus } from 'react-icons/fa';
-import { useCompanyContext } from '../../../context';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -146,8 +145,6 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   }
 
 
-  const rosterId = JSON.parse(localStorage.getItem('rosterId'))
-  const progressNoteId = JSON.parse(localStorage.getItem('progressNoteId'))
   const HandleFill = (data) => {
     // Extract progressNoteId and shiftRosterId from the data object
     const { shiftRosterId, progressNoteId } = data;

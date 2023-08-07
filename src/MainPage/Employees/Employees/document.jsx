@@ -23,10 +23,18 @@ import { fetchStaff } from '../../../store/slices/StaffSlice';
 import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchAdmin } from '../../../store/slices/AdminSlice';
 import axiosInstance from '../../../store/axiosInstance';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 const Document = () => {
+
     const dispatch = useDispatch();
     const id = JSON.parse(localStorage.getItem('user'));
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    dayjs.tz.setDefault('Australia/Sydney');
+    const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD');
 
     // Fetch staff data and update the state
     useEffect(() => {
@@ -108,18 +116,42 @@ const Document = () => {
                 </span>
             ),
         },
-        {
+          {
             name: 'Status',
             selector: row => row.status,
             sortable: true,
             expandable: true,
-            cell: (row) => (
-                <span className={`${row.status === 'Pending' ? "bg-warning" : row.status === 'Accepted' ? "bg-success text-white" :
-                    row.status === 'Rejected' ? "bg-danger text-white" : "bg-transparent"
-                    } px-2 py-1 rounded-pill fw-bold`}
-                    style={{ fontSize: "10px" }}>{row.status}</span>
-            ),
-        },
+            cell: (row) => {
+              const isExpired = dayjs(row.expirationDate).format('YYYY-MM-DD') < (nowInAustraliaTime);
+              let status;
+          
+              if (isExpired) {
+                status = 'Expired';
+              } else if (row.status === 'Rejected') {
+                status = 'Rejected';
+              } else {
+                status = row.status;
+              }
+          
+              const statusClasses = `px-2 py-1 rounded-pill fw-bold ${
+                isExpired ? 'bg-danger text-white' : ''
+              } ${
+                row.status === 'Pending'
+                  ? 'bg-warning'
+                  : row.status === 'Accepted'
+                  ? 'bg-success text-white'
+                  : row.status === 'Rejected'
+                  ? 'bg-danger text-white'
+                  : 'bg-transparent'
+              }`;
+          
+              return (
+                <span className={statusClasses} style={{ fontSize: '10px' }}>
+                  {status}
+                </span>
+              );
+            },
+          },
 
     ];
 
