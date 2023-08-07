@@ -143,9 +143,20 @@ const AllUser = () => {
 
 
                 } catch (error) {
-                    toast.error("Ooops😔 Error Occurred")
+                    // toast.error("Ooops😔 Error Occurred")
                     console.log(error);
-
+                    if (error.response && error.response.data) {
+                        if (error.response.data.message || error.response.data.title) {
+                          toast.error(error.response.data.message);
+                          toast.error(error.response.data.title);
+                        } else {
+                          toast("Check Users List For Updated Info");
+                          dispatch(fetchUser());
+                        }
+                      } else {
+                        toast("Check Users List For Updated Info");
+                        dispatch(fetchUser());
+                      }
 
 
                 }

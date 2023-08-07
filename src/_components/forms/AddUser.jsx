@@ -9,6 +9,8 @@ import useHttp from '../../hooks/useHttp';
 const AddUser = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const [loading, setLoading] = useState(false)
+    const [loading1, setLoading1] = useState(false)
+    const [roles, setRoles] = useState([]);
     const firstName = useRef(null);
     const lastName = useRef(null);
     const email = useRef(null);
@@ -20,11 +22,32 @@ const AddUser = () => {
     const navigate = useHistory()
 
 
+    const FetchRoles = async () => {
+
+        try {
+            setLoading(true);
+            const { data } = await privateHttp.get(`/Account/get_roles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setRoles(data.roles);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+
+        } finally {
+            setLoading(false)
+
+        }
+    };
+    useEffect(() => {
+
+        FetchRoles()
+    }, []);
 
     const submitForm = async (e) => {
         e.preventDefault()
-        if (firstName.trim() === "" || surName.trim() === "" || phoneNumber.trim() === "" ||
-            email.trim() === ""
+        if (firstName.current.value === "" || lastName.current.value === "" || phoneNumber.current.value === "" ||
+            email.current.value === ""
         ) {
             return toast.error("Marked Fields must be filled")
         }
@@ -42,21 +65,34 @@ const AddUser = () => {
 
 
         try {
-            setLoading(true)
-            const { data } = await privateHttp.post(`/Account/add_user/Account/add_user`,
+            setLoading1(true)
+            const { data } = await privateHttp.post(`/Account/add_user?userId=${id.userId}`,
                 info
             )
             toast.success(data.message)
             navigate.push('/app/account/alluser')
-            setLoading(false)
+            setLoading1(false)
 
         } catch (error) {
-            toast.error("Error creating user")
-
-            setLoading(false)
-
-        } finally {
-            setLoading(false)
+            console.log(error);
+          
+            if (error.response && error.response.data) {
+              if (error.response.data.message || error.response.data.title) {
+                toast.error(error.response.data.errors.ConfirmPassword[0]);
+                toast.error(error.response.data.message);
+                toast.error(error.response.data.title);
+              } else {
+                toast("Check Users List For Updated Info");
+                navigate.push('/app/account/alluser');
+              }
+            } else {
+              toast("Check Users List For Updated Info");
+              navigate.push('/app/account/alluser');
+            }
+          
+            setLoading1(false);
+          } finally {
+            setLoading1(false)
         }
 
     }
@@ -81,7 +117,7 @@ const AddUser = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">First Name <span className="text-danger">*</span></label>
-                                                <input className="form-control" required type="text" ref={firstName} onChange={e => setFirstName(e.target.value)} />
+                                                <input className="form-control" required type="text" ref={firstName} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
@@ -121,9 +157,18 @@ const AddUser = () => {
                                                 <label className="col-form-label">Role <span className="text-danger">*</span></label>
                                                 <div>
                                                     <select className="form-select" ref={role}>
-                                                        <option defaultValue hidden value="">--Select a role--</option>
-                                                        <option value=""></option>
-                                                    </select></div>
+                                                        <option defaultValue hidden value="">
+                                                            --Select a role--
+                                                        </option>
+                                                        {
+                                                            roles.map((role, index) => (
+                                                                <option key={index}>
+                                                                    {role.role}
+                                                                </option>
+                                                            ))}
+                                                    </select>
+                                                </div>
+
                                             </div>
                                         </div>
 
@@ -132,7 +177,7 @@ const AddUser = () => {
                                     <div className="submit-section">
                                         <button className="btn btn-primary rounded submit-btn" type='submit'>
 
-                                            {loading ? <div className="spinner-grow text-light" role="status">
+                                            {loading1 ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>
                                             </div> : "Submit"}
                                         </button>

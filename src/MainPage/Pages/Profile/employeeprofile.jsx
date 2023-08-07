@@ -307,7 +307,7 @@ const EmployeeProfile = () => {
                   </div>
                 </div>
                 <div className="form-group col-md-4">
-                  <label>SurName</label>
+                  <label>Last Name</label>
                   <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
@@ -315,7 +315,7 @@ const EmployeeProfile = () => {
                   <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Last Name</label>
+                  <label>Middle Nme</label>
                   <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
                 </div>
                 <div className="form-group col-md-4">

@@ -242,7 +242,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                   </div>
                 </div> 
                 <div className="form-group col-md-4">
-                  <label>SurName</label>
+                  <label>Last Name</label>
                   <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
@@ -250,7 +250,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                   <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Last Name</label>
+                  <label>Middle Name</label>
                   <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
                 </div>
                 <div className="form-group col-md-4">

@@ -474,7 +474,7 @@ const ClientProfiles = () => {
                   </div>
                 </div>
                 <div className="form-group col-md-4">
-                  <label>SurName</label>
+                  <label>Last Name</label>
                   <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
@@ -482,7 +482,7 @@ const ClientProfiles = () => {
                   <input type="text" className="form-control" value={profile.firstName} readOnly />
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Last Name</label>
+                  <label>Middle Name</label>
                   <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ""} onChange={handleInputChange} />
                 </div>
                 <div className="form-group col-md-4">
