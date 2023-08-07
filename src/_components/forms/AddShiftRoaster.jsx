@@ -114,6 +114,10 @@ const AddShiftRoaster = () => {
             return toast.error("Select Either a staff or client")
         }
 
+        if (repeat && stopDate === "") {
+            return toast.error("Select a Stop Date");
+        }
+
         try {
             setLoading(true)
             const { data } = await post(`/ShiftRosters/add_multipleclient_shifts?userId=${id.userId}`,
@@ -233,14 +237,14 @@ const AddShiftRoaster = () => {
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isExceptionalShift} onChange={handleExceptionChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Active Night</label>
+                                                <label className="col-form-label">Active Night</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isNightShift} onChange={handleNightChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Night Shift</label>
+                                                <label className="col-form-label">Sleep Over</label>
                                             </div>
                                         </div>
 

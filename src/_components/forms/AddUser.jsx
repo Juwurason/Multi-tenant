@@ -75,11 +75,23 @@ const AddUser = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error("Error creating user")
-
-            setLoading1(false)
-
-        } finally {
+          
+            if (error.response && error.response.data) {
+              if (error.response.data.message || error.response.data.title) {
+                toast.error(error.response.data.errors.ConfirmPassword[0]);
+                toast.error(error.response.data.message);
+                toast.error(error.response.data.title);
+              } else {
+                toast("Check Users List For Updated Info");
+                navigate.push('/app/account/alluser');
+              }
+            } else {
+              toast("Check Users List For Updated Info");
+              navigate.push('/app/account/alluser');
+            }
+          
+            setLoading1(false);
+          } finally {
             setLoading1(false)
         }
 
@@ -149,11 +161,11 @@ const AddUser = () => {
                                                             --Select a role--
                                                         </option>
                                                         {
-                                                         roles.map((role, index) => (
-                                                            <option key={index} value={role}>
-                                                                {role.role}
-                                                            </option>
-                                                        ))}
+                                                            roles.map((role, index) => (
+                                                                <option key={index}>
+                                                                    {role.role}
+                                                                </option>
+                                                            ))}
                                                     </select>
                                                 </div>
 
