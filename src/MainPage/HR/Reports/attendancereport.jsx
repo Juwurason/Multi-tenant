@@ -846,11 +846,14 @@ const AttendanceReport = () => {
                         <td>{dayjs(data.clockOut).format('DD/MM/YYYY h:mm A')}</td>
                         <td>{data.totalKm}</td>
                         <td><small style={{ fontSize: "12px" }} className={`px-2 py-1 rounded text-white
-                          bg-${data.shift === 'M' ? 'primary' : data.shift === 'E' ? 'secondary' : data.shift === 'N' ? 'dark' : 'transparent'}
+                          bg-${data.shift === 'M' ? 'primary' : data.shift === 'E' ? 'secondary' : data.shift === 'N' ? 'dark' : 'primary'}
                           `}
 
                         >
-                          {data.shift === 'M' ? 'Morning' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Night' : data.shift}
+                          {data.shift === 'M' ? 'Normal' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Sleepover'
+                            : data.shift === 'SU' ? 'Sunday' : data.shift === 'PH' ? 'Public Holiday' : data.shift === 'SUN' ? 'Sunday Night'
+                              : data.shift === 'SAN' ? 'Saturday Night' : data.shift === 'EX' ? 'Active Night' : data.shift === 'SA' ? 'Saturday' : data.shift
+                          }
                         </small></td>
                       </tr>
 

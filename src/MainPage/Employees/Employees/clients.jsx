@@ -416,6 +416,7 @@ const Clients = () => {
                             <span className="visually-hidden">Loading...</span>
                           </div>
 
+
                         }
 
                       </div>

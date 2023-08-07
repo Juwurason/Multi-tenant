@@ -150,13 +150,16 @@ const TimesheetPDF = ({ total, timesheet }) => {
                                             style={{
                                                 borderRadius: 3,
                                                 padding: 1,
-                                                backgroundColor: data.shift === 'M' ? '#198754' : data.shift === 'E' ? '#0dcaf0' : data.shift === 'N' ? '#adb5bd' : data.shift === "SU" ? '#e44786' : 'transparent',
+                                                backgroundColor: data.shift === 'M' ? '#198754' : data.shift === 'E' ? '#0dcaf0' : data.shift === 'N' ? '#adb5bd' : data.shift === "SU" ? '#e44786' : '#1C75BC',
                                                 color: "white",
                                                 fontSize: 10,
                                                 textAlign: "center",
                                             }}
                                         >
-                                            {data.shift === 'M' ? 'Morning' : data.shift === 'E' ? 'Evening' : data.shift === 'N' ? 'Night' : data.shift === "SU" ? 'Sunday' : ""}
+                                            {data.shift === 'M' ? 'Normal' : data.shift === 'E' ? 'Evening' : data.shift === "SU" ? 'Sunday'
+                                                : data.shift === "PH" ? 'Public Holiday' : data.shift === "SUN" ? 'Sunday Night' : data.shift === "SAN" ? 'Saturday Night' :
+                                                    data.shift === "EX" ? 'Active Night' : data.shift === "N" ? 'Sleepover' : data.shift === "SA" ? 'Saturday' : ""
+                                            }
                                         </Text>
                                     </View>
                                 </View>

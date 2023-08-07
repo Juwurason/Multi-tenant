@@ -100,8 +100,8 @@ const Integration = () => {
 
     const HandleSubmit = async (e) => {
         e.preventDefault();
-        if (thirdParty.current.value === "" || secretID.current.value === "" || clientID.current.value === ""
-            || scope.current.value === "" || responseUrl.current.value === ""
+        if (thirdParty.trim() === "" || secretID.current.value === "" || clientID.current.value === ""
+            || scope.trim() === "" || responseUrl.trim() === ""
         ) {
             return toast.error("Form is not complete")
         }
@@ -342,7 +342,7 @@ const Integration = () => {
 
                     |
                     <button className="btn text-danger fw-bold" style={{ fontSize: "12px" }}
-                        onClick={() => handleDelete(row.integrationId)}>
+                        onClick={() => handleDelete(data.integrationId)}>
                         Delete
                     </button>
                 </div>

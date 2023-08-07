@@ -132,7 +132,7 @@ const AllUser = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Account/delete_user?id=${e}&userId=${id.userId}`,
+                    const { data } = await get(`/Account/delete_user?id=${e}&userId=${id.userId}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
