@@ -114,7 +114,7 @@ const AddShiftRoaster = () => {
             return toast.error("Select Either a staff or client")
         }
 
-        if (repeat && stopDate === "") {
+        if (repeat && stopDate === "" ) {
             return toast.error("Select a Stop Date");
         }
 
@@ -143,6 +143,7 @@ const AddShiftRoaster = () => {
             )
             toast.success(data.message)
             navigate.push('/app/employee/shift-scheduling')
+            console.log("sucess");
             setLoading(false)
 
         } catch (error) {
