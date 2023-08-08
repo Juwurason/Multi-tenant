@@ -77,7 +77,7 @@ const Clients = () => {
         <span className="d-flex gap-1">
 
           {user.role === "CompanyAdmin" || hasRequiredClaims("Edit Client") ? <div className='col-md-4'>
-            <Link to={`/app/profile/edit-client/${row.profileId}`}
+            <Link to={`/app/profile/client-profile/${row.profileId}/${row.firstName}`}
               className="btn"
               title='edit'
             >

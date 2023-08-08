@@ -13,6 +13,7 @@ import useHttp from '../../../hooks/useHttp';
 import Swal from 'sweetalert2';
 const CreateProgressNote = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+  const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const navigate = useHistory()
   const { uid, name } = useParams()
 
@@ -71,25 +72,25 @@ const CreateProgressNote = () => {
       position: "",
       followUp: follow,
       staff: staff,
+      staffId: staffProfile.staffId,
       startKm: kilometer,
-      end: endKm,
+      endKm: endKm,
       profileId: details.profileId,
       companyID: companyId
     }
+
     try {
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
       console.log(data);
       if (data.status === 'Success') {
-        // if (data.progressNote.progressNoteId === 0) {
-        //   navigate.push(`/staff/staff/create-progress/${uid}`)
-        // }
+        
         navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
         toast.success(data.message)
       }
       setLoading1(false)
     } catch (error) {
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
     }
     finally {
       setLoading1(false)

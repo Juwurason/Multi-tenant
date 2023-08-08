@@ -28,6 +28,7 @@ const ProgressReportDetails = () => {
         setLoading(true);
         try {
             const { data } = await get(`/ProgressNotes/${uid}`, { cacheTimeout: 300000 });
+            // console.log(data);
             setDetails(data);
         } catch (error) {
             console.log(error);
@@ -67,31 +68,43 @@ const ProgressReportDetails = () => {
     const today = new Date();
     const formattedDate = formatDate(today);
 
+     const navigate = useHistory();
     const handleSave = async () => {
         const info = {
-            progressNoteId: editedDetails.progressNoteId,
+    
+            progressNoteId: uid,
             report: editedDetails.report,
             progress: editedDetails.progress,
             position: editedDetails.position,
             followUp: editedDetails.followUp,
-            date: formattedDate,
             staff: editedDetails.staff,
+            staffId: editedDetails.staffId,
+            date: formattedDate,
             startKm: editedDetails.startKm,
-            profileId: editedDetails.profileId,
+            endKm: editedDetails.endKm,
+            profileId: editedDetails.profile.profileId,
             companyID: editedDetails.companyID,
-        }
+            IsCompleted: editedDetails.isCompleted
+          }
+      
         try {
             setLoading1(true)
-            const saveProgress = await post(`/ProgressNotes/edit/${uid}?userId=${id.userId}`, info);
-            const savePro = saveProgress.data;
+            const {data} = await post(`/ProgressNotes/edit/${uid}?userId=${id.userId}`, info);
+            if (data.status === "Success") {
+                toast.success(data.message)
+                setLoading1(false);
+                navigate.push(`/app/reports/progress-reports`)
+            }
 
-            toast.success(savePro.message)
+            // toast.success(savePro.message)
             setLoading1(false)
             toggleEditing();
 
         } catch (error) {
-            toast.error("Error Updating Progress Note")
             console.log(error);
+            // toast.error("Error Updating Progress Note")
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
             toggleEditing();
 
         }

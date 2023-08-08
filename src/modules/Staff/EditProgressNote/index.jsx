@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 
 const EditProgressNote = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+  const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
   const { uid, pro } = useParams()
 
   const [details, setDetails] = useState('')
@@ -47,8 +48,9 @@ const EditProgressNote = () => {
 
     try {
       const {data} = await get(`/ProgressNotes/${pro}`, { cacheTimeout: 300000 });
+      // console.log(data);
       setEditPro(data);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -88,25 +90,27 @@ const EditProgressNote = () => {
       progressNoteId: pro,
       report: editpro.report,
       progress: editpro.progress,
-      position: "0",
+      position: editpro.position,
       followUp: editpro.followUp,
       date: formattedDate,
       staff: staff,
+      staffId: staffProfile.staffId,
       startKm: editpro.startKm,
       endKm: editpro.endKm,
       profileId: details.profileId,
       companyID: companyId,
-      IsCompleted: true
+      IsCompleted: editpro.isCompleted
     }
     try {
-      const saveProgress = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);     
-      const savePro = saveProgress.data;
-      toast.success(savePro.message);
+      const {data} = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}`, info);     
+      // console.log(data);
+      toast.success(data.message);
       setLoading1(false);
     } catch (error) {
       toast.error("Error saving progress note");
       toast.error(error.response.data.message);
       toast.error(error.response.data.title);
+      setLoading1(false);
     }
     finally {
       setLoading1(false);
@@ -128,9 +132,10 @@ const EditProgressNote = () => {
           progressNoteId: Number(pro),
           report: editpro.report,
           progress: editpro.progress,
-          position: "",
+          position: editpro.position,
           followUp: editpro.followUp,
           staff: staff,
+          staffId: staffProfile.staffId,
           startKm: editpro.startKm,
           endKm: endKm,
           profileId: details.profileId,

@@ -84,26 +84,26 @@ const ProgressReport = () => {
             ),
         },
 
-        {
-            name: "Actions",
-            cell: (row) => (
+        // {
+        //     name: "Actions",
+        //     cell: (row) => (
 
-                <>
+        //         <>
 
-                    {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Progress Report") ? <button
-                        className='btn'
-                        title='Delete'
-                        onClick={() => {
-                            // handle action here, e.g. open a modal or navigate to a new page
+        //             {id.role === "CompanyAdmin" || hasRequiredClaims("Delete Progress Report") ? <button
+        //                 className='btn'
+        //                 title='Delete'
+        //                 onClick={() => {
+        //                     // handle action here, e.g. open a modal or navigate to a new page
 
-                        }}
-                    >
-                        <GoTrashcan />
-                    </button> : ""}
-                </>
+        //                 }}
+        //             >
+        //                 <GoTrashcan />
+        //             </button> : ""}
+        //         </>
 
-            ),
-        },
+        //     ),
+        // },
 
 
     ];
