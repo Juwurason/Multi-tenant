@@ -33,6 +33,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
     const [loading, setLoading] = useState(false);
     const [document, setDocument] = useState("")
     const user = JSON.parse(localStorage.getItem('user'));
+    const staffProfile = JSON.parse(localStorage.getItem('staffProfile'));
 
     const columns = [
         {
@@ -171,6 +172,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
             followUp: selectedActivity.followUp,
             date: formattedDate,
             staff: selectedActivity.staff,
+            staffId: staffProfile.staffId,
             startKm: selectedActivity.startKm,
             profileId: selectedActivity.profileId,
             companyID: selectedActivity.companyId,
@@ -186,6 +188,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
             toast.error("Error Updating Progress Note")
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
+            setLoading1(false)
         }
         finally {
             setLoading1(false)
