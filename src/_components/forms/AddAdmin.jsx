@@ -51,8 +51,19 @@ const AddAdministrator = () => {
             setLoading1(false)
 
         } catch (error) {
-            toast.error("Error Creating Admin")
-            toast.error(error.response?.data?.message)
+            console.log(error);
+            if (error.response && error.response.data) {
+                if (error.response.data.message || error.response.data.title) {
+                  toast.error(error.response.data.message);
+                  toast.error(error.response.data.title);
+                } else {
+                  toast("Check Administrators List For Updated Info");
+                  navigate.push('/app/employee/alladmin');
+                }
+              } else {
+                toast("Check Administrators List For Updated Info");
+                navigate.push('/app/employee/alladmin');
+              }
 
             setLoading1(false)
 

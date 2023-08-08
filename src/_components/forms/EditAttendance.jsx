@@ -23,12 +23,13 @@ const EditAttendance = () => {
         setLoading(true);
 
         try {
-            const attendanceData = await privateHttp.get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
-            setAttendance(attendanceData.data);
+            const {data} = await privateHttp.get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setAttendance(data);
             // Process the attendance data here
-            setReport(attendanceData.data.report || "");
-            setStartKm(attendanceData.data.startKm || 0);
-            setEndKm(attendanceData.data.endKm || 0);
+            // setReport(data.report || "");
+            // setStartKm(data.startKm || 0);
+            // setEndKm(data.endKm || 0);
 
         } catch (attendanceError) {
             toast.error("Error Fetching Attendance")
@@ -41,38 +42,62 @@ const EditAttendance = () => {
     }, []);
 
 
-    const [startKm, setStartKm] = useState(0);
-    const [endKm, setEndKm] = useState(0);
-    const [report, setReport] = useState("");
-    const [url, setUrl] = useState(null);
+    
+    const [imageFile, setImageFile] = useState(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 
         if (allowedExtensions.exec(selectedFile.name)) {
-            setUrl(selectedFile);
+            setImageFile(selectedFile);
         } else {
             alert('Please upload an image');
         }
     };
 
-    const formData = new FormData();
-    formData.append("attendanceId", attendance.attendanceId);
-    formData.append("StartKm", startKm);
-    formData.append("EndKm", endKm);
-    formData.append("Report", report);
-    formData.append("ImageFile", url);
-    formData.append("companyID", user.companyId);
-    formData.append("staffId", attendance.staffId);
+
+    function handleInputChange(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        const newValue = value === "" ? "" : value;
+        setAttendance({
+          ...attendance,
+          [name]: newValue
+        });
+      }
 
     const SendReport = async (e) => {
         e.preventDefault()
         setLoading1(true)
 
+        const info = {
+            "attendanceId": attendance.attendanceId,
+            "report": attendance.report,
+            "clockIn": attendance.clockIn,
+            // "clockInCheck": true,
+            // "clockOutCheck": false,
+            // "isSplitted": false,
+            "clockOut": attendance.clockOut,
+            "duration": attendance.duration,
+            "inLongitude": attendance.inLongitude,
+            "inLatitude": attendance.inLatitude,
+            // "outLongitude": 0,
+            // "outLatitude": 0,
+            "startKm": attendance.startKm,
+            "endKm": attendance.endKm,
+            "staffId": attendance.staffId,
+            "imageFile": imageFile,
+            // "imageURL": attendance.imageURL,
+            "companyID": user.companyId
+        }
+
+
         try {
             const { data } = await privateHttp.post(`/Attendances/edit/${uid}?userId=${user.userId}`,
-                formData);
+                info);
+                // console.log(data);
             if (data.status === "Success") {
                 Swal.fire(
                     '',
@@ -84,9 +109,11 @@ const EditAttendance = () => {
             }
             setLoading1(false)
         } catch (error) {
+            // console.log(error);
             toast.error("Error Updating Attendance")
+            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.title)
 
-            console.log(error);
             setLoading1(false)
 
         }
@@ -148,9 +175,8 @@ const EditAttendance = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Starting Kilometre (km)</label>
                                                     <input
-                                                        type="text"
-                                                        value={startKm}
-                                                        onChange={(e) => setStartKm(e.target.value)}
+                                                        type="number"
+                                                        name="startKm" value={attendance.startKm || ''} onChange={handleInputChange}
                                                         className="form-control"
                                                     />
                                                 </div>
@@ -159,9 +185,8 @@ const EditAttendance = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Ending Kilometre (km)</label>
                                                     <input
-                                                        type="text"
-                                                        value={endKm}
-                                                        onChange={(e) => setEndKm(e.target.value)}
+                                                        type="number"
+                                                        name="endKm" value={attendance.endKm || ''} onChange={handleInputChange}
                                                         className="form-control"
                                                     />
 
@@ -176,9 +201,7 @@ const EditAttendance = () => {
                                             <textarea
                                                 rows={3}
                                                 className="form-control summernote"
-                                                name="report"
-                                                value={report}
-                                                onChange={(e) => setReport(e.target.value)}
+                                                name="report" value={attendance.report || ''} onChange={handleInputChange}
                                             />
                                         </div>
 
