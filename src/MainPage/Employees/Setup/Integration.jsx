@@ -120,7 +120,7 @@ const Integration = () => {
         try {
             const { data } = await post(`/Integrations/add_integration`, info)
             toast.success(data.message)
-            dispatch(fetchIntegration());
+            dispatch(fetchIntegration(id.companyId));
             setShowModal(false)
 
         } catch (error) {
@@ -151,7 +151,7 @@ const Integration = () => {
             const { data } = await post(`/Integrations/edit/${editId}`, info)
             console.log(data);
             toast.success(data.message)
-            dispatch(fetchIntegration());
+            dispatch(fetchIntegration(id.companyId));
             setEditModal(false)
 
         } catch (error) {
@@ -274,7 +274,7 @@ const Integration = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchIntegration());
+                        dispatch(fetchIntegration(id.companyId));
                     } else {
                         toast.error(data.message);
                     }
