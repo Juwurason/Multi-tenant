@@ -7,6 +7,7 @@ import SupportType from './supportType';
 import Integration from './Integration';
 import FormTemplate from './formTemplate';
 import AddFormTemplate from '../../../_components/forms/AddFormTemplate';
+import TimePeriod from './timePeriod';
 
 const SetupRoute = ({ match }) => (
     <Switch>
@@ -17,6 +18,7 @@ const SetupRoute = ({ match }) => (
         <Route path={`${match.url}/integrations`} component={Integration} />
         <Route path={`${match.url}/form-template`} component={FormTemplate} />
         <Route path={`${match.url}/create-template`} component={AddFormTemplate} />
+        <Route path={`${match.url}/time-period`} component={TimePeriod} />
 
     </Switch>
 );

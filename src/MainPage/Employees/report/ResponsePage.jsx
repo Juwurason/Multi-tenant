@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import axiosInstance from '../../../store/axiosInstance';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 const ResponsePage = () => {
     const history = useHistory();
