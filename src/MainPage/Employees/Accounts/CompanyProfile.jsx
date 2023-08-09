@@ -16,6 +16,9 @@ const CompanyProfile = () => {
     const [editedCompany, setEditedCompany] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [image, setImage] = useState("");
+    const packagesId = useRef(null)
+    const [packages, setPackages] = useState([])
+    const [loading1, setLoading1] = useState(false)
 
     const privateHttp = useHttp();
     const FetchCompany = async () => {
@@ -28,6 +31,15 @@ const CompanyProfile = () => {
 
         } catch (error) {
             console.log(error);
+        }
+        try {
+            const response = await axiosInstance.get("/Packages/get_all_packages");
+            // console.log(response.data)
+            setPackages(response.data);
+            setLoading1(false)
+        } catch (error) {
+            console.log(error);
+            setLoading1(false)
         }
     }
     useEffect(() => {
@@ -45,7 +57,7 @@ const CompanyProfile = () => {
     const handlechange = (e) => {
         setImage(e.target.files[0]);
     }
-    
+
 
     const styles = {
         main: {
@@ -62,38 +74,41 @@ const CompanyProfile = () => {
     const HandleSubmit = async (e) => {
         e.preventDefault();
         // toast("Not editable at the moment");
-       
-    const formData = new FormData()
-    formData.append("CompanyId", id.companyId);
-    formData.append("CompanyName", editedCompany.companyName);
-    formData.append("CompanyEmail", editedCompany.companyEmail);
-    formData.append("companyAddress", editedCompany.companyAddress);
-    formData.append("companyPhone", editedCompany.companyPhone);
-    formData.append("companyState", companyOne.companyState);
-    formData.append("companyDetails", companyOne.companyDetails);
-    formData.append("companyHead", editedCompany.companyHead);
-    formData.append("PackagesId", companyOne.packagesId);
-    formData.append("SubscribtionDate", companyOne.subscribtionDate);
-    formData.append("ExpirationDate", companyOne.expirationDate);
-    formData.append("IsApproved", companyOne.isApproved);
-    formData.append("CompanyLogoFile", image);
+
+        const formData = new FormData()
+        formData.append("CompanyId", id.companyId);
+        formData.append("CompanyName", editedCompany.companyName);
+        formData.append("CompanyEmail", editedCompany.companyEmail);
+        formData.append("companyAddress", editedCompany.companyAddress);
+        formData.append("companyPhone", editedCompany.companyPhone);
+        formData.append("companyState", companyOne.companyState);
+        formData.append("companyDetails", companyOne.companyDetails);
+        formData.append("Website", editedCompany.website);
+        formData.append("companyHead", editedCompany.companyHead);
+        formData.append("PackagesId", editedCompany.packagesId);
+        formData.append("SubscribtionDate", companyOne.subscribtionDate);
+        formData.append("ExpirationDate", companyOne.expirationDate);
+        formData.append("IsApproved", companyOne.isApproved);
+        formData.append("CompanyLogoFile", image);
         try {
             const { data } = await axiosInstance.post(`/Companies/edit/${id.companyId}`, formData)
+            // console.log(data)
             if (data.status === 'Success') {
                 toast.success(data.message);
-                 setShowModal(false);
-                 FetchCompany()
-              } else {
+                setShowModal(false);
+                FetchCompany()
+            } else {
                 toast.error(data.message);
-              }
-        
+            }
+
 
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
         }
         finally {
             // setLoading(false)
-          }
+        }
     }
 
     return (
@@ -160,6 +175,12 @@ const CompanyProfile = () => {
                                                     value={companyOne.companyPhone} readOnly
                                                 />
                                             </div>
+                                            <div className="form-group col-md-6">
+                                                <label>Company Website</label>
+                                                <input type="text" className="form-control"
+                                                    value={companyOne.website} readOnly
+                                                />
+                                            </div>
 
                                         </div>
                                     </form>
@@ -189,7 +210,7 @@ const CompanyProfile = () => {
 
                                     </div>
                                 </div>
-                                <div className="form-group col-md-12">
+                                <div className="form-group col-md-6">
                                     <label>Company Head</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyHead || ""}
@@ -201,7 +222,7 @@ const CompanyProfile = () => {
                                     <label>Company Name</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyName}
-                                        readOnly
+
                                     />
                                 </div>
                                 <div className="form-group col-md-6">
@@ -229,6 +250,49 @@ const CompanyProfile = () => {
                                         onChange={handleInputChange}
 
                                     />
+                                </div>
+                                <div className="form-group col-md-6">
+                                    <label>Website</label>
+                                    <input type="text" className="form-control"
+                                        value={editedCompany.website || ""}
+                                        name='website'
+                                        onChange={handleInputChange}
+
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    {
+                                        !loading1 && packages.length > 0 ?
+                                            <select
+                                                className="form-select"
+                                                style={{ height: "3rem" }}
+                                                name='packagesId'
+                                                value={editedCompany.packagesId || ""}
+                                                onChange={handleInputChange}
+                                                aria-label="Select a package"
+                                            >
+                                                <option hidden>Choose a package</option>
+                                                {
+                                                    packages.map((item) =>
+                                                        <option value={item.packagesId} key={item.packagesId}>
+                                                            {item.package}
+                                                        </option>
+                                                    )
+                                                }
+                                            </select> :
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div className="spinner-grow" role="status">
+                                                    <span className="sr-only">Loading...</span>
+                                                </div>
+                                                <span className="fw-bold">Loading Packages</span>
+                                            </div>
+                                    }
+
+                                    {
+                                        !loading1 && packages.length < 0 ?
+                                            <span className="text-danger">Packages not available.. Try Reloading this page</span>
+                                            : ""
+                                    }
                                 </div>
                                 <div className="submit-section">
                                     <button className="btn btn-primary rounded submit-btn" type='submit'>

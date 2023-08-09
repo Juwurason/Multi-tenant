@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import { fetchUser } from '../../../store/slices/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdOutlineLockReset } from 'react-icons/md';
+import axiosInstance from '../../../store/axiosInstance';
 
 
 
@@ -132,11 +133,11 @@ const AllUser = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await get(`/Account/delete_user?id=${e}&userId=${id.userId}`,
+                    const {data} = await axiosInstance.get(`/Account/delete_user?id=${e}&userId=${id.userId}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchUser());
+                        dispatch(fetchUser(id.companyId));
                     } else {
                         toast.error(data.message);
                     }
@@ -145,20 +146,9 @@ const AllUser = () => {
                 } catch (error) {
                     // toast.error("Ooops😔 Error Occurred")
                     console.log(error);
-                    if (error.response && error.response.data) {
-                        if (error.response.data.message || error.response.data.title) {
-                          toast.error(error.response.data.message);
-                          toast.error(error.response.data.title);
-                        } else {
-                          toast("Check Users List For Updated Info");
-                          dispatch(fetchUser());
-                        }
-                      } else {
-                        toast("Check Users List For Updated Info");
-                        dispatch(fetchUser());
-                      }
-
-
+                    toast.error(error.response.data.message);
+                    toast.error(error.response.data.title);
+                    dispatch(fetchUser(id.companyId));
                 }
 
 
@@ -182,7 +172,7 @@ const AllUser = () => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchUser());
+                        dispatch(fetchUser(id.companyId));
                     } else {
                         toast.error(data.message);
                     }

@@ -30,6 +30,7 @@ const AddReport = () => {
 
             try {
                 const {data}= await privateHttp.get(`/Attendances/${attendId}`, { cacheTimeout: 300000 });
+                // console.log(data);
                 setAttendance(data);
                 setEditPro(data)
                 // Process the attendance data here
