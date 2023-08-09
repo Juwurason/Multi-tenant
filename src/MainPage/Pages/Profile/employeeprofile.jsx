@@ -315,7 +315,7 @@ const EmployeeProfile = () => {
                   <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Middle Nme</label>
+                  <label>Middle Name</label>
                   <input type="text" className="form-control" name="middleName" value={editedProfile.middleName || ''} onChange={handleInputChange} />
                 </div>
                 <div className="form-group col-md-4">
