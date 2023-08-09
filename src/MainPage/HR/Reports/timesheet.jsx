@@ -205,11 +205,11 @@ const TimesheetPDF = ({ total, timesheet }) => {
                     <View style={{ flexDirection: "column", marginTop: 20, gap: 2 }}>
                         <Text style={{ fontSize: 10 }}>Total Duration for Normal Shift: {formatDuration(total.normalDuration)}</Text>
                         <Text style={{ fontSize: 10 }}>Total Duration for Evening Shift: {formatDuration(total.eveningDuration)}</Text>
-                        <Text style={{ fontSize: 10 }}>Total Duration for Exceptional Shift: {formatDuration(total.exceptionalDuration)}</Text>
+                        <Text style={{ fontSize: 10 }}>Total Duration for Active Night Shift: {formatDuration(total.exceptionalDuration)}</Text>
                         <Text style={{ fontSize: 10 }}>Total Duration for Saturday Shift: {formatDuration(total.satDuration)}</Text>
                         <Text style={{ fontSize: 10 }}>Total Duration for Sunday Shift: {formatDuration(total.sunDuration)}</Text>
                         <Text style={{ fontSize: 10 }}>Total Duration for Public Holidays Shift: {formatDuration(total.phDuration)}</Text>
-                        <Text style={{ fontSize: 10 }}>Total Night Shift: {total.nightShift}</Text>
+                        <Text style={{ fontSize: 10 }}>Total Sleepover Shift: {total.nightShift}</Text>
                     </View>
 
                     <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 30 }}>
