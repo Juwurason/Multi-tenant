@@ -369,7 +369,8 @@
                      <div className="col-md-12">
                          <div className="card">
                              <div className="card-header">
-                                 <h4 style={{ fontSize: "15px" }} className="card-title mb-0"> Add Time Period</h4>
+                                 <h4 style={{ fontSize: "15px" }} className="card-title mb-0"> Add Time Period </h4>
+                                 <h6>Kindly take note that you need not worry about the date, only the scheduled time is of significance</h6>
                              </div>
                              <div className="card-body">
                                  <form className="row">
