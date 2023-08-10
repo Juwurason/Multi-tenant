@@ -49,8 +49,7 @@ const Document = () => {
     const document = useSelector((state) => state.document.data);
     const staff = useSelector((state) => state.staff.data);
     const admin = useSelector((state) => state.admin.data);
-
-
+    
     //Declaring Variables
     const privateHttp = useHttp();
     const [rejectModal, setRejectModal] = useState(false);
