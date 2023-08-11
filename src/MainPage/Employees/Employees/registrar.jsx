@@ -261,7 +261,7 @@ const Registrar = () => {
                                     </div>
                                     
                                     <div className='bg-primary p-5'>
-                                        <button className='btn btn-light'>View Other Forms</button>
+                                        <Link to="/app/employee/otherForms" className='btn btn-light'>View Other Forms</Link>
                                     </div>
                             </div>
 
