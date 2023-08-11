@@ -251,17 +251,24 @@ const Registrar = () => {
                     <div className="col-md-12">
                         <div className="card">
 
-                            <div style={{display: "flex", flexWrap: "wrap"}}>
+                            <div className='d-flex flex-wrap-wrap justify-content-between'>
+
                             <div className='bg-primary p-5'>
-                                        <button className='btn btn-light'>View Staff Registrar</button>
+                                        <button className='btn btn-light'>
+                                            View Staff Registrar
+                                        </button>
                         </div>
 
                                     <div className='bg-primary p-5'>
-                                        <Link to="/app/employee/incident" className='btn btn-light'>View Incident Forms</Link>
+                                        <Link to="/app/employee/incident" className='btn btn-light'>
+                                            View Incident Forms
+                                        </Link>
                                     </div>
                                     
                                     <div className='bg-primary p-5'>
-                                        <Link to="/app/employee/otherForms" className='btn btn-light'>View Other Forms</Link>
+                                        <Link to="/app/employee/otherForms" className='btn btn-light'>
+                                            View Other Forms
+                                        </Link>
                                     </div>
                             </div>
 
@@ -277,27 +284,8 @@ const Registrar = () => {
                                 <h4 className="card-title mb-0">Forms</h4>
                             </div>
                             <div className="card-body">
-                                <form className="">
-                                    <div className='col-md-6'>
-                                        <div className="form-group">
-                                            <label>Vision Related Issues</label>
-                                            <select className='form-select' onChange={(e) => setSelectedDay(e.target.value)} required>
-                                                <option defaultValue hidden >Select Issues</option>
-                                                <option value={"No Issues"}>No Issues</option>
-                                                <option value={"Some Issues"}>Some Issues</option>
-                                                <option value={"Hearing Impaired"}>Hearing Impaired</option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className='col-md-6'>
-                                        <div className="form-group">
-                                            <label>Vision Description</label>
-                                            <textarea className="form-control" rows="2" cols="10" />
-                                        </div>
-                                    </div>
-                                </form>
+                               <label>Superannuation Form</label>
+                               <Link to="#">view form</Link>
                             </div>
                         </div>
                     </div>
