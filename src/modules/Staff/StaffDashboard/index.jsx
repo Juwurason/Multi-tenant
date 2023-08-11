@@ -31,7 +31,6 @@ const StaffDashboard = ({ roster, loading }) => {
       navigate.push('/')
     }
   }, [localStorage.getItem('user')]);
-
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
@@ -245,7 +244,7 @@ const StaffDashboard = ({ roster, loading }) => {
                       <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
-                        {/* <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><RxPencil2 /> Appointment: </span><span className='text-truncate'>{activity?.appointment}</span></span> */}
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activity?.staff.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
                       </div>
@@ -350,7 +349,7 @@ const StaffDashboard = ({ roster, loading }) => {
                         <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
                           <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activity?.clients}</span></span>
-                          {/* <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><RxPencil2 /> Appointment: </span><span className='text-truncate'>{activity?.appointment}</span></span> */}
+                          <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activity?.staff.fullName}</span></span>
                           <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{dayjs(activity?.dateFrom).format('hh:mm A')}</span></span>
                           <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{dayjs(activity?.dateTo).format('hh:mm A')}</span></span>
                         </div>
@@ -407,7 +406,7 @@ const StaffDashboard = ({ roster, loading }) => {
                       <div className="card-body  d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[0][0]?.profile.firstName}</span></span>
-                        {/* <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><RxPencil2 /> Appointment: </span><span className='text-truncate'>{activitiesByDay[0][0]?.appointment}</span></span> */}
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[0][0]?.staff.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[0].length > 0 ? dayjs(activitiesByDay[0][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[0].length > 0 ? dayjs(activitiesByDay[0][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
@@ -521,7 +520,7 @@ const StaffDashboard = ({ roster, loading }) => {
                       <div className="card-body d-flex flex-column gap-1 justify-content-start align-items-start">
 
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Client: </span><span className='text-truncate'>{activitiesByDay[2][0]?.clients}</span></span>
-                        {/* <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><RxPencil2 /> Appointment: </span><span className='text-truncate'>{activitiesByDay[2][0]?.appointment}</span></span> */}
+                        <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[2][0]?.staff.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>{activitiesByDay[2].length > 0 ? dayjs(activitiesByDay[2][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
                       </div>
