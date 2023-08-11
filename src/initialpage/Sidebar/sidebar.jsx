@@ -303,6 +303,10 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/document" onClick={() => onMenuClik()}><i className="la la-book" /> <span>Documents</span></Link>
               </li> : ""}
 
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Registrar") ? <li className={pathname.includes('registrar') || pathname.includes('registrar') ? "active" : ""}>
+                <Link to="/app/employee/registrar" onClick={() => onMenuClik()}><i className="la la-outdent" /> <span>Registrar</span></Link>
+              </li> : ""}
+
               {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className="menu-title">
                 <span>Communication</span>
               </li> : ""}
