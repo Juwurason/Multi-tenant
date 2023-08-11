@@ -16,6 +16,9 @@ import EditShiftRoaster from '../../../_components/forms/EditShiftRoaster';
 import Clients from './clients';
 import AddClients from '../../../_components/forms/AddClients';
 import AddUser from '../../../_components/forms/AddUser';
+import Registrar from './registrar';
+import IncidentForm from './incidentForm';
+import OtherForms from './otherForms';
 
 const EmployeesRoute = ({ match }) => (
 
@@ -35,6 +38,21 @@ const EmployeesRoute = ({ match }) => (
       <Route
          path={`${match.url}/document`}
          component={Document}
+      />
+
+      <Route
+         path={`${match.url}/registrar`}
+         component={Registrar}
+      />
+
+      <Route
+         path={`${match.url}/incident`}
+         component={IncidentForm}
+      />
+
+      <Route
+         path={`${match.url}/otherforms`}
+         component={OtherForms}
       />
 
       <Route path={`${match.url}/addclients`} component={AddClients} />

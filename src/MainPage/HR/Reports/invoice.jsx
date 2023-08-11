@@ -15,16 +15,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchClient } from "../../../store/slices/ClientSlice";
 
 
+// function formatDuration(duration) {
+//     const durationInTicks = BigInt(duration);
+//     const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
+
+//     const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+//     const hours = Math.floor(durationInMinutes / 60);
+//     // const minutes = durationInMinutes % 60;
+
+//     return `${hours} Hrs`;
+// }
+
 function formatDuration(duration) {
     const durationInTicks = BigInt(duration);
     const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
 
-    const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
-    const hours = Math.floor(durationInMinutes / 60);
-    // const minutes = durationInMinutes % 60;
+    const durationInMinutes = Math.ceil(durationInMilliseconds / (1000 * 60)); // Round up minutes
+    const totalHours = Math.floor(durationInMinutes / 60);
+    const totalMinutes = durationInMinutes % 60; // Get remaining minutes
 
-    return `${hours} Hrs`;
+    // Add remaining minutes to total hours if totalMinutes >= 30
+    const finalHours = totalHours + Math.floor(totalMinutes / 30);
+
+    return `${finalHours} Hrs`;
 }
+
+
+
+
 
 const Invoice = () => {
     const dispatch = useDispatch();

@@ -270,7 +270,7 @@ const Sidebar = (props) => {
                   : ""
                 }
               </li> : ""}
-              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View & Assign Admin Roster") ? <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View & Assign Admin Roster") || hasRequiredClaims("View Shift Roster") ? <li className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ? "active" : ""}>
                 <Link to="/app/employee/shift-scheduling" onClick={() => onMenuClik()}><i className="la la-calendar" /> <span>Shift Roster</span></Link>
               </li> : ""}
 
@@ -301,6 +301,10 @@ const Sidebar = (props) => {
 
               {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Accept & Reject Documents") ? <li className={pathname.includes('document') || pathname.includes('document') ? "active" : ""}>
                 <Link to="/app/employee/document" onClick={() => onMenuClik()}><i className="la la-book" /> <span>Documents</span></Link>
+              </li> : ""}
+
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Registrar") ? <li className={pathname.includes('registrar') || pathname.includes('registrar') ? "active" : ""}>
+                <Link to="/app/employee/registrar" onClick={() => onMenuClik()}><i className="la la-outdent" /> <span>Registrar</span></Link>
               </li> : ""}
 
               {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className="menu-title">
