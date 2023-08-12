@@ -2,22 +2,19 @@
  * Form Elemets
  */
 import React, { useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CSVLink } from 'react-csv';
+import DataTable from 'react-data-table-component';
 import { Helmet } from "react-helmet";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf } from 'react-icons/fa';
+import { GoSearch } from 'react-icons/go';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-import { Modal } from 'react-bootstrap';
-import { MultiSelect } from 'react-multi-select-component';
 import useHttp from '../../../hooks/useHttp';
-const options = [
-    { label: "Need Mobility Assistance?", value: "Need Mobility Assistance?" },
-    { label: "Mobility Independency", value: "Mobility Independency" },
-
-];
-const optionsOther = [
-    { label: "Need Communication Assistance?", value: "Need Communication Assistance?" },
-
-];
+import { fetchTemplate } from '../../../store/slices/FormTemplateSlice';
+import dayjs from 'dayjs';
 
 
 const Registrar = () => {
@@ -30,112 +27,271 @@ const Registrar = () => {
         }
     });
 
-    const [selected, setSelected] = useState([]);
-    const [staffAvail, setStaffAvail] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [loading1, setLoading1] = useState(false);
+    const id = JSON.parse(localStorage.getItem('user'));
     const [loading2, setLoading2] = useState(false);
-    const [selectedDay, setSelectedDay] = useState("");
     const { get, post } = useHttp();
-    const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
-    const [selectedTimeTo, setSelectedTimeTo] = useState("");
-    const id = JSON.parse(localStorage.getItem('user'))
-    const [showModal, setShowModal] = useState(false);
-    // const clientProfile = JSON.parse(localStorage.getItem('clientProfile'))
-    const handleSelected = (selectedOptions) => {
-        setSelected(selectedOptions);
-    }
-    const selectedValues = selected.map(option => option.label).join(', ');
+    const dispatch = useDispatch();
 
-
-    const PostAvail = async (e) => {
-        if (selectedDay === "" || selectedTimeFrom === "" || selectedTimeTo === "" || selectedValues === "") {
-            return toast.error("Input Fields cannot be empty")
-        }
-        e.preventDefault()
-        setLoading1(true)
-        const info = {
-            // profileId: clientProfile.profileId,
-            days: selectedDay,
-            fromTimeOfDay: selectedTimeFrom,
-            toTimeOfDay: selectedTimeTo,
-            activities: selectedValues,
-            companyID: id.companyId
-        }
-        try {
-
-            const { data } = await post(`/ClientSchedules/add_client_schedule?userId=${id.userId}`, info);
-            console.log(data)
-            if (data.status === 'Success') {
-                toast.success(data.message)
-            }
-            setLoading1(false)
-            FetchSchedule()
-        } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
-            setLoading1(false)
-        }
-    }
-
-
-    const FetchSchedule = async () => {
-        // setLoading2(true)
-        try {
-            // const { data } = await get(`ClientSchedules/get_client_schedule?clientId=${clientProfile.profileId}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            //  setStaffAvail(data)
-            // setLoading2(false);
-        } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        // finally {
-        //   setLoading2(false)
-        // }
-
-
-    };
     useEffect(() => {
-        FetchSchedule()
-    }, []);
+        dispatch(fetchTemplate(id.companyId));
+    }, [dispatch]);
+
+    const loading = useSelector((state) => state.template.isLoading);
+    const template = useSelector((state) => state.template.data);
+    console.log(template);
+    const columns = [
+
+        {
+            name: 'Template Name',
+            selector: row => row.templateName,
+            sortable: true,
+
+        },
+        {
+            name: 'Template Type',
+            selector: row => row.templateType,
+            sortable: true,
+
+        },
+
+        {
+            name: "Actions",
+            cell: (row) => (
+      
+                <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+               
+                <div>
+                   
+                    {
+                        row.templateUrl ?
+                            <button className="btn text-secondary" style={{ fontSize: "12px" }}
+                                onClick={() => handleView(row.templateUrl)}>
+
+                                View
+                            </button> :
+
+
+                            <Link to={`/app/employee/fillForm/${row.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
+                                // onClick={() => handleDetails(row.templateId)}
+                            >
+                                {
+                                    loading2 ?
+                                        <>
+                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                            Please wait...
+                                        </>
+                                        :
+                                        "Fill Form"
+
+                                }
+                            </Link>
+                    }
+                  
+                </div>
+
+            </div >
+            ),
+          }
+       
+
+    ];
 
 
 
 
 
+
+    const handleExcelDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet('Sheet1');
+
+        // Add headers
+        const headers = columns.map((column) => column.name);
+        sheet.addRow(headers);
+
+        // Add data
+        template.forEach((dataRow) => {
+            const values = columns.map((column) => {
+                if (typeof column.selector === 'function') {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            });
+            sheet.addRow(values);
+        });
+
+        // Generate Excel file
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'template.xlsx';
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    };
+
+
+
+    const handleCSVDownload = () => {
+        const csvData = Papa.unparse(template);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "template.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handlePDFDownload = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+        doc.setFontSize(13);
+        doc.text("template Table", marginLeft, 40);
+        const headers = columns.map((column) => column.name);
+        const dataValues = template.map((dataRow) =>
+            columns.map((column) => {
+                if (typeof column.selector === "function") {
+                    return column.selector(dataRow);
+                }
+                return dataRow[column.selector];
+            })
+        );
+
+        doc.autoTable({
+            startY: 50,
+            head: [headers],
+            body: dataValues,
+            margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
+        });
+        doc.save("template.pdf");
+    };
+    const handleView = (templateUrl) => {
+        window.open(templateUrl, '_blank');
+    };
+    {/* const handleDetails = (e) => {
+        setLoading2(true);
+        setTimeout(() => {
+            const url = `/form-details/${e}`;
+            window.open(url, '_blank');
+            setLoading2(false);
+        }, 2000);
+    }; */}
+
+    const ButtonRow = ({ data }) => {
+        return (
+            <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+                <span>
+                    <span className='fw-bold'>Template Name: </span>
+                    <span> {data.templateName}</span>
+                </span>
+
+                <span>
+                    <span className='fw-bold'>Date Created: </span>
+                    <span>
+                        {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
+                    </span>
+                </span>
+                <span>
+                    <span className='fw-bold'>Date Modified: </span>
+                    <span>
+                        {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
+                    </span>
+                </span>
+                <div>
+                    <span className='fw-bold'>Actions: </span>
+                    
+                    {
+                        data.templateUrl ?
+                            <button className="btn text-secondary" style={{ fontSize: "12px" }}
+                                onClick={() => handleView(data.templateUrl)}>
+
+                                View
+                            </button> :
+
+
+                            <Link to={`/app/employee/fillForm/${data.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
+                                // onClick={() => handleDetails(data.templateId)}
+                            >
+                                {
+                                    loading2 ?
+                                        <>
+                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                            Please wait...
+                                        </>
+                                        :
+                                        "Fill Form"
+
+                                }
+                            </Link>
+                    }
+                   
+                </div>
+
+            </div >
+        );
+    };
+    const [searchText, setSearchText] = useState("");
+
+    const handleSearch = (event) => {
+        setSearchText(event.target.value);
+    };
+
+    const filteredData = template.filter((item) =>
+        item.templateName.toLowerCase().includes(searchText.toLowerCase())
+    );
+    const customStyles = {
+
+        headCells: {
+            style: {
+                paddingLeft: '8px', // override the cell padding for head cells
+                paddingRight: '8px',
+            },
+        },
+        cells: {
+            style: {
+                paddingLeft: '8px', // override the cell padding for data cells
+                paddingRight: '8px',
+            },
+        },
+    };
 
     const handleDelete = async (e) => {
         Swal.fire({
-            html: `<h3>Are you sure? you want to delete this Schedule</h3>`,
-            icon: 'question',
+            html: `<h3>Are you sure? you want to delete this template</h3>`,
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#405189',
-            cancelButtonColor: '#C8102E',
+            cancelButtonColor: '#777',
             confirmButtonText: 'Confirm Delete',
             showLoaderOnConfirm: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/ClientSchedules/delete/${e}`)
-                    // console.log(data);
+                    const { data } = await post(`/Templates/delete/${e}`,
+
+                    )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchSchedule()
+                        dispatch(fetchTemplate(id.companyId));
                     } else {
                         toast.error(data.message);
                     }
 
 
                 } catch (error) {
-                    // console.log(error);
+                    console.log(error);
                     toast.error(error.response.data.message)
                     toast.error(error.response.data.title)
-
 
                 }
 
@@ -143,89 +299,13 @@ const Registrar = () => {
             }
         })
 
-
-    }
-
-    const [editAvail, setEditAvail] = useState({});
-    const [idSave, setIdSave] = useState('')
-    const [selectedActivities, setSelectedActivities] = useState([]);
-    const selectedValue = selectedActivities.map(option => option.label).join(', ');
-    const handleEdit = async (e) => {
-        setShowModal(true);
-        setIdSave(e)
-        // setLoading2(true)
-        try {
-
-            const { data } = await get(`/ClientSchedules/get_schedule/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
-            console.log();
-            setEditAvail(data);
-        } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-    };
-
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditAvail({
-            ...editAvail,
-            [name]: newValue
-        });
-    }
-
-    const handleActivityChange = (selected) => {
-        setSelectedActivities(selected);
-    };
-
-    const EditAvail = async (e) => {
-
-        e.preventDefault()
-        setLoading2(true)
-        const info = {
-            clientScheduleId: idSave,
-            // profileId: clientProfile.profileId,
-            days: editAvail.days,
-            fromTimeOfDay: editAvail.fromTimeOfDay,
-            toTimeOfDay: editAvail.toTimeOfDay,
-            activities: selectedValue,
-            companyID: id.companyId
-        }
-        try {
-
-            const { data } = await post(`/ClientSchedules/edit/${idSave}?userId=${id.userId}`, info);
-            // console.log(data);
-            if (data.status === 'Success') {
-                toast.success(data.message)
-            }
-            setLoading2(false)
-            setShowModal(false)
-            FetchSchedule()
-        } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
-            setLoading2(false)
-        }
     }
 
 
-    const [searchText, setSearchText] = useState("");
 
-    const handleSearch = (event) => {
-        setSearchText(event.target.value);
-    };
 
-    const filteredData = staffAvail.filter((item) =>
-        item.days.toLowerCase().includes(searchText.toLowerCase())
-    );
+
+    
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -246,7 +326,7 @@ const Registrar = () => {
                 </div>
                 {/* /Page Header */}
 
-
+                
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
@@ -254,9 +334,9 @@ const Registrar = () => {
                             <div className='d-flex flex-wrap-wrap justify-content-between'>
 
                             <div className='bg-primary p-5'>
-                                        <button className='btn btn-light'>
+                                        <Link to="/app/employee/staffReg" className='btn btn-light'>
                                             View Staff Registrar
-                                        </button>
+                                        </Link>
                         </div>
 
                                     <div className='bg-primary p-5'>
@@ -277,19 +357,90 @@ const Registrar = () => {
                     </div>
                 </div>
 
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card">
-                            <div className="card-header">
-                                <h4 className="card-title mb-0">Forms</h4>
-                            </div>
-                            <div className="card-body">
-                               <label>Superannuation Form</label>
-                               <Link to="#">view form</Link>
+                <label className='d-flex justify-content-center align-items-center'> Forms </label>
+                <div className='mt-4 border'>
+                    <div className="row px-2 py-3">
+
+                        <div className="col-md-3">
+                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                <input type="text" placeholder="Search..." className='border-0 outline-none' onChange={handleSearch} />
+                                <GoSearch />
                             </div>
                         </div>
+                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                            <CSVLink
+                                data={template}
+                                filename={"template.csv"}
+
+                            >
+                                <button
+
+                                    className='btn text-info'
+                                    title="Export as CSV"
+                                >
+                                    <FaFileCsv />
+                                </button>
+
+                            </CSVLink>
+                            <button
+                                className='btn text-danger'
+                                onClick={handlePDFDownload}
+                                title="Export as PDF"
+                            >
+                                <FaFilePdf />
+                            </button>
+                            <button
+                                className='btn text-primary'
+
+                                onClick={handleExcelDownload}
+                                title="Export as Excel"
+                            >
+                                <FaFileExcel />
+                            </button>
+                            <CopyToClipboard text={JSON.stringify(template)}>
+                                <button
+
+                                    className='btn text-warning'
+                                    title="Copy Table"
+                                    onClick={() => toast("Table Copied")}
+                                >
+                                    <FaCopy />
+                                </button>
+                            </CopyToClipboard>
+                        </div>
+                        <div className='col-md-4'>
+                            {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
+                Add New Holiday</Link> */}
+                            {/* <Link
+                                to={"/app/setup/create-template"}
+                                className="btn btn-info add-btn rounded-2 text-white">Add New Template</Link> */}
+                        </div>
                     </div>
+                    <DataTable data={filteredData} columns={columns}
+                        pagination
+                        highlightOnHover
+                        searchable
+                        searchTerm={searchText}
+                        progressPending={loading}
+                        progressComponent={<div className='text-center fs-1'>
+                            <div className="spinner-grow text-secondary">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+                        expandableRows
+                        expandableRowsComponent={ButtonRow}
+                        paginationTotalRows={filteredData.length}
+                        customStyles={customStyles}
+                        responsive
+
+                    />
+
+
+                    {/*Edit Modal */}
+
+
                 </div>
+               
 
 
             </div>
