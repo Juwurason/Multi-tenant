@@ -19,6 +19,8 @@ import AddUser from '../../../_components/forms/AddUser';
 import Registrar from './registrar';
 import IncidentForm from './incidentForm';
 import OtherForms from './otherForms';
+import StaffRegistrar from './staffRegistrar';
+import FillForm from './fillForm';
 
 const EmployeesRoute = ({ match }) => (
 
@@ -51,8 +53,18 @@ const EmployeesRoute = ({ match }) => (
       />
 
       <Route
+         path={`${match.url}/fillForm/:uid`}
+         component={FillForm}
+      />
+
+      <Route
          path={`${match.url}/otherforms`}
          component={OtherForms}
+      />
+
+      <Route
+         path={`${match.url}/staffReg`}
+         component={StaffRegistrar}
       />
 
       <Route path={`${match.url}/addclients`} component={AddClients} />
