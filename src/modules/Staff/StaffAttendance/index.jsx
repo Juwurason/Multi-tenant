@@ -38,7 +38,7 @@ const StaffAttendance = ({ staffAtten }) => {
   const columns = [
     {
       name: 'Date',
-      selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
+      selector: row => dayjs(row.dateCreated).format('DD-MM-YYYY'),
       sortable: true
     },
     {
