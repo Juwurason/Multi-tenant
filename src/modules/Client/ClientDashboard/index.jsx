@@ -11,6 +11,7 @@ import { useCompanyContext } from '../../../context/index.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import { MdHourglassTop, MdHourglassBottom, MdPersonOutline } from 'react-icons/md';
 import { BsClockHistory } from 'react-icons/bs';
+import { RxPencil2 } from 'react-icons/rx';
 import { toast } from 'react-toastify';
 import { Modal } from 'react-bootstrap';
 
@@ -283,6 +284,12 @@ function handleInputChange(event) {
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[1][0]?.staff?.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
+                      </div>
+                      <div className="card-footer text-body-secondary bg-light text-dark">
+                        <RxPencil2 /> &nbsp; Appointment
+                      </div>
+                      <div className='px-5 py-4'>
+                        <span>{activitiesByDay[1][0]?.appointment ? activitiesByDay[1][0]?.appointment : <span className='text-muted'>No Appointment</span>}</span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
