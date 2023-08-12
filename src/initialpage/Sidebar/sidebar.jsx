@@ -279,23 +279,23 @@ const Sidebar = (props) => {
               </li> : ""}
 
               {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Attendances") ? <li className={pathname.includes('attendance-report') || pathname.includes('attendance-report') ? "active" : ""}>
-                <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Timesheet Report</span></Link>
+                <Link to="/app/reports/attendance-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Timesheet </span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className={pathname.includes('shift-report') || pathname.includes('shift-report') ? "active" : ""}>
-                <Link to="/app/reports/shift-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Shift Attendance Report</span></Link>
+                <Link to="/app/reports/shift-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Shift Attendance </span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("View Progress Report") ? <li className={pathname.includes('progress-report') || pathname.includes('progress-report') ? "active" : ""}>
-                <Link to="/app/reports/progress-reports" onClick={() => onMenuClik()}><i className="la la-folder-open" /> <span>Progress Report</span></Link>
+                <Link to="/app/reports/progress-reports" onClick={() => onMenuClik()}><i className="la la-folder-open" /> <span>Progress Notes</span></Link>
               </li> : ""}
 
               {user.role === "CompanyAdmin" || hasRequiredClaims("Load Invoices") ? <li className={pathname.includes('invoice') || pathname.includes('invoice') ? "active" : ""}>
                 <Link to="/app/reports/invoice" onClick={() => onMenuClik()}><i className="la la-file-text" /> <span>Invoicing</span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" ? <li className={pathname.includes('administrator-report') || pathname.includes('administrator-report') ? "active" : ""}>
-                <Link to="/app/reports/administrator-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Admin Daily Report</span></Link>
+                <Link to="/app/reports/administrator-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Admin Daily Notes</span></Link>
               </li> : ""}
               {user.role === "CompanyAdmin" ? <li className={pathname.includes('staff-report') || pathname.includes('staff-report') ? "active" : ""}>
-                <Link to="/app/reports/staff-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Staff Daily Report</span></Link>
+                <Link to="/app/reports/staff-reports" onClick={() => onMenuClik()}><i className="la la-calendar-check-o" /> <span>Staff Daily Notes</span></Link>
               </li> : ""}
 
 

@@ -49,7 +49,7 @@ const Document = () => {
     const document = useSelector((state) => state.document.data);
     const staff = useSelector((state) => state.staff.data);
     const admin = useSelector((state) => state.admin.data);
-    
+
     //Declaring Variables
     const privateHttp = useHttp();
     const [rejectModal, setRejectModal] = useState(false);
@@ -105,52 +105,44 @@ const Document = () => {
         },
         {
             name: 'Expiration Date',
-            selector: row => row.expirationDate,
+            selector: row => !row.expirationDate ? "No Expiration Date" : moment(row.expirationDate).format('ll'),
             sortable: true,
-            expandable: true,
-            cell: (row) => (
-                <span>
-                    {row.expirationDate === "null" || undefined
-                        ? "" : moment(row.expirationDate).format('ll')}
-                </span>
-            ),
+            expandable: true
         },
-          {
+        {
             name: 'Status',
             selector: row => row.status,
             sortable: true,
             expandable: true,
             cell: (row) => {
-              const isExpired = dayjs(row.expirationDate).format('YYYY-MM-DD') < (nowInAustraliaTime);
-              let status;
-          
-              if (isExpired) {
-                status = 'Expired';
-              } else if (row.status === 'Rejected') {
-                status = 'Rejected';
-              } else {
-                status = row.status;
-              }
-          
-              const statusClasses = `px-2 py-1 rounded-pill fw-bold ${
-                isExpired ? 'bg-danger text-white' : ''
-              } ${
-                row.status === 'Pending'
-                  ? 'bg-warning'
-                  : row.status === 'Accepted'
-                  ? 'bg-success text-white'
-                  : row.status === 'Rejected'
-                  ? 'bg-danger text-white'
-                  : 'bg-transparent'
-              }`;
-          
-              return (
-                <span className={statusClasses} style={{ fontSize: '10px' }}>
-                  {status}
-                </span>
-              );
+                const isExpired = dayjs(row.expirationDate).format('YYYY-MM-DD') < (nowInAustraliaTime);
+                let status;
+
+                if (isExpired) {
+                    status = 'Expired';
+                } else if (row.status === 'Rejected') {
+                    status = 'Rejected';
+                } else {
+                    status = row.status;
+                }
+
+                const statusClasses = `px-2 py-1 rounded-pill fw-bold ${isExpired ? 'bg-danger text-white' : ''
+                    } ${row.status === 'Pending'
+                        ? 'bg-warning'
+                        : row.status === 'Accepted'
+                            ? 'bg-success text-white'
+                            : row.status === 'Rejected'
+                                ? 'bg-danger text-white'
+                                : 'bg-transparent'
+                    }`;
+
+                return (
+                    <span className={statusClasses} style={{ fontSize: '10px' }}>
+                        {status}
+                    </span>
+                );
             },
-          },
+        },
 
     ];
 

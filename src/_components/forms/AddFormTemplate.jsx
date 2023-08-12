@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
 import Edit from '../../MainPage/HR/Message/edit';
+import RichTextEditor from '../Editor/summerNote';
 
 
 
