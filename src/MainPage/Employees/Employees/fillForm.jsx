@@ -30,8 +30,8 @@ const FillForm = () => {
             setReport(data.content)
 
         } catch (attendanceError) {
-            toast.error(error.response.data.message)
-             toast.error(error.response.data.title)
+            toast.error(error.response.data.message);
+             toast.error(error.response.data.title);
         }
     };
 

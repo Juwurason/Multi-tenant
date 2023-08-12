@@ -73,14 +73,14 @@ import useHttp from '../../../../hooks/useHttp';
          // setLoading2(true)
          try {
              const { data } = await get(`HealthSupports/get_all?clientId=${uid}`, { cacheTimeout: 300000 });
-             // console.log(data);
+            //  console.log(data);
               setStaffAvail(data)
               
               if (data && data.length > 0) {
                  const healthSupportId = data[0].healthSupportId;
                  setIdSave(healthSupportId)
                  const { data: secondData } = await get(`/HealthSupports/${healthSupportId}`, { cacheTimeout: 300000 });
-                 // console.log(secondData);
+                 console.log(secondData);
                  setEditPro(secondData);
                  // Do something with the second data (e.g., setEditPro(secondData))
                }
@@ -163,7 +163,7 @@ import useHttp from '../../../../hooks/useHttp';
                      </div>
                  </div>
                  {/* /Page Header */}
-                 {staffAvail.length < 0 && <div className="row">
+                 {staffAvail.length === 0 && <div className="row">
                      <div className="col-md-12">
                          <div className="card">
                              <div className="card-header">

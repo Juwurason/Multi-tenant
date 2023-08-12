@@ -80,7 +80,33 @@ const ClientDashboard = () => {
   }
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
+  const [editedProfile, setEditedProfile] = useState({});
 
+  const addAppoint = async (e) => {
+    setAppointModal(true)
+    setCli(e)
+    try {
+        const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+        // console.log(data);
+        setEditedProfile(data);
+        setLoading(false)
+    } catch (error) {
+        toast.error(error.response.data.message)
+        toast.error(error.response.data.title)
+        setLoading(false)
+    }
+}
+
+function handleInputChange(event) {
+  const target = event.target;
+  const name = target.name;
+  const value = target.value;
+  const newValue = value === "" ? "" : value;
+  setEditedProfile({
+      ...editedProfile,
+      [name]: newValue
+  });
+}
   const daysOfWeek = [
     currentDate.subtract(1, 'day'),
     currentDate,
@@ -146,17 +172,17 @@ const ClientDashboard = () => {
     }, 3000);
   };
 
-  const [appoint, setAppoint] = useState("");
+  // const [appoint, setAppoint] = useState("");
   const id = JSON.parse(localStorage.getItem('user'));
   const [showModal, setShowModal] = useState(false);
   const [appointModal, setAppointModal] = useState(false)
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [cli, setCli] = useState("");
 
-  const addAppoint = (e) => {
-    setAppointModal(true)
-    setCli(e)
-  }
+  // const addAppoint = (e) => {
+  //   setAppointModal(true)
+  //   setCli(e)
+  // }
 
   const handleActivityClick = (activitiesByDay) => {
     setSelectedActivity(activitiesByDay);
@@ -164,12 +190,12 @@ const ClientDashboard = () => {
   };
 
   const addAppointment = async () => {
-    if (appoint === "") {
+    if (editedProfile === "") {
       return toast.error("Input Fields cannot be empty")
     }
     try {
       setLoading(true)
-      const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${appoint}`);
+      const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
       // console.log(data);
       toast.success(data.message);
       setLoading(false);
@@ -347,7 +373,9 @@ const ClientDashboard = () => {
               <Modal.Body>
                 <div>
                   <label htmlFor="">Please Provide Appointment Details</label>
-                  <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setAppoint(e.target.value)} />
+                  <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} 
+                  name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
+                  />
                 </div>
               </Modal.Body>
               <Modal.Footer>
