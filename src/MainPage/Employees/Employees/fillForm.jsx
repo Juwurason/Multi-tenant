@@ -26,7 +26,7 @@ const FillForm = () => {
 
         try {
             const {data} = await privateHttp.get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
+            // console.log(data);
             setReport(data.content)
 
         } catch (attendanceError) {
