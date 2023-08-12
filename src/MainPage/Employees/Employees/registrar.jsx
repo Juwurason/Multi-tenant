@@ -38,7 +38,6 @@ const Registrar = () => {
 
     const loading = useSelector((state) => state.template.isLoading);
     const template = useSelector((state) => state.template.data);
-    console.log(template);
     const columns = [
 
         {
@@ -57,42 +56,42 @@ const Registrar = () => {
         {
             name: "Actions",
             cell: (row) => (
-      
+
                 <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
-               
-                <div>
-                   
-                    {
-                        row.templateUrl ?
-                            <button className="btn text-secondary" style={{ fontSize: "12px" }}
-                                onClick={() => handleView(row.templateUrl)}>
 
-                                View
-                            </button> :
+                    <div>
+
+                        {
+                            row.templateUrl ?
+                                <button className="btn text-secondary" style={{ fontSize: "12px" }}
+                                    onClick={() => handleView(row.templateUrl)}>
+
+                                    View
+                                </button> :
 
 
-                            <Link to={`/app/employee/fillForm/${row.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
+                                <Link to={`/app/employee/fillForm/${row.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
                                 // onClick={() => handleDetails(row.templateId)}
-                            >
-                                {
-                                    loading2 ?
-                                        <>
-                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
-                                            Please wait...
-                                        </>
-                                        :
-                                        "Fill Form"
+                                >
+                                    {
+                                        loading2 ?
+                                            <>
+                                                <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                                Please wait...
+                                            </>
+                                            :
+                                            "Fill Form"
 
-                                }
-                            </Link>
-                    }
-                  
-                </div>
+                                    }
+                                </Link>
+                        }
 
-            </div >
+                    </div>
+
+                </div >
             ),
-          }
-       
+        }
+
 
     ];
 
@@ -209,7 +208,7 @@ const Registrar = () => {
                 </span>
                 <div>
                     <span className='fw-bold'>Actions: </span>
-                    
+
                     {
                         data.templateUrl ?
                             <button className="btn text-secondary" style={{ fontSize: "12px" }}
@@ -220,7 +219,7 @@ const Registrar = () => {
 
 
                             <Link to={`/app/employee/fillForm/${data.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
-                                // onClick={() => handleDetails(data.templateId)}
+                            // onClick={() => handleDetails(data.templateId)}
                             >
                                 {
                                     loading2 ?
@@ -234,7 +233,7 @@ const Registrar = () => {
                                 }
                             </Link>
                     }
-                   
+
                 </div>
 
             </div >
@@ -305,7 +304,7 @@ const Registrar = () => {
 
 
 
-    
+
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -326,30 +325,30 @@ const Registrar = () => {
                 </div>
                 {/* /Page Header */}
 
-                
+
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
 
                             <div className='d-flex flex-wrap-wrap justify-content-between'>
 
-                            <div className='bg-primary p-5'>
-                                        <Link to="/app/employee/staffReg" className='btn btn-light'>
-                                            View Staff Registrar
-                                        </Link>
-                        </div>
+                                <div className='bg-primary p-5'>
+                                    <Link to="/app/employee/staffReg" className='btn btn-light'>
+                                        View Staff Registrar
+                                    </Link>
+                                </div>
 
-                                    <div className='bg-primary p-5'>
-                                        <Link to="/app/employee/incident" className='btn btn-light'>
-                                            View Incident Forms
-                                        </Link>
-                                    </div>
-                                    
-                                    <div className='bg-primary p-5'>
-                                        <Link to="/app/employee/otherForms" className='btn btn-light'>
-                                            View Other Forms
-                                        </Link>
-                                    </div>
+                                <div className='bg-primary p-5'>
+                                    <Link to="/app/employee/incident" className='btn btn-light'>
+                                        View Incident Forms
+                                    </Link>
+                                </div>
+
+                                <div className='bg-primary p-5'>
+                                    <Link to="/app/employee/otherForms" className='btn btn-light'>
+                                        View Other Forms
+                                    </Link>
+                                </div>
                             </div>
 
 
@@ -440,7 +439,7 @@ const Registrar = () => {
 
 
                 </div>
-               
+
 
 
             </div>

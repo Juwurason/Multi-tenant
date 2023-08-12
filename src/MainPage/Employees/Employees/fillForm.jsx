@@ -8,30 +8,45 @@ import Swal from 'sweetalert2';
 import useHttp from '../../../hooks/useHttp';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import Editor from '../../../modules/Staff/StaffNewReport/editor';
+import { fetchUser } from '../../../store/slices/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const FillForm = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { uid, } = useParams();
-    const [attendance, setAttendance] = useState({});
+    const [formDetails, setFormDetails] = useState({});
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [report, setReport] = useState("");
+    const [reportName, setReportName] = useState("");
     const navigate = useHistory();
     const privateHttp = useHttp();
 
+    const id = JSON.parse(localStorage.getItem('user'));
+    const dispatch = useDispatch();
+
+    // Fetch user data and update the state
+    useEffect(() => {
+        dispatch(fetchUser(id.companyId));
+    }, [dispatch]);
+
+    // Access the entire state
+    const users = useSelector((state) => state.user.data);
 
 
     const FetchData = async () => {
         setLoading(true);
 
         try {
-            const {data} = await privateHttp.get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
-            // console.log(data);
+            const { data } = await privateHttp.get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
+            setReportName(data.templateName);
+
+            setFormDetails(data)
             setReport(data.content)
 
-        } catch (attendanceError) {
-            toast.error(error.response.data.message);
-             toast.error(error.response.data.title);
+        } catch (error) {
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         }
     };
 
@@ -40,7 +55,7 @@ const FillForm = () => {
     }, []);
 
 
-    
+
     const [imageFile, setImageFile] = useState(null);
 
     const handleFileChange = (e) => {
@@ -55,74 +70,74 @@ const FillForm = () => {
     };
 
 
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setAttendance({
-          ...attendance,
-          [name]: newValue
-        });
-      }
+    // function handleInputChange(event) {
+    //     const target = event.target;
+    //     const name = target.name;
+    //     const value = target.value;
+    //     const newValue = value === "" ? "" : value;
+    //     setAttendance({
+    //         ...attendance,
+    //         [name]: newValue
+    //     });
+    // }
 
-      const handleReportChange = (value) => {
-        setReport(value); // Update the state when the editor content changes
-      };
+    // const handleReportChange = (value) => {
+    //     setReport(value); // Update the state when the editor content changes
+    // };
 
-    const SendReport = async (e) => {
-        e.preventDefault()
-        setLoading1(true)
+    // const SendReport = async (e) => {
+    //     e.preventDefault()
+    //     setLoading1(true)
 
-        const info = {
-            "attendanceId": attendance.attendanceId,
-            "report": attendance.report,
-            "clockIn": attendance.clockIn,
-            // "clockInCheck": true,
-            // "clockOutCheck": false,
-            // "isSplitted": false,
-            "clockOut": attendance.clockOut,
-            "duration": attendance.duration,
-            "inLongitude": attendance.inLongitude,
-            "inLatitude": attendance.inLatitude,
-            // "outLongitude": 0,
-            // "outLatitude": 0,
-            "startKm": attendance.startKm,
-            "endKm": attendance.endKm,
-            "staffId": attendance.staffId,
-            "imageFile": imageFile,
-            // "imageURL": attendance.imageURL,
-            "companyID": user.companyId
-        }
+    //     const info = {
+    //         "attendanceId": attendance.attendanceId,
+    //         "report": attendance.report,
+    //         "clockIn": attendance.clockIn,
+    //         // "clockInCheck": true,
+    //         // "clockOutCheck": false,
+    //         // "isSplitted": false,
+    //         "clockOut": attendance.clockOut,
+    //         "duration": attendance.duration,
+    //         "inLongitude": attendance.inLongitude,
+    //         "inLatitude": attendance.inLatitude,
+    //         // "outLongitude": 0,
+    //         // "outLatitude": 0,
+    //         "startKm": attendance.startKm,
+    //         "endKm": attendance.endKm,
+    //         "staffId": attendance.staffId,
+    //         "imageFile": imageFile,
+    //         // "imageURL": attendance.imageURL,
+    //         "companyID": user.companyId
+    //     }
 
 
-        try {
-            const { data } = await privateHttp.post(`/Attendances/edit/${uid}?userId=${user.userId}`,
-                info);
-                // console.log(data);
-            if (data.status === "Success") {
-                Swal.fire(
-                    '',
-                    `${data.message}`,
-                    'success'
-                )
-                setLoading1(false)
-                navigate.push(`/app/reports/attendance-reports`)
-            }
-            setLoading1(false)
-        } catch (error) {
-            // console.log(error);
-            toast.error("Error Updating Attendance")
-            toast.error(error.response?.data?.message)
-            toast.error(error.response?.data?.title)
+    //     try {
+    //         const { data } = await privateHttp.post(`/Attendances/edit/${uid}?userId=${user.userId}`,
+    //             info);
+    //         // console.log(data);
+    //         if (data.status === "Success") {
+    //             Swal.fire(
+    //                 '',
+    //                 `${data.message}`,
+    //                 'success'
+    //             )
+    //             setLoading1(false)
+    //             navigate.push(`/app/reports/attendance-reports`)
+    //         }
+    //         setLoading1(false)
+    //     } catch (error) {
+    //         // console.log(error);
+    //         toast.error("Error Updating Attendance")
+    //         toast.error(error.response?.data?.message)
+    //         toast.error(error.response?.data?.title)
 
-            setLoading1(false)
+    //         setLoading1(false)
 
-        }
-        finally {
-            setLoading1(false)
-        }
-    }
+    //     }
+    //     finally {
+    //         setLoading1(false)
+    //     }
+    // }
 
 
 
@@ -153,29 +168,40 @@ const FillForm = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
-                                    <form onSubmit={SendReport}>
+                                    <form >
                                         <div className='col-md-4'>
 
                                         </div>
                                         <div className="row">
-                                            <div className="col-md-4">
+                                            <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="">Template Name</label>
                                                     <input
                                                         type="number"
-                                                        name="startKm" value={attendance.startKm || ''} onChange={handleInputChange}
+                                                        name="startKm" value={reportName
+                                                        }
                                                         className="form-control"
+                                                        readOnly
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="col-md-4">
+                                            <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor=""> User</label>
-                                                    <input
-                                                        type="number"
-                                                        name="endKm" value={attendance.endKm || ''} onChange={handleInputChange}
-                                                        className="form-control"
-                                                    />
+                                                    <div className='form-control d-flex justify-content-center align-items-center'>
+                                                        <select name="" id="" className="form-select py-2 border-0 bg-transparent">
+                                                            <option value="">
+                                                                --Select a User--
+                                                            </option>
+                                                            {
+                                                                users.map((user, index) =>
+                                                                    <option value="" key={index}>
+                                                                        {user.fullName}
+                                                                    </option>
+                                                                )
+                                                            }
+                                                        </select>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -192,15 +218,15 @@ const FillForm = () => {
                                             /> */}
                                             <Editor
                                                 placeholder="Write something..."
-                                            onChange={handleReportChange}
-                                            value={report}
+                                                // onChange={handleReportChange}
+                                                value={report}
                                             ></Editor>
-                                             <br />
+                                            <br />
                                             <br />
                                             <br />
                                         </div>
 
-                            
+
                                         <div className="form-group text-center mb-0">
                                             <div className="text-center d-flex gap-2">
                                                 <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
