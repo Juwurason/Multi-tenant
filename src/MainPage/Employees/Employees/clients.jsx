@@ -43,7 +43,11 @@ const Clients = () => {
 
   const columns = [
 
-
+    {
+      name: 'Client ID',
+      selector: row => row.contactId,
+      sortable: true
+    },
     {
       name: 'Full Name',
       selector: row => row.fullName,

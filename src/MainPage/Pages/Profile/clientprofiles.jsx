@@ -383,8 +383,13 @@ const ClientProfiles = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left">
                             <h3 className="user-name m-t-0">{staffOne.fullName}</h3>
+                            
                             {/* <h5 className="company-role m-t-0 mb-0">Barry Cuda</h5> */}
-                            <small className="text-muted">{staffOne.email}</small>
+                            <div className="text-muted">{staffOne.email}</div>
+                            <div className="staff-id">{staffOne.address}</div>
+                            <div className="staff-id">{staffOne.contactId}</div>
+                            <div className="staff-id">NDIS No: {staffOne.ndisNo}</div>
+                            
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                             <div className="staff-msg d-flex gap-2">
 
@@ -410,18 +415,18 @@ const ClientProfiles = () => {
                               <span className="title">Phone:</span>
                               <span className="text"><a href={`tel:${staffOne.phoneNumber}`}>{staffOne.phoneNumber}</a></span>
                             </li>
-                            <li>
+                            {/* <li>
                               <span className="title">Email:</span>
                               <span className="text"><a href={`mailto:${staffOne.email}`}>{staffOne.email}</a></span>
-                            </li>
+                            </li> */}
                             <li>
                               <span className="title">Birthday:</span>
                               <span className="text">{!staffOne.dateOfBirth ? "Not Updated" : moment(staffOne.dateOfBirth).format('ll')}</span>
                             </li>
-                            <li>
+                            {/* <li>
                               <span className="title">Address:</span>
                               <span className="text">{staffOne.address}</span>
-                            </li>
+                            </li> */}
                             <li>
                               <span className="title">Gender:</span>
                               <span className="text">{staffOne.gender}</span>
