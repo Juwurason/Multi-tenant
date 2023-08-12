@@ -36,7 +36,6 @@ const FormType = () => {
     // Access the entire state
     const loading = useSelector((state) => state.template.isLoading);
     const template = useSelector((state) => state.template.data);
-    console.log(template);
     const columns = [
 
         {

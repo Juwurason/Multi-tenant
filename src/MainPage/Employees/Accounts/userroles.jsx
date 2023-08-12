@@ -167,7 +167,13 @@ const UserRoles = () => {
                                             <div className="row px-2 py-3">
 
                                                 {
-                                                    roles.length > 0 ? roles.map((data, index) =>
+                                                    loading &&
+                                                    <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+
+                                                }
+
+                                                {
+                                                    !loading && roles.length > 0 ? roles.map((data, index) =>
                                                         <div className="col-md-3" key={index}>
                                                             <div className="card" style={{ height: "10rem" }}>
 

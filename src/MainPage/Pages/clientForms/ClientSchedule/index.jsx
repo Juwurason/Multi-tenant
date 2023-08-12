@@ -53,7 +53,7 @@ const ClientSchedule = () => {
         }
     });
 
-    const {uid} = useParams()
+    const { uid } = useParams()
     const [selected, setSelected] = useState([]);
     const [staffAvail, setStaffAvail] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -291,7 +291,6 @@ const ClientSchedule = () => {
             const { data } = await get(`/ClientSchedules/get_schedule/${e}`, { cacheTimeout: 300000 });
             // console.log(data);
             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
-            console.log();
             setEditAvail(data);
         } catch (error) {
             // console.log(error);
@@ -394,6 +393,7 @@ const ClientSchedule = () => {
                             </ul>
                         </div>
                     </div>
+
                 </div>
                 {/* /Page Header */}
                 <div className="row">
@@ -446,7 +446,7 @@ const ClientSchedule = () => {
                                     </div>
 
                                     <div className="text-start">
-                                        <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
+                                        <button type="submit" className="btn btn-primary add-btn rounded px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
                                             {loading1 ? <div className="spinner-grow text-light" role="status">
                                                 <span className="sr-only">Loading...</span>
                                             </div> : "Add"}</button>

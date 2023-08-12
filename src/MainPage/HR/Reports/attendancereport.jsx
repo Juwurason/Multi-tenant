@@ -150,7 +150,7 @@ const AttendanceReport = () => {
 
     {
       name: 'Clock-Out',
-      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY h:mm A'),
+      selector: row => !row.clockOut ? (<span className='bg-warning py-1 px-2 rounded-2'>In Shift</span>) : dayjs(row.clockOut).format('DD/MM/YYYY h:mm A'),
       sortable: true,
       expandable: true,
 
@@ -436,7 +436,7 @@ const AttendanceReport = () => {
 
       <div className="page-wrapper">
         <Helmet>
-          <title>Timesheet Reports</title>
+          <title>Timesheet R</title>
           <meta name="description" content="Login page" />
         </Helmet>
 
@@ -445,10 +445,10 @@ const AttendanceReport = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h3 className="page-title">Timesheet Reports</h3>
+                <h3 className="page-title">Timesheet</h3>
                 {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                  <li className="breadcrumb-item active">Timesheet Reports</li>
+                  <li className="breadcrumb-item active">Timesheet</li>
                 </ul> : ""}
               </div>
             </div>
