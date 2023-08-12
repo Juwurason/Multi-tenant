@@ -202,7 +202,7 @@ function handleInputChange(event) {
       setAppointModal(false);
 
     } catch (error) {
-      console.log(error);
+      console.log(error); 
     }
     finally {
       setLoading(false);
