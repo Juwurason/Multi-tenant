@@ -40,6 +40,7 @@ const FillForm = () => {
         try {
             const { data } = await privateHttp.get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
             setReportName(data.templateName);
+
             setFormDetails(data)
             setReport(data.content)
 
@@ -190,7 +191,7 @@ const FillForm = () => {
                                                     <div className='form-control d-flex justify-content-center align-items-center'>
                                                         <select name="" id="" className="form-select py-2 border-0 bg-transparent">
                                                             <option value="">
-                                                                Select a user
+                                                                --Select a User--
                                                             </option>
                                                             {
                                                                 users.map((user, index) =>
