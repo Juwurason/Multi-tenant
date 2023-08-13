@@ -43,7 +43,6 @@ const AllEmployees = () => {
   const { post, get } = useHttp();
   const status = useRef(false);
 
-
   const columns = [
     // {
     //   name: '',
@@ -61,7 +60,7 @@ const AllEmployees = () => {
 
     {
       name: 'Staff ID',
-      selector: row => row.maxStaffId,
+      selector: row => row.maxStaffId === 'null' ? "" : row.maxStaffId,
       sortable: true
     },
     {
@@ -299,12 +298,13 @@ const AllEmployees = () => {
         <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
           {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Staff") ?
-            <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-              Activate Staff |
+            !data.isActive && <button onClick={() => handleActivate(data.staffId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+              Activate Staff
             </button>
             : ""}
+          &nbsp;
           {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Staff") ?
-            <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+            data.isActive && <button onClick={() => handleDeactivate(data.staffId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
               Deactivate Staff
             </button>
             : ""}

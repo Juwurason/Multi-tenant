@@ -12,7 +12,7 @@ export const CompanyProvider = ({ children }) => {
     const [email, setEmail] = useState('');
 
     const [userProfile, setUserProfile] = useState({});
-    const navigate = useHistory();
+    const history = useHistory();
 
     // useEffect(() => {
     //     const user = JSON.parse(localStorage.getItem('user'))
@@ -69,11 +69,14 @@ export const CompanyProvider = ({ children }) => {
         localStorage.removeItem('email');
     };
 
+
+
     const contextValue = {
         companyId, email, storeCompanyId,
         storeAdminEmail, clearCompanyData,
-        userProfile, setUserProfile, loading, setLoading
+        userProfile, setUserProfile, loading, setLoading,
     };
+
 
     return (
         <CompanyContext.Provider value={contextValue}>

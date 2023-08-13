@@ -43,6 +43,12 @@ const Clients = () => {
 
   const columns = [
 
+    {
+      name: 'Client ID',
+      selector: row => row.contactId,
+      sortable: true,
+    },
+
 
     {
       name: 'Full Name',
@@ -225,13 +231,15 @@ const Clients = () => {
         <div><span className='fw-bold'>Email: </span> {data.email}</div>
         <div><span className='fw-bold'>Date Created: </span>  {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}</div>
         <div>
+
           {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Client") ?
-            <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+            !data.isActive && <button onClick={() => handleActivate(data.profileId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
               Activate Client
-              | </button>
+            </button>
             : ""}
+          &nbsp;
           {user.role === "CompanyAdmin" || hasRequiredClaims("Activate & Deactivate Client") ?
-            <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+            data.isActive && <button onClick={() => handleDeactivate(data.profileId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
               Deactivate Client
             </button>
             : ""}

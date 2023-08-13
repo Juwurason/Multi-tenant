@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
-import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaLongArrowAltLeft, FaLongArrowAltRight, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -177,6 +177,15 @@ const EmployeeProfile = () => {
 
   }
 
+  const history = useHistory();
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
+
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
+
 
   return (
     <>
@@ -190,13 +199,20 @@ const EmployeeProfile = () => {
           {/* Page Header */}
           <div className="page-header">
             <div className="row">
-              <div className="col-sm-12">
+              <div className="col-sm-10">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="/app/employee/allstaff">Staff</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
+              </div>
+              <div className="col-md-2 d-none d-md-block">
+                <button className='btn' onClick={goBack}>
+                  <FaLongArrowAltLeft className='fs-3' />
+                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                  <FaLongArrowAltRight className='fs-3' />
+                </button>
               </div>
             </div>
           </div>

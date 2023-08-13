@@ -9,7 +9,7 @@ import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaLongArrowAltLeft, FaLongArrowAltRight, FaTrash } from "react-icons/fa";
 import Offcanvas from '../../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -20,6 +20,7 @@ import { Modal } from 'react-bootstrap';
 import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 import { MultiSelect } from 'react-multi-select-component';
 import useHttp from '../../../../hooks/useHttp';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 const options = [
     { label: "Medication Supervision", value: "Medication Supervision" },
     { label: "Medication administering", value: "Medication administering" },
@@ -375,6 +376,14 @@ const ClientSchedule = () => {
     const filteredData = staffAvail.filter((item) =>
         item.days.toLowerCase().includes(searchText.toLowerCase())
     );
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -385,12 +394,19 @@ const ClientSchedule = () => {
                 {/* Page Header */}
                 <div className="page-header">
                     <div className="row">
-                        <div className="col">
+                        <div className="col-md-10">
                             {/* <h3 className="page-title">Staff Client Schedule</h3> */}
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Client Schedule</li>
                             </ul>
+                        </div>
+                        <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
                         </div>
                     </div>
 

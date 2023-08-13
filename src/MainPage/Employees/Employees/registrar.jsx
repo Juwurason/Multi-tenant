@@ -57,7 +57,7 @@ const Registrar = () => {
             name: "Actions",
             cell: (row) => (
 
-                <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+                <div className="p-2 d-flex flex-column gap-2 overflow-hidden" style={{ fontSize: "12px" }}>
 
                     <div>
 
@@ -186,59 +186,59 @@ const Registrar = () => {
         }, 2000);
     }; */}
 
-    const ButtonRow = ({ data }) => {
-        return (
-            <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
-                <span>
-                    <span className='fw-bold'>Template Name: </span>
-                    <span> {data.templateName}</span>
-                </span>
+    // const ButtonRow = ({ data }) => {
+    //     return (
+    //         <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
+    //             <span>
+    //                 <span className='fw-bold'>Template Name: </span>
+    //                 <span> {data.templateName}</span>
+    //             </span>
 
-                <span>
-                    <span className='fw-bold'>Date Created: </span>
-                    <span>
-                        {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
-                    </span>
-                </span>
-                <span>
-                    <span className='fw-bold'>Date Modified: </span>
-                    <span>
-                        {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
-                    </span>
-                </span>
-                <div>
-                    <span className='fw-bold'>Actions: </span>
+    //             <span>
+    //                 <span className='fw-bold'>Date Created: </span>
+    //                 <span>
+    //                     {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
+    //                 </span>
+    //             </span>
+    //             <span>
+    //                 <span className='fw-bold'>Date Modified: </span>
+    //                 <span>
+    //                     {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
+    //                 </span>
+    //             </span>
+    //             <div>
+    //                 <span className='fw-bold'>Actions: </span>
 
-                    {
-                        data.templateUrl ?
-                            <button className="btn text-secondary" style={{ fontSize: "12px" }}
-                                onClick={() => handleView(data.templateUrl)}>
+    //                 {
+    //                     data.templateUrl ?
+    //                         <button className="btn text-secondary" style={{ fontSize: "12px" }}
+    //                             onClick={() => handleView(data.templateUrl)}>
 
-                                View
-                            </button> :
+    //                             View
+    //                         </button> :
 
 
-                            <Link to={`/app/employee/fillForm/${data.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
-                            // onClick={() => handleDetails(data.templateId)}
-                            >
-                                {
-                                    loading2 ?
-                                        <>
-                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
-                                            Please wait...
-                                        </>
-                                        :
-                                        "Fill Form"
+    //                         <Link to={`/app/employee/fillForm/${data.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
+    //                         // onClick={() => handleDetails(data.templateId)}
+    //                         >
+    //                             {
+    //                                 loading2 ?
+    //                                     <>
+    //                                         <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+    //                                         Please wait...
+    //                                     </>
+    //                                     :
+    //                                     "Fill Form"
 
-                                }
-                            </Link>
-                    }
+    //                             }
+    //                         </Link>
+    //                 }
 
-                </div>
+    //             </div>
 
-            </div >
-        );
-    };
+    //         </div >
+    //     );
+    // };
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
@@ -330,21 +330,21 @@ const Registrar = () => {
                     <div className="col-md-12">
                         <div className="card">
 
-                            <div className='d-flex flex-wrap-wrap justify-content-between'>
+                            <div className='d-flex flex-wrap-wrap justify-content-evenly p-2'>
 
-                                <div className='bg-primary p-5'>
+                                <div className='bg-primary p-4 rounded'>
                                     <Link to="/app/employee/staffReg" className='btn btn-light'>
                                         View Staff Registrar
                                     </Link>
                                 </div>
 
-                                <div className='bg-primary p-5'>
+                                <div className='bg-primary p-4 rounded'>
                                     <Link to="/app/employee/incident" className='btn btn-light'>
                                         View Incident Forms
                                     </Link>
                                 </div>
 
-                                <div className='bg-primary p-5'>
+                                <div className='bg-primary p-4 rounded'>
                                     <Link to="/app/employee/otherForms" className='btn btn-light'>
                                         View Other Forms
                                     </Link>
@@ -426,8 +426,8 @@ const Registrar = () => {
                                 <span className="sr-only">Loading...</span>
                             </div>
                         </div>}
-                        expandableRows
-                        expandableRowsComponent={ButtonRow}
+                        // expandableRows
+                        // expandableRowsComponent={ButtonRow}
                         paginationTotalRows={filteredData.length}
                         customStyles={customStyles}
                         responsive

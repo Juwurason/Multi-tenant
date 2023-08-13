@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
-import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaLongArrowAltLeft, FaLongArrowAltRight, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -45,7 +45,7 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
-      setStaffOne(data)
+      setStaffOne(data);
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -342,7 +342,14 @@ const ClientProfiles = () => {
     item.dateFrom?.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const history = useHistory();
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
 
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
   return (
     <>
       <div className="page-wrapper">
@@ -355,13 +362,20 @@ const ClientProfiles = () => {
           {/* Page Header */}
           <div className="page-header">
             <div className="row">
-              <div className="col-sm-12">
+              <div className="col-sm-10">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="/app/employee/clients">Client</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
+              </div>
+              <div className="col-md-2 d-none d-md-block">
+                <button className='btn' onClick={goBack}>
+                  <FaLongArrowAltLeft className='fs-3' />
+                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                  <FaLongArrowAltRight className='fs-3' />
+                </button>
               </div>
             </div>
           </div>
@@ -385,7 +399,7 @@ const ClientProfiles = () => {
                             <h3 className="user-name m-t-0">{staffOne.fullName}</h3>
                             {/* <h5 className="company-role m-t-0 mb-0">Barry Cuda</h5> */}
                             <small className="text-muted">{staffOne.email}</small>
-                            {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
+                            <div className="staff-id">Client ID : {staffOne.contactId}</div>
                             <div className="staff-msg d-flex gap-2">
 
                               <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}
@@ -916,7 +930,7 @@ const ClientProfiles = () => {
                 </div>
 
               </div>
-                            <label className='d-flex justify-content-center align-items-center'>{staffOne.fullName} Shift Roster</label>
+              <label className='d-flex justify-content-center align-items-center'>{staffOne.fullName} Shift Roster</label>
               <div className='mt-4 border'>
                 <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 

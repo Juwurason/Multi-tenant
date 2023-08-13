@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaEye } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaEye, FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
@@ -26,6 +26,8 @@ import axiosInstance from '../../../store/axiosInstance';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useHistory } from 'react-router-dom';
+
 
 const Document = () => {
 
@@ -57,12 +59,22 @@ const Document = () => {
     const [deadline, setDeadline] = useState("");
     const [selectedDocument, setSelectedDocument] = useState(0);
     const [loading1, setLoading1] = useState(false);
+    const history = useHistory();
     const sta = useRef("");
     const cli = useRef("");
     const dateFrom = useRef("");
     const dateTo = useRef("");
     const status = useRef("");
     const role = useRef("");
+
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
+
 
     const columns = [
 
@@ -437,7 +449,7 @@ const Document = () => {
                     {/* Page Header */}
                     <div className="page-header">
                         <div className="row align-items-center">
-                            <div className="col">
+                            <div className="col-md-10">
                                 <h3 className="page-title">Document</h3>
                                 {id.role === "CompanyAdmin" ?
                                     <ul className="breadcrumb">
@@ -445,6 +457,13 @@ const Document = () => {
                                         <li className="breadcrumb-item active">Documents</li>
                                     </ul>
                                     : ""}
+                            </div>
+                            <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
                             </div>
 
                         </div>

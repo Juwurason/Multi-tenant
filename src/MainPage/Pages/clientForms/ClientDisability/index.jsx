@@ -18,6 +18,8 @@ import { Modal } from 'react-bootstrap';
 import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 import { MultiSelect } from 'react-multi-select-component';
 import useHttp from '../../../../hooks/useHttp';
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 const options = [
     { label: "Need Mobility Assistance?", value: "Need Mobility Assistance?" },
     { label: "Mobility Independency", value: "Mobility Independency" },
@@ -50,7 +52,7 @@ const ClientDisability = () => {
     const [selectedTimeTo, setSelectedTimeTo] = useState("");
     const id = JSON.parse(localStorage.getItem('user'))
     const [showModal, setShowModal] = useState(false);
-    const {uid} = useParams()
+    const { uid } = useParams()
     const handleSelected = (selectedOptions) => {
         setSelected(selectedOptions);
     }
@@ -241,7 +243,14 @@ const ClientDisability = () => {
             setLoading2(false)
         }
     }
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
 
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const [searchText, setSearchText] = useState("");
 
@@ -262,12 +271,19 @@ const ClientDisability = () => {
                 {/* Page Header */}
                 <div className="page-header">
                     <div className="row">
-                        <div className="col">
+                        <div className="col-md-10">
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Disability Support Needs</li>
                                 <li className="breadcrumb-item active">Check if Yes and Uncheck if No</li>
                             </ul>
+                        </div>
+                        <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
                         </div>
                     </div>
                 </div>
