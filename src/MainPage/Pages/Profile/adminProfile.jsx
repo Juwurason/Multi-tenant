@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
-import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaLongArrowAltLeft, FaLongArrowAltRight, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
 import Offcanvas from '../../../Entryfile/offcanvance';
@@ -114,7 +114,7 @@ const AdminProfile = () => {
       const { data } = await privateHttp.post(`/Administrators/edit/${uid}?userId=${id.userId}`,
         formData
       )
-    //   console.log(data);
+      //   console.log(data);
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -141,8 +141,15 @@ const AdminProfile = () => {
       setLoading(false)
     }
   }
-  
+  const history = useHistory();
 
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
+
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
   return (
     <>
       <div className="page-wrapper">
@@ -155,13 +162,20 @@ const AdminProfile = () => {
           {/* Page Header */}
           <div className="page-header">
             <div className="row">
-              <div className="col-sm-12">
+              <div className="col-sm-10">
                 <h3 className="page-title">Profile</h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item"><Link to="/app/employee/alladmin">Admin</Link></li>
                   <li className="breadcrumb-item active">Profile</li>
                 </ul>
+              </div>
+              <div className="col-md-2 d-none d-md-block">
+                <button className='btn' onClick={goBack}>
+                  <FaLongArrowAltLeft className='fs-3' />
+                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                  <FaLongArrowAltRight className='fs-3' />
+                </button>
               </div>
             </div>
           </div>
@@ -183,13 +197,13 @@ const AdminProfile = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0 fw-bold">{staffOne.fullName}</h3>
-                            <div className="staff-id">Admin ID : {staffOne.maxStaffId}</div>
+                            <div className="staff-id">Admin ID : {staffOne.maxStaffId === 'null' ? "N/A" : staffOne.maxStaffId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`}
                                 className="btn py-2 rounded text-white bg-primary">Admin Document</Link>
-                             
+
                             </div>
                           </div>
                         </div>

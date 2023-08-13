@@ -423,9 +423,11 @@ const Invoice = () => {
                                             <div className="col-auto mt-3">
                                                 <div className="form-group">
                                                     <button className="btn btn-info rounded-2 add-btn text-white" type="button"
-                                                        onClick={() => setShowInvoice(false)}
+                                                        onClick={() => setShowInvoice(!showInvoice)}
                                                     >
-                                                        Group Invoice by item Number
+                                                        {
+                                                            showInvoice ? "Group Invoice by item Number" : "Ungroup Invoice by item number"
+                                                        }
 
                                                     </button>
                                                 </div>

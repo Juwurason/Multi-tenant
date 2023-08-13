@@ -229,14 +229,14 @@ const EditShiftRoaster = () => {
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isExceptionalShift} onChange={handleExceptionChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Active Night</label>
+                                                <label className="col-form-label">Active Night</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <input type="checkbox" checked={isNightShift} onChange={handleNightChange} />
                                                 &nbsp; &nbsp;
-                                                <label className="col-form-label">Is Night Shift</label>
+                                                <label className="col-form-label">Sleep Over</label>
                                             </div>
                                         </div>
                                     </div>

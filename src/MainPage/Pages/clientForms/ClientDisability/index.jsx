@@ -4,21 +4,13 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useParams } from 'react-router-dom';
-import DataTable from "react-data-table-component";
-import { CSVLink } from "react-csv";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { toast } from 'react-toastify';
-import { GoSearch, GoTrashcan } from 'react-icons/go';
-import dayjs from 'dayjs';
-import moment from 'moment';
-import Swal from 'sweetalert2';
-import { Modal } from 'react-bootstrap';
-import { async } from '@babel/runtime/helpers/regeneratorRuntime';
 import { MultiSelect } from 'react-multi-select-component';
 import useHttp from '../../../../hooks/useHttp';
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
 import { useRef } from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 const options = [
     { label: "Need Mobility Assistance?", value: "Need Mobility Assistance?" },
     { label: "Mobility Independency", value: "Mobility Independency" }
@@ -41,24 +33,7 @@ const ClientDisability = () => {
         }
     });
 
-    
-    const [loading1, setLoading1] = useState(false);
-    const { get, post } = useHttp();
-    const { uid } = useParams()
-    const [disabled, setDisabled] = useState([])
-    const [idSave, setIdSave] = useState('')
-    const [editpro, setEditPro] = useState({})
-     function handleInputChange(event) {
-         const target = event.target;
-         const name = target.name;
-         const value = target.value;
-         const newValue = value === "" ? "" : value;
-         setEditPro({
-           ...editpro,
-           [name]: newValue
-         });
-       }
-
+        const [disabled, setDisabled] = useState([])
        const [editDisabled, setEditDisabled] = useState({
         mobilityAssistance: ['Need Mobility Assistance'] // Initial value should be an array to hold selected values
       });
@@ -73,6 +48,10 @@ const ClientDisability = () => {
           [name]: newValue
         });
       }
+      const { uid } = useParams()
+      const { get, post } = useHttp();
+      const [loading1, setLoading1] = useState(false);
+      const [idSave, setIdSave] = useState("");
 
     const FetchDisable = async () => {
         // setLoading2(true)
@@ -86,7 +65,7 @@ const ClientDisability = () => {
                 setIdSave(disabilityId)
                 const { data: secondData } = await get(`/Disabilities/${disabilityId}`, { cacheTimeout: 300000 });
                 console.log(secondData);
-                setEditPro(secondData);
+                setEditDisabled(secondData);
 
                 const options = [
                     {
@@ -189,8 +168,18 @@ const ClientDisability = () => {
         }
     }
 
-    
 
+
+
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -201,12 +190,19 @@ const ClientDisability = () => {
                 {/* Page Header */}
                 <div className="page-header">
                     <div className="row">
-                        <div className="col">
+                        <div className="col-md-10">
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Disability Support Needs</li>
                                 <li className="breadcrumb-item active">Check if Yes and Uncheck if No</li>
                             </ul>
+                        </div>
+                        <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -202,9 +202,9 @@ const FormType = () => {
                 <div>
                     <span className='fw-bold'>Actions: </span>
                     {
-                        data.templateType === "Editable" ? <button className="btn text-primary" style={{ fontSize: "12px" }}>
+                        data.templateType === "Editable" ? <Link to={`/app/employee/fillForm/${data.templateId}`} className="btn text-primary" style={{ fontSize: "12px" }}>
                             Edit
-                        </button> : ""
+                        </Link > : ""
                     } |
                     {
                         data.templateUrl ?

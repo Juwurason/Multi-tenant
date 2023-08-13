@@ -177,7 +177,7 @@ const FillForm = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Template Name</label>
                                                     <input
-                                                        type="number"
+                                                        type="text"
                                                         name="startKm" value={reportName
                                                         }
                                                         className="form-control"
