@@ -126,10 +126,14 @@ const PublicHoliday = () => {
         setLoading4(true)
 
         try {
-            const { data } = await get(`/SetUp/adjust_public_holiday?userId=${id.userId}&shiftdate=${e}`, { cacheTimeout: 300000 });
-            toast.success(data.message);
-            FetchHoliday();
-            setLoading4(false);
+            const { data } = await get(`/SetUp/adjust_public_holiday?userId=${id.userId}&shiftdate=${e}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            
+            if (data.status === "Success") {
+                toast.success(data.message);
+                FetchHoliday();
+                setLoading4(false);
+            }
+           
 
 
         } catch (error) {

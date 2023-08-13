@@ -186,7 +186,7 @@ const CreateProgressNote = () => {
             <div className="col-sm-12">
               <div className="card">
                 <div className='d-flex justify-content-start p-2'>
-                  <button className='btn btn-info text-white add-btn rounded-2' style={{ fontSize: "10px" }}>View Hand-over report by previous staff</button>
+                  <Link to={`/staff/staff/staff-hand-over/${uid}`} className='btn btn-info text-white add-btn rounded-2' style={{ fontSize: "10px" }}>View Hand-over report by previous staff</Link>
                 </div>
                 <div className="card-body">
                   {

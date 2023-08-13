@@ -80,7 +80,7 @@ import useHttp from '../../../../hooks/useHttp';
                  const healthSupportId = data[0].healthSupportId;
                  setIdSave(healthSupportId)
                  const { data: secondData } = await get(`/HealthSupports/${healthSupportId}`, { cacheTimeout: 300000 });
-                 console.log(secondData);
+                //  console.log(secondData);
                  setEditPro(secondData);
                  // Do something with the second data (e.g., setEditPro(secondData))
                }
