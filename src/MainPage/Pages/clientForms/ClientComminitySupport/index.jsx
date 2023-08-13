@@ -80,7 +80,7 @@ const ClientComunitySupport = () => {
             if (data && data.length > 0) {
                 const communitySupportId = data[0].communitySupportId;
                 setIdSave(communitySupportId);
-                const { data: secondData } = await get(`/BehaviourSupports/${communitySupportId}`, { cacheTimeout: 300000 });
+                const { data: secondData } = await get(`/CommunitySupports/${communitySupportId}`, { cacheTimeout: 300000 });
                 // console.log(secondData);
                 setEditPro(secondData);
                 // Do something with the second data (e.g., setEditPro(secondData))

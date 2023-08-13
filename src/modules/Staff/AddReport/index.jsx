@@ -100,7 +100,7 @@ const AddReport = () => {
                     'success'
                 )
                 setLoading1(false)
-                navigate.push(`/staff/staff/roster`)
+                navigate.push(`/staff/staff/attendance`)
             }
             setLoading1(false)
         } catch (error) {

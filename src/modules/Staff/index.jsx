@@ -28,6 +28,7 @@ import AddReport from './AddReport';
 import useHttp from '../../hooks/useHttp';
 import { toast } from 'react-toastify';
 import CreateProgressNote from './CreateProgressNote';
+import StaffHandOver from './StaffHandOver';
 
 
 
@@ -194,6 +195,7 @@ const StaffRoute = ({ match }) => {
       <Route path={`${match.url}/roster`}
         render={() => <StaffRoster staff={staff} loading={loading} FetchData={FetchData} />} />
       <Route path={`${match.url}/report/:uid`} render={() => <AddReport />} />
+      <Route path={`${match.url}/staff-hand-over/:uid`} render={() => <StaffHandOver />} />
       <Route path={`${match.url}/view-ticket`}
         render={() => <ViewTicket ticket={ticket} FetchData={FetchData} />} />
       <Route path={`${match.url}/raise-ticket`} render={() => <RaiseTicket />} />

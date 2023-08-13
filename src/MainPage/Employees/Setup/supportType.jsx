@@ -198,7 +198,7 @@ const SupportType = () => {
                         {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
                     </span>
                 </span>
-                <div>
+                {/* <div>
                     <span className='fw-bold'>Actions: </span>
                     <button className="btn text-primary" style={{ fontSize: "12px" }}>
                         Edit
@@ -206,7 +206,7 @@ const SupportType = () => {
                     <button className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button>
-                </div>
+                </div> */}
 
             </div>
         );
@@ -314,7 +314,7 @@ const SupportType = () => {
                         <div className='col-md-4'>
                             {/* <Link to="/administrator/createClient" className="btn btn-info add-btn rounded-2">
                 Add New Holiday</Link> */}
-                            <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add Support Type</button>
+                            {/* <button className="btn btn-info add-btn rounded-2 text-white" onClick={handleActivityClick}>Add Support Type</button> */}
                         </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
