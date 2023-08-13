@@ -63,14 +63,7 @@ const ClientProfiles = () => {
   useEffect(() => {
     FetchStaff()
   }, []);
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        width: '100%',
-        minimumResultsForSearch: -1,
-      });
-    }
-  });
+
 
   const columns = [
     {
@@ -80,7 +73,7 @@ const ClientProfiles = () => {
     },
     {
       name: 'Date',
-      selector: row => dayjs(row.dateFrom).format('YYYY-MM-DD'),
+      selector: row => dayjs(row.dateFrom).format('DD-MM-YYYY'),
       sortable: true,
     },
     {
@@ -397,9 +390,13 @@ const ClientProfiles = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left">
                             <h3 className="user-name m-t-0">{staffOne.fullName}</h3>
+
                             {/* <h5 className="company-role m-t-0 mb-0">Barry Cuda</h5> */}
                             <small className="text-muted">{staffOne.email}</small>
                             <div className="staff-id">Client ID : {staffOne.contactId}</div>
+                            <div className="staff-id">NDIS No: {staffOne.ndisNo}</div>
+
+                            {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                             <div className="staff-msg d-flex gap-2">
 
                               <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}

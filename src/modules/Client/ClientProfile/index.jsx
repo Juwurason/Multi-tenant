@@ -198,7 +198,7 @@ const ClientProfile = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
-                            <div className="staff-id">Client ID : {staffOne.clientId === "null" ? "" : staffOne.clientId}</div>
+                            <div className="staff-id">Client ID : {staffOne.contactId === "null" ? "" : staffOne.contactId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}

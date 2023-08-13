@@ -18,18 +18,10 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
 
-const StaffDocument = ({ staffDocument, FetchData }) => {
-  useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
-  });
+const StaffDocument = ({ staffDocument, FetchData, loading }) => {
+
 
   const { get } = useHttp();
-  const { loading, setLoading } = useCompanyContext();
   const [documentName, setDocumentName] = useState("")
   const [otherDocumentName, setOtherDocumentName] = useState("")
   const [expire, setExpire] = useState("")
@@ -557,14 +549,14 @@ const StaffDocument = ({ staffDocument, FetchData }) => {
           </Modal.Header>
           <Modal.Body>
             <form className="row">
-              <div className='col-md-6'>
+              <div className='col-md-12'>
                 <div className="form-group">
                   <label>Document Name</label>
                   <input className="form-control" type="text" name='documentName' value={editAvail.documentName || ''} onChange={handleInputChange} />
 
                 </div>
               </div>
-              <div className='col-md-6'>
+              <div className='col-md-12'>
                 <div className="form-group">
                   <label>Expiration Date</label>
                   <input className="form-control" type="date" name='expirationDate' value={editAvail.expirationDate || ''} onChange={handleInputChange}

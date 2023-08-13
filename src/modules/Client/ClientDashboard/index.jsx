@@ -11,6 +11,7 @@ import { useCompanyContext } from '../../../context/index.jsx';
 import useHttp from '../../../hooks/useHttp.jsx';
 import { MdHourglassTop, MdHourglassBottom, MdPersonOutline } from 'react-icons/md';
 import { BsClockHistory } from 'react-icons/bs';
+import { RxPencil2 } from 'react-icons/rx';
 import { toast } from 'react-toastify';
 import { Modal } from 'react-bootstrap';
 
@@ -80,7 +81,33 @@ const ClientDashboard = () => {
   }
 
   const [currentDate, setCurrentDate] = useState(dayjs().tz());
+  const [editedProfile, setEditedProfile] = useState({});
 
+  const addAppoint = async (e) => {
+    setAppointModal(true)
+    setCli(e)
+    try {
+        const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+        // console.log(data);
+        setEditedProfile(data);
+        setLoading(false)
+    } catch (error) {
+        toast.error(error.response.data.message)
+        toast.error(error.response.data.title)
+        setLoading(false)
+    }
+}
+
+function handleInputChange(event) {
+  const target = event.target;
+  const name = target.name;
+  const value = target.value;
+  const newValue = value === "" ? "" : value;
+  setEditedProfile({
+      ...editedProfile,
+      [name]: newValue
+  });
+}
   const daysOfWeek = [
     currentDate.subtract(1, 'day'),
     currentDate,
@@ -146,17 +173,17 @@ const ClientDashboard = () => {
     }, 3000);
   };
 
-  const [appoint, setAppoint] = useState("");
+  // const [appoint, setAppoint] = useState("");
   const id = JSON.parse(localStorage.getItem('user'));
   const [showModal, setShowModal] = useState(false);
   const [appointModal, setAppointModal] = useState(false)
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [cli, setCli] = useState("");
 
-  const addAppoint = (e) => {
-    setAppointModal(true)
-    setCli(e)
-  }
+  // const addAppoint = (e) => {
+  //   setAppointModal(true)
+  //   setCli(e)
+  // }
 
   const handleActivityClick = (activitiesByDay) => {
     setSelectedActivity(activitiesByDay);
@@ -164,19 +191,19 @@ const ClientDashboard = () => {
   };
 
   const addAppointment = async () => {
-    if (appoint === "") {
+    if (editedProfile === "") {
       return toast.error("Input Fields cannot be empty")
     }
     try {
       setLoading(true)
-      const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${appoint}`);
+      const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
       // console.log(data);
       toast.success(data.message);
       setLoading(false);
       setAppointModal(false);
 
     } catch (error) {
-      console.log(error);
+      console.log(error); 
     }
     finally {
       setLoading(false);
@@ -257,6 +284,12 @@ const ClientDashboard = () => {
                         <span className=' d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdPersonOutline /> Staff: </span><span className='text-truncate'>{activitiesByDay[1][0]?.staff?.fullName}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassTop className='text-success' /> Start Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateFrom).format('hh:mm A') : '--'}</span></span>
                         <span className='d-flex justify-content-between w-100'><span className='fw-bold text-truncate'><MdHourglassBottom className='text-danger' /> End Time: </span><span className='text-truncate'>  {activitiesByDay[1].length > 0 ? dayjs(activitiesByDay[1][0]?.dateTo).format('hh:mm A') : '--'}</span></span>
+                      </div>
+                      <div className="card-footer text-body-secondary bg-light text-dark">
+                        <RxPencil2 /> &nbsp; Appointment
+                      </div>
+                      <div className='px-5 py-4'>
+                        <span>{activitiesByDay[1][0]?.appointment ? activitiesByDay[1][0]?.appointment : <span className='text-muted'>No Appointment</span>}</span>
                       </div>
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
@@ -347,7 +380,9 @@ const ClientDashboard = () => {
               <Modal.Body>
                 <div>
                   <label htmlFor="">Please Provide Appointment Details</label>
-                  <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} onChange={e => setAppoint(e.target.value)} />
+                  <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} 
+                  name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
+                  />
                 </div>
               </Modal.Body>
               <Modal.Footer>

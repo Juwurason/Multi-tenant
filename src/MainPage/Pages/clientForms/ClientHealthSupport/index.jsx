@@ -13,14 +13,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 const ClientHealth = () => {
-    useEffect(() => {
-        if ($('.select').length > 0) {
-            $('.select').select2({
-                minimumResultsForSearch: -1,
-                width: '100%'
-            });
-        }
-    });
+
 
     const [staffAvail, setStaffAvail] = useState([]);
     const [staffAva, setStaffAva] = useState("");
@@ -323,3 +316,4 @@ const ClientHealth = () => {
     );
 }
 export default ClientHealth;
+

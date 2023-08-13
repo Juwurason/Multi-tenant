@@ -53,27 +53,8 @@ const ClientDisability = () => {
     const id = JSON.parse(localStorage.getItem('user'))
     const [showModal, setShowModal] = useState(false);
     const { uid } = useParams()
-    const handleSelected = (selectedOptions) => {
-        setSelected(selectedOptions);
-    }
+
     const selectedValues = selected.map(option => option.label).join(', ');
-
-
-    const convertTo12HourFormat = (time24h) => {
-        let [hours, minutes] = time24h.split(':');
-        let suffix = 'AM';
-
-        if (hours >= 12) {
-            suffix = 'PM';
-            hours = hours - 12;
-        }
-
-        if (hours === 0) {
-            hours = 12;
-        }
-
-        return `${hours}:${minutes} ${suffix}`;
-    };
 
 
     const PostAvail = async (e) => {
@@ -84,15 +65,24 @@ const ClientDisability = () => {
         setLoading1(true)
         const info = {
             profileId: uid,
-            days: selectedDay,
-            fromTimeOfDay: selectedTimeFrom,
-            toTimeOfDay: selectedTimeTo,
-            activities: selectedValues,
-            companyID: id.companyId
+            mobilityAssistance: true,
+            mobilityIndependent: true,
+            mobilityDescription: "string",
+            hearingIssues: "string",
+            hearingDescription: "string",
+            visionIssues: "string",
+            visionDescription: "string",
+            memoryIssues: "string",
+            memoryDescription: "string",
+            communicationAssistance: true,
+            communicationMeans: "string",
+            communicationAttachment: "string",
+            communicationDescription: "string",
+            communicationAttachmentFile: "string"
         }
         try {
 
-            const { data } = await post(`/ClientSchedules/add_client_schedule?userId=${id.userId}`, info);
+            const { data } = await post(`/Disabilities`, info);
             console.log(data)
             if (data.status === 'Success') {
                 toast.success(data.message)
@@ -133,79 +123,9 @@ const ClientDisability = () => {
     }, []);
 
 
-
-
-
-
-    const handleDelete = async (e) => {
-        Swal.fire({
-            html: `<h3>Are you sure? you want to delete this Schedule</h3>`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#405189',
-            cancelButtonColor: '#C8102E',
-            confirmButtonText: 'Confirm Delete',
-            showLoaderOnConfirm: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const { data } = await post(`/ClientSchedules/delete/${e}`)
-                    // console.log(data);
-                    if (data.status === 'Success') {
-                        toast.success(data.message);
-                        FetchSchedule()
-                    } else {
-                        toast.error(data.message);
-                    }
-
-
-                } catch (error) {
-                    // console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
-
-
-                }
-
-
-            }
-        })
-
-
-    }
-
-    const [editAvail, setEditAvail] = useState({});
-    const [idSave, setIdSave] = useState('')
     const [selectedActivities, setSelectedActivities] = useState([]);
     const selectedValue = selectedActivities.map(option => option.label).join(', ');
-    const handleEdit = async (e) => {
-        setShowModal(true);
-        setIdSave(e)
-        // setLoading2(true)
-        try {
 
-            const { data } = await get(`/ClientSchedules/get_schedule/${e}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
-            console.log();
-            setEditAvail(data);
-        } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-    };
-
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditAvail({
-            ...editAvail,
-            [name]: newValue
-        });
-    }
 
     const handleActivityChange = (selected) => {
         setSelectedActivities(selected);
@@ -243,14 +163,7 @@ const ClientDisability = () => {
             setLoading2(false)
         }
     }
-    const history = useHistory();
-    const goBack = () => {
-        history.goBack(); // Go back in history
-    };
 
-    const goForward = () => {
-        history.goForward(); // Go forward in history
-    };
 
     const [searchText, setSearchText] = useState("");
 
@@ -261,6 +174,17 @@ const ClientDisability = () => {
     const filteredData = staffAvail.filter((item) =>
         item.days.toLowerCase().includes(searchText.toLowerCase())
     );
+
+
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
     return (
         <div className="page-wrapper">
             <Helmet>
@@ -479,81 +403,7 @@ const ClientDisability = () => {
                 </div>
 
 
-                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Schedule</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <form className="row">
-                            <div className='col-md-12'>
-                                <div className="form-group">
-                                    <label>Days</label>
-                                    <select
-                                        className='form-select'
-                                        name="days" value={editAvail.days || ''} onChange={handleInputChange}
-                                        required
-                                    >
-                                        <option defaultValue hidden>Select Days</option>
-                                        <option value={"Monday"}>Monday</option>
-                                        <option value={"Tuesday"}>Tuesday</option>
-                                        <option value={"Wednessday"}>Wednessday</option>
-                                        <option value={"Thursday"}>Thursday</option>
-                                        <option value={"Friday"}>Friday</option>
-                                        <option value={"Saturday"}>Saturday</option>
-                                        <option value={"Sunday"}>Sunday</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <div className="form-group">
-                                    <label>Activities</label>
-                                    <MultiSelect
-                                        options={options}
-                                        value={selectedActivities}
-                                        onChange={handleActivityChange}
-                                        labelledBy={'Select Activities'}
-                                    />
-                                </div>
-                            </div>
-                            <div className='col-md-6'>
-                                <div className="form-group">
-                                    <label>From Time of Day</label>
-                                    <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className='col-md-6'>
-                                <div className="form-group">
-                                    <label>To Time of Day</label>
-                                    <input
-                                        className="form-control"
-                                        type="time"
-                                        name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
 
-
-                        </form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <button
-                            type="submit"
-                            className="btn btn-primary add-btn px-2"
-                            disabled={loading2 ? true : false}
-                            onClick={EditAvail}
-                        >
-                            {loading2 ? (
-                                <div className="spinner-grow text-light" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            ) : (
-                                "Add"
-                            )}
-                        </button>
-                    </Modal.Footer>
-                </Modal>
 
 
             </div>

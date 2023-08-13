@@ -177,7 +177,7 @@ const StaffRoute = ({ match }) => {
         path={`${match.url}/dashboard`}
         render={() => <StaffDashboard roster={staff} loading={loading} />} />
       <Route path={`${match.url}/document`}
-        render={() => <StaffDocument staffDocument={staffDocument} FetchData={FetchData} />} />
+        render={() => <StaffDocument staffDocument={staffDocument} FetchData={FetchData} loading={loading} />} />
       <Route path={`${match.url}/progressNote`}
         render={() => <StaffProgressNote staffPro={staffPro} FetchData={FetchData} />} />
       <Route path={`${match.url}/progress/:uid`} render={() => <ProgressNote />} />

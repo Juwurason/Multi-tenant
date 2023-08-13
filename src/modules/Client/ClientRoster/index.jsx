@@ -138,7 +138,6 @@ const ClientRoster = () => {
             setActivities(activities.split(',').map((activity) => ({ label: activity, value: activity })));
             setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
 
-
             setLoading(false)
         } catch (error) {
             toast.error(error.response.data.message)
@@ -154,9 +153,13 @@ const ClientRoster = () => {
             setLoading(true)
             const { data } = await post(`ShiftRosters/edit_activities?userId=${id.userId}&shiftId=${cli}&activities=${selectedValues}`);
             // console.log(data);
-            toast.success(data.message);
-            setLoading(false);
-            setLgShow(false)
+            if (data.status === "Success") {
+                toast.success(data.message);
+                FetchSchedule()
+                setLoading(false);
+                setLgShow(false)
+            }
+           
 
         } catch (error) {
             toast.error(error.response.data.message)
@@ -188,6 +191,7 @@ const ClientRoster = () => {
             // console.log(data);
             setEditedProfile(data);
             setLoading(false)
+            FetchSchedule()
         } catch (error) {
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
@@ -227,6 +231,7 @@ const ClientRoster = () => {
             // console.log(data);
             setEditedProfile(data);
             setLoading(false)
+            FetchSchedule()
         } catch (error) {
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
@@ -243,6 +248,7 @@ const ClientRoster = () => {
             const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
             // console.log(data);
             toast.success(data.message);
+            FetchSchedule()
             setLoading(false);
             setAppointModal(false);
 

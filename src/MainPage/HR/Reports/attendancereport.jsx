@@ -234,23 +234,26 @@ const AttendanceReport = () => {
   }
 
   const AdjustAttendance = async (e) => {
+    const confirmed = window.confirm("Are you sure you want to adjust attendance?");
 
-    setLoading4(true)
+    if (!confirmed) {
+      return;
+    }
+
+    setLoading4(true);
 
     try {
       const { data } = await get(`/attendances/adjust_attendances?userId=${id.userId}&attendanceId=${e}`, { cacheTimeout: 300000 });
       toast.success(data.message);
       dispatch(fetchAttendance(id.companyId));
       setLoading4(false);
-
-
     } catch (error) {
-      toast.error("Ooops!😔 Error Occurred")
+      toast.error("Ooops!😔 Error Occurred");
       console.log(error);
-      setLoading4(false)
+      setLoading4(false);
     }
+  };
 
-  }
 
 
 

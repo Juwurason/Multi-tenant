@@ -197,7 +197,7 @@ const AdminProfile = () => {
                         <div className="col-md-5">
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0 fw-bold">{staffOne.fullName}</h3>
-                            <div className="staff-id">Admin ID : {staffOne.maxStaffId}</div>
+                            <div className="staff-id">Admin ID : {staffOne.maxStaffId === 'null' ? "N/A" : staffOne.maxStaffId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}

@@ -48,8 +48,6 @@ const Clients = () => {
       selector: row => row.contactId,
       sortable: true,
     },
-
-
     {
       name: 'Full Name',
       selector: row => row.fullName,

@@ -60,7 +60,7 @@ const AllEmployees = () => {
 
     {
       name: 'Staff ID',
-      selector: row => row.maxStaffId === 'null' ? "" : row.maxStaffId,
+      selector: row => row.maxStaffId === 'null' ? "N/A" : row.maxStaffId,
       sortable: true
     },
     {
