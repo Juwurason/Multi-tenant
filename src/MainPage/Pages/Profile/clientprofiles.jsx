@@ -279,7 +279,7 @@ const ClientProfiles = () => {
       const { data } = await post(`/Profiles/edit/${uid}?userId=${id.userId}`,
         formData
       )
-      //   console.log(data)
+        // console.log(data)
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);

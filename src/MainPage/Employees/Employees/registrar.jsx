@@ -186,59 +186,6 @@ const Registrar = () => {
         }, 2000);
     }; */}
 
-    // const ButtonRow = ({ data }) => {
-    //     return (
-    //         <div className="p-2 d-flex flex-column gap-2" style={{ fontSize: "12px" }}>
-    //             <span>
-    //                 <span className='fw-bold'>Template Name: </span>
-    //                 <span> {data.templateName}</span>
-    //             </span>
-
-    //             <span>
-    //                 <span className='fw-bold'>Date Created: </span>
-    //                 <span>
-    //                     {dayjs(data.dateCreated).format('DD/MM/YYYY HH:mm:ss')}
-    //                 </span>
-    //             </span>
-    //             <span>
-    //                 <span className='fw-bold'>Date Modified: </span>
-    //                 <span>
-    //                     {dayjs(data.dateModified).format('DD/MM/YYYY HH:mm:ss')}
-    //                 </span>
-    //             </span>
-    //             <div>
-    //                 <span className='fw-bold'>Actions: </span>
-
-    //                 {
-    //                     data.templateUrl ?
-    //                         <button className="btn text-secondary" style={{ fontSize: "12px" }}
-    //                             onClick={() => handleView(data.templateUrl)}>
-
-    //                             View
-    //                         </button> :
-
-
-    //                         <Link to={`/app/employee/fillForm/${data.templateId}`} className="btn text-secondary" style={{ fontSize: "12px" }}
-    //                         // onClick={() => handleDetails(data.templateId)}
-    //                         >
-    //                             {
-    //                                 loading2 ?
-    //                                     <>
-    //                                         <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
-    //                                         Please wait...
-    //                                     </>
-    //                                     :
-    //                                     "Fill Form"
-
-    //                             }
-    //                         </Link>
-    //                 }
-
-    //             </div>
-
-    //         </div >
-    //     );
-    // };
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
@@ -300,9 +247,7 @@ const Registrar = () => {
 
     }
 
-
-
-
+    
 
 
     return (

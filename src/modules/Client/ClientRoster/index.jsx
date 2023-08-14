@@ -411,10 +411,6 @@ const ClientRoster = () => {
                                                             className={`text-truncate d-flex 
                                                             align-items-center
                                                             justify-content-center px-2 py-1 rounded border-0 bg-danger pointer`}
-                                                            // disabled={
-                                                            //     (dayjs(activity.dateTo)).format('YYYY-MM-DD HH:mm:ss')
-                                                            //     <
-                                                            //     dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
                                                             title="Cancel"
                                                             onClick={() => cancelShift(activity.shiftRosterId)}
 

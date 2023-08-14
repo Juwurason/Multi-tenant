@@ -14,9 +14,31 @@ import { BsClockHistory } from 'react-icons/bs';
 import { RxPencil2 } from 'react-icons/rx';
 import { toast } from 'react-toastify';
 import { Modal } from 'react-bootstrap';
-
-
+import { FaRegEdit } from 'react-icons/fa';
+import { MdLibraryAdd } from 'react-icons/md';
+import { ImCancelCircle } from 'react-icons/im';
+import { MultiSelect } from 'react-multi-select-component';
 dayjs.extend(isBetween);
+
+const options = [
+  { label: "Medication Supervision", value: "Medication Supervision" },
+  { label: "Medication administering", value: "Medication administering" },
+  { label: "Personal Support", value: "Personal Support" },
+  { label: "Domestic Cleaning", value: "Domestic Cleaning" },
+  { label: "Transport", value: "Transport" },
+  { label: "Dog training", value: "Dog training" },
+  { label: "Install phone", value: "Install phone" },
+  { label: "Welfare check", value: "Welfare check" },
+  { label: "Support Groceries shopping", value: "Support Groceries shopping" },
+  { label: "Pick up", value: "Pick up" },
+  { label: "Baby sitting", value: "Baby sitting" },
+  { label: "Taking to solicitors appointment", value: "Taking to solicitors appointment" },
+  { label: "Meal Preparation", value: "Meal Preparation" },
+  { label: "Shopping", value: "Shopping" },
+  { label: "Groceries Transport", value: "Groceries Transport" },
+  { label: "Domestics Social Support", value: "Domestics Social Support" },
+
+];
 
 const ClientDashboard = () => {
   const navigate = useHistory();
@@ -32,10 +54,8 @@ const ClientDashboard = () => {
 
   // Set the default timezone to Australia/Sydney
   dayjs.tz.setDefault('Australia/Sydney');
-  const userObj = JSON.parse(localStorage.getItem('user'));
   const [roster, setRoster] = useState([]);
   const { loading, setLoading } = useCompanyContext();
-  const [document, setDocument] = useState([]);
   const { get, post } = useHttp();
 
   let isMounted = true;
@@ -65,16 +85,6 @@ const ClientDashboard = () => {
       console.log(error);
     }
 
-
-    try {
-      const { data } = await get(`Documents/get_all_documents?companyId=${userObj.companyId}`, { cacheTimeout: 300000 });
-      setDocument(data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-
     finally {
       setLoading(false)
     }
@@ -87,27 +97,67 @@ const ClientDashboard = () => {
     setAppointModal(true)
     setCli(e)
     try {
-        const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
-        // console.log(data);
-        setEditedProfile(data);
-        setLoading(false)
+      const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setEditedProfile(data);
+      setLoading(false)
     } catch (error) {
-        toast.error(error.response.data.message)
-        toast.error(error.response.data.title)
-        setLoading(false)
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading(false)
     }
-}
+  }
 
-function handleInputChange(event) {
-  const target = event.target;
-  const name = target.name;
-  const value = target.value;
-  const newValue = value === "" ? "" : value;
-  setEditedProfile({
+  const cancelShift = async (e) => {
+    setReasonModal(true)
+    setCli(e)
+    try {
+      const { data } = await get(`/ShiftRosters/${e}`, { cacheTimeout: 300000 });
+      // console.log(data);
+      setEditedProfile(data);
+      setLoading(false)
+      FetchSchedule()
+    } catch (error) {
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading(false)
+    }
+  }
+
+  const rejectShift = async () => {
+
+    if (editedProfile === "") {
+      return toast.error("Input Fields cannot be empty")
+    }
+    try {
+      setLoading(true)
+      const response = await get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
+      // console.log(data);
+      // toast.success(data.message);
+      setLoading(false);
+      setReasonModal(false)
+      // setLgShow(false)
+
+    } catch (error) {
+      // console.log(error);
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const newValue = value === "" ? "" : value;
+    setEditedProfile({
       ...editedProfile,
       [name]: newValue
-  });
-}
+    });
+  }
   const daysOfWeek = [
     currentDate.subtract(1, 'day'),
     currentDate,
@@ -143,35 +193,6 @@ function handleInputChange(event) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClockIn = () => {
-    setIsLoading(true);
-    // Simulating an asynchronous action, such as an API call
-    setTimeout(() => {
-      // Perform any necessary logic here before routing to the - page
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            localStorage.setItem("latit", latitude)
-            localStorage.setItem("log", longitude)
-            navigate.push(`/staff/staff-progress/${activitiesByDay[1][0]?.shiftRosterId}`);
-          },
-          (error) => {
-            toast.error('Error getting location:', error.message);
-          }
-        );
-      } else {
-        toast.error('Geolocation is not supported');
-      }
-
-    }, 2000); // Set an appropriate delay to simulate the loading time
-
-    // Optionally, you can clear the loading state after the specified time
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  };
 
   // const [appoint, setAppoint] = useState("");
   const id = JSON.parse(localStorage.getItem('user'));
@@ -180,10 +201,6 @@ function handleInputChange(event) {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [cli, setCli] = useState("");
 
-  // const addAppoint = (e) => {
-  //   setAppointModal(true)
-  //   setCli(e)
-  // }
 
   const handleActivityClick = (activitiesByDay) => {
     setSelectedActivity(activitiesByDay);
@@ -198,19 +215,67 @@ function handleInputChange(event) {
       setLoading(true)
       const { data } = await post(`ShiftRosters/add_appointment?userId=${id.userId}&shiftId=${cli}&appointment=${editedProfile.appointment}`);
       // console.log(data);
-      toast.success(data.message);
-      setLoading(false);
-      setAppointModal(false);
+      if (data.status === "Success") {
+        toast.success(data.message);
+        FetchStaff()
+        setLoading(false);
+        setAppointModal(false);
+      }
 
     } catch (error) {
-      console.log(error); 
+      console.log(error);
     }
     finally {
       setLoading(false);
     }
   };
+  const [selectedActivities, setSelectedActivities] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [lgShow, setLgShow] = useState(false);
+  const [reasonModal, setReasonModal] = useState(false)
+  const handleActivityChange = (selected) => {
+    setSelectedActivities(selected);
+  };
+  const selectedValues = selectedActivities.map(option => option.label).join(', ');
+
+  const editActivity = async (e) => {
+    setLgShow(true)
+    setCli(e)
+    try {
+      const { data } = await get(`ShiftRosters/${e}`, { cacheTimeout: 300000 });
+      const { activities } = data;
+      setActivities(activities.split(',').map((activity) => ({ label: activity, value: activity })));
+      setSelectedActivities(data.activities.split(',').map((activity) => ({ label: activity, value: activity })));
+
+      setLoading(false)
+    } catch (error) {
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+    }
+  }
+
+  const submitActivity = async () => {
+
+    try {
+      setLoading(true)
+      const { data } = await post(`ShiftRosters/edit_activities?userId=${id.userId}&shiftId=${cli}&activities=${selectedValues}`);
+      // console.log(data);
+      if (data.status === "Success") {
+        toast.success(data.message);
+        FetchStaff()
+        setLoading(false);
+        setLgShow(false)
+      }
 
 
+    } catch (error) {
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+    }
+    finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -295,10 +360,12 @@ function handleInputChange(event) {
                         <BsClockHistory /> &nbsp; Activities
                       </div>
 
-                      <div className='px-5 py-4'>
+                      {/* <div className='px-5 py-4'>
                         <span>{activitiesByDay[1][0]?.activities}</span> <br /> <br />
                         {activitiesByDay[1].length > 0 ? (
-                          <button
+                          
+                          <div>
+                            <button
                             className='btn btn-primary'
                             onClick={() => addAppoint(activitiesByDay[1][0]?.shiftRosterId)}
                             disabled={
@@ -308,10 +375,56 @@ function handleInputChange(event) {
                           >
                             Add Appointment
                           </button>
+
+                          </div>
+                        ) : (
+                          <span>No Shift Today</span>
+                        )}
+                      </div> */}
+                      <div className='px-5 py-4'>
+                        <span>{activitiesByDay[1][0]?.activities}</span>
+                        <br /><br />
+                        {activitiesByDay[1].length > 0 ? (
+                          dayjs(activitiesByDay[1][0].dateTo).format('YYYY-MM-DD HH:mm:ss') >
+                            dayjs().tz().format('YYYY-MM-DD HH:mm:ss') ? (
+                            <div className='d-flex gap-2 justify-content-center'>
+
+                              <button
+
+                                //   className={`text-truncate d-flex align-items-center 
+                                // justify-content-center px-2 py-1 rounded border-0 bg-light pointer`}
+                                className='btn btn-light'
+                                onClick={() => editActivity(activitiesByDay[1][0]?.shiftRosterId)}
+                                title="Edit activities"
+                              >
+                                <FaRegEdit className='fs-6 text-dark' />
+
+                              </button>
+
+                              <button
+                                className='btn btn-primary'
+                                onClick={() => addAppoint(activitiesByDay[1][0]?.shiftRosterId)}
+                                title="Add Appointment"
+                              >
+                                <MdLibraryAdd className='fs-6 text-white' />
+                              </button>
+
+                              <button
+                                className='btn btn-danger'
+                                onClick={() => cancelShift(activitiesByDay[1][0]?.shiftRosterId)}
+                                title="Cancel shift"
+                              >
+                                <ImCancelCircle className='fs-6 text-white' />
+                              </button>
+
+
+                            </div>
+                          ) : null
                         ) : (
                           <span>No Shift Today</span>
                         )}
                       </div>
+
 
                     </div>
 
@@ -380,13 +493,66 @@ function handleInputChange(event) {
               <Modal.Body>
                 <div>
                   <label htmlFor="">Please Provide Appointment Details</label>
-                  <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""} 
-                  name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
+                  <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
+                    name='appointment' value={editedProfile.appointment || ""} onChange={handleInputChange}
                   />
                 </div>
               </Modal.Body>
               <Modal.Footer>
                 <button className="btn btn-primary" onClick={addAppointment}>{loading ? <div className="spinner-grow text-light" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div> : "Submit"}</button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal
+              size="lg"
+              show={lgShow}
+              onHide={() => setLgShow(false)}
+              backdrop="static"
+              keyboard={false}
+              aria-labelledby="example-modal-sizes-title-lg"
+              centered>
+              <Modal.Header closeButton>
+                <Modal.Title id="example-modal-sizes-title-lg">
+                  Edit Activities
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <label className="col-form-label fw-bold text-danger">Add or Remove From Activities</label>
+                <div className="form-group">
+                  <label className="col-form-label fw-bold">Activities</label>
+
+                  <MultiSelect
+                    options={options.concat(activities)}
+                    value={selectedActivities}
+                    onChange={handleActivityChange}
+                    labelledBy={'Select Activities'}
+                  />
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <button className="btn btn-info add-btn text-white rounded" onClick={submitActivity}>
+                  {loading ? <div className="spinner-grow text-light" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div> : "Submit"}
+                </button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal show={reasonModal} onHide={() => setReasonModal(false)} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Request to Cancel Shift</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div>
+                  <label htmlFor="">Please provide reasons for cancelling shift</label>
+                  <textarea rows={3} className="form-control summernote" placeholder="Add Reason for Cancel Shift..."
+                    name='reason' value={editedProfile.reason || ""} onChange={handleInputChange} />
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <button className="btn btn-primary" onClick={rejectShift}>{loading ? <div className="spinner-grow text-light" role="status">
                   <span className="sr-only">Loading...</span>
                 </div> : "Submit"}</button>
               </Modal.Footer>

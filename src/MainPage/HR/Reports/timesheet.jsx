@@ -22,18 +22,35 @@ const formatDate = (dateString) => {
     return { formattedDay, formattedDate, formattedTime };
 };
 
+// function formatDuration(duration) {
+//     if (duration) {
+//         const durationInMilliseconds = duration / 10000; // Convert ticks to milliseconds
+
+//         const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+//         const hours = Math.floor(durationInMinutes / 60);
+//         const minutes = durationInMinutes % 60;
+
+//         return `${hours} Hrs ${minutes} min`;
+//     }
+
+//     return "0 Hrs 0 min"; // Return an empty string if duration is not available
+// }
+
 function formatDuration(duration) {
     if (duration) {
-        const durationInMilliseconds = duration / 10000; // Convert ticks to milliseconds
+        const durationInTicks = BigInt(duration);
+    const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
 
-        const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
-        const hours = Math.floor(durationInMinutes / 60);
-        const minutes = durationInMinutes % 60;
+    const durationInMinutes = Math.ceil(durationInMilliseconds / (1000 * 60)); // Round up minutes
+    const totalHours = Math.floor(durationInMinutes / 60);
+    const totalMinutes = durationInMinutes % 60; // Get remaining minutes
 
-        return `${hours} Hrs ${minutes} min`;
+    // Add remaining minutes to total hours if totalMinutes >= 30
+    const finalHours = totalHours + Math.floor(totalMinutes / 30);
+
+    return `${finalHours} Hrs`;
     }
-
-    return "0 Hrs 0 min"; // Return an empty string if duration is not available
+    return "0 Hrs 0 min";
 }
 
 const todayDate = (date) => {
