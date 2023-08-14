@@ -135,7 +135,7 @@ const ClientDashboard = () => {
       // console.log(data);
       // toast.success(data.message);
       setLoading(false);
-      setReasonModal(false)
+      setReasonModal(false);
       // setLgShow(false)
 
     } catch (error) {
@@ -359,28 +359,6 @@ const ClientDashboard = () => {
                       <div className="card-footer text-body-secondary bg-secondary text-white">
                         <BsClockHistory /> &nbsp; Activities
                       </div>
-
-                      {/* <div className='px-5 py-4'>
-                        <span>{activitiesByDay[1][0]?.activities}</span> <br /> <br />
-                        {activitiesByDay[1].length > 0 ? (
-                          
-                          <div>
-                            <button
-                            className='btn btn-primary'
-                            onClick={() => addAppoint(activitiesByDay[1][0]?.shiftRosterId)}
-                            disabled={
-                              (dayjs(activitiesByDay[1][0]?.dateTo)).format('YYYY-MM-DD HH:mm:ss')
-                              <
-                              dayjs().tz().format('YYYY-MM-DD HH:mm:ss')}
-                          >
-                            Add Appointment
-                          </button>
-
-                          </div>
-                        ) : (
-                          <span>No Shift Today</span>
-                        )}
-                      </div> */}
                       <div className='px-5 py-4'>
                         <span>{activitiesByDay[1][0]?.activities}</span>
                         <br /><br />
