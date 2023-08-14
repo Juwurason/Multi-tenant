@@ -213,14 +213,14 @@ const AttendanceReport = () => {
     }, 2000);
   }
   const allTimesheet = useSelector((state) => state.allTimesheet.data);
-  console.log(allTimesheet);
 
   const SendTimesheet = async () => {
+
 
     setLoading3(true)
 
     try {
-      const { data } = await get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}`, { cacheTimeout: 300000 });
+      const { data } = await get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
       toast.success(data.message)
       setLoading3(false);
 
@@ -439,7 +439,7 @@ const AttendanceReport = () => {
 
       <div className="page-wrapper">
         <Helmet>
-          <title>Timesheet R</title>
+          <title>Timesheet</title>
           <meta name="description" content="Login page" />
         </Helmet>
 
