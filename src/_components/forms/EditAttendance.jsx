@@ -110,7 +110,7 @@ const EditAttendance = () => {
             setLoading1(false)
         } catch (error) {
             // console.log(error);
-            toast.error("Error Updating Attendance")
+            // toast.error("Error Updating Attendance")
             toast.error(error.response?.data?.message)
             toast.error(error.response?.data?.title)
 
@@ -159,16 +159,15 @@ const EditAttendance = () => {
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock In</label>
-                                                    <input type="text" className="form-control"
-                                                        value={moment(attendance.clockIn).format("LLL")} readOnly />
+                                                    <input className="form-control datetimepicker" type="datetime-local"
+                                                       name="clockIn" value={attendance.clockIn || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock Out</label>
-                                                    <input type="text" className="form-control"
-                                                        value={moment(attendance.clockOut).format("LLL")}
-                                                        readOnly />
+                                                    <input className="form-control datetimepicker" type="datetime-local"
+                                                     name="clockOut" value={attendance.clockOut || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
