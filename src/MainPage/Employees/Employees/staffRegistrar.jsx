@@ -41,23 +41,33 @@ import { useCompanyContext } from '../../../context';
 
  
      const FetchSchedule = async () => {
-         // setLoading2(true)
+        
          try {
              const { data } = await get(`/Staffs?companyId=${user.companyId}`, { cacheTimeout: 300000 });
             //   console.log(data);
-            //  setStaffAvail(data.otherforms)
-             // setLoading2(false);
+           
          } catch (error) {
              // console.log(error);
              toast.error(error.response.data.message)
              toast.error(error.response.data.title)
          }
-         // finally {
-         //   setLoading2(false)
-         // }
- 
+
+         try {
+             const { data } = await get(`/Documents/get_all_documents?companyId=${user.companyId}`, { cacheTimeout: 300000 });
+            //   console.log(data);
+            
+         } catch (error) {
+             // console.log(error);
+             toast.error(error.response.data.message)
+             toast.error(error.response.data.title)
+         }
  
      };
+
+    
+
+
+      
      useEffect(() => {
          FetchSchedule()
      }, []);

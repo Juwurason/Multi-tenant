@@ -33,14 +33,12 @@ const FillForm = () => {
     // Access the entire state
     const users = useSelector((state) => state.user.data);
 
-
     const FetchData = async () => {
         setLoading(true);
 
         try {
             const { data } = await privateHttp.get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
             setReportName(data.templateName);
-
             setFormDetails(data)
             setReport(data.content)
 
@@ -70,74 +68,48 @@ const FillForm = () => {
     };
 
 
-    // function handleInputChange(event) {
-    //     const target = event.target;
-    //     const name = target.name;
-    //     const value = target.value;
-    //     const newValue = value === "" ? "" : value;
-    //     setAttendance({
-    //         ...attendance,
-    //         [name]: newValue
-    //     });
-    // }
 
-    // const handleReportChange = (value) => {
-    //     setReport(value); // Update the state when the editor content changes
-    // };
+    const [staffId, setStaffId] = useState(0);
+    // console.log(staffId);
+    const SendReport = async (e) => {
+        e.preventDefault()
+        setLoading1(true)
 
-    // const SendReport = async (e) => {
-    //     e.preventDefault()
-    //     setLoading1(true)
-
-    //     const info = {
-    //         "attendanceId": attendance.attendanceId,
-    //         "report": attendance.report,
-    //         "clockIn": attendance.clockIn,
-    //         // "clockInCheck": true,
-    //         // "clockOutCheck": false,
-    //         // "isSplitted": false,
-    //         "clockOut": attendance.clockOut,
-    //         "duration": attendance.duration,
-    //         "inLongitude": attendance.inLongitude,
-    //         "inLatitude": attendance.inLatitude,
-    //         // "outLongitude": 0,
-    //         // "outLatitude": 0,
-    //         "startKm": attendance.startKm,
-    //         "endKm": attendance.endKm,
-    //         "staffId": attendance.staffId,
-    //         "imageFile": imageFile,
-    //         // "imageURL": attendance.imageURL,
-    //         "companyID": user.companyId
-    //     }
+        const info = {
+            templateId: formDetails.templateId,
+            templateName: formDetails.templateName,
+            content: formDetails.content,
+            companyId: user.companyId
+        }
 
 
-    //     try {
-    //         const { data } = await privateHttp.post(`/Attendances/edit/${uid}?userId=${user.userId}`,
-    //             info);
-    //         // console.log(data);
-    //         if (data.status === "Success") {
-    //             Swal.fire(
-    //                 '',
-    //                 `${data.message}`,
-    //                 'success'
-    //             )
-    //             setLoading1(false)
-    //             navigate.push(`/app/reports/attendance-reports`)
-    //         }
-    //         setLoading1(false)
-    //     } catch (error) {
-    //         // console.log(error);
-    //         toast.error("Error Updating Attendance")
-    //         toast.error(error.response?.data?.message)
-    //         toast.error(error.response?.data?.title)
+        try { 
+            const { data } = await privateHttp.post(`/Templates/fiil_user_form?id=${staffId}&userId=${user.userId}`,
+                info);
+            console.log(data);
+            // if (data.status === "Success") {
+            //     Swal.fire(
+            //         '',
+            //         `${data.message}`,
+            //         'success'
+            //     )
+            //     setLoading1(false)
+            //     // navigate.push(`/app/reports/attendance-reports`)
+            // }
+            setLoading1(false)
+        } catch (error) {
+            console.log(error);
+            // toast.error("Error Updating Attendance")
+            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.title)
 
-    //         setLoading1(false)
+            setLoading1(false)
 
-    //     }
-    //     finally {
-    //         setLoading1(false)
-    //     }
-    // }
+        }
+        finally {
+            setLoading1(false)
+        }
+    }
 
 
 
@@ -189,13 +161,14 @@ const FillForm = () => {
                                                 <div className="form-group">
                                                     <label htmlFor=""> User</label>
                                                     <div className='form-control d-flex justify-content-center align-items-center'>
-                                                        <select name="" id="" className="form-select py-2 border-0 bg-transparent">
-                                                            <option value="">
+                                                        <select className="form-select py-2 border-0 bg-transparent" onChange={e => setStaffId(e.target.value)}>
+                                                
+                                                            <option defaultValue hidden>
                                                                 --Select a User--
                                                             </option>
                                                             {
                                                                 users.map((user, index) =>
-                                                                    <option value="" key={index}>
+                                                                    <option value={user.id} key={index}>
                                                                         {user.fullName}
                                                                     </option>
                                                                 )
@@ -231,7 +204,7 @@ const FillForm = () => {
                                             <div className="text-center d-flex gap-2">
                                                 <button className="btn btn-info add-btn text-white rounded-2 m-r-5"
                                                     disabled={loading1 ? true : false}
-                                                    type='submit'
+                                                    onClick={SendReport}
                                                 >
 
                                                     {loading1 ? <div className="spinner-grow text-light" role="status">
