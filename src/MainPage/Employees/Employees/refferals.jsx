@@ -24,16 +24,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Refferal = () => {
     const { loadin, setLoading } = useCompanyContext()
-    const id = JSON.parse(localStorage.getItem('user'));
-    const [getHoli, setGetHoli] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
-    const [loading1, setLoading1] = useState(false);
     const [editpro, setEditPro] = useState({})
     const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
 
     const dispatch = useDispatch();
+    const id = JSON.parse(localStorage.getItem('user'));
  
      useEffect(() => {
          dispatch(fetchRefferals(id.companyId));
@@ -41,7 +37,7 @@ const Refferal = () => {
 
      const loading = useSelector((state) => state.refferals.isLoading);
      const refferals = useSelector((state) => state.refferals.data);
-     console.log(refferals);
+    //  console.log(refferals);
     const columns = [
         // {
         //     name: '#',
@@ -103,14 +99,9 @@ const Refferal = () => {
 
 
 
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setDays((prevDays) => ({ ...prevDays, [name]: checked }));
-    };
-
     const handleEdit = async (e) => {
         // console.log(e);
-        setEditModal(true);
+        // setEditModal(true);
         try {
             setLoading(true)
             const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
@@ -135,43 +126,6 @@ const Refferal = () => {
             [name]: newValue
         });
     }
-
-
-
-    const FetchClient = async () => {
-        setLoading(true)
-        try {
-            const { data } = await get(`/SetUp/get_public_holidays`, { cacheTimeout: 300000 });
-            // console.log(data);
-            //   setGetHoli(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-
-        try {
-            const { data } = await get(`/ClientReferrals/get_client_referrals?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            // setGetHoli(data);
-            // setClients(data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        } finally {
-            setLoading(false)
-        }
-    };
-    useEffect(() => {
-        FetchClient()
-    }, []);
-
-    const handleActivityClick = () => {
-        setShowModal(true);
-    };
 
     useEffect(() => {
         if ($('.select').length > 0) {
@@ -290,75 +244,44 @@ const Refferal = () => {
         },
     };
 
-    const handleDelete = async (e) => {
-        Swal.fire({
-            html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#405189',
-            cancelButtonColor: '#777',
-            confirmButtonText: 'Confirm Delete',
-            showLoaderOnConfirm: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
-                        // { userId: id.userId }
-                    )
-                    if (data.status === 'Success') {
-                        toast.success(data.message);
-                        FetchClient();
-                    } else {
-                        toast.error(data.message);
-                    }
+    // const handleDelete = async (e) => {
+    //     Swal.fire({
+    //         html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#405189',
+    //         cancelButtonColor: '#777',
+    //         confirmButtonText: 'Confirm Delete',
+    //         showLoaderOnConfirm: true,
+    //     }).then(async (result) => {
+    //         if (result.isConfirmed) {
+    //             try {
+    //                 const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
+    //                     // { userId: id.userId }
+    //                 )
+    //                 if (data.status === 'Success') {
+    //                     toast.success(data.message);
+    //                     FetchClient();
+    //                 } else {
+    //                     toast.error(data.message);
+    //                 }
 
 
-                } catch (error) {
-                    console.log(error);
-                    toast.error(error.response.data.message)
-                    toast.error(error.response.data.title)
+    //             } catch (error) {
+    //                 console.log(error);
+    //                 toast.error(error.response.data.message)
+    //                 toast.error(error.response.data.title)
 
-                }
-
-
-            }
-        })
-
-    }
-
-    const [holidayName, setHolidayName] = useState('')
-    const [holidayDate, setHolidayDate] = useState('')
+    //             }
 
 
-    const addHoliday = async () => {
+    //         }
+    //     })
 
-        if (holidayName === '' || holidayDate.length === 0) {
-            return toast.error("Input Fields cannot be empty")
-        }
+    // }
 
-        setLoading1(true)
-        const info = {
-            name: holidayName,
-            date: holidayDate
-        }
-        try {
-            const { data } = await post(`/SetUp/add_holiday`, info)
-            // console.log(data);
-            toast.success(data.message)
-            setShowModal(false)
-            FetchClient()
-            setLoading1(false)
-            setHolidayName('')
-            setHolidayDate('')
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
-        }
-        finally {
-            setLoading1(false)
-        }
-    }
+
+    
 
     return (
         <div className="page-wrapper">
@@ -454,110 +377,8 @@ const Refferal = () => {
 
                     />
 
-                    {/* Modal */}
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title> Add Support Type </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Item Number</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Item Name</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Unit</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">National</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Remote</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="col-form-label">Very Remote</label>
-                                        <div>
-                                            <input type="text" className='form-control' onChange={e => setHolidayName(e.target.value)} />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button
-                                disabled={loading1 ? true : false}
-                                className="btn btn-primary add-btn rounded-2 text-white" >
-                                {loading1 ? <div className="spinner-grow text-light" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div> : "Create"}
-                            </button>
-                        </Modal.Footer>
-                    </Modal>
-
-                    {/*Edit Modal */}
-                    <Modal show={editModal} onHide={() => setEditModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>View Holiday</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                <div className="row">
-                                    <div className="">
-                                        <div className="form-group">
-                                            <label className="col-form-label">Name of Holiday</label>
-                                            <div>
-                                                <input type="text" className='form-control' name="name" value={editpro.name || ''} onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="col-form-label">Date</label>
-                                        <div><input className="form-control date" type="date" name="date" value={editpro.date || ''} onChange={handleInputChange} /></div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            {/* <button className="btn btn-primary add-btn rounded-2 text-white" onClick={addHoliday}>Save</button> */}
-                            <button className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
-                        </Modal.Footer>
-                    </Modal>
 
                 </div>
-
-
-                {/* </div> */}
-
-
             </div>
 
         </div>
