@@ -183,6 +183,15 @@ const fetchTicket = async (companyId) => {
         throw error;
     }
 };
+const fetchRefferals = async (companyId) => {
+    try {
+        const response = await axiosInstance.get(`/ClientReferrals/get_client_referrals?companyId=${companyId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Refferals', error);
+        throw error;
+    }
+};
 const fetchFormTemplate = async (companyId) => {
     try {
         const response = await axiosInstance.get(`/Templates/get_templates?companyId=${companyId}`);
@@ -293,6 +302,7 @@ const api = {
     filterProgressNotes,
     getShiftsByUser,
     fetchTicket,
+    fetchRefferals,
     fetchActivityLog,
     filterActivityLogs,
     fetchFormTemplate,

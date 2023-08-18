@@ -16,14 +16,12 @@ import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { useCompanyContext } from '../../../context';
-import useHttp from '../../../hooks/useHttp';
-import { fetchRefferals } from '../../../store/slices/RefferalsSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCompanyContext } from '../../../../context';
+import useHttp from '../../../../hooks/useHttp';
 
 
-const Refferal = () => {
-    const { loadin, setLoading } = useCompanyContext()
+const ClientKnowledgeBase = () => {
+    const { loading, setLoading } = useCompanyContext()
     const id = JSON.parse(localStorage.getItem('user'));
     const [getHoli, setGetHoli] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -33,71 +31,45 @@ const Refferal = () => {
     const [clients, setClients] = useState([]);
     const { get, post } = useHttp();
 
-    const dispatch = useDispatch();
- 
-     useEffect(() => {
-         dispatch(fetchRefferals(id.companyId));
-     }, [dispatch]);
-
-     const loading = useSelector((state) => state.refferals.isLoading);
-     const refferals = useSelector((state) => state.refferals.data);
-     console.log(refferals);
     const columns = [
-        // {
-        //     name: '#',
-        //     cell: (row, index) => index + 1
-        // },
+        {
+            name: '#',
+            cell: (row, index) => index + 1
+        },
 
         {
-            name: 'FullName',
-            selector: row => row.fullName,
+            name: 'Subject',
+            selector: row => row.name,
             sortable: true,
-
+        },
+        {
+            name: 'User',
+            selector: row => row.date,
+            sortable: true,
         },
         {
             name: 'Status',
-            selector: row => row.status,
-            sortable: true,
-
+            selector: row => dayjs(row.dateCreated).format('YYYY-MM-DD'),
+            sortable: true
         },
+
 
         {
-            name: 'Current Residence',
-            selector: row => row.currentResidence,
-            sortable: true,
+            name: "Actions",
+            cell: (row) => (
+                <div className="d-flex gap-1">
 
+                    <button
+                        className='btn'
+                        title='Delete'
+                        onClick={() => handleView(row)}
+                    >
+                        <GoEye />
+                    </button>
+
+                </div>
+            ),
         },
-
-        {
-            name: 'Contact Number',
-            selector: row => row.contactNumber,
-            sortable: true,
-
-        },
-        {
-            name: 'NDIS No',
-            selector: row => row.ndisNo,
-            sortable: true,
-
-        },
-
-
-        // {
-        //     name: "Actions",
-        //     cell: (row) => (
-        //         <div className="d-flex gap-1">
-
-        //             <button
-        //                 className='btn'
-        //                 title='Delete'
-        //                 onClick={() => handleView(row)}
-        //             >
-        //                 <GoEye />
-        //             </button>
-
-        //         </div>
-        //     ),
-        // },
 
     ];
 
@@ -153,10 +125,9 @@ const Refferal = () => {
         }
 
         try {
-            const { data } = await get(`/ClientReferrals/get_client_referrals?companyId=${id.companyId}`, { cacheTimeout: 300000 });
+            const { data } = await get(`/Profiles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
             // console.log(data);
-            // setGetHoli(data);
-            // setClients(data);
+            setClients(data);
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -191,7 +162,7 @@ const Refferal = () => {
         sheet.addRow(headers);
 
         // Add data
-        refferals.forEach((dataRow) => {
+        getHoli.forEach((dataRow) => {
             const values = columns.map((column) => {
                 if (typeof column.selector === 'function') {
                     return column.selector(dataRow);
@@ -207,7 +178,7 @@ const Refferal = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'refferals.xlsx';
+            link.download = 'getHoli.xlsx';
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -218,12 +189,12 @@ const Refferal = () => {
 
 
     const handleCSVDownload = () => {
-        const csvData = Papa.unparse(refferals);
+        const csvData = Papa.unparse(getHoli);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "refferals.csv");
+        link.setAttribute("download", "getHoli.csv");
         link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
@@ -237,9 +208,9 @@ const Refferal = () => {
         const marginLeft = 40;
         const doc = new jsPDF(orientation, unit, size);
         doc.setFontSize(13);
-        doc.text("refferals Table", marginLeft, 40);
+        doc.text("getHoli Table", marginLeft, 40);
         const headers = columns.map((column) => column.name);
-        const dataValues = refferals.map((dataRow) =>
+        const dataValues = getHoli.map((dataRow) =>
             columns.map((column) => {
                 if (typeof column.selector === "function") {
                     return column.selector(dataRow);
@@ -254,7 +225,7 @@ const Refferal = () => {
             body: dataValues,
             margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
         });
-        doc.save("refferals.pdf");
+        doc.save("getHoli.pdf");
     };
 
     const ButtonRow = ({ data }) => {
@@ -271,8 +242,8 @@ const Refferal = () => {
         setSearchText(event.target.value);
     };
 
-    const filteredData = refferals.filter((item) =>
-        item.fullName.toLowerCase().includes(searchText.toLowerCase())
+    const filteredData = getHoli.filter((item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
     );
     const customStyles = {
 
@@ -363,8 +334,8 @@ const Refferal = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Refferal</title>
-                <meta name="description" content="Refferal" />
+                <title>Knowledge Base</title>
+                <meta name="description" content="Knowledge Base" />
             </Helmet>
             {/* Page Content */}
             <div className="content container-fluid">
@@ -372,10 +343,10 @@ const Refferal = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Refferal</h3>
+                            <h3 className="page-title">Knowledge Base</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Refferal</li>
+                                <li className="breadcrumb-item active">Knowledge Base</li>
                             </ul>
                         </div>
                     </div>
@@ -394,8 +365,8 @@ const Refferal = () => {
                         </div>
                         <div className='col-md-8 d-flex  justify-content-center align-items-center gap-4'>
                             <CSVLink
-                                data={refferals}
-                                filename={"refferals.csv"}
+                                data={getHoli}
+                                filename={"getHoli.csv"}
 
                             >
                                 <button
@@ -422,7 +393,7 @@ const Refferal = () => {
                             >
                                 <FaFileExcel />
                             </button>
-                            <CopyToClipboard text={JSON.stringify(refferals)}>
+                            <CopyToClipboard text={JSON.stringify(getHoli)}>
                                 <button
 
                                     className='btn text-warning'
@@ -564,4 +535,4 @@ const Refferal = () => {
     );
 }
 
-export default Refferal;
+export default ClientKnowledgeBase;
