@@ -15,6 +15,7 @@ import { GoEye, GoSearch, GoTrashcan } from 'react-icons/go';
 import { SlSettings } from 'react-icons/sl'
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
+import moment from 'moment';
 import dayjs from 'dayjs';
 import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
@@ -213,8 +214,31 @@ const Refferal = () => {
 
     const ButtonRow = ({ data }) => {
         return (
-            <div className="p-4">
-                {data.name}
+            <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
+                <div ><span className='fw-bold'>NDIS Start Date: </span> {moment(data.ndisStartDate).format('ll')}</div>
+                <div ><span className='fw-bold'>NDIS End Date: </span> {moment(data.ndisEndDate).format('ll')}</div>
+                <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
+                {/* <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
+                <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div> */}
+                <div>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                        Edit Form
+                    </button> |
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                        View Form
+                    </button> |
+                    {/* <button 
+                    // onClick={() => handleDelete(data.documentId)} 
+                    className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
+                        Delete
+                    </button> | */}
+                    <button 
+                    // onClick={() => handleAccept(data.documentId)}
+                     className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                        Accept
+                    </button>
+                   
+                </div>
 
             </div>
         );
