@@ -12,21 +12,16 @@ import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoEye, GoSearch, GoTrashcan } from 'react-icons/go';
-import { SlSettings } from 'react-icons/sl'
-import Swal from 'sweetalert2';
-import { Modal } from 'react-bootstrap';
 import moment from 'moment';
-import dayjs from 'dayjs';
-import { useCompanyContext } from '../../../context';
 import useHttp from '../../../hooks/useHttp';
 import { fetchRefferals } from '../../../store/slices/RefferalsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 const Refferal = () => {
-    const { loadin, setLoading } = useCompanyContext()
+    
     const [editpro, setEditPro] = useState({})
-    const [clients, setClients] = useState([]);
+    const [loading2, setLoading2] = useState(false);
     const { get, post } = useHttp();
 
     const dispatch = useDispatch();
@@ -38,7 +33,7 @@ const Refferal = () => {
 
      const loading = useSelector((state) => state.refferals.isLoading);
      const refferals = useSelector((state) => state.refferals.data);
-    //  console.log(refferals);
+    //  console.log(refferals[0]);
     const columns = [
         // {
         //     name: '#',
@@ -53,10 +48,21 @@ const Refferal = () => {
         },
         {
             name: 'Status',
-            selector: row => row.status,
+            selector: row => row.isAccepted, 
             sortable: true,
-
-        },
+            cell: row => (
+              <div
+                style={{
+                  backgroundColor: row.value ? 'success' : 'warning',
+                  color: 'white', 
+                  padding: '5px',
+                  textAlign: 'center',
+                }}
+              >
+                {row.value ? 'Accepted' : 'Pending'}
+              </div>
+            ),
+          },
 
         {
             name: 'Current Residence',
@@ -104,16 +110,16 @@ const Refferal = () => {
         // console.log(e);
         // setEditModal(true);
         try {
-            setLoading(true)
-            const { data } = await get(`/SetUp/holiday_details/${e}`, { cacheTimeout: 300000 });
+           
+            const { data } = await get(`/ClientReferrals/get_client_referral_details/${4}`, { cacheTimeout: 300000 });
             // console.log(data);
             setEditPro(data);
-            setLoading(false)
+           
         } catch (error) {
             console.log(error);
-            setLoading(false)
+           
         } finally {
-            setLoading(false)
+           
         }
     };
 
@@ -135,7 +141,8 @@ const Refferal = () => {
                 width: '100%'
             });
         }
-    });
+        // handleEdit()
+    },[]);
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -212,6 +219,15 @@ const Refferal = () => {
         doc.save("refferals.pdf");
     };
 
+    const handleDetails = (e) => {
+        setLoading2(true);
+        setTimeout(() => {
+            const url = `/refferal-details/${e}`;
+            window.open(url, '_blank');
+            setLoading2(false);
+        }, 2000);
+    };
+
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
@@ -221,11 +237,21 @@ const Refferal = () => {
                 {/* <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div> */}
                 <div>
-                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                    {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit Form
-                    </button> |
-                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
-                        View Form
+                    </button> | */}
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}  onClick={() => handleDetails(data.clientReferralId)}>
+                        
+                        {
+                                    loading2 ?
+                                        <>
+                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                            Please wait...
+                                        </>
+                                        :
+                                        "View Form"
+
+                                }
                     </button> |
                     {/* <button 
                     // onClick={() => handleDelete(data.documentId)} 
@@ -310,7 +336,7 @@ const Refferal = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Refferal</title>
+                <title>Referral</title>
                 <meta name="description" content="Refferal" />
             </Helmet>
             {/* Page Content */}
@@ -319,10 +345,10 @@ const Refferal = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Refferal</h3>
+                            <h3 className="page-title">Referral</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Refferal</li>
+                                <li className="breadcrumb-item active">Referral</li>
                             </ul>
                         </div>
                     </div>

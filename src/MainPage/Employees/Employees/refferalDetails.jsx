@@ -153,7 +153,7 @@
 //     );
 // };
 
-// const FormTemplateDetails = () => {
+// const RefferalDetails = () => {
 //     const { uid } = useParams();
 //     const [details, setDetails] = useState({});
 //     const [isLoading, setIsLoading] = useState(true);
@@ -163,7 +163,7 @@
 //     const fetchDetails = async () => {
 //         try {
 //             const { data } = await get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
-//             // console.log(data);
+//             console.log(data);
 //             setDetails(data);
 //             setIsLoading(false);
 //         } catch (error) {
@@ -187,7 +187,7 @@
 //     );
 // };
 
-// export default FormTemplateDetails;
+// export default RefferalDetails;
 
 import React, { useState, useEffect } from "react";
 import { Page, Text, View, Document, StyleSheet, Image, PDFViewer } from "@react-pdf/renderer";
@@ -221,9 +221,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 1.5,
   },
+  tableCell: {
+    padding: 5,
+    flex: 1,
+    fontWeight: "normal", // Make the data less bold
+    fontSize: 10, // Make the data smaller
+  },
+  tableCellHeader: {
+    color: "#000",
+    // marginBottom: 1, // Separate header from table
+    fontWeight: "bold",
+    fontSize: 12, // Make the header slightly larger
+  },
+  table: {
+    display: "table",
+    width: "100%",
+    marginTop: 20,
+    borderStyle: "solid",
+    borderColor: "#000",
+    borderWidth: 1,
+  },
+  tableRow: {
+    flexDirection: "row",
+  },
 });
 
-const FormTemplateDetails = () => {
+const RefferalDetails = () => {
   const { uid } = useParams();
   const [details, setDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -232,8 +255,8 @@ const FormTemplateDetails = () => {
 
   const fetchDetails = async () => {
     try {
-      const { data } = await get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
-      // console.log(data);
+      const { data } = await get(`/ClientReferrals/get_client_referral_details/${uid}`, { cacheTimeout: 300000 });
+      console.log(data);
       setDetails(data);
       setIsLoading(false);
     } catch (error) {
@@ -249,14 +272,8 @@ const FormTemplateDetails = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  const removeHtmlTags = (html) => {
-        const cleanText = html.replace(/<\/?[^>]+(>|$)/g, "");
-        return cleanText;
-    };
+ 
 
-  const parsedContent = details.content ? parse(removeHtmlTags(details.content.replace(/\\"/g, '"'))) : null;
-// const parsedContent = details.content ? parse(details.content.replace(/\\"/g, '"')) : null;
-console.log(parsedContent);
   return (
     <PDFViewer width="100%" height={800}>
       <Document>
@@ -265,11 +282,19 @@ console.log(parsedContent);
             <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
               <Image src={logo} style={styles.logo} />
               <Text style={styles.title}>Form Template</Text>
-              <Text style={styles.subtitle}>{details.templateName}</Text>
             </View>
 
-            <View style={styles.content}>
-              <Text>{parsedContent}</Text>
+            {/* Move the tableCellHeader outside of the table */}
+            <Text style={styles.tableCellHeader}>Personal Details</Text>
+
+            {/* Table to display data */}
+            <View style={styles.table}>
+              {/* Table Rows */}
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Name </Text>
+                <Text style={styles.tableCell}>{details.fullName}</Text>
+                
+              </View>
             </View>
           </View>
         </Page>
@@ -278,5 +303,5 @@ console.log(parsedContent);
   );
 };
 
-export default FormTemplateDetails;
+export default RefferalDetails;
 
