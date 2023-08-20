@@ -16,7 +16,8 @@ import moment from 'moment';
 import useHttp from '../../../hooks/useHttp';
 import { fetchRefferals } from '../../../store/slices/RefferalsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-
+import Swal from 'sweetalert2';
+import axiosInstance from '../../../store/axiosInstance';
 
 const Refferal = () => {
     
@@ -79,54 +80,9 @@ const Refferal = () => {
         },
 
 
-        // {
-        //     name: "Actions",
-        //     cell: (row) => (
-        //         <div className="d-flex gap-1">
-
-        //             <button
-        //                 className='btn'
-        //                 title='Delete'
-        //                 onClick={() => handleView(row)}
-        //             >
-        //                 <GoEye />
-        //             </button>
-
-        //         </div>
-        //     ),
-        // },
-
     ];
 
 
-
-    const handleEdit = async (e) => {
-        // console.log(e);
-        // setEditModal(true);
-        try {
-           
-            const { data } = await get(`/ClientReferrals/get_client_referral_details/${4}`, { cacheTimeout: 300000 });
-            // console.log(data);
-            setEditPro(data);
-           
-        } catch (error) {
-            console.log(error);
-           
-        } finally {
-           
-        }
-    };
-
-    function handleInputChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        const newValue = value === "" ? "" : value;
-        setEditPro({
-            ...editpro,
-            [name]: newValue
-        });
-    }
 
     useEffect(() => {
         if ($('.select').length > 0) {
@@ -222,6 +178,43 @@ const Refferal = () => {
         }, 2000);
     };
 
+    const handleAccept = async (e) => {
+        Swal.fire({
+            html: `<h3>Accept This Referral</h3>`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#405189',
+            cancelButtonColor: '#C8102E',
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await axiosInstance.get(`/ClientReferrals/accept_client_referral?id=${e}&userId=${id.userid}`,
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        dispatch(fetchDocument(id.companyId));
+                    } else {
+                        toast.error("Error Accepting Document");
+                    }
+
+
+                } catch (error) {
+                    toast.error("Ooooops😔 Error Occurred ")
+                    console.log(error);
+
+
+
+                }
+
+
+            }
+        })
+
+
+    }
+
     const ButtonRow = ({ data }) => {
         return (
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
@@ -252,11 +245,11 @@ const Refferal = () => {
                     className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> | */}
-                    <button 
-                    // onClick={() => handleAccept(data.documentId)}
+                    {!data.isAccepted && <button 
+                    onClick={() => handleAccept(data.clientReferralId)}
                      className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
                         Accept
-                    </button>
+                    </button>}
                    
                 </div>
 
