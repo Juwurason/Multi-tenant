@@ -84,8 +84,8 @@ const AddFormTemplate = () => {
         formData.append("CompanyId", id.companyId);
 
         try {
-            setLoading(true)
-            const { data } = await post(`/Templates/add_templates`,
+            setLoading(true) 
+            const { data } = await post(`/Templates/add_templates?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
