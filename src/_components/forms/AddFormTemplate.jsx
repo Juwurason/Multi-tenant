@@ -196,7 +196,7 @@ const AddFormTemplate = () => {
                                                 <label className="col-form-label">Is Incident Form</label>
                                             </div>
                                             <div className="form-group">
-                                                <input type="checkbox" checked={incident} onChange={handleIsCarePlanChange} />
+                                                <input type="checkbox" checked={isCarePlan} onChange={handleIsCarePlanChange} />
                                                 &nbsp; &nbsp;
                                                 <label className="col-form-label">IsCarePlan</label>
                                             </div>
