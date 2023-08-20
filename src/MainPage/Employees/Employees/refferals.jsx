@@ -33,7 +33,7 @@ const Refferal = () => {
 
      const loading = useSelector((state) => state.refferals.isLoading);
      const refferals = useSelector((state) => state.refferals.data);
-    //  console.log(refferals[0]);
+    //  console.log(refferals[0].isAccepted);
     const columns = [
         // {
         //     name: '#',
@@ -51,16 +51,10 @@ const Refferal = () => {
             selector: row => row.isAccepted, 
             sortable: true,
             cell: row => (
-              <div
-                style={{
-                  backgroundColor: row.value ? 'success' : 'warning',
-                  color: 'white', 
-                  padding: '5px',
-                  textAlign: 'center',
-                }}
-              >
-                {row.value ? 'Accepted' : 'Pending'}
-              </div>
+              
+              <span className={`px-2 py-1 rounded-pill fw-bold ${row.isAccepted ? 'bg-success' : 'bg-warning'}`} style={{ fontSize: "10px" }}>
+              {row.isAccepted ? 'Accepted' : 'Pending'}
+            </span>
             ),
           },
 

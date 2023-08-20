@@ -334,6 +334,54 @@ const RefferalDetails = () => {
                 {/* <Text style={styles.tableCell}>{details.gender}</Text> */}
               </View>
             </View>
+
+
+            <Text style={styles.tableCellHeader}>NDIS PLAN DETAILS</Text>
+
+            {/* Table to display data */}
+            <View style={styles.table}>
+              {/* Table Rows */}
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>NDIS Number:</Text>
+                <Text style={styles.tableCell}>{details.ndisNo}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>PlanManager Details:</Text>
+                <Text style={styles.tableCell}>{details.email}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>NDIS Start Date</Text>
+                <Text style={styles.tableCell}>{details.ndisStartDate}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>NDIS End Date:</Text>
+                <Text style={styles.tableCell}>{details.ndisEndDate}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>NDIS Goals</Text>
+                <Text style={styles.tableCell}>{details.ndisGoals}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>What lineitemfromtheir NDIS plan should MaxiCare Plus useto providesupport? </Text>
+                <Text style={styles.tableCell}>{details.gender}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Do they identify as Aboriginal or Torres Strait Islander?: </Text>
+                {/* <Text style={styles.tableCell}>{details.gender}</Text> */}
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Do they identify as Culturally and LinguisticallyDiverse(CALD)? </Text>
+                {/* <Text style={styles.tableCell}>{details.gender}</Text> */}
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>NOK/ EmergencyContact Details: </Text>
+                {/* <Text style={styles.tableCell}>{details.gender}</Text> */}
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Do they havea nominated carer?If yes, please providecontact details </Text>
+                {/* <Text style={styles.tableCell}>{details.gender}</Text> */}
+              </View>
+            </View>
           </View>
         </Page>
       </Document>
