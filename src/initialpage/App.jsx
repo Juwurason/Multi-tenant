@@ -15,6 +15,7 @@ import OTPscreen from './otp';
 import StaffProgress from '../MainPage/HR/Reports/progressPrint';
 import formTemplateDetails from '../MainPage/Employees/Setup/formTemplateDetails';
 import ResetPassword from './resetPassword';
+import RefferalDetails from '../MainPage/Employees/Employees/refferalDetails';
 
 const App = () => {
     const location = useLocation();
@@ -71,6 +72,7 @@ const App = () => {
             <Route path={`/Allstaff-timesheet/:dateFrom/:dateTo`} component={TimesheetForAll} />
             <Route path={`/staff-progress/:uid`} component={StaffProgress} />
             <Route path={`/form-details/:uid`} component={formTemplateDetails} />
+            <Route path={`/refferal-details/:uid`} component={RefferalDetails} />
 
             <Route path="/logout" render={handleLogout} />
             {/* <Route component={Error404} /> Catch-all route */}

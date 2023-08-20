@@ -398,10 +398,10 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                         <Modal.Body>
                           {selectedActivity && (
                             <>
+                              <p><b>Status:</b> <span style={{ fontSize: "10px" }} className={`px-3 py-1 rounded fw-bold text-white ${selectedActivity.status === "Pending" ? "bg-warning" : selectedActivity.status === "Cancelled" ? "bg-danger" : "bg-primary"}`}>{selectedActivity.status}</span></p>
                               <p><b>Date:</b> {dayjs(selectedActivity.dateFrom).format('YYYY-MM-DD')}</p>
                               <p><b>Time:</b> {dayjs(selectedActivity.dateFrom).format('hh:mm A')} - {dayjs(selectedActivity.dateTo).format('hh:mm A')}</p>
                               <p><b>Client(s):</b> {selectedActivity.clients}</p>
-                              <p><b>Status:</b> {selectedActivity.status}</p>
                               <p><b>Appointment:</b> {selectedActivity.appointment}</p>
                               <p><b>Activities:</b> {selectedActivity.activities}</p>
                             </>

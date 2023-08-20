@@ -39,7 +39,7 @@ const AllEmployees = () => {
   const staff = useSelector((state) => state.staff.data);
   const [loading1, setLoading1] = useState(false);
 
-
+    // console.log(staff)
   const { post, get } = useHttp();
   const status = useRef(false);
 

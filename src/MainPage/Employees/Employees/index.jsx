@@ -47,6 +47,7 @@ const EmployeesRoute = ({ match }) => (
          component={Registrar}
       />
 
+
       <Route
          path={`${match.url}/incident`}
          component={IncidentForm}

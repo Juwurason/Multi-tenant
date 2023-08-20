@@ -233,7 +233,7 @@ const FormTemplateDetails = () => {
   const fetchDetails = async () => {
     try {
       const { data } = await get(`/Templates/template_details/${uid}`, { cacheTimeout: 300000 });
-      console.log(data);
+      // console.log(data);
       setDetails(data);
       setIsLoading(false);
     } catch (error) {
