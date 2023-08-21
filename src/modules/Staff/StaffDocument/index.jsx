@@ -148,7 +148,7 @@ const StaffDocument = ({ staffDocument, FetchData, loading }) => {
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (documentName === "" || document === "") {
+    if (documentName === "" || document === null) {
       return toast.error("Input Fields cannot be empty")
     }
 
