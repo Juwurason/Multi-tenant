@@ -100,13 +100,14 @@ const AllUser = () => {
                     >
                         <FaRegEdit />
                     </Link>
-                   {id.role === "CompanyAdmin" || id.role === "Administrator" || hasRequiredClaims("Reset User Password") && <button
+                   {id.role === "CompanyAdmin" || id.role === "Administrator" || hasRequiredClaims("Reset User Password") ? 
+                   <button
                         className='btn'
                         title='Reset User Password'
                         onClick={() => handleResetPassword(row.email)}
                     >
                         <MdOutlineLockReset className='fs-5' />
-                    </button>}
+                    </button>: ""}
                     <button
                         className='btn'
                         title='Delete User'
