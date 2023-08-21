@@ -26,6 +26,10 @@ import axiosInstance from '../../../store/axiosInstance';
 const AllUser = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
+  const claims = JSON.parse(localStorage.getItem('claims'));
+  const hasRequiredClaims = (claimType) => {
+    return claims.some(claim => claim.value === claimType);
+  };
 
     // Fetch user data and update the state
     useEffect(() => {
@@ -96,13 +100,13 @@ const AllUser = () => {
                     >
                         <FaRegEdit />
                     </Link>
-                    <button
+                   {id.role === "CompanyAdmin" || id.role === "Administrator" || hasRequiredClaims("Reset User Password") && <button
                         className='btn'
                         title='Reset User Password'
                         onClick={() => handleResetPassword(row.email)}
                     >
                         <MdOutlineLockReset className='fs-5' />
-                    </button>
+                    </button>}
                     <button
                         className='btn'
                         title='Delete User'

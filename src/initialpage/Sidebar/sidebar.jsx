@@ -147,19 +147,20 @@ const Sidebar = (props) => {
                 </li>
               ) : null}
 
-              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add & Edit Role") ? (
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") ? (
                 <li className="submenu">
                   <a href="#" className={isSideMenu === "management" ? "subdrop" : ""} onClick={(e) => {
                     e.preventDefault();
                     toggleSidebar(isSideMenu === "management" ? "" : "management");
                   }}>
+
                     <i className="la la-cog" />
                     <span>Account Management</span>
                     <span className="menu-arrow" />
                   </a>
                   {isSideMenu === "management" ? (
                     <ul>
-                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") ? (
+                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") || hasRequiredClaims("View Activity Logs") || hasRequiredClaims("Add & Edit Role") ? (
                         <li>
                           <Link
                             className={pathname.includes('alluser') ? "active" : ""}
