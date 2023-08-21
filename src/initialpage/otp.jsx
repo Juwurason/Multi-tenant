@@ -1,7 +1,7 @@
 
 import React, { Component, useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useCompanyContext } from '../context/index.jsx';
@@ -92,9 +92,9 @@ const OTPscreen = () => {
       </Helmet>
       <div className="cover-bg">
         <div className="header-left p-4">
-          <span className="logo p-4">
+          <Link to="/login" className="logo p-4">
             <img src={loggo} width={180} height={180} alt="" />
-          </span>
+          </Link>
         </div>
         <div >
           <div className='container pt-3'>
