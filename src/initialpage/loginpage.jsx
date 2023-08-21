@@ -161,7 +161,7 @@ const Loginpage = () => {
                 value={password}
                 type={pwdVisible ? "text" : "password"}
                 name="password"
-                minLength="6"
+                // minLength="6"
                 // maxLength="15"
                 required
                 className="form-control border-0" placeholder="Password" />
