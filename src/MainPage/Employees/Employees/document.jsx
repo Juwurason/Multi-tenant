@@ -510,20 +510,20 @@ const Document = () => {
                                         <div className="col-sm-4">
                                             <div className="form-group">
                                                 <label className="col-form-label">Date From</label>
-                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="form-group">
                                                 <label className="col-form-label">Date To</label>
-                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="form-group" >
                                                 <label className="col-form-label">Status</label>
                                                 <div>
-                                                    <select className="form-select" ref={status} required>
+                                                    <select className="form-select" ref={status}>
                                                         <option defaultValue hidden value={""}>--Select a Status...</option>
                                                         <option value="Accepted">Accepted</option>
                                                         <option value="Rejected">Rejected</option>
@@ -538,7 +538,7 @@ const Document = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">User Role</label>
                                                 <div>
-                                                    <select className="form-select" ref={role} required>
+                                                    <select className="form-select" ref={role}>
                                                         <option defaultValue hidden value={""}>--Select Role--</option>
                                                         <option value="Admin">Admin</option>
                                                         <option value="Staff">Staff</option>
