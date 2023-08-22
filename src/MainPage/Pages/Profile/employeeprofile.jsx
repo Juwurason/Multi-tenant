@@ -10,6 +10,7 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
+import axiosInstance from '../../../store/axiosInstance';
 const EmployeeProfile = () => {
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
@@ -23,6 +24,8 @@ const EmployeeProfile = () => {
   const [socialModal, setSocialModal] = useState(false);
   const [employmentModal, setEmploymentModal] = useState(false);
 
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   const privateHttp = useHttp()
   const FetchStaff = async () => {
@@ -114,6 +117,7 @@ const EmployeeProfile = () => {
       const { data } = await privateHttp.post(`/Staffs/edit/${uid}?userId=${id.userId}`,
         formData
       )
+      // console.log(data);
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -130,7 +134,7 @@ const EmployeeProfile = () => {
       setLoading(false)
 
     } catch (error) {
-      console.log(error);
+
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading(false);
@@ -141,37 +145,50 @@ const EmployeeProfile = () => {
     }
   }
   const handleActivate = async (e) => {
+    setLoading2(true)
     try {
-      const response = await get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
+      const { data } = await axiosInstance.get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
 
       )
-      console.log(response);
 
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
 
     } catch (error) {
-      console.log(error);
+
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
-
-
-    }
+      setLoading2(false)
+}
+finally{
+  setLoading2(false)
+}
 
 
   }
 
   const handleDeactivate = async (e) => {
+    setLoading1(true)
     try {
-      const response = await get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      const { data } = await axiosInstance.get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
       )
-      console.log(response);
 
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
 
     } catch (error) {
-      console.log(error);
+      setLoading1(false)
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
 
 
+    }
+    finally{
+      setLoading1(false)
     }
 
 
@@ -243,11 +260,17 @@ const EmployeeProfile = () => {
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
-                                    Deactivate Staff
+                                    
+                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Deactivate Staff"}
                                   </button>
                                   :
                                   <button onClick={() => handleActivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
-                                    Activate Staff
+                                    
+                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Activate Staff"}
                                   </button>
 
                               }
@@ -336,7 +359,7 @@ const EmployeeProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={editedProfile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={editedProfile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>

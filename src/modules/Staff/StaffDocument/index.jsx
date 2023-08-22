@@ -25,7 +25,7 @@ const StaffDocument = ({ staffDocument, FetchData, loading }) => {
   const [documentName, setDocumentName] = useState("")
   const [otherDocumentName, setOtherDocumentName] = useState("")
   const [expire, setExpire] = useState("")
-  const [document, setDocument] = useState("")
+  const [document, setDocument] = useState(null)
   // const [staffDocument, setStaffDocument] = useState([]);
   const id = JSON.parse(localStorage.getItem('user'));
   const staffPro = JSON.parse(localStorage.getItem('staffProfile'));
@@ -134,10 +134,21 @@ const StaffDocument = ({ staffDocument, FetchData, loading }) => {
     });
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const allowedExtensions = /(\.pdf|\.doc)$/i;
+
+    if (allowedExtensions.exec(selectedFile.name)) {
+      setDocument(selectedFile);
+    } else {
+      alert('Please select a PDF or DOC file');
+    }
+  };
+
   const privateHttp = useHttp()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (documentName === "" || document === "") {
+    if (documentName === "" || document === null) {
       return toast.error("Input Fields cannot be empty")
     }
 
@@ -510,13 +521,11 @@ const StaffDocument = ({ staffDocument, FetchData, loading }) => {
               </div>
               <div className='col-md-12'>
                 <div className="form-group">
-                  <label>Upload Document</label> <br />
-                  <input
-                    type="file"
-                    className="custom-file-input"
-                    accept=".pdf, .doc, .txt, .jpg, .jpeg, .png"
-                    id="policy_upload"
-                    onChange={e => setDocument(e.target.value)}
+                  <label>Select Document</label> <br />
+                  <input className="form-control" type="file"
+                    accept=".pdf,.doc,.docx"
+                    maxsize={1024 * 1024 * 2}
+                   onChange={handleFileChange}
                   />
                 </div>
               </div>

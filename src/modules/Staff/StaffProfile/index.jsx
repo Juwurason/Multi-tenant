@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) => {
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null);
   const [informModal, setInformModal] = useState(false);
   const [stateModal, setStateModal] = useState(false);
   const [kinModal, setKinModal] = useState(false);
@@ -96,7 +96,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
       const { data } = await privateHttp.post(`/Staffs/edit/${getStaffProfile.staffId}?userId=${id.userId}`,
         formData
       )
-
+      // console.log(data);
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -231,12 +231,12 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                   <div className="form-group">
                     <label style={styles.label} className="border border-2 rounded-circle">
                       <img className="rounded-circle" style={{ width: '100%', height: '100%' }}
-                        src={image === "" ? man : URL.createObjectURL(image)} alt="profile image" />
+                        src={image === null ? man : URL.createObjectURL(image)} alt="profile image" />
                     </label>
 
                     <label style={{ display: 'flex', justifyContent: 'center' }}>
                       <FaCamera />
-                      <input type="file" accept="image/jpeg, image/png" required style={styles.main} onChange={handlechange} />
+                      <input type="file" accept="image/jpeg, image/png" style={styles.main} value={editedProfile.imageFile || ''} onChange={handlechange} />
                     </label>
 
                   </div>
@@ -255,7 +255,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={editedProfile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={editedProfile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>

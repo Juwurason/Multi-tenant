@@ -219,7 +219,7 @@ const TimesheetForAll = () => {
 
     const GetTimeshift = async (e) => {
         try {
-            const { data } = await get(`/Attendances/generate_all_staff_timesheet?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}`, { cacheTimeout: 300000 });
+            const { data } = await get(`/Attendances/generate_all_staff_timesheet?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
             setTimesheet(data?.timesheet?.staffTimeSheet);
             setTotal(data?.timesheet)
             if (data.status === "Success") {
