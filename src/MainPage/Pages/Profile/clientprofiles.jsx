@@ -190,7 +190,7 @@ const ClientProfiles = () => {
   const handleActivate = async (e) => {
     setLoading2(true)
     try {
-      const { data } = await axiosInstance.get(`/Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+      const { data } = await axiosInstance.get(`/Profiles/activate_client?userId=${id.userId}&clientid=${e}`,
       
       )
 
@@ -215,7 +215,7 @@ finally{
   const handleDeactivate = async (e) => {
     setLoading1(true)
     try {
-      const { data } = await axiosInstance.get(`/Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+      const { data } = await axiosInstance.get(`/Profiles/deactivate_client?userId=${id.userId}&clientid=${e}`,
       )
       
 

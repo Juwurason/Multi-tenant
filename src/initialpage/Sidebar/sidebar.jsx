@@ -223,7 +223,7 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Referrals") ? <li className={pathname.includes('referrals') ? "active" : ""} onClick={() => onMenuClik()}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Referrals") ? <li className={pathname.includes('refferals') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/refferals"><i className="la la-user-plus" /> <span>Referrals</span></Link>
               </li> : ""}
 

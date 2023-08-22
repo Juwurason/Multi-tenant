@@ -255,7 +255,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={editedProfile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={editedProfile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>

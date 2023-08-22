@@ -17,6 +17,7 @@ import useHttp from '../../../hooks/useHttp';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClient, filterClient } from '../../../store/slices/ClientSlice';
+import axiosInstance from '../../../store/axiosInstance';
 
 const Clients = () => {
   const dispatch = useDispatch();
@@ -184,30 +185,63 @@ const Clients = () => {
     });
     doc.save("clients.pdf");
   };
+  // const handleActivate = async (e) => {
+  //   try {
+  //     const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
+
+  //     )
+
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.response.data.message)
+  //     toast.error(error.response.data.title)
+
+
+  //   }
+  // }
+  // const handleDeactivate = async (e) => {
+  //   try {
+  //     const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+  //     )
+
+
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.response.data.message)
+  //     toast.error(error.response.data.title)
+
+
+  //   }
+  // }
+
   const handleActivate = async (e) => {
     try {
-      const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
-
+      const {data} = await axiosInstance.get(`/Profiles/activate_client?userId=${id.userId}&clientid=${e}`,
       )
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        dispatch(fetchClient(id.companyId))
+     }
 
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
 
 
     }
+}
 
-
-
-
-  }
   const handleDeactivate = async (e) => {
     try {
-      const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
+      const {data} = await axiosInstance.get(`/Profiles/deactivate_client?userId=${id.userId}&clientid=${e}`,
       )
-
+     if (data.status === 'Success') {
+        toast.success(data.message)
+        dispatch(fetchClient(id.companyId))
+     }
 
     } catch (error) {
       console.log(error);
@@ -216,12 +250,7 @@ const Clients = () => {
 
 
     }
-
-
-
-
   }
-
   const ButtonRow = ({ data }) => {
     return (
       <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
