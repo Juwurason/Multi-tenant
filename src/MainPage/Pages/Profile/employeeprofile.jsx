@@ -117,6 +117,7 @@ const EmployeeProfile = () => {
       const { data } = await privateHttp.post(`/Staffs/edit/${uid}?userId=${id.userId}`,
         formData
       )
+      // console.log(data);
       if (data.status === 'Success') {
         toast.success(data.message);
         setInformModal(false);
@@ -358,7 +359,7 @@ finally{
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={editedProfile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={editedProfile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
