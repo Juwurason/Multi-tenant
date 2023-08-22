@@ -185,35 +185,7 @@ const Clients = () => {
     });
     doc.save("clients.pdf");
   };
-  // const handleActivate = async (e) => {
-  //   try {
-  //     const response = await get(`Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
-
-  //     )
-
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error.response.data.message)
-  //     toast.error(error.response.data.title)
-
-
-  //   }
-  // }
-  // const handleDeactivate = async (e) => {
-  //   try {
-  //     const response = await get(`Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
-  //     )
-
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error.response.data.message)
-  //     toast.error(error.response.data.title)
-
-
-  //   }
-  // }
+ 
 
   const handleActivate = async (e) => {
     try {

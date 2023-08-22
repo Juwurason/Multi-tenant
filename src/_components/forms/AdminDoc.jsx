@@ -86,6 +86,7 @@ const AdminDoc = () => {
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
     const navigate = useHistory();
+    const id = JSON.parse(localStorage.getItem('user'));
 
 
     const { get, post } = useHttp()
@@ -95,12 +96,12 @@ const AdminDoc = () => {
             const { data } = await get(`/Administrators/${uid}`, { cacheTimeout: 300000 })
 
             setStaffOne(data)
-
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }
         try {
-            const { data } = await get(`Docume${uid}`, { cacheTimeout: 300000 })
+            const { data } = await get(`/Documents/get_all_admin_documents?adminId=${uid}`, { cacheTimeout: 300000 })
             setDocumentOne(data.staffDocuments)
 
         } catch (error) {
@@ -131,21 +132,22 @@ const AdminDoc = () => {
         }
     };
     const handleSubmit = async (e) => {
-        setLoading(true);
+        setLoading1(true);
         e.preventDefault()
         if (documentName === "" || document === "") {
             return toast.error("Fields marked red cannot be empty")
         }
-
+        
         const formData = new FormData()
         formData.append("CompanyId", id.companyId);
         formData.append("DocumentFile", document);
         formData.append("DocumentName", documentName);
         formData.append("ExpirationDate", expire);
         formData.append("User", staffOne.fullName);
-        formData.append("UserRole", 'Staff');
+        formData.append("UserRole", 'Administrator');
         formData.append("Status", "Pending");
-        formData.append("UserId", staffOne.staffId);
+        formData.append("UserId", staffOne.administratorId
+        );
 
         try {
             const { data } = await post(`/Administrators/document_upload?userId=${id.userId}`,
