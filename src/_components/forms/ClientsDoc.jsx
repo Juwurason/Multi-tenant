@@ -16,11 +16,19 @@ import ExcelJS from 'exceljs';
 import { GoSearch } from 'react-icons/go';
 import moment from 'moment';
 import { MdCancel } from "react-icons/md";
+import axiosInstance from "../../store/axiosInstance";
+import { Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
+
 const ClientDoc = () => {
     const [loading, setLoading] = useState(false);
     const { uid } = useParams()
     const [clientOne, setClientOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
+    const [rejectModal, setRejectModal] = useState(false);
+    const [selectedDocument, setSelectedDocument] = useState("");
+    const [reason, setReason] = useState("");
+    const [deadline, setDeadline] = useState("");
     const navigate = useHistory();
     const { get, post } = useHttp();
 
@@ -128,6 +136,7 @@ const ClientDoc = () => {
         }
     };
     const id = JSON.parse(localStorage.getItem('user'));
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (documentName === "" || document === "") {
@@ -264,13 +273,13 @@ const ClientDoc = () => {
                     <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> |
-                    <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                    {data.status === 'Pending' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
                         Accept
-                    </button>
+                    </button>:""}
                     |
-                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                    {data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Reject
-                    </button>
+                    </button>: ""}
                 </div>
 
             </div>
@@ -293,11 +302,11 @@ const ClientDoc = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.post(`/Documents/delete/${e}`,
+                    const { data } = await axiosInstance.post(`/Documents/delete/${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchDocument()
+                        FetchClient()
                     } else {
                         toast.error(data.message);
                     }
@@ -329,11 +338,12 @@ const ClientDoc = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    const res = await axiosInstance.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
                     )
+                    console.log(res);
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchDocument()
+                        FetchClient()
                     } else {
                         toast.error(data.message);
                     }
@@ -350,19 +360,26 @@ const ClientDoc = () => {
 
             }
         })
+    }
 
+    const handleRejectModal = (e) => {
+        setRejectModal(true)
+        setSelectedDocument(e);
 
     }
+
+
+
     const handleReject = async () => {
         if (reason.trim() === "" || deadline === "") {
             toast.error("provide valid reason and deadline")
         }
         try {
-            const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
+            const { data } = await axiosInstance.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
-                FetchDocument()
+                FetchClient()
             } else {
                 toast.error(data.message);
             }
@@ -537,6 +554,37 @@ const ClientDoc = () => {
 
                     </div>
                 </div>
+
+                <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Reject Document</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>
+                            <label htmlFor="">Please provide reasons for rejecting document</label>
+                            <br />
+                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
+                                onChange={e => setReason(e.target.value)} />
+                        </div>
+                        <br />
+                        <div>
+                            <label htmlFor="">Set a new deadline</label>
+                            <br />
+                            <input type="date" className='form-control'
+                                onChange={e => setDeadline(e.target.value)}
+                            />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button onClick={handleReject} className="btn btn-danger">
+
+                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div> : "Reject Document"}
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+                
             </div>
         </>
     );

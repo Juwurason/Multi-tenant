@@ -17,7 +17,7 @@ const EditProgressNote = () => {
   const [details, setDetails] = useState('')
   const [staff, setStaff] = useState('')
   const [kilometer, setKilometer] = useState('')
-  const [endKm, setEndKm] = useState('')
+  const [endKm, setEndKm] = useState(0)
   const [editpro, setEditPro] = useState({})
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
@@ -120,7 +120,7 @@ const EditProgressNote = () => {
 
   const CreateProgress = async (e) => {
     e.preventDefault();
-    if (endKm === "") {
+    if (endKm === 0 ) {
       toast.error("Input end Kilometer");
       return; // Exit the function early if endKm is not provided
     }
@@ -220,7 +220,7 @@ const EditProgressNote = () => {
                     <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="number" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" value={endKm} className="form-control" onChange={e => setEndKm(e.target.value)} />
                           </div>
                      </div>
                       <div className="col-md-4">

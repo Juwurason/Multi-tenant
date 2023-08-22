@@ -274,15 +274,16 @@ const Document = () => {
                     </button> |
 
                     {
-                        data.status !== 'Accepted' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                        data.status === 'Pending' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
                             Accept
                         </button> : ""
                     }
 
                     |
-                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                    
+                    { data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Reject
-                    </button>
+                    </button>: ''}
                 </div>
 
             </div>
@@ -307,7 +308,7 @@ const Document = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.post(`/Documents/delete/${e}`,
+                    const { data } = await axiosInstance.post(`/Documents/delete/${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
@@ -342,8 +343,9 @@ const Document = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    const { data } = await axiosInstance.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
                     )
+                  
                     if (data.status === 'Success') {
                         toast.success(data.message);
                         dispatch(fetchDocument(id.companyId));
@@ -373,7 +375,7 @@ const Document = () => {
         }
         setLoading1(false);
         try {
-            const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
+            const { data } = await axiosInstance.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
@@ -510,20 +512,20 @@ const Document = () => {
                                         <div className="col-sm-4">
                                             <div className="form-group">
                                                 <label className="col-form-label">Date From</label>
-                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} required /></div>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateFrom} /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="form-group">
                                                 <label className="col-form-label">Date To</label>
-                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} required /></div>
+                                                <div><input className="form-control datetimepicker" type="datetime-local" ref={dateTo} /></div>
                                             </div>
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="form-group" >
                                                 <label className="col-form-label">Status</label>
                                                 <div>
-                                                    <select className="form-select" ref={status} required>
+                                                    <select className="form-select" ref={status}>
                                                         <option defaultValue hidden value={""}>--Select a Status...</option>
                                                         <option value="Accepted">Accepted</option>
                                                         <option value="Rejected">Rejected</option>
@@ -538,7 +540,7 @@ const Document = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">User Role</label>
                                                 <div>
-                                                    <select className="form-select" ref={role} required>
+                                                    <select className="form-select" ref={role}>
                                                         <option defaultValue hidden value={""}>--Select Role--</option>
                                                         <option value="Admin">Admin</option>
                                                         <option value="Staff">Staff</option>

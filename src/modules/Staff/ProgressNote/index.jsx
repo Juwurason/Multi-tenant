@@ -26,7 +26,7 @@ const ProgressNote = () => {
   const [follow, setFollow] = useState('')
   const [clientNames, setClientName] = useState('')
   const [kilometer, setKilometer] = useState(0)
-  const [endKm, setEndKm] = useState("")
+  const [endKm, setEndKm] = useState(0)
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -217,13 +217,13 @@ const ProgressNote = () => {
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Starting KiloMetre if any</label>
-                            <input type="number" placeholder="0" className="form-control" onChange={e => setKilometer(e.target.value)} />
+                            <input type="number" placeholder="0" value={kilometer} className="form-control" onChange={e => setKilometer(e.target.value)} />
                           </div>
                         </div>
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="number" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" value={endKm} className="form-control" onChange={e => setEndKm(e.target.value)} />
                           </div>
                         </div>
                           <div className="col-md-4">

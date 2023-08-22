@@ -66,7 +66,10 @@ const AdminDashboard = () => {
   let adminAttendance = null;
 
   if (id.role === "Administrator") {
-    adminAttendance = JSON.parse(localStorage.getItem('adminAttendance'));
+    const adminAttendanceJSON = localStorage.getItem('adminAttendance');
+    if (adminAttendanceJSON && adminAttendanceJSON !== "undefined") {
+      adminAttendance = JSON.parse(adminAttendanceJSON);
+    }
   }
 
   useEffect(() => {
@@ -91,11 +94,11 @@ const AdminDashboard = () => {
   const handleClockIn = async () => {
     setIsLoadin(true);
 
-    if (adminAttendance.clockOutCheck === false) {
-      // console.log("clock out");
-      navigate.push(`/app/reports/adminAttendances-clockOut/${adminAttendance.adminAttendanceid}`)
+    if (adminAttendance !== undefined && adminAttendance !== null && adminAttendance.clockOutCheck === false) {
+      navigate.push(`/app/reports/adminAttendances-clockOut/${adminAttendance.adminAttendanceid}`);
       setIsLoadin(false);
-    } else {
+    }
+    else {
 
       setTimeout(() => {
 
@@ -391,14 +394,20 @@ const AdminDashboard = () => {
 
                       <div className="align-self-center">
                         <span className={`pointer btn text-white rounded ${isLoadin ? "btn-warning" : "btn-success"}`} onClick={handleClockIn}>
-                          {isLoadin ?
+                          {isLoadin ? (
                             <div>
-                              <div class="spinner-border text-secondary spinner-border-sm text-white" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                              </div> Please wait....
+                              <div className="spinner-border text-secondary spinner-border-sm text-white" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                              </div>
+                              Please wait....
                             </div>
-                            : <span> <BiStopwatch /> {adminAttendance.clockOutCheck === false ? "Clock Out" : "Clock In"}</span>
-                          }
+                          ) : (
+                            <span>
+                              <BiStopwatch />
+                              {adminAttendance !== undefined && adminAttendance !== null && adminAttendance.clockOutCheck === false ? "Clock Out" : "Clock In"}
+                            </span>
+                          )}
+
                         </span>
                       </div>
 

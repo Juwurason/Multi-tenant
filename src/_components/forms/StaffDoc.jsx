@@ -16,6 +16,9 @@ import ExcelJS from 'exceljs';
 import { GoSearch } from 'react-icons/go';
 import moment from 'moment';
 import { MdCancel } from "react-icons/md";
+import { Modal } from 'react-bootstrap';
+import axiosInstance from "../../store/axiosInstance";
+import Swal from "sweetalert2";
 const StaffDoc = () => {
 
     const columns = [
@@ -82,8 +85,9 @@ const StaffDoc = () => {
 
     ];
     const [loading, setLoading] = useState(false);
-    const { loading1, setLoading1 } = useState(false);
-    2
+    const [loading1, setLoading1] = useState(false);
+    const [rejectModal, setRejectModal] = useState(false);
+    
     const { uid } = useParams()
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
@@ -134,8 +138,10 @@ const StaffDoc = () => {
     };
     const id = JSON.parse(localStorage.getItem('user'));
     const handleSubmit = async (e) => {
-        setLoading1(true);
         e.preventDefault()
+
+        setLoading1(true);
+       
         if (documentName === "" || document === "") {
             return toast.error("Fields marked red cannot be empty")
         }
@@ -269,13 +275,13 @@ const StaffDoc = () => {
                     <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> |
-                    <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                    {data.status === 'Pending' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
                         Accept
-                    </button>
+                    </button> : ''}
                     |
-                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                    {data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Reject
-                    </button>
+                    </button> : ''}
                 </div>
 
             </div>
@@ -299,11 +305,11 @@ const StaffDoc = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.post(`/Documents/delete/${e}`,
+                    const { data } = await axiosInstance.post(`/Documents/delete/${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchDocument()
+                        FetchStaff()
                     } else {
                         toast.error(data.message);
                     }
@@ -335,11 +341,11 @@ const StaffDoc = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await privateHttp.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
+                    const { data } = await axiosInstance.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchDocument()
+                        FetchStaff()
                     } else {
                         toast.error(data.message);
                     }
@@ -359,16 +365,27 @@ const StaffDoc = () => {
 
 
     }
+
+    const [selectedDocument, setSelectedDocument] = useState("");
+    const [reason, setReason] = useState("");
+    const [deadline, setDeadline] = useState("");
+
+    const handleRejectModal = (e) => {
+        setRejectModal(true)
+        setSelectedDocument(e);
+
+    }
+
     const handleReject = async () => {
-        if (reason.trim() === "" || deadline === "") {
+        if (reason.trim() === "") {
             toast.error("provide valid reason and deadline")
         }
         try {
-            const { data } = await privateHttp.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
+            const { data } = await axiosInstance.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
-                FetchDocument()
+                FetchStaff()
             } else {
                 toast.error(data.message);
             }
@@ -456,7 +473,7 @@ const StaffDoc = () => {
                                         </div>
 
                                         <div className="submit-section">
-                                            <button className="btn btn-primary rounded submit-btn" type='submit'>
+                                            <button className="btn btn-primary rounded submit-btn" type="submit" >
 
                                                 {loading1 ? <div className="spinner-grow text-light" role="status">
                                                     <span className="sr-only">Loading...</span>
@@ -544,6 +561,35 @@ const StaffDoc = () => {
 
                     </div>
                 </div>
+                <Modal show={rejectModal} onHide={() => setRejectModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Reject Document</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>
+                            <label htmlFor="">Please provide reasons for rejecting document</label>
+                            <br />
+                            <textarea rows={3} className="form-control summernote" placeholder="" defaultValue={""}
+                                onChange={e => setReason(e.target.value)} />
+                        </div>
+                        <br />
+                        <div>
+                            <label htmlFor="">Set a new deadline</label>
+                            <br />
+                            <input type="date" className='form-control'
+                                onChange={e => setDeadline(e.target.value)}
+                            />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button onClick={handleReject} className="btn btn-danger">
+
+                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div> : "Reject Document"}
+                        </button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );

@@ -21,6 +21,7 @@ import { GoSearch, GoTrashcan } from 'react-icons/go';
 import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import axiosInstance from '../../../store/axiosInstance';
 dayjs.locale('en-au');
 dayjs.extend(isBetween);
 
@@ -40,6 +41,8 @@ const ClientProfiles = () => {
   const [kinModal, setKinModal] = useState(false);
   const [bankModal, setBankModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   const { get, post } = useHttp()
   const FetchStaff = async () => {
@@ -169,6 +172,7 @@ const ClientProfiles = () => {
       display: "flex", justifyContent: "center", alignItems: "center", textAlign: 'center'
     }
   }
+
   const FetchExising = async (e) => {
     try {
       const { data } = await get(`/Profiles/${e}`, { cacheTimeout: 300000 })
@@ -184,40 +188,53 @@ const ClientProfiles = () => {
   }
 
   const handleActivate = async (e) => {
+    setLoading2(true)
     try {
-      const response = await get(`/Profiles/activate_staff?userId=${id.userId}&clientid=${e}`,
-
+      const { data } = await axiosInstance.get(`/Profiles/activate_client?userId=${id.userId}&clientid=${e}`,
+      
       )
 
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
 
     } catch (error) {
-      toast.error("Error Occurred")
+
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
-
-
-    }
-
-
+      setLoading2(false)
+}
+finally{
+  setLoading2(false)
+}
 
 
   }
-  const handleDeactivate = async (e) => {
-    try {
-      const response = await get(`/Profiles/deactivate_staff?userId=${id.userId}&clientid=${e}`,
-      )
 
+  const handleDeactivate = async (e) => {
+    setLoading1(true)
+    try {
+      const { data } = await axiosInstance.get(`/Profiles/deactivate_client?userId=${id.userId}&clientid=${e}`,
+      )
+      
+
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
 
     } catch (error) {
-      toast.error("Error Occurred")
       console.log(error);
+      setLoading1(false)
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
 
 
     }
-
-
+    finally{
+      setLoading1(false)
+    }
 
 
   }
@@ -404,11 +421,17 @@ const ClientProfiles = () => {
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-danger">
-                                    Deactivate Client
+                                    
+                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Deactivate Client"}
                                   </button>
                                   :
                                   <button onClick={() => handleActivate(staffOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-success">
-                                    Activate Client
+                                    
+                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Activate Client"}
                                   </button>
 
                               }
@@ -498,7 +521,7 @@ const ClientProfiles = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={profile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>

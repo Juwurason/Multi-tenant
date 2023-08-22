@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 import { fetchStaff, filterStaff } from '../../../store/slices/StaffSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import axiosInstance from '../../../store/axiosInstance';
 
 const AllEmployees = () => {
   const id = JSON.parse(localStorage.getItem('user'));
@@ -164,13 +165,16 @@ const AllEmployees = () => {
   }
   const handleActivate = async (e) => {
     try {
-      const response = await get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
-
+      const {data} = await axiosInstance.get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
       )
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        dispatch(fetchStaff(id.companyId))
+     }
 
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
 
@@ -184,12 +188,15 @@ const AllEmployees = () => {
 
   const handleDeactivate = async (e) => {
     try {
-      const response = await get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      const {data} = await axiosInstance.get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
       )
-
+     if (data.status === 'Success') {
+        toast.success(data.message)
+        dispatch(fetchStaff(id.companyId))
+     }
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
 

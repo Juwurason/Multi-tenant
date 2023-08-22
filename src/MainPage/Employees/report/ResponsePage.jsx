@@ -28,7 +28,7 @@ const ResponsePage = () => {
                         Swal.showLoading();
                     }
                 });
-                const { data } = axiosInstance.get(`/SetUp/xero_auth?userId=${id.userId}&code=${code}&state=${state}`);
+                const { data } = await axiosInstance.get(`/SetUp/xero_auth?userId=${id.userId}&code=${code}&state=${state}`);
                 if (data.status === "Success") {
                     toast.success(data.message)
                     Swal.close(); // Close the loading state

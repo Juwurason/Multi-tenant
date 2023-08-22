@@ -292,7 +292,7 @@ const ClientProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="number" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={profile.phoneNumber} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>

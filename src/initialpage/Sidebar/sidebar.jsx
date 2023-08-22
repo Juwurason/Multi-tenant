@@ -147,19 +147,20 @@ const Sidebar = (props) => {
                 </li>
               ) : null}
 
-              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add & Edit Role") ? (
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") ? (
                 <li className="submenu">
                   <a href="#" className={isSideMenu === "management" ? "subdrop" : ""} onClick={(e) => {
                     e.preventDefault();
                     toggleSidebar(isSideMenu === "management" ? "" : "management");
                   }}>
+
                     <i className="la la-cog" />
                     <span>Account Management</span>
                     <span className="menu-arrow" />
                   </a>
                   {isSideMenu === "management" ? (
                     <ul>
-                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") ? (
+                      {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Account Users") || hasRequiredClaims("View Activity Logs") || hasRequiredClaims("Add & Edit Role") ? (
                         <li>
                           <Link
                             className={pathname.includes('alluser') ? "active" : ""}
@@ -222,7 +223,7 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/clients"><i className="la la-users" /> <span>Clients</span></Link>
               </li> : ""}
 
-              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Referrals") ? <li className={pathname.includes('referrals') ? "active" : ""} onClick={() => onMenuClik()}>
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Referrals") ? <li className={pathname.includes('refferals') ? "active" : ""} onClick={() => onMenuClik()}>
                 <Link to="/app/employee/refferals"><i className="la la-user-plus" /> <span>Referrals</span></Link>
               </li> : ""}
 

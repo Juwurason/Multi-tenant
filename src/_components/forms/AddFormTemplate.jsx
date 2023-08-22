@@ -23,6 +23,7 @@ const AddFormTemplate = () => {
     const [employment, setEmployment] = useState(false);
     const [general, setGeneral] = useState(false);
     const [incident, setIncident] = useState(false);
+    const [isCarePlan, setIsCarePlan] = useState(false);
     const [file, setFile] = useState(null);
     const templateName = useRef("");
 
@@ -41,6 +42,9 @@ const AddFormTemplate = () => {
     };
     const handleIncidentChange = (e) => {
         setIncident(e.target.checked);
+    };
+    const handleIsCarePlanChange = (e) => {
+        setIsCarePlan(e.target.checked);
     };
     const [editorValue, setEditorValue] = useState('');
     const handleEditorChange = (value) => {
@@ -82,10 +86,11 @@ const AddFormTemplate = () => {
         formData.append("IsIncidentForm", incident);
         formData.append("TemplateUrlFile", file);
         formData.append("CompanyId", id.companyId);
+        formData.append("IsCarePlan", isCarePlan);
 
         try {
-            setLoading(true)
-            const { data } = await post(`/Templates/add_templates`,
+            setLoading(true) 
+            const { data } = await post(`/Templates/add_templates?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
@@ -189,6 +194,11 @@ const AddFormTemplate = () => {
                                                 <input type="checkbox" checked={incident} onChange={handleIncidentChange} />
                                                 &nbsp; &nbsp;
                                                 <label className="col-form-label">Is Incident Form</label>
+                                            </div>
+                                            <div className="form-group">
+                                                <input type="checkbox" checked={isCarePlan} onChange={handleIsCarePlanChange} />
+                                                &nbsp; &nbsp;
+                                                <label className="col-form-label">Is Care Plan</label>
                                             </div>
 
                                         </div>
