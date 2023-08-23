@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use(
             // Handle 401 Unauthorized error
             if (response.status === 401) {
                 localStorage.clear(); // Clear user data from local storage
-                toast.error("Session TimeOut")
+                // toast.error("Session TimeOut")
                 window.location.replace = '/login'; // Redirect the user to the login page
             }
             // Handle 403 Forbidden error

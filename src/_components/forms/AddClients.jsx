@@ -79,7 +79,7 @@ const AddClients = () => {
         <div className="page-wrapper">
             <Helmet>
                 <title>Add Client</title>
-                <meta name="description" content="" />
+                <meta name="description" content="Add Client" />
             </Helmet>
             <div className="content container-fluid">
                 <div className="row">
