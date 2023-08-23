@@ -37,14 +37,14 @@ const KnowledgeBase = () => {
                     > {row.subject}</span>
 
                     <span className='d-flex'>
-                        <span className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
+                        <Link to={`/app/support/knowledge-video/${row.knowledgeBaseId}`} className='bg-primary text-white pointer px-2 py-1 rounded d-flex justify-content-center align-items-center'
                             title='View'
 
-                            onClick={() => handleView(row.description)}
+                            // onClick={() => handleView(row.description)}
                         >
 
                             <FaEye />
-                        </span>
+                        </Link>
 
                         <a ref={downloadLinkRef} style={{ display: 'none' }} />
                     </span>

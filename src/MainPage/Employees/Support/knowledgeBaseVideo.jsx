@@ -8,7 +8,7 @@ import moment from 'moment';
 import useHttp from '../../../hooks/useHttp';
 import Offcanvas from '../../../Entryfile/offcanvance';
 
-const KnowledgeBaseDetails = () => {
+const KnowledgeBaseVideo = () => {
     const { uid, pro } = useParams()
     const [details, setDetails] = useState('')
     const [staffName, setStaffName] = useState('')
@@ -37,6 +37,21 @@ const KnowledgeBaseDetails = () => {
         FetchSchedule()
     }, []);
 
+    const customStyles = {
+        videoContainer: {
+            position: 'relative',
+            paddingBottom: '56.25%', // 16:9 aspect ratio for widescreen video
+            height: 0,
+            overflow: 'hidden',
+        },
+        iframe: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '50%',
+            height: '50%',
+        },
+    };
 
 
 
@@ -62,7 +77,7 @@ const KnowledgeBaseDetails = () => {
                         </div>
                     </div>
                     {/* /Page Header */}
-                    <div className="row">
+                    {/* <div className="row">
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-body">
@@ -80,7 +95,7 @@ const KnowledgeBaseDetails = () => {
                                         </li>
                                         <li>
                                             <div className="title">Description</div>
-                                            {/* <div className="text">{details.description}</div> */}
+                                            
                                         </li>
                                         <li>
                                             <div className="title">Vote</div>
@@ -96,7 +111,12 @@ const KnowledgeBaseDetails = () => {
                                 </div>
                             </div>
                         </div>
+                    </div> */}
+                    <div style={customStyles.videoContainer}>
+                        {/* Render the HTML code as dangerously set inner HTML */}
+                        <div dangerouslySetInnerHTML={{ __html: details.description }} style={customStyles.iframe} />
                     </div>
+                    {/* <div dangerouslySetInnerHTML={{ __html: details.description }} /> */}
                 </div>
                 {/* /Page Content */}
             </div>
@@ -108,4 +128,4 @@ const KnowledgeBaseDetails = () => {
 }
 
 
-export default KnowledgeBaseDetails;
+export default KnowledgeBaseVideo;

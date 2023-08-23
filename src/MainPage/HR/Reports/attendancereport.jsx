@@ -227,8 +227,8 @@ const AttendanceReport = () => {
 
 
     } catch (error) {
-      console.log(error);
-      // toast.error("Ooops!😔 Error Occurred")
+      // console.log(error);
+      toast.error("Ooops!😔 Error Occurred")
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading3(false)

@@ -37,10 +37,13 @@ const ViewStep = () => {
                                 <Link to={'/app/employee/alladmin'} className="card-title mb-0 text-danger fs-3 "></Link>
                             </div>
 
-                            <MultiStep activeStep={0}>
-                                <StepOne title='Step 1' />
-                                <StepTwo title='Step 2' />
-                            </MultiStep>
+                            <div>
+                                <MultiStep activeStep={0}>
+                                    <StepOne title='Step 1' style={{ display: 'flex', justifyContent: 'center' }} />
+                                    <StepTwo title='Step 2' />
+                                </MultiStep>
+                            </div>
+
                         </div>
                     </div>
                 </div>
