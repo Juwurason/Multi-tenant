@@ -1,42 +1,36 @@
 
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Swal from 'sweetalert2';
-import moment from 'moment';
 import useHttp from '../../../hooks/useHttp';
 import Offcanvas from '../../../Entryfile/offcanvance';
 
 const KnowledgeBaseVideo = () => {
-    const { uid, pro } = useParams()
+    const { uid } = useParams()
     const [details, setDetails] = useState('')
-    const [staffName, setStaffName] = useState('')
-    const { get, post } = useHttp();
+    const { get } = useHttp();
     const [loading, setLoading] = useState(false);
 
     const FetchSchedule = async () => {
-        setLoading(true)
+        setLoading(true); // Set loading to true before making the API request
         try {
             const { data } = await get(`/Tickets/get_knowledgebase_details/${uid}`, { cacheTimeout: 300000 });
-            // console.log(data);
             setDetails(data.knowledgeBase);
-            setLoading(false);
         } catch (error) {
-            // console.log(error);
-            toast.error(error.response.data.message)
-            toast.error(error.response.data.title)
+            toast.error(error.response.data.message);
+            toast.error(error.response.data.title);
+            setLoading(false);
+        } finally {
+            setLoading(false); // Set loading to false in both success and error cases
         }
-        finally {
-            setLoading(false)
-        }
-
-
     };
+    
     useEffect(() => {
-        FetchSchedule()
+        FetchSchedule();
     }, []);
-
+    
+   
     const customStyles = {
         videoContainer: {
             position: 'relative',
@@ -48,8 +42,8 @@ const KnowledgeBaseVideo = () => {
             position: 'absolute',
             top: 0,
             left: 0,
-            width: '50%',
-            height: '50%',
+            width: '100%',
+            // height: '50%',
         },
     };
 
@@ -77,48 +71,19 @@ const KnowledgeBaseVideo = () => {
                         </div>
                     </div>
                     {/* /Page Header */}
-                    {/* <div className="row">
-                        <div className="col-sm-12">
-                            <div className="card">
-                                <div className="card-body">
-                                    <div className="border-bottom">
-                                        <Link to="/app/support/knowledge-base" className="edit-icon bg-danger text-white" >
-                                            <i className="la la-times-circle" />
-                                        </Link>
-                                        <h3>Knowledge Base Details</h3>
-                                    </div> <br />
-
-                                    <ul className="personal-info">
-                                        <li>
-                                            <div className="title">Subject</div>
-                                            <div className="text">{details.subject}</div>
-                                        </li>
-                                        <li>
-                                            <div className="title">Description</div>
-                                            
-                                        </li>
-                                        <li>
-                                            <div className="title">Vote</div>
-                                            <div className="text">{details.vote}</div>
-                                        </li>
-                                        
-                                        <li>
-                                            <div className="title">Date Created</div>
-                                            <div className="text">{moment(details.dateCreated).format('lll')}</div>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
+                   
+                   {loading ? (
+                        <div className="spinner-grow text-light" role="status">
+                            <span className="sr-only">Loading...</span>
                         </div>
-                    </div> */}
-                    <div style={customStyles.videoContainer}>
-                        {/* Render the HTML code as dangerously set inner HTML */}
-                        <div dangerouslySetInnerHTML={{ __html: details.description }} style={customStyles.iframe} />
-                    </div>
-                    {/* <div dangerouslySetInnerHTML={{ __html: details.description }} /> */}
+                    ) : (
+                        <div style={customStyles.videoContainer}>
+                            <div dangerouslySetInnerHTML={{ __html: details.description }} style={customStyles.iframe} />
+                        </div>
+                    )}
+                    
                 </div>
-                {/* /Page Content */}
+               
             </div>
             <Offcanvas />
         </>
