@@ -29,6 +29,8 @@ import useHttp from '../../hooks/useHttp';
 import { toast } from 'react-toastify';
 import CreateProgressNote from './CreateProgressNote';
 import StaffHandOver from './StaffHandOver';
+import KnowledgeBaseDetails from './Support/knowledgeBaseDetails';
+import KnowledgeBaseVideo from './Support/knowledgeBaseVideo';
 
 
 
@@ -212,6 +214,8 @@ const StaffRoute = ({ match }) => {
       <Route path={`${match.url}/daily-report`} render={() => <StaffDailyReport />} />
       <Route path={`${match.url}/new-report`} render={() => <StaffNewReport />} />
       <Route path={`${match.url}/new-report-edit/:uid`} render={() => <StaffNewReportEdit />} />
+      <Route path={`${match.url}/knowledge-details/:uid`} render={() => <KnowledgeBaseDetails />} />
+      <Route path={`${match.url}/knowledge-video/:uid`} render={() => <KnowledgeBaseVideo />} />
 
     </Switch>
   )

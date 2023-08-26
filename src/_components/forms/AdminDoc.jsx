@@ -146,8 +146,7 @@ const AdminDoc = () => {
         formData.append("User", staffOne.fullName);
         formData.append("UserRole", 'Administrator');
         formData.append("Status", "Pending");
-        formData.append("UserId", staffOne.administratorId
-        );
+        formData.append("UserId", staffOne.administratorId);
 
         try {
             const { data } = await post(`/Administrators/document_upload?userId=${id.userId}`,
@@ -162,7 +161,7 @@ const AdminDoc = () => {
             setExpire("");
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             toast.error(error.message)
             setLoading1(false);
 

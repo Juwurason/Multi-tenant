@@ -22,6 +22,8 @@ import PrivacyStatement from './PrivacyStatement';
 import ClientEditHealth from './ClientEditHealth';
 import ClientBehaviuorEdit from './ClientBehaviuorEdit';
 import ClientTicketDetails from './ClientSupport/Support/ticketDetails';
+import KnowledgeBaseDetails from './ClientSupport/Support/knowledgeBaseDetails';
+import KnowledgeBaseVideo from './ClientSupport/Support/knowledgeBaseVideo';
 
 
 
@@ -44,6 +46,8 @@ const ClientRoute = ({ match }) => {
       <Route path={`${match.url}/client-daily-living`} render={() => <ClientDailyLiving />} />
       <Route path={`${match.url}/client-health`} render={() => <ClientHealth />} />
       <Route path={`${match.url}/client-edit-health/:uid`} render={() => <ClientEditHealth />} />
+      <Route path={`${match.url}/knowledge-details/:uid`} render={() => <KnowledgeBaseDetails />} />
+      <Route path={`${match.url}/knowledge-video/:uid`} render={() => <KnowledgeBaseVideo />} />
       <Route path={`${match.url}/client-behaviuor`} render={() => <ClientBehaviuor />} />
       <Route path={`${match.url}/client-behaviuor-edit/:uid`} render={() => <ClientBehaviuorEdit />} />
       <Route path={`${match.url}/client-message`} render={() => <ClientMessage />} />
