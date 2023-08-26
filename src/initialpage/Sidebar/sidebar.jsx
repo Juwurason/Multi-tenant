@@ -227,6 +227,10 @@ const Sidebar = (props) => {
                 <Link to="/app/employee/refferals"><i className="la la-user-plus" /> <span>Referrals</span></Link>
               </li> : ""}
 
+              {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Service Provider") ? <li className={pathname.includes('provider') ? "active" : ""} onClick={() => onMenuClik()}>
+                <Link to="/app/employee/provider"><i className="la la-rss-square" /> <span>Service Providers</span></Link>
+              </li> : ""}
+
 
 
 
