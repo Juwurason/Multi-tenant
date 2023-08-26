@@ -23,6 +23,7 @@ import { fetchClient } from '../../../store/slices/ClientSlice';
 import { fetchSplittedAttendance } from '../../../store/slices/splittedAttendance';
 import { fetchTimesheet } from '../../../store/slices/TimeSheetSlice';
 import { fetchAllTimesheet } from '../../../store/slices/AllTimeSheetSlice';
+import axiosInstance from '../../../store/axiosInstance';
 
 function formatDuration(duration) {
   if (duration) {
@@ -220,14 +221,19 @@ const AttendanceReport = () => {
     setLoading3(true)
 
     try {
-      const { data } = await get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const { data } = await axiosInstance.get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=&companyId=${id.companyId}`, { cacheTimeout: 300000 });
       toast.success(data.message)
       setLoading3(false);
 
 
     } catch (error) {
+      // console.log(error);
       toast.error("Ooops!😔 Error Occurred")
-      console.log(error);
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading3(false)
+    }
+    finally{
       setLoading3(false)
     }
 

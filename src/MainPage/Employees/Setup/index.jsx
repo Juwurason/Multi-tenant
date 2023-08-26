@@ -8,6 +8,7 @@ import Integration from './Integration';
 import FormTemplate from './formTemplate';
 import AddFormTemplate from '../../../_components/forms/AddFormTemplate';
 import TimePeriod from './timePeriod';
+import ViewStep from '../../../_components/client-referrals-form/viewStep';
 
 const SetupRoute = ({ match }) => (
     <Switch>
@@ -19,6 +20,7 @@ const SetupRoute = ({ match }) => (
         <Route path={`${match.url}/form-template`} component={FormTemplate} />
         <Route path={`${match.url}/create-template`} component={AddFormTemplate} />
         <Route path={`${match.url}/time-period`} component={TimePeriod} />
+        <Route path={`${match.url}/client-referrals-form`} component={ViewStep} />
 
     </Switch>
 );
