@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import isBetween from 'dayjs/plugin/isBetween';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import axiosInstance from '../../../store/axiosInstance';
 dayjs.locale('en-au');
 dayjs.extend(isBetween);
 const options = [
@@ -206,17 +207,24 @@ const ClientRoster = () => {
         }
         try {
             setLoading(true)
-            const response = await get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
+            const {data} = await axiosInstance.get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
             // console.log(data);
             // toast.success(data.message);
-            setLoading(false);
-            setReasonModal(false)
+            if (data.status === "Success") {
+                setReasonModal(false)
+                toast.success(data.message)
+                FetchSchedule()
+                setLoading(false);
+                
+            }
+           
             // setLgShow(false)
 
         } catch (error) {
             // console.log(error);
             toast.error(error.response.data.message);
             toast.error(error.response.data.title);
+            setLoading(false);
         }
         finally {
             setLoading(false);
@@ -235,6 +243,9 @@ const ClientRoster = () => {
         } catch (error) {
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
+            setLoading(false)
+        }
+        finally{
             setLoading(false)
         }
     }

@@ -172,7 +172,7 @@ const ShiftScheduling = () => {
 
     //To view details of a shift roaster
     const handleActivityClick = (activity) => {
-        console.log(activity);
+        // console.log(activity);
         setSelectedActivity(activity);
         setShowModal(true);
     };

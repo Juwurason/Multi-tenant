@@ -148,8 +148,8 @@ const ShiftAttendanceReport = () => {
             selector: row => row.shiftRoster?.clients,
             sortable: true,
             cell: (row) => <span className="long-cell fw-bold" style={{ overflow: "hidden", cursor: "pointer" }}
-                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.shiftRoster?.profile?.fullName}`}
-            >{row.shiftRoster?.profile?.fullName}</span>
+                data-bs-toggle="tooltip" data-bs-placement="top" title={`${row.shiftRoster?.clients}`}
+            >{row.shiftRoster?.clients}</span>
 
         },
         {
