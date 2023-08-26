@@ -48,6 +48,7 @@ const ClientRoster = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const { get, post } = useHttp();
     const [loading, setLoading] = useState(false);
+    const [loading1, setLoading1] = useState(false);
     const [clients, setClients] = useState([]);
     const [cli, setCli] = useState("");
     const [activities, setActivities] = useState([]);
@@ -206,7 +207,7 @@ const ClientRoster = () => {
             return toast.error("Input Fields cannot be empty")
         }
         try {
-            setLoading(true)
+            setLoading1(true)
             const {data} = await axiosInstance.get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
             // console.log(data);
             // toast.success(data.message);
@@ -224,10 +225,10 @@ const ClientRoster = () => {
             // console.log(error);
             toast.error(error.response.data.message);
             toast.error(error.response.data.title);
-            setLoading(false);
+            setLoading1(false);
         }
         finally {
-            setLoading(false);
+            setLoading1(false);
         }
     }
 
@@ -527,7 +528,7 @@ const ClientRoster = () => {
                                                     </div>
                                                 </Modal.Body>
                                                 <Modal.Footer>
-                                                    <button className="btn btn-primary" onClick={rejectShift}>{loading ? <div className="spinner-grow text-light" role="status">
+                                                    <button className="btn btn-primary" onClick={rejectShift}>{loading1 ? <div className="spinner-grow text-light" role="status">
                                                         <span className="sr-only">Loading...</span>
                                                     </div> : "Submit"}</button>
                                                 </Modal.Footer>
