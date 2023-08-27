@@ -36,29 +36,19 @@ const StaffAttendance = ({ staffAtten }) => {
 
 
   const columns = [
-    {
-      name: 'Date',
-      selector: row => dayjs(row.dateCreated).format('DD-MM-YYYY'),
-      sortable: true
-    },
+    
     {
       name: 'Staff',
       selector: row => row.staff.fullName,
       sortable: true,
     },
     {
-      name: 'Start Time',
-      selector: row => dayjs(row.clockIn).format('h:mm A'),
+      name: 'ClockIn',
+      // selector: row => dayjs(row.clockIn).format('h:mm A'),
+      selector: row => dayjs(row.clockIn).format('DD/MM/YYYY HH:mm:ss'),
       sortable: true,
     },
-    {
-      name: 'End Time',
-      selector: row => {
-        const dateObject = new Date(row.clockOut);
-        return dayjs(dateObject).format('h:mm A');
-      },
-      sortable: true
-    },
+    
     {
       name: 'Duration',
       selector: row => {
@@ -71,6 +61,20 @@ const StaffAttendance = ({ staffAtten }) => {
         return `${hours}h ${minutes}m`;
       },
       sortable: false,
+    },
+    {
+      name: 'ClockOut',
+      // selector: row => {
+      //   const dateObject = new Date(row.clockOut);
+      //   return dayjs(dateObject).format('h:mm A');
+      // },
+      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY HH:mm:ss'),
+      sortable: true
+    },
+    {
+      name: 'Date Created',
+      selector: row => dayjs(row.dateCreated).format('DD/MM/YYYY HH:mm:ss'),
+      sortable: true
     },
     {
       name: 'DateModified',
@@ -145,6 +149,8 @@ const StaffAttendance = ({ staffAtten }) => {
     return (
       <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
         <div><span className='fw-bold'>Staff: </span>{data.staff.fullName} </div>
+        <div><span className='fw-bold'>ClockIn: </span>{moment(data.clockIn).format('lll')} </div>
+        <div><span className='fw-bold'>ClockOut: </span>{moment(data.clockOut).format('lll')} </div>
         <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
         <div>
           <Link to={`/staff/staff/attendance-report/${data.attendanceId}`} className="btn text-info fw-bold" style={{ fontSize: "12px" }}
