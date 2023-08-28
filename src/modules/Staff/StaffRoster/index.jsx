@@ -12,6 +12,7 @@ import { Modal } from 'react-bootstrap';
 import { useHistory } from "react-router-dom"
 import { toast } from 'react-toastify';
 import { BiStopwatch } from 'react-icons/bi';
+import axiosInstance from '../../../store/axiosInstance';
 // import axiosInstance from '../../../store/axiosInstance';
 
 
@@ -22,7 +23,7 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   const [staffCancel, setStaffCancel] = useState('');
 
   // console.log(staff)
-  // const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
 
 
   const AustraliaTimezone = 'Australia/Sydney';
@@ -73,27 +74,28 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
   };
 
   const CancelShift = async () => {
-    // setLoading(true)
+    setLoading1(true)
     if (editedProfile.reason === "" || editedProfile.reason === null) {
       return toast.error("Input Fields cannot be empty")
     }
     try {
-      const response = await privateHttp.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
-      FetchData()
+      const { data } = await axiosInstance.get(`/ShiftRosters/shift_cancellation?userId=${user.userId}&reason=${editedProfile.reason}&shiftid=${staffCancel}`)
 
-      // Use the converted JSON data in your component
-      // console.log(json);
-      // setStaffCancel(cancel);
-      // setLoading(false);
-      setReasonModal(false)
+      if (data.status === "Success") {
+        toast.success(data.message)
+        setReasonModal(false)
+        FetchData()
+        setLoading1(false)
+      }
+
     } catch (error) {
-      FetchData()
-      // console.log(error);
+
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
+      setLoading1(false)
     }
     finally {
-      // setLoading(false)
+      setLoading1(false)
       setReasonModal(false)
     }
   };
@@ -425,7 +427,11 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                           </div>
                         </Modal.Body>
                         <Modal.Footer>
-                          <button onClick={CancelShift} className="btn btn-success">Submit</button>
+                          <button onClick={CancelShift} className="btn btn-success">
+                            {loading1 ? <div className="spinner-grow text-light" role="status">
+                              <span className="sr-only">Loading...</span>
+                            </div> : "Submit"}
+                          </button>
                         </Modal.Footer>
                       </Modal>
 

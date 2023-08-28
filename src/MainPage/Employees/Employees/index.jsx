@@ -21,6 +21,7 @@ import IncidentForm from './incidentForm';
 import OtherForms from './otherForms';
 import StaffRegistrar from './staffRegistrar';
 import FillForm from './fillForm';
+import ServiceProvider from './serviceProvider';
 
 const EmployeesRoute = ({ match }) => (
 
@@ -74,6 +75,7 @@ const EmployeesRoute = ({ match }) => (
       <Route path={`${match.url}/addstaff`} component={AddStaff} />
       <Route path={`${match.url}/adduser`} component={AddUser} />
       <Route path={`${match.url}/refferals`} component={Refferal} />
+      <Route path={`${match.url}/provider`} component={ServiceProvider} />
       <Route path={`${match.url}/departments`} component={Department} />
       <Route path={`${match.url}/timesheet`} component={Timesheet} />
       <Route

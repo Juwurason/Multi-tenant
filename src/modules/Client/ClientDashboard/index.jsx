@@ -18,6 +18,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { MdLibraryAdd } from 'react-icons/md';
 import { ImCancelCircle } from 'react-icons/im';
 import { MultiSelect } from 'react-multi-select-component';
+import axiosInstance from '../../../store/axiosInstance.js';
 dayjs.extend(isBetween);
 
 const options = [
@@ -116,7 +117,7 @@ const ClientDashboard = () => {
       // console.log(data);
       setEditedProfile(data);
       setLoading(false)
-      FetchSchedule()
+      FetchStaff()
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -131,11 +132,16 @@ const ClientDashboard = () => {
     }
     try {
       setLoading(true)
-      const response = await get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
+      const {data} = await axiosInstance.get(`/ShiftRosters/client_shift_cancellation?userId=${id.userId}&reasons=${editedProfile.reason}&shiftid=${cli}`);
       // console.log(data);
       // toast.success(data.message);
-      setLoading(false);
-      setReasonModal(false);
+      if (data.status === "Success") {
+        setReasonModal(false)
+        toast.success(data.message)
+        FetchStaff()
+        setLoading(false);
+        
+    }
       // setLgShow(false)
 
     } catch (error) {
