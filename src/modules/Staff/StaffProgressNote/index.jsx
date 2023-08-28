@@ -179,7 +179,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
             companyID: selectedActivity.companyId,
         }
         try {
-            const { data } = await post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}`, info);
+            const { data } = await post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}&shiftId=`, info);
             //   console.log(data);
             toast.success(data.message)
             setShowModal(false);

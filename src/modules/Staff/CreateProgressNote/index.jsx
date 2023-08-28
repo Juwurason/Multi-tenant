@@ -80,7 +80,7 @@ const CreateProgressNote = () => {
     }
 
     try {
-      const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
+      const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}&shiftId=${uid}`, info);
       // console.log(data);
       if (data.status === 'Success') {
         
@@ -120,7 +120,7 @@ const CreateProgressNote = () => {
           companyID: companyId
         }
   
-        const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+        const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}&shiftId=${uid}`, info);
         // console.log(data);
         if (data.status === "Success") {
           Swal.fire(
