@@ -5,12 +5,16 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
 import Offcanvas from '../../../Entryfile/offcanvance';
+import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
+import axiosInstance from '../../../store/axiosInstance';
 
 const KnowledgeBaseVideo = () => {
     const { uid } = useParams()
     const [details, setDetails] = useState('')
     const { get } = useHttp();
     const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
+    const [loading1, setLoading1] = useState(false);
 
     const FetchSchedule = async () => {
         setLoading(true); // Set loading to true before making the API request
@@ -25,12 +29,46 @@ const KnowledgeBaseVideo = () => {
             setLoading(false); // Set loading to false in both success and error cases
         }
     };
-    
+
     useEffect(() => {
         FetchSchedule();
     }, []);
     
-   
+
+    const UpVote = async (e) => {
+        e.preventDefault()
+        setLoading2(true); // Set loading to true before making the API request
+        try {
+            const { data } = await axiosInstance.get(`/Tickets/upvote_knowledgebase?knowledgeId=${uid}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            toast.success(data.message)
+            // setDetails(data.knowledgeBase);
+        } catch (error) {
+            toast.error(error.response.data.message);
+            toast.error(error.response.data.title);
+            setLoading2(false);
+        } finally {
+            setLoading2(false); // Set loading to false in both success and error cases
+        }
+    };
+
+    const DownVote = async (e) => {
+        e.preventDefault()
+        setLoading1(true); // Set loading to true before making the API request
+        try {
+            const { data } = await axiosInstance.get(`/Tickets/downvote_knowledgebase?knowledgeId=${uid}`, { cacheTimeout: 300000 });
+            // console.log(data);
+            toast.success(data.message)
+            // setDetails(data.knowledgeBase);
+        } catch (error) {
+            toast.error(error.response.data.message);
+            toast.error(error.response.data.title);
+            setLoading1(false);
+        } finally {
+            setLoading1(false); // Set loading to false in both success and error cases
+        }
+    };
+
     const customStyles = {
         videoContainer: {
             position: 'relative',
@@ -71,19 +109,45 @@ const KnowledgeBaseVideo = () => {
                         </div>
                     </div>
                     {/* /Page Header */}
-                   
-                   {loading ? (
-                        <div className="spinner-grow text-light" role="status">
-                            <span className="sr-only">Loading...</span>
-                        </div>
-                    ) : (
-                        <div style={customStyles.videoContainer}>
-                            <div dangerouslySetInnerHTML={{ __html: details.description }} style={customStyles.iframe} />
-                        </div>
-                    )}
-                    
+
+                    <div>
+                        {loading ? (
+                            <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        ) : (
+                            <div>
+                                <div style={customStyles.videoContainer}>
+                                    <div dangerouslySetInnerHTML={{ __html: details.description }} style={customStyles.iframe} />
+                                </div> <br />
+
+                                <div>
+                                    <span>Your feedback matters! Upvote or downvote.</span>
+
+                                    {/* {loading2 ? (
+                                <>
+                                  <span className="spinner-border text-white spinner-border-sm me-2" role="status" aria-hidden="true" />
+                                  Please wait...
+                                </>
+                              ) : (
+                                
+                              )} */}
+                                    <div className='d-flex'>
+                                <div onClick={UpVote} className='pointer'>
+                                <FiThumbsUp size={20} />
+                                </div>
+
+                                <div onClick={DownVote} className='pointer' style={{marginLeft: 15}}>
+                                <FiThumbsDown size={20} />
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                 </div>
-               
+
             </div>
             <Offcanvas />
         </>

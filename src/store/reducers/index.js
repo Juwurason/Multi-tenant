@@ -21,6 +21,7 @@ import TimeSheetSlice from '../slices/TimeSheetSlice';
 import AllTimeSheetSlice from '../slices/AllTimeSheetSlice';
 import SupportSchedule from '../slices/SupportSchedule';
 import RefferalsSlice from '../slices/RefferalsSlice';
+import ServiceProviderSlice from '../slices/ServiceProviderSlice';
 
 
 const rootReducer = combineReducers({
@@ -44,8 +45,8 @@ const rootReducer = combineReducers({
     staffAttendance: staffAttendanceSlice,
     adminAttendance: adminAttendanceSlice,
     supportSchedule: SupportSchedule,
-    refferals: RefferalsSlice 
-
+    refferals: RefferalsSlice, 
+    serviceProvider:ServiceProviderSlice
 });
 
 export default rootReducer;
