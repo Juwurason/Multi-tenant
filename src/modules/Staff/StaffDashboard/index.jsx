@@ -67,7 +67,7 @@ const StaffDashboard = ({ roster, loading }) => {
   //filter unclock Out shift
   const unClockedOutRoster = roster.filter((activity) => {
     const activityDate = dayjs(activity.dateFrom); // Assuming activity.date is the date to compare
-    return activity.attendance === true && activity.isEnded === false && activityDate > (yesterday);
+    return activity.attendance === true && activity.isEnded === false;
   });
 
 
@@ -342,7 +342,7 @@ const StaffDashboard = ({ roster, loading }) => {
                       <div className="card text-center">
                         <div className="card-header bg-info text-white">
                           <div className='d-flex justify-content-between align-items-center'>
-                            <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[2]).format('dddd, MMMM D, YYYY')}</span>
+                            <span style={{ fontSize: '12px' }}>{dayjs(activity.dateFrom).format('dddd, MMMM D, YYYY')}</span>
                             <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
                           </div>
                         </div>

@@ -149,6 +149,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
     const [selectedActivity, setSelectedActivity] = useState({});
 
     const handleActivityClick = async (e) => {
+        // console.log(e);
         try {
             const { data } = await get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
             setSelectedActivity(data);

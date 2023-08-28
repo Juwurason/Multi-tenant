@@ -81,7 +81,7 @@ const CreateProgressNote = () => {
 
     try {
       const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
-      console.log(data);
+      // console.log(data);
       if (data.status === 'Success') {
         
         navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
