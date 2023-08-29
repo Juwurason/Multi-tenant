@@ -303,7 +303,7 @@ const handleDeapproveAudit = async (e) => {
                             <div className="staff-msg d-flex gap-2 flex-wrap">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`}
-                                className="btn py-2 rounded text-white bg-primary">Staff Document</Link>
+                                className="btn py-2 rounded text-white bg-primary">Staff Doc</Link>
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
@@ -341,7 +341,7 @@ const handleDeapproveAudit = async (e) => {
                               <div>
                               <div>
                               {staffOne.employeeId === null ? <button
-                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Post Staff to Xero</button>:""}
+                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button>:""}
                               </div>
                               </div>
                             </div>

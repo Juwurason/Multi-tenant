@@ -69,7 +69,7 @@ const StaffDashboard = ({ roster, loading }) => {
     const activityDate = dayjs(activity.dateFrom); // Assuming activity.date is the date to compare
     return activity.attendance === true && activity.isEnded === false;
   });
-
+// console.log(unClockedOutRoster);
 
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
