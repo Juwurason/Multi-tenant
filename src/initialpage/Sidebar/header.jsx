@@ -23,7 +23,7 @@ const Header = (props) => {
   const FetchCompany = async () => {
     try {
         const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
-        console.log(data);
+        // console.log(data);
         setCompanyOne(data.company)
         // console.log(data.company);
         // setEditedCompany({ ...data.company })

@@ -7,6 +7,7 @@ import useHttp from "../../../hooks/useHttp";
 import dayjs from "dayjs";
 import moment from "moment";
 import logo from "../../../assets/img/logo.png";
+import axiosInstance from "../../../store/axiosInstance";
 
 
 // function formatDuration(duration) {
@@ -90,6 +91,26 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 });
+
+// const [companyOne, setCompanyOne] = useState({});
+//   const user = JSON.parse(localStorage.getItem('user'));
+
+//   const FetchCompany = async () => {
+//     try {
+//         const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+//         // console.log(data);
+//         setCompanyOne(data.company)
+//         // console.log(data.company);
+//         // setEditedCompany({ ...data.company })
+
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+// useEffect(() => {
+//     FetchCompany()
+// }, []);
 
 
 const TimesheetPDF = ({ total, timesheet }) => {

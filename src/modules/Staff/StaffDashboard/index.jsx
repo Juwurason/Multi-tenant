@@ -104,13 +104,17 @@ const StaffDashboard = ({ roster, loading }) => {
             navigate.push(`/staff/staff/progress/${e}`);
           },
           (error) => {
-            toast.error('Error getting location:', error.message);
-            // navigate.push(`/staff/staff/progress/${e}`);
+            // toast.error('Error getting location:', error.message);
+            localStorage.setItem("latit", 0);
+          localStorage.setItem("log", 0);
+            navigate.push(`/staff/staff/progress/${e}`);
           }
         );
       } else {
-        toast.error('Geolocation is not supported');
-        // navigate.push(`/staff/staff/progress/${e}`);
+        // toast.error('Geolocation is not supported');
+        localStorage.setItem("latit", 0);
+          localStorage.setItem("log", 0);
+        navigate.push(`/staff/staff/progress/${e}`);
       }
 
     }, 2000); // Set an appropriate delay to simulate the loading time
