@@ -313,11 +313,17 @@ const StaffRoster = ({ staff, loading, FetchData }) => {
                                             navigate.push(`/staff/staff/progress/${activity.shiftRosterId}`);
                                           },
                                           (error) => {
-                                            toast.error('Error getting location:', error.message);
+                                            // toast.error('Error getting location:', error.message);
+                                            localStorage.setItem("latit", 0);
+                                            localStorage.setItem("log", 0);
+                                            navigate.push(`/staff/staff/progress/${activity.shiftRosterId}`);
                                           }
                                         );
                                       } else {
-                                        toast.error('Geolocation is not supported');
+                                        // toast.error('Geolocation is not supported');
+                                        localStorage.setItem("latit", 0);
+                                        localStorage.setItem("log", 0);
+                                        navigate.push(`/staff/staff/progress/${activity.shiftRosterId}`);
                                       }
                                     }}
                                       className="bg-success p-1 rounded"

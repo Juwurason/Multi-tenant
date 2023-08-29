@@ -10,7 +10,7 @@ import axiosInstance from '../../../store/axiosInstance';
 
 const KnowledgeBaseVideo = () => {
     const { uid } = useParams()
-    const [details, setDetails] = useState('')
+    const [details, setDetails] = useState('');
     const { get } = useHttp();
     const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(false);

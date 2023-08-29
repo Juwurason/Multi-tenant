@@ -194,7 +194,7 @@ const ProgressNote = () => {
             <div className="col-sm-12">
               <div className="card">
               <p>Kindly Note: You are to click on <b>SUBMIT</b> if you are through filling your progress note and will like to clock out.</p> 
-                <div className='d-flex justify-content-start p-2'>
+              <div className='d-flex justify-content-start p-2'>
                   <Link to={`/staff/staff/staff-hand-over/${uid}`} className='btn btn-info text-white add-btn rounded-2' style={{ fontSize: "10px" }}>View Hand-over report by previous staff</Link>
                 </div>
                 <div className="card-body">
