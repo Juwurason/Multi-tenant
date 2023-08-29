@@ -92,34 +92,37 @@ const styles = StyleSheet.create({
     },
 });
 
-// const [companyOne, setCompanyOne] = useState({});
-//   const user = JSON.parse(localStorage.getItem('user'));
 
-//   const FetchCompany = async () => {
-//     try {
-//         const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
-//         // console.log(data);
-//         setCompanyOne(data.company)
-//         // console.log(data.company);
-//         // setEditedCompany({ ...data.company })
-
-
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-// useEffect(() => {
-//     FetchCompany()
-// }, []);
 
 
 const TimesheetPDF = ({ total, timesheet }) => {
+
+    const [companyOne, setCompanyOne] = useState({});
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const FetchCompany = async () => {
+    try {
+        const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+        // console.log(data);
+        setCompanyOne(data.company)
+        // console.log(data.company);
+        // setEditedCompany({ ...data.company })
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+useEffect(() => {
+    FetchCompany()
+}, []);
+
     return (
         <Document >
             <Page style={styles.page} orientation="landscape">
                 <View>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                        <Image src={logo} style={styles.logo} />
+                        <Image src={companyOne.companyLogo ? companyOne.companyLogo : logo} style={styles.logo} />
                         <Text style={{ textAlign: "center", fontSize: 10, marginBottom: 10 }}>Staff Attendance Sheet from {moment(total.fromDate).format('LLL')} to {moment(total.toDate).format('LLL')}</Text>
                     </View>
                     <View style={styles.table}>
