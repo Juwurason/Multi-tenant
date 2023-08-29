@@ -222,7 +222,7 @@ const CompanyProfile = () => {
                                     <label>Company Name</label>
                                     <input type="text" className="form-control"
                                         value={editedCompany.companyName}
-
+                                        name='companyName'
                                     />
                                 </div>
                                 <div className="form-group col-md-6">

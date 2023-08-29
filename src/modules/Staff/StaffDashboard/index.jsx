@@ -67,7 +67,7 @@ const StaffDashboard = ({ roster, loading }) => {
   //filter unclock Out shift
   const unClockedOutRoster = roster.filter((activity) => {
     const activityDate = dayjs(activity.dateFrom); // Assuming activity.date is the date to compare
-    return activity.attendance === true && activity.isEnded === false;
+    return activity.attendance === true && activity.attendId > 0 && activity.isEnded === false;
   });
 // console.log(unClockedOutRoster);
 
@@ -105,10 +105,12 @@ const StaffDashboard = ({ roster, loading }) => {
           },
           (error) => {
             toast.error('Error getting location:', error.message);
+            // navigate.push(`/staff/staff/progress/${e}`);
           }
         );
       } else {
         toast.error('Geolocation is not supported');
+        // navigate.push(`/staff/staff/progress/${e}`);
       }
 
     }, 2000); // Set an appropriate delay to simulate the loading time

@@ -4,6 +4,7 @@ import { useHistory, withRouter, Link } from 'react-router-dom';
 import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineSettings } from 'react-icons/md';
 import man from "../../assets/img/user.jpg";
 import loggo from '../../assets/img/promaxcare_logo_icon.png';
+import axiosInstance from '../../store/axiosInstance';
 const Header = (props) => {
   const navigate = useHistory();
   const handlesidebar = () => {
@@ -15,9 +16,26 @@ const Header = (props) => {
   };
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [companyOne, setCompanyOne] = useState({});
   const pathname = location.pathname;
   const user = JSON.parse(localStorage.getItem('user'));
 
+  const FetchCompany = async () => {
+    try {
+        const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+        console.log(data);
+        setCompanyOne(data.company)
+        // console.log(data.company);
+        // setEditedCompany({ ...data.company })
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+useEffect(() => {
+    FetchCompany()
+}, []);
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.clear();
@@ -43,7 +61,7 @@ const Header = (props) => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={loggo} width={40} height={40} alt="" />
+          <img src={ companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" />
         </Link>
       </div>
       {/* /Logo */}
@@ -57,7 +75,7 @@ const Header = (props) => {
       </button>
       {/* Header Title */}
       <div className="page-title-box">
-        <h3>Promax Care</h3>
+        <h3> {companyOne.companyName ? companyOne.companyName : "Promax Care"}</h3>
       </div>
       {/* /Header Title */}
       <a id="mobile_btn" className="mobile_btn" href="#"
