@@ -128,7 +128,7 @@ const CreateProgressNote = () => {
           navigate.push(`/staff/staff/report/${uid}`);
         }
       } catch (error) {
-        // console.log(error);
+        console.log(error);
         toast.error("Error Clock Out");
         toast.error(error.response.data.message);
         toast.error(error.response.data.title);
@@ -205,7 +205,7 @@ const CreateProgressNote = () => {
                         <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="number" placeholder="0" className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" value={endKm} className="form-control" onChange={e => setEndKm(e.target.value)} />
                           </div>
                         </div>
 
