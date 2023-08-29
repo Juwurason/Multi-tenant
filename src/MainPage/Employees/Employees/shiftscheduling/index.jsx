@@ -268,9 +268,7 @@ const ShiftScheduling = () => {
 
 
     const handleConfirmation = async (e) => {
-        if (endKm === 0) {
-            return toast.error("EndKm and Cannot be 0")
-        }
+
 
         const info = {
             clockIn: e.dateFrom,
