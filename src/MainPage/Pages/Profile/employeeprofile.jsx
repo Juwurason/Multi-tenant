@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
 import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaLongArrowAltLeft, FaLongArrowAltRight, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -194,6 +194,10 @@ finally{
 
   }
 
+  const handleView = (xerolink) => {
+    window.open(xerolink, '_blank');
+};
+
   const history = useHistory();
   const goBack = () => {
     history.goBack(); // Go back in history
@@ -253,7 +257,7 @@ finally{
                             <h3 className="user-name m-t-0 mb-0 fw-bold">{staffOne.fullName}</h3>
                             <div className="staff-id">Staff ID : {staffOne.maxStaffId === 'null' ? "N/A" : staffOne.maxStaffId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
-                            <div className="staff-msg d-flex gap-2">
+                            <div className="staff-msg d-flex gap-2 flex-wrap">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`}
                                 className="btn py-2 rounded text-white bg-primary">Staff Document</Link>
@@ -274,6 +278,12 @@ finally{
                                   </button>
 
                               }
+                              <div>
+                              <div>
+                              {staffOne.employeeId === null ? <button
+                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Post Staff to Xero</button>:""}
+                              </div>
+                              </div>
                             </div>
                           </div>
                         </div>
