@@ -419,7 +419,7 @@ finally{
                             <div className="staff-id">NDIS No: {staffOne.ndisNo}</div>
 
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
-                            <div className="staff-msg d-flex gap-2">
+                            <div className="staff-msg d-flex gap-2 flex-wrap">
 
                               <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}
                                 className="btn btn-primary py-2  btn-sm">Client's Doc</Link>
