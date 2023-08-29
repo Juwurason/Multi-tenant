@@ -48,6 +48,7 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
+      // console.log(data);
       setStaffOne(data);
     } catch (error) {
       toast.error(error.response.data.message)
@@ -238,6 +239,10 @@ finally{
 
 
   }
+
+  const handleView = (xerolink) => {
+    window.open(xerolink, '_blank');
+};
 
   const handleModal0 = (e) => {
     setInformModal(true)
@@ -436,6 +441,10 @@ finally{
 
                               }
                             </div>
+                            <div>
+                              {staffOne.contactId === null ? <button
+                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Post Client to Xero</button>:""}
+                              </div>
                           </div>
                         </div>
                         <div className="col-md-7">
