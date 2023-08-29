@@ -65,10 +65,10 @@ const StaffDashboard = ({ roster, loading }) => {
 
   const yesterday = dayjs().subtract(1, 'day').startOf('day');
   //filter unclock Out shift
-  const unClockedOutRoster = roster.filter((activity) => {
-    const activityDate = dayjs(activity.dateFrom); // Assuming activity.date is the date to compare
-    return activity.attendance === true && activity.attendId > 0 && activity.isEnded === false;
-  });
+  // const unClockedOutRoster = roster.filter((activity) => {
+  //   const activityDate = dayjs(activity.dateFrom); // Assuming activity.date is the date to compare
+  //   return activity.attendance === true && activity.attendId > 0 && activity.isEnded === false;
+  // });
 // console.log(unClockedOutRoster);
 
   const [menu, setMenu] = useState(false);
@@ -204,7 +204,7 @@ const StaffDashboard = ({ roster, loading }) => {
     }
   }
 
-  const AlltodayShifts = roster.filter(AllActToday => dayjs(AllActToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime);
+  const AlltodayShifts = roster.filter(AllActToday => dayjs(AllActToday.dateFrom).format('YYYY-MM-DD') === nowInAustraliaTime || AllActToday.attendance === true && AllActToday.attendId > 0 && AllActToday.isEnded === false);
 
   return (
     <>
@@ -330,7 +330,7 @@ const StaffDashboard = ({ roster, loading }) => {
 
 
             {/* UnClocked Out Shift */}
-            <div className="row">
+            {/* <div className="row">
               {unClockedOutRoster.length > 0 &&
                 unClockedOutRoster.map((activity, index) => {
                   const activityDate = dayjs(activity.dateFrom).format('YYYY-MM-DD');
@@ -387,7 +387,7 @@ const StaffDashboard = ({ roster, loading }) => {
                     </div>
                   );
                 })}
-            </div>
+            </div> */}
 
 
 

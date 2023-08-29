@@ -102,7 +102,7 @@ const EditProgressNote = () => {
       IsCompleted: editpro.isCompleted
     }
     try {
-      const {data} = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${pro}&shiftId=${uid}`, info);     
+      const {data} = await post(`/ProgressNotes/save_progressnote?userId=${user.userId}&noteid=${pro}&shiftId=${uid}`, info);     
       // console.log(data);
       toast.success(data.message);
       setLoading1(false);
@@ -120,12 +120,8 @@ const EditProgressNote = () => {
 
   const CreateProgress = async (e) => {
     e.preventDefault();
-    if (endKm === 0 ) {
-      toast.error("Input end Kilometer");
-      return; // Exit the function early if endKm is not provided
-    }
   
-    // Function to handle the SweetAlert confirmation
+  // Function to handle the SweetAlert confirmation
     const proceedWithConfirmation = async () => {
       try {
         const info = {

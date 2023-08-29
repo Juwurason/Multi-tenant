@@ -67,7 +67,7 @@ useEffect(() => {
             {/* Logo */}
             <div className="header-left">
                 <a href="/staff/staff/dashboard" className="logo">
-                    <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" />
+                    <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
                 </a>
             </div>
             {/* /Logo */}
@@ -80,7 +80,7 @@ useEffect(() => {
             </a>
             {/* Header Title */}
             <div className="page-title-box">
-                <h3>{companyOne.companyName ? companyOne.companyName :"Promax Care"}</h3>
+                <h3>{companyOne.companyName ? companyOne.companyName : "Promax Care"}</h3>
             </div>
             {/* /Header Title */}
             <a id="mobile_btn" className="mobile_btn" href="#"

@@ -61,7 +61,7 @@ useEffect(() => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={ companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" />
+          <img src={ companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
         </Link>
       </div>
       {/* /Logo */}

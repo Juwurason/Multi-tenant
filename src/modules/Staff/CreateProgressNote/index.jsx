@@ -23,7 +23,7 @@ const CreateProgressNote = () => {
   const [progress, setProgress] = useState('')
   const [follow, setFollow] = useState('')
   const [kilometer, setKilometer] = useState(0)
-  const [endKm, setEndKm] = useState("")
+  const [endKm, setEndKm] = useState(0)
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
   const [loading, setLoading] = useState(false);
@@ -80,7 +80,7 @@ const CreateProgressNote = () => {
     }
 
     try {
-      const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}&shiftId=${uid}`, info);
+      const { data } = await post(`/ProgressNotes/save_progressnote?userId=${user.userId}&noteid=${''}&shiftId=${uid}`, info);
       // console.log(data);
       if (data.status === 'Success') {
         
@@ -89,6 +89,7 @@ const CreateProgressNote = () => {
       }
       setLoading1(false)
     } catch (error) {
+      console.log(error);
       toast.error(error.response.data.message);
       toast.error(error.response.data.title);
     }
@@ -99,12 +100,7 @@ const CreateProgressNote = () => {
 
   const SubmitProgress = async (e) => {
     e.preventDefault();
-    if (endKm === "") {
-      toast.error("Input end Kilometer");
-      return; // Exit the function early if endKm is not provided
-    }
-  
-    // Function to handle the SweetAlert confirmation
+     // Function to handle the SweetAlert confirmation
     const proceedWithConfirmation = async () => {
       try {
         const info = {
