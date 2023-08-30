@@ -327,14 +327,14 @@ const handleDeapproveAudit = async (e) => {
                                     
                                     {loading1 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
-                                    </div> : "Deapprove Audit"}
+                                    </div> : "Disapprove for Auditing"}
                                   </button>
                                   :
                                   <button onClick={() => handleApproveAudit(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
                                     
                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
-                                    </div> : "Approve Audit"}
+                                    </div> : "Approve for Auditing"}
                                   </button>
 
                               }

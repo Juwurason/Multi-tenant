@@ -38,6 +38,8 @@ function formatDuration(duration) {
 const ShiftAttendanceReport = () => {
     const [total, setTotal] = useState({});
     const [shiftAttendance, setShiftAttendance] = useState([]);
+    const [periodic, setPeriodic] = useState([]);
+    const [loading2, setLoading2] = useState(false);
 
 
     const GetTimeshift = async () => {
@@ -46,6 +48,7 @@ const ShiftAttendanceReport = () => {
             const { data } = await axiosInstance.get(`/Attendances/get_shift_attendance?companyId=${id.companyId}`);
             setTotal(data.shiftAttendance);
             setShiftAttendance(data.shiftAttendance?.attendanceSplits);
+            
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -57,13 +60,16 @@ const ShiftAttendanceReport = () => {
     useEffect(() => {
         GetTimeshift();
     }, []);
+
     const GetPeriodic = async (e) => {
         e.preventDefault();
         setLoading1(true);
         try {
             const { data } = await axiosInstance.get(`/Attendances/get_periodic_shift_attendnace?companyId=${id.companyId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&clientId=${cli}&shifttype=${type}`);
+            // console.log(data);
             setTotal(data.shiftAttendance);
             setShiftAttendance(data.shiftAttendance?.attendanceSplits);
+            setPeriodic(data.shiftAttendance?.attendanceSplits)
             setLoading1(false);
         } catch (error) {
             setLoading1(false);
@@ -72,7 +78,17 @@ const ShiftAttendanceReport = () => {
         }
     }
 
-
+    const Generate = async (e) => {
+        e.preventDefault();
+        console.log(33);
+        // dispatch(fetchTimesheet({ user: id.userId, sta: sta, dateFrom: dateFrom.current.value, dateTo: dateTo.current.value }));
+        setLoading2(true);
+        setTimeout(() => {
+          const url = `/staff-timesheet/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
+          window.open(url, '_blank');
+          setLoading2(false);
+        }, 2000);
+      }
 
     //Declaring Variables
     const dispatch = useDispatch();
@@ -104,7 +120,7 @@ const ShiftAttendanceReport = () => {
     const [type, setType] = useState('');
     const dateFrom = useRef(null);
     const dateTo = useRef(null);
-    const [periodic, setPeriodic] = useState([]);
+    
 
 
 
@@ -139,6 +155,13 @@ const ShiftAttendanceReport = () => {
         {
             name: 'End Date',
             selector: row => dayjs(row.clockOut).format('ddd, MMM DD, h:mm A'),
+            sortable: true,
+            expandable: true,
+
+        },
+        {
+            name: 'Km',
+            selector: row => row.totalKm,
             sortable: true,
             expandable: true,
 
@@ -393,6 +416,20 @@ const ShiftAttendanceReport = () => {
 
                                         <div className="col-auto mt-3">
                                             <div className="form-group">
+
+                                            {periodic.length <= 0 ? "" : <button
+                                                    // type='submit'
+                                                    onClick={Generate}
+                                                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                                    disabled={loading2 ? true : false}
+                                                >
+
+
+                                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div> : "Generate Shift Attendance Report"}
+                                                </button>}
+
                                                 <button
                                                     type='submit'
                                                     className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -405,7 +442,10 @@ const ShiftAttendanceReport = () => {
                                                     </div> : "Load"}
                                                 </button>
 
+                                                
+
                                             </div>
+                                            
                                         </div>
 
 
