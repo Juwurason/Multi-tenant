@@ -10,7 +10,7 @@ import axiosInstance from '../../../store/axiosInstance';
 
 const KnowledgeBaseVideo = () => {
     const { uid } = useParams()
-    const [details, setDetails] = useState('')
+    const [details, setDetails] = useState('');
     const { get } = useHttp();
     const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(false);
@@ -20,6 +20,7 @@ const KnowledgeBaseVideo = () => {
         setLoading(true); // Set loading to true before making the API request
         try {
             const { data } = await get(`/Tickets/get_knowledgebase_details/${uid}`, { cacheTimeout: 300000 });
+            // console.log(data);
             setDetails(data.knowledgeBase);
         } catch (error) {
             toast.error(error.response.data.message);
@@ -81,7 +82,7 @@ const KnowledgeBaseVideo = () => {
             top: 0,
             left: 0,
             width: '100%',
-            // height: '50%',
+            height: '100%',
         },
     };
 

@@ -47,8 +47,8 @@ const ProgressNote = () => {
       setDetails(staff.profile);
       setLoading(false);
     } catch (error) {
-      toast.error(error.response.data.message)
-      toast.error(error.response.data.title)
+      toast.error(error.response.data.message);
+      toast.error(error.response.data.title);
     }
     finally {
       setLoading(false)
@@ -95,12 +95,12 @@ const ProgressNote = () => {
       companyID: companyId
     }
     try {
-      const { data } = await post(`/ProgressNotes/save_progressnote/?userId=${user.userId}&noteid=${''}`, info);
+      const { data } = await post(`/ProgressNotes/save_progressnote?userId=${user.userId}&noteid=${''}&shiftId=${uid}`, info);
       if (data.status === 'Success') {
         if (data.progressNote.progressNoteId === 0) {
-          navigate.push(`/staff/staff/create-progress/${uid}`)
+          navigate.push(`/staff/staff/create-progress/${uid}`);
         }
-        navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`)
+        navigate.push(`/staff/staff/edit-progress/${uid}/${data.progressNote.progressNoteId}`);
         toast.success(data.message)
       }
       setLoading1(false)
@@ -116,11 +116,6 @@ const ProgressNote = () => {
 
   const CreateProgress = async (e) => {
     e.preventDefault()
-    if (endKm === "") {
-      toast.error("Input end Kilometer");
-      return; // Exit the function early if endKm is not provided
-    }
-   
     const info = {
       report: report,
       progress: progress,
@@ -148,7 +143,7 @@ const ProgressNote = () => {
       if (result.isConfirmed) {
 
         try {
-          const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}`, info);
+          const { data } = await post(`/ProgressNotes/create_progressnote?userId=${user.userId}&shiftId=${uid}`, info);
           if (data.status === "Success") {
             Swal.fire(
               '',
@@ -156,12 +151,12 @@ const ProgressNote = () => {
               'success'
             )
 
-            navigate.push(`/staff/staff/report/${uid}`)
+            navigate.push(`/staff/staff/report/${uid}`);
           }
         } catch (error) {
           // console.log(error);
-          toast.error(error.response.data.message)
-          toast.error(error.response.data.title)
+          toast.error(error.response.data.message);
+          toast.error(error.response.data.title);
 
         }
 
@@ -199,8 +194,8 @@ const ProgressNote = () => {
             <div className="col-sm-12">
               <div className="card">
               <p>Kindly Note: You are to click on <b>SUBMIT</b> if you are through filling your progress note and will like to clock out.</p> 
-                <div className='d-flex justify-content-start p-2'>
-                  <button className='btn btn-info text-white add-btn rounded-2' style={{ fontSize: "10px" }}>View Hand-over report by previous staff</button>
+              <div className='d-flex justify-content-start p-2'>
+                  <Link to={`/staff/staff/staff-hand-over/${uid}`} className='btn btn-info text-white add-btn rounded-2' style={{ fontSize: "10px" }}>View Hand-over report by previous staff</Link>
                 </div>
                 <div className="card-body">
                   {

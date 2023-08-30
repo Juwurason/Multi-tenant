@@ -48,6 +48,7 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
+      // console.log(data);
       setStaffOne(data);
     } catch (error) {
       toast.error(error.response.data.message)
@@ -239,6 +240,56 @@ finally{
 
   }
 
+  const handleApproveAudit = async (e) => {
+    setLoading2(true)
+    try {
+      const { data } = await axiosInstance.get(`/Profiles/approve_audit?userId=${id.userId}&id=${e}`,
+
+      )
+
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
+
+    } catch (error) {
+
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading2(false)
+}
+finally{
+  setLoading2(false)
+}
+}
+
+const handleDeapproveAudit = async (e) => {
+  setLoading1(true)
+  try {
+    const { data } = await axiosInstance.get(`/Profiles/disapprove_audit?userId=${id.userId}&id=${e}`,
+    )
+
+    if (data.status === 'Success') {
+      toast.success(data.message)
+      FetchStaff();
+    }
+
+  } catch (error) {
+    setLoading1(false)
+    toast.error(error.response.data.message)
+    toast.error(error.response.data.title)
+
+
+  }
+  finally{
+    setLoading1(false)
+  }
+}
+
+  const handleView = (xerolink) => {
+    window.open(xerolink, '_blank');
+};
+
   const handleModal0 = (e) => {
     setInformModal(true)
     FetchExising(e);
@@ -414,7 +465,7 @@ finally{
                             <div className="staff-id">NDIS No: {staffOne.ndisNo}</div>
 
                             {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
-                            <div className="staff-msg d-flex gap-2">
+                            <div className="staff-msg d-flex gap-2 flex-wrap">
 
                               <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}
                                 className="btn btn-primary py-2  btn-sm">Client's Doc</Link>
@@ -435,7 +486,28 @@ finally{
                                   </button>
 
                               }
+                              {
+                                staffOne.auditApproved ?
+                                  <button onClick={() => handleDeapproveAudit(staffOne.profileId)} className="btn py-1 px-2 rounded text-white bg-danger">
+                                    
+                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Deapprove Audit"}
+                                  </button>
+                                  :
+                                  <button onClick={() => handleApproveAudit(staffOne.profileId)} className="btn py-1 px-2 rounded text-white bg-success">
+                                    
+                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Approve Audit"}
+                                  </button>
+
+                              }
                             </div>
+                            <div>
+                              {staffOne.contactId === null ? <button
+                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button>:""}
+                              </div>
                           </div>
                         </div>
                         <div className="col-md-7">

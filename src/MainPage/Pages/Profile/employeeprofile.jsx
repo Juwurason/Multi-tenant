@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
 import { FaCamera, FaFacebook, FaInstagram, FaLinkedin, FaLongArrowAltLeft, FaLongArrowAltRight, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -31,6 +31,7 @@ const EmployeeProfile = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await privateHttp.get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
+      // console.log(data);
       setStaffOne(data)
       setEditedProfile({ ...data });
 
@@ -165,9 +166,7 @@ const EmployeeProfile = () => {
 finally{
   setLoading2(false)
 }
-
-
-  }
+}
 
   const handleDeactivate = async (e) => {
     setLoading1(true)
@@ -190,9 +189,57 @@ finally{
     finally{
       setLoading1(false)
     }
+}
+
+  const handleApproveAudit = async (e) => {
+    setLoading2(true)
+    try {
+      const { data } = await axiosInstance.get(`/Staffs/approve_audit?userId=${id.userId}&id=${e}`,
+
+      )
+
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
+
+    } catch (error) {
+
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading2(false)
+}
+finally{
+  setLoading2(false)
+}
+}
+
+const handleDeapproveAudit = async (e) => {
+  setLoading1(true)
+  try {
+    const { data } = await axiosInstance.get(`/Staffs/disapprove_audit?userId=${id.userId}&id=${e}`,
+    )
+
+    if (data.status === 'Success') {
+      toast.success(data.message)
+      FetchStaff();
+    }
+
+  } catch (error) {
+    setLoading1(false)
+    toast.error(error.response.data.message)
+    toast.error(error.response.data.title)
 
 
   }
+  finally{
+    setLoading1(false)
+  }
+}
+
+  const handleView = (xerolink) => {
+    window.open(xerolink, '_blank');
+};
 
   const history = useHistory();
   const goBack = () => {
@@ -253,10 +300,10 @@ finally{
                             <h3 className="user-name m-t-0 mb-0 fw-bold">{staffOne.fullName}</h3>
                             <div className="staff-id">Staff ID : {staffOne.maxStaffId === 'null' ? "N/A" : staffOne.maxStaffId}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
-                            <div className="staff-msg d-flex gap-2">
+                            <div className="staff-msg d-flex gap-2 flex-wrap">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`}
-                                className="btn py-2 rounded text-white bg-primary">Staff Document</Link>
+                                className="btn py-2 rounded text-white bg-primary">Staff Doc</Link>
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
@@ -274,6 +321,29 @@ finally{
                                   </button>
 
                               }
+                              {
+                                staffOne.auditApproved ?
+                                  <button onClick={() => handleDeapproveAudit(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
+                                    
+                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Deapprove Audit"}
+                                  </button>
+                                  :
+                                  <button onClick={() => handleApproveAudit(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
+                                    
+                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Approve Audit"}
+                                  </button>
+
+                              }
+                              <div>
+                              <div>
+                              {staffOne.employeeId === null ? <button
+                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button>:""}
+                              </div>
+                              </div>
                             </div>
                           </div>
                         </div>

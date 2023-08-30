@@ -10,6 +10,7 @@ import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
+import axiosInstance from '../../../store/axiosInstance';
 const AdminProfile = () => {
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
@@ -22,12 +23,15 @@ const AdminProfile = () => {
   const [bankModal, setBankModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
   const [employmentModal, setEmploymentModal] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
 
   const privateHttp = useHttp()
   const FetchStaff = async () => {
     try {
       const { data } = await privateHttp.get(`/Administrators/${uid}`, { cacheTimeout: 300000 })
+      // console.log(data);
       setStaffOne(data)
       setEditedProfile({ ...data });
 
@@ -141,6 +145,52 @@ const AdminProfile = () => {
       setLoading(false)
     }
   }
+
+  const handleActivate = async (e) => {
+    setLoading2(true)
+    try {
+      const { data } = await axiosInstance.get(`/Administrators/activate_admin?userId=${id.userId}&adminId=${e}`,
+
+      )
+
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
+
+    } catch (error) {
+
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading2(false)
+}
+finally{
+  setLoading2(false)
+}
+}
+
+  const handleDeactivate = async (e) => {
+    setLoading1(true)
+    try {
+      const { data } = await axiosInstance.get(`/Administrators/deactivate_admin?userId=${id.userId}&adminId=${e}`,
+      )
+
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
+
+    } catch (error) {
+      setLoading1(false)
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+    finally{
+      setLoading1(false)
+    }
+}
   const history = useHistory();
 
   const goBack = () => {
@@ -202,8 +252,24 @@ const AdminProfile = () => {
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`}
-                                className="btn py-2 rounded text-white bg-primary">Admin Document</Link>
+                                className="btn py-2 rounded text-white bg-primary">Admin Doc</Link>
+                            {
+                                staffOne.isActive ?
+                                  <button onClick={() => handleDeactivate(staffOne.administratorId)} className="btn py-1 px-2 rounded text-white bg-danger">
+                                    
+                                    {loading1 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Deactivate Admin"}
+                                  </button>
+                                  :
+                                  <button onClick={() => handleActivate(staffOne.administratorId)} className="btn py-1 px-2 rounded text-white bg-success">
+                                    
+                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div> : "Activate Admin"}
+                                  </button>
 
+                              }
                             </div>
                           </div>
                         </div>

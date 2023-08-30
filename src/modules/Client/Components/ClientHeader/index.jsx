@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import man from "../../../../assets/img/user.jpg"
 import loggo from "../../../../assets/img/promaxcare_logo_icon.png"
 import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout } from "react-icons/md"
+import axiosInstance from '../../../../store/axiosInstance';
 
 const ClientHeader = (props) => {
     const navigate = useHistory()
@@ -42,12 +43,29 @@ const ClientHeader = (props) => {
         navigate.push("/")
     }
 
+    const [companyOne, setCompanyOne] = useState({});
+    const user = JSON.parse(localStorage.getItem('user'));
+  
+    const FetchCompany = async () => {
+      try {
+          const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+          // console.log(data);
+          setCompanyOne(data.company)
+  
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  useEffect(() => {
+      FetchCompany()
+  }, []);
+
     return (
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
                 <Link to="/client/app/dashboard" className="logo">
-                    <img src={loggo} width={40} height={40} alt="" />
+                    <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" />
                 </Link>
             </div>
             {/* /Logo */}
@@ -60,7 +78,7 @@ const ClientHeader = (props) => {
             </a>
             {/* Header Title */}
             <div className="page-title-box">
-                <h3>Promax Care</h3>
+                <h3>{companyOne.companyName ? companyOne.companyName : "Promax Care"}</h3>
             </div>
             {/* /Header Title */}
             <a id="mobile_btn" className="mobile_btn" href="#"

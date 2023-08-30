@@ -221,8 +221,9 @@ const CompanyProfile = () => {
                                 <div className="form-group col-md-6">
                                     <label>Company Name</label>
                                     <input type="text" className="form-control"
-                                        value={editedCompany.companyName}
-
+                                        value={editedCompany.companyName || ""}
+                                        name='companyName'
+                                        onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="form-group col-md-6">

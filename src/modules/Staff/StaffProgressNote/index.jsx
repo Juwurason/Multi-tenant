@@ -149,6 +149,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
     const [selectedActivity, setSelectedActivity] = useState({});
 
     const handleActivityClick = async (e) => {
+        // console.log(e);
         try {
             const { data } = await get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
             setSelectedActivity(data);
@@ -178,13 +179,14 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
             companyID: selectedActivity.companyId,
         }
         try {
-            const { data } = await post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}`, info);
+            const { data } = await post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}&shiftId=`, info);
             //   console.log(data);
             toast.success(data.message)
             setShowModal(false);
             setLoading1(false);
             FetchData()
         } catch (error) {
+            console.log(error);
             toast.error("Error Updating Progress Note")
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
