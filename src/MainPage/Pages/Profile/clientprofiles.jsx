@@ -48,7 +48,7 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
-      console.log(data);
+      // console.log(data);
       setStaffOne(data);
     } catch (error) {
       toast.error(error.response.data.message)
@@ -589,11 +589,11 @@ const handleDeapproveAudit = async (e) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
-                  <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={profile.surName || ''} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={profile.firstName} readOnly />
+                  <input type="text" className="form-control" value={profile.firstName || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Middle Name</label>
@@ -601,7 +601,7 @@ const handleDeapproveAudit = async (e) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="tel" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={profile.phoneNumber || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -610,7 +610,7 @@ const handleDeapproveAudit = async (e) => {
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={profile.email} readOnly />
+                  <input type="text" className="form-control" value={profile.email || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>

@@ -243,11 +243,11 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                 </div> 
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
-                  <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.surName || ''} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.firstName || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Middle Name</label>
@@ -255,7 +255,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="tel" className="form-control" value={editedProfile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={editedProfile.phoneNumber || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -264,7 +264,7 @@ const StaffProfile = ({ staffOne, FetchData, editedProfile, setEditedProfile }) 
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={editedProfile.email} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.email || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>

@@ -199,6 +199,7 @@ const ClientProfile = () => {
                           <div className="profile-info-left d-flex flex-column">
                             <h3 className="user-name m-t-0 mb-0">{staffOne.fullName}</h3>
                             <div className="staff-id">Client ID : {staffOne.contactId === "null" ? "" : staffOne.contactId}</div>
+                            <div className="staff-id">Client ID : {staffOne.ndisNo === "null" ? "" : staffOne.ndisNo}</div>
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
@@ -222,7 +223,7 @@ const ClientProfile = () => {
                             </li>
                             <li>
                               <div className="title">Birthday:</div>
-                              <div className="text">{moment(staffOne.dateOfBirth).format('ll')}</div>
+                              <div className="text">{!staffOne.dateOfBirth ? "Not Updated" : moment(staffOne.dateOfBirth).format('ll')}</div>
                             </li>
                             <li>
                               <div className="title">Address:</div>
@@ -232,7 +233,14 @@ const ClientProfile = () => {
                               <div className="title">Gender:</div>
                               <div className="text">{staffOne.gender || "None"}</div>
                             </li>
-
+                            <li>
+                              <span className="title">Agreement Start Date:</span>
+                              <span className="text">{!staffOne.agreementStartDate ? "Not Updated" : moment(staffOne.agreementStartDate).format('ll')}</span>
+                            </li>
+                            <li>
+                              <span className="title">Agreement End Date:</span>
+                              <span className="text">{!staffOne.agreementEndDate ? "Not Updated" : moment(staffOne.agreementEndDate).format('ll')}</span>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -280,11 +288,11 @@ const ClientProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
-                  <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={profile.surName || ''} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={profile.firstName} readOnly />
+                  <input type="text" className="form-control" value={profile.firstName || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Middle Name</label>
@@ -292,7 +300,7 @@ const ClientProfile = () => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="tel" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={profile.phoneNumber || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -301,7 +309,7 @@ const ClientProfile = () => {
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={profile.email} readOnly />
+                  <input type="text" className="form-control" value={profile.email || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
@@ -312,6 +320,22 @@ const ClientProfile = () => {
                   </select>
 
                 </div>
+
+                <div className="form-group col-md-4">
+                  <label>Agreement Start Date</label>
+                  <input type="date" className="form-control" name='agreementStartDate' value={editedProfile.agreementStartDate || ''} onChange={handleInputChange} />
+                </div>
+
+                <div className="form-group col-md-4">
+                  <label>Agreement End Date</label>
+                  <input type="date" className="form-control" name='agreementEndDate' value={editedProfile.agreementEndDate || ''} onChange={handleInputChange} />
+                </div>
+
+                <div className="form-group col-md-4">
+                  <label>Ndis No</label>
+                  <input type="text" className="form-control" name='ndisNo' value={editedProfile.ndisNo || ''} onChange={handleInputChange} />
+                </div>
+
                 <div className="form-group col-md-8">
                   <label>Address</label>
                   <input type="text" className="form-control" name='address' value={editedProfile.address || ''} onChange={handleInputChange} />
