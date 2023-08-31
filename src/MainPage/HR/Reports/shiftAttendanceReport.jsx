@@ -80,11 +80,10 @@ const ShiftAttendanceReport = () => {
 
     const Generate = async (e) => {
         e.preventDefault();
-        console.log(33);
         // dispatch(fetchTimesheet({ user: id.userId, sta: sta, dateFrom: dateFrom.current.value, dateTo: dateTo.current.value }));
         setLoading2(true);
         setTimeout(() => {
-          const url = `/Alluser-shiftattendance/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+          const url = `/Alluser-shiftattendance/${dateFrom.current.value}/${dateTo.current.value}`;
           window.open(url, '_blank');
           setLoading2(false);
         }, 2000);
@@ -417,7 +416,7 @@ const ShiftAttendanceReport = () => {
                                         <div className="col-auto mt-3">
                                             <div className="form-group">
 
-                                            {/* {periodic.length <= 0 ? "" : <button
+                                            {periodic.length <= 0 ? "" : <button
                                                     // type='submit'
                                                     onClick={Generate}
                                                     className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -428,7 +427,7 @@ const ShiftAttendanceReport = () => {
                                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                                         <span className="sr-only">Loading...</span>
                                                     </div> : "Generate Shift Attendance Report"}
-                                                </button>} */}
+                                                </button>}
 
                                                 <button
                                                     type='submit'

@@ -26,20 +26,41 @@ import axiosInstance from "../../../store/axiosInstance";
 
 function formatDuration(duration) {
     if (duration) {
-        const durationInTicks = BigInt(duration);
-    const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
-
-    const durationInMinutes = Math.ceil(durationInMilliseconds / (1000 * 60)); // Round up minutes
-    const totalHours = Math.floor(durationInMinutes / 60);
-    const totalMinutes = durationInMinutes % 60; // Get remaining minutes
-
-    // Add remaining minutes to total hours if totalMinutes >= 30
-    const finalHours = totalHours + Math.floor(totalMinutes / 30);
-
-    return `${finalHours} Hrs`;
+      const durationInMilliseconds = duration / 10000; // Convert ticks to milliseconds
+  
+      const durationInMinutes = Math.floor(durationInMilliseconds / (1000 * 60));
+      const hours = Math.floor(durationInMinutes / 60);
+      const minutes = durationInMinutes % 60;
+  
+      if (hours === 0) {
+        return `${minutes} min`;
+      } else if (minutes === 0) {
+        return `${hours} Hrs`;
+      } else {
+        return `${hours} Hrs ${minutes} min`;
+      }
     }
-    return "0 Hrs 0 min";
-}
+  
+    return "0 Hrs"; // Return an empty string if duration is not available
+  }
+  
+
+// function formatDuration(duration) {
+//     if (duration) {
+//         const durationInTicks = BigInt(duration);
+//     const durationInMilliseconds = Number(durationInTicks) / 10000; // Convert ticks to milliseconds
+
+//     const durationInMinutes = Math.ceil(durationInMilliseconds / (1000 * 60)); // Round up minutes
+//     const totalHours = Math.floor(durationInMinutes / 60);
+//     const totalMinutes = durationInMinutes % 60; // Get remaining minutes
+
+//     // Add remaining minutes to total hours if totalMinutes >= 30
+//     const finalHours = totalHours + Math.floor(totalMinutes / 30);
+
+//     return `${finalHours} Hrs`;
+//     }
+//     return "0 Hrs 0 min";
+// }
 
 const todayDate = (date) => {
     const year = date.getFullYear();
@@ -123,41 +144,41 @@ useEffect(() => {
                 <View>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <Image src={companyOne.companyLogo ? companyOne.companyLogo : logo} style={styles.logo} />
-                        <Text style={{ textAlign: "center", fontSize: 10, marginBottom: 10 }}>Staff Attendance Sheet from {moment(total.fromDate).format('LLL')} to {moment(total.toDate).format('LLL')}</Text>
+                        <Text style={{ textAlign: "center", fontSize: 10, marginBottom: 10 }}>Shift Attendance Sheet from {moment(total.fromDate).format('LLL')} to {moment(total.toDate).format('LLL')}</Text>
                     </View>
                     <View style={styles.table}>
 
                         <View style={styles.tableRow}>
                             <View style={styles.tableCol2}>
-                                <Text style={styles.tableCell}>Staff Name</Text>
+                                <Text style={styles.tableCell}>Staff</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Normal Shift Duration</Text>
+                                <Text style={styles.tableCell}>Date</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Evening Shift Duration</Text>
+                                <Text style={styles.tableCell}>Start Time</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Saturday Shift Duration</Text>
+                                <Text style={styles.tableCell}>End Time</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Sunday Shift Duration</Text>
+                                <Text style={styles.tableCell}>Km</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Exceptional Shift Duration</Text>
+                                <Text style={styles.tableCell}>Clients</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Public Holiday</Text>
+                                <Text style={styles.tableCell}>Duration</Text>
                             </View>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Night Shift</Text>
+                                <Text style={styles.tableCell}>Attendance</Text>
                             </View>
-                            <View style={styles.tableCol}>
+                            {/* <View style={styles.tableCol}>
                                 <Text style={styles.tableCell}>Total Km</Text>
                             </View>
                             <View style={styles.tableCol}>
                                 <Text style={styles.tableCell}>Total Duration</Text>
-                            </View>
+                            </View> */}
                         </View>
 
 
@@ -168,35 +189,35 @@ useEffect(() => {
                             <View style={styles.tableRow} key={index}>
 
                                 <View style={styles.tableCol2}>
-                                    <Text style={styles.tableCell}>{data.staffName}</Text>
+                                    <Text style={styles.tableCell}>{data.shiftRoster.staff.fullName}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{formatDuration(data.normalDuration)}</Text>
+                                    <Text style={styles.tableCell}>{moment(data.clockIn).format('LL')}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{formatDuration(data.eveningDuration)}</Text>
+                                    <Text style={styles.tableCell}>{moment(data.clockIn).format('LT')}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{formatDuration(data.satDuration)}</Text>
+                                    <Text style={styles.tableCell}>{moment(data.clockOut).format('LLL')}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{formatDuration(data.sunDuration)}</Text>
+                                    <Text style={styles.tableCell}>{(data.totalKm)}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{formatDuration(data.exceptionalDuration)}</Text>
+                                    <Text style={styles.tableCell}>{data.shiftRoster.clients}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{formatDuration(data.phDuration)}</Text>
+                                    <Text style={styles.tableCell}>{formatDuration(data.duration)}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
-                                    <Text style={styles.tableCell}>{data.nightShift}</Text>
+                                    <Text style={styles.tableCell}>{data.shiftRoster.status}</Text>
                                 </View>
-                                <View style={styles.tableCol}>
+                                {/* <View style={styles.tableCol}>
                                     <Text style={styles.tableCell}>{(data.totalKm).toFixed(3)}</Text>
                                 </View>
                                 <View style={styles.tableCol}>
                                     <Text style={styles.tableCell}>{formatDuration(data.totalDuration)}</Text>
-                                </View>
+                                </View> */}
 
 
                             </View>
@@ -215,7 +236,7 @@ useEffect(() => {
 
 
 
-                    <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 30 }}>
+                    {/* <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 30 }}>
                         <View style={{ flexDirection: "column", alignItems: "center", gap: 5 }}>
                             <View style={{ border: "1 solid black", marginBottom: 10, width: "150px" }}></View>
                             <Text style={{ fontSize: 10 }}>Approved By</Text>
@@ -224,7 +245,7 @@ useEffect(() => {
                             <View style={{ border: "1 solid black", marginBottom: 10, width: "150px" }}></View>
                             <Text style={{ fontSize: 10 }}>Payroll Officer and Date</Text>
                         </View>
-                    </View>
+                    </View> */}
 
 
 
@@ -236,17 +257,17 @@ useEffect(() => {
 
 const GenerateShiftAttendance = () => {
     const id = JSON.parse(localStorage.getItem('user'));
-    const { sta, cli, dateFrom, dateTo } = useParams();
+    const { dateFrom, dateTo } = useParams();
     const { get } = useHttp();
     const [timesheet, setTimesheet] = useState([]);
     const [total, setTotal] = useState({});
     
     const GetTimeshift = async (e) => {
         try {
-            const { data } = await get(`/Attendances/get_periodic_shift_attendnace?companyId=${id.companyId}&fromDate=${dateFrom}&toDate=${dateTo}&staffId=${sta}&clientId=${cli}&shifttype=`, { cacheTimeout: 300000 });
-            console.log(data);
-            // setTimesheet(data?.timesheet?.staffTimeSheet);
-            // setTotal(data?.timesheet)
+            const { data } = await get(`/Attendances/get_periodic_shift_attendnace?companyId=${id.companyId}&fromDate=${dateFrom}&toDate=${dateTo}&staffId=&clientId=&shifttype=`, { cacheTimeout: 300000 });
+            // console.log(data);
+            setTimesheet(data?.shiftAttendance?.attendanceSplits);
+            setTotal(data?.shiftAttendance)
             if (data.status === "Success") {
                 toast.success(data.message);
             }
@@ -259,14 +280,12 @@ const GenerateShiftAttendance = () => {
         GetTimeshift();
     }, []);
 
-    console.log(sta, cli);
-
 
 
     return (
         <>
             <Helmet>
-                <title>Timesheet For All Staff</title>
+                <title>Shift Attendance Report</title>
             </Helmet>
 
             <PDFViewer width="100%" height={800}>

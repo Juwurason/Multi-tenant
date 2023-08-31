@@ -71,7 +71,7 @@ const App = () => {
             <Route path="/ui-components" component={uicomponents} />
             <Route path={`/staff-timesheet/:sta/:dateFrom/:dateTo`} component={Timesheet} />
             <Route path={`/Allstaff-timesheet/:dateFrom/:dateTo`} component={TimesheetForAll} />
-            <Route path={`/Alluser-shiftattendance/:sta/:cli/:dateFrom/:dateTo`} component={GenerateShiftAttendance} />
+            <Route path={`/Alluser-shiftattendance/:dateFrom/:dateTo`} component={GenerateShiftAttendance} />
             <Route path={`/staff-progress/:uid`} component={StaffProgress} />
             <Route path={`/form-details/:uid`} component={formTemplateDetails} />
             <Route path={`/refferal-details/:uid`} component={RefferalDetails} />
