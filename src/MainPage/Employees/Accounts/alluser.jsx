@@ -26,10 +26,10 @@ import axiosInstance from '../../../store/axiosInstance';
 const AllUser = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
-  const claims = JSON.parse(localStorage.getItem('claims'));
-  const hasRequiredClaims = (claimType) => {
-    return claims.some(claim => claim.value === claimType);
-  };
+    const claims = JSON.parse(localStorage.getItem('claims'));
+    const hasRequiredClaims = (claimType) => {
+        return claims.some(claim => claim.value === claimType);
+    };
 
     // Fetch user data and update the state
     useEffect(() => {
@@ -100,14 +100,14 @@ const AllUser = () => {
                     >
                         <FaRegEdit />
                     </Link>
-                   {id.role === "CompanyAdmin" || id.role === "Administrator" || hasRequiredClaims("Reset User Password") ? 
-                   <button
-                        className='btn'
-                        title='Reset User Password'
-                        onClick={() => handleResetPassword(row.email)}
-                    >
-                        <MdOutlineLockReset className='fs-5' />
-                    </button>: ""}
+                    {id.role === "CompanyAdmin" || id.role === "Administrator" || hasRequiredClaims("Reset User Password") ?
+                        <button
+                            className='btn'
+                            title='Reset User Password'
+                            onClick={() => handleResetPassword(row.email)}
+                        >
+                            <MdOutlineLockReset className='fs-5' />
+                        </button> : ""}
                     <button
                         className='btn'
                         title='Delete User'
@@ -138,8 +138,9 @@ const AllUser = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const {data} = await axiosInstance.get(`/Account/delete_user?id=${e}&userId=${id.userId}`,
+                    const { data } = await axiosInstance.get(`/Account/delete_user?id=${e}&userId=${id.userId}`,
                     )
+                    console.log(data);
                     if (data.status === 'Success') {
                         toast.success(data.message);
                         dispatch(fetchUser(id.companyId));
@@ -173,7 +174,7 @@ const AllUser = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await post(`/Account/reset_user_password?userId=${id.userId}&email=${e}`,
+                    const { data } = await axiosInstance.get(`/Account/reset_user_password?userId=${id.userId}&email=${e}`,
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
@@ -184,9 +185,10 @@ const AllUser = () => {
 
 
                 } catch (error) {
-                    toast.error("Ooops😔 Error Occurred")
+                    // toast.error("Ooops😔 Error Occurred")
                     console.log(error);
-
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
 
 
                 }
