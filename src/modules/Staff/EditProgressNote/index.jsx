@@ -16,8 +16,8 @@ const EditProgressNote = () => {
 
   const [details, setDetails] = useState('')
   const [staff, setStaff] = useState('')
-  const [kilometer, setKilometer] = useState('')
-  const [endKm, setEndKm] = useState(0)
+  const [attend, setAttend] = useState('')
+  const [km, setKm] = useState({})
   const [editpro, setEditPro] = useState({})
   const [companyId, setCompanyId] = useState('')
   const { get, post } = useHttp();
@@ -38,6 +38,16 @@ const EditProgressNote = () => {
       setDetails(staff.profile);
       setClientName(staff.clients)
       setLoading(false);
+      try {
+        const { data } = await get(`/Attendances/${staff.attendId}`, { cacheTimeout: 300000 });
+        // console.log(data);
+        setKm(data)
+       
+        // Process the attendance data here
+    } catch (error) {
+        toast.error(error.response.data.message)
+     toast.error(error.response.data.title)
+    }
     } catch (error) {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
@@ -68,12 +78,20 @@ const EditProgressNote = () => {
     const target = event.target;
     const name = target.name;
     const value = target.value;
-    const newValue = value === "" ? "" : value;
+  
+    // Update the 'editpro' state
     setEditPro({
       ...editpro,
-      [name]: newValue
+      [name]: value === "" ? "" : value
+    });
+  
+    // Update the 'km' state
+    setKm({
+      ...km,
+      [name]: value === "" ? "" : value
     });
   }
+  
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -95,8 +113,8 @@ const EditProgressNote = () => {
       date: formattedDate,
       staff: staff,
       staffId: staffProfile.staffId,
-      startKm: editpro.startKm,
-      endKm: editpro.endKm,
+      startKm: km.startKm,
+      endKm: km.endKm,
       profileId: details.profileId,
       companyID: companyId,
       IsCompleted: editpro.isCompleted
@@ -132,8 +150,8 @@ const EditProgressNote = () => {
           followUp: editpro.followUp,
           staff: staff,
           staffId: staffProfile.staffId,
-          startKm: editpro.startKm,
-          endKm: endKm,
+          startKm: km.startKm,
+          endKm: km.endKm,
           profileId: details.profileId,
           companyID: companyId,
           date: ""
@@ -210,13 +228,13 @@ const EditProgressNote = () => {
                     <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Starting KiloMetre if any</label>
-                            <input type="number" placeholder="0" className="form-control" name="startKm" value={editpro.startKm || ''} onChange={handleInputChange} />
+                            <input type="number" placeholder="0" className="form-control" name='startKm' value={km.startKm || ''} onChange={handleInputChange} />
                           </div>
                      </div>
                     <div className='col-md-5'>
                           <div className="form-group">
                             <label htmlFor="">Provide your Ending KiloMetre if any</label>
-                            <input type="number" placeholder="0" value={endKm} className="form-control" onChange={e => setEndKm(e.target.value)} />
+                            <input type="number" placeholder="0" className="form-control" name='endKm' value={km.endKm || ''} onChange={handleInputChange} />
                           </div>
                      </div>
                       <div className="col-md-4">
