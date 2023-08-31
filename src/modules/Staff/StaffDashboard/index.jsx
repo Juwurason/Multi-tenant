@@ -243,7 +243,7 @@ const StaffDashboard = ({ roster, loading }) => {
                     <div className="card text-center">
                       <div className="card-header bg-info text-white">
                         <div className='d-flex justify-content-between align-items-center'>
-                          <span style={{ fontSize: '12px' }}>{dayjs(daysOfWeek[1]).format('dddd, MMMM D, YYYY')}</span>
+                          <span style={{ fontSize: '12px' }}>{dayjs(activity.dateFrom).format('dddd, MMMM D, YYYY')}</span>
                           <span style={{ fontSize: '12px' }} className='text-white bg-primary rounded px-2'>{activity?.status}</span>
                         </div>
                       </div>

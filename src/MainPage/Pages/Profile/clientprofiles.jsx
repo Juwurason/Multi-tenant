@@ -48,7 +48,7 @@ const ClientProfiles = () => {
   const FetchStaff = async () => {
     try {
       const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
-      // console.log(data);
+      console.log(data);
       setStaffOne(data);
     } catch (error) {
       toast.error(error.response.data.message)
@@ -532,6 +532,14 @@ const handleDeapproveAudit = async (e) => {
                               <span className="title">Gender:</span>
                               <span className="text">{staffOne.gender}</span>
                             </li>
+                            <li>
+                              <span className="title">Agreement Start Date:</span>
+                              <span className="text">{!staffOne.agreementStartDate ? "Not Updated" : moment(staffOne.agreementStartDate).format('ll')}</span>
+                            </li>
+                            <li>
+                              <span className="title">Agreement End Date:</span>
+                              <span className="text">{!staffOne.agreementEndDate ? "Not Updated" : moment(staffOne.agreementEndDate).format('ll')}</span>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -613,10 +621,28 @@ const handleDeapproveAudit = async (e) => {
                   </select>
 
                 </div>
+
+                <div className="form-group col-md-4">
+                  <label>Agreement Start Date</label>
+                  <input type="date" className="form-control" name='agreementStartDate' value={editedProfile.agreementStartDate || ''} onChange={handleInputChange} />
+                </div>
+
+                <div className="form-group col-md-4">
+                  <label>Agreement End Date</label>
+                  <input type="date" className="form-control" name='agreementEndDate' value={editedProfile.agreementEndDate || ''} onChange={handleInputChange} />
+                </div>
+
+                <div className="form-group col-md-4">
+                  <label>Ndis No</label>
+                  <input type="text" className="form-control" name='ndisNo' value={editedProfile.ndisNo || ''} onChange={handleInputChange} />
+                </div>
+
                 <div className="form-group col-md-8">
                   <label>Address</label>
                   <input type="text" className="form-control" name='address' value={editedProfile.address || ''} onChange={handleInputChange} />
                 </div>
+
+                
 
 
                 {/* <div className="form-group col-md-12">
