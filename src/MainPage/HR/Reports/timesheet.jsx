@@ -102,28 +102,28 @@ const styles = StyleSheet.create({
 const TimesheetPDF = ({ total, timesheet }) => {
 
     const [companyOne, setCompanyOne] = useState({});
-  const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
 
-  const FetchCompany = async () => {
-    try {
-        const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
-        // console.log(data);
-        setCompanyOne(data.company)
+    const FetchCompany = async () => {
+        try {
+            const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+            // console.log(data);
+            setCompanyOne(data.company)
 
-    } catch (error) {
-        console.log(error);
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
-useEffect(() => {
-    FetchCompany()
-}, []);
+    useEffect(() => {
+        FetchCompany()
+    }, []);
 
     return (
         <Document>
             <Page style={styles.page} orientation="landscape">
                 <View>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                        <Image src={ companyOne.companyLogo ? companyOne.companyLogo : logo } style={styles.logo} />
+                        <Image src={companyOne.companyLogo ? companyOne.companyLogo : logo} style={styles.logo} />
                         <Text style={{ textAlign: "center", fontSize: 10, marginBottom: 10 }}>{total.staffName} Attendance Sheet from {moment(total.fromDate).format('LLL')} to {moment(total.toDate).format('LLL')}</Text>
                     </View>
                     <View style={styles.table}>
@@ -288,29 +288,28 @@ const Timesheet = () => {
 
     const [companyOne, setCompanyOne] = useState({});
 
-//   const FetchCompany = async () => {
-//     try {
-//         const { data } = await axiosInstance.get(`/Companies/get_company/${id.companyId}`, { cacheTimeout: 300000 })
-//         // console.log(data);
-//         setCompanyOne(data.company)
-//         // console.log(data.company);
-//         // setEditedCompany({ ...data.company })
+    //   const FetchCompany = async () => {
+    //     try {
+    //         const { data } = await axiosInstance.get(`/Companies/get_company/${id.companyId}`, { cacheTimeout: 300000 })
+    //         // console.log(data);
+    //         setCompanyOne(data.company)
+    //         // console.log(data.company);
+    //         // setEditedCompany({ ...data.company })
 
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-// useEffect(() => {
-//     FetchCompany()
-// }, []);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    // useEffect(() => {
+    //     FetchCompany()
+    // }, []);
 
     const GetTimeshift = async (e) => {
         try {
             const { data } = await get(`/Attendances/generate_staff_timesheet?userId=${id.userId}&staffid=${sta}&fromDate=${dateFrom}&toDate=${dateTo}`, { cacheTimeout: 300000 });
             setTimesheet(data?.timesheet?.attendanceSplits);
             setTotal(data?.timesheet)
-            console.log(data);
             if (data.status === "Success") {
                 toast.success(data.message);
             }
@@ -321,7 +320,7 @@ const Timesheet = () => {
 
     useEffect(() => {
         GetTimeshift();
-        
+
     }, []);
 
 
