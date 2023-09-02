@@ -71,23 +71,33 @@ const AdminDashboard = () => {
       adminAttendance = JSON.parse(adminAttendanceJSON);
     }
   }
+  let isMounted = true
 
   useEffect(() => {
-    dispatch(fetchShiftRosterCount(id.companyId));
-    dispatch(fetchAttendanceCount(id.companyId));
-    dispatch(fetchAttendanceCount(id.companyId));
-    dispatch(fetchProgressNoteCount(id.companyId));
-    dispatch(fetchShiftAnalysisCount(id.companyId));
-    dispatch(fetchAdmin(id.companyId));
-    dispatch(fetchStaff(id.companyId));
-    dispatch(fetchClient(id.companyId));
-    dispatch(fetchDocument(id.companyId));
-    dispatch(fetchTicket(id.companyId));
-  }, [dispatch, id.companyId, clients, admin, ticket]);
+    if (isMounted) {
+      dispatch(fetchShiftRosterCount(id.companyId));
+      dispatch(fetchAttendanceCount(id.companyId));
+      dispatch(fetchAttendanceCount(id.companyId));
+      dispatch(fetchProgressNoteCount(id.companyId));
+      dispatch(fetchShiftAnalysisCount(id.companyId));
+      dispatch(fetchAdmin(id.companyId));
+      dispatch(fetchStaff(id.companyId));
+      dispatch(fetchClient(id.companyId));
+      dispatch(fetchDocument(id.companyId));
+      dispatch(fetchTicket(id.companyId));
+    }
+
+    return () => {
+      isMounted = false
+    }
+  }, [dispatch, id.companyId]);
+
+
+
   useEffect(() => {
     setRecentUsers(clients.slice(-5))
 
-  }, [clients, admin, attendanceCount]);
+  }, [dispatch, id.companyId]);
 
 
 
@@ -313,8 +323,8 @@ const AdminDashboard = () => {
 
 
                     {
-                      !isLoading && clients.length >= 1 && recentUsers && recentUsers.length > 0 ? (
-                        recentUsers.map((data, index) => (
+                      !isLoading && clients.length > 0 ? (
+                        clients?.slice(-5).map((data, index) => (
                           <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
                             <div className="col-2">
                               <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
