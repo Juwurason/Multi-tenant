@@ -90,7 +90,7 @@ const ProgressNote = () => {
       followUp: follow,
       staff: staff,
       startKm: kilometer,
-      end: endKm,
+      endKm: endKm,
       profileId: details.profileId,
       companyID: companyId
     }

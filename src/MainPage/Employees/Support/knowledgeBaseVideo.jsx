@@ -20,7 +20,7 @@ const KnowledgeBaseVideo = () => {
         setLoading(true); // Set loading to true before making the API request
         try {
             const { data } = await get(`/Tickets/get_knowledgebase_details/${uid}`, { cacheTimeout: 300000 });
-            // console.log(data);
+            console.log(data);
             setDetails(data.knowledgeBase);
         } catch (error) {
             toast.error(error.response.data.message);
@@ -34,7 +34,7 @@ const KnowledgeBaseVideo = () => {
     useEffect(() => {
         FetchSchedule();
     }, []);
-    
+
 
     const UpVote = async (e) => {
         e.preventDefault()
@@ -118,9 +118,27 @@ const KnowledgeBaseVideo = () => {
                             </div>
                         ) : (
                             <div>
-                                <div style={customStyles.videoContainer}>
-                                    <div dangerouslySetInnerHTML={{ __html: details.description }} style={customStyles.iframe} />
-                                </div> <br />
+                                {details.videoUrl !== null ? <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                                    <iframe
+                                        title="Embedded Video"
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                        }}
+                                        src={details.videoUrl}
+                                        frameBorder="0"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                                :
+                                <div >
+                                <div dangerouslySetInnerHTML={{ __html: details.description }} />
+                            </div>
+                            }
+                                {/* <br /> */}
 
                                 <div>
                                     <span>Your feedback matters! Upvote or downvote.</span>
@@ -134,14 +152,14 @@ const KnowledgeBaseVideo = () => {
                                 
                               )} */}
                                     <div className='d-flex'>
-                                <div onClick={UpVote} className='pointer'>
-                                <FiThumbsUp size={20} />
-                                </div>
+                                        <div onClick={UpVote} className='pointer'>
+                                            <FiThumbsUp size={20} />
+                                        </div>
 
-                                <div onClick={DownVote} className='pointer' style={{marginLeft: 15}}>
-                                <FiThumbsDown size={20} />
-                                </div>
-                                </div>
+                                        <div onClick={DownVote} className='pointer' style={{ marginLeft: 15 }}>
+                                            <FiThumbsDown size={20} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}

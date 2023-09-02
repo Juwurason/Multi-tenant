@@ -327,14 +327,14 @@ const handleDeapproveAudit = async (e) => {
                                     
                                     {loading1 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
-                                    </div> : "Deapprove Audit"}
+                                    </div> : "Disapprove for Auditing"}
                                   </button>
                                   :
                                   <button onClick={() => handleApproveAudit(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
                                     
                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
-                                    </div> : "Approve Audit"}
+                                    </div> : "Approve for Auditing"}
                                   </button>
 
                               }
@@ -417,11 +417,11 @@ const handleDeapproveAudit = async (e) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
-                  <input type="text" className="form-control" value={editedProfile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.surName || ''} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={editedProfile.firstName} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.firstName || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Middle Name</label>
@@ -429,7 +429,7 @@ const handleDeapproveAudit = async (e) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="tel" className="form-control" value={editedProfile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={editedProfile.phoneNumber || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -438,7 +438,7 @@ const handleDeapproveAudit = async (e) => {
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={editedProfile.email} readOnly />
+                  <input type="text" className="form-control" value={editedProfile.email || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>

@@ -44,11 +44,9 @@ const StaffAttendance = ({ staffAtten }) => {
     },
     {
       name: 'ClockIn',
-      // selector: row => dayjs(row.clockIn).format('h:mm A'),
-      selector: row => dayjs(row.clockIn).format('DD/MM/YYYY HH:mm:ss'),
+      selector: row => dayjs(row.clockIn).format('DD/MM/YYYY h:mm A'),
       sortable: true,
     },
-    
     {
       name: 'Duration',
       selector: row => {
@@ -64,11 +62,7 @@ const StaffAttendance = ({ staffAtten }) => {
     },
     {
       name: 'ClockOut',
-      // selector: row => {
-      //   const dateObject = new Date(row.clockOut);
-      //   return dayjs(dateObject).format('h:mm A');
-      // },
-      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY HH:mm:ss'),
+      selector: row => dayjs(row.clockOut).format('DD/MM/YYYY h:mm A'),
       sortable: true
     },
     {

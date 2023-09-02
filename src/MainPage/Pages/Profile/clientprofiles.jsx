@@ -492,14 +492,14 @@ const handleDeapproveAudit = async (e) => {
                                     
                                     {loading1 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
-                                    </div> : "Deapprove Audit"}
+                                    </div> : "Disapprove for Auditing"}
                                   </button>
                                   :
                                   <button onClick={() => handleApproveAudit(staffOne.profileId)} className="btn py-1 px-2 rounded text-white bg-success">
                                     
                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
-                                    </div> : "Approve Audit"}
+                                    </div> : "Approve for Auditing"}
                                   </button>
 
                               }
@@ -531,6 +531,14 @@ const handleDeapproveAudit = async (e) => {
                             <li>
                               <span className="title">Gender:</span>
                               <span className="text">{staffOne.gender}</span>
+                            </li>
+                            <li>
+                              <span className="title">Agreement Start Date:</span>
+                              <span className="text">{!staffOne.agreementStartDate ? "Not Updated" : moment(staffOne.agreementStartDate).format('ll')}</span>
+                            </li>
+                            <li>
+                              <span className="title">Agreement End Date:</span>
+                              <span className="text">{!staffOne.agreementEndDate ? "Not Updated" : moment(staffOne.agreementEndDate).format('ll')}</span>
                             </li>
                           </ul>
                         </div>
@@ -581,11 +589,11 @@ const handleDeapproveAudit = async (e) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Last Name</label>
-                  <input type="text" className="form-control" value={profile.surName} onChange={handleInputChange} readOnly />
+                  <input type="text" className="form-control" value={profile.surName || ''} onChange={handleInputChange} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>First Name</label>
-                  <input type="text" className="form-control" value={profile.firstName} readOnly />
+                  <input type="text" className="form-control" value={profile.firstName || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Middle Name</label>
@@ -593,7 +601,7 @@ const handleDeapproveAudit = async (e) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Phone Number</label>
-                  <input type="tel" className="form-control" value={profile.phoneNumber} readOnly />
+                  <input type="tel" className="form-control" value={profile.phoneNumber || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -602,7 +610,7 @@ const handleDeapproveAudit = async (e) => {
 
                 <div className="form-group col-md-4">
                   <label>Email</label>
-                  <input type="text" className="form-control" value={profile.email} readOnly />
+                  <input type="text" className="form-control" value={profile.email || ''} readOnly />
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender:</label>
@@ -613,10 +621,28 @@ const handleDeapproveAudit = async (e) => {
                   </select>
 
                 </div>
+
+                <div className="form-group col-md-4">
+                  <label>Agreement Start Date</label>
+                  <input type="date" className="form-control" name='agreementStartDate' value={editedProfile.agreementStartDate || ''} onChange={handleInputChange} />
+                </div>
+
+                <div className="form-group col-md-4">
+                  <label>Agreement End Date</label>
+                  <input type="date" className="form-control" name='agreementEndDate' value={editedProfile.agreementEndDate || ''} onChange={handleInputChange} />
+                </div>
+
+                <div className="form-group col-md-4">
+                  <label>Ndis No</label>
+                  <input type="text" className="form-control" name='ndisNo' value={editedProfile.ndisNo || ''} onChange={handleInputChange} />
+                </div>
+
                 <div className="form-group col-md-8">
                   <label>Address</label>
                   <input type="text" className="form-control" name='address' value={editedProfile.address || ''} onChange={handleInputChange} />
                 </div>
+
+                
 
 
                 {/* <div className="form-group col-md-12">

@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     logo: {
-        width: 50,
+        width: 80,
         height: 50,
         marginBottom: 10,
     },
