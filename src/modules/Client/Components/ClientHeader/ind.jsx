@@ -10,7 +10,8 @@ import {
     Avatar_06, Avatar_08, Avatar_09, Avatar_13, Avatar_17, Avatar_21
 } from '../../../../Entryfile/imagepath'
 import man from "../../../../assets/img/user.jpg"
-import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineVerifiedUser, MdPersonOutline } from 'react-icons/md';
+import { MdOutlineLockPerson, MdOutlineLockReset, MdOutlineLogout, MdOutlineVerifiedUser, MdPersonOutline } from 'react-icons/md';
+import { emptyCache } from '../../../../hooks/cacheUtils';
 
 
 const ClientHeader = (props) => {
@@ -337,6 +338,8 @@ const ClientHeader = (props) => {
                         </div>
                         <Link className="dropdown-item" to={"/client/clientchange-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
                         <Link className="dropdown-item" to={"/client/client-profile"}><MdPersonOutline /> &nbsp; Profile</Link>
+                        <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>
@@ -361,6 +364,8 @@ const ClientHeader = (props) => {
 
                     <Link className="dropdown-item" to={"/client/client-profile"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
                     <Link className="dropdown-item" to={"/client/change-password"}><MdPersonOutline /> &nbsp; Profile</Link>
+                    <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>

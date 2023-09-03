@@ -6,9 +6,10 @@ import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useHistory, withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import man from "../../../../assets/img/user.jpg"
-import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout } from "react-icons/md"
+import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout, MdOutlineLockReset } from "react-icons/md"
 import loggo from '../../../../assets/img/promaxcare_logo_icon.png';
 import axiosInstance from '../../../../store/axiosInstance';
+import { emptyCache } from '../../../../hooks/cacheUtils';
 
 const StaffHeader = (props) => {
     const navigate = useHistory()
@@ -46,21 +47,21 @@ const StaffHeader = (props) => {
     }
 
     const [companyOne, setCompanyOne] = useState({});
-  const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
 
-  const FetchCompany = async () => {
-    try {
-        const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
-        // console.log(data);
-        setCompanyOne(data.company)
+    const FetchCompany = async () => {
+        try {
+            const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+            // console.log(data);
+            setCompanyOne(data.company)
 
-    } catch (error) {
-        console.log(error);
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
-useEffect(() => {
-    FetchCompany()
-}, []);
+    useEffect(() => {
+        FetchCompany()
+    }, []);
 
     return (
         <div className="header" style={{ right: "0px" }}>
@@ -181,6 +182,8 @@ useEffect(() => {
                         </div>
                         <Link className="dropdown-item" to={"/staff/staff/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
                         <Link className="dropdown-item" to={"/staff/staff/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                        <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                     </div>

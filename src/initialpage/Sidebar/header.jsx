@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useHistory, withRouter, Link } from 'react-router-dom';
-import { MdOutlineLockPerson, MdOutlineLogout, MdOutlineSettings } from 'react-icons/md';
+import { MdOutlineLockPerson, MdOutlineLockReset, MdOutlineLogout, MdOutlineSettings } from 'react-icons/md';
 import man from "../../assets/img/user.jpg";
 import loggo from '../../assets/img/promaxcare_logo_icon.png';
 import axiosInstance from '../../store/axiosInstance';
+import { emptyCache } from '../../hooks/cacheUtils';
 const Header = (props) => {
   const navigate = useHistory();
   const handlesidebar = () => {
@@ -22,20 +23,20 @@ const Header = (props) => {
 
   const FetchCompany = async () => {
     try {
-        const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
-        // console.log(data);
-        setCompanyOne(data.company)
-        // console.log(data.company);
-        // setEditedCompany({ ...data.company })
+      const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+      // console.log(data);
+      setCompanyOne(data.company)
+      // console.log(data.company);
+      // setEditedCompany({ ...data.company })
 
 
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-}
-useEffect(() => {
+  }
+  useEffect(() => {
     FetchCompany()
-}, []);
+  }, []);
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.clear();
@@ -61,7 +62,7 @@ useEffect(() => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={ companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
+          <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
         </Link>
       </div>
       {/* /Logo */}
@@ -168,6 +169,8 @@ useEffect(() => {
             </div>
             <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
             {user.role === "CompanyAdmin" ? <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link> : ""}
+            <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
           </div>
         </li>
@@ -189,6 +192,7 @@ useEffect(() => {
         <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
           <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
           <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link>
+          <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
           <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
         </div>
       </div>

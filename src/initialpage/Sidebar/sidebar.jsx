@@ -493,13 +493,13 @@ const Sidebar = (props) => {
 
 
 
-
+              {/* 
               <div className='p-4'>
 
                 <button className='btn btn-outline-danger btn-sm' onClick={() => emptyCache()}>
                   Clear Cache
                 </button>
-              </div>
+              </div> */}
 
 
 
