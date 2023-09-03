@@ -208,6 +208,8 @@ const StaffHeader = (props) => {
 
                     <Link className="dropdown-item" to={"/staff/staff/changepassword"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
                     <Link className="dropdown-item" to={"/staff/staff/profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
+                    <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
                 </div>
