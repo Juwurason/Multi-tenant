@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { MdDashboard } from 'react-icons/md';
+import { emptyCache } from '../../hooks/cacheUtils';
 
 const Sidebar = (props) => {
   const MenuMore = () => {
@@ -484,13 +485,21 @@ const Sidebar = (props) => {
                   </ul>
                   : ""
                 }
+
+
+
               </li> : ""}
 
 
 
 
 
+              <div className='p-4'>
 
+                <button className='btn btn-outline-danger btn-sm' onClick={() => emptyCache()}>
+                  Clear Cache
+                </button>
+              </div>
 
 
 
