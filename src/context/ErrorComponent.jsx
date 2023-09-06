@@ -5,6 +5,8 @@ import {
 } from '../Entryfile/imagepath';
 import sad from '../assets/img/sad-bird.png'
 import loggo from '../assets/img/promaxcare_logo (2).png'
+import { emptyCache } from '../hooks/cacheUtils';
+
 
 const ErrorComponent = ({ message }) => {
 
@@ -14,9 +16,11 @@ const ErrorComponent = ({ message }) => {
         if (!user) {
             // User object not found in local storage, navigate to the login page
             window.location.replace('/login');
+            emptyCache()
         } else {
             // User object found, reload the browser
             window.location.reload();
+            emptyCache()
         }
     };
 
