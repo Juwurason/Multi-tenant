@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import { useCompanyContext } from '../../../context';
 import EditUser from '../../../_components/modelbox/EditUser';
@@ -36,6 +36,14 @@ const ActivityLog = () => {
 
     }, [dispatch]);
 
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
     // Access the entire state
     const loading = useSelector((state) => state.activity.isLoading);
     const activity = useSelector((state) => state.activity.data);
@@ -244,8 +252,12 @@ const ActivityLog = () => {
                                     <li className="breadcrumb-item active">Activity Log</li>
                                 </ul>
                             </div>
-                            <div className="col-auto float-end ml-auto">
-
+                            <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
                             </div>
                         </div>
                     </div>
