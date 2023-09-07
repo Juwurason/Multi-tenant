@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaDharmachakra, FaEllipsisV, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
+import { FaCopy, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import useHttp from '../../../hooks/useHttp';
@@ -40,9 +40,17 @@ const AllEmployees = () => {
   const staff = useSelector((state) => state.staff.data);
   const [loading1, setLoading1] = useState(false);
 
-    // console.log(staff)
+  // console.log(staff)
   const { post, get } = useHttp();
   const status = useRef(false);
+  const history = useHistory();
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
+
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
 
   const columns = [
     // {
@@ -165,12 +173,12 @@ const AllEmployees = () => {
   }
   const handleActivate = async (e) => {
     try {
-      const {data} = await axiosInstance.get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
+      const { data } = await axiosInstance.get(`/Staffs/activate_staff?userId=${id.userId}&staffid=${e}`,
       )
       if (data.status === 'Success') {
         toast.success(data.message)
         dispatch(fetchStaff(id.companyId))
-     }
+      }
 
 
     } catch (error) {
@@ -188,12 +196,12 @@ const AllEmployees = () => {
 
   const handleDeactivate = async (e) => {
     try {
-      const {data} = await axiosInstance.get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
+      const { data } = await axiosInstance.get(`/Staffs/deactivate_staff?userId=${id.userId}&staffid=${e}`,
       )
-     if (data.status === 'Success') {
+      if (data.status === 'Success') {
         toast.success(data.message)
         dispatch(fetchStaff(id.companyId))
-     }
+      }
 
     } catch (error) {
       // console.log(error);
@@ -368,8 +376,12 @@ const AllEmployees = () => {
                   <li className="breadcrumb-item active">Staffs</li>
                 </ul>
               </div>
-              <div className="col-auto float-end ml-auto">
-
+              <div className="col-md-2 d-none d-md-block">
+                <button className='btn' onClick={goBack}>
+                  <FaLongArrowAltLeft className='fs-3' />
+                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                  <FaLongArrowAltRight className='fs-3' />
+                </button>
               </div>
             </div>
           </div> : ""}

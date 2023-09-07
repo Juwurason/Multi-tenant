@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaLongArrowAltLeft, FaLongArrowAltRight, FaRegEdit, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Editemployee from "../../../_components/modelbox/Editemployee"
 import Sidebar from '../../../initialpage/Sidebar/sidebar';;
@@ -44,7 +44,15 @@ const AllAdmin = () => {
         return claims.some(claim => claim.value === claimType);
     };
     const privateHttp = useHttp();
+    
+    const history = useHistory();
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
 
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
 
     const columns = [
 
@@ -272,11 +280,16 @@ const AllAdmin = () => {
                                         <li className="breadcrumb-item active">Administrators</li>
                                     </ul>
                                 </div>
-                                <div className="col-auto float-end ml-auto">
 
-                                    <div className="view-icons">
+                                    {/* <div className="view-icons">
                                         <Link to="/app/employee/AllAdmin" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                                    </div>
+                                    </div> */}
+                                    <div className="col-md-2 d-none d-md-block">
+                                        <button className='btn' onClick={goBack}>
+                                            <FaLongArrowAltLeft className='fs-3' />
+                                        </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                            <FaLongArrowAltRight className='fs-3' />
+                                        </button>
                                 </div>
                             </div>
                         </div> : ""}

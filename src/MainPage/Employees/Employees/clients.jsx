@@ -1,14 +1,14 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileExcel, FaFilePdf, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -37,6 +37,14 @@ const Clients = () => {
   const loading = useSelector((state) => state.client.isLoading);
   const clients = useSelector((state) => state.client.data);
 
+  const history = useHistory();
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
+
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
 
 
   const { get, post } = useHttp();
@@ -348,6 +356,13 @@ const Clients = () => {
                 <li className="breadcrumb-item active">Clients</li>
               </ul>
             </div>
+            <div className="col-md-2 d-none d-md-block">
+                <button className='btn' onClick={goBack}>
+                  <FaLongArrowAltLeft className='fs-3' />
+                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                  <FaLongArrowAltRight className='fs-3' />
+                </button>
+              </div>
           </div>
         </div> : ""}
         <div className="row">
