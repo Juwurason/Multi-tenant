@@ -78,9 +78,18 @@ const ShiftAttendanceReport = () => {
         }
     }
 
+    const GenerateStaffandClient = async (e) => {
+        e.preventDefault();
+        setLoading2(true);
+        setTimeout(() => {
+          const url = `/staff-client/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+          window.open(url, '_blank');
+          setLoading2(false);
+        }, 2000);
+      }
+
     const Generate = async (e) => {
         e.preventDefault();
-        // dispatch(fetchTimesheet({ user: id.userId, sta: sta, dateFrom: dateFrom.current.value, dateTo: dateTo.current.value }));
         setLoading2(true);
         setTimeout(() => {
           const url = `/Alluser-shiftattendance/${dateFrom.current.value}/${dateTo.current.value}`;
@@ -416,9 +425,22 @@ const ShiftAttendanceReport = () => {
                                         <div className="col-auto mt-3">
                                             <div className="form-group">
 
-                                            {periodic.length <= 0 ? "" : <button
+                                            {sta !== "" || cli !== "" || periodic.length <= 0 ? "" : <button
                                                     // type='submit'
                                                     onClick={Generate}
+                                                    className="btn btn-info add-btn text-white rounded-2 m-r-5"
+                                                    disabled={loading2 ? true : false}
+                                                >
+
+
+                                                    {loading2 ? <div className="spinner-grow text-light" role="status">
+                                                        <span className="sr-only">Loading...</span>
+                                                    </div> : "Generate Shift Attendance Report"}
+                                                </button>}
+
+                                            {sta === "" || cli === "" || periodic.length <= 0 ? "" : <button
+                                                    // type='submit'
+                                                    onClick={GenerateStaffandClient}
                                                     className="btn btn-info add-btn text-white rounded-2 m-r-5"
                                                     disabled={loading2 ? true : false}
                                                 >

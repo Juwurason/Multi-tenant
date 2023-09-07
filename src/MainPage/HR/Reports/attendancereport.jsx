@@ -222,7 +222,7 @@ const AttendanceReport = () => {
 
     try {
       const { data } = await axiosInstance.get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      toast.success(data.message)
+      toast.success(data.message);
       setLoading3(false);
 
 

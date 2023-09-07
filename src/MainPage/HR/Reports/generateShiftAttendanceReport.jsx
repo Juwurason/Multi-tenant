@@ -83,14 +83,14 @@ const styles = StyleSheet.create({
 
     },
     tableCol: {
-        width: "78px",
+        width: "88px",
         borderWidth: 0,
         borderStyle: "solid",
         borderWidth: 1,
         borderColor: "#DEE2E6"
     },
     tableCol2: {
-        width: "88px",
+        width: "98px",
         borderWidth: 0,
         borderStyle: "solid",
         borderWidth: 1,

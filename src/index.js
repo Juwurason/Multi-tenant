@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import ErrorBoundaryWrapper from "./context/errorBoundary";
-import useCacheBuster from "./hooks/cacheBuster";
+// import CacheBuster from "./hooks/cacheBuster";
 dayjs.locale('en-au');
 const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
@@ -31,7 +31,7 @@ root.render(
             <OnlineStatus />
             <ToastContainer position="top-right" />
             <ErrorBoundaryWrapper>
-                <useCacheBuster />
+                {/* <CacheBuster /> */}
                 <Main />
             </ErrorBoundaryWrapper>
         </CompanyProvider>
