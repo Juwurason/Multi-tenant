@@ -193,9 +193,9 @@ const Invoice = () => {
         try {
             const { data } = await get(`/Invoice/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${type}`, { cacheTimeout: 300000 });
             if (data.status === "Success") {
-                console.log(data);
+                // console.log(data);
                 toast.success(data.message);
-                console.log(data?.invoiceItems);
+                // console.log(data?.invoiceItems);
                 setTotal(data?.invoiceItems);
                 setTotalAgreed(data?.invoiceItems?.totalAgreedDuration)
                 setTotalAmount(data?.invoiceItems?.totalAmount)
@@ -209,7 +209,9 @@ const Invoice = () => {
             }
             setLoading1(false)
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         } finally {
             setLoading1(false)
         }
@@ -511,7 +513,7 @@ const Invoice = () => {
                             </div>
 
                             <div className='col-md-4'>
-                                <a href={total.xeroUploadLink} className="btn btn-info add-btn text-white rounded-2">
+                                <a href={total.xeroUploadLink} target="_blank" className="btn btn-info add-btn text-white rounded-2">
                                     Post to Xero</a>
                             </div>
 
