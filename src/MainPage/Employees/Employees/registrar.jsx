@@ -6,10 +6,10 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { CSVLink } from 'react-csv';
 import DataTable from 'react-data-table-component';
 import { Helmet } from "react-helmet";
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf } from 'react-icons/fa';
+import { FaCopy, FaFileCsv, FaFileExcel, FaLongArrowAltLeft, FaLongArrowAltRight, FaFilePdf } from 'react-icons/fa';
 import { GoSearch } from 'react-icons/go';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import useHttp from '../../../hooks/useHttp';
@@ -35,6 +35,15 @@ const Registrar = () => {
     useEffect(() => {
         dispatch(fetchTemplate(id.companyId));
     }, [dispatch]);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const loading = useSelector((state) => state.template.isLoading);
     const template = useSelector((state) => state.template.data);
@@ -266,6 +275,13 @@ const Registrar = () => {
                                 <li className="breadcrumb-item active">Registrar</li>
                             </ul>
                         </div>
+                        <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
+                            </div>
                     </div>
                 </div>
                 {/* /Page Header */}

@@ -4,13 +4,11 @@ import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import Offcanvas from '../../../../Entryfile/offcanvance';
 import useHttp from '../../../../hooks/useHttp';
-import { FaAngleLeft, FaAngleRight, FaExclamationTriangle, FaPlus, } from 'react-icons/fa';
+import { FaLongArrowAltLeft, FaLongArrowAltRight, FaExclamationTriangle, FaPlus, } from 'react-icons/fa';
 import dayjs from 'dayjs';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-import { GoTrashcan } from 'react-icons/go';
-import { MdDoneOutline, MdOutlineCancel, MdOutlineEditCalendar, MdOutlineRefresh, MdThumbUpOffAlt } from 'react-icons/md';
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -53,6 +51,14 @@ const ShiftScheduling = () => {
     const staff = useSelector((state) => state.staff.data);
     const clients = useSelector((state) => state.client.data);
 
+
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     // useEffect(() => {
     //   const now = new Date(); // Current date and time
@@ -434,6 +440,13 @@ const ShiftScheduling = () => {
                                     <li className="breadcrumb-item active">Shift Roster</li>
                                 </ul> : ""}
                             </div>
+                            {/* <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
+                            </div> */}
                             {user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Add Shift Roster") ? <div className="col-auto float-end ml-auto p-4">
                                 <Link to="/app/employee/add-shift" className="btn btn-info add-btn text-white m-r-5 rounded-2">Add New Roster</Link>
                             </div> : ""}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useHttp from "../../../hooks/useHttp";
 import { GoSearch } from "react-icons/go";
 import { CSVLink } from "react-csv";
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileExcel, FaFilePdf } from "react-icons/fa";
 import CopyToClipboard from "react-copy-to-clipboard";
 import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
@@ -62,6 +62,15 @@ const Invoice = () => {
     const [totalAgreed, setTotalAgreed] = useState(0);
     const [totalDuration, setTotalDuration] = useState(0);
     const [showInvoice, setShowInvoice] = useState(true);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const columns = [
 
@@ -340,7 +349,13 @@ const Invoice = () => {
                                 <li className="breadcrumb-item active">Invoice</li>
                             </ul> : ""}
                         </div>
-
+                        <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
+                            </div>
                     </div>
                 </div>
 

@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaLongArrowAltLeft, FaLongArrowAltRight, FaRegFileAlt, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
@@ -48,7 +48,7 @@ const ShiftAttendanceReport = () => {
             const { data } = await axiosInstance.get(`/Attendances/get_shift_attendance?companyId=${id.companyId}`);
             setTotal(data.shiftAttendance);
             setShiftAttendance(data.shiftAttendance?.attendanceSplits);
-            
+
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -60,6 +60,15 @@ const ShiftAttendanceReport = () => {
     useEffect(() => {
         GetTimeshift();
     }, []);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const GetPeriodic = async (e) => {
         e.preventDefault();
@@ -82,21 +91,21 @@ const ShiftAttendanceReport = () => {
         e.preventDefault();
         setLoading2(true);
         setTimeout(() => {
-          const url = `/staff-client/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
-          window.open(url, '_blank');
-          setLoading2(false);
+            const url = `/staff-client/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+            window.open(url, '_blank');
+            setLoading2(false);
         }, 2000);
-      }
+    }
 
     const Generate = async (e) => {
         e.preventDefault();
         setLoading2(true);
         setTimeout(() => {
-          const url = `/Alluser-shiftattendance/${dateFrom.current.value}/${dateTo.current.value}`;
-          window.open(url, '_blank');
-          setLoading2(false);
+            const url = `/Alluser-shiftattendance/${dateFrom.current.value}/${dateTo.current.value}`;
+            window.open(url, '_blank');
+            setLoading2(false);
         }, 2000);
-      }
+    }
 
     //Declaring Variables
     const dispatch = useDispatch();
@@ -128,7 +137,7 @@ const ShiftAttendanceReport = () => {
     const [type, setType] = useState('');
     const dateFrom = useRef(null);
     const dateTo = useRef(null);
-    
+
 
 
 
@@ -359,14 +368,22 @@ const ShiftAttendanceReport = () => {
 
                 <div className="content container-fluid">
 
+
                     <div className="page-header">
-                        <div className="row">
-                            <div className="col-sm-12">
+                        <div className="row align-items-center">
+                            <div className="col">
                                 <h3 className="page-title">Shift Attendance Reports</h3>
                                 {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Shift Attendance Reports</li>
                                 </ul> : ""}
+                            </div>
+                            <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -425,7 +442,7 @@ const ShiftAttendanceReport = () => {
                                         <div className="col-auto mt-3">
                                             <div className="form-group">
 
-                                            {sta !== "" || cli !== "" || periodic.length <= 0 ? "" : <button
+                                                {sta !== "" || cli !== "" || periodic.length <= 0 ? "" : <button
                                                     // type='submit'
                                                     onClick={Generate}
                                                     className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -438,7 +455,7 @@ const ShiftAttendanceReport = () => {
                                                     </div> : "Generate Shift Attendance Report"}
                                                 </button>}
 
-                                            {sta === "" || cli === "" || periodic.length <= 0 ? "" : <button
+                                                {sta === "" || cli === "" || periodic.length <= 0 ? "" : <button
                                                     // type='submit'
                                                     onClick={GenerateStaffandClient}
                                                     className="btn btn-info add-btn text-white rounded-2 m-r-5"
@@ -463,10 +480,10 @@ const ShiftAttendanceReport = () => {
                                                     </div> : "Load"}
                                                 </button>
 
-                                                
+
 
                                             </div>
-                                            
+
                                         </div>
 
 
