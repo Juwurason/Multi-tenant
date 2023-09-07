@@ -1,14 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaLongArrowAltLeft, FaLongArrowAltRight, FaFilePdf, FaRegClock, FaRegEdit, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
@@ -34,6 +34,15 @@ const PublicHoliday = () => {
 
 
     const [loadingClockId, setLoadingClockId] = useState(null);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const handleClockClick = (date) => {
         setLoadingClockId(date);
@@ -127,13 +136,13 @@ const PublicHoliday = () => {
 
         try {
             const { data } = await get(`/SetUp/adjust_public_holiday?userId=${id.userId}&shiftdate=${e}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            
+
             if (data.status === "Success") {
                 toast.success(data.message);
                 FetchHoliday();
                 setLoading4(false);
             }
-           
+
 
 
         } catch (error) {
@@ -397,6 +406,13 @@ const PublicHoliday = () => {
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Public Holiday</li>
                             </ul> : ""}
+                        </div>
+                        <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
                         </div>
                     </div>
                 </div>
