@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaEye, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaCopy, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileCsv, FaFileExcel, FaFilePdf, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
@@ -37,6 +37,14 @@ const ProgressReport = () => {
         dispatch(fetchClient(id.companyId));
     }, [dispatch, progress]);
 
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
     // Access the entire state
     const loading = useSelector((state) => state.progress.isLoading);
     const progress = useSelector((state) => state.progress.data);
@@ -230,13 +238,20 @@ const ProgressReport = () => {
                 <div className="content container-fluid">
 
                     <div className="page-header">
-                        <div className="row">
-                            <div className="col-sm-12">
+                        <div className="row align-items-center">
+                            <div className="col">
                                 <h3 className="page-title">Progress Reports</h3>
                                 {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                     <li className="breadcrumb-item active">Progress Reports</li>
                                 </ul> : ""}
+                            </div>
+                            <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
                             </div>
                         </div>
                     </div>

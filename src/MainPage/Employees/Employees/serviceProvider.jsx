@@ -1,14 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaLongArrowAltLeft, FaLongArrowAltRight, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoEye, GoSearch, GoTrashcan } from 'react-icons/go';
@@ -20,20 +20,29 @@ import axiosInstance from '../../../store/axiosInstance';
 import { fectchServiceProvider } from '../../../store/slices/ServiceProviderSlice';
 
 const ServiceProvider = () => {
-    
+
     const [editpro, setEditPro] = useState({})
     const [loading2, setLoading2] = useState(false);
     const { get, post } = useHttp();
 
     const dispatch = useDispatch();
     const id = JSON.parse(localStorage.getItem('user'));
- 
-     useEffect(() => {
-         dispatch(fectchServiceProvider(id.companyId));
-     }, [dispatch]);
 
-     const loading = useSelector((state) => state.serviceProvider.isLoading);
-     const serviceProvider = useSelector((state) => state.serviceProvider.data);
+    useEffect(() => {
+        dispatch(fectchServiceProvider(id.companyId));
+    }, [dispatch]);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
+
+    const loading = useSelector((state) => state.serviceProvider.isLoading);
+    const serviceProvider = useSelector((state) => state.serviceProvider.data);
     const columns = [
         // {
         //     name: '#',
@@ -52,7 +61,7 @@ const ServiceProvider = () => {
             sortable: true,
 
         },
-       
+
         {
             name: 'Phone',
             selector: row => row.phone,
@@ -73,7 +82,7 @@ const ServiceProvider = () => {
             });
         }
         // handleEdit()
-    },[]);
+    }, []);
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -267,7 +276,7 @@ const ServiceProvider = () => {
     // }
 
 
-    
+
 
     return (
         <div className="page-wrapper">
@@ -286,6 +295,14 @@ const ServiceProvider = () => {
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Referral</li>
                             </ul>
+                        </div>
+
+                        <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
                         </div>
                     </div>
                 </div>

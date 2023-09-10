@@ -255,17 +255,17 @@ useEffect(() => {
     );
 };
 
-const GenerateShiftAttendance = () => {
+const StaffAndClientAttendance = () => {
     const id = JSON.parse(localStorage.getItem('user'));
-    const { dateFrom, dateTo } = useParams();
+    const { sta, cli, dateFrom, dateTo } = useParams();
     const { get } = useHttp();
     const [timesheet, setTimesheet] = useState([]);
     const [total, setTotal] = useState({});
     
     const GetTimeshift = async (e) => {
         try {
-            const { data } = await get(`/Attendances/get_periodic_shift_attendnace?companyId=${id.companyId}&fromDate=${dateFrom}&toDate=${dateTo}&staffId=&clientId=&shifttype=`, { cacheTimeout: 300000 });
-            // console.log(data);
+            const { data } = await get(`/Attendances/get_periodic_shift_attendnace?companyId=${id.companyId}&fromDate=${dateFrom}&toDate=${dateTo}&staffId=${sta}&clientId=${cli}&shifttype=`, { cacheTimeout: 300000 });
+            console.log(data);
             setTimesheet(data?.shiftAttendance?.attendanceSplits);
             setTotal(data?.shiftAttendance)
             if (data.status === "Success") {
@@ -295,4 +295,4 @@ const GenerateShiftAttendance = () => {
     );
 };
 
-export default GenerateShiftAttendance;
+export default StaffAndClientAttendance;

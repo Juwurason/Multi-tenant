@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
-import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaSearch, FaTrash } from 'react-icons/fa';
+import { FaCopy, FaDharmachakra, FaEdit, FaFileCsv, FaFileExcel, FaFileExport, FaFilePdf, FaRegEdit, FaLongArrowAltLeft, FaLongArrowAltRight, } from 'react-icons/fa';
 import { GoSearch, GoTrashcan } from 'react-icons/go';
 import EditUser from '../../../_components/modelbox/EditUser';
 import DataTable from "react-data-table-component";
@@ -43,7 +43,14 @@ const AllUser = () => {
 
     const { get, post } = useHttp()
 
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
 
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
 
 
@@ -316,8 +323,12 @@ const AllUser = () => {
                                     <li className="breadcrumb-item active">users</li>
                                 </ul>
                             </div>
-                            <div className="col-auto float-end ml-auto">
-
+                            <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
                             </div>
                         </div>
                     </div>

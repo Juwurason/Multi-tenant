@@ -222,7 +222,7 @@ const AttendanceReport = () => {
 
     try {
       const { data } = await axiosInstance.get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=&companyId=${id.companyId}`, { cacheTimeout: 300000 });
-      toast.success(data.message)
+      toast.success(data.message);
       setLoading3(false);
 
 
@@ -624,6 +624,7 @@ const AttendanceReport = () => {
                       <div className="form-group">
                         <a href={timesheet?.timesheet?.xeroUploadLink}
                           type='submit'
+                          target="_blank"
                           className="btn btn-success add-btn text-white rounded-2 m-r-5"
 
                         >
@@ -638,6 +639,7 @@ const AttendanceReport = () => {
                       <div className="form-group">
                         <a href={allTimesheet?.timesheet?.xeroUploadLink}
                           type='submit'
+                          target="_blank"
                           className="btn btn-success add-btn text-white rounded-2 m-r-5"
                           style={{ fontSize: "12px" }}
                         >

@@ -3,7 +3,7 @@
  */
  import React, { useEffect, useRef, useState } from 'react';
  import { Helmet } from "react-helmet";
- import { Link } from 'react-router-dom';
+ import { Link, useHistory } from 'react-router-dom';
  import useHttp from '../../../hooks/useHttp';
  import { useCompanyContext } from '../../../context';
  import DataTable from "react-data-table-component";
@@ -11,7 +11,7 @@
  import { CopyToClipboard } from "react-copy-to-clipboard";
  import jsPDF from "jspdf";
  import "jspdf-autotable";
- import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
+ import { FaCopy, FaEdit, FaFileCsv, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileExcel, FaFilePdf } from "react-icons/fa";
  import { toast } from 'react-toastify';
  import { GoSearch, GoTrashcan } from 'react-icons/go';
  import dayjs from 'dayjs';
@@ -107,7 +107,15 @@
      useEffect(() => {
          FetchSchedule()
      }, []);
- 
+     
+     const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
  
      const columns = [
         {
@@ -362,6 +370,13 @@
                                  <li className="breadcrumb-item active">Time Period</li>
                              </ul>
                          </div>
+                         <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
+                        </div>
                      </div>
                  </div>
                  {/* /Page Header */}

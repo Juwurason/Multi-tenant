@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import useHttp from '../../../hooks/useHttp';
 import { toast } from 'react-toastify';
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 import EditUser from '../../../_components/modelbox/EditUser';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
@@ -28,7 +29,7 @@ const UserRoles = () => {
         try {
             setLoading(true);
             const { data } = await get(`/Account/get_roles?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            console.log(data);
+            // console.log(data);
             setRoles(data.roles);
             setLoading(false)
         } catch (error) {
@@ -46,7 +47,14 @@ const UserRoles = () => {
     }, []);
 
 
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
 
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
     const handleSubmit = async () => {
 
         if (roleName.current.value === ""
@@ -144,8 +152,12 @@ const UserRoles = () => {
                                         <li className="breadcrumb-item active">Manage Roles</li>
                                     </ul>
                                 </div>
-                                <div className="col-auto float-end ml-auto">
-
+                                <div className="col-md-2 d-none d-md-block">
+                                    <button className='btn' onClick={goBack}>
+                                        <FaLongArrowAltLeft className='fs-3' />
+                                    </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                        <FaLongArrowAltRight className='fs-3' />
+                                    </button>
                                 </div>
                             </div>
                         </div> : ""}

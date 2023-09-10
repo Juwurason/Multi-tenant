@@ -17,6 +17,7 @@ import formTemplateDetails from '../MainPage/Employees/Setup/formTemplateDetails
 import ResetPassword from './resetPassword';
 import RefferalDetails from '../MainPage/Employees/Employees/refferalDetails';
 import GenerateShiftAttendance from '../MainPage/HR/Reports/generateShiftAttendanceReport';
+import StaffAndClientAttendance from '../MainPage/HR/Reports/staffAndClientAttendance';
 
 const App = () => {
     const location = useLocation();
@@ -72,6 +73,7 @@ const App = () => {
             <Route path={`/staff-timesheet/:sta/:dateFrom/:dateTo`} component={Timesheet} />
             <Route path={`/Allstaff-timesheet/:dateFrom/:dateTo`} component={TimesheetForAll} />
             <Route path={`/Alluser-shiftattendance/:dateFrom/:dateTo`} component={GenerateShiftAttendance} />
+            <Route path={`/staff-client/:sta/:cli/:dateFrom/:dateTo`} component={StaffAndClientAttendance} />
             <Route path={`/staff-progress/:uid`} component={StaffProgress} />
             <Route path={`/form-details/:uid`} component={formTemplateDetails} />
             <Route path={`/refferal-details/:uid`} component={RefferalDetails} />

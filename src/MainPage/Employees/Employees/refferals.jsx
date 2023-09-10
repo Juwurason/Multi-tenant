@@ -1,14 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { CSVLink } from "react-csv";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaFileExcel, FaLongArrowAltLeft, FaLongArrowAltRight, FaFilePdf, } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import { toast } from 'react-toastify';
 import { GoEye, GoSearch, GoTrashcan } from 'react-icons/go';
@@ -20,20 +20,29 @@ import Swal from 'sweetalert2';
 import axiosInstance from '../../../store/axiosInstance';
 
 const Refferal = () => {
-    
+
     const [editpro, setEditPro] = useState({})
     const [loading2, setLoading2] = useState(false);
     const { get, post } = useHttp();
 
     const dispatch = useDispatch();
     const id = JSON.parse(localStorage.getItem('user'));
- 
-     useEffect(() => {
-         dispatch(fetchRefferals(id.companyId));
-     }, [dispatch]);
 
-     const loading = useSelector((state) => state.refferals.isLoading);
-     const refferals = useSelector((state) => state.refferals.data);
+    useEffect(() => {
+        dispatch(fetchRefferals(id.companyId));
+    }, [dispatch]);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
+
+    const loading = useSelector((state) => state.refferals.isLoading);
+    const refferals = useSelector((state) => state.refferals.data);
     //  console.log(refferals[0].isAccepted);
     const columns = [
         // {
@@ -49,15 +58,15 @@ const Refferal = () => {
         },
         {
             name: 'Status',
-            selector: row => row.isAccepted, 
+            selector: row => row.isAccepted,
             sortable: true,
             cell: row => (
-              
-              <span className={`px-2 py-1 rounded-pill fw-bold ${row.isAccepted ? 'bg-success' : 'bg-warning'}`} style={{ fontSize: "10px" }}>
-              {row.isAccepted ? 'Accepted' : 'Pending'}
-            </span>
+
+                <span className={`px-2 py-1 rounded-pill fw-bold ${row.isAccepted ? 'bg-success' : 'bg-warning'}`} style={{ fontSize: "10px" }}>
+                    {row.isAccepted ? 'Accepted' : 'Pending'}
+                </span>
             ),
-          },
+        },
 
         {
             name: 'Current Residence',
@@ -92,7 +101,7 @@ const Refferal = () => {
             });
         }
         // handleEdit()
-    },[]);
+    }, []);
 
     const handleExcelDownload = () => {
         const workbook = new ExcelJS.Workbook();
@@ -227,30 +236,30 @@ const Refferal = () => {
                     {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit Form
                     </button> | */}
-                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}  onClick={() => handleDetails(data.clientReferralId)}>
-                        
-                        {
-                                    loading2 ?
-                                        <>
-                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
-                                            Please wait...
-                                        </>
-                                        :
-                                        "View Form"
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleDetails(data.clientReferralId)}>
 
-                                }
+                        {
+                            loading2 ?
+                                <>
+                                    <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                    Please wait...
+                                </>
+                                :
+                                "View Form"
+
+                        }
                     </button> |
                     {/* <button 
                     // onClick={() => handleDelete(data.documentId)} 
                     className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> | */}
-                    {!data.isAccepted && <button 
-                    onClick={() => handleAccept(data.clientReferralId)}
-                     className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                    {!data.isAccepted && <button
+                        onClick={() => handleAccept(data.clientReferralId)}
+                        className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
                         Accept
                     </button>}
-                   
+
                 </div>
 
             </div>
@@ -318,7 +327,7 @@ const Refferal = () => {
     // }
 
 
-    
+
 
     return (
         <div className="page-wrapper">
@@ -337,6 +346,13 @@ const Refferal = () => {
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                 <li className="breadcrumb-item active">Referral</li>
                             </ul>
+                        </div>
+                        <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
                         </div>
                     </div>
                 </div>

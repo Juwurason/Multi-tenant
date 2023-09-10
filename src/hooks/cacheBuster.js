@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const useCacheBuster = () => {
+const CacheBuster = () => {
     const location = useLocation();
     const parseVersion = (str) => +str.replace(/\D/g, '');
 
@@ -27,4 +27,4 @@ const useCacheBuster = () => {
     return null;
 };
 
-export default useCacheBuster;
+export default CacheBuster;

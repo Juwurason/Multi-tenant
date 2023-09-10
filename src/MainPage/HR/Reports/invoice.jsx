@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useHttp from "../../../hooks/useHttp";
 import { GoSearch } from "react-icons/go";
 import { CSVLink } from "react-csv";
-import { FaCopy, FaFileCsv, FaFileExcel, FaFilePdf } from "react-icons/fa";
+import { FaCopy, FaFileCsv, FaLongArrowAltLeft, FaLongArrowAltRight, FaFileExcel, FaFilePdf } from "react-icons/fa";
 import CopyToClipboard from "react-copy-to-clipboard";
 import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
@@ -62,6 +62,15 @@ const Invoice = () => {
     const [totalAgreed, setTotalAgreed] = useState(0);
     const [totalDuration, setTotalDuration] = useState(0);
     const [showInvoice, setShowInvoice] = useState(true);
+
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
+
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const columns = [
 
@@ -193,9 +202,9 @@ const Invoice = () => {
         try {
             const { data } = await get(`/Invoice/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${type}`, { cacheTimeout: 300000 });
             if (data.status === "Success") {
-                console.log(data);
+                // console.log(data);
                 toast.success(data.message);
-                console.log(data?.invoiceItems);
+                // console.log(data?.invoiceItems);
                 setTotal(data?.invoiceItems);
                 setTotalAgreed(data?.invoiceItems?.totalAgreedDuration)
                 setTotalAmount(data?.invoiceItems?.totalAmount)
@@ -209,7 +218,9 @@ const Invoice = () => {
             }
             setLoading1(false)
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            toast.error(error.response.data.message)
+            toast.error(error.response.data.title)
         } finally {
             setLoading1(false)
         }
@@ -338,7 +349,13 @@ const Invoice = () => {
                                 <li className="breadcrumb-item active">Invoice</li>
                             </ul> : ""}
                         </div>
-
+                        <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
+                            </div>
                     </div>
                 </div>
 
@@ -511,7 +528,7 @@ const Invoice = () => {
                             </div>
 
                             <div className='col-md-4'>
-                                <a href={total.xeroUploadLink} className="btn btn-info add-btn text-white rounded-2">
+                                <a href={total.xeroUploadLink} target="_blank" className="btn btn-info add-btn text-white rounded-2">
                                     Post to Xero</a>
                             </div>
 
