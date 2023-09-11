@@ -16,7 +16,6 @@ const ErrorComponent = ({ message }) => {
         if (!user) {
             // User object not found in local storage, navigate to the login page
             window.location.replace('/login');
-            emptyCache()
         } else {
             // User object found, reload the browser
             window.location.reload();

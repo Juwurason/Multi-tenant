@@ -163,11 +163,11 @@ const AdminProfile = () => {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading2(false)
-}
-finally{
-  setLoading2(false)
-}
-}
+    }
+    finally {
+      setLoading2(false)
+    }
+  }
 
   const handleDeactivate = async (e) => {
     setLoading1(true)
@@ -187,10 +187,10 @@ finally{
 
 
     }
-    finally{
+    finally {
       setLoading1(false)
     }
-}
+  }
   const history = useHistory();
 
   const goBack = () => {
@@ -253,17 +253,17 @@ finally{
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
                               <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`}
                                 className="btn py-2 rounded text-white bg-primary">Admin Doc</Link>
-                            {
+                              {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.administratorId)} className="btn py-1 px-2 rounded text-white bg-danger">
-                                    
+
                                     {loading1 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
                                     </div> : "Deactivate Admin"}
                                   </button>
                                   :
                                   <button onClick={() => handleActivate(staffOne.administratorId)} className="btn py-1 px-2 rounded text-white bg-success">
-                                    
+
                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
                                     </div> : "Activate Admin"}
