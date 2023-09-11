@@ -7,6 +7,7 @@ import Offcanvas from '../../Entryfile/offcanvance';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import useHttp from '../../hooks/useHttp';
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 
 const EditAttendance = () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -17,13 +18,20 @@ const EditAttendance = () => {
     const navigate = useHistory();
     const privateHttp = useHttp();
 
+    const history = useHistory();
+    const goBack = () => {
+        history.goBack(); // Go back in history
+    };
 
+    const goForward = () => {
+        history.goForward(); // Go forward in history
+    };
 
     const FetchData = async () => {
         setLoading(true);
 
         try {
-            const {data} = await privateHttp.get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
+            const { data } = await privateHttp.get(`/Attendances/${uid}`, { cacheTimeout: 300000 });
             // console.log(data);
             setAttendance(data);
             // Process the attendance data here
@@ -42,7 +50,7 @@ const EditAttendance = () => {
     }, []);
 
 
-    
+
     const [imageFile, setImageFile] = useState(null);
 
     const handleFileChange = (e) => {
@@ -63,10 +71,10 @@ const EditAttendance = () => {
         const value = target.value;
         const newValue = value === "" ? "" : value;
         setAttendance({
-          ...attendance,
-          [name]: newValue
+            ...attendance,
+            [name]: newValue
         });
-      }
+    }
 
     const SendReport = async (e) => {
         e.preventDefault()
@@ -97,7 +105,7 @@ const EditAttendance = () => {
         try {
             const { data } = await privateHttp.post(`/Attendances/edit/${uid}?userId=${user.userId}`,
                 info);
-                // console.log(data);
+            // console.log(data);
             if (data.status === "Success") {
                 Swal.fire(
                     '',
@@ -134,7 +142,7 @@ const EditAttendance = () => {
                 {/* Page Content */}
                 <div className="content container-fluid">
                     {/* Page Header */}
-                    <div className="page-header">
+                    {/* <div className="page-header">
                         <div className="row">
                             <div className="col-sm-12">
                                 <h3 className="page-title">Edit Attendance</h3>
@@ -143,6 +151,31 @@ const EditAttendance = () => {
                                     <li className="breadcrumb-item"><Link to="/app/reports/attendance-reports">Attendance</Link></li>
                                     <li className="breadcrumb-item active">Edit Attendance</li>
                                 </ul>
+                                <div className="col-md-2 d-none d-md-block">
+                                    <button className='btn' onClick={goBack}>
+                                        <FaLongArrowAltLeft className='fs-3' />
+                                    </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                        <FaLongArrowAltRight className='fs-3' />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
+                    <div className="page-header">
+                        <div className="row align-items-center">
+                            <div className="col">
+                                <h3 className="page-title">Edit Attendance</h3>
+                               <ul className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                                    <li className="breadcrumb-item active">Edit Attendance</li>
+                                </ul>
+                            </div>
+                            <div className="col-md-2 d-none d-md-block">
+                                <button className='btn' onClick={goBack}>
+                                    <FaLongArrowAltLeft className='fs-3' />
+                                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                    <FaLongArrowAltRight className='fs-3' />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -160,14 +193,14 @@ const EditAttendance = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock In</label>
                                                     <input className="form-control datetimepicker" type="datetime-local"
-                                                       name="clockIn" value={attendance.clockIn || ''} onChange={handleInputChange} />
+                                                        name="clockIn" value={attendance.clockIn || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="form-group">
                                                     <label htmlFor="">Clock Out</label>
                                                     <input className="form-control datetimepicker" type="datetime-local"
-                                                     name="clockOut" value={attendance.clockOut || ''} onChange={handleInputChange} />
+                                                        name="clockOut" value={attendance.clockOut || ''} onChange={handleInputChange} />
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
