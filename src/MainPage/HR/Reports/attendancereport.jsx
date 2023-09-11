@@ -221,7 +221,8 @@ const AttendanceReport = () => {
     setLoading3(true)
 
     try {
-      const { data } = await axiosInstance.get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+      const { data } = await axiosInstance.get(`/ShiftRosters/send_timesheet?userId=${id.userId}&fromDate=${dateFrom.current.value}&toDate=${dateTo.current.value}&staffId=${sta}&companyId=${id.companyId}`, { cacheTimeout: 300000 });
+
       toast.success(data.message);
       setLoading3(false);
 
@@ -233,7 +234,7 @@ const AttendanceReport = () => {
       toast.error(error.response.data.title)
       setLoading3(false)
     }
-    finally{
+    finally {
       setLoading3(false)
     }
 

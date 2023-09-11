@@ -23,7 +23,7 @@ const optionsOther = [
 ];
 
 
-const ClientDisability = () => {
+const ClientDisability = ({ uid }) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -33,34 +33,33 @@ const ClientDisability = () => {
         }
     });
 
-        const [disabled, setDisabled] = useState([])
-       const [editDisabled, setEditDisabled] = useState({
+    const [disabled, setDisabled] = useState([])
+    const [editDisabled, setEditDisabled] = useState({
         mobilityAssistance: ['Need Mobility Assistance'] // Initial value should be an array to hold selected values
-      });
+    });
 
-      function handleInputChan(event) {
+    function handleInputChan(event) {
         const target = event.target;
         const name = target.name;
         const value = target.value;
         const newValue = value === "" ? "" : value;
         setEditDisabled({
-          ...editDisabled,
-          [name]: newValue
+            ...editDisabled,
+            [name]: newValue
         });
-      }
-      const { uid } = useParams()
-      const { get, post } = useHttp();
-      const [loading1, setLoading1] = useState(false);
-      const [idSave, setIdSave] = useState("");
+    }
+    const { get, post } = useHttp();
+    const [loading1, setLoading1] = useState(false);
+    const [idSave, setIdSave] = useState("");
 
     const FetchDisable = async () => {
         // setLoading2(true)
         try {
             const { data } = await get(`/Disabilities/get_all?clientId=${uid}`, { cacheTimeout: 300000 });
             // console.log(data);
-           setDisabled(data)
-             
-             if (data && data.length > 0) {
+            setDisabled(data)
+
+            if (data && data.length > 0) {
                 const disabilityId = data[1].disabilityId;
                 setIdSave(disabilityId)
                 const { data: secondData } = await get(`/Disabilities/${disabilityId}`, { cacheTimeout: 300000 });
@@ -82,16 +81,16 @@ const ClientDisability = () => {
                 setEditDisabled({
                     mobilityAssistance: options.filter(option => option.selected),
                     mobilityIndependency: options.filter(option => option.selected) // Assuming data contains mobilityAssistance array
-                  });
+                });
 
-              }
+            }
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
         }
-       
-        
+
+
     };
     useEffect(() => {
         FetchDisable()
@@ -181,34 +180,13 @@ const ClientDisability = () => {
         history.goForward(); // Go forward in history
     };
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Disability Support Needs</title>
-                <meta name="description" content="Disability Support Needs" />
-            </Helmet>
-            <div className="content container-fluid">
-                {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Disability Support Needs</li>
-                                <li className="breadcrumb-item active">Check if Yes and Uncheck if No</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {/* /Page Header */}
-                {disabled.length === 0 && <div>
-                    
+        <div className="">
+
+            {/* Page Header */}
+
+            {/* /Page Header */}
+            {disabled.length === 0 && <div>
+
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
@@ -320,7 +298,7 @@ const ClientDisability = () => {
                                     <div className='col-md-6'>
                                         <div className="form-group">
                                             <label>Memory Related Issues</label>
-                                            
+
                                             <select className='form-select' ref={memoryIssues} required>
                                                 <option defaultValue hidden >Select Issues</option>
                                                 <option value={"No Issues"}>No Issues</option>
@@ -399,11 +377,11 @@ const ClientDisability = () => {
                         </div>
                     </div>
                 </div>
-                </div>}
+            </div>}
 
 
-                {disabled.length > 0 && <div>
-                    
+            {disabled.length > 0 && <div>
+
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
@@ -516,7 +494,7 @@ const ClientDisability = () => {
                                     <div className='col-md-6'>
                                         <div className="form-group">
                                             <label>Memory Related Issues</label>
-                                            
+
                                             <select className='form-select' ref={memoryIssues} required>
                                                 <option defaultValue hidden >Select Issues</option>
                                                 <option value={"No Issues"}>No Issues</option>
@@ -590,20 +568,19 @@ const ClientDisability = () => {
                         <div className="text-start">
                             <button type="submit" className="btn btn-primary px-2" disabled={loading1 ? true : false}
                             //  onClick={EditAvail} 
-                             >
+                            >
                                 {loading1 ? <div className="spinner-grow text-light" role="status">
                                     <span className="sr-only">Loading...</span>
                                 </div> : "Submit"}</button>
                         </div>
                     </div>
                 </div>
-                </div>}
+            </div>}
 
 
 
 
 
-            </div>
 
         </div>
     );

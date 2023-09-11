@@ -44,7 +44,7 @@ const options = [
 ];
 
 
-const ClientSchedule = () => {
+const ClientSchedule = ({ uid }) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -54,7 +54,7 @@ const ClientSchedule = () => {
         }
     });
 
-    const { uid } = useParams()
+    // const { uid } = useParams()
     const [selected, setSelected] = useState([]);
     const [staffAvail, setStaffAvail] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -385,246 +385,223 @@ const ClientSchedule = () => {
         history.goForward(); // Go forward in history
     };
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Client Schedule</title>
-                <meta name="description" content="Client Schedule" />
-            </Helmet>
-            <div className="content container-fluid">
-                {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            {/* <h3 className="page-title">Staff Client Schedule</h3> */}
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Client Schedule</li>
-                            </ul>
+        <div className="">
+
+            {/* Page Header */}
+
+            {/* /Page Header */}
+            <div className="row">
+                <div className="col-md-12">
+                    <div className="card">
+                        <div className="card-header">
+                            <h4 className="card-title mb-0">Add Schedule</h4>
                         </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
+                        <div className="card-body">
+                            <form className="row">
+                                <div className='col-md-6'>
+                                    <div className="form-group">
+                                        <label>Days</label>
+                                        <select className='form-select' onChange={(e) => setSelectedDay(e.target.value)} required>
+                                            <option defaultValue hidden >Select Days</option>
+                                            <option value={"Monday"}>Monday</option>
+                                            <option value={"Tuesday"}>Tuesday</option>
+                                            <option value={"Wednessday"}>Wednessday</option>
+                                            <option value={"Thursday"}>Thursday</option>
+                                            <option value={"Friday"}>Friday</option>
+                                            <option value={"Saturday"}>Saturday</option>
+                                            <option value={"Sunday"}>Sunday</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                </div>
-                {/* /Page Header */}
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card">
-                            <div className="card-header">
-                                <h4 className="card-title mb-0">Add Schedule</h4>
-                            </div>
-                            <div className="card-body">
-                                <form className="row">
-                                    <div className='col-md-6'>
-                                        <div className="form-group">
-                                            <label>Days</label>
-                                            <select className='form-select' onChange={(e) => setSelectedDay(e.target.value)} required>
-                                                <option defaultValue hidden >Select Days</option>
-                                                <option value={"Monday"}>Monday</option>
-                                                <option value={"Tuesday"}>Tuesday</option>
-                                                <option value={"Wednessday"}>Wednessday</option>
-                                                <option value={"Thursday"}>Thursday</option>
-                                                <option value={"Friday"}>Friday</option>
-                                                <option value={"Saturday"}>Saturday</option>
-                                                <option value={"Sunday"}>Sunday</option>
-                                            </select>
-                                        </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label>Activities</label>
+                                        <MultiSelect
+                                            options={options}
+                                            value={selected}
+                                            onChange={handleSelected}
+                                            labelledBy="Select Activities"
+                                        />
                                     </div>
+                                </div>
 
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label>Activities</label>
-                                            <MultiSelect
-                                                options={options}
-                                                value={selected}
-                                                onChange={handleSelected}
-                                                labelledBy="Select Activities"
-                                            />
-                                        </div>
+                                <div className='col-md-6'>
+                                    <div className="form-group">
+                                        <label>From Time of Day</label>
+                                        <input className="form-control" type="time" onChange={(e) => setSelectedTimeFrom(e.target.value)} required />
                                     </div>
+                                </div>
+                                <div className='col-md-6'>
+                                    <div className="form-group">
+                                        <label>To Time of Day</label>
+                                        <input className="form-control" type="time" onChange={(e) => setSelectedTimeTo(e.target.value)} required />
+                                    </div>
+                                </div>
 
-                                    <div className='col-md-6'>
-                                        <div className="form-group">
-                                            <label>From Time of Day</label>
-                                            <input className="form-control" type="time" onChange={(e) => setSelectedTimeFrom(e.target.value)} required />
-                                        </div>
-                                    </div>
-                                    <div className='col-md-6'>
-                                        <div className="form-group">
-                                            <label>To Time of Day</label>
-                                            <input className="form-control" type="time" onChange={(e) => setSelectedTimeTo(e.target.value)} required />
-                                        </div>
-                                    </div>
-
-                                    <div className="text-start">
-                                        <button type="submit" className="btn btn-primary add-btn rounded px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
-                                            {loading1 ? <div className="spinner-grow text-light" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div> : "Add"}</button>
-                                    </div>
-                                </form>
-                            </div>
+                                <div className="text-start">
+                                    <button type="submit" className="btn btn-primary add-btn rounded px-2" disabled={loading1 ? true : false} onClick={PostAvail}>
+                                        {loading1 ? <div className="spinner-grow text-light" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div> : "Add"}</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h4 className="card-title">Add Schedule</h4>
-                </div>
-                <div className='mt-4 border'>
-                    <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
+            </div>
+            <div>
+                <h4 className="card-title">Add Schedule</h4>
+            </div>
+            <div className='mt-4 border'>
+                <div className="row px-2 py-3 d-flex justify-content-between align-items-center gap-4">
 
-                        <div className="col-md-3">
-                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
-                                <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
-                                <GoSearch />
-                            </div>
-                        </div>
-                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
-                            <CSVLink
-                                data={staffAvail}
-                                filename={"document.csv"}
-
-                            >
-                                <button
-
-                                    className='btn text-info'
-                                    title="Export as CSV"
-                                >
-                                    <FaFileCsv />
-                                </button>
-
-                            </CSVLink>
-                            <button
-                                className='btn text-danger'
-                                onClick={handlePDFDownload}
-                                title="Export as PDF"
-                            >
-                                <FaFilePdf />
-                            </button>
-                            <button
-                                className='btn text-primary'
-
-                                onClick={handleExcelDownload}
-                                title="Export as Excel"
-                            >
-                                <FaFileExcel />
-                            </button>
-                            <CopyToClipboard text={JSON.stringify(staffAvail)}>
-                                <button
-
-                                    className='btn text-warning'
-                                    title="Copy Table"
-                                    onClick={() => toast("Table Copied")}
-                                >
-                                    <FaCopy />
-                                </button>
-                            </CopyToClipboard>
+                    <div className="col-md-3">
+                        <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                            <input type="text" placeholder="Search...." className='border-0 outline-none' onChange={handleSearch} />
+                            <GoSearch />
                         </div>
                     </div>
-                    <DataTable data={filteredData} columns={columns}
-                        pagination
-                        highlightOnHover
-                        searchable
-                        searchTerm={searchText}
-                        progressPending={loading}
-                        progressComponent={<div className='text-center fs-1'>
-                            <div className="spinner-grow text-secondary" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>}
-                        expandableRows
-                        expandableRowsComponent={ButtonRow}
-                        paginationTotalRows={filteredData.length}
-                        responsive
+                    <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                        <CSVLink
+                            data={staffAvail}
+                            filename={"document.csv"}
 
-
-                    />
-
-
-                </div>
-                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Schedule</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <form className="row">
-                            <div className='col-md-12'>
-                                <div className="form-group">
-                                    <label>Days</label>
-                                    <select
-                                        className='form-select'
-                                        name="days" value={editAvail.days || ''} onChange={handleInputChange}
-                                        required
-                                    >
-                                        <option defaultValue hidden>Select Days</option>
-                                        <option value={"Monday"}>Monday</option>
-                                        <option value={"Tuesday"}>Tuesday</option>
-                                        <option value={"Wednessday"}>Wednessday</option>
-                                        <option value={"Thursday"}>Thursday</option>
-                                        <option value={"Friday"}>Friday</option>
-                                        <option value={"Saturday"}>Saturday</option>
-                                        <option value={"Sunday"}>Sunday</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <div className="form-group">
-                                    <label>Activities</label>
-                                    <MultiSelect
-                                        options={options}
-                                        value={selectedActivities}
-                                        onChange={handleActivityChange}
-                                        labelledBy={'Select Activities'}
-                                    />
-                                </div>
-                            </div>
-                            <div className='col-md-6'>
-                                <div className="form-group">
-                                    <label>From Time of Day</label>
-                                    <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className='col-md-6'>
-                                <div className="form-group">
-                                    <label>To Time of Day</label>
-                                    <input
-                                        className="form-control"
-                                        type="time"
-                                        name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-
-                        </form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <button
-                            type="submit"
-                            className="btn btn-primary add-btn px-2"
-                            disabled={loading2 ? true : false}
-                            onClick={EditAvail}
                         >
-                            {loading2 ? (
-                                <div className="spinner-grow text-light" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            ) : (
-                                "Add"
-                            )}
+                            <button
+
+                                className='btn text-info'
+                                title="Export as CSV"
+                            >
+                                <FaFileCsv />
+                            </button>
+
+                        </CSVLink>
+                        <button
+                            className='btn text-danger'
+                            onClick={handlePDFDownload}
+                            title="Export as PDF"
+                        >
+                            <FaFilePdf />
                         </button>
-                    </Modal.Footer>
-                </Modal>
+                        <button
+                            className='btn text-primary'
+
+                            onClick={handleExcelDownload}
+                            title="Export as Excel"
+                        >
+                            <FaFileExcel />
+                        </button>
+                        <CopyToClipboard text={JSON.stringify(staffAvail)}>
+                            <button
+
+                                className='btn text-warning'
+                                title="Copy Table"
+                                onClick={() => toast("Table Copied")}
+                            >
+                                <FaCopy />
+                            </button>
+                        </CopyToClipboard>
+                    </div>
+                </div>
+                <DataTable data={filteredData} columns={columns}
+                    pagination
+                    highlightOnHover
+                    searchable
+                    searchTerm={searchText}
+                    progressPending={loading}
+                    progressComponent={<div className='text-center fs-1'>
+                        <div className="spinner-grow text-secondary" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>}
+                    expandableRows
+                    expandableRowsComponent={ButtonRow}
+                    paginationTotalRows={filteredData.length}
+                    responsive
+
+
+                />
 
 
             </div>
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Schedule</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form className="row">
+                        <div className='col-md-12'>
+                            <div className="form-group">
+                                <label>Days</label>
+                                <select
+                                    className='form-select'
+                                    name="days" value={editAvail.days || ''} onChange={handleInputChange}
+                                    required
+                                >
+                                    <option defaultValue hidden>Select Days</option>
+                                    <option value={"Monday"}>Monday</option>
+                                    <option value={"Tuesday"}>Tuesday</option>
+                                    <option value={"Wednessday"}>Wednessday</option>
+                                    <option value={"Thursday"}>Thursday</option>
+                                    <option value={"Friday"}>Friday</option>
+                                    <option value={"Saturday"}>Saturday</option>
+                                    <option value={"Sunday"}>Sunday</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="col-md-12">
+                            <div className="form-group">
+                                <label>Activities</label>
+                                <MultiSelect
+                                    options={options}
+                                    value={selectedActivities}
+                                    onChange={handleActivityChange}
+                                    labelledBy={'Select Activities'}
+                                />
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="form-group">
+                                <label>From Time of Day</label>
+                                <input className="form-control" type="time" name='fromTimeOfDay' value={editAvail.fromTimeOfDay || ''} onChange={handleInputChange}
+                                />
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="form-group">
+                                <label>To Time of Day</label>
+                                <input
+                                    className="form-control"
+                                    type="time"
+                                    name="toTimeOfDay" value={editAvail.toTimeOfDay || ''} onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+
+                    </form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button
+                        type="submit"
+                        className="btn btn-primary add-btn px-2"
+                        disabled={loading2 ? true : false}
+                        onClick={EditAvail}
+                    >
+                        {loading2 ? (
+                            <div className="spinner-grow text-light" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        ) : (
+                            "Add"
+                        )}
+                    </button>
+                </Modal.Footer>
+            </Modal>
+
+
 
         </div>
     );
