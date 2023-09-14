@@ -20,7 +20,7 @@ import { useCompanyContext } from '../../../../context';
 import useHttp from '../../../../hooks/useHttp';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const ClientDailyLiving = () => {
+const ClientDailyLiving = ({uid}) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -41,7 +41,6 @@ const ClientDailyLiving = () => {
     const [selectedSupport, setSelectedSupport] = useState("");
     const { get, post } = useHttp();
     const [showModal, setShowModal] = useState(false);
-    const { uid } = useParams()
 
 
     const PostAvail = async (e) => {
@@ -333,30 +332,10 @@ const ClientDailyLiving = () => {
         history.goForward(); // Go forward in history
     };
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Daily Living & Night Support</title>
-                <meta name="description" content="Daily Living & Night Support" />
-            </Helmet>
-            <div className="content container-fluid">
+        <div className="">
+    
                 {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Daily Living & Night Support</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+               
                 {/* /Page Header */}
                 <div className="row">
                     <div className="col-md-12">
@@ -565,7 +544,6 @@ const ClientDailyLiving = () => {
 
             </div>
 
-        </div>
     );
 }
 export default ClientDailyLiving;

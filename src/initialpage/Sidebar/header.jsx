@@ -24,7 +24,7 @@ const Header = (props) => {
   const FetchCompany = async () => {
     try {
       const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
-      // console.log(data);
+      // console.log(data.company);
       setCompanyOne(data.company)
       // console.log(data.company);
       // setEditedCompany({ ...data.company })
@@ -43,6 +43,27 @@ const Header = (props) => {
     navigate.push('/');
   };
 
+  // Assuming companyOne.dateCreated is a valid date string (e.g., "2023-09-15")
+const companyOneDate = new Date(companyOne.expirationDate);
+
+// Get the current date in Australia (assuming Australian Eastern Standard Time)
+const australiaTimeZoneOffset = 10; // UTC+10 for Australian Eastern Standard Time
+const currentDateInAustralia = new Date();
+currentDateInAustralia.setHours(currentDateInAustralia.getHours() + australiaTimeZoneOffset);
+
+// Calculate the difference in days
+const timeDifference = currentDateInAustralia - companyOneDate;
+const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
+
+// Define your rendering logic
+let displayText;
+if (daysDifference <= 0) {
+  // Free trial not expired yet
+  displayText = `${Math.abs(daysDifference)} days left`;
+} else {
+  // Free trial has expired
+  displayText = 'Free trial expired';
+}
   const [currentTime, setCurrentTime] = useState(new Date());
   const userObj = JSON.parse(localStorage.getItem('user'));
 
@@ -88,6 +109,14 @@ const Header = (props) => {
         <i className="fa fa-bars" /></a>
       {/* Header Menu */}
       <ul className="nav user-menu">
+
+      <li className="nav-item dropdown has-arrow flag-nav">
+      <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+        <span className='fw-bold'>
+          {displayText}
+        </span>
+      </a>
+    </li>
         {/* Search */}
         <li className="nav-item">
           <div className="top-nav-search">
@@ -169,7 +198,7 @@ const Header = (props) => {
             </div>
             <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
             {user.role === "CompanyAdmin" ? <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link> : ""}
-            <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+            <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Update App Version</button>
 
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
           </div>
@@ -192,7 +221,7 @@ const Header = (props) => {
         <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
           <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
           <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link>
-          <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+          <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Update App Version</button>
           <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
         </div>
       </div>

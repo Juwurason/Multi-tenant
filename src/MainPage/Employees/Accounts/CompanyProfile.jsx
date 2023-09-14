@@ -137,7 +137,7 @@ const CompanyProfile = () => {
                                                 <div className="form-group">
                                                     <label style={styles.label}>
                                                         <img className="" style={{ width: '100%', height: '100%' }}
-                                                            src={companyOne.companyLogo || ""} alt="company logo" />
+                                                            src={companyOne.companyLogo ? companyOne.companyLogo : ""} alt="company logo" />
                                                     </label>
 
                                                 </div>

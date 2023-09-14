@@ -24,6 +24,11 @@ import axiosInstance from '../../../../store/axiosInstance';
 import ProfileDetail from './profileDetail';
 import ClientSchedule from '../../clientForms/ClientSchedule';
 import ClientDisability from '../../clientForms/ClientDisability';
+import ClientDailyLiving from '../../clientForms/ClientDailyNightAndLiving';
+import ClientAidEquip from '../../clientForms/ClientAid';
+import ClientHealth from '../../clientForms/ClientHealthSupport';
+import ClientComunitySupport from '../../clientForms/ClientComminitySupport';
+import ClientBehaviuor from '../../clientForms/ClientBehaviour';
 dayjs.locale('en-au');
 dayjs.extend(isBetween);
 
@@ -47,6 +52,10 @@ const ClientProfiles = () => {
     const [loading2, setLoading2] = useState(false);
 
     const { get, post } = useHttp()
+    const [activeTab, setActiveTab] = useState('emp_profile');
+    const handleTabClick = (tabId) => {
+        setActiveTab(tabId);
+    };
     const FetchStaff = async () => {
         try {
             const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
@@ -678,7 +687,7 @@ const ClientProfiles = () => {
 
 
 
-                    <div className="card tab-box">
+                    {/* <div className="card tab-box">
                         <div className="row user-tabs">
                             <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
                                 <div className="scrollable-tabs-container" style={{ width: "100%", overflowY: "hidden", overflowX: "auto" }}>
@@ -686,19 +695,111 @@ const ClientProfiles = () => {
                                         <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary fw-bold">Profile</a></li>
                                         <li className="nav-item"><a href="#client_schedule" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Schedule</a></li>
                                         <li className="nav-item"><a href="#client-disability-support" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Disability Support Needs</a></li>
-                                        {/* <li className="nav-item"><Link to={`/app/forms/client-schedule/${uid}`} className="nav-link text-primary fw-bold"></Link></li> */}
-                                        {/* <li className="nav-item"><Link to={`/app/forms/client-disability-support/${uid}`} className="nav-link text-primary fw-bold">Disability Support Needs</Link></li> */}
-                                        <li className="nav-item"><Link to={`/app/forms/client-daily-living/${uid}`} className="nav-link text-primary fw-bold">Daily Living & Night Support</Link></li>
-                                        <li className="nav-item"><Link to={`/app/forms/client-aids/${uid}`} className="nav-link text-primary fw-bold">Aids & Equipment</Link></li>
-                                        <li className="nav-item"><Link to={`/app/forms/client-health/${uid}`} className="nav-link text-primary fw-bold">Health Support Needs</Link></li>
-                                        <li className="nav-item"><Link to={`/app/forms/client-community-support/${uid}`} className="nav-link text-primary fw-bold">Community Support Needs</Link></li>
-                                        <li className="nav-item"><Link to={`/app/forms/client-behaviour/${uid}`} className="nav-link text-primary fw-bold">Behaviour Support Needs</Link></li>
+                                        <li className="nav-item"><a href="#client-daily-living" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Daily Living & Night Support</a></li>
+                                        <li className="nav-item"><a href="#client-aids" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Aids & Equipment</a></li>
+                                        <li className="nav-item"><a href="#client-health" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Health Support Needs</a></li>
+                                        <li className="nav-item"><a href="#client-community-support" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Community Support Needs</a></li>
+                                        <li className="nav-item"><a href="#client-behaviour" data-bs-toggle="tab" className="nav-link text-primary fw-bold">Behaviour Support Needs</a></li>
+                                       
 
                                     </ul>
                                 </div>
                             </div>
                         </div>
+                    </div> */}
+
+                    <div className="card tab-box">
+                        <div className="row user-tabs">
+                            <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                                <div className="scrollable-tabs-container" style={{ width: "100%", overflowY: "hidden", overflowX: "auto" }}>
+                                    <ul className="nav nav-tabs nav-tabs-bottom" style={{ display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#emp_profile"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'emp_profile' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('emp_profile')}
+                                            >
+                                                Profile
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client_schedule"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client_schedule' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client_schedule')}
+                                            >
+                                                Schedule
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client-disability-support"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-disability-support' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-disability-support')}
+                                            >
+                                                Disability Support Needs
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client-daily-living"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-daily-living' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-daily-living')}
+                                            >
+                                                Daily Living & Night Support
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client-aids"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-aids' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-aids')}
+                                            >
+                                                Aids & Equipment
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client-health"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-health' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-health')}
+                                            >
+                                                Health Support Needs
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client-community-support"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-community-support' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-community-support')}
+                                            >
+                                                Community Support Needs
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client-behaviour"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-behaviour' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-behaviour')}
+                                            >
+                                                Behaviour Support Needs
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div className="tab-content">
                         {/* Profile Info Tab */}
                         <div id="emp_profile" className="pro-overview tab-pane fade show active">
@@ -725,6 +826,26 @@ const ClientProfiles = () => {
                         <div id="client-disability-support" className="pro-overview tab-pane fade show ">
 
                             <ClientDisability uid={uid} />
+                        </div>
+                        <div id="client-daily-living" className="pro-overview tab-pane fade show ">
+
+                            <ClientDailyLiving uid={uid} />
+                        </div>
+                        <div id="client-aids" className="pro-overview tab-pane fade show ">
+
+                            <ClientAidEquip uid={uid} />
+                        </div>
+                        <div id="client-health" className="pro-overview tab-pane fade show ">
+
+                            <ClientHealth uid={uid} />
+                        </div>
+                        <div id="client-community-support" className="pro-overview tab-pane fade show ">
+
+                            <ClientComunitySupport uid={uid} />
+                        </div>
+                        <div id="client-behaviour" className="pro-overview tab-pane fade show ">
+
+                            <ClientBehaviuor uid={uid} />
                         </div>
 
 
