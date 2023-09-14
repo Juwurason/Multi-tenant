@@ -27,7 +27,7 @@ const CompanySetup = () => {
             setLoading1(true);
             try {
                 const response = await publicHttp.get("/Packages/get_all_packages")
-                setPackages(response.data)
+              setPackages(response.data)
                 setLoading1(false)
             } catch (error) {
                 console.log(error);
@@ -203,7 +203,7 @@ const CompanySetup = () => {
                                                         <option hidden>Choose a package</option>
 
                                                         {
-                                                            packages.map((item) =>
+                                                            packages?.slice(0, 1).map((item) =>
                                                                 <option value={item.packagesId} key={item.packagesId}>{item.package}</option>
                                                             )
                                                         }

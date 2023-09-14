@@ -198,10 +198,10 @@ body::-webkit-scrollbar-thumb {
 
 }
 
-.rdt_TableRow {
+/* .rdt_TableRow {
     display: flex;
     flex-wrap: wrap;
-}
+} */
 
 .rdt_TableHeadRow {
     position: sticky;

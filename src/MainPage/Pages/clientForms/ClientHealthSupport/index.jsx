@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 
-const ClientHealth = () => {
+const ClientHealth = ({uid}) => {
 
 
     const [staffAvail, setStaffAvail] = useState([]);
@@ -26,7 +26,6 @@ const ClientHealth = () => {
     const [selectedTimeTo, setSelectedTimeTo] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const id = JSON.parse(localStorage.getItem('user'));
-    const { uid } = useParams()
 
 
     const PostAvail = async (e) => {
@@ -147,32 +146,9 @@ const ClientHealth = () => {
 
 
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Client Health Support Needs</title>
-                <meta name="description" content="Client Health Support Needs" />
-            </Helmet>
-            <div className="content container-fluid">
-                {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Health Support Needs</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {/* /Page Header */}
-                {staffAvail.length < 0 && <div className="row">
+        <div >
+           
+                {staffAvail.length <= 0 && <div className="row">
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header">
@@ -306,11 +282,6 @@ const ClientHealth = () => {
                     </div>
                 </div>}
 
-
-
-
-
-            </div>
 
         </div>
     );

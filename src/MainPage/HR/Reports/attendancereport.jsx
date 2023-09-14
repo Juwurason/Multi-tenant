@@ -7,7 +7,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from 'papaparse';
-import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaRegEdit, FaRegFileAlt, FaTrash } from "react-icons/fa";
+import { FaCopy, FaEdit, FaFileCsv, FaFileExcel, FaFilePdf, FaRegClock, FaLongArrowAltLeft, FaLongArrowAltRight, FaTrash } from "react-icons/fa";
 import ExcelJS from 'exceljs';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import { toast } from 'react-toastify';
@@ -64,8 +64,6 @@ const AttendanceReport = () => {
   const staff = useSelector((state) => state.staff.data);
   const splittedAttendance = useSelector((state) => state.splittedAttendance.data)
 
-
-
   const { get } = useHttp();
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -78,7 +76,13 @@ const AttendanceReport = () => {
   const [splittedModal, setSplittedModal] = useState(false);
   const [periodic, setPeriodic] = useState([]);
   const history = useHistory();
+  const goBack = () => {
+    history.goBack(); // Go back in history
+  };
 
+  const goForward = () => {
+    history.goForward(); // Go forward in history
+  };
   const [loadingClockId, setLoadingClockId] = useState(null);
 
   const handleClockClick = (attendanceId) => {
@@ -348,32 +352,6 @@ const AttendanceReport = () => {
     window.open(pdfBlob, "_blank");
   };
 
-  // const handlePDFDownload = () => {
-  //   const unit = "pt";
-  //   const size = "A4"; // Use A1, A2, A3 or A4
-  //   const orientation = "portrait"; // portrait or landscape
-  //   const marginLeft = 40;
-  //   const doc = new jsPDF(orientation, unit, size);
-  //   doc.setFontSize(13);
-  //   doc.text("User Table", marginLeft, 40);
-  //   const headers = columns.map((column) => column.name);
-  //   const dataValues = attendance.map((dataRow) =>
-  //     columns.map((column) => {
-  //       if (typeof column.selector === "function") {
-  //         return column.selector(dataRow);
-  //       }
-  //       return dataRow[column.selector];
-  //     })
-  //   );
-
-  //   doc.autoTable({
-  //     startY: 50,
-  //     head: [headers],
-  //     body: dataValues,
-  //     margin: { top: 50, left: marginLeft, right: marginLeft, bottom: 0 },
-  //   });
-  //   doc.save("Attendance.pdf");
-  // };
 
   const ButtonRow = ({ data }) => {
     return (
@@ -453,13 +431,20 @@ const AttendanceReport = () => {
         <div className="content container-fluid">
 
           <div className="page-header">
-            <div className="row">
-              <div className="col-sm-12">
+            <div className="row align-items-center">
+              <div className="col">
                 <h3 className="page-title">Timesheet</h3>
                 {id.role === "CompanyAdmin" ? <ul className="breadcrumb">
                   <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                   <li className="breadcrumb-item active">Timesheet</li>
                 </ul> : ""}
+              </div>
+              <div className="col-md-2 d-none d-md-block">
+                <button className='btn' onClick={goBack}>
+                  <FaLongArrowAltLeft className='fs-3' />
+                </button> &nbsp;  <button className='btn' onClick={goForward}>
+                  <FaLongArrowAltRight className='fs-3' />
+                </button>
               </div>
             </div>
           </div>

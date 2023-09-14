@@ -100,28 +100,28 @@ const PublicHoliday = () => {
         },
 
 
-        {
-            name: "Actions",
-            cell: (row) => (
-                <div className="d-flex gap-1">
-                    <button
-                        className="btn"
-                        title='edit'
-                        onClick={() => handleEdit(row.holidayId)}
-                    >
-                        <FaRegEdit />
-                    </button>
-                    <button
-                        className='btn'
-                        title='Delete'
-                        onClick={() => handleDelete(row)}
-                    >
-                        <GoTrashcan />
-                    </button>
+        // {
+        //     name: "Actions",
+        //     cell: (row) => (
+        //         <div className="d-flex gap-1">
+        //             <button
+        //                 className="btn"
+        //                 title='edit'
+        //                 onClick={() => handleEdit(row.holidayId)}
+        //             >
+        //                 <FaRegEdit />
+        //             </button>
+        //             <button
+        //                 className='btn'
+        //                 title='Delete'
+        //                 onClick={() => handleDelete(row)}
+        //             >
+        //                 <GoTrashcan />
+        //             </button>
 
-                </div>
-            ),
-        },
+        //         </div>
+        //     ),
+        // },
 
     ];
 

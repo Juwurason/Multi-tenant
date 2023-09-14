@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 
 
 
-const ClientComunitySupport = () => {
+const ClientComunitySupport = ({uid}) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -21,7 +21,6 @@ const ClientComunitySupport = () => {
         }
     });
 
-    const { uid } = useParams()
     const [staffAvail, setStaffAvail] = useState([]);
     const [loading1, setLoading1] = useState(false);
     const [selectedDay, setSelectedDay] = useState("");
@@ -153,30 +152,10 @@ const ClientComunitySupport = () => {
     };
 
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Community Support Needs</title>
-                <meta name="description" content="Community Support Needs" />
-            </Helmet>
-            <div className="content container-fluid">
+        <div>
+            
                 {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Community Support Needs</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+               
                 {/* /Page Header */}
                 {staffAvail.length === 0 && <div className="row">
                     <div className="col-md-12">
@@ -301,7 +280,6 @@ const ClientComunitySupport = () => {
 
             </div>
 
-        </div>
     );
 }
 export default ClientComunitySupport;

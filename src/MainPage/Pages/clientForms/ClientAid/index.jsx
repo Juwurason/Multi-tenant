@@ -26,7 +26,7 @@ const options = [
 ];
 
 
-const ClientAidEquip = () => {
+const ClientAidEquip = ({uid}) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -45,7 +45,6 @@ const ClientAidEquip = () => {
     const { get, post } = useHttp();
     const [equipmentUsed, setEquipmentUsed] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const { uid } = useParams()
 
 
     const handleSelected = (selectedOptions) => {
@@ -357,31 +356,8 @@ const ClientAidEquip = () => {
         item.equipmentUsed.toLowerCase().includes(searchText.toLowerCase())
     );
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Aids & Equipments</title>
-                <meta name="description" content="Aids & Equipments" />
-            </Helmet>
-            <div className="content container-fluid">
-                {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            {/* <h3 className="page-title">Staff Aids & Equipments</h3> */}
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Aids & Equipments</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <div >
+                
                 {/* /Page Header */}
                 <div className="row">
                     <div className="col-md-12">
@@ -544,8 +520,6 @@ const ClientAidEquip = () => {
 
 
             </div>
-
-        </div>
     );
 }
 export default ClientAidEquip;

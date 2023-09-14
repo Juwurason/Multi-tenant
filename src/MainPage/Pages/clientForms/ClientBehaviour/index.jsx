@@ -10,7 +10,7 @@ import useHttp from '../../../../hooks/useHttp';
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
 
 
-const ClientBehaviuor = () => {
+const ClientBehaviuor = ({uid}) => {
     useEffect(() => {
         if ($('.select').length > 0) {
             $('.select').select2({
@@ -20,7 +20,6 @@ const ClientBehaviuor = () => {
         }
     });
 
-    const { uid } = useParams();
     const history = useHistory();
     const [loading1, setLoading1] = useState(false);
     const [selectedDay, setSelectedDay] = useState("");
@@ -157,30 +156,7 @@ const ClientBehaviuor = () => {
     };
 
     return (
-        <div className="page-wrapper">
-            <Helmet>
-                <title> Behaviour Support Needs</title>
-                <meta name="description" content="Behaviour Support Needs" />
-            </Helmet>
-            <div className="content container-fluid">
-                {/* Page Header */}
-                <div className="page-header">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Behaviour Support Needs</li>
-                            </ul>
-                        </div>
-                        <div className="col-md-2 d-none d-md-block">
-                            <button className='btn' onClick={goBack}>
-                                <FaLongArrowAltLeft className='fs-3' />
-                            </button> &nbsp;  <button className='btn' onClick={goForward}>
-                                <FaLongArrowAltRight className='fs-3' />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <div>
                 {/* /Page Header */}
                 {staffAvail.length === 0 && <div className="row">
                     <div className="col-md-12">
@@ -321,11 +297,6 @@ const ClientBehaviuor = () => {
                     </div>
                 </div>}
 
-
-
-
-
-            </div>
 
         </div>
     );
