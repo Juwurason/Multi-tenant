@@ -194,13 +194,13 @@ const Invoice = () => {
 
     const FetchInvoice = async (e) => {
         e.preventDefault();
-        if (type.trim() === "" || profileId === 0) {
-            return toast.error("Select a client and support type")
+        if (profileId === 0) {
+            return toast.error("Select a client")
         }
         e.preventDefault();
         setLoading1(true);
         try {
-            const { data } = await get(`/Invoice/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${type}`, { cacheTimeout: 300000 });
+            const { data } = await get(`/Invoice/load_invoice?userId=${id.userId}&fromDate=${dateFrom}&toDate=${dateTo}&clientId=${profileId}&type=${'No'}`, { cacheTimeout: 300000 });
             if (data.status === "Success") {
                 // console.log(data);
                 toast.success(data.message);
@@ -400,7 +400,7 @@ const Invoice = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-sm-4">
+                                        {/* <div className="col-sm-4">
                                             <div className="form-group">
                                                 <label className="col-form-label">Support Type</label>
                                                 <div>
@@ -412,7 +412,7 @@ const Invoice = () => {
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
 
 
 

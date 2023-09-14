@@ -198,7 +198,7 @@ if (daysDifference <= 0) {
             </div>
             <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
             {user.role === "CompanyAdmin" ? <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link> : ""}
-            <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+            <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Update App Version</button>
 
             <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
           </div>
@@ -221,7 +221,7 @@ if (daysDifference <= 0) {
         <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
           <Link className="dropdown-item" to={"/app/account/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
           <Link className="dropdown-item" to={"/app/account/company-profile"}><MdOutlineSettings /> &nbsp; Company Profile</Link>
-          <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+          <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Update App Version</button>
           <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
         </div>
       </div>

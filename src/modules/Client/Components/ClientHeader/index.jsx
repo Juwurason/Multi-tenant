@@ -181,7 +181,7 @@ const ClientHeader = (props) => {
                         </div>
                         <Link className="dropdown-item" to={"/client/app/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
                         <Link className="dropdown-item" to={"/client/app/client-profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
-                        <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+                        <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Update App Version</button>
 
                         <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
@@ -207,7 +207,7 @@ const ClientHeader = (props) => {
 
                     <Link className="dropdown-item" to={"/client/app/change-password"}><MdOutlineLockPerson /> &nbsp; Change Password</Link>
                     <Link className="dropdown-item" to={"/client/app/client-profile"}><MdOutlineSettings /> &nbsp; Settings</Link>
-                    <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Reload App</button>
+                    <button className="dropdown-item" onClick={() => emptyCache()}><MdOutlineLockReset /> &nbsp; Update App Version</button>
 
                     <button className="dropdown-item" onClick={handleLogout}><MdOutlineLogout /> &nbsp; Logout</button>
 
