@@ -258,23 +258,29 @@ body::-webkit-scrollbar-thumb {
 
 
 .scrollable-tabs-container::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    width: 8px;
+    /* Width of the scrollbar */
     height: 7px;
-  }
-  
-  .scrollable-tabs-container::-webkit-scrollbar-thumb {
-    background-color: #405189; /* Color of the scrollbar thumb */
-    border-radius: 6px; /* Rounded corners of the scrollbar thumb */
-  }
-  
-  .scrollable-tabs-container::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Color of the scrollbar thumb on hover */
-  }
-  
-  .scrollable-tabs-container::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* Color of the scrollbar track */
-    border-radius: 6px; /* Rounded corners of the scrollbar track */
-  }
+}
+
+.scrollable-tabs-container::-webkit-scrollbar-thumb {
+    background-color: #405189;
+    /* Color of the scrollbar thumb */
+    border-radius: 6px;
+    /* Rounded corners of the scrollbar thumb */
+}
+
+.scrollable-tabs-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Color of the scrollbar thumb on hover */
+}
+
+.scrollable-tabs-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* Color of the scrollbar track */
+    border-radius: 6px;
+    /* Rounded corners of the scrollbar track */
+}
 
 .current-date {
     background-color: #405189;
@@ -322,6 +328,7 @@ body::-webkit-scrollbar-thumb {
     /* Adjust the opacity/fade as needed */
     z-index: -1;
 }
+
 
 .lds-spinner {
     color: official;
