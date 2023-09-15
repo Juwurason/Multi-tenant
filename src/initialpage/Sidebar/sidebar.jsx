@@ -99,6 +99,14 @@ const Sidebar = (props) => {
                           </ a>
                         </li>
                       ) : null}
+                      <li>
+                        <Link to="/app/main/user-dashboard"
+                          className={pathname.includes('user-dashboard') ? "active" : ""}
+                          onClick={() => onMenuClik()}
+                        >
+                          User Dashboard
+                        </ Link>
+                      </li>
                     </ul>
                   ) : null}
                 </li>
