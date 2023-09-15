@@ -59,10 +59,10 @@ const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24)); // Conve
 let displayText;
 if (daysDifference <= 0) {
   // Free trial not expired yet
-  displayText = `${Math.abs(daysDifference)} days left`;
+  displayText = `Free trial: ${Math.abs(daysDifference)} days left`;
 } else {
   // Free trial has expired
-  displayText = 'Free trial expired';
+  displayText = 'Free trial: Expired';
 }
   const [currentTime, setCurrentTime] = useState(new Date());
   const userObj = JSON.parse(localStorage.getItem('user'));
@@ -110,13 +110,13 @@ if (daysDifference <= 0) {
       {/* Header Menu */}
       <ul className="nav user-menu">
 
-      <li className="nav-item dropdown has-arrow flag-nav">
+      {user.role === "CompanyAdmin" ? <li className="nav-item dropdown has-arrow flag-nav">
       <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
         <span className='fw-bold'>
           {displayText}
         </span>
       </a>
-    </li>
+    </li>:""}
         {/* Search */}
         <li className="nav-item">
           <div className="top-nav-search">

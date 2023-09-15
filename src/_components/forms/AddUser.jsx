@@ -69,22 +69,19 @@ const AddUser = () => {
             const { data } = await privateHttp.post(`/Account/add_user?userId=${id.userId}`,
                 info
             )
+            console.log(data);
             toast.success(data.message)
             navigate.push('/app/account/alluser')
             setLoading1(false)
 
         } catch (error) {
             console.log(error);
-          
             if (error.response && error.response.data) {
-              if (error.response.data.message || error.response.data.title) {
-                toast.error(error.response.data.errors.ConfirmPassword[0]);
                 toast.error(error.response.data.message);
+                toast.error(error.response.data.errors.Password[0]);
+                toast.error(error.response.data.errors.ConfirmPassword[0]);
                 toast.error(error.response.data.title);
-              } else {
-                toast("Check Users List For Updated Info");
-                navigate.push('/app/account/alluser');
-              }
+             
             } else {
               toast("Check Users List For Updated Info");
               navigate.push('/app/account/alluser');
@@ -130,25 +127,25 @@ const AddUser = () => {
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Email <span className="text-danger">*</span></label>
-                                                <input className="form-control" required type="email" ref={email} />
+                                                <input className="form-control" required autoComplete="email" type="email" ref={email} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Phone Number <span className="text-danger">*</span></label>
-                                                <input className="form-control" required type="tel" ref={phoneNumber} />
+                                                <input className="form-control" required type="text" ref={phoneNumber} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Password <span className="text-danger">*</span></label>
-                                                <input className="form-control" required type="password" ref={password} />
+                                                <input className="form-control" autoComplete="new-password" required type="password" ref={password} />
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="form-group">
                                                 <label className="col-form-label">Confirm Password <span className="text-danger">*</span></label>
-                                                <input className="form-control" required type="password" ref={confirmPassword} />
+                                                <input className="form-control" required autoComplete="new-password" type="password" ref={confirmPassword} />
                                             </div>
                                         </div>
 

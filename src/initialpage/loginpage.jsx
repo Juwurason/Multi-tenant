@@ -81,8 +81,8 @@ const Loginpage = () => {
         localStorage.setItem("clientProfile", JSON.stringify(data.clientProfile))
 
       }
-      else {
-        navigate.push('/app/main/user-dashboard')
+      if (data.userProfile?.role !== "Client" && data.userProfile?.role !== "Staff" && data.userProfile?.role !== "CompanyAdmin" && data.userProfile?.role !== "Administrator") {
+        navigate.push('/app/main/user-dashboard');
         // localStorage.setItem("adminProfile", JSON.stringify(data.adminProfile))
 
       }

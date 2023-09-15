@@ -203,7 +203,7 @@ const ClientProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.profileId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-document`} className="py-1 px-2 rounded text-white btn">My Dococument</Link>
+                              <Link style={{ backgroundColor: "#405189" }} to={`/client/app/client-document`} className="py-1 px-2 rounded text-white btn">My Document</Link>
                             </div>
 
                             <div>
