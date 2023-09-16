@@ -196,6 +196,7 @@ import logo from "../../../assets/img/logo.png";
 import { useParams } from "react-router-dom";
 import parse from 'html-react-parser';
 import { FaBlackTie } from "react-icons/fa";
+import axiosInstance from "../../../store/axiosInstance";
 
 const styles = StyleSheet.create({
   page: {
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-            width: 50,
+            width: 70,
             height: 50,
             marginBottom: 10,
         },
@@ -259,19 +260,33 @@ const RefferalDetails = () => {
   const { uid } = useParams();
   const [details, setDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [companyOne, setCompanyOne] = useState({});
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const { get } = useHttp();
 
   const fetchDetails = async () => {
     try {
       const { data } = await get(`/ClientReferrals/get_client_referral_details/${uid}`, { cacheTimeout: 300000 });
-      console.log(data);
+      // console.log(data);
       setDetails(data);
       setIsLoading(false);
-    } catch (error) {
+
+      
+    }
+     catch (error) {
       console.log(error);
       setIsLoading(false);
     }
+
+    try {
+      const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+      // console.log(data.company);
+      setCompanyOne(data.company)
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
 
   useEffect(() => {
@@ -289,7 +304,7 @@ const RefferalDetails = () => {
         <Page size="A4" style={styles.page}>
           <View>
             <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Image src={logo} style={styles.logo} />
+              <Image src={companyOne.companyLogo ? companyOne.companyLogo : logo} style={styles.logo} />
               <Text style={styles.title}>Referral Document of {details.name}</Text>
             </View>
 

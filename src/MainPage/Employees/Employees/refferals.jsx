@@ -199,8 +199,9 @@ const Refferal = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const { data } = await axiosInstance.get(`/ClientReferrals/accept_client_referral?id=${e}&userId=${id.userid}`,
+                    const { data } = await axiosInstance.get(`/ClientReferrals/accept_client_referral?id=${e}&userId=${id.userId}`,
                     )
+                    // console.log(data);
                     if (data.status === 'Success') {
                         toast.success(data.message);
                         dispatch(fetchDocument(id.companyId));
@@ -210,11 +211,8 @@ const Refferal = () => {
 
 
                 } catch (error) {
-                    toast.error("Ooooops😔 Error Occurred ")
-                    console.log(error);
-
-
-
+                    toast.error(error.response.data.message)
+                    // console.log(error);
                 }
 
 
