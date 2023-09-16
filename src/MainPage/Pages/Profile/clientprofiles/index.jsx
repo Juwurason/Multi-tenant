@@ -376,6 +376,7 @@ const ClientProfiles = () => {
         } catch (error) {
             // console.log(error);
             toast.error(error.response.data.message)
+            toast.error(error.response.data.errors.PhoneNumber[0])
             toast.error(error.response.data.title)
             setLoading(false);
 
@@ -516,7 +517,7 @@ const ClientProfiles = () => {
                                                             }
                                                         </div>
                                                         <div>
-                                                            {staffOne.contactId === null ? <button
+                                                            {staffOne.clientId === null ? <button
                                                                 className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button> : ""}
                                                         </div>
                                                     </div>

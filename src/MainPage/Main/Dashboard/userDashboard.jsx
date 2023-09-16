@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import { Link, useHistory } from 'react-router-dom';
 import Offcanvas from '../../../Entryfile/offcanvance';
 import heroImg from '../../../assets/img/office.jpg';
+import axiosInstance from '../../../store/axiosInstance';
 
 
 
@@ -12,9 +13,24 @@ const UserDashboard = () => {
     const id = JSON.parse(localStorage.getItem('user'));
 
 
+    const [companyOne, setCompanyOne] = useState({});
 
-
-
+    const FetchCompany = async () => {
+        try {
+          const { data } = await axiosInstance.get(`/Companies/get_company/${id.companyId}`, { cacheTimeout: 300000 })
+          // console.log(data.company);
+          setCompanyOne(data.company)
+          // console.log(data.company);
+          // setEditedCompany({ ...data.company })
+    
+    
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      useEffect(() => {
+        FetchCompany()
+      }, []);
 
 
     return (
@@ -31,7 +47,7 @@ const UserDashboard = () => {
                         <div className="col">
                             <h3 className="page-title">User Dashboard</h3>
                             <ul className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="">Dashboard</Link></li>
+                                <li className="breadcrumb-item"><Link to="/app/main/user-dashboard">Dashboard</Link></li>
                             </ul>
                         </div>
 
@@ -49,7 +65,7 @@ const UserDashboard = () => {
                                                 <div className="col">
                                                     <div className="px-5 py-5 mt-5">
                                                         <div className="px-2 py-2 align-middle">
-                                                            <h2>Welcome to Promax Care</h2>
+                                                            <h2>Welcome to {companyOne.companyName}</h2>
                                                             <p></p>
                                                         </div>
                                                         <div className="px-2 py-2">

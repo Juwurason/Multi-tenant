@@ -99,7 +99,8 @@ const Sidebar = (props) => {
                           </ a>
                         </li>
                       ) : null}
-                      <li>
+                      {/* {user.role !=="CompanyAdmin" && user.role !=="Staff" && user.role !=="Client" && user.role !=="Administrator" ?(
+                        <li>
                         <Link to="/app/main/user-dashboard"
                           className={pathname.includes('user-dashboard') ? "active" : ""}
                           onClick={() => onMenuClik()}
@@ -107,10 +108,18 @@ const Sidebar = (props) => {
                           User Dashboard
                         </ Link>
                       </li>
+                      ): null} */}
                     </ul>
                   ) : null}
                 </li>
-              ) : null}
+              ) : <li>
+              <Link to="/app/main/user-dashboard"
+                className={pathname.includes('user-dashboard') ? "active" : ""}
+                onClick={() => onMenuClik()}
+              >
+                User Dashboard
+              </ Link>
+            </li>}
 
 
 
