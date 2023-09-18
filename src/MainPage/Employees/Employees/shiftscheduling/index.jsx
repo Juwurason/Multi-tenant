@@ -180,6 +180,7 @@ const ShiftScheduling = () => {
     const handleActivityClick = (activity) => {
         // console.log(activity);
         setSelectedActivity(activity);
+
         setShowModal(true);
     };
 
@@ -476,6 +477,7 @@ const ShiftScheduling = () => {
                                     <p><b>Staff:</b> {selectedActivity.staff?.fullName}</p>
                                     <p><b>Client(s):</b> {selectedActivity.clients}</p>
                                     <p><b>Activities:</b> {selectedActivity?.activities}</p>
+                                    {selectedActivity.reason ? <p><b>Reason:</b> {selectedActivity?.reason}</p> : ""}
                                 </>
                             )}
                         </Modal.Body>
