@@ -62,7 +62,7 @@ const Refferal = () => {
             sortable: true,
             cell: row => (
 
-                <span className={`px-2 py-1 rounded-pill fw-bold ${row.isAccepted ? 'bg-success' : 'bg-warning'}`} style={{ fontSize: "10px" }}>
+                <span className={`px-2 py-1 rounded-pill fw-bold ${row.isAccepted ? 'bg-success text-white' : 'bg-warning'}`} style={{ fontSize: "10px" }}>
                     {row.isAccepted ? 'Accepted' : 'Pending'}
                 </span>
             ),

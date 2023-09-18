@@ -159,51 +159,6 @@ const ServiceProvider = () => {
         doc.save("serviceProvider.pdf");
     };
 
-    const handleDetails = (e) => {
-        setLoading2(true);
-        setTimeout(() => {
-            const url = `/refferal-details/${e}`;
-            window.open(url, '_blank');
-            setLoading2(false);
-        }, 2000);
-    };
-
-    const handleAccept = async (e) => {
-        Swal.fire({
-            html: `<h3>Accept This Referral</h3>`,
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonColor: '#405189',
-            cancelButtonColor: '#C8102E',
-            confirmButtonText: 'Confirm',
-            showLoaderOnConfirm: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const { data } = await axiosInstance.get(`/ClientReferrals/accept_client_referral?id=${e}&userId=${id.userid}`,
-                    )
-                    if (data.status === 'Success') {
-                        toast.success(data.message);
-                        dispatch(fetchDocument(id.companyId));
-                    } else {
-                        toast.error("Error Accepting Document");
-                    }
-
-
-                } catch (error) {
-                    toast.error("Ooooops😔 Error Occurred ")
-                    console.log(error);
-
-
-
-                }
-
-
-            }
-        })
-
-
-    }
 
     const ButtonRow = ({ data }) => {
         return (
@@ -239,41 +194,7 @@ const ServiceProvider = () => {
         },
     };
 
-    // const handleDelete = async (e) => {
-    //     Swal.fire({
-    //         html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#405189',
-    //         cancelButtonColor: '#777',
-    //         confirmButtonText: 'Confirm Delete',
-    //         showLoaderOnConfirm: true,
-    //     }).then(async (result) => {
-    //         if (result.isConfirmed) {
-    //             try {
-    //                 const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
-    //                     // { userId: id.userId }
-    //                 )
-    //                 if (data.status === 'Success') {
-    //                     toast.success(data.message);
-    //                     FetchClient();
-    //                 } else {
-    //                     toast.error(data.message);
-    //                 }
 
-
-    //             } catch (error) {
-    //                 console.log(error);
-    //                 toast.error(error.response.data.message)
-    //                 toast.error(error.response.data.title)
-
-    //             }
-
-
-    //         }
-    //     })
-
-    // }
 
 
 
@@ -281,8 +202,8 @@ const ServiceProvider = () => {
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Referral</title>
-                <meta name="description" content="Refferal" />
+                <title>Service Provider</title>
+                <meta name="description" content="Service-provider" />
             </Helmet>
             {/* Page Content */}
             <div className="content container-fluid">
@@ -290,10 +211,10 @@ const ServiceProvider = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Referral</h3>
+                            <h3 className="page-title">Service Provider</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
-                                <li className="breadcrumb-item active">Referral</li>
+                                <li className="breadcrumb-item active">Service Provider</li>
                             </ul>
                         </div>
 
