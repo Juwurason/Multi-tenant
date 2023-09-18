@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link, useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
@@ -57,6 +57,8 @@ const ProgressReport = () => {
     const [loading1, setLoading1] = useState(false);
     const [cli, setCli] = useState('');
     const [sta, setSta] = useState('');
+    const dateFrom = useRef(null);
+    const dateTo = useRef(null);
     const columns = [
         {
             name: '',
@@ -128,11 +130,11 @@ const ProgressReport = () => {
             )
 
         } else {
-            dispatch(filterProgress({ sta, cli }))
+            dispatch(filterProgress({ dateTo: dateTo.current.value, dateFrom: dateFrom.current.value, sta, cli, company: id.companyId }))
         }
 
     }
-
+    // fromDate: dateFrom.current.value, toDate: dateTo.current.value, company: id.companyId
 
 
 
@@ -286,6 +288,26 @@ const ProgressReport = () => {
                                                                 <option value={data.profileId} key={index}>{data.fullName}</option>)
                                                         }
                                                     </select></div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Date From</label>
+                                                <div>
+                                                    <input type="datetime-local" 
+                                                    ref={dateFrom}
+                                                     className=' form-control' name="" id="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="col-form-label">Date To</label>
+                                                <div>
+                                                    <input type="datetime-local" 
+                                                    ref={dateTo}
+                                                     className=' form-control' name="" id="" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-auto mt-3">

@@ -220,13 +220,13 @@ const AdminDashboard = () => {
                 <DashboardCard title={"Attendances"} content={attendanceCount} icon={<MdOutlineQueryBuilder className='fs-4' />}
                   link={`/app/reports/attendance-reports`} sty={'warning'} loading={isLoading}
                 />
-                <DashboardCard title={`Total shift roaster for ${month}`} content={perMonthCount} icon={<MdCalendarMonth className='fs-4' />}
+                <DashboardCard title={`Total shift roster for ${month}`} content={perMonthCount} icon={<MdCalendarMonth className='fs-4' />}
                   linkTitle={`${monthPercentage}% increase compared to last month`} link={``} sty={'secondary'}
                   loading={isLoading}
                 />
 
 
-                <DashboardCard title={`Total shift roaster for today`} sty={'danger'}
+                <DashboardCard title={`Total shift roster for today`} sty={'danger'}
                   content={perDayCount} icon={<MdCalendarToday className='fs-4' />}
                   link={''}
                   linkTitle={`${dayPercentage}% increase compared to yesterday`}
@@ -269,7 +269,7 @@ const AdminDashboard = () => {
                   <div className="card-body">
                     <div className="media d-flex justify-content-between">
                       <div className="media-body text-left">
-                        <span>{`Total shift roaster from ${fromWeek} - ${toWeek}`}</span>
+                        <span>{`Total shift roster from ${fromWeek} - ${toWeek}`}</span>
 
                         {
                           isLoading ? (<div className=" d-flex py-2 justify-content-start fs-6">
