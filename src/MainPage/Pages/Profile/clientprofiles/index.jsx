@@ -476,6 +476,7 @@ const ClientProfiles = () => {
                                                         <small className="text-muted">{staffOne.email}</small>
                                                         <div className="staff-id">Client ID : {staffOne.contactId}</div>
                                                         <div className="staff-id">NDIS No: {staffOne.ndisNo}</div>
+                                                        <div className="staff-id">Referral: {staffOne.referral}</div>
 
                                                         {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                                                         <div className="staff-msg d-flex gap-2 flex-wrap">

@@ -436,7 +436,7 @@ const ClientDoc = ({uid}) => {
 
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">Upload Document for {clientOne.fullName} </h4>
-                                    <Link to={`/app/profile/client-profile/${uid}/${clientOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                    {/* <Link to={`/app/profile/client-profile/${uid}/${clientOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link> */}
                                 </div>
                                 <div className="card-body">
                                     <form
