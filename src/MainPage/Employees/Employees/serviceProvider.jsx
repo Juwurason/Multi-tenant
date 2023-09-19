@@ -174,6 +174,14 @@ const ServiceProvider = () => {
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div ><span className='fw-bold'>Email: </span> {data.email}</div>
                 <div ><span className='fw-bold'>Phone: </span> {data.phone}</div>
+                {/* <div ><span className='fw-bold'>View Clients</span> </div> */}
+                <Link
+              className='fw-bold text-info'
+              title='View Clients'
+              to={`/app/employee/provider-list/${data.email}`}
+                >
+             View Clients
+            </Link>
 
             </div>
         );
