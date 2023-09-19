@@ -149,7 +149,7 @@ const ClientDoc = () => {
         formData.append("DocumentName", documentName);
         formData.append("ExpirationDate", expire);
         formData.append("User", clientOne.fullName);
-        formData.append("UserRole", 'client');
+        formData.append("UserRole", 'Client');
         formData.append("Status", "Pending");
         formData.append("UserId", clientOne.profileId);
 

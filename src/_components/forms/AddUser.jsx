@@ -69,7 +69,7 @@ const AddUser = () => {
             const { data } = await privateHttp.post(`/Account/add_user?userId=${id.userId}`,
                 info
             )
-            console.log(data);
+            // console.log(data);
             toast.success(data.message)
             navigate.push('/app/account/alluser')
             setLoading1(false)

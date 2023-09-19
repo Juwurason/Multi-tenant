@@ -231,9 +231,9 @@ const Refferal = () => {
                 {/* <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div> */}
                 <div>
-                    {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit Form
-                    </button> | */}
+                    </button> |
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleDetails(data.clientReferralId)}>
 
                         {

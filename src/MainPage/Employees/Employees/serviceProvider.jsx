@@ -43,6 +43,7 @@ const ServiceProvider = () => {
 
     const loading = useSelector((state) => state.serviceProvider.isLoading);
     const serviceProvider = useSelector((state) => state.serviceProvider.data);
+    // console.log(serviceProvider);
     const columns = [
         // {
         //     name: '#',
@@ -51,7 +52,7 @@ const ServiceProvider = () => {
 
         {
             name: 'FullName',
-            selector: row => row.name,
+            selector: row => row.fullName,
             sortable: true,
 
         },
@@ -61,6 +62,14 @@ const ServiceProvider = () => {
             sortable: true,
 
         },
+
+        {
+            name: 'Company',
+            selector: row => row.companyName,
+            sortable: true,
+
+        },
+        
 
         {
             name: 'Phone',
