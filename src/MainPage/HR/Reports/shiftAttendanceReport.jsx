@@ -106,6 +106,7 @@ const ShiftAttendanceReport = () => {
                 url += `/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
             }
             if (!sta && cli) {
+                // url += `/${undefined}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
                 url += `/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
             }
              else if (sta && cli) {

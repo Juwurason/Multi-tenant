@@ -156,11 +156,12 @@ const StaffDoc = () => {
         formData.append("Status", "Pending");
         formData.append("UserId", staffOne.staffId);
 
-        try {
-            const { data } = await post(`/Staffs/document_upload?userId=${id.userId}`,
+        try {   
+            const { data } = await axiosInstance.post(`/Documents/add_document?userId=${id.userId}`,
                 formData
             )
-            toast.success(data.message)
+            // console.log(data);
+            toast.success(data.message);
 
             setLoading1(false)
             FetchStaff();
@@ -268,20 +269,32 @@ const StaffDoc = () => {
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
-                <div>
+                <div className=' d-flex gap-1'>
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit
                     </button> |
                     <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> |
-                    {data.status === 'Pending' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                    {
+                        data.status === 'Pending' &&
+                        <div>
+                            <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                                Accept
+                            </button> |
+
+                            <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                                Reject
+                            </button>
+                        </div>
+                    }
+
+                    {data.status === "Rejected" && <button onClick={() => handleAccept(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Accept
-                    </button> : ''}
-                    |
-                    {data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-                        Reject
-                    </button> : ''}
+                    </button>}
+                    {data.status === "Accepted" && <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                            Reject
+                        </button>}
                 </div>
 
             </div>
@@ -385,7 +398,8 @@ const StaffDoc = () => {
             )
             if (data.status === 'Success') {
                 toast.success(data.message);
-                FetchStaff()
+                FetchStaff();
+                setRejectModal(false);
             } else {
                 toast.error(data.message);
             }
