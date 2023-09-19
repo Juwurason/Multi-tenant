@@ -20,9 +20,9 @@ import axiosInstance from "../../store/axiosInstance";
 import { Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
 
-const ClientDoc = () => {
+const ClientDoc = ({uid}) => {
     const [loading, setLoading] = useState(false);
-    const { uid } = useParams()
+    // const { uid } = useParams()
     const [clientOne, setClientOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
     const [rejectModal, setRejectModal] = useState(false);
@@ -428,12 +428,8 @@ const ClientDoc = () => {
     return (
         <>
 
-            <div className="page-wrapper">
-                <Helmet>
-                    <title>Client Document Upload</title>
-                    <meta name="description" content="" />
-                </Helmet>
-                <div className="content container-fluid">
+            <div className="">
+               
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card">
@@ -598,7 +594,7 @@ const ClientDoc = () => {
                     </Modal.Footer>
                 </Modal>
                 
-            </div>
+            
         </>
     );
 }
