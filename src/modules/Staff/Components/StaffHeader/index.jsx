@@ -10,6 +10,8 @@ import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout, MdOutlineLockR
 import loggo from '../../../../assets/img/promaxcare_logo_icon.png';
 import axiosInstance from '../../../../store/axiosInstance';
 import { emptyCache } from '../../../../hooks/cacheUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchInbox } from '../../../../store/slices/MessageInboxSlice';
 
 const StaffHeader = (props) => {
     const navigate = useHistory()
@@ -59,9 +61,14 @@ const StaffHeader = (props) => {
             console.log(error);
         }
     }
+    const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(fetchInbox(user.userId));
         FetchCompany()
     }, []);
+    const inbox = useSelector((state) => state.inbox.data);
+
+    const filteredInbox = inbox.filter((item) => item.status === false);
 
     return (
         <div className="header" style={{ right: "0px" }}>
@@ -134,6 +141,10 @@ const StaffHeader = (props) => {
                     <Link to={'/staff/staff/messageInbox'} >
                         <i className="fa fa-comment-o" />
                         {/* <span className="badge badge-pill">8</span> */}
+                        {
+                            filteredInbox.length <= 0 ? "" :
+                                <span className="badge badge-pill bg-danger">{filteredInbox.length}</span>
+                        }
                     </Link>
 
                 </li>

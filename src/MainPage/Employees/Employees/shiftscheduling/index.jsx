@@ -34,12 +34,41 @@ const ShiftScheduling = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const user = JSON.parse(localStorage.getItem('user'));
     const claims = JSON.parse(localStorage.getItem('claims'));
+    const { get, post } = useHttp();
+    const [loading1, setLoading1] = useState(false)
+    const [loading2, setLoading2] = useState(false);
+    const [loading3, setLoading3] = useState(false);
+    const history = useHistory();
+    const [cli, setCli] = useState('');
+    const [sta, setSta] = useState('');
+    const [lgShow, setLgShow] = useState(false);
+    const [report, setReport] = useState("");
+    const [startKm, setStartKm] = useState(0);
+    const [endKm, setEndKm] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [reasonModal, setReasonModal] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [periodicModal, setPeriodicModal] = useState(false);
+    const dateFrom = useRef(null);
+    const dateTo = useRef(null);
     const hasRequiredClaims = (claimType) => {
         return claims.some(claim => claim.value === claimType);
     };
+    const [currentDate, setCurrentDate] = useState(dayjs().tz());
+    const daysOfWeek = [
+        currentDate.subtract(3, 'day'),
+        currentDate.subtract(2, 'day'),
+        currentDate.subtract(1, 'day'),
+        currentDate,
+        currentDate.add(1, 'day'),
+        currentDate.add(2, 'day'),
+    ];
+    const startDate = currentDate.subtract(3, 'day');
+    const endDate = currentDate.add(3, 'day');
 
     // Fetch staff data and update the state
     useEffect(() => {
+        // dispatch(filterRoaster({ dateFrom: startDate.format('YYYY-MM-DD'), dateTo: endDate.format('YYYY-MM-DD'), sta, cli, companyId: id.companyId }));
         dispatch(fetchRoaster(id.companyId));
         dispatch(fetchStaff(id.companyId));
         dispatch(fetchClient(id.companyId));
@@ -69,23 +98,7 @@ const ShiftScheduling = () => {
     //   console.log(nowInAustraliaTime);
     // }, [])
 
-    const { get, post } = useHttp();
-    const [loading1, setLoading1] = useState(false)
-    const [loading2, setLoading2] = useState(false);
-    const [loading3, setLoading3] = useState(false);
-    const history = useHistory();
-    const [cli, setCli] = useState('');
-    const [sta, setSta] = useState('');
-    const [lgShow, setLgShow] = useState(false);
-    const [report, setReport] = useState("");
-    const [startKm, setStartKm] = useState(0);
-    const [endKm, setEndKm] = useState(0);
-    const [showModal, setShowModal] = useState(false);
-    const [reasonModal, setReasonModal] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState(null);
-    const [periodicModal, setPeriodicModal] = useState(false);
-    const dateFrom = useRef(null);
-    const dateTo = useRef(null);
+
 
     const [reason, setReason] = useState("");
 
@@ -95,26 +108,22 @@ const ShiftScheduling = () => {
 
     //Calendar Logic Starts here
     // Get the current date
-    const [currentDate, setCurrentDate] = useState(dayjs().tz());
 
-    const handleNextClick = () => {
+
+    const handleNextClick = (start, end) => {
         setCurrentDate(currentDate.add(6, 'day'));
+        // console.log("StartDate:", start.add(6, 'day').format('MM/DD/YYYY'), "EndDate:", end.add(6, 'day').format('MM/DD/YYYY'));
+        // dispatch(filterRoaster({ dateFrom: start.add(6, 'day').format('YYYY-MM-DD'), dateTo: end.add(7, 'day').format('YYYY-MM-DD'), sta, cli, companyId: id.companyId }));
+
     };
 
-    const handlePrevClick = () => {
+    const handlePrevClick = (start, end) => {
         setCurrentDate(currentDate.subtract(6, 'day'));
+        // console.log("StartDate:", start.subtract(6, 'day').format('YYYY-MM-DD'), "EndDate:", end.subtract(6, 'day').format('YYYY-MM-DD'));
+        // dispatch(filterRoaster({ dateFrom: start.subtract(7, 'day').format('YYYY-MM-DD'), dateTo: end.subtract(7, 'day').format('YYYY-MM-DD'), sta, cli, companyId: id.companyId }));
     };
 
-    const daysOfWeek = [
-        currentDate.subtract(3, 'day'),
-        currentDate.subtract(2, 'day'),
-        currentDate.subtract(1, 'day'),
-        currentDate,
-        currentDate.add(1, 'day'),
-        currentDate.add(2, 'day'),
-    ];
-    const startDate = currentDate.subtract(3, 'day');
-    const endDate = currentDate.add(2, 'day');
+
     const [selectedShift, setSelectedShift] = useState(null);
     const [dropModal, setDropModal] = useState(false);
 

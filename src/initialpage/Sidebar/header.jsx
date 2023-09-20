@@ -6,6 +6,8 @@ import man from "../../assets/img/user.jpg";
 import loggo from '../../assets/img/promaxcare_logo_icon.png';
 import axiosInstance from '../../store/axiosInstance';
 import { emptyCache } from '../../hooks/cacheUtils';
+import { fetchInbox } from '../../store/slices/MessageInboxSlice';
+import { useDispatch, useSelector } from 'react-redux';
 const Header = (props) => {
   const navigate = useHistory();
   const handlesidebar = () => {
@@ -34,7 +36,9 @@ const Header = (props) => {
       console.log(error);
     }
   }
+  const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(fetchInbox(user.userId));
     FetchCompany()
   }, []);
   const handleLogout = () => {
@@ -42,28 +46,33 @@ const Header = (props) => {
     localStorage.clear();
     navigate.push('/');
   };
+  const inbox = useSelector((state) => state.inbox.data);
+
+  const filteredInbox = inbox.filter((item) => item.status === false);
+
+
 
   // Assuming companyOne.dateCreated is a valid date string (e.g., "2023-09-15")
-const companyOneDate = new Date(companyOne.expirationDate);
+  const companyOneDate = new Date(companyOne.expirationDate);
 
-// Get the current date in Australia (assuming Australian Eastern Standard Time)
-const australiaTimeZoneOffset = 10; // UTC+10 for Australian Eastern Standard Time
-const currentDateInAustralia = new Date();
-currentDateInAustralia.setHours(currentDateInAustralia.getHours() + australiaTimeZoneOffset);
+  // Get the current date in Australia (assuming Australian Eastern Standard Time)
+  const australiaTimeZoneOffset = 10; // UTC+10 for Australian Eastern Standard Time
+  const currentDateInAustralia = new Date();
+  currentDateInAustralia.setHours(currentDateInAustralia.getHours() + australiaTimeZoneOffset);
 
-// Calculate the difference in days
-const timeDifference = currentDateInAustralia - companyOneDate;
-const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
+  // Calculate the difference in days
+  const timeDifference = currentDateInAustralia - companyOneDate;
+  const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
 
-// Define your rendering logic
-let displayText;
-if (daysDifference <= 0) {
-  // Free trial not expired yet
-  displayText = `Free trial: ${Math.abs(daysDifference)} days left`;
-} else {
-  // Free trial has expired
-  displayText = 'Free trial: Expired';
-}
+  // Define your rendering logic
+  let displayText;
+  if (daysDifference <= 0) {
+    // Free trial not expired yet
+    displayText = `Free trial: ${Math.abs(daysDifference)} days left`;
+  } else {
+    // Free trial has expired
+    displayText = 'Free trial: Expired';
+  }
   const [currentTime, setCurrentTime] = useState(new Date());
   const userObj = JSON.parse(localStorage.getItem('user'));
 
@@ -110,13 +119,13 @@ if (daysDifference <= 0) {
       {/* Header Menu */}
       <ul className="nav user-menu">
 
-      {user.role === "CompanyAdmin" ? <li className="nav-item dropdown has-arrow flag-nav">
-      <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-        <span className='fw-bold'>
-          {displayText}
-        </span>
-      </a>
-    </li>:""}
+        {user.role === "CompanyAdmin" ? <li className="nav-item dropdown has-arrow flag-nav">
+          <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+            <span className='fw-bold'>
+              {displayText}
+            </span>
+          </a>
+        </li> : ""}
         {/* Search */}
         <li className="nav-item">
           <div className="top-nav-search">
@@ -154,7 +163,10 @@ if (daysDifference <= 0) {
         <li className="nav-item dropdown">
           <Link to={'/app/message/inbox'} >
             <i className="fa fa-comment-o" />
-            {/* <span className="badge badge-pill">8</span> */}
+            {
+              filteredInbox.length <= 0 ? "" :
+                <span className="badge badge-pill bg-danger">{filteredInbox.length}</span>
+            }
           </Link>
         </li>
         {/* /Message Notifications */}

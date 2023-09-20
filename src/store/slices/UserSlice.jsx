@@ -6,6 +6,15 @@ export const fetchUser = createAsyncThunk('User/fetchUser', async (companyId) =>
     return response;
 });
 
+export const formatUser = createAsyncThunk('User/formatUser', async (companyId) => {
+    const response = await api.fetchUserData(companyId);
+    const formattedData = response.map((item) => ({
+        label: item.email,
+        value: item.email,
+    }));
+    return formattedData;
+});
+
 const UserSlice = createSlice({
     name: 'User',
     initialState: {
@@ -27,6 +36,18 @@ const UserSlice = createSlice({
                 state.data = action.payload;
             })
             .addCase(fetchUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            })
+            .addCase(formatUser.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(formatUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(formatUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message;
             });

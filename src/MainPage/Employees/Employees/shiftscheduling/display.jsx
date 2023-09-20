@@ -16,12 +16,12 @@ const Display = ({ handlePrevClick, handleNextClick, startDate, endDate, daysOfW
             <div className="col-md-6  col-lg-12 col-xl-12">
                 <div className='mt-4 p-3 d-flex justify-content-between flex-wrap align-items-center'>
                     <span className='' >
-                        <button onClick={handlePrevClick} className='btn btn-primary btn-sm shadow'>
+                        <button onClick={() => handlePrevClick(startDate, endDate)} className='btn btn-primary btn-sm shadow'>
                             <FaAngleLeft className='pointer fs-4 text-white' />
 
                         </button>
                         <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMM D')} - {endDate.format('MMM D')}</span>
-                        <button onClick={handleNextClick} className='btn btn-primary btn-sm shadow' >
+                        <button onClick={() => handleNextClick(startDate, endDate)} className='btn btn-primary btn-sm shadow' >
                             <FaAngleRight className='pointer fs-4 text-white' />
 
                         </button>
@@ -114,9 +114,11 @@ const Display = ({ handlePrevClick, handleNextClick, startDate, endDate, daysOfW
 
 
 
-                                                <span style={{ width: "10px", height: "10px" }} className={`${activity.attendance === true ? "bg-success" : activity.attendance === false ? "bg-danger" :
-                                                    activity.status === "Pending" ? "" : activity.status === "Cancelled" ? "" : "bg-danger"
-                                                    } rounded-circle`}></span>
+                                                <span style={{ width: "10px", height: "10px" }}
+                                                    title={activity.attendance === true ? "Attended Shift" : "Unattended Shift"}
+                                                    className={`${activity.attendance === true ? "bg-success" : activity.attendance === false ? "bg-danger" :
+                                                        activity.status === "Pending" ? "" : activity.status === "Cancelled" ? "" : "bg-danger"
+                                                        } rounded-circle`}></span>
                                             </div>
                                             <span><span className='fw-bold text-truncate'>Staff: </span><span className='text-truncate'>{activity.staff?.fullName}</span></span>
                                             <span><span className='fw-bold text-truncate'>Client(s): </span><span className='text-truncate'>{activity.clients}</span></span>
@@ -156,36 +158,40 @@ const Display = ({ handlePrevClick, handleNextClick, startDate, endDate, daysOfW
 
                                                     <div className='d-flex gap-2' >
 
-                                                        {(user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster")) && (
-
-                                                            <small
-                                                                className={`text-truncate d-flex 
-             align-items-center
-             justify-content-center px-2 py-1 rounded bg-danger pointer`}
-
-                                                                onClick={() => handleDelete(activity?.shiftRosterId)}
-                                                                title="Delete"
-                                                            >
-                                                                <GoTrashcan className='fs-6' />
-                                                            </small>
-
-
-
-                                                        )}
 
                                                         {
                                                             getActivityStatus(activity) === 'Upcoming' && activity.status !== 'Pending' && activity.status !== 'Cancelled' && (
                                                                 (user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Edit Shift Roster")) && (
-                                                                    <Link
-                                                                        to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
-                                                                        className={`text-truncate d-flex 
-              align-items-center
-              justify-content-center px-2 py-1 rounded bg-light pointer`}
-                                                                        title="Edit"
+                                                                    <div className='d-flex gap-2'>
 
-                                                                    >
-                                                                        <MdOutlineEditCalendar className='fs-6 text-dark' />
-                                                                    </Link>
+                                                                        {(user.role === "CompanyAdmin" || user.role === "Administrator" || hasRequiredClaims("Delete Shift Roster")) && (
+
+                                                                            <small
+                                                                                className={`text-truncate d-flex 
+align-items-center
+justify-content-center px-2 py-1 rounded bg-danger pointer`}
+
+                                                                                onClick={() => handleDelete(activity?.shiftRosterId)}
+                                                                                title="Delete"
+                                                                            >
+                                                                                <GoTrashcan className='fs-6' />
+                                                                            </small>
+
+
+
+                                                                        )}
+
+                                                                        <Link
+                                                                            to={`/app/employee/edit-shift/${activity?.shiftRosterId}`}
+                                                                            className={`text-truncate d-flex 
+                                                                        align-items-center
+                                                                        justify-content-center px-2 py-1 rounded bg-light pointer`}
+                                                                            title="Edit"
+
+                                                                        >
+                                                                            <MdOutlineEditCalendar className='fs-6 text-dark' />
+                                                                        </Link>
+                                                                    </div>
                                                                 )
 
                                                             )

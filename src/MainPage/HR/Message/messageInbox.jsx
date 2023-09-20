@@ -16,6 +16,9 @@ import moment from 'moment';
 import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
 import axiosInstance from '../../../store/axiosInstance';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatUser } from '../../../store/slices/UserSlice';
+import { fetchInbox } from '../../../store/slices/MessageInboxSlice';
 
 function truncateString(str, maxLength) {
     if (str.length > maxLength) {
@@ -28,12 +31,10 @@ function truncateString(str, maxLength) {
 
 const MessageInbox = () => {
     const id = JSON.parse(localStorage.getItem('user'));
-    const privateHttp = useHttp();
     const [activeTab, setActiveTab] = useState('inbox');
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [editorValue, setEditorValue] = useState('');
     const subject = useRef(null);
-    const [options, setOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [lgShow, setLgShow] = useState(false);
     const [sendAsSMS, setSendAsSMS] = useState(false);
@@ -44,7 +45,6 @@ const MessageInbox = () => {
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
     const [replyModal, setReplyModal] = useState(false);
-    const [inbox, setInbox] = useState([]);
     const [sentEmail, setSentEmail] = useState([]);
     const [email, setEmail] = useState("");
 
@@ -95,8 +95,11 @@ const MessageInbox = () => {
         setSelectedEmail(null);
     };
 
-    const handleEmailClick = (email) => {
-        setSelectedEmail(email);
+    const handleEmailClick = async (email) => {
+        const { data } = await axiosInstance.get(`/Messages/${email.messageId}`);
+        setSelectedEmail(data);
+
+
     };
     const [showCc, setShowCc] = useState(false);
     const [showBcc, setShowBcc] = useState(false);
@@ -112,33 +115,25 @@ const MessageInbox = () => {
         setEmail(e)
         setReplyModal(true);
     };
+    const dispatch = useDispatch();
     const fetchClient = async () => {
+        dispatch(formatUser(id.companyId));
+        dispatch(fetchInbox(id.userId));
+
         try {
-            const { data } = await axiosInstance.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const formattedOptions = data.map((item) => ({
-                label: item.email,
-                value: item.email,
-            }));
-            setOptions(formattedOptions);
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const { data } = await axiosInstance.get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
+            const { data } = await axiosInstance.get(`/Messages/sent?userId=${id.userId}`);
             setSentEmail(data.message);
         } catch (error) {
             console.log(error);
         }
-        try {
-            const { data } = await axiosInstance.get(`/Messages/inbox?userId=${id.userId}`, { cacheTimeout: 300000 });
-            setInbox(data.message);
-        } catch (error) {
-            console.log(error);
-        }
+
     }
     useEffect(() => {
         fetchClient()
     }, []);
+    const options = useSelector((state) => state.user.data);
+    const inbox = useSelector((state) => state.inbox.data);
+    const isLoading = useSelector((state) => state.inbox.isLoading);
 
     const handleSelectionChange = (selected) => {
         setSelectedOptions(selected);
@@ -282,7 +277,10 @@ const MessageInbox = () => {
 
 
                 {/* /Page Header */}
-                <div className="email-component">
+                {isLoading ? <div className='mx-auto d-flex justify-content-center w-100'>
+                    <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div>
+                    </div><div></div><div></div><div></div><div></div></div>
+                </div> : <div className="email-component">
                     <div className="row">
                         <div className="col-md-3 col-lg-3 col-xl-3 border">
                             <div className="nav flex-column gap-2 nav-pills py-2" id="v-pills-tab"
@@ -304,7 +302,7 @@ const MessageInbox = () => {
                                         <MdMoveToInbox className='fs-4' />
                                         <span className='fw-bold'>Inbox</span>
                                     </div>
-                                    <span className='text-warning'>0</span>
+                                    <span className='text-warning'>{inbox.length}</span>
                                 </a>
                                 {/* Other tabs */}
                                 <a
@@ -458,7 +456,7 @@ const MessageInbox = () => {
                                                                 style={{ cursor: 'pointer' }}
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
-                                                                <tbody style={{ overflow: 'scroll', height: "20vh" }}>
+                                                                <tbody>
                                                                     <tr>
                                                                         <th></th>
                                                                         <th>From</th>
@@ -477,7 +475,7 @@ const MessageInbox = () => {
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
                                                                             <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                                <span className="mb-0 text-muted text-truncate" > {truncateString(email.emailTo, 30)} </span>
+                                                                                <span className="mb-0 text-muted text-truncate" > {truncateString(email.emailFrom, 30)} </span>
                                                                             </td>
                                                                             {/* Message */}
                                                                             <td>
@@ -570,8 +568,8 @@ const MessageInbox = () => {
                                                                 <tbody>
                                                                     <tr>
                                                                         <th></th>
-                                                                        <th>To</th>
                                                                         <th>Subject</th>
+                                                                        {/* <th>Content</th> */}
                                                                         <th>Date</th>
                                                                     </tr>
                                                                     {sentEmail?.map((email, index) => (
@@ -585,9 +583,9 @@ const MessageInbox = () => {
                                                                             </td>
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
-                                                                            <td style={{ width: "100px", fontSize: "12px" }}>
+                                                                            {/* <td style={{ width: "100px", fontSize: "12px" }}>
                                                                                 <span className="mb-0 text-muted text-truncate" > {truncateString(email.emailTo, 30)} </span>
-                                                                            </td>
+                                                                            </td> */}
                                                                             {/* Message */}
                                                                             <td style={{ cursor: 'pointer' }}>
                                                                                 <a className="link" href="javascript: void(0)" >
@@ -595,7 +593,16 @@ const MessageInbox = () => {
                                                                                         onClick={() => handleEmailClick(email)}
                                                                                     >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
+
                                                                             </td>
+                                                                            {/* <td style={{ cursor: 'pointer' }}>
+                                                                                <a className="link" href="javascript: void(0)" >
+                                                                                    <span className="text-dark fw-bold text-truncate"
+                                                                                        onClick={() => handleEmailClick(email)}
+                                                                                    >{truncateString(ReactHtmlParser(email.content), 5)}</span>
+                                                                                </a>
+
+                                                                            </td> */}
                                                                             {/* Attachment */}
                                                                             {/* Time */}
                                                                             <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
@@ -699,7 +706,7 @@ const MessageInbox = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
                 <Modal
                     size="lg"
                     show={lgShow}

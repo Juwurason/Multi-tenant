@@ -18,9 +18,7 @@ const ClientChart = () => {
 
     useEffect(() => {
         dispatch(fetchChart({ value: selectedPeriod, company: id.companyId }))
-            .then(() => setIsLoading(false))
-            .catch(() => setIsLoading(false));
-    }, [dispatch, selectedPeriod]);
+    }, [dispatch]);
 
     const data = {
         labels: staffNames,

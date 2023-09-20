@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom';
 import ClientDashboard from './ClientDashboard';
 import ClientChangePassword from './ClientChangePassword';
@@ -24,11 +24,43 @@ import ClientBehaviuorEdit from './ClientBehaviuorEdit';
 import ClientTicketDetails from './ClientSupport/Support/ticketDetails';
 import KnowledgeBaseDetails from './ClientSupport/Support/knowledgeBaseDetails';
 import KnowledgeBaseVideo from './ClientSupport/Support/knowledgeBaseVideo';
+import useHttp from '../../hooks/useHttp';
 
 
 
 const ClientRoute = ({ match }) => {
+  const id = JSON.parse(localStorage.getItem('user'));
+  const { get } = useHttp();
+  const [sentEmail, setSentEmail] = useState([]);
+  const [inbox, setInbox] = useState([]);
 
+  const fetchData = async () => {
+
+    try {
+      const { data } = await get(`/Messages/sent?userId=${id.userId}`, { cacheTimeout: 300000 });
+      setSentEmail(data.message);
+      setLoading(false)
+      // console.log(data);
+    } catch (error) {
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading(false)
+    }
+    try {
+      const { data } = await get(`/Messages/inbox?userId=${id.userId}`, { cacheTimeout: 300000 });
+      setInbox(data.message);
+      setLoading(false)
+      // console.log(data);
+    } catch (error) {
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
   return (
 
 
@@ -50,7 +82,7 @@ const ClientRoute = ({ match }) => {
       <Route path={`${match.url}/knowledge-video/:uid`} render={() => <KnowledgeBaseVideo />} />
       <Route path={`${match.url}/client-behaviuor`} render={() => <ClientBehaviuor />} />
       <Route path={`${match.url}/client-behaviuor-edit/:uid`} render={() => <ClientBehaviuorEdit />} />
-      <Route path={`${match.url}/client-message`} render={() => <ClientMessage />} />
+      <Route path={`${match.url}/client-message`} render={() => <ClientMessage sentEmail={sentEmail} inbox={inbox} fetchData={fetchData} />} />
       <Route path={`${match.url}/client-view_ticket`} render={() => <ClientViewTicket />} />
       <Route path={`${match.url}/client-raise_ticket`} render={() => <ClientRaiseTicket />} />
       <Route path={`${match.url}/client-ticket_details/:uid`} render={() => <ClientTicketDetails />} />

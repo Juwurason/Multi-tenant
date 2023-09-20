@@ -180,12 +180,23 @@ const UserRoles = () => {
 
                                                 {
                                                     loading &&
-                                                    <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                                    <div className='text-center fs-1'>
+                                                        <div className="spinner-grow text-secondary" role="status">
+                                                            <span className="sr-only">Loading...</span>
+                                                        </div>
+                                                    </div>
 
+                                                }
+                                                {
+                                                    !loading && roles.length <= 0 &&
+                                                    <div className='w-100'>
+                                                        <h4 className='text-center text-bold'>No Roles Found</h4>
+
+                                                    </div>
                                                 }
 
                                                 {
-                                                    !loading && roles.length > 0 ? roles.map((data, index) =>
+                                                    !loading && roles.length > 0 && roles.map((data, index) =>
                                                         <div className="col-md-3" key={index}>
                                                             <div className="card" style={{ height: "10rem" }}>
 
@@ -218,10 +229,7 @@ const UserRoles = () => {
                                                             </div>
                                                         </div>
 
-                                                    ) : <div className='w-100'>
-                                                        <h4 className='text-center text-bold'>No Roles Found</h4>
-
-                                                    </div>
+                                                    )
                                                 }
 
                                             </div>

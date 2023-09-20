@@ -140,10 +140,10 @@ const Loginpage = () => {
 
 
       <div className='cover-bg px-2'>
-        <div className="header-left p-4">
-          <span className="logo p-4">
-            <img src={loggo} width={180} height={180} alt="" />
-          </span>
+        <div className="logo-login p-4">
+          {/* <span className=" p-4" > */}
+          <img src={loggo} className='w-100 h-100' alt="" />
+          {/* </span> */}
         </div>
         <div className="login-form px-1 shadow bg-white rounded" >
           <form onSubmit={handleLogin}>

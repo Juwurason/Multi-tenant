@@ -12,8 +12,9 @@ import Editor from './editor';
 import { MultiSelect } from 'react-multi-select-component';
 import { toast } from 'react-toastify';
 import useHttp from '../../../../hooks/useHttp';
+import axiosInstance from '../../../../store/axiosInstance';
 
-const ClientMessage = () => {
+const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
     const id = JSON.parse(localStorage.getItem('user'));
     const privateHttp = useHttp();
     const [activeTab, setActiveTab] = useState('inbox');
@@ -77,8 +78,14 @@ const ClientMessage = () => {
         setSelectedEmail(null);
     };
 
-    const handleEmailClick = (email) => {
-        setSelectedEmail(email);
+
+
+
+    const handleEmailClick = async (email) => {
+        const { data } = await axiosInstance.get(`/Messages/${email.messageId}`);
+        setSelectedEmail(data);
+
+
     };
     const [showCc, setShowCc] = useState(false);
     const [showBcc, setShowBcc] = useState(false);
@@ -230,7 +237,7 @@ const ClientMessage = () => {
                                 >
                                     <MdMoveToInbox className='fs-4' />
                                     <span className='fw-bold'>Inbox</span>
-                                    <span className='text-warning'>0</span>
+                                    <span className='text-warning'>{inbox?.length}</span>
                                 </a>
                                 {/* Other tabs */}
                                 <a
@@ -245,6 +252,7 @@ const ClientMessage = () => {
                                 >
                                     <MdSend className='fs-4' />
                                     <span className='fw-bold'>Sent</span>
+                                    <span className='text-info'>{sentEmail?.length}</span>
                                 </a>
                                 <a
                                     className={`nav-link text-dark d-flex gap-4 align-items-center ${activeTab === 'drafts' ? 'active' : ''}`}
@@ -323,7 +331,7 @@ const ClientMessage = () => {
                                 </a>
                             </div>
                         </div>
-                        <div className="col-md-9 col-lg-9 col-xl-9  border">
+                        <div className="col-md-9 col-lg-9 col-xl-9  border" style={{ height: "80vh" }}>
                             <div className="tab-content" id="v-pills-tabContent">
                                 <div
                                     className={`tab-pane fade ${activeTab === 'inbox' ? 'show active' : ''}`}
@@ -331,75 +339,104 @@ const ClientMessage = () => {
                                     role="tabpanel"
                                     aria-labelledby="v-pills-inbox-tab"
                                 >
-                                    {selectedEmail ? (
-                                        <div>
-                                            <h4>{selectedEmail.subject}</h4>
-                                            <p>From: {selectedEmail.sender}</p>
-                                            <p>{selectedEmail.body}</p>
-                                        </div>
-                                    ) : (
-                                        <ul className="list-group">
+                                    <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                        <span className='d-flex gap-4 align-items-center'>
+                                            <input type="checkbox" className="custom-control-input" id="cst1" />
+                                            <GoTrashcan />
+                                        </span>
+                                        <span>
+                                            <MdOutlineRefresh className='fs-5' />
+                                        </span>
+                                    </div>
+                                    <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                        <span className='ml-4 d-flex gap-2 align-items-center text-primary fw-bold border-bottom-danger'>
+                                            <MdMoveToInbox /> Primary
+                                        </span>
+                                        <span>
+                                            {inbox?.length} Message(s)
+                                        </span>
 
-                                            <div className="table-responsive">
-                                                <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
-                                                    <span className='d-flex gap-4 align-items-center'>
-                                                        <input type="checkbox" className="custom-control-input" id="cst1" />
-                                                        <GoTrashcan />
-                                                    </span>
-                                                    <span>
-                                                        <MdOutlineRefresh className='fs-5' />
-                                                    </span>
-                                                </div>
-                                                <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
-                                                    <span className='ml-4 d-flex gap-2 align-items-center text-primary fw-bold border-bottom-danger'>
-                                                        <MdMoveToInbox /> Primary
-                                                    </span>
-                                                    <span>
-                                                        0 Message(s)
-                                                    </span>
-                                                </div>
-                                                <table
+                                    </div>
 
-                                                    style={{ cursor: 'pointer' }}
-                                                    className="table email-table no-wrap table-hover v-middle mb-0 ">
-                                                    <tbody>
-                                                        {inboxEmails.map((email) => (
-                                                            <tr key={email.id}
+                                    {
+                                        inbox <= 0 ?
+                                            <>
+                                                No Message Yet
+                                            </>
+                                            :
+                                            <>
 
+                                                {selectedEmail ? (
+                                                    <div>
+                                                        <h4>{selectedEmail.subject}</h4>
+                                                        <p>From: {selectedEmail.emailFrom}</p>
+                                                        <p>{ReactHtmlParser(selectedEmail.content)}</p>
+                                                        <div>
+                                                            <button className='btn btn-primary' onClick={() => handleReply(selectedEmail.emailFrom)}>Reply</button>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <ul className="list-group" style={{ height: "62vh", overflowY: 'auto' }}>
 
-                                                            >
-                                                                {/* label */}
-                                                                <td className="">
-                                                                    <input type="checkbox" className="custom-control-input" id="cst1" />
-                                                                </td>
-                                                                {/* star */}
-                                                                {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
-                                                                <td>
-                                                                    <span className="mb-0 text-muted"> {email.sender} </span>
-                                                                </td>
-                                                                {/* Message */}
-                                                                <td>
-                                                                    <a className="link" href="javascript: void(0)" onClick={() => handleEmailClick(email)}>
-                                                                        <span className="text-dark fw-bold text-truncate">{email.subject}</span>
-                                                                    </a>
-                                                                </td>
-                                                                {/* Attachment */}
-                                                                <td><i className="fa fa-paperclip text-muted" /></td>
-                                                                {/* Time */}
-                                                                <td className="text-muted text-end">{email.time}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                        <div className="table-responsive">
+
+                                                            <table
+
+                                                                style={{ cursor: 'pointer' }}
+                                                                className="table email-table no-wrap table-hover v-middle mb-0 ">
+
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>From</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                    {inbox?.map((email, index) => (
+                                                                        <tr key={index}
 
 
+                                                                        >
+                                                                            {/* label */}
+                                                                            <td className="" style={{ width: "20px" }}>
+                                                                                <input type="checkbox" className="custom-control-input" id="cst1" />
+                                                                            </td>
+                                                                            {/* star */}
+                                                                            {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
+                                                                            <td style={{ width: "100px", fontSize: "12px" }}>
+                                                                                <span className="mb-0 text-muted text-truncate" >
+                                                                                    {truncateString(email.emailFrom, 30)}
+                                                                                </span>
+                                                                            </td>
+                                                                            {/* Message */}
+                                                                            <td>
+                                                                                <a className="link" href="javascript: void(0)" >
+                                                                                    <span className="text-dark fw-bold text-truncate"
+                                                                                        onClick={() => handleEmailClick(email)}
+                                                                                    >{truncateString(email.subject, 30)}</span>
+                                                                                </a>
+                                                                            </td>
+                                                                            {/* Attachment */}
+                                                                            {/* Time */}
+                                                                            <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
+                                                                            <td className="text-end" style={{ width: "20px" }}
+                                                                                onClick={() => handleDelete(email.messageId)}>
+                                                                                <GoTrashcan className='pointer' /></td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </ul>
+                                                )}
+
+                                            </>
+                                    }
 
 
 
 
-                                        </ul>
-                                    )}
                                 </div>
                                 {/* Other tab content */}
                                 <div
@@ -408,17 +445,129 @@ const ClientMessage = () => {
                                     role="tabpanel"
                                     aria-labelledby="v-pills-sent-tab"
                                 >
-                                    <h3>Sent</h3>
-                                    <p>Display sent emails here.</p>
+                                    <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                        <span className='d-flex gap-4 align-items-center'>
+                                            <input type="checkbox" className="custom-control-input" id="cst1" />
+                                            <GoTrashcan />
+                                        </span>
+                                        <span>
+                                            <MdOutlineRefresh className='fs-5' />
+                                        </span>
+                                    </div>
+                                    <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                        <span className='ml-4 d-flex gap-2 align-items-center text-warning fw-bold border-bottom-danger'>
+                                            <MdMoveToInbox /> Sent
+                                        </span>
+                                        <span>
+                                            {sentEmail?.length} Message(s)
+                                        </span>
+                                    </div>
+
+
+                                    {
+                                        sentEmail <= 0 ?
+                                            <>
+                                                No Message Yet
+                                            </>
+                                            :
+                                            <>
+
+                                                {selectedEmail ? (
+                                                    <div>
+                                                        <h4>{selectedEmail.subject}</h4>
+                                                        <p>To: {selectedEmail.emailTo}</p>
+                                                        <p>{ReactHtmlParser(selectedEmail.content)}</p>
+                                                    </div>
+                                                ) : (
+                                                    <ul className="list-group" style={{ height: "62vh", overflowY: 'auto' }}>
+
+                                                        <div className="table-responsive">
+
+                                                            <table
+
+
+                                                                className="table email-table no-wrap table-hover v-middle mb-0 ">
+
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>To</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                    {sentEmail?.map((email, index) => (
+                                                                        <tr key={index}
+
+
+                                                                        >
+                                                                            {/* label */}
+                                                                            <td className="" style={{ width: "20px" }}>
+                                                                                <input type="checkbox" className="custom-control-input" id="cst1" />
+                                                                            </td>
+                                                                            {/* star */}
+                                                                            {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
+                                                                            <td style={{ width: "100px", fontSize: "12px" }}>
+                                                                                <span className="mb-0 text-muted text-truncate" >  {truncateString(email.emailTo, 30)} </span>
+                                                                            </td>
+                                                                            {/* Message */}
+                                                                            <td style={{ cursor: 'pointer' }}>
+                                                                                <a className="link" href="#" >
+                                                                                    <span className="text-dark fw-bold text-truncate"
+                                                                                        onClick={(e) => {
+                                                                                            e.preventDefault()
+                                                                                            handleEmailClick(email)
+                                                                                        }}
+                                                                                    > {truncateString(email.subject, 30)}</span>
+                                                                                </a>
+                                                                            </td>
+                                                                            {/* Attachment */}
+                                                                            {/* Time */}
+                                                                            <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
+                                                                            <td className="text-end" style={{ width: "20px" }}
+                                                                                onClick={() => handleDelete(email.messageId)}>
+                                                                                <GoTrashcan className='pointer' /></td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </ul>
+                                                )}
+
+                                            </>
+                                    }
+
                                 </div>
+
+
+
+
                                 <div
                                     className={`tab-pane fade ${activeTab === 'drafts' ? 'show active' : ''}`}
                                     id="v-pills-drafts"
                                     role="tabpanel"
                                     aria-labelledby="v-pills-drafts-tab"
                                 >
-                                    <h3>Drafts</h3>
-                                    <p>Display draft emails here.</p>
+                                    <div className='bg-light p-2 d-flex justify-content-between align-items-center'>
+                                        <span className='d-flex gap-4 align-items-center'>
+                                            <input type="checkbox" className="custom-control-input" id="cst1" />
+                                            <GoTrashcan />
+                                        </span>
+                                        <span>
+                                            <MdOutlineRefresh className='fs-5' />
+                                        </span>
+                                    </div>
+                                    <div className=' px-2 py-3 d-flex justify-content-between align-items-center'>
+                                        <span className='ml-4 d-flex gap-2 align-items-center text-secondary fw-bold border-bottom-danger'>
+                                            <MdMoveToInbox /> Drafts
+                                        </span>
+                                        <span>
+                                            0 Message(s)
+                                        </span>
+                                    </div>
+
+
+
                                 </div>
                                 <div
                                     className={`tab-pane fade ${activeTab === 'spam' ? 'show active' : ''}`}
@@ -526,7 +675,7 @@ const ClientMessage = () => {
                                         <label className="col-form-label fw-semibold">To: </label>
                                         {/* ... Rest of the recipient selection code ... */}
                                         <div className="form-control d-flex justify-content-between align-items-center">
-                                            {/* 
+
                                             <MultiSelect
                                                 options={options}
                                                 value={selectedOptions}
@@ -536,8 +685,8 @@ const ClientMessage = () => {
 
 
 
-                                            /> */}
-                                            <input className="form-control border-0 bg-transparent w-75" type="text" placeholder="To...." />
+                                            />
+                                            {/* <input className="form-control border-0 bg-transparent w-75" type="text" placeholder="To...." /> */}
 
                                             <span className="w-25 d-flex justify-content-end">
                                                 <button className="btn" onClick={toggleCc}>

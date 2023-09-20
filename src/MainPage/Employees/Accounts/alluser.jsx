@@ -61,7 +61,7 @@ const AllUser = () => {
 
 
         {
-            name: '',
+            name: 'Roles & Priviledges',
             cell: (row) => (
                 <span className='w-100 d-flex justify-content-center'>
                     <Link to={`/app/account/editrole/${row.id}`} className='py-1 px-2 rounded bg-warning d-flex justify-content-center align-items-center pointer'

@@ -165,6 +165,15 @@ const fetchIntegrationData = async (company) => {
         throw error;
     }
 };
+const fetchInboxData = async (user) => {
+    try {
+        const response = await axiosInstance.get(`/Messages/inbox?userId=${user}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching message:', error);
+        throw error;
+    }
+};
 const fetchProgressNotes = async (company) => {
     try {
         const response = await axiosInstance.get(`/ProgressNotes/get_all_progressnote_by_company?companyId=${company}`);
@@ -322,7 +331,8 @@ const api = {
     fetchAllTimesheet,
     fetchSupportSchedule,
     filterDocument,
-    filterAdminAttendance
+    filterAdminAttendance,
+    fetchInboxData
     // Add other API endpoints and corresponding methods as needed
 };
 

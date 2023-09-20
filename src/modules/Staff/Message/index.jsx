@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
+import axiosInstance from '../../../store/axiosInstance';
 
 function truncateString(str, maxLength) {
     if (str.length > maxLength) {
@@ -95,8 +96,11 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
         setSelectedEmail(null);
     };
 
-    const handleEmailClick = (email) => {
-        setSelectedEmail(email);
+    const handleEmailClick = async (email) => {
+        const { data } = await axiosInstance.get(`/Messages/${email.messageId}`);
+        setSelectedEmail(data);
+
+
     };
 
     const handleReply = async (e) => {
@@ -453,7 +457,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                         <p>From: {selectedEmail.emailFrom}</p>
                                                         <p>{ReactHtmlParser(selectedEmail.content)}</p>
                                                         <div>
-                                                            <button className='btn btn-primary'  onClick={() => handleReply(selectedEmail.emailFrom)}>Reply</button>
+                                                            <button className='btn btn-primary' onClick={() => handleReply(selectedEmail.emailFrom)}>Reply</button>
                                                         </div>
                                                     </div>
                                                 ) : (
@@ -466,7 +470,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                 style={{ cursor: 'pointer' }}
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
-                                                                <tbody style={{ overflowY: 'scroll', height: "20vh" }}>
+                                                                <tbody>
                                                                     <tr>
                                                                         <th></th>
                                                                         <th>From</th>
@@ -705,7 +709,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="form-group">
-                            {id.role === "Staff" || hasRequiredClaims("Send Messages to all") ? <div className="fw-bold">
+                            {id.role === "CompanyAdmin" || hasRequiredClaims("Send Messages to all") ? <div className="fw-bold">
                                 <label>
                                     <input
                                         type="checkbox"
@@ -749,6 +753,8 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                     Send As SMS
                                 </label>
                             </div> : ""}
+
+
                             <hr />
                             {!sendAsSMS ? (
                                 <>

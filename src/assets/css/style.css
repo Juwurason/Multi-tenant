@@ -10,6 +10,8 @@
 /** Extends **/
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap');
+
 .css-equal-content,
 .css-equal-heights {
   display: flex;
@@ -563,7 +565,8 @@ h6 {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  /* font-family: 'Poppins', sans-serif; */
+  font-family: 'Rubik', sans-serif;
   font-size: 15px;
   color: #1f1f1f;
   background-color: #fff;
