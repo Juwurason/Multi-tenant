@@ -178,7 +178,7 @@ const ServiceProvider = () => {
                 <Link
               className='fw-bold text-info'
               title='View Clients'
-              to={`/app/employee/provider-list/${data.email}`}
+              to={`/app/employee/provider-list/${data.email}/${"referral"}`}
                 >
              View Clients
             </Link>

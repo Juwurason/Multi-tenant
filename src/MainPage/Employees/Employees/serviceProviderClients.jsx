@@ -33,7 +33,7 @@ function formatDuration(duration) {
 
 const cliClients = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    const { uid, pro } = useParams();
+    const { uid, id } = useParams();
     const [details, setDetails] = useState('')
     const [cli, setCliName] = useState([])
     const { get, post } = useHttp();
@@ -43,7 +43,7 @@ const cliClients = () => {
         setLoading(true)
         try {
             const { data } = await get(`/ClientReferrals/get_referral_clients?email=${uid}`, { cacheTimeout: 300000 });
-            console.log(data);
+            // console.log(data);
             setCliName(data);
             // setDetails(data);
             setLoading(false);
@@ -174,7 +174,7 @@ const cliClients = () => {
         doc.save("cli.pdf");
     };
 
-    const ButtonRow = ({ data }) => {
+    // const ButtonRow = ({ data }) => {
         // return (
         //     <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
         //         <div ><span className='fw-bold'>Email: </span> {data.email}</div>
@@ -190,7 +190,7 @@ const cliClients = () => {
 
         //     </div>
         // );
-    };
+    // };
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = (event) => {
@@ -231,11 +231,11 @@ const cliClients = () => {
                     <div className="page-header">
                         <div className="row">
                             <div className="col-sm-12">
-                                <h3 className="page-title">Clients</h3>
+                                <h3 className="page-title">Referred Clients</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
                                     {/* <li className="breadcrumb-item active"><Link to="/app/reports/attendance-reports">Attendance</Link></li> */}
-                                    <li className="breadcrumb-item active">Clients</li>
+                                    <li className="breadcrumb-item active">Referred Clients</li>
                                 </ul>
                             </div>
                         </div>
@@ -245,7 +245,7 @@ const cliClients = () => {
                         <div className="col-sm-12">
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between align-items-center">
-                                    <h4 className="card-title mb-0">Clients</h4>
+                                    <h4 className="card-title mb-0">Clients Reffered by {uid}</h4>
                                     <Link to="/app/employee/provider" className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className='mt-4 border'>
@@ -311,8 +311,8 @@ const cliClients = () => {
                                                 <span className="sr-only">Loading...</span>
                                             </div>
                                         </div>}
-                                        expandableRows
-                                        expandableRowsComponent={ButtonRow}
+                                        // expandableRows
+                                        // expandableRowsComponent={ButtonRow}
                                         paginationTotalRows={filteredData.length}
                                         customStyles={customStyles}
                                         responsive
