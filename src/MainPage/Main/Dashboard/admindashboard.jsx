@@ -223,6 +223,12 @@ const AdminDashboard = () => {
                 <DashboardCard title={"Attendances"} content={attendanceCount} icon={<MdOutlineQueryBuilder className='fs-4' />}
                   link={`/app/reports/attendance-reports`} sty={'warning'} loading={isLoading}
                 />
+                <DashboardCard title={`Documents`} sty={'info'}
+                  content={document.length} icon={<MdOutlineFolderOpen className='fs-4' />}
+                  link={'/app/employee/document'}
+
+                  loading={isLoading}
+                />
                 <DashboardCard title={`Total shift roster for ${month}`} content={perMonthCount} icon={<MdCalendarMonth className='fs-4' />}
                   linkTitle={`${monthPercentage}% increase compared to last month`} link={``} sty={'secondary'}
                   loading={isLoading}
@@ -235,6 +241,9 @@ const AdminDashboard = () => {
                   linkTitle={`${dayPercentage}% increase compared to yesterday`}
                   loading={isLoading}
                 />
+
+
+
 
               </div>
 
@@ -300,6 +309,54 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
+
+              <div className='p-3 shadow-sm'>
+                <small className='fw-bold'>Recently Onboarded Clients</small>
+                {
+                  isLoading && <div className='text-center fs-1'>
+                    <div className="spinner-grow text-secondary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                }
+
+
+                {
+                  !isLoading && clients.length > 0 ? (
+                    clients?.slice(-5).map((data, index) => (
+                      <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
+                        <div className="col-2">
+                          <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
+                            <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
+                          </div>
+                        </div>
+
+                        <div className="col-10 d-flex flex-column justify-content-start text-dark">
+                          <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
+                          <span style={{ fontSize: "10px", }}>{data.address}</span>
+                          <span style={{ fontSize: "7px", }}>{data.email}</span>
+                        </div>
+
+                      </Link>
+                    ))
+                  ) : !isLoading && clients.length <= 0 ? (
+                    <div className="text-center text-danger fs-6">
+                      <p>Not Available</p>
+                    </div>
+                  ) : null
+                }
+
+
+
+
+                <div className='d-flex justify-content-end mt-2'>
+                  <Link to={'/app/employee/clients'}
+                    className='text-primary pointer' style={{ fontSize: "12px", }}>
+                    See all <FaLongArrowAltRight className='fs-3' />
+                  </Link>
+                </div>
+
+              </div>
             </div>
 
 
@@ -314,91 +371,11 @@ const AdminDashboard = () => {
             <div className='col-md-7'>
               <div className="row">
                 <div className='col-md-6  d-flex  flex-column gap-2 justify-content-start'>
-                  <div className='p-3 shadow-sm'>
-                    <small className='fw-bold'>Recently Onboarded Clients</small>
-                    {
-                      isLoading && <div className='text-center fs-1'>
-                        <div className="spinner-grow text-secondary" role="status">
-                          <span className="sr-only">Loading...</span>
-                        </div>
-                      </div>
-                    }
 
-
-                    {
-                      !isLoading && clients.length > 0 ? (
-                        clients?.slice(-5).map((data, index) => (
-                          <Link to={`/app/profile/client-profile/${data.profileId}/${data.firstName}`} className="row mt-2" key={index}>
-                            <div className="col-2">
-                              <div className='rounded-circle mt-2 bg-secondary' style={{ width: "35px", height: "35px" }}>
-                                <img src={!data.imageUrl ? man : data.imageUrl} alt="" width={50} height={50} className='rounded-circle' />
-                              </div>
-                            </div>
-
-                            <div className="col-10 d-flex flex-column justify-content-start text-dark">
-                              <span className='text-primary fs-6 fw-bold'>{data.fullName}</span>
-                              <span style={{ fontSize: "10px", }}>{data.address}</span>
-                              <span style={{ fontSize: "7px", }}>{data.email}</span>
-                            </div>
-
-                          </Link>
-                        ))
-                      ) : !isLoading && clients.length <= 0 ? (
-                        <div className="text-center text-danger fs-6">
-                          <p>Not Available</p>
-                        </div>
-                      ) : null
-                    }
-
-
-
-
-                    <div className='d-flex justify-content-end mt-2'>
-                      <Link to={'/app/employee/clients'}
-                        className='text-primary pointer' style={{ fontSize: "12px", }}>
-                        See all <FaLongArrowAltRight className='fs-3' />
-                      </Link>
-                    </div>
-
-                  </div>
 
 
                 </div>
-                <div className="col-md-6">
-                  <div className={`card border border-info`}>
-                    <div className="card-content">
-                      <div className="card-body">
-                        <div className="media d-flex justify-content-between">
-                          <div className="media-body text-left">
-                            <span>Documents</span>
 
-                            {
-                              isLoading ? (<div className=" d-flex py-2 justify-content-start fs-6">
-                                <div className="spinner-grow text-light" role="status">
-                                  <span className="sr-only">Loading...</span>
-                                </div>
-                              </div>
-                              )
-
-                                :
-                                <h3 className='text-info'>{document.length}</h3>
-                            }
-
-                            <Link style={{ fontSize: "12px" }}
-
-                              to={`/app/employee/document`} className='pointer text-dark text-end'>View all</Link>
-                          </div>
-                          <div className="align-self-center">
-                            <MdOutlineFolderOpen className='fs-4' />
-                          </div>
-                        </div>
-                        {/* <div className='d-flex justify-content-end'>
-                        <span style={{ fontSize: "10px", }}>7 new documents uploaded today</span>
-                      </div> */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
 
                 {id.role === "Administrator" ? <div className={`card shadow-sm bg-white`} >

@@ -64,7 +64,7 @@ const ShiftScheduling = () => {
         currentDate.add(2, 'day'),
     ];
     const startDate = currentDate.subtract(3, 'day');
-    const endDate = currentDate.add(3, 'day');
+    const endDate = currentDate.add(2, 'day');
 
     // Fetch staff data and update the state
     useEffect(() => {
