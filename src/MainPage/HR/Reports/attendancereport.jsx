@@ -24,6 +24,7 @@ import { fetchSplittedAttendance } from '../../../store/slices/splittedAttendanc
 import { fetchTimesheet } from '../../../store/slices/TimeSheetSlice';
 import { fetchAllTimesheet } from '../../../store/slices/AllTimeSheetSlice';
 import axiosInstance from '../../../store/axiosInstance';
+import Swal from 'sweetalert2';
 
 function formatDuration(duration) {
   if (duration) {
@@ -100,7 +101,7 @@ const AttendanceReport = () => {
 
   const columns = [
     {
-      name: '',
+      name: 'Adjust Attendance',
       selector: "",
       sortable: true,
       expandable: true,
@@ -244,26 +245,64 @@ const AttendanceReport = () => {
 
   }
 
+
   const AdjustAttendance = async (e) => {
-    const confirmed = window.confirm("Are you sure you want to adjust attendance?");
+    Swal.fire({
+              html: `<h3>The selected attendance will be adjusted to the exact 
+              time of the shift duration. Do you wish to proceed?</h3>`,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#405189',
+              cancelButtonColor: '#777',
+              confirmButtonText: 'Confirm',
+              showLoaderOnConfirm: true,
+          }).then(async (result) => {
+              if (result.isConfirmed) {
+                  try {
+                      const { data } = await axiosInstance.get(`/attendances/adjust_attendances?userId=${id.userId}&attendanceId=${e}`,
+                      )
+                      // console.log(data);
+                      if (data.status === 'Success') {
+                        toast.success(data.message);
+                            dispatch(fetchAttendance(id.companyId));
+                            setLoading4(false);
+                      } else {
+                          toast.error(data.message);
+                      }
+      
+      
+                  } catch (error) {
+                      // toast.error("Ooops😔 Error Occurred")
+                      console.log(error);
+                      toast.error(error.response.data.message);
+                      toast.error(error.response.data.title);
+                      dispatch(fetchUser(id.companyId));
+                  }
+      
+      
+              }
+          })
+  }
+  // const AdjustAttendance = async (e) => {
+  //   const confirmed = window.confirm("Are you sure you want to adjust attendance?");
 
-    if (!confirmed) {
-      return;
-    }
+  //   if (!confirmed) {
+  //     return;
+  //   }
 
-    setLoading4(true);
+  //   setLoading4(true);
 
-    try {
-      const { data } = await get(`/attendances/adjust_attendances?userId=${id.userId}&attendanceId=${e}`, { cacheTimeout: 300000 });
-      toast.success(data.message);
-      dispatch(fetchAttendance(id.companyId));
-      setLoading4(false);
-    } catch (error) {
-      toast.error("Ooops!😔 Error Occurred");
-      console.log(error);
-      setLoading4(false);
-    }
-  };
+  //   try {
+  //     const { data } = await get(`/attendances/adjust_attendances?userId=${id.userId}&attendanceId=${e}`, { cacheTimeout: 300000 });
+  //     toast.success(data.message);
+  //     dispatch(fetchAttendance(id.companyId));
+  //     setLoading4(false);
+  //   } catch (error) {
+  //     toast.error("Ooops!😔 Error Occurred");
+  //     console.log(error);
+  //     setLoading4(false);
+  //   }
+  // };
 
 
 

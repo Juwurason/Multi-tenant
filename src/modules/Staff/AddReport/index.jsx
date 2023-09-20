@@ -190,7 +190,7 @@ const AddReport = () => {
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="">Image URL </label>
+                                            <label htmlFor=""> Upload an Image related to your shift</label>
                                             <input className="form-control" type="file"
                                                 accept=".png,.jpg,.jpeg"
                                                 maxsize={1024 * 1024 * 2}

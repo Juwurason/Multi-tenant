@@ -51,7 +51,7 @@ const Document = () => {
     const document = useSelector((state) => state.document.data);
     const staff = useSelector((state) => state.staff.data);
     const admin = useSelector((state) => state.admin.data);
-
+    // console.log(document);
     //Declaring Variables
     const privateHttp = useHttp();
     const [rejectModal, setRejectModal] = useState(false);
@@ -265,7 +265,7 @@ const Document = () => {
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
-                <div>
+                <div className=' d-flex gap-1'>
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit
                     </button> |
@@ -274,16 +274,36 @@ const Document = () => {
                     </button> |
 
                     {
-                        data.status === 'Pending' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
-                            Accept
-                        </button> : ""
+                        data.status === 'Pending' &&
+                        <div>
+                            <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                                Accept
+                            </button> |
+
+                            <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                                Reject
+                            </button>
+                        </div>
                     }
 
-                    |
-                    
-                    { data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                    {data.status === "Rejected" && <button onClick={() => handleAccept(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                        Accept
+                    </button>}
+                    {data.status === "Accepted" && <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                            Reject
+                        </button>}
+{/* 
+                    <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                            Reject
+                        </button> */}
+
+                    {/* | */}
+
+                    {/* { data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Reject
-                    </button>: ''}
+                    </button>: ''} */}
+
+
                 </div>
 
             </div>
@@ -345,7 +365,7 @@ const Document = () => {
                 try {
                     const { data } = await axiosInstance.get(`/Documents/accept_document?userId=${id.userId}&id=${e}`,
                     )
-                  
+
                     if (data.status === 'Success') {
                         toast.success(data.message);
                         dispatch(fetchDocument(id.companyId));
@@ -381,11 +401,11 @@ const Document = () => {
                 toast.success(data.message);
                 dispatch(fetchDocument(id.companyId));
                 setLoading1(false);
-                setRejectModal(true)
+                setRejectModal(false);
             } else {
 
                 toast.error(data.message);
-                setRejectModal(true)
+                setRejectModal(true);
                 setLoading1(false);
             }
 

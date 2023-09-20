@@ -29,6 +29,7 @@ import ClientAidEquip from '../../clientForms/ClientAid';
 import ClientHealth from '../../clientForms/ClientHealthSupport';
 import ClientComunitySupport from '../../clientForms/ClientComminitySupport';
 import ClientBehaviuor from '../../clientForms/ClientBehaviour';
+import ClientDoc from '../../../../_components/forms/ClientsDoc';
 dayjs.locale('en-au');
 dayjs.extend(isBetween);
 
@@ -475,12 +476,13 @@ const ClientProfiles = () => {
                                                         <small className="text-muted">{staffOne.email}</small>
                                                         <div className="staff-id">Client ID : {staffOne.contactId}</div>
                                                         <div className="staff-id">NDIS No: {staffOne.ndisNo}</div>
+                                                        <div className="staff-id">Referral: {staffOne.referral}</div>
 
                                                         {/* <div className="staff-id">Employee ID : CLT-0001</div> */}
                                                         <div className="staff-msg d-flex gap-2 flex-wrap">
 
-                                                            <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}
-                                                                className="btn btn-primary py-2  btn-sm">Client's Doc</Link>
+                                                            {/* <Link to={`/app/profile/client-docUpload/${staffOne.profileId}`}
+                                                                className="btn btn-primary py-2  btn-sm">Client's Doc</Link> */}
                                                             {
                                                                 staffOne.isActive ?
                                                                     <button onClick={() => handleDeactivate(staffOne.profileId)} className="btn btn-sm py-1 px-2 rounded text-white bg-danger">
@@ -736,6 +738,16 @@ const ClientProfiles = () => {
                                         </li>
                                         <li className="nav-item">
                                             <a
+                                                href="#client-docUpload"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client-docUpload' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client-docUpload')}
+                                            >
+                                                Document
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
                                                 href="#client-disability-support"
                                                 data-bs-toggle="tab"
                                                 className={`nav-link ${activeTab === 'client-disability-support' ? 'active text-primary fw-bold' : ''}`}
@@ -823,6 +835,10 @@ const ClientProfiles = () => {
                         <div id="client_schedule" className="pro-overview tab-pane fade show ">
 
                             <ClientSchedule uid={uid} />
+                        </div>
+                        <div id="client-docUpload" className="pro-overview tab-pane fade show ">
+
+                            <ClientDoc uid={uid} />
                         </div>
                         <div id="client-disability-support" className="pro-overview tab-pane fade show ">
 

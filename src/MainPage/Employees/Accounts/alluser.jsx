@@ -55,8 +55,6 @@ const AllUser = () => {
 
 
 
-
-
     const columns = [
 
 
@@ -147,7 +145,7 @@ const AllUser = () => {
                 try {
                     const { data } = await axiosInstance.get(`/Account/delete_user?id=${e}&userId=${id.userId}`,
                     )
-                    console.log(data);
+                    // console.log(data);
                     if (data.status === 'Success') {
                         toast.success(data.message);
                         dispatch(fetchUser(id.companyId));

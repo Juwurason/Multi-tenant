@@ -7,8 +7,8 @@ export const fetchProgress = createAsyncThunk('Progress/fetchProgress', async (c
 });
 export const filterProgress = createAsyncThunk(
     'Progress/filterProgress',
-    async ({ sta, cli }) => {
-        const response = await api.filterProgressNotes(sta, cli);
+    async ({ dateTo, dateFrom, sta, cli, company }) => {
+        const response = await api.filterProgressNotes(dateTo, dateFrom, sta, cli, company);
         return response.progressNote;
     }
 );

@@ -231,9 +231,9 @@ const Refferal = () => {
                 {/* <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div> */}
                 <div>
-                    {/* <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit Form
-                    </button> | */}
+                    </button> |
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleDetails(data.clientReferralId)}>
 
                         {
@@ -324,6 +324,17 @@ const Refferal = () => {
 
     // }
 
+    const [textToCopy, setTextToCopy] = useState(`https://www.promaxcare.com.au/Account/ClientReferral?companyId=${id.companyId}`); // Replace with your text
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        toast.success('Referral Link copied to clipboard');
+      })
+      .catch((error) => {
+        console.error('Error copying text: ', error);
+      });
+  };
 
 
 
@@ -358,6 +369,79 @@ const Refferal = () => {
                 {/* Search Filter */}
 
                 <div className='mt-4 border'>
+                    <div className="row px-2 py-3">
+
+                        <div className="col-md-3">
+                            <div className='d-flex justify-content-between border align-items-center rounded rounded-pill p-2'>
+                                <input type="text" placeholder="Search refferals" className='border-0 outline-none' onChange={handleSearch} />
+                                <GoSearch />
+                            </div>
+                        </div>
+                        <div className='col-md-5 d-flex  justify-content-center align-items-center gap-4'>
+                            <CSVLink
+                                data={refferals}
+                                filename={"refferals.csv"}
+
+                            >
+                                <button
+
+                                    className='btn text-info'
+                                    title="Export as CSV"
+                                >
+                                    <FaFileCsv />
+                                </button>
+
+                            </CSVLink>
+                            <button
+                                className='btn text-danger'
+                                onClick={handlePDFDownload}
+                                title="Export as PDF"
+                            >
+                                <FaFilePdf />
+                            </button>
+                            <button
+                                className='btn text-primary'
+
+                                onClick={handleExcelDownload}
+                                title="Export as Excel"
+                            >
+                                <FaFileExcel />
+                            </button>
+                            <CopyToClipboard text={JSON.stringify(refferals)}>
+                                <button
+
+                                    className='btn text-warning'
+                                    title="Copy Table"
+                                    onClick={() => toast("Table Copied")}
+                                >
+                                    <FaCopy />
+                                </button>
+                            </CopyToClipboard>
+                        </div>
+                        <div className='col-md-4'>
+                            <div onClick={copyToClipboard} className="btn btn-info text-white add-btn rounded-2">
+                                Copy Refferal Link</div>
+                        </div>
+                    </div>
+                    <DataTable data={filteredData} columns={columns}
+                        pagination
+                        highlightOnHover
+                        searchable
+                        searchTerm={searchText}
+                        expandableRows
+                        expandableRowsComponent={ButtonRow}
+                        paginationTotalRows={filteredData.length}
+                        customStyles={customStyles}
+                        responsive
+
+
+                    />
+
+                </div>
+
+            {/* </div> */}
+
+            {/* <div className='mt-4 border'>
                     <div className="row px-2 py-3">
 
                         <div className="col-md-3">
@@ -407,7 +491,10 @@ const Refferal = () => {
                                 </button>
                             </CopyToClipboard>
                         </div>
-
+                        <div className='col-md-4'>
+                <Link to={'/app/employee/addrefferals'} className="btn btn-info text-white add-btn rounded-2">
+                  Create New refferals</Link>
+              </div>
                     </div>
                     <DataTable data={filteredData} columns={columns}
                         pagination
@@ -429,10 +516,10 @@ const Refferal = () => {
                     />
 
 
-                </div>
-            </div>
-
+                </div> */}
         </div>
+
+        </div >
     );
 }
 

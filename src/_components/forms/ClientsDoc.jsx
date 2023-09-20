@@ -20,9 +20,9 @@ import axiosInstance from "../../store/axiosInstance";
 import { Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
 
-const ClientDoc = () => {
+const ClientDoc = ({uid}) => {
     const [loading, setLoading] = useState(false);
-    const { uid } = useParams()
+    // const { uid } = useParams()
     const [clientOne, setClientOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
     const [rejectModal, setRejectModal] = useState(false);
@@ -149,13 +149,13 @@ const ClientDoc = () => {
         formData.append("DocumentName", documentName);
         formData.append("ExpirationDate", expire);
         formData.append("User", clientOne.fullName);
-        formData.append("UserRole", 'client');
+        formData.append("UserRole", 'Client');
         formData.append("Status", "Pending");
         formData.append("UserId", clientOne.profileId);
 
         try {
             setLoading1(true)
-            const { data } = await post(`/Profiles/document_upload?userId=${id.userId}`,
+            const { data } = await post(`/Documents/add_document?userId=${id.userId}`,
                 formData
             )
             toast.success(data.message)
@@ -266,20 +266,32 @@ const ClientDoc = () => {
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div>
-                <div>
+                <div className='d-flex gap-1'>
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit
                     </button> |
                     <button onClick={() => handleDelete(data.documentId)} className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
                     </button> |
-                    {data.status === 'Pending' ? <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                    {
+                        data.status === 'Pending' &&
+                        <div>
+                            <button onClick={() => handleAccept(data.documentId)} className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
+                                Accept
+                            </button> |
+
+                            <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                                Reject
+                            </button>
+                        </div>
+                    }
+
+                    {data.status === "Rejected" && <button onClick={() => handleAccept(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
                         Accept
-                    </button>:""}
-                    |
-                    {data.status === 'Pending' ? <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-                        Reject
-                    </button>: ""}
+                    </button>}
+                    {data.status === "Accepted" && <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
+                            Reject
+                        </button>}
                 </div>
 
             </div>
@@ -377,6 +389,7 @@ const ClientDoc = () => {
         try {
             const { data } = await axiosInstance.post(`/Documents/reject_document?userId=${id.userId}&docid=${selectedDocument}&reason=${reason}&deadline=${deadline}`,
             )
+            console.log(data);
             if (data.status === 'Success') {
                 toast.success(data.message);
                 FetchClient()
@@ -415,19 +428,15 @@ const ClientDoc = () => {
     return (
         <>
 
-            <div className="page-wrapper">
-                <Helmet>
-                    <title>Client Document Upload</title>
-                    <meta name="description" content="" />
-                </Helmet>
-                <div className="content container-fluid">
+            <div className="">
+               
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card">
 
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">Upload Document for {clientOne.fullName} </h4>
-                                    <Link to={`/app/profile/client-profile/${uid}/${clientOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                    {/* <Link to={`/app/profile/client-profile/${uid}/${clientOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link> */}
                                 </div>
                                 <div className="card-body">
                                     <form
@@ -585,7 +594,7 @@ const ClientDoc = () => {
                     </Modal.Footer>
                 </Modal>
                 
-            </div>
+            
         </>
     );
 }

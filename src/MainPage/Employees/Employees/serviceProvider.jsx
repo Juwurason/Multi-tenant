@@ -43,6 +43,7 @@ const ServiceProvider = () => {
 
     const loading = useSelector((state) => state.serviceProvider.isLoading);
     const serviceProvider = useSelector((state) => state.serviceProvider.data);
+    // console.log(serviceProvider);
     const columns = [
         // {
         //     name: '#',
@@ -51,7 +52,7 @@ const ServiceProvider = () => {
 
         {
             name: 'FullName',
-            selector: row => row.name,
+            selector: row => row.fullName,
             sortable: true,
 
         },
@@ -61,6 +62,14 @@ const ServiceProvider = () => {
             sortable: true,
 
         },
+
+        {
+            name: 'Company',
+            selector: row => row.companyName,
+            sortable: true,
+
+        },
+        
 
         {
             name: 'Phone',
@@ -165,6 +174,14 @@ const ServiceProvider = () => {
             <div className="p-2 d-flex gap-1 flex-column " style={{ fontSize: "12px" }}>
                 <div ><span className='fw-bold'>Email: </span> {data.email}</div>
                 <div ><span className='fw-bold'>Phone: </span> {data.phone}</div>
+                {/* <div ><span className='fw-bold'>View Clients</span> </div> */}
+                <Link
+              className='fw-bold text-info'
+              title='View Clients'
+              to={`/app/employee/provider-list/${data.email}`}
+                >
+             View Clients
+            </Link>
 
             </div>
         );

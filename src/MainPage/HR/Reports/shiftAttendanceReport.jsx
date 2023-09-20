@@ -87,15 +87,36 @@ const ShiftAttendanceReport = () => {
         }
     }
 
+    // const GenerateStaffandClient = async (e) => {
+    //     e.preventDefault();
+    //     setLoading2(true);
+    //     setTimeout(() => {
+    //         const url = `/staff-client/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+    //         window.open(url, '_blank');
+    //         setLoading2(false);
+    //     }, 2000);
+    // }
+
     const GenerateStaffandClient = async (e) => {
         e.preventDefault();
         setLoading2(true);
         setTimeout(() => {
-            const url = `/staff-client/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+            let url = `/staff-client`;
+            if (sta && !cli) {
+                url += `/${sta}/${dateFrom.current.value}/${dateTo.current.value}`;
+            }
+            if (!sta && cli) {
+                // url += `/${undefined}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+                url += `/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+            }
+             else if (sta && cli) {
+                url = `/staff-client/${sta}/${cli}/${dateFrom.current.value}/${dateTo.current.value}`;
+             }
             window.open(url, '_blank');
             setLoading2(false);
         }, 2000);
     }
+      
 
     const Generate = async (e) => {
         e.preventDefault();
@@ -455,7 +476,7 @@ const ShiftAttendanceReport = () => {
                                                     </div> : "Generate Shift Attendance Report"}
                                                 </button>}
 
-                                                {sta === "" || cli === "" || periodic.length <= 0 ? "" : <button
+                                                {sta === "" && cli === "" || periodic.length <= 0 ? "" : <button
                                                     // type='submit'
                                                     onClick={GenerateStaffandClient}
                                                     className="btn btn-info add-btn text-white rounded-2 m-r-5"

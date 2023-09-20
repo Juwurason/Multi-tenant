@@ -265,8 +265,10 @@ const filterAdminAttendance = async (admin, fromDate, toDate, company) => {
         throw error;
     }
 };
-const filterProgressNotes = async (staff, client) => {
+const filterProgressNotes = async (dateTo, dateFrom, staff, client, company) => {
     try {
+        // ProgressNotes/get_periodic_progress_notes?toDate=&fromDate=&staffname=&clientId=&companyId=
+        // const response = await axiosInstance.get(`/ProgressNotes/get_periodic_progress_notes?toDate=${dateTo}&fromDate=${dateFrom}&staffname=${staff}&clientId=${client}&companyId=${company}`);
         const response = await axiosInstance.get(`/ProgressNotes/get_progressnote_by_user?staffname=${staff}&profileId=${client}`);
         return response.data;
     } catch (error) {
