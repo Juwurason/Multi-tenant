@@ -198,6 +198,9 @@ const AdminDashboard = () => {
                 <DashboardCard title={"Clients"} sty={'success'} content={clients.length} icon={<MdOutlineGroup className='fs-4' />}
                   loading={isLoading} link={`/app/employee/clients`}
                 />
+                <DashboardCard title={"Staffs"} sty={'success'} content={staff.length} icon={<MdOutlineGroup className='fs-4' />}
+                  loading={isLoading} link={`/app/employee/allstaff`}
+                />
 
 
                 <DashboardCard title={"Shift Roster"} content={shiftRosterCount} icon={<MdOutlineEventNote className='fs-4' />}
@@ -243,20 +246,20 @@ const AdminDashboard = () => {
 
 
               <div className='p-3 shadow-sm bg-white mb-3'>
-                <small className='fw-bold'>Staffs</small>
+                {/* <small className='fw-bold'>Staffs</small> */}
                 <div className='d-flex justify-content-center flex-column p-2 gap-2'>
-                  <div className='d-flex justify-content-between align-items-center'>
+                  {/* <div className='d-flex justify-content-between align-items-center'>
                     <span><MdOutlineSwitchAccount className='fs-2' /> Total number of Staffs</span>
                     <h2 className='text-primary'>
 
                       {staff.length}
                     </h2>
-                  </div>
-                  <div className='d-flex justify-content-end'>
+                  </div> */}
+                  {/* <div className='d-flex justify-content-end'>
                     <Link style={{ fontSize: "12px" }}
 
                       to={`/app/employee/allstaff`} className='pointer text-dark'>View all</Link>
-                  </div>
+                  </div> */}
                   <div className='p-2 bg-1 rounded-2'>
 
                     <ClientChart />
