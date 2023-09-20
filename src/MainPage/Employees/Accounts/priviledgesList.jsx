@@ -67,6 +67,7 @@ const PriviledgesList = () => {
                 toast.success(data.message)
                 FetchClaims()
                 setLoading1(false);
+                navigate.push('/app/account/alluser')
             }
             setLoading1(false);
 

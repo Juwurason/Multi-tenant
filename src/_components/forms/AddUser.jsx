@@ -71,7 +71,7 @@ const AddUser = () => {
             )
             // console.log(data);
             toast.success(data.message)
-            navigate.push('/app/account/alluser')
+            navigate.push(`/app/account/priviledges-list/${data.user.id}`)
             setLoading1(false)
 
         } catch (error) {
