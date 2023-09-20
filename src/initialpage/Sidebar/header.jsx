@@ -17,8 +17,8 @@ const Header = (props) => {
   };
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [companyOne, setCompanyOne] = useState({});
   const pathname = location.pathname;
+  const [companyOne, setCompanyOne] = useState({});
   const user = JSON.parse(localStorage.getItem('user'));
 
   const FetchCompany = async () => {
