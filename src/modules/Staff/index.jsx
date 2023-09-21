@@ -193,7 +193,7 @@ const StaffRoute = ({ match }) => {
       <Route path={`${match.url}/edit-profile`} render={() => <StaffEditProfile />} />
       <Route path={`${match.url}/changepassword`} render={() => <StaffChangePassword />} />
       <Route path={`${match.url}/attendance`}
-        render={() => <StaffAttendance staffAtten={staffAtten} />} />
+        render={() => <StaffAttendance staffAtten={staffAtten} loading={loading} />} />
       <Route path={`${match.url}/roster`}
         render={() => <StaffRoster staff={staff} loading={loading} FetchData={FetchData} />} />
       <Route path={`${match.url}/report/:uid`} render={() => <AddReport />} />
@@ -207,9 +207,9 @@ const StaffRoute = ({ match }) => {
         render={() => <StaffForm staffAvail={staffAvail} FetchData={FetchData} />} />
       <Route path={`${match.url}/messageInbox`}
         render={() => <MessageInbox
-          options={options} sentEmail={sentEmail} inbox={inbox} FetchData={FetchData} />} />
-      <Route path={`${match.url}/attendance-report/:uid`} render={() => <StaffAttendanceReport />} />
-      <Route path={`${match.url}/attendance-details/:uid`} render={() => <StaffAttendanceDetails />} />
+          options={options} sentEmail={sentEmail} inbox={inbox} FetchData={FetchData} loading={loading} />} />
+      <Route path={`${match.url}/attendance-report/:uid`} render={() => <StaffAttendanceReport loading={loading} />} />
+      <Route path={`${match.url}/attendance-details/:uid`} render={() => <StaffAttendanceDetails loading={loading} />} />
       <Route path={`${match.url}/staff-report-details/:uid`} render={() => <StaffNewReportDetails />} />
       <Route path={`${match.url}/daily-report`} render={() => <StaffDailyReport />} />
       <Route path={`${match.url}/new-report`} render={() => <StaffNewReport />} />

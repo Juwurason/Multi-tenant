@@ -16,7 +16,7 @@ import ExcelJS from 'exceljs';
 import { GoSearch } from 'react-icons/go';
 import moment from 'moment';
 import { MdCancel } from "react-icons/md";
-const AdminDoc = () => {
+const AdminDoc = ({ uid }) => {
 
     const columns = [
         // {
@@ -82,7 +82,6 @@ const AdminDoc = () => {
 
     ];
     const [loading, setLoading] = useState(false);
-    const { uid } = useParams();
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
     const navigate = useHistory();
@@ -137,7 +136,7 @@ const AdminDoc = () => {
         if (documentName === "" || document === "") {
             return toast.error("Fields marked red cannot be empty")
         }
-        
+
         const formData = new FormData()
         formData.append("CompanyId", id.companyId);
         formData.append("DocumentFile", document);
@@ -335,19 +334,15 @@ const AdminDoc = () => {
     return (
         <>
 
-            <div className="page-wrapper">
-                <Helmet>
-                    <title>Client Document Upload</title>
-                    <meta name="description" content="" />
-                </Helmet>
-                <div className="content container-fluid">
+            <div className="">
+
+                <div className="">
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card">
 
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">Upload Document for {staffOne.fullName} </h4>
-                                    <Link to={`/app/profile/admin-profile/${uid}/${staffOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className="card-body">
                                     <form

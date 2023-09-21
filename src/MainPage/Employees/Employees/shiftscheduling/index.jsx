@@ -63,8 +63,29 @@ const ShiftScheduling = () => {
         currentDate.add(1, 'day'),
         currentDate.add(2, 'day'),
     ];
-    const startDate = currentDate.subtract(3, 'day');
-    const endDate = currentDate.add(2, 'day');
+
+
+    // const startDate = currentDate.subtract(3, 'day');
+    // const endDate = currentDate.add(2, 'day');
+
+    // Define the initial default start and end dates
+    const defaultStartDate = dayjs().subtract(3, 'day');
+    const defaultEndDate = dayjs().add(2, 'day');
+
+    // Create state variables for start and end dates
+    const [startDate, setStartDate] = useState(defaultStartDate);
+    const [endDate, setEndDate] = useState(defaultEndDate);
+
+    // Define a function to handle changes in the input fields
+    const handleStartDateChange = (event) => {
+        const newStartDate = dayjs(event.target.value);
+        setStartDate(newStartDate);
+    };
+
+    const handleEndDateChange = (event) => {
+        const newEndDate = dayjs(event.target.value);
+        setEndDate(newEndDate);
+    };
 
     // Fetch staff data and update the state
     useEffect(() => {
@@ -337,6 +358,12 @@ const ShiftScheduling = () => {
         } else {
 
             dispatch(filterRoaster({ dateFrom: dateFrom.current.value, dateTo: dateTo.current.value, sta, cli, companyId: id.companyId }));
+            // const newStartDate = dayjs(dateFrom.current.value);
+            // setStartDate(newStartDate);
+            // const newEndDate = dayjs(dateTo.current.value);
+            // setEndDate(newEndDate);
+            setCurrentDate(dayjs(dateFrom.current.value))
+
         }
     }
 

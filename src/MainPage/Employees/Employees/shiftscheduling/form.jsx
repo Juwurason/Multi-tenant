@@ -88,6 +88,7 @@ const Form = ({ setCli, setSta, staff, clients, dateFrom, dateTo, GetPeriodic, l
 
                         </div>
                     </div>
+                    <p className="px-3"><span className="text-danger fw-bold">NB:</span> Kindly use the start-date & end-date above to load past shifts  </p>
                 </div>
             </div>
         </div>

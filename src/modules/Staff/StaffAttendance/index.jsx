@@ -17,7 +17,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import moment from 'moment';
 
-const StaffAttendance = ({ staffAtten }) => {
+const StaffAttendance = ({ staffAtten, loading }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   dayjs.tz.setDefault('Australia/Sydney');
@@ -30,13 +30,13 @@ const StaffAttendance = ({ staffAtten }) => {
       });
     }
   });
-  const { loading, setLoading } = useCompanyContext();
+
   const [document, setDocument] = useState("")
   const id = JSON.parse(localStorage.getItem('user'));
 
 
   const columns = [
-    
+
     {
       name: 'Staff',
       selector: row => row.staff.fullName,
@@ -65,16 +65,8 @@ const StaffAttendance = ({ staffAtten }) => {
       selector: row => dayjs(row.clockOut).format('DD/MM/YYYY h:mm A'),
       sortable: true
     },
-    {
-      name: 'Date Created',
-      selector: row => dayjs(row.dateCreated).format('DD/MM/YYYY HH:mm:ss'),
-      sortable: true
-    },
-    {
-      name: 'DateModified',
-      selector: row => dayjs(row.dateModified).format('DD/MM/YYYY HH:mm:ss'),
-      sortable: true
-    }
+
+
   ];
 
 

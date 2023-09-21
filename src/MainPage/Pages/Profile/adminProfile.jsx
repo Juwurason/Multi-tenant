@@ -11,6 +11,7 @@ import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
 import axiosInstance from '../../../store/axiosInstance';
+import AdminDoc from '../../../_components/forms/AdminDoc';
 const AdminProfile = () => {
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
@@ -251,8 +252,7 @@ const AdminProfile = () => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link to={`/app/profile/admin-docUpload/${staffOne.administratorId}`}
-                                className="btn py-2 rounded text-white bg-primary">Admin Doc</Link>
+
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.administratorId)} className="btn py-1 px-2 rounded text-white bg-danger">
@@ -406,7 +406,7 @@ const AdminProfile = () => {
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
                 <ul className="nav nav-tabs nav-tabs-bottom">
                   <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
-                  {/* <li className="nav-item"><a  href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
+                  <li className="nav-item"><a href="#emp_documents" data-bs-toggle="tab" className="nav-link">Documents</a></li>
                   {/* <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link text-primary">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li> */}
                 </ul>
               </div>
@@ -972,6 +972,11 @@ const AdminProfile = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div id="emp_documents" className="pro-overview tab-pane fade show">
+              <AdminDoc uid={uid} />
+
             </div>
           </div>
 

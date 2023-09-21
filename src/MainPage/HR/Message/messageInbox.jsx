@@ -19,6 +19,7 @@ import axiosInstance from '../../../store/axiosInstance';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatUser } from '../../../store/slices/UserSlice';
 import { fetchInbox } from '../../../store/slices/MessageInboxSlice';
+import { fetchSent } from '../../../store/slices/MessageSent';
 
 function truncateString(str, maxLength) {
     if (str.length > maxLength) {
@@ -45,7 +46,6 @@ const MessageInbox = () => {
     const [toAllClients, setToAllClients] = useState(false);
     const [loading, setLoading] = useState(false);
     const [replyModal, setReplyModal] = useState(false);
-    const [sentEmail, setSentEmail] = useState([]);
     const [email, setEmail] = useState("");
 
 
@@ -97,7 +97,9 @@ const MessageInbox = () => {
 
     const handleEmailClick = async (email) => {
         const { data } = await axiosInstance.get(`/Messages/${email.messageId}`);
+
         setSelectedEmail(data);
+        fetchClient();
 
 
     };
@@ -119,21 +121,16 @@ const MessageInbox = () => {
     const fetchClient = async () => {
         dispatch(formatUser(id.companyId));
         dispatch(fetchInbox(id.userId));
-
-        try {
-            const { data } = await axiosInstance.get(`/Messages/sent?userId=${id.userId}`);
-            setSentEmail(data.message);
-        } catch (error) {
-            console.log(error);
-        }
+        dispatch(fetchSent(id.userId));
 
     }
     useEffect(() => {
         fetchClient()
     }, []);
     const options = useSelector((state) => state.user.data);
-    const inbox = useSelector((state) => state.inbox.data);
     const isLoading = useSelector((state) => state.inbox.isLoading);
+    const inbox = useSelector((state) => state.inbox.data);
+    const sentEmail = useSelector((state) => state.sent.data);
 
     const handleSelectionChange = (selected) => {
         setSelectedOptions(selected);
@@ -461,6 +458,7 @@ const MessageInbox = () => {
                                                                         <th></th>
                                                                         <th>From</th>
                                                                         <th>Subject</th>
+                                                                        <th></th>
                                                                         <th>Date</th>
                                                                     </tr>
                                                                     {inbox?.map((email, index) => (
@@ -485,6 +483,7 @@ const MessageInbox = () => {
                                                                                     >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
+                                                                            <td className='text-warning'>{!email.status && <MdMarkEmailUnread />}</td>
                                                                             {/* Attachment */}
                                                                             {/* Time */}
                                                                             <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>

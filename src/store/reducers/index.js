@@ -23,6 +23,7 @@ import SupportSchedule from '../slices/SupportSchedule';
 import RefferalsSlice from '../slices/RefferalsSlice';
 import ServiceProviderSlice from '../slices/ServiceProviderSlice';
 import MessageInboxSlice from '../slices/MessageInboxSlice';
+import MessageSent from '../slices/MessageSent';
 
 
 const rootReducer = combineReducers({
@@ -48,7 +49,8 @@ const rootReducer = combineReducers({
     supportSchedule: SupportSchedule,
     refferals: RefferalsSlice,
     serviceProvider: ServiceProviderSlice,
-    inbox: MessageInboxSlice
+    inbox: MessageInboxSlice,
+    sent: MessageSent
 });
 
 export default rootReducer;
