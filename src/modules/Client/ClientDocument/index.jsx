@@ -17,6 +17,9 @@ import { SlSettings } from 'react-icons/sl'
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 const ClientDocument = () => {
   useEffect(() => {
@@ -27,6 +30,11 @@ const ClientDocument = () => {
       });
     }
   });
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.tz.setDefault('Australia/Sydney');
+  const nowInAustraliaTime = dayjs().tz().format('YYYY-MM-DD');
 
   const { get } = useHttp();
   const { loading, setLoading } = useCompanyContext();
@@ -83,19 +91,46 @@ const ClientDocument = () => {
         </div>
       ),
     },
+
     {
       name: 'Expiration Date',
-      selector: row => row.expirationDate,
-      sortable: true
+      selector: row => !row.expirationDate ? "No Expiration Date" : moment(row.expirationDate).format('ll'),
+      sortable: true,
+      expandable: true
     },
     {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
       expandable: true,
-      cell: (row) => (
-        <span className='bg-warning px-2 py-1 rounded-pill fw-bold' style={{ fontSize: "10px" }}>{row.status}</span>
-      ),
+      cell: (row) => {
+        const isExpired = dayjs(row.expirationDate).format('YYYY-MM-DD') < (nowInAustraliaTime);
+        let status;
+
+        if (isExpired) {
+          status = 'Expired';
+        } else if (row.status === 'Rejected') {
+          status = 'Rejected';
+        } else {
+          status = row.status;
+        }
+
+        const statusClasses = `px-2 py-1 rounded-pill fw-bold ${isExpired ? 'bg-danger text-white' : ''
+          } ${row.status === 'Pending'
+            ? 'bg-warning'
+            : row.status === 'Accepted'
+              ? 'bg-success text-white'
+              : row.status === 'Rejected'
+                ? 'bg-danger text-white'
+                : 'bg-transparent'
+          }`;
+
+        return (
+          <span className={statusClasses} style={{ fontSize: '10px' }}>
+            {status}
+          </span>
+        );
+      },
     },
 
   ];
@@ -318,7 +353,7 @@ const ClientDocument = () => {
     const handleFileChange = (e) => {
       const selectedFile = e.target.files[0];
       const allowedExtensions = /(\.pdf|\.doc)$/i;
-  
+
       if (allowedExtensions.exec(selectedFile.name)) {
         setDocument(selectedFile);
       } else {
@@ -533,7 +568,7 @@ const ClientDocument = () => {
                   <input className="form-control" type="file"
                     accept=".pdf,.doc,.docx"
                     maxsize={1024 * 1024 * 2}
-                   onChange={handleFileChange}
+                    onChange={handleFileChan}
                   />
                 </div>
               </div>
