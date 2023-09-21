@@ -19,7 +19,7 @@ import { MdCancel } from "react-icons/md";
 import { Modal } from 'react-bootstrap';
 import axiosInstance from "../../store/axiosInstance";
 import Swal from "sweetalert2";
-const StaffDoc = () => {
+const StaffDoc = ({ uid }) => {
 
     const columns = [
         // {
@@ -87,8 +87,7 @@ const StaffDoc = () => {
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [rejectModal, setRejectModal] = useState(false);
-    
-    const { uid } = useParams()
+
     const [staffOne, setStaffOne] = useState({});
     const [documentOne, setDocumentOne] = useState([]);
     const navigate = useHistory();
@@ -141,7 +140,7 @@ const StaffDoc = () => {
         e.preventDefault()
 
         setLoading1(true);
-       
+
         if (documentName === "" || document === "") {
             return toast.error("Fields marked red cannot be empty")
         }
@@ -156,7 +155,7 @@ const StaffDoc = () => {
         formData.append("Status", "Pending");
         formData.append("UserId", staffOne.staffId);
 
-        try {   
+        try {
             const { data } = await axiosInstance.post(`/Documents/add_document?userId=${id.userId}`,
                 formData
             )
@@ -293,8 +292,8 @@ const StaffDoc = () => {
                         Accept
                     </button>}
                     {data.status === "Accepted" && <button onClick={() => handleRejectModal(data.documentId)} className="btn text-primary fw-bold" style={{ fontSize: "12px" }}>
-                            Reject
-                        </button>}
+                        Reject
+                    </button>}
                 </div>
 
             </div>
@@ -434,19 +433,15 @@ const StaffDoc = () => {
     return (
         <>
 
-            <div className="page-wrapper">
-                <Helmet>
-                    <title>Client Document Upload</title>
-                    <meta name="description" content="" />
-                </Helmet>
-                <div className="content container-fluid">
+            <div className="">
+
+                <div className="">
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card">
 
                                 <div className="card-header d-flex justify-content-between align-items-center">
                                     <h4 className="card-title mb-0">Upload Document for {staffOne.fullName} </h4>
-                                    <Link to={`/app/profile/employee-profile/${uid}/${staffOne.firstName}`} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
                                 </div>
                                 <div className="card-body">
                                     <form

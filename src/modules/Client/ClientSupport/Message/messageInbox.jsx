@@ -188,11 +188,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
 
 
 
-    const inboxEmails = [
-        // { id: 1, sender: 'John Doe', subject: 'Hello', body: 'This is the email body of the first email.', time: "22-05-2023" },
-        // { id: 2, sender: 'Jane Smith', subject: 'Meeting Reminder', body: 'This is the email body of the second email.', time: "22-05-2023" },
-        // { id: 3, sender: 'Bob Johnson', subject: 'Important Update', body: 'This is the email body of the third email.', time: "22-05-2023" },
-    ];
+
     return (
         <div className="page-wrapper">
             <Helmet>

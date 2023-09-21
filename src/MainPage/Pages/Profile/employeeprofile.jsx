@@ -11,6 +11,7 @@ import useHttp from '../../../hooks/useHttp'
 import man from '../../../assets/img/man.png'
 import { toast } from 'react-toastify';
 import axiosInstance from '../../../store/axiosInstance';
+import StaffDoc from '../../../_components/forms/StaffDoc';
 const EmployeeProfile = () => {
   const { uid } = useParams()
   const [staffOne, setStaffOne] = useState({});
@@ -24,20 +25,26 @@ const EmployeeProfile = () => {
   const [socialModal, setSocialModal] = useState(false);
   const [employmentModal, setEmploymentModal] = useState(false);
 
+  const [loading0, setLoading0] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
   const privateHttp = useHttp()
   const FetchStaff = async () => {
     try {
+      setLoading0(true)
       const { data } = await privateHttp.get(`/Staffs/${uid}`, { cacheTimeout: 300000 })
       // console.log(data);
       setStaffOne(data)
       setEditedProfile({ ...data });
-
+      setLoading0(false)
 
     } catch (error) {
       console.log(error);
+      setLoading0(false)
+    }
+    finally {
+      setLoading0(false)
     }
   }
 
@@ -162,11 +169,11 @@ const EmployeeProfile = () => {
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading2(false)
-}
-finally{
-  setLoading2(false)
-}
-}
+    }
+    finally {
+      setLoading2(false)
+    }
+  }
 
   const handleDeactivate = async (e) => {
     setLoading1(true)
@@ -186,10 +193,10 @@ finally{
 
 
     }
-    finally{
+    finally {
       setLoading1(false)
     }
-}
+  }
 
   const handleApproveAudit = async (e) => {
     setLoading2(true)
@@ -208,38 +215,38 @@ finally{
       toast.error(error.response.data.message)
       toast.error(error.response.data.title)
       setLoading2(false)
-}
-finally{
-  setLoading2(false)
-}
-}
-
-const handleDeapproveAudit = async (e) => {
-  setLoading1(true)
-  try {
-    const { data } = await axiosInstance.get(`/Staffs/disapprove_audit?userId=${id.userId}&id=${e}`,
-    )
-
-    if (data.status === 'Success') {
-      toast.success(data.message)
-      FetchStaff();
     }
-
-  } catch (error) {
-    setLoading1(false)
-    toast.error(error.response.data.message)
-    toast.error(error.response.data.title)
-
-
+    finally {
+      setLoading2(false)
+    }
   }
-  finally{
-    setLoading1(false)
+
+  const handleDeapproveAudit = async (e) => {
+    setLoading1(true)
+    try {
+      const { data } = await axiosInstance.get(`/Staffs/disapprove_audit?userId=${id.userId}&id=${e}`,
+      )
+
+      if (data.status === 'Success') {
+        toast.success(data.message)
+        FetchStaff();
+      }
+
+    } catch (error) {
+      setLoading1(false)
+      toast.error(error.response.data.message)
+      toast.error(error.response.data.title)
+
+
+    }
+    finally {
+      setLoading1(false)
+    }
   }
-}
 
   const handleView = (xerolink) => {
     window.open(xerolink, '_blank');
-};
+  };
 
   const history = useHistory();
   const goBack = () => {
@@ -259,7 +266,10 @@ const handleDeapproveAudit = async (e) => {
           <meta name="description" content="Staff Profile" />
         </Helmet>
         {/* Page Content */}
-        <div className="content container-fluid">
+        {loading0 ? <div className='mx-auto d-flex justify-content-center w-100 py-5'>
+          <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div>
+          </div><div></div><div></div><div></div><div></div></div>
+        </div> : <div className="content container-fluid">
           {/* Page Header */}
           <div className="page-header">
             <div className="row">
@@ -281,6 +291,7 @@ const handleDeapproveAudit = async (e) => {
             </div>
           </div>
           {/* /Page Header */}
+
           <div className="card mb-0">
             <div className="card-body">
               <div className="row">
@@ -302,19 +313,18 @@ const handleDeapproveAudit = async (e) => {
                             <div className="small doj text-muted">{staffOne.aboutMe}</div>
                             <div className="staff-msg d-flex gap-2 flex-wrap">
                               {/* <Link to={`/app/profile/edit-profile/${staffOne.staffId}`} className="btn btn-primary" >Edit Profile</Link> */}
-                              <Link to={`/app/profile/staff-docUpload/${staffOne.staffId}`}
-                                className="btn py-2 rounded text-white bg-primary">Staff Doc</Link>
+
                               {
                                 staffOne.isActive ?
                                   <button onClick={() => handleDeactivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
-                                    
+
                                     {loading1 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
                                     </div> : "Deactivate Staff"}
                                   </button>
                                   :
                                   <button onClick={() => handleActivate(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
-                                    
+
                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
                                     </div> : "Activate Staff"}
@@ -324,14 +334,14 @@ const handleDeapproveAudit = async (e) => {
                               {
                                 staffOne.auditApproved ?
                                   <button onClick={() => handleDeapproveAudit(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-danger">
-                                    
+
                                     {loading1 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
                                     </div> : "Disapprove for Auditing"}
                                   </button>
                                   :
                                   <button onClick={() => handleApproveAudit(staffOne.staffId)} className="btn py-1 px-2 rounded text-white bg-success">
-                                    
+
                                     {loading2 ? <div className="spinner-grow text-light" role="status">
                                       <span className="sr-only">Loading...</span>
                                     </div> : "Approve for Auditing"}
@@ -339,10 +349,10 @@ const handleDeapproveAudit = async (e) => {
 
                               }
                               <div>
-                              <div>
-                              {staffOne.employeeId === null ? <button
-                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button>:""}
-                              </div>
+                                <div>
+                                  {staffOne.employeeId === null ? <button
+                                    className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button> : ""}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -486,7 +496,7 @@ const handleDeapproveAudit = async (e) => {
               <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
                 <ul className="nav nav-tabs nav-tabs-bottom">
                   <li className="nav-item"><a href="#emp_profile" data-bs-toggle="tab" className="nav-link active text-primary">Profile</a></li>
-                  {/* <li className="nav-item"><a  href="#emp_projects" data-bs-toggle="tab" className="nav-link">Projects</a></li> */}
+                  <li className="nav-item"><a href="#emp_documents" data-bs-toggle="tab" className="nav-link">Documents</a></li>
                   {/* <li className="nav-item"><a href="#bank_statutory" data-bs-toggle="tab" className="nav-link text-primary">Bank &amp; Statutory <small className="text-danger">(Admin Only)</small></a></li> */}
                 </ul>
               </div>
@@ -1053,10 +1063,17 @@ const handleDeapproveAudit = async (e) => {
                 </div>
               </div>
             </div>
+
+
+
+            <div id="emp_documents" className="pro-overview tab-pane fade show ">
+
+              <StaffDoc uid={uid} />
+            </div>
           </div>
 
 
-        </div>
+        </div>}
       </div>
       <Offcanvas />
     </>

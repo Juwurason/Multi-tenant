@@ -20,7 +20,9 @@ const Display = ({ handlePrevClick, handleNextClick, startDate, endDate, daysOfW
                             <FaAngleLeft className='pointer fs-4 text-white' />
 
                         </button>
-                        <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMM D')} - {endDate.format('MMM D')}</span>
+                        &nbsp;
+                        &nbsp;
+                        {/* <span className='fw-bold px-2' style={{ fontSize: '15px' }}> {startDate.format('MMM D')} - {endDate.format('MMM D')}</span> */}
                         <button onClick={() => handleNextClick(startDate, endDate)} className='btn btn-primary btn-sm shadow' >
                             <FaAngleRight className='pointer fs-4 text-white' />
 
@@ -38,8 +40,9 @@ const Display = ({ handlePrevClick, handleNextClick, startDate, endDate, daysOfW
 
                             :
                             <span>
-                                <h1 className='text-muted fw-bold'>
-                                    {startDate.format('YYYY')}
+                                {/* <p>{startDate.format('MMM')}</p> */}
+                                <h1 className='text-muted fw-bold text-uppercase'>
+                                    {currentDate.format('MMM YYYY')}
                                 </h1>
                             </span>
                     }

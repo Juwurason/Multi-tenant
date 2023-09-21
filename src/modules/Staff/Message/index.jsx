@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
 import { FaPlusCircle } from 'react-icons/fa';
 import { GoTrashcan } from 'react-icons/go';
-import { MdEditSquare, MdError, MdLabelImportant, MdMoveToInbox, MdOutlineRefresh, MdSend, MdStars } from 'react-icons/md';
+import { MdEditSquare, MdError, MdLabelImportant, MdMarkEmailUnread, MdMoveToInbox, MdOutlineRefresh, MdSend, MdStars } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import './message.css';
@@ -16,6 +16,10 @@ import moment from 'moment';
 import ReactHtmlParser from 'react-html-parser';
 import Swal from 'sweetalert2';
 import axiosInstance from '../../../store/axiosInstance';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatUser } from '../../../store/slices/UserSlice';
+import { fetchInbox } from '../../../store/slices/MessageInboxSlice';
+import { fetchSent } from '../../../store/slices/MessageSent';
 
 function truncateString(str, maxLength) {
     if (str.length > maxLength) {
@@ -25,8 +29,24 @@ function truncateString(str, maxLength) {
     }
 }
 
-const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
+const MessageInbox = () => {
     const id = JSON.parse(localStorage.getItem('user'));
+
+    const dispatch = useDispatch();
+    const fetchData = async () => {
+        dispatch(formatUser(id.companyId));
+        dispatch(fetchInbox(id.userId));
+        dispatch(fetchSent(id.userId));
+
+    }
+    useEffect(() => {
+        fetchData()
+    }, []);
+    const options = useSelector((state) => state.user.data);
+    const loading = useSelector((state) => state.inbox.isLoading);
+    const inbox = useSelector((state) => state.inbox.data);
+    const sentEmail = useSelector((state) => state.sent.data);
+
     const privateHttp = useHttp();
     const [activeTab, setActiveTab] = useState('inbox');
     const [selectedEmail, setSelectedEmail] = useState(null);
@@ -47,7 +67,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const [toAllStaffs, setToAllStaffs] = useState(false);
     const [toAllClients, setToAllClients] = useState(false);
     const [replyModal, setReplyModal] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading1, setLoading1] = useState(false);
     // const [inbox, setInbox] = useState([]);
     // const [sentEmail, setSentEmail] = useState([]);
     const handleSendAsSMSChange = (event) => {
@@ -99,6 +119,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     const handleEmailClick = async (email) => {
         const { data } = await axiosInstance.get(`/Messages/${email.messageId}`);
         setSelectedEmail(data);
+        fetchData();
 
 
     };
@@ -122,21 +143,21 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
     //         companyId: id.companyId // Replace with the actual companyId
     //     };
     //     try {
-    //         setLoading(true)
+    //         setLoading1(true)
     //         const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
     //             payload
     //         )
     //         toast.success(data.message)
-    //         // FetchData();
-    //         setLoading(false)
+    //         // fetchData();
+    //         setLoading1(false)
 
     //     } catch (error) {
     //         toast.error(error.response?.data?.message)
 
-    //         setLoading(false)
+    //         setLoading1(false)
 
     //     } finally {
-    //         setLoading(false)
+    //         setLoading1(false)
     //     }
     // }
 
@@ -173,21 +194,21 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
             };
             // 
             try {
-                setLoading(true)
+                setLoading1(true)
                 const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
                 toast.success(data.message)
-                FetchData();
-                setLoading(false)
+                fetchData();
+                setLoading1(false)
 
             } catch (error) {
                 toast.error(error.response?.data?.message)
 
-                setLoading(false)
+                setLoading1(false)
 
             } finally {
-                setLoading(false)
+                setLoading1(false)
             }
 
         }
@@ -206,7 +227,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                 companyId: id.companyId // Replace with the actual companyId
             };
             try {
-                setLoading(true)
+                setLoading1(true)
                 const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
@@ -214,19 +235,19 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                 setEditorValue("");
                 subject.current.value = ''
                 setSelectedOptions([]);
-                FetchData();
+                fetchData();
                 setLgShow(false);
 
 
-                setLoading(false)
+                setLoading1(false)
 
             } catch (error) {
                 toast.error(error.response?.data?.message)
 
-                setLoading(false)
+                setLoading1(false)
 
             } finally {
-                setLoading(false)
+                setLoading1(false)
             }
         }
 
@@ -248,7 +269,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                     )
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        FetchData();
+                        fetchData();
                     } else {
                         toast.error(data.message);
                     }
@@ -293,7 +314,10 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
 
 
                 {/* /Page Header */}
-                <div className="email-component">
+                {loading ? <div className='mx-auto d-flex justify-content-center w-100'>
+                    <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div>
+                    </div><div></div><div></div><div></div><div></div></div>
+                </div> : <div className="email-component">
                     <div className="row">
                         <div className="col-md-3 col-lg-3 col-xl-3 border">
                             <div className="nav flex-column gap-2 nav-pills py-2" id="v-pills-tab"
@@ -467,7 +491,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
 
                                                             <table
 
-                                                                style={{ cursor: 'pointer' }}
+
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody>
@@ -475,6 +499,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                         <th></th>
                                                                         <th>From</th>
                                                                         <th>Subject</th>
+                                                                        <th></th>
                                                                         <th>Date</th>
                                                                     </tr>
                                                                     {inbox?.map((email, index) => (
@@ -487,7 +512,6 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                                 <input type="checkbox" className="custom-control-input" id="cst1" />
                                                                             </td>
                                                                             {/* star */}
-                                                                            {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
                                                                             <td style={{ width: "100px", fontSize: "12px" }}>
                                                                                 <span className="mb-0 text-muted text-truncate" >
                                                                                     {truncateString(email.emailFrom, 30)}
@@ -501,6 +525,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                                     >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
+                                                                            <td className='text-warning'>{!email.status && <MdMarkEmailUnread />}</td>
                                                                             {/* Attachment */}
                                                                             {/* Time */}
                                                                             <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
@@ -576,7 +601,6 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                 <tbody>
                                                                     <tr>
                                                                         <th></th>
-                                                                        <th>To</th>
                                                                         <th>Subject</th>
                                                                         <th>Date</th>
                                                                     </tr>
@@ -591,9 +615,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                             </td>
                                                                             {/* star */}
                                                                             {/* <td className=''><i className="fa fa-star text-warning" /></td> */}
-                                                                            <td style={{ width: "100px", fontSize: "12px" }}>
-                                                                                <span className="mb-0 text-muted text-truncate" >  {truncateString(email.emailTo, 30)} </span>
-                                                                            </td>
+
                                                                             {/* Message */}
                                                                             <td style={{ cursor: 'pointer' }}>
                                                                                 <a className="link" href="#" >
@@ -602,7 +624,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                                                                                             e.preventDefault()
                                                                                             handleEmailClick(email)
                                                                                         }}
-                                                                                    > {truncateString(email.subject, 30)}</span>
+                                                                                    > {truncateString(email.subject, 50)}</span>
                                                                                 </a>
                                                                             </td>
                                                                             {/* Attachment */}
@@ -693,7 +715,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
                 <Modal
                     size="lg"
                     show={lgShow}
@@ -851,7 +873,7 @@ const MessageInbox = ({ options, sentEmail, inbox, FetchData }) => {
                             className="ml-2 btn add-btn rounded text-white btn-info"
                             onClick={handleSendMessage}
                         >
-                            {loading ? <div className="spinner-grow text-light" role="status">
+                            {loading1 ? <div className="spinner-grow text-light" role="status">
                                 <span className="sr-only">Loading...</span>
                             </div> : "Send"}
                         </button>
