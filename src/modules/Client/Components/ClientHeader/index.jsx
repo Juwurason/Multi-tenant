@@ -47,16 +47,19 @@ const ClientHeader = (props) => {
     }
 
     const [companyOne, setCompanyOne] = useState({});
+    const [loading, setLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const FetchCompany = async () => {
+        setLoading(true)
         try {
-            const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+            const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`)
             // console.log(data);
             setCompanyOne(data.company)
-
+            setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
 
@@ -75,7 +78,20 @@ const ClientHeader = (props) => {
             {/* Logo */}
             <div className="header-left">
                 <Link to="/client/app/dashboard" className="logo">
-                    <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" />
+                    {/* <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" /> */}
+                    {loading ? ( // If loading is true, display the loading message
+                        <div className="spinner-grow" role="status">
+                            <span className="sr-only text-warning">Loading...</span>
+                        </div>
+                    ) : (
+                        // If loading is false, display the image
+                        <img
+                            src={companyOne.companyLogo ? companyOne.companyLogo : loggo}
+                            width={60}
+                            height={60}
+                            alt=""
+                        />
+                    )}
                 </Link>
             </div>
             {/* /Logo */}
