@@ -24,6 +24,7 @@ const AdminProfile = () => {
   const [bankModal, setBankModal] = useState(false);
   const [socialModal, setSocialModal] = useState(false);
   const [employmentModal, setEmploymentModal] = useState(false);
+  const [loading0, setLoading0] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
@@ -31,14 +32,20 @@ const AdminProfile = () => {
   const privateHttp = useHttp()
   const FetchStaff = async () => {
     try {
+      setLoading0(true);
       const { data } = await privateHttp.get(`/Administrators/${uid}`, { cacheTimeout: 300000 })
       // console.log(data);
       setStaffOne(data)
       setEditedProfile({ ...data });
+      setLoading0(false);
 
 
     } catch (error) {
       console.log(error);
+      setLoading0(false);
+    } finally {
+      setLoading0(false);
+
     }
   }
 
@@ -209,7 +216,10 @@ const AdminProfile = () => {
           <meta name="description" content="Staff Profile" />
         </Helmet>
         {/* Page Content */}
-        <div className="content container-fluid">
+        {loading0 ? <div className='mx-auto d-flex justify-content-center w-100 py-5'>
+          <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div>
+          </div><div></div><div></div><div></div><div></div></div>
+        </div> : <div className="content container-fluid">
           {/* Page Header */}
           <div className="page-header">
             <div className="row">
@@ -981,7 +991,7 @@ const AdminProfile = () => {
           </div>
 
 
-        </div>
+        </div>}
       </div>
       <Offcanvas />
     </>

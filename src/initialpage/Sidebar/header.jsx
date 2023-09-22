@@ -21,19 +21,24 @@ const Header = (props) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const pathname = location.pathname;
   const [companyOne, setCompanyOne] = useState({});
+  const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
 
   const FetchCompany = async () => {
+
+    setLoading(true)
     try {
       const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
       // console.log(data.company);
       setCompanyOne(data.company)
+      setLoading(false)
       // console.log(data.company);
       // setEditedCompany({ ...data.company })
 
 
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   }
   const dispatch = useDispatch();
@@ -92,7 +97,25 @@ const Header = (props) => {
       {/* Logo */}
       <div className="header-left">
         <Link to="/app/main/dashboard" className="logo">
-          <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
+          {/* <img src={
+            loading ? <p>
+              please waiting...
+            </p>
+              :
+              companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" /> */}
+          {loading ? ( // If loading is true, display the loading message
+            <div className="spinner-grow" role="status">
+              <span className="sr-only text-warning">Loading...</span>
+            </div>
+          ) : (
+            // If loading is false, display the image
+            <img
+              src={companyOne.companyLogo ? companyOne.companyLogo : loggo}
+              width={60}
+              height={60}
+              alt=""
+            />
+          )}
         </Link>
       </div>
       {/* /Logo */}

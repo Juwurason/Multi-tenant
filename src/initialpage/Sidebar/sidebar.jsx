@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { MdDashboard } from 'react-icons/md';
 import { emptyCache } from '../../hooks/cacheUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchInbox } from '../../store/slices/MessageInboxSlice';
 
 const Sidebar = (props) => {
   const MenuMore = () => {
@@ -40,6 +42,16 @@ const Sidebar = (props) => {
     return claims.some(claim => claim.value === claimType);
   };
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchInbox(user.userId));
+
+  }, []);
+  const inbox = useSelector((state) => state.inbox.data);
+
+  const filteredInbox = inbox.filter((item) => item.status === false);
+
+
   let pathname = props.location.pathname
   return (
     <div id="sidebar" className="sidebar bg-primary">
@@ -63,7 +75,7 @@ const Sidebar = (props) => {
             { /*Vertical Sidebar starts here*/}
             <ul className="sidebar-vertical" id='veritical-sidebar'>
               <li className="menu-title">
-                <span>Main</span>
+                <span>Main &nbsp; &nbsp; <span className='text-warning'>v.1.0.3</span></span>
               </li>
               {user.role === "CompanyAdmin" || user.role === "Administrator" || user.role === "Staff" || hasRequiredClaims("Staff Dashboard") || hasRequiredClaims("Admin Dashboard") ? (
                 <li className="submenu">
@@ -113,13 +125,13 @@ const Sidebar = (props) => {
                   ) : null}
                 </li>
               ) : <li>
-              <Link to="/app/main/user-dashboard"
-                className={pathname.includes('user-dashboard') ? "active" : ""}
-                onClick={() => onMenuClik()}
-              >
-                User Dashboard
-              </ Link>
-            </li>}
+                <Link to="/app/main/user-dashboard"
+                  className={pathname.includes('user-dashboard') ? "active" : ""}
+                  onClick={() => onMenuClik()}
+                >
+                  User Dashboard
+                </ Link>
+              </li>}
 
 
 
@@ -338,7 +350,16 @@ const Sidebar = (props) => {
                 <span>Communication</span>
               </li> : ""}
               {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className={pathname.includes('message') || pathname.includes('message') ? "active" : ""}>
-                <Link to="/app/message/inbox" onClick={() => onMenuClik()}><i className="la la-comment" /> <span>Messages</span></Link>
+                <Link to="/app/message/inbox" onClick={() => onMenuClik()}><i className="la la-comment" /> <span>Messages &nbsp;
+
+                  {
+                    filteredInbox.length <= 0 ? "" :
+                      <span className='py-1 px-2 rounded-circle text-white bg-danger'>{filteredInbox.length}</span>
+                  }
+
+                </span>
+
+                </Link>
               </li> : ""}
               {user.role === "CompanyAdmin" || user.role === "Administrator" ? <li className="submenu">
                 <a href="#" className={isSideMenu == "support" ? "subdrop" : ""} onClick={(e) => {
@@ -369,7 +390,13 @@ const Sidebar = (props) => {
               </li> : ""}
 
               {user.role === "Staff" ? <li className={pathname.includes('messageInbox') || pathname.includes('messageInbox') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/staff/staff/messageInbox"><i className="la la-comment" /> <span>Messages</span></Link>
+                <Link to="/staff/staff/messageInbox"><i className="la la-comment" /> <span>Messages &nbsp;
+
+                  {
+                    filteredInbox.length <= 0 ? "" :
+                      <span className='py-1 px-2 rounded-circle text-white bg-danger'>{filteredInbox.length}</span>
+                  }
+                </span></Link>
               </li> : ""}
 
               {user.role === "Staff" ? <li className="submenu">
@@ -474,7 +501,13 @@ const Sidebar = (props) => {
               </li> : ""}
 
               {user.role === "Client" ? <li className={pathname.includes('client-message') || pathname.includes('client-message') ? "active" : ""} onClick={() => onMenuClik()}>
-                <Link to="/client/app/client-message"><i className="la la-comment" /> <span>Messages</span></Link>
+                <Link to="/client/app/client-message"><i className="la la-comment" /> <span>Messages &nbsp;
+
+                  {
+                    filteredInbox.length <= 0 ? "" :
+                      <span className='py-1 px-2 rounded-circle text-white bg-danger'>{filteredInbox.length}</span>
+                  }
+                </span></Link>
               </li> : ""}
 
               {user.role === "Client" ? <li className="submenu">

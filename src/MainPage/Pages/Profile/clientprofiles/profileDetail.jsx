@@ -15,6 +15,7 @@ const ProfileDetail = ({ handleModal1, profile, stateModal, setStateModal, edite
     columns,
     searchText,
     ButtonRow,
+    loading0
 }) => {
     return (
         <>
@@ -424,7 +425,7 @@ const ProfileDetail = ({ handleModal1, profile, stateModal, setStateModal, edite
                     highlightOnHover
                     searchable
                     searchTerm={searchText}
-                    progressPending={loading}
+                    progressPending={loading0}
                     progressComponent={<div className='text-center fs-1'>
                         <div className="spinner-grow text-secondary" role="status">
                             <span className="sr-only">Loading...</span>
