@@ -26,13 +26,14 @@ const AddStaff = () => {
 
     const loading1 = useSelector((state) => state.template.isLoading);
     const template = useSelector((state) => state.template.data);
-    // console.log(template);
+    const filteredTemplates = template.filter((template) => template.templateType === "Non-Editable");
+    // console.log(filteredTemplates);
     const submitForm = async (e) => {
         e.preventDefault()
         if (firstName.trim() === "" || surName.trim() === "" || phoneNumber.trim() === "" ||
             email.trim() === ""
         ) {
-            return toast.error("Marked Fields must be filled")
+            return toast.error("Marked Fields must be filled");
         }
 
 
@@ -124,11 +125,18 @@ const AddStaff = () => {
 
                                         <div className="col-sm-12">
                                             <div className="form-group">
-                                                <label className="col-form-label">List of Documents to be sent as an attachment to staffs invite mail <span className="text-danger">*</span></label>
-                                                {/* <div><input className="form-control" type="file"
+                                                <label className="col-form-label"> Upload Offer Letter <span className="text-danger">*</span></label>
+                                                <div><input className="form-control" type="file"
                                                     accept=".pdf,.doc,.docx"
                                                     maxsize={1024 * 1024 * 2}
-                                                    onChange={e => setOfferLetter(e.target.files[0])} /></div> */}
+                                                    onChange={e => setOfferLetter(e.target.files[0])} /></div>
+
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-12">
+                                            <div className="form-group">
+                                                <label className="col-form-label">List of Documents to be sent as an attachment to staffs invite mail <span className="text-danger">*</span></label>
+
                                                 <div className='d-flex gap-2 flex-column'>
                                                     {loading1 ? (
                                                         <>
@@ -137,25 +145,26 @@ const AddStaff = () => {
                                                         </>
                                                     ) : (
                                                         <>
-                                                            {template.length > 0 ? (
-                                                                template.map((data, index) => (
-                                                                    <span key={index} className='fw-bold'>
-                                                                        <FaCaretRight />
-                                                                        <span className='fw-bold'>{data.templateName}</span>
-                                                                    </span>
-                                                                ))
-                                                            ) : (
-                                                                <>
-                                                                    <div>
-                                                                        <span> Upload required Documents</span>
+                                                            {filteredTemplates.length > 0 ? (
+                                                                filteredTemplates.map((data, index) => (
+                                                                    <div key={index}>
+                                                                        <span className='fw-bold'>
+                                                                            <FaCaretRight />
+                                                                            <span className='fw-bold'>{data.templateName}</span>
+                                                                        </span>
                                                                     </div>
-                                                                    <Link to={"/app/setup/create-template"} 
-                                                                    className="btn btn-info add-btn rounded-2 text-white"> Click Me</Link >
-                                                                </>
-                                                            )}
+                                                                ))
+                                                            ) : null}
+                                                          
                                                         </>
                                                     )}
                                                 </div>
+
+                                                <div>
+                                                <Link to="/app/setup/create-template" className="btn btn-info rounded-2 text-white">
+                                                   Click Me
+                                                </Link>
+                                             </div>
 
 
                                             </div>
