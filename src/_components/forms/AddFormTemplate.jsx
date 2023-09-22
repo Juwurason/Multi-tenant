@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { FaBackspace } from 'react-icons/fa';
+import { FaBackspace, FaLongArrowAltLeft, FaLongArrowAltRight, } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { MultiSelect } from 'react-multi-select-component';
 import { Link, useHistory } from 'react-router-dom';
@@ -27,8 +27,13 @@ const AddFormTemplate = () => {
     const [file, setFile] = useState(null);
     const templateName = useRef("");
 
+    const goBack = () => {
+        navigate.goBack(); // Go back in navigate
+    };
 
-
+    const goForward = () => {
+        navigate.goForward(); // Go forward in navigate
+    };
 
     const [type, setType] = useState("");
     const handleTypeChange = (e) => {
@@ -119,11 +124,19 @@ const AddFormTemplate = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
-
+                        
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <h4 className="card-title mb-0">Create Template</h4>
-                                <Link to={'/app/setup/form-template'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link>
+                                <div className="col-md-2 d-none d-md-block">
+                            <button className='btn' onClick={goBack}>
+                                <FaLongArrowAltLeft className='fs-3' />
+                            </button> &nbsp;  <button className='btn' onClick={goForward}>
+                                <FaLongArrowAltRight className='fs-3' />
+                            </button>
+                        </div>
+                                {/* <Link to={'/app/setup/form-template'} className="card-title mb-0 text-danger fs-3 "> <MdCancel /></Link> */}
                             </div>
+                           
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
                                     <div className="row">

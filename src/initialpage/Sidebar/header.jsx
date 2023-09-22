@@ -68,7 +68,7 @@ const Header = (props) => {
   let displayText;
   if (daysDifference <= 0) {
     // Free trial not expired yet
-    displayText = `Free trial: ${Math.abs(daysDifference)} days left`;
+    displayText = `${companyOne.packages.package}: ${Math.abs(daysDifference)} days left`;
   } else {
     // Free trial has expired
     displayText = 'Free trial: Expired';
@@ -127,7 +127,7 @@ const Header = (props) => {
           </a>
         </li> : ""}
         {/* Search */}
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <div className="top-nav-search">
             <a href="#" className="responsive-search">
               <i className="fa fa-search" />
@@ -137,7 +137,7 @@ const Header = (props) => {
               <button className="btn" type="submit"><i className="fa fa-search" /></button>
             </form>
           </div>
-        </li>
+        </li> */}
 
 
         {/* /Search */}
@@ -152,12 +152,12 @@ const Header = (props) => {
         </li>
         {/* /Flag */}
         {/* Notifications */}
-        <li className="nav-item dropdown">
+        {/* <li className="nav-item dropdown">
           <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <i className="fa fa-bell-o" />
-            {/* <span className="badge badge-pill">3</span> */}
+            <span className="badge badge-pill">3</span>
           </a>
-        </li>
+        </li> */}
         {/* /Notifications */}
         {/* Message Notifications */}
         <li className="nav-item dropdown">

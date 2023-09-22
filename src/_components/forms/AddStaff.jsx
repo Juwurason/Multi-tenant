@@ -154,15 +154,15 @@ const AddStaff = () => {
                                                                         </span>
                                                                     </div>
                                                                 ))
-                                                            ) : null}
+                                                            ) : <p> No forms available, use the button below to add forms </p> }
                                                           
                                                         </>
                                                     )}
                                                 </div>
 
-                                                <div>
-                                                <Link to="/app/setup/create-template" className="btn btn-info rounded-2 text-white">
-                                                   Click Me
+                                                <div className='mt-2'>
+                                                <Link to="/app/setup/create-template" className="btn btn-secondary rounded-2 text-white">
+                                                   Add more forms
                                                 </Link>
                                              </div>
 
