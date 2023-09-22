@@ -10,6 +10,8 @@ import loggo from "../../../../assets/img/promaxcare_logo_icon.png"
 import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout, MdOutlineLockReset } from "react-icons/md"
 import axiosInstance from '../../../../store/axiosInstance';
 import { emptyCache } from '../../../../hooks/cacheUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchInbox } from '../../../../store/slices/MessageInboxSlice';
 
 const ClientHeader = (props) => {
     const navigate = useHistory()
@@ -45,28 +47,51 @@ const ClientHeader = (props) => {
     }
 
     const [companyOne, setCompanyOne] = useState({});
+    const [loading, setLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const FetchCompany = async () => {
+        setLoading(true)
         try {
-            const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
+            const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`)
             // console.log(data);
             setCompanyOne(data.company)
-
+            setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
+
+
+    const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(fetchInbox(user.userId));
         FetchCompany()
     }, []);
+    const inbox = useSelector((state) => state.inbox.data);
+
+    const filteredInbox = inbox.filter((item) => item.status === false);
 
     return (
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
                 <Link to="/client/app/dashboard" className="logo">
-                    <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" />
+                    {/* <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={40} height={40} alt="" /> */}
+                    {loading ? ( // If loading is true, display the loading message
+                        <div className="spinner-grow" role="status">
+                            <span className="sr-only text-warning">Loading...</span>
+                        </div>
+                    ) : (
+                        // If loading is false, display the image
+                        <img
+                            src={companyOne.companyLogo ? companyOne.companyLogo : loggo}
+                            width={60}
+                            height={60}
+                            alt=""
+                        />
+                    )}
                 </Link>
             </div>
             {/* /Logo */}
@@ -132,7 +157,10 @@ const ClientHeader = (props) => {
                 <li className="nav-item dropdown">
                     <Link to={'/client/app/client-message'} >
                         <i className="fa fa-comment-o" />
-                        {/* <span className="badge badge-pill">8</span> */}
+                        {
+                            filteredInbox.length <= 0 ? "" :
+                                <span className="badge badge-pill bg-danger">{filteredInbox.length}</span>
+                        }
                     </Link>
 
                 </li>

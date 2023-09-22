@@ -9,16 +9,16 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const ClientChart = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const dispatch = useDispatch();
-    const result = useSelector((state) => state.chart.data);
-    const staffNames = result.map((item) => item.staffName);
-    const durations = result.map((item) => item.duration);
+
     const [selectedPeriod, setSelectedPeriod] = useState('y');
-
-    const [isLoading, setIsLoading] = useState(true);
-
     useEffect(() => {
         dispatch(fetchChart({ value: selectedPeriod, company: id.companyId }))
     }, [dispatch]);
+    const isLoading = useSelector((state) => state.chart.isLoading);
+    const result = useSelector((state) => state.chart.data);
+    const staffNames = result.map((item) => item.staffName);
+    const durations = result.map((item) => item.duration);
+
 
     const data = {
         labels: staffNames,

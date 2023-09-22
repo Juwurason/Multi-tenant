@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 import { Helmet } from "react-helmet";
 import { FaPlusCircle } from 'react-icons/fa';
 import { GoTrashcan } from 'react-icons/go';
-import { MdEditSquare, MdError, MdLabelImportant, MdMoveToInbox, MdOutlineRefresh, MdSend, MdStars } from 'react-icons/md';
+import { MdEditSquare, MdError, MdLabelImportant, MdMarkEmailUnread, MdMoveToInbox, MdOutlineRefresh, MdSend, MdStars } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import './message.css';
@@ -13,15 +13,42 @@ import { MultiSelect } from 'react-multi-select-component';
 import { toast } from 'react-toastify';
 import useHttp from '../../../../hooks/useHttp';
 import axiosInstance from '../../../../store/axiosInstance';
-
-const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { formatUser } from '../../../../store/slices/UserSlice';
+import { fetchInbox } from '../../../../store/slices/MessageInboxSlice';
+import { fetchSent } from '../../../../store/slices/MessageSent';
+import ReactHtmlParser from 'react-html-parser';
+import moment from 'moment';
+function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+        return str.slice(0, maxLength - 3) + "...";
+    } else {
+        return str;
+    }
+}
+const ClientMessage = () => {
     const id = JSON.parse(localStorage.getItem('user'));
+
+    const dispatch = useDispatch();
+    const fetchData = async () => {
+        dispatch(formatUser(id.companyId));
+        dispatch(fetchInbox(id.userId));
+        dispatch(fetchSent(id.userId));
+
+    }
+    useEffect(() => {
+        fetchData()
+    }, []);
+    const options = useSelector((state) => state.user.data);
+    const isLoading = useSelector((state) => state.inbox.isLoading);
+    const inbox = useSelector((state) => state.inbox.data);
+    const sentEmail = useSelector((state) => state.sent.data);
+
     const privateHttp = useHttp();
     const [activeTab, setActiveTab] = useState('inbox');
     const [selectedEmail, setSelectedEmail] = useState(null);
     const [editorValue, setEditorValue] = useState('');
     const subject = useRef(null);
-    const [options, setOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [lgShow, setLgShow] = useState(false);
     const [sendAsSMS, setSendAsSMS] = useState(false);
@@ -84,6 +111,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
     const handleEmailClick = async (email) => {
         const { data } = await axiosInstance.get(`/Messages/${email.messageId}`);
         setSelectedEmail(data);
+        fetchData();
 
 
     };
@@ -97,21 +125,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
     const toggleBcc = () => {
         setShowBcc(!showBcc);
     };
-    const FetchClient = async () => {
-        try {
-            const { data } = await privateHttp.get(`/Account/get_all_users?companyId=${id.companyId}`, { cacheTimeout: 300000 });
-            const formattedOptions = data.map((item) => ({
-                label: item.email,
-                value: item.email,
-            }));
-            setOptions(formattedOptions);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        FetchClient()
-    }, []);
+
 
     const handleSelectionChange = (selected) => {
         setSelectedOptions(selected);
@@ -136,11 +150,12 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
             // 
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`Messages/send_message`,
+                const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
                 toast.success(data.message)
-
+                fetchData();
+                setLgShow(false);
                 setLoading(false)
 
             } catch (error) {
@@ -167,11 +182,12 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
             };
             try {
                 setLoading(true)
-                const { data } = await privateHttp.post(`Messages/send_message`,
+                const { data } = await privateHttp.post(`/Messages/send_message?userId=${id.userId}`,
                     payload
                 )
-                toast.success(data.message)
-
+                toast.success(data.message);
+                setLgShow(false);
+                fetchData();
                 setLoading(false)
 
             } catch (error) {
@@ -213,7 +229,10 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
 
 
                 {/* /Page Header */}
-                <div className="email-component">
+                {isLoading ? <div className='mx-auto d-flex justify-content-center w-100'>
+                    <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div>
+                    </div><div></div><div></div><div></div><div></div></div>
+                </div> : <div className="email-component">
                     <div className="row">
                         <div className="col-md-3 col-lg-3 col-xl-3 border">
                             <div className="nav flex-column gap-2 nav-pills py-2" id="v-pills-tab"
@@ -378,7 +397,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
 
                                                             <table
 
-                                                                style={{ cursor: 'pointer' }}
+
                                                                 className="table email-table no-wrap table-hover v-middle mb-0 ">
 
                                                                 <tbody>
@@ -386,6 +405,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
                                                                         <th></th>
                                                                         <th>From</th>
                                                                         <th>Subject</th>
+                                                                        <th></th>
                                                                         <th>Date</th>
                                                                     </tr>
                                                                     {inbox?.map((email, index) => (
@@ -412,6 +432,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
                                                                                     >{truncateString(email.subject, 30)}</span>
                                                                                 </a>
                                                                             </td>
+                                                                            <td className='text-warning'>{!email.status && <MdMarkEmailUnread />}</td>
                                                                             {/* Attachment */}
                                                                             {/* Time */}
                                                                             <td className="text-muted" style={{ fontSize: "12px" }}>{moment(email.dateCreated).format('LLL')}</td>
@@ -604,7 +625,7 @@ const ClientMessage = ({ sentEmail, inbox, fetchData }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
                 <Modal
                     size="lg"
                     show={lgShow}

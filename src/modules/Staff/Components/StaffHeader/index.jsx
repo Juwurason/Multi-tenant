@@ -25,6 +25,7 @@ const StaffHeader = (props) => {
     let pathname = location.pathname
 
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [loading, setLoading] = useState(false);
     const userObj = JSON.parse(localStorage.getItem('user'));
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -52,12 +53,15 @@ const StaffHeader = (props) => {
     const user = JSON.parse(localStorage.getItem('user'));
 
     const FetchCompany = async () => {
+
+        setLoading(true)
         try {
             const { data } = await axiosInstance.get(`/Companies/get_company/${user.companyId}`, { cacheTimeout: 300000 })
             // console.log(data);
             setCompanyOne(data.company)
-
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log(error);
         }
     }
@@ -74,9 +78,22 @@ const StaffHeader = (props) => {
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
-                <a href="/staff/staff/dashboard" className="logo">
+                {/* <a href="/staff/staff/dashboard" className="logo">
                     <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
-                </a>
+                </a> */}
+                {loading ? ( // If loading is true, display the loading message
+                    <div className="spinner-grow" role="status">
+                        <span className="sr-only text-warning">Loading...</span>
+                    </div>
+                ) : (
+                    // If loading is false, display the image
+                    <img
+                        src={companyOne.companyLogo ? companyOne.companyLogo : loggo}
+                        width={60}
+                        height={60}
+                        alt=""
+                    />
+                )}
             </div>
             {/* /Logo */}
             <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
@@ -204,6 +221,7 @@ const StaffHeader = (props) => {
             {/* /Header Menu */}
             {/* Mobile Menu */}
 
+
             <div className="dropdown mobile-user-menu">
                 <a
                     className="nav-link dropdown-toggle"
@@ -226,6 +244,8 @@ const StaffHeader = (props) => {
                 </div>
             </div>
             {/* /Mobile Menu */}
+
+
         </div>
 
     );
