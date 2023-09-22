@@ -57,8 +57,10 @@ const ProgressReport = () => {
     const [loading1, setLoading1] = useState(false);
     const [cli, setCli] = useState('');
     const [sta, setSta] = useState('');
-    const dateFrom = useRef(null);
-    const dateTo = useRef(null);
+    // const dateFrom = useRef(null);
+    // const dateTo = useRef(null);
+    const [dateFrom, setDateFrom] = useState(moment().format('YYYY-MM-DD'))
+    const [dateTo, setDateTo] = useState(moment().format('YYYY-MM-DD'))
     const columns = [
         {
             name: '',
@@ -119,7 +121,6 @@ const ProgressReport = () => {
     ];
 
 
-
     const FilterReport = async () => {
 
         if (sta === "" && cli === "") {
@@ -129,8 +130,9 @@ const ProgressReport = () => {
                 "error"
             )
 
-        } else {
-            dispatch(filterProgress({ dateTo: dateTo.current.value, dateFrom: dateFrom.current.value, sta, cli, company: id.companyId }))
+        } 
+        else {
+            dispatch(filterProgress({ dateTo: dateTo, dateFrom: dateFrom, sta, cli, company: id.companyId }))
         }
 
     }
@@ -294,8 +296,9 @@ const ProgressReport = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">Date From</label>
                                                 <div>
-                                                    <input type="datetime-local" 
-                                                    ref={dateFrom}
+                                                    <input type="date" 
+                                                    // ref={dateFrom}
+                                                    onChange={e => setDateFrom(e.target.value)}
                                                      className=' form-control' name="" id="" />
                                                 </div>
                                             </div>
@@ -304,8 +307,9 @@ const ProgressReport = () => {
                                             <div className="form-group">
                                                 <label className="col-form-label">Date To</label>
                                                 <div>
-                                                    <input type="datetime-local" 
-                                                    ref={dateTo}
+                                                    <input type="date" 
+                                                    // ref={dateTo}
+                                                    onChange={e => setDateTo(e.target.value)}
                                                      className=' form-control' name="" id="" />
                                                 </div>
                                             </div>

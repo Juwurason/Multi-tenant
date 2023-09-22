@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import usePublicHttp from '../hooks/usePublicHttp';
 import CryptoJS from 'crypto-js';
 import loggo from '../assets/img/promaxcare_logo_white.png'
+// import { emptyCache } from '../hooks/cacheUtils';
 
 
 const Loginpage = () => {
@@ -61,7 +62,7 @@ const Loginpage = () => {
       }
       if (data.userProfile?.role === "CompanyAdmin" || data.userProfile?.role === "Administrator") {
         navigate.push('/app/main/dashboard')
-
+        
       }
 
       if (data.claims) {

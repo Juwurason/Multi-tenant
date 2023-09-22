@@ -204,7 +204,7 @@ const Refferal = () => {
                     // console.log(data);
                     if (data.status === 'Success') {
                         toast.success(data.message);
-                        dispatch(fetchDocument(id.companyId));
+                        dispatch(fetchRefferals(id.companyId));
                     } else {
                         toast.error("Error Accepting Document");
                     }
@@ -212,6 +212,7 @@ const Refferal = () => {
 
                 } catch (error) {
                     toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
                     // console.log(error);
                 }
 
@@ -219,6 +220,42 @@ const Refferal = () => {
             }
         })
 
+
+    }
+
+    const handleDelete = async (e) => {
+        Swal.fire({
+            html: `<h3>Are you sure? you want to delete this</h3>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#405189',
+            cancelButtonColor: '#777',
+            confirmButtonText: 'Confirm Delete',
+            showLoaderOnConfirm: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await post(`/ClientReferrals/delete/${e}`,
+                        // { userId: id.userId }
+                    )
+                    if (data.status === 'Success') {
+                        toast.success(data.message);
+                        dispatch(fetchRefferals(id.companyId));
+                    } else {
+                        toast.error(data.message);
+                    }
+
+
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.response.data.message)
+                    toast.error(error.response.data.title)
+
+                }
+
+
+            }
+        })
 
     }
 
@@ -231,9 +268,9 @@ const Refferal = () => {
                 {/* <div ><span className='fw-bold'>Date Created: </span> {moment(data.dateCreated).format('lll')}</div>
                 <div><span className='fw-bold'>Date Modified: </span>{moment(data.dateModified).format('lll')}</div> */}
                 <div>
-                    <button className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
+                <a href={`https://www.promaxcare.com.au/Account/ClientReferral/${data.clientReferralId}?page=1&companyId=${id.companyId}`} target="_blank" className="btn text-info fw-bold" style={{ fontSize: "12px" }}>
                         Edit Form
-                    </button> |
+                    </a> |
                     <button className="btn text-info fw-bold" style={{ fontSize: "12px" }} onClick={() => handleDetails(data.clientReferralId)}>
 
                         {
@@ -247,11 +284,11 @@ const Refferal = () => {
 
                         }
                     </button> |
-                    {/* <button 
-                    // onClick={() => handleDelete(data.documentId)} 
+                    <button 
+                    onClick={() => handleDelete(data.clientReferralId)} 
                     className="btn text-danger fw-bold" style={{ fontSize: "12px" }}>
                         Delete
-                    </button> | */}
+                    </button> |
                     {!data.isAccepted && <button
                         onClick={() => handleAccept(data.clientReferralId)}
                         className="btn text-success fw-bold" style={{ fontSize: "12px" }}>
@@ -288,41 +325,7 @@ const Refferal = () => {
         },
     };
 
-    // const handleDelete = async (e) => {
-    //     Swal.fire({
-    //         html: `<h3>Are you sure? you want to delete Public Holiday "${e.name}"</h3>`,
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#405189',
-    //         cancelButtonColor: '#777',
-    //         confirmButtonText: 'Confirm Delete',
-    //         showLoaderOnConfirm: true,
-    //     }).then(async (result) => {
-    //         if (result.isConfirmed) {
-    //             try {
-    //                 const { data } = await post(`/SetUp/delete_holiday/${e.holidayId}`,
-    //                     // { userId: id.userId }
-    //                 )
-    //                 if (data.status === 'Success') {
-    //                     toast.success(data.message);
-    //                     FetchClient();
-    //                 } else {
-    //                     toast.error(data.message);
-    //                 }
-
-
-    //             } catch (error) {
-    //                 console.log(error);
-    //                 toast.error(error.response.data.message)
-    //                 toast.error(error.response.data.title)
-
-    //             }
-
-
-    //         }
-    //     })
-
-    // }
+    
 
     const [textToCopy, setTextToCopy] = useState(`https://www.promaxcare.com.au/Account/ClientReferral?companyId=${id.companyId}`); // Replace with your text
 

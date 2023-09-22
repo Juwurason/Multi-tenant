@@ -351,7 +351,7 @@ const EmployeeProfile = () => {
                               <div>
                                 <div>
                                   {staffOne.employeeId === null ? <button
-                                    className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button> : ""}
+                                    className="btn py-1 rounded text-white bg-primary" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button> : ""}
                                 </div>
                               </div>
                             </div>

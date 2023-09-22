@@ -153,7 +153,7 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
         try {
             const { data } = await get(`/ProgressNotes/${e}`, { cacheTimeout: 300000 })
             setSelectedActivity(data);
-            console.log(data);
+            // console.log(data);
             setLoading(false);
         } catch (error) {
             toast.error(error.response.data.message)
@@ -180,13 +180,13 @@ const StaffProgressNote = ({ staffPro, FetchData }) => {
         }
         try {
             const { data } = await post(`/ProgressNotes/edit/${selectedActivity.progressNoteId}?userId=${user.userId}&shiftId=${""}`, info);
-              console.log(data);
+            //   console.log(data);
             toast.success(data.message)
             setShowModal(false);
             setLoading1(false);
             FetchData()
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             toast.error("Error Updating Progress Note")
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)

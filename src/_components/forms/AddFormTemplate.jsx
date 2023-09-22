@@ -153,7 +153,7 @@ const AddFormTemplate = () => {
                                         {type === "Non-Editable" && <div className="col-sm-12">
                                             <div className="form-group">
                                                 <div>
-                                                    <label htmlFor="formFile" className="form-label">Template Url</label>
+                                                    <label htmlFor="formFile" className="form-label">Upload Template</label>
                                                     <input className="form-control" type="file" id="formFile"
                                                         onChange={e => setFile(e.target.files[0])}
                                                     />

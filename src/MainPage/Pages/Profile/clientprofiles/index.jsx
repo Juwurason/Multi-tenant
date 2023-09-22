@@ -531,7 +531,7 @@ const ClientProfiles = () => {
                                                         </div>
                                                         <div>
                                                             {staffOne.clientId === null ? <button
-                                                                className="btn py-1 rounded text-white bg-success" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button> : ""}
+                                                                className="btn py-1 rounded text-white mt-2 bg-primary" onClick={() => handleView(staffOne.xerolink)}>Update Record to Xero</button> : ""}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -739,22 +739,22 @@ const ClientProfiles = () => {
                                         </li>
                                         <li className="nav-item">
                                             <a
-                                                href="#client_schedule"
-                                                data-bs-toggle="tab"
-                                                className={`nav-link ${activeTab === 'client_schedule' ? 'active text-primary fw-bold' : ''}`}
-                                                onClick={() => handleTabClick('client_schedule')}
-                                            >
-                                                Schedule
-                                            </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a
                                                 href="#client-docUpload"
                                                 data-bs-toggle="tab"
                                                 className={`nav-link ${activeTab === 'client-docUpload' ? 'active text-primary fw-bold' : ''}`}
                                                 onClick={() => handleTabClick('client-docUpload')}
                                             >
                                                 Document
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                href="#client_schedule"
+                                                data-bs-toggle="tab"
+                                                className={`nav-link ${activeTab === 'client_schedule' ? 'active text-primary fw-bold' : ''}`}
+                                                onClick={() => handleTabClick('client_schedule')}
+                                            >
+                                                Schedule
                                             </a>
                                         </li>
                                         <li className="nav-item">
@@ -844,14 +844,16 @@ const ClientProfiles = () => {
                             />
 
                         </div>
-                        <div id="client_schedule" className="pro-overview tab-pane fade show ">
-
-                            <ClientSchedule uid={uid} />
-                        </div>
                         <div id="client-docUpload" className="pro-overview tab-pane fade show ">
 
                             <ClientDoc uid={uid} />
                         </div>
+
+                        <div id="client_schedule" className="pro-overview tab-pane fade show ">
+
+                            <ClientSchedule uid={uid} />
+                        </div>
+                        
                         <div id="client-disability-support" className="pro-overview tab-pane fade show ">
 
                             <ClientDisability uid={uid} />

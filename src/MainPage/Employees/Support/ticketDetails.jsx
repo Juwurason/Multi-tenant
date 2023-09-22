@@ -123,7 +123,8 @@ const ticketDetails = () => {
     }
     const handleEscalate = async (e) => {
         setLoading2(true);
-        try {
+        try {   
+            // Tickets/excalate/{id}?userId=
             const { data } = await get(`/Tickets/excalate/${uid}?userId=${id.userId}`, { cacheTimeout: 300000 });
             if (data.status === "Success") {
                 toast.success(data.message);

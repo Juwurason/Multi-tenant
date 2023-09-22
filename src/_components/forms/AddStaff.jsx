@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { FaBackspace } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useCompanyContext } from '../../context';
 import useHttp from '../../hooks/useHttp';
+import { FaBackspace, FaCaretRight } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTemplate } from '../../store/slices/FormTemplateSlice';
 const AddStaff = () => {
     const id = JSON.parse(localStorage.getItem('user'));
     const [loading, setLoading] = useState(false)
@@ -18,14 +19,21 @@ const AddStaff = () => {
     const [offerLetter, setOfferLetter] = useState(null);
     const privateHttp = useHttp();
     const navigate = useHistory()
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchTemplate(id.companyId));
+    }, [dispatch]);
 
-
+    const loading1 = useSelector((state) => state.template.isLoading);
+    const template = useSelector((state) => state.template.data);
+    const filteredTemplates = template.filter((template) => template.templateType === "Non-Editable");
+    // console.log(filteredTemplates);
     const submitForm = async (e) => {
         e.preventDefault()
         if (firstName.trim() === "" || surName.trim() === "" || phoneNumber.trim() === "" ||
             email.trim() === ""
         ) {
-            return toast.error("Marked Fields must be filled")
+            return toast.error("Marked Fields must be filled");
         }
 
 
@@ -117,11 +125,48 @@ const AddStaff = () => {
 
                                         <div className="col-sm-12">
                                             <div className="form-group">
-                                                <label className="col-form-label">Offer Letter <span className="text-danger">*</span></label>
+                                                <label className="col-form-label"> Upload Offer Letter <span className="text-danger">*</span></label>
                                                 <div><input className="form-control" type="file"
                                                     accept=".pdf,.doc,.docx"
                                                     maxsize={1024 * 1024 * 2}
                                                     onChange={e => setOfferLetter(e.target.files[0])} /></div>
+
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-12">
+                                            <div className="form-group">
+                                                <label className="col-form-label">List of Documents to be sent as an attachment to staffs invite mail <span className="text-danger">*</span></label>
+
+                                                <div className='d-flex gap-2 flex-column'>
+                                                    {loading1 ? (
+                                                        <>
+                                                            <span className="spinner-border text-white spinner-border-sm me-2" aria-hidden="true" />
+                                                            Please wait...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {filteredTemplates.length > 0 ? (
+                                                                filteredTemplates.map((data, index) => (
+                                                                    <div key={index}>
+                                                                        <span className='fw-bold'>
+                                                                            <FaCaretRight />
+                                                                            <span className='fw-bold'>{data.templateName}</span>
+                                                                        </span>
+                                                                    </div>
+                                                                ))
+                                                            ) : null}
+                                                          
+                                                        </>
+                                                    )}
+                                                </div>
+
+                                                <div>
+                                                <Link to="/app/setup/create-template" className="btn btn-info rounded-2 text-white">
+                                                   Click Me
+                                                </Link>
+                                             </div>
+
+
                                             </div>
                                         </div>
 
