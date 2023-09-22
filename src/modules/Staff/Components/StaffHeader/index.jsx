@@ -78,23 +78,28 @@ const StaffHeader = (props) => {
         <div className="header" style={{ right: "0px" }}>
             {/* Logo */}
             <div className="header-left">
-                {/* <a href="/staff/staff/dashboard" className="logo">
-                    <img src={companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" />
-                </a> */}
-                {loading ? ( // If loading is true, display the loading message
-                    <div className="spinner-grow" role="status">
-                        <span className="sr-only text-warning">Loading...</span>
-                    </div>
-                ) : (
-                    // If loading is false, display the image
-                    <img
-                        src={companyOne.companyLogo ? companyOne.companyLogo : loggo}
-                        width={60}
-                        height={60}
-                        alt=""
-                    />
-                )}
+        <a href='/staff/staff/dashboard' className="logo mt-1">
+          {/* <img src={
+            loading ? <p>
+              please waiting...
+            </p>
+              :
+              companyOne.companyLogo ? companyOne.companyLogo : loggo} width={60} height={60} alt="" /> */}
+          {loading ? ( // If loading is true, display the loading message
+            <div className="spinner-grow" role="status">
+              <span className="sr-only text-warning">Loading...</span>
             </div>
+          ) : (
+            // If loading is false, display the image
+            <img
+              src={companyOne.companyLogo ? companyOne.companyLogo : loggo}
+              width={60}
+              height={60}
+              alt=""
+            />
+          )}
+        </a>
+      </div>
             {/* /Logo */}
             <a id="toggle_btn" href="#" style={{ display: pathname.includes('tasks') ? "none" : pathname.includes('compose') ? "none" : "" }} onClick={handlesidebar}>
                 <span className="bar-icon">

@@ -96,7 +96,7 @@ const Header = (props) => {
     <div className="header" style={{ right: "0px" }}>
       {/* Logo */}
       <div className="header-left">
-        <Link to="/app/main/dashboard" className="logo">
+        <Link to="/app/main/dashboard" className="logo mt-1">
           {/* <img src={
             loading ? <p>
               please waiting...
