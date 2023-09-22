@@ -49,6 +49,7 @@ const ClientProfiles = () => {
     const [kinModal, setKinModal] = useState(false);
     const [bankModal, setBankModal] = useState(false);
     const [socialModal, setSocialModal] = useState(false);
+    const [loading0, setLoading0] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [loading2, setLoading2] = useState(false);
 
@@ -58,22 +59,29 @@ const ClientProfiles = () => {
         setActiveTab(tabId);
     };
     const FetchStaff = async () => {
+        setLoading0(true);
         try {
             const { data } = await get(`/Profiles/${uid}`, { cacheTimeout: 300000 })
-            // console.log(data);
+
             setStaffOne(data);
+            setLoading0(false);
         } catch (error) {
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
+            setLoading0(false);
         }
 
         try {
             const { data } = await get(`/ShiftRosters/get_shifts_by_user?client=${uid}&staff=`, { cacheTimeout: 300000 });
             setClientRoster(data.shiftRoster)
+            setLoading0(false);
 
         } catch (error) {
             toast.error(error.response.data.message)
             toast.error(error.response.data.title)
+            setLoading0(false);
+        } finally {
+            setLoading0(false);
         }
     }
     useEffect(() => {
@@ -432,7 +440,10 @@ const ClientProfiles = () => {
                     <meta name="description" content="Client Profile" />
                 </Helmet>
                 {/* Page Content */}
-                <div className="content container-fluid">
+                {loading0 ? <div className='mx-auto d-flex justify-content-center w-100 py-5'>
+                    <div className="lds-spinner m-5"><div></div><div></div><div></div><div></div><div>
+                    </div><div></div><div></div><div></div><div></div></div>
+                </div> : <div className="content container-fluid">
                     {/* Page Header */}
                     <div className="page-header">
                         <div className="row">
@@ -827,6 +838,7 @@ const ClientProfiles = () => {
                                 searchText={searchText}
                                 ButtonRow={ButtonRow}
                                 handleSearch={handleSearch}
+                                loading0={loading0}
 
 
                             />
@@ -867,7 +879,7 @@ const ClientProfiles = () => {
 
 
                     </div>
-                </div>
+                </div>}
                 {/* /Experience Modal */}
             </div>
             <Offcanvas />

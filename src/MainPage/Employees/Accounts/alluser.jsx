@@ -286,9 +286,9 @@ const AllUser = () => {
     };
 
     const filteredData = users.filter((item) =>
-        item?.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item?.fullName?.toLowerCase().includes(searchText.toLowerCase()) ||
         // item?.role.includes(searchText.toLowerCase()) ||
-        item?.email.toLowerCase().includes(searchText.toLowerCase())
+        item?.email?.toLowerCase().includes(searchText.toLowerCase())
     );
 
     const ButtonRow = ({ data }) => {

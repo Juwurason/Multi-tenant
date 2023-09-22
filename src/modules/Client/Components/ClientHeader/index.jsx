@@ -10,6 +10,8 @@ import loggo from "../../../../assets/img/promaxcare_logo_icon.png"
 import { MdOutlineLockPerson, MdOutlineSettings, MdOutlineLogout, MdOutlineLockReset } from "react-icons/md"
 import axiosInstance from '../../../../store/axiosInstance';
 import { emptyCache } from '../../../../hooks/cacheUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchInbox } from '../../../../store/slices/MessageInboxSlice';
 
 const ClientHeader = (props) => {
     const navigate = useHistory()
@@ -57,9 +59,16 @@ const ClientHeader = (props) => {
             console.log(error);
         }
     }
+
+
+    const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(fetchInbox(user.userId));
         FetchCompany()
     }, []);
+    const inbox = useSelector((state) => state.inbox.data);
+
+    const filteredInbox = inbox.filter((item) => item.status === false);
 
     return (
         <div className="header" style={{ right: "0px" }}>
@@ -132,7 +141,10 @@ const ClientHeader = (props) => {
                 <li className="nav-item dropdown">
                     <Link to={'/client/app/client-message'} >
                         <i className="fa fa-comment-o" />
-                        {/* <span className="badge badge-pill">8</span> */}
+                        {
+                            filteredInbox.length <= 0 ? "" :
+                                <span className="badge badge-pill bg-danger">{filteredInbox.length}</span>
+                        }
                     </Link>
 
                 </li>
